@@ -1,3 +1,4 @@
+import concurrent.futures
 import os
 import sys
 import json
@@ -9,14 +10,51 @@ import threading
 import concurrent
 from queue import Queue
 from loguru import logger
-from typing import Optional, List, Dict, Tuple, Set, Any
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Optional, List, Dict, Set, Any
+from concurrent.futures import ThreadPoolExecutor
 
 sys.path.append(".")
 
+from prompt import *
 from api.llm import AliyunApiLLMModel
 from utils.protocol import UsageInfo
-from tools.build_prompt import build_all_prompt
+from tools.build_prompt import get_shots
+
+def build_shot_prompt(
+        shots: list[dict],
+        prompt_template: str,
+        shot_prompt_template: str) -> str:
+    """
+    构建prompt
+
+    shots: 随机挑选的测试样本
+    """
+    examples = []
+    for shot in shots:
+        # 生成答案部分
+        answer_lines = []
+        for q in shot["quadruples"]:
+            target = (q.get("target", "") or "NULL").strip()
+            argument = (q.get("argument", "") or "NULL").strip()
+            targeted_group = (q.get("targeted_group", "") or "NULL").strip()
+            hateful = (q.get("hateful", "") or "NULL").strip()
+
+            answer_lines.append(f"{target} | {argument} | {targeted_group} | {hateful}")
+        
+        # 构建单个示例
+        examples.append(
+            shot_prompt_template.format(
+                text=shot["content"],
+                answer="\n".join(answer_lines)
+            )
+        )
+    
+    # 组合所有示例并生成包含示例的prompt模板
+    return prompt_template.format(
+        text = "{text}",
+        shots="\n\n".join(examples)
+    )
+
 
 class FewShotLLMTester:
     def __init__(
@@ -109,22 +147,6 @@ class FewShotLLMTester:
         
         logger.info("退出进度已保存，可重新运行程序继续处理")
 
-    def _build_prompts(self)-> List[Dict]:
-        if self.shot_num:
-            file_name = os.path.join(self.prompts_save_dir, f"fewshot_prompts_{self.seed}_{self.shot_num}.json")
-        else:
-            file_name = os.path.join(self.prompts_save_dir, f"zero_shot_prompts.json")
-        return build_all_prompt(self.shot_dataset_file, self.test_dataset_file, file_name, shot_num=self.shot_num, seed=self.seed)
-
-    def _load_data(self) -> List[Dict]:
-        """加载输入数据"""
-        try:
-            with open(self.input_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            logger.error(f"数据加载失败: {str(e)}")
-            raise
-
     def _load_progress(self) -> None:
         """加载最新进度文件"""
         try:
@@ -188,8 +210,53 @@ class FewShotLLMTester:
             self.last_checkpoint = len(self.results)
         except Exception as e:
             logger.error(f"进度保存失败: {str(e)}")
+
+    def _create_datas(
+            self,
+            shot_data_path: Optional[str], 
+            test_data_path: str, 
+            shot_num: int = 5, 
+            seed: int = 23333333,
+            prompt_template: str = TRAIN_PROMPT_FEW_SHOT_V1,
+            shot_prompt_template: str = SHOT_PROMPT_V1,
+            system_prompt: Optional[str] = None):
+        
+        if shot_data_path:
+            with open(shot_data_path, "r") as f:
+                self.shot_datas = json.load(f)
+        else:
+            self.shot_datas = []
+        
+        with open(test_data_path, "r") as f:
+            self.test_datas = json.load(f)
+
+        if system_prompt:
+            prompt_template = prompt_template.replace("{system_prompt}", system_prompt)
+        else:
+            prompt_template = prompt_template.replace("{system_prompt}", "")
+
+        if shot_num:
+            sample_shots = get_shots(self.shot_datas, shot_num=shot_num, seed=seed)
+            prompt_template = build_shot_prompt(
+                sample_shots, 
+                prompt_template, 
+                shot_prompt_template)
+        else:
+            prompt_template = prompt_template.replace("{shots}", "")
+
+        all_datas: list[dict] = []
+
+        for data in self.test_datas:
+            all_datas.append(
+                {
+                    "id": data["id"], 
+                    "content": data["content"], 
+                    "quadruples": data.get("quadruples", None), 
+                    "prompt": prompt_template.format(text=data["content"], system_prompt = "")})
+        
+        return all_datas
     
-    def _clean_old_progress_files(self, keep: int = None):
+    def _clean_old_progress_files(self, keep: Optional[int] = None):
         """清理超出数量限制的旧进度文件"""
         keep = keep if keep is not None else self.max_progress_files
         progress_files = sorted(glob.glob(os.path.join(self.progress_dir, "progress_*.json")), 
@@ -277,6 +344,9 @@ class FewShotLLMTester:
         item_id = item['id']
         prompt = item['prompt']
         quadruples = []
+        error_code = 1
+        response = ""
+        last_error = ""
         
         for attempt in range(self.max_retries + 1):
             if self._shutdown_flag:
@@ -366,7 +436,14 @@ class FewShotLLMTester:
         self._load_progress()
         
         # 读取数据
-        dataset = self._load_data() if self.input_file else self._build_prompts()
+        dataset = self._create_datas(
+            self.shot_dataset_file, 
+            self.test_dataset_file, 
+            self.shot_num, 
+            self.seed, 
+            prompt_template=TRAIN_PROMPT_FEW_SHOT_V1, 
+            shot_prompt_template=SHOT_PROMPT_V1)
+        
         total_items = len(dataset)
         pending_items = [item for item in dataset if item['id'] not in self.processed_ids]
 
@@ -480,7 +557,7 @@ if __name__ == "__main__" :
     from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
 
     model = AliyunApiLLMModel(
-        model_name="deepseek-v3",
+        model_name="deepseek-r1-distill-llama-8b",
         api_base="https://dashscope.aliyuncs.com/api/v1",
         api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
         use_dashscope=True,
@@ -501,12 +578,12 @@ if __name__ == "__main__" :
     tester = FewShotLLMTester(
         llm_model=model,
         shot_dataset_file="./data/temp_train_data.json",
-        test_dataset_file="./data/test_data_parsed.json",
-        shot_num=5,
+        test_dataset_file="./data/temp_test_data.json",
+        shot_num=0,
         seed=23333333,
         concurrency=1,
         prompts_save_dir="./data/prompts/",
-        output_dir="./data/result/"
+        output_dir="/workspace/few_shot/output/"
     )
 
     tester.run()

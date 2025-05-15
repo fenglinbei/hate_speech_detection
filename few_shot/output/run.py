@@ -10,19 +10,17 @@ import threading
 import concurrent
 from queue import Queue
 from loguru import logger
-from typing import Optional, List, Dict, Tuple, Set, Any
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Optional, List, Dict, Set, Any
+from concurrent.futures import ThreadPoolExecutor
 
 sys.path.append(".")
 
-from metric import Metrics
 from prompt import *
 from api.llm import AliyunApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 
-
-def build_two_step_shot_prompt(
+def build_shot_prompt(
         shots: list[dict],
         prompt_template: str,
         shot_prompt_template: str) -> str:
@@ -38,11 +36,15 @@ def build_two_step_shot_prompt(
         for q in shot["quadruples"]:
             target = (q.get("target", "") or "NULL").strip()
             argument = (q.get("argument", "") or "NULL").strip()
-            answer_lines.append(f"{target} | {argument}")
+            targeted_group = (q.get("targeted_group", "") or "NULL").strip()
+            hateful = (q.get("hateful", "") or "NULL").strip()
+
+            answer_lines.append(f"{target} | {argument} | {targeted_group} | {hateful}")
         
         # 构建单个示例
         examples.append(
-            shot_prompt_template.format(                text=shot["content"],
+            shot_prompt_template.format(
+                text=shot["content"],
                 answer="\n".join(answer_lines)
             )
         )
@@ -54,26 +56,26 @@ def build_two_step_shot_prompt(
     )
 
 
-class StepOneLLMTester:
+class FewShotLLMTester:
     def __init__(
         self,
         llm_model: AliyunApiLLMModel,
+        shot_dataset_file: str,
         test_dataset_file: str,
+        shot_num: int,
+        seed: int,
+        prompts_save_dir: str,
         output_dir: str,
-        shot_dataset_file: Optional[str] = None,
-        shot_num: int = 0,
-        seed: int = 23333333,
         max_tokens: int = 512,
         temperature: Optional[float] = None,
         concurrency: int = 1,
-        max_retries: int = 5,
-        base_retry_wait_time: int = 0,
+        max_retries: int = 3,
+        base_retry_wait_time: int = 3,
         request_timeout: float = 45.0,
         checkpoint_interval: int = 10,
-        progress_dir: str = "./two_step/step1/progress",
+        progress_dir: str = "./few_shot/progress",
         max_progress_files: int = 5,
         input_file: Optional[str] = None,
-        use_metric: bool = True
     ):
         """
         FewShot测试执行器
@@ -84,6 +86,7 @@ class StepOneLLMTester:
             test_dataset_file: 测试数据集,
             shot_num: 例子抽样个数,
             seed: 随机抽样种子，用于复现结果,
+            prompts_save_dir: 生成的prompt文件的保存路径,
             output_dir: 输出文件保存路径,
             max_tokens: 生成文本的最大token数
             temperature: 采样温度（None表示使用模型默认值）
@@ -100,6 +103,8 @@ class StepOneLLMTester:
         self.shot_num = shot_num
         self.seed = seed
 
+        self.prompts_save_dir = prompts_save_dir
+        self.input_file = input_file
         self.output_dir = output_dir
         self.max_tokens = max_tokens
         self.temperature = temperature
@@ -110,7 +115,6 @@ class StepOneLLMTester:
         self.checkpoint_interval = checkpoint_interval
         self.progress_dir = progress_dir
         self.max_progress_files = max_progress_files
-        self.use_metric = use_metric
         os.makedirs(self.progress_dir, exist_ok=True)
 
         # 状态管理
@@ -142,51 +146,6 @@ class StepOneLLMTester:
             self._save_progress(force=True)
         
         logger.info("退出进度已保存，可重新运行程序继续处理")
-
-    def _create_datas(
-            self,
-            shot_data_path: Optional[str], 
-            test_data_path: str, 
-            shot_num: int = 5, 
-            seed: int = 23333333,
-            prompt_template: str = TRAIN_PROMPT_STEP_1_V1,
-            shot_prompt_template: str = SHOT_PROMPT_STEP_1_V1,
-            system_prompt: Optional[str] = None):
-        
-        if shot_data_path:
-            with open(shot_data_path, "r") as f:
-                self.shot_datas = json.load(f)
-        else:
-            self.shot_datas = []
-        
-        with open(test_data_path, "r") as f:
-            self.test_datas = json.load(f)
-
-        if system_prompt:
-            prompt_template = prompt_template.replace("{system_prompt}", system_prompt)
-        else:
-            prompt_template = prompt_template.replace("{system_prompt}", "")
-
-        if shot_num:
-            sample_shots = get_shots(self.shot_datas, shot_num=shot_num, seed=seed)
-            prompt_template = build_two_step_shot_prompt(
-                sample_shots, 
-                prompt_template, 
-                shot_prompt_template)
-        else:
-            prompt_template = prompt_template.replace("{shots}", "")
-
-        all_datas: list[dict] = []
-
-        for data in self.test_datas:
-            all_datas.append(
-                {
-                    "id": data["id"], 
-                    "content": data["content"], 
-                    "quadruples": data.get("quadruples", None), 
-                    "prompt": prompt_template.format(text=data["content"], system_prompt = "")})
-        
-        return all_datas
 
     def _load_progress(self) -> None:
         """加载最新进度文件"""
@@ -251,6 +210,51 @@ class StepOneLLMTester:
             self.last_checkpoint = len(self.results)
         except Exception as e:
             logger.error(f"进度保存失败: {str(e)}")
+
+    def _create_datas(
+            self,
+            shot_data_path: Optional[str], 
+            test_data_path: str, 
+            shot_num: int = 5, 
+            seed: int = 23333333,
+            prompt_template: str = TRAIN_PROMPT_FEW_SHOT_V1,
+            shot_prompt_template: str = SHOT_PROMPT_V1,
+            system_prompt: Optional[str] = None):
+        
+        if shot_data_path:
+            with open(shot_data_path, "r") as f:
+                self.shot_datas = json.load(f)
+        else:
+            self.shot_datas = []
+        
+        with open(test_data_path, "r") as f:
+            self.test_datas = json.load(f)
+
+        if system_prompt:
+            prompt_template = prompt_template.replace("{system_prompt}", system_prompt)
+        else:
+            prompt_template = prompt_template.replace("{system_prompt}", "")
+
+        if shot_num:
+            sample_shots = get_shots(self.shot_datas, shot_num=shot_num, seed=seed)
+            prompt_template = build_shot_prompt(
+                sample_shots, 
+                prompt_template, 
+                shot_prompt_template)
+        else:
+            prompt_template = prompt_template.replace("{shots}", "")
+
+        all_datas: list[dict] = []
+
+        for data in self.test_datas:
+            all_datas.append(
+                {
+                    "id": data["id"], 
+                    "content": data["content"], 
+                    "quadruples": data.get("quadruples", None), 
+                    "prompt": prompt_template.format(text=data["content"], system_prompt = "")})
+        
+        return all_datas
     
     def _clean_old_progress_files(self, keep: Optional[int] = None):
         """清理超出数量限制的旧进度文件"""
@@ -269,29 +273,67 @@ class StepOneLLMTester:
     def _parse_llm_output(self, llm_output: str) -> List[Dict]:
         """解析LLM输出并标准化格式"""
         quadruples = []
+        group_mapping = {
+            'racism': 'Racism',
+            'region': 'Region',
+            'lgbtq': 'LGBTQ',
+            'sexism': 'Sexism',
+            'others': 'Others',
+            'non_hate': 'non_hate',  # 特殊处理为全小写
+            'non-hate': 'non_hate',
+            'nonhate': 'non_hate',   # 兼容无下划线格式
+            'nohate': 'non_hate',  # 兼容简写格式
+            'hate': 'hate'
+        }
         
         lines = llm_output.strip().split('\n')
         for line in lines:
             parts = [part.strip() for part in line.split('|')]
-            if len(parts) != 2:
+            if len(parts) != 4:
                 continue
 
             # 处理 target 和 argument
             target = parts[0] if parts[0].upper() != 'NULL' else None
             argument = parts[1] if parts[1].upper() != 'NULL' else None
 
-            quadruples.append({
-                'target': target,
-                'argument': argument
-            })
+            # 智能处理 targeted_group
+            tg_raw = parts[2].strip().lower()
+            targeted_groups: list[str] = []
+            for tg_raw_sp in tg_raw.split(","):
+                tg = group_mapping.get(tg_raw_sp.strip(), None)
+                if not tg:
+                    continue
+                targeted_groups.append(tg)
+            targeted_group = ", ".join(targeted_groups)
+            
+            # 处理 hateful
+            hateful = parts[3].strip().lower()
+            hateful = group_mapping.get(hateful, None)
+            hateful = hateful if hateful in {'hate', 'non_hate'} else None
+
+            if targeted_group and hateful:  # 只有格式合法才保留
+                quadruples.append({
+                    'target': target,
+                    'argument': argument,
+                    'targeted_group': targeted_group,
+                    'hateful': hateful
+                })
         return quadruples
 
     def _validate_quadruples(self, quadruples: List[Dict]) -> bool:
         """验证四元组格式"""
         if not quadruples:
             return False
+            
+        # 最终合法值集合（注意大小写）
+        valid_targeted_groups = {'Racism', 'Region', 'LGBTQ', 'Sexism', 'Others', 'non_hate'}
+        valid_hateful = {'hate', 'non_hate'}
         
-        return True
+        return all(
+            (all(s in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
+            (q['hateful'] in valid_hateful) and q['hateful']
+            for q in quadruples
+        )
 
     def _process_item(self, item: Dict) -> Optional[Dict[str, Any]]:
         """处理单个数据项（含重试机制）"""
@@ -302,7 +344,6 @@ class StepOneLLMTester:
         item_id = item['id']
         prompt = item['prompt']
         quadruples = []
-        backoff = 0
         error_code = 1
         response = ""
         last_error = ""
@@ -341,25 +382,18 @@ class StepOneLLMTester:
                     else:
                         last_error = "Validation failed"
                         logger.warning(f"LLM输出验证失败 (ID:{item_id} 尝试:{attempt+1})")
-                        backoff = 0
                 else:
                     last_error = f"API error: error code {error_code}"
                     logger.warning(f"API错误 (ID:{item_id} 尝试:{attempt+1}) 错误码: {error_code}")
-                    if error_code == 429:
-                        backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
-                    elif error_code == 400:
-                        backoff = 2 ** (attempt + self.base_retry_wait_time)
                     
             except requests.exceptions.Timeout:
                 logger.warning(f"请求超时 (ID:{item_id} 尝试:{attempt+1})")
-                backoff = 2 ** (attempt + self.base_retry_wait_time)
             except Exception as e:
                 logger.exception(e)
                 logger.error(f"处理异常 (ID:{item_id}): {str(e)}", exc_info=True)
-                backoff = 2 ** (attempt + self.base_retry_wait_time)
-                self._shutdown_flag = True
 
             if attempt < self.max_retries:
+                backoff = 2 ** (attempt + self.base_retry_wait_time)
                 logger.info(f"等待{backoff}s后重试")
                 time.sleep(backoff)
 
@@ -374,27 +408,20 @@ class StepOneLLMTester:
         }
     
 
-    def _save_final_results(self, metric: Metrics):
+    def _save_final_results(self):
         """保存最终结果并清理"""
 
-        timestamp = time.strftime("%Y%m%d_%H%M%S")
-        output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}_{timestamp}.json"
-        os.makedirs(self.output_dir, exist_ok=True)
+        output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}.json"
         output_path = os.path.join(self.output_dir, output_name)
 
         info = {"model": self.llm.model_name,
                 "shot_num": self.shot_num,
                 "seed": self.seed,
                 'usage': self.total_usage.model_dump()}
-        
-        if self.use_metric:
-            metric_dict = metric.run(self.results)
-        else:
-            metric_dict = None
 
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump({"info": info, "metric": metric_dict, "results": self.results}, f, ensure_ascii=False, indent=2)
+                json.dump({"info": info, "results": self.results}, f, ensure_ascii=False, indent=2)
             
             self._clean_old_progress_files(keep=0)
             
@@ -403,13 +430,20 @@ class StepOneLLMTester:
             logger.error(f"结果保存失败: {str(e)}")
             raise
     
-    def run(self, metric: Metrics) -> None:
+    def run(self) -> None:
         """执行分析任务"""
         # 加载进度
         self._load_progress()
         
         # 读取数据
-        dataset = self._create_datas(self.shot_dataset_file, self.test_dataset_file, self.shot_num, self.seed, prompt_template=TRAIN_PROMPT_STEP_1_V1, shot_prompt_template=SHOT_PROMPT_STEP_1_V1)
+        dataset = self._create_datas(
+            self.shot_dataset_file, 
+            self.test_dataset_file, 
+            self.shot_num, 
+            self.seed, 
+            prompt_template=TRAIN_PROMPT_FEW_SHOT_V1, 
+            shot_prompt_template=SHOT_PROMPT_V1)
+        
         total_items = len(dataset)
         pending_items = [item for item in dataset if item['id'] not in self.processed_ids]
 
@@ -499,7 +533,7 @@ class StepOneLLMTester:
             with self.lock:
                 self._save_progress(force=True)
         else:
-            self._save_final_results(metric=metric)
+            self._save_final_results()
             self._show_summary()
 
     def _show_summary(self):
@@ -514,23 +548,43 @@ class StepOneLLMTester:
         logger.info(f"Total tokens: {self.total_usage.total_tokens}")
 
 if __name__ == "__main__" :
+    # model = AliyunApiLLMModel(
+    #     model_name="deepseek-v3",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    #     api_key="sk-06107e55e13c4b67b7f8a262548b9b53",
+    # )
+
+    from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+
     model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct-ft-202504251158-c4e8",
+        model_name="qwen-max",
         api_base="https://dashscope.aliyuncs.com/api/v1",
         api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
         use_dashscope=True,
-        system_prompt=TRAIN_PROMPT_STEP_1_SYSTEM_V1
+        system_prompt=TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
     )
 
-    tester = StepOneLLMTester(
+    # tester = FewShotLLMTester(
+    #     llm_model=model,
+    #     shot_dataset_file="./data/temp_train_data.json",
+    #     test_dataset_file="./data/temp_test_data.json",
+    #     shot_num=20,
+    #     seed=233,
+    #     concurrency=5,
+    #     prompts_save_dir="./few_shot/data/",
+    #     output_dir="./few_shot/output/"
+    # )
+
+    tester = FewShotLLMTester(
         llm_model=model,
-        test_dataset_file="./data/test_data.json",
-        concurrency=5,
-        output_dir="./two_step/step1/result/",
-        use_metric=False
+        shot_dataset_file="./data/temp_train_data.json",
+        test_dataset_file="./data/temp_test_data.json",
+        shot_num=10,
+        seed=23333333,
+        concurrency=1,
+        prompts_save_dir="./data/prompts/",
+        output_dir="./data/result/"
     )
 
-    metric = Metrics()
-
-    tester.run(metric=metric)
+    tester.run()
     # print(tester._parse_llm_output("中国人为啥要吹黑人性能力 | 女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism | hate"))

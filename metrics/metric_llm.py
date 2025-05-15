@@ -14,6 +14,8 @@ class LLMmetrics:
         self.total_f1_hard = 0
         self.total_f1_soft = 0
         self.avg_f1 = 0
+        self.success = 0
+        self.total = 0
 
     def _load_data(self):
         logger.info("正在读取数据...")
@@ -26,9 +28,11 @@ class LLMmetrics:
         self.metric_datas = []
 
         for result in results:
+            self.total += 1
             if result["status"] != "success":
                 continue
-
+            
+            self.success += 1
             gold_quads = result["quadruples"]
             gold_list = [
                 {
@@ -79,7 +83,10 @@ class LLMmetrics:
 
         score_dict = {"f1_hard": self.f1_hard,
                       "f1_soft": self.f1_soft,
-                      "f1_avg": self.avg_f1}
+                      "f1_avg": self.avg_f1,
+                      "success": self.success,
+                      "total": self.total,
+                      "success_rate": self.success / self.total}
         
         model_name = self.info["model"]
         shot_num = self.info["shot_num"]
@@ -94,6 +101,7 @@ class LLMmetrics:
     def run(self):
         self._load_data()
         try:
+            pred_list, gold_list = [], []
             for idx, (pred_list, gold_list) in enumerate(self.metric_datas, start=1):
                 self._calculate_score(pred_list, gold_list)
 
@@ -103,7 +111,6 @@ class LLMmetrics:
                                 f"({idx/self.data_len:.1%})"
                             )
         except Exception as e:
-            print((pred_list, gold_list))
             logger.exception(e)
             logger.error(f"运行时异常: {str(e)}", exc_info=True)
             exit()
@@ -115,7 +122,7 @@ class LLMmetrics:
         self._save_result()
 
 if __name__ == "__main__":
-    METRIC = LLMmetrics(data_path="./few_shot/output/output_deepseek-v3_20_233.json")
+    METRIC = LLMmetrics(data_path="/workspace/few_shot/output/output_qwen-max_15_23333333.json")
     METRIC.run()
         
     
