@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  hate_speech_detection:
+    build:
+      context: ./docker/   # 明确构建上下文
+      dockerfile: Dockerfile  # 显式指定 Dockerfile 路径
+    container_name: hate_speech_detection  # 固定容器名称
+    networks:
+      - my_network  # 使用自定义网络，替代 host 模式
+    user: "1000:1000"  # 以非 root 用户运行（需在 Dockerfile 中创建用户）
+    ports:
+      - "5000:5000"  # 仅暴露必要端口
+    ulimits:
+      stack: 67108864
+      memlock: -1
+    
+    restart: "unless-stopped"  # 容器退出后自动重启（除非手动停止）
+    tty: true  # 分配伪终端（便于进入容器）
+    stdin_open: true  # 保持标准输入开放
+    runtime: "nvidia"  # 明确指定 NVIDIA 运行时
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all  # 允许使用所有 GPU
+    volumes:
+      - "./:/workspace"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"  # 单日志文件最大 10MB
+        max-file: "3"    # 保留 3 个历史日志
+      
+
+networks:
+  my_network:  # 自定义网络提升隔离性
+    driver: bridge
