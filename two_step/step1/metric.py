@@ -67,23 +67,34 @@ def get_similarity(pred, gold) -> tuple[float, float]:
 
 class Metrics:
 
-    def __init__(self):
+    def __init__(self, data_path: str):
 
+        # 类参数
+        self.data_path = data_path
+
+        # 统计参数
         self.total_target_sim = 0
         self.total_arg_sim = 0
         self.avg_sim = 0
+        self.total = 0
+        self.success = 0
 
-    def _load_data(self, datas):
+    def _load_data(self, data_path: str):
         logger.info("正在读取数据...")
         
-        results = datas
-        print(datas[:10])
+        with open(data_path, "r") as f:
+            datas = json.load(f)
+
+        results = datas["results"]
 
         self.metric_datas = []
 
         for result in results:
+            self.total += 1
             if result["status"] != "success":
                 continue
+            self.success += 1
+
             print(result)
             gold_quads = result["quadruples"]
             gold_list = [
@@ -107,9 +118,9 @@ class Metrics:
         self.total_target_sim += target_sim
         self.total_arg_sim += arg_sim
 
-    def run(self, datas) -> dict:
+    def run(self) -> dict:
         logger.info('开始计算分数')
-        self._load_data(datas)
+        self._load_data(self.data_path)
         try:
             for idx, (pred_list, gold_list) in enumerate(self.metric_datas, start=1):
                 self._calculate_score(pred_list, gold_list)
@@ -130,13 +141,27 @@ class Metrics:
 
         score_dict = {"target_sim": self.avg_target_sim,
                       "arg_sim": self.avg_arg_sim,
-                      "avg": self.avg}
+                      "avg": self.avg,
+                      "success": self.success,
+                      "total": self.total,
+                      "success_rate": self.success / self.total}
         
         return score_dict
+    
+    def save_metric(self, score_dict: dict):
+
+        with open(self.data_path, "r") as f:
+            data = json.load(f)
+        
+        data["etric"] = score_dict
+
+        with open(self.data_path, "w") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-    METRIC = Metrics(data_path="./few_shot/output/output_deepseek-v3_20_233.json")
-    METRIC.run()
+    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2-7b-instruct-ft-202504250045-215b_0_23333333_20250425_101409.json")
+    score_dict = METRIC.run()
+    METRIC.save_metric(score_dict)
         
     
     
