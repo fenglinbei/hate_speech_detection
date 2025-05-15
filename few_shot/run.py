@@ -557,7 +557,7 @@ if __name__ == "__main__" :
     from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
 
     model = AliyunApiLLMModel(
-        model_name="deepseek-r1-distill-llama-8b",
+        model_name="qwen2.5-7b-instruct-ft-202504180934-6766",
         api_base="https://dashscope.aliyuncs.com/api/v1",
         api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
         use_dashscope=True,
@@ -579,7 +579,7 @@ if __name__ == "__main__" :
         llm_model=model,
         shot_dataset_file="./data/temp_train_data.json",
         test_dataset_file="./data/temp_test_data.json",
-        shot_num=0,
+        shot_num=15,
         seed=23333333,
         concurrency=1,
         prompts_save_dir="./data/prompts/",

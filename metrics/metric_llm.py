@@ -122,7 +122,7 @@ class LLMmetrics:
         self._save_result()
 
 if __name__ == "__main__":
-    METRIC = LLMmetrics(data_path="/workspace/few_shot/output/output_qwen-max_15_23333333.json")
+    METRIC = LLMmetrics(data_path="/workspace/few_shot/output/output_qwen2.5-7b-instruct-ft-202504180934-6766_10_23333333.json")
     METRIC.run()
         
     

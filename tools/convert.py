@@ -106,7 +106,7 @@ def convert_to_json(raw_data_path: str, save_path: str, is_test_data: bool = Fal
 
     print(f"成功处理{len(processed_data)}条样本，保存为{save_path}")
 
-def partition(processed_data: list[dict], ratio: float = 0.1) -> dict[str, list[dict]]:
+def partition(processed_data: list[dict], ratio: float = 0.1, seed: int = 23333333) -> dict[str, list[dict]]:
     """
     将数据集打乱后划分成训练集以测试集
     processed_data: 完整的数据集
@@ -115,6 +115,7 @@ def partition(processed_data: list[dict], ratio: float = 0.1) -> dict[str, list[
     # 创建原数据的浅拷贝以避免修改原始数据
     data = list(processed_data)
     # 打乱数据顺序
+    random.seed(seed)
     random.shuffle(data)
     # 计算测试集的大小
     test_size = int(len(data) * ratio)
