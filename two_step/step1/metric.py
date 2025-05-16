@@ -153,13 +153,13 @@ class Metrics:
         with open(self.data_path, "r") as f:
             data = json.load(f)
         
-        data["etric"] = score_dict
+        data["metric"] = score_dict
 
         with open(self.data_path, "w") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2-7b-instruct-ft-202504250045-215b_0_23333333_20250425_101409.json")
+    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2.5-7b-instruct-ft-202504242138-24f6_0_23333333_20250425_001509.json")
     score_dict = METRIC.run()
     METRIC.save_metric(score_dict)
         
