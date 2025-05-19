@@ -15,7 +15,7 @@ CMD ["tail", "-f", "/dev/null"]
 # RUN cp -r ./cudnn/include/* /usr/local/cuda/include
 # ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/cuda/lib64"
 
-# RUN pip install --no-cache-dir -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+RUN pip install --no-cache-dir -r requirements.txt -i https://mirror.baidu.com/pypi/simple
 # RUN pip uninstall opencv-python -y
 # RUN pip uninstall opencv-contrib-python -y
 # RUN pip uninstall opencv-python-headless -y

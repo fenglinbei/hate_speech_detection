@@ -10,11 +10,10 @@ services:
       - my_network  # 使用自定义网络，替代 host 模式
     user: "1000:1000"  # 以非 root 用户运行（需在 Dockerfile 中创建用户）
     ports:
-      - "5000:5000"  # 仅暴露必要端口
+      - "6006:6006"
     ulimits:
       stack: 67108864
       memlock: -1
-    
     restart: "unless-stopped"  # 容器退出后自动重启（除非手动停止）
     tty: true  # 分配伪终端（便于进入容器）
     stdin_open: true  # 保持标准输入开放

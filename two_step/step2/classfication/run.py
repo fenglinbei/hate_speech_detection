@@ -1,27 +1,27 @@
 import json
 import torch
 from loguru import logger
-from transformers import pipeline
+from transformers.pipelines import pipeline
 
-is_hate_pipe = pipeline("text-classification", model="./is_hate_model/checkpoint-1000", tokenizer="IDEA-CCNL/Erlangshen-TCBert-330M-Classification-Chinese")
-hate_type_pipe = pipeline("text-classification", model="./hate_type_model/checkpoint-3000", tokenizer="IDEA-CCNL/Erlangshen-TCBert-330M-Classification-Chinese")
+is_hate_pipe = pipeline("text-classification", model="/workspace/two_step/step2/classfication/is_hate_model/checkpoint-3900", tokenizer="IDEA-CCNL/Erlangshen-TCBert-330M-Classification-Chinese")
+hate_type_pipe = pipeline("text-classification", model="/workspace/two_step/step2/classfication/hate_type_model/checkpoint-3000", tokenizer="IDEA-CCNL/Erlangshen-TCBert-330M-Classification-Chinese")
 
 
 
 is_hate_mapping = {
-    'LABEL_0': 'non-hate',
-    'LABEL_1': 'hate'
+    'LABEL_1': 'non-hate',
+    'LABEL_0': 'hate'
 }
 
 hate_type_mapping ={
-    'LABEL_0': 'Racism',
-    'LABEL_1': 'others',
+    'LABEL_1': 'Racism',
+    'LABEL_4': 'others',
     'LABEL_2': 'Region',
-    'LABEL_3': 'LGBTQ',
-    'LABEL_4': 'Sexism',
+    'LABEL_0': 'LGBTQ',
+    'LABEL_3': 'Sexism',
 }
 
-def unpack_step1_data(datas: list[dict], with_gt: bool=False) -> list[dict]:
+def unpack_step1_data(datas: dict, with_gt: bool=False) -> list[dict]:
     unpack_datas: list[dict] = []
     for data in datas["results"]:
 
@@ -40,9 +40,31 @@ def unpack_step1_data(datas: list[dict], with_gt: bool=False) -> list[dict]:
 
     return unpack_datas
 
+def unpack_data(datas: list[dict]) -> list[dict]:
+    unpack_datas: list[dict] = []
+    task_id = 1
+    for data in datas:
+        quadruples = data["quadruples"]
+        for quadruple in quadruples:
+            unpack_datas.append(
+                {
+                    "id": data["id"],
+                    "task_id": task_id,
+                    "content": data["content"],
+                    "target": quadruple["target"],
+                    "argument": quadruple["argument"],
+                    "gt_targeted_group": quadruple["targeted_group"],
+                    "gt_hateful": quadruple["hateful"]
+                }
+            )
+            task_id += 1
+
+    return unpack_datas
+
 def process(test_data_path: str, output_path: str):
     with open(test_data_path, "r") as f:
-        test_datas = unpack_step1_data(json.load(f))
+        # test_datas = unpack_step1_data(json.load(f))
+        test_datas = unpack_data(json.load(f))
 
     results: list[dict] = []
 
@@ -50,11 +72,11 @@ def process(test_data_path: str, output_path: str):
         text = test_data["content"]
         logger.info(f"正在处理文本: {text}")
 
-        is_hate_output = is_hate_pipe(text)
+        is_hate_output: dict = is_hate_pipe(text)
     
         is_hate_label = is_hate_mapping[is_hate_output[0]['label']]
         if is_hate_label == 'hate':
-            hate_type_output = hate_type_pipe(text)
+            hate_type_output: dict = hate_type_pipe(text)
             result_dict = {
                 **test_data,
                 'pred_targeted_group': hate_type_mapping[hate_type_output[0]['label']],
@@ -74,9 +96,9 @@ def process(test_data_path: str, output_path: str):
         results.append(result_dict)
 
     with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump({"info": None, "metric": None, "results": results}, f, ensure_ascii=False, indent=2)
+        json.dump({"info": None, "metric": None, "results": results}, f, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
-    process("/workspace/two_step/step1/result/output_qwen2.5-7b-instruct-ft-202504251158-c4e8_0_23333333_20250425_150407.json",
-            "/workspace/two_step/step2/classfication/result/full_test_output.json")
+    process("/workspace/data/temp_test_data.json",
+            "/workspace/two_step/step2/classfication/result/Erlangshen-Roberta-330M-NLI_step3900.json")
 

@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 import torch
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -33,16 +34,53 @@ def compute_metrics(p):
     }
 
 # 统一训练函数
-def train_classifier(train_file, model_dir, num_labels=2):
+def train_classifier(train_file, val_file, model_dir, label_field, num_labels):
     # 加载数据
-    df = pd.read_csv(train_file)
-    texts = df["content"].tolist()
-    labels = df["label_id"].tolist()
+    with open(train_file, 'r', encoding='utf-8') as f:
+        train_data = json.load(f)
+    with open(val_file, 'r', encoding='utf-8') as f:
+        val_data = json.load(f)
+
+    # 提取文本和标签字符串
+    train_texts = [entry['content'] for entry in train_data if entry['quadruples'][0][label_field].split(", ")[0]  != "non-hate"]
+    val_texts = [entry['content'] for entry in val_data if entry['quadruples'][0][label_field].split(", ")[0]  != "non-hate"]
+
+    # 提取标签字符串并检查数据完整性
+    train_labels_str = []
+    for entry in train_data:
+        if not entry['quadruples']:
+            raise ValueError(f"Entry {entry['id']} has no quadruples.")
+        if label_field == "targeted_group":
+            label_str = entry['quadruples'][0][label_field].split(", ")[0]
+            if label_str == "non-hate":
+                continue
+            train_labels_str.append(label_str)
+        else:
+            train_labels_str.append(entry['quadruples'][0][label_field])
     
-    # 划分训练集和验证集
-    train_texts, val_texts, train_labels, val_labels = train_test_split(
-        texts, labels, test_size=0.1, random_state=42
-    )
+    val_labels_str = []
+    for entry in val_data:
+        if not entry['quadruples']:
+            raise ValueError(f"Entry {entry['id']} has no quadruples.")
+        if label_field == "targeted_group":
+            label_str = entry['quadruples'][0][label_field].split(", ")[0]
+            if label_str == "non-hate":
+                continue
+            val_labels_str.append(label_str)
+        else:
+            val_labels_str.append(entry['quadruples'][0][label_field])
+    
+    # 创建标签映射
+    all_labels_str = train_labels_str + val_labels_str
+    unique_labels = sorted(list(set(all_labels_str)))
+    label2id = {label: idx for idx, label in enumerate(unique_labels)}
+    
+    # 检查标签数量一致性
+    assert len(unique_labels) == num_labels, f"Expected {num_labels} labels, but found {len(unique_labels)}"
+    
+    # 转换标签为数值ID
+    train_labels = [label2id[label] for label in train_labels_str]
+    val_labels = [label2id[label] for label in val_labels_str]
     
     # 初始化分词器（使用中文BERT）
     # IDEA-CCNL/Erlangshen-ZEN2-345M-Chinese
@@ -108,15 +146,18 @@ def train_classifier(train_file, model_dir, num_labels=2):
 
 if __name__ == "__main__":
     # 训练第一个分类任务（二分类）
-    train_classifier(
-        train_file="./data/is_hate_classification_first_only_labeled.csv",
-        model_dir="./is_hate_model",
-        num_labels=2
-    )
-    
-    # 训练第二个分类任务（三分类）
     # train_classifier(
-    #     train_file="./data/hate_type_classification_first_only_labeled.csv",
-    #     model_dir="./hate_type_model",
-    #     num_labels=5
+    #     train_file="/workspace/data/temp_train_data.json",
+    #     val_file="/workspace/data/temp_test_data.json",
+    #     model_dir="/workspace/two_step/step2/classfication/is_hate_model",
+    #     label_field="hateful",
+    #     num_labels=2
     # )
+    
+    train_classifier(
+        train_file="/workspace/data/temp_train_data.json",
+        val_file="/workspace/data/temp_test_data.json",
+        model_dir="/workspace/two_step/step2/classfication/hate_type_model",
+        label_field="targeted_group",
+        num_labels=5
+    )

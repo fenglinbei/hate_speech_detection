@@ -515,19 +515,29 @@ class StepOneLLMTester:
 
 if __name__ == "__main__" :
     model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct-ft-202504251158-c4e8",
+        model_name="qwen2.5-7b-instruct",
         api_base="https://dashscope.aliyuncs.com/api/v1",
         api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
         use_dashscope=True,
         system_prompt=TRAIN_PROMPT_STEP_1_SYSTEM_V1
     )
 
+    # tester = StepOneLLMTester(
+    #     llm_model=model,
+    #     test_dataset_file="./data/test_data.json",
+    #     concurrency=5,
+    #     output_dir="./two_step/step1/result/",
+    #     use_metric=False
+    # )
+
     tester = StepOneLLMTester(
         llm_model=model,
-        test_dataset_file="./data/test_data.json",
+        shot_dataset_file="./data/temp_train_data.json",
+        test_dataset_file="./data/temp_test_data.json",
+        shot_num=10,
         concurrency=5,
         output_dir="./two_step/step1/result/",
-        use_metric=False
+        use_metric=True
     )
 
     metric = Metrics()

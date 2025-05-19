@@ -67,7 +67,7 @@ def get_similarity(pred, gold) -> tuple[float, float]:
 
 class Metrics:
 
-    def __init__(self, data_path: str):
+    def __init__(self, data_path: Optional[str] = None):
 
         # 类参数
         self.data_path = data_path
@@ -79,13 +79,18 @@ class Metrics:
         self.total = 0
         self.success = 0
 
-    def _load_data(self, data_path: str):
+    def _load_data(self, datas: Optional[list[dict]] = None, data_path: Optional[str] = None):
         logger.info("正在读取数据...")
         
-        with open(data_path, "r") as f:
-            datas = json.load(f)
+        assert isinstance(data_path, str) or isinstance(datas, list), "未提供合法参数"
 
-        results = datas["results"]
+        if isinstance(data_path, str):
+            with open(data_path, "r") as f:
+                results = json.load(f)["results"]
+        elif isinstance(datas, list):
+            results = datas
+        else:
+            raise ValueError("未提供合法参数")
 
         self.metric_datas = []
 
@@ -118,9 +123,9 @@ class Metrics:
         self.total_target_sim += target_sim
         self.total_arg_sim += arg_sim
 
-    def run(self) -> dict:
+    def run(self, datas: Optional[list[dict]] = None) -> dict:
         logger.info('开始计算分数')
-        self._load_data(self.data_path)
+        self._load_data(datas) if datas else self._load_data(data_path=self.data_path)
         try:
             for idx, (pred_list, gold_list) in enumerate(self.metric_datas, start=1):
                 self._calculate_score(pred_list, gold_list)
@@ -149,17 +154,17 @@ class Metrics:
         return score_dict
     
     def save_metric(self, score_dict: dict):
+        if isinstance(self.data_path, str):
+            with open(self.data_path, "r") as f:
+                data = json.load(f)
+            
+            data["metric"] = score_dict
 
-        with open(self.data_path, "r") as f:
-            data = json.load(f)
-        
-        data["metric"] = score_dict
-
-        with open(self.data_path, "w") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+            with open(self.data_path, "w") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2.5-7b-instruct-ft-202504242138-24f6_0_23333333_20250425_001509.json")
+    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2.5-7b-instruct_5_23333333_20250517_090431.json")
     score_dict = METRIC.run()
     METRIC.save_metric(score_dict)
         

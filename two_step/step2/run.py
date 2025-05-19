@@ -1,3 +1,4 @@
+import concurrent.futures
 import os
 import sys
 import json
@@ -87,12 +88,14 @@ def get_shots(shot_datas: list[dict], shot_num: int, seed: int = 23333333) -> li
 
 def unpack_data(datas: list[dict]) -> list[dict]:
     unpack_datas: list[dict] = []
+    task_id = 1
     for data in datas:
         quadruples = data["quadruples"]
         for quadruple in quadruples:
             unpack_datas.append(
                 {
                     "id": data["id"],
+                    "task_id": task_id,
                     "content": data["content"],
                     "target": quadruple["target"],
                     "argument": quadruple["argument"],
@@ -100,10 +103,11 @@ def unpack_data(datas: list[dict]) -> list[dict]:
                     "gt_hateful": quadruple["hateful"]
                 }
             )
+            task_id += 1
 
     return unpack_datas
 
-def unpack_step1_data(datas: list[dict], with_gt: bool=False) -> list[dict]:
+def unpack_step1_data(datas: dict, with_gt: bool=False) -> list[dict]:
     unpack_datas: list[dict] = []
     task_id = 1
     for data in datas["results"]:
@@ -124,6 +128,25 @@ def unpack_step1_data(datas: list[dict], with_gt: bool=False) -> list[dict]:
 
 
     return unpack_datas
+
+# def unpack_data(datas: list[dict]) -> list[dict]:
+#     unpack_datas: list[dict] = []
+#     task_id = 1
+#     for data in datas:
+#         gt_quadruples = data["quadruples"]
+#         for gt_quadruple in gt_quadruples:
+#             unpack_datas.append(
+#                 {
+#                     "id": data["id"],
+#                     "task_id": task_id,
+#                     "content": data["content"],
+#                     "gt_target": gt_quadruple["target"],
+#                     "gt_argument": gt_quadruple["argument"],
+#                 }
+#             )
+#             task_id += 1
+
+#     return unpack_datas
 
 
 class TwoStepLLMTester:
@@ -173,7 +196,6 @@ class TwoStepLLMTester:
         self.shot_num = shot_num
         self.seed = seed
 
-        self.input_file = input_file
         self.output_dir = output_dir
         self.max_tokens = max_tokens
         self.temperature = temperature
@@ -228,6 +250,7 @@ class TwoStepLLMTester:
             system_prompt: Optional[str] = None):
         
         if not step1_result_file:
+            assert isinstance(shot_data_path, str) and isinstance(test_data_path, str), "数据类型错误"
         
             with open(shot_data_path, "r") as f:
                 self.shot_datas = unpack_data(json.load(f))
@@ -256,23 +279,22 @@ class TwoStepLLMTester:
         all_datas: list[dict] = []
 
         for data in self.test_datas:
-            all_datas.append(
-                {   **data,
-                    "prompt": prompt_template.format(
-                        text=data["content"],
-                        target=data["pred_target"],
-                        argument=data['pred_argument'])})
+            if step1_result_file:
+                all_datas.append(
+                    {   **data,
+                        "prompt": prompt_template.format(
+                            text=data["content"],
+                            target=data["pred_target"],
+                            argument=data['pred_argument'])})
+            else:
+                all_datas.append(
+                    {   **data,
+                        "prompt": prompt_template.format(
+                            text=data["content"],
+                            target=data["target"],
+                            argument=data['argument'])})
         
         return all_datas
-
-    def _load_data(self) -> List[Dict]:
-        """加载输入数据"""
-        try:
-            with open(self.input_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            logger.error(f"数据加载失败: {str(e)}")
-            raise
 
     def _load_progress(self) -> None:
         """加载最新进度文件"""
@@ -338,7 +360,7 @@ class TwoStepLLMTester:
         except Exception as e:
             logger.error(f"进度保存失败: {str(e)}")
     
-    def _clean_old_progress_files(self, keep: int = None):
+    def _clean_old_progress_files(self, keep: Optional[int] = None):
         """清理超出数量限制的旧进度文件"""
         keep = keep if keep is not None else self.max_progress_files
         progress_files = sorted(glob.glob(os.path.join(self.progress_dir, "progress_*.json")), 
@@ -387,6 +409,9 @@ class TwoStepLLMTester:
         prompt = item['prompt']
         results = None
         backoff = 0
+        error_code = 1
+        response = ""
+        last_error = ""
         
         for attempt in range(self.max_retries + 1):
             if self._shutdown_flag:
@@ -614,23 +639,23 @@ if __name__ == "__main__" :
         system_prompt=TRAIN_PROMPT_STEP_2_SYSTEM_V1
     )
 
-    # tester = TwoStepLLMTester(
-    #     llm_model=model,
-    #     shot_dataset_file="./data/temp_train_data.json",
-    #     test_dataset_file="./data/temp_test_data.json",
-    #     shot_num=0,
-    #     seed=23333333,
-    #     concurrency=5,
-    #     output_dir="./two_step/step2/result/"
-    # )
-
     tester = TwoStepLLMTester(
         llm_model=model,
-        step1_result_file="/mnt/i/project/hateSpeechDetection/two_step/step1/result/output_qwen2.5-7b-instruct-ft-202504232331-1485_0_23333333_20250424_162731.json",
+        shot_dataset_file="./data/temp_train_data.json",
+        test_dataset_file="./data/temp_test_data.json",
         shot_num=0,
-        concurrency=3,
+        seed=23333333,
+        concurrency=10,
         output_dir="./two_step/step2/result/"
     )
+
+    # tester = TwoStepLLMTester(
+    #     llm_model=model,
+    #     step1_result_file="/mnt/i/project/hateSpeechDetection/two_step/step1/result/output_qwen2.5-7b-instruct-ft-202504232331-1485_0_23333333_20250424_162731.json",
+    #     shot_num=15,
+    #     concurrency=3,
+    #     output_dir="./two_step/step2/result/"
+    # )
 
     metric = Metrics()
 
