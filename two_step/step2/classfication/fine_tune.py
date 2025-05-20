@@ -98,7 +98,8 @@ def train_classifier(data_file, model_dir, label_field, num_labels, seed: int = 
         val_dataset = TextClassificationDataset(val_encodings, val_labels)
         
         # 加载模型
-        model = AutoModelForSequenceClassification.from_pretrained("./models/Erlangshen-Roberta-330M-NLI", num_labels=num_labels, ignore_mismatched_sizes=True)
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        model = AutoModelForSequenceClassification.from_pretrained("./models/Erlangshen-Roberta-330M-NLI", num_labels=num_labels, ignore_mismatched_sizes=True).to(device)
         
         new_model_dir = os.path.join(model_dir, str(fold))
         os.makedirs(new_model_dir, exist_ok=True)
