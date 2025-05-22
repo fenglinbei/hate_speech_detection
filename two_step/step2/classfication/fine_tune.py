@@ -11,6 +11,9 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+
 # 自定义数据集类
 class TextClassificationDataset(Dataset):
     def __init__(self, encodings, labels):
