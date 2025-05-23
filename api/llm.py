@@ -1,14 +1,18 @@
+import sys
 import time
 import requests
 from loguru import logger
-from typing import Tuple, Optional
-import sys
+from urllib.parse import urljoin
+from typing import Tuple, Optional, Dict, List
+from pydantic import validate_call
+
 sys.path.insert(0, ".")
 from utils.error import ApiError
 from utils.protocol import UsageInfo
 
 class ApiLLMModel:
 
+    @validate_call
     def __init__(
             self,
             model_name: str, 
@@ -16,15 +20,20 @@ class ApiLLMModel:
             api_key: str, 
             temperature: float=0.2, 
             top_p: float=0.1, 
-            http_proxy: Optional[str]=None,
-            https_proxy: Optional[str]=None,
-            system_prompt: Optional[str]=None) -> None:
+            timeout: int = 10,
+            http_proxy: Optional[str] = None,
+            https_proxy: Optional[str] = None,
+            system_prompt: Optional[str] = None) -> None:
+        
+        if not api_base.startswith(("http://", "https://")):
+            raise ValueError("Invalid API base URL")
         
         self.model_name = model_name
         self.api_base = api_base
         self.api_key = api_key
         self.temperature = temperature
         self.top_p = top_p
+        self.timeout = timeout
 
         self.usage_count = UsageInfo()
 
@@ -34,119 +43,151 @@ class ApiLLMModel:
             "Content-Type": "application/json"
         }
         self.system_prompt = system_prompt
-        if http_proxy or https_proxy:
-            self.proxies = {
-                'http': http_proxy,
-                'https': https_proxy
-            }
-        else:
-            self.proxies = None
+        self.proxies = self._build_proxies(http_proxy, https_proxy)
+    
+    def _build_proxies(self, http_proxy, https_proxy):
+        proxies = {}
+        if http_proxy:
+            proxies['http'] = http_proxy
+        if https_proxy:
+            proxies['https'] = https_proxy
+        return proxies or None
 
-    def update_usage(self, usage: UsageInfo):
+    def _update_usage(self, usage: UsageInfo):
         self.usage_count.prompt_tokens += usage.prompt_tokens
         self.usage_count.completion_tokens += usage.completion_tokens
         self.usage_count.total_tokens+= usage.total_tokens
 
-    def chat(self, prompt: str, max_new_tokens: int, temperature: Optional[float]=None) -> Tuple[str, UsageInfo, int]:
-
-        if self.system_prompt is not None:
-            messages = [
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": prompt}
-                ]
-        else:
-            messages = [
-                    {"role": "user", "content": prompt}
-                ]
+    def _build_messages(self, prompt: str) -> List[Dict[str, str]]:
+        messages = []
+        if self.system_prompt:
+            messages.append({"role": "system", "content": self.system_prompt})
+        messages.append({"role": "user", "content": prompt})
+        return messages
+    
+    def _build_params(
+            self, 
+            messages: list[dict[str, str]],
+            max_new_tokens: int, 
+            temperature: Optional[float] = None) -> dict:
         
         params = {
             "model": self.model_name,
             "messages": messages,
             "temperature": temperature if temperature is not None else self.temperature,
+            "top_p": self.top_p,  # 添加此行
             "max_tokens": max_new_tokens
-            }
+        }
+        return params
+    
+    def _build_url(self) -> str:
+        url = urljoin(self.api_base, "chat/completions")
+        return url
+        
+    def _parse_response(self, response_data: dict) -> Tuple[str, UsageInfo]:
+        if 'error' in response_data:
+            raise ApiError(response_data['error'])
+        return (
+            response_data["choices"][0]["message"]["content"],
+            UsageInfo(**response_data["usage"])
+        )
+
+    def chat(
+            self, 
+            prompt: str, 
+            max_new_tokens: int, 
+            temperature: Optional[float] = None
+            ) -> Tuple[Optional[str], Optional[UsageInfo], int]:
+        
+        response = None
+        status_code = 200
+
+        messages = self._build_messages(prompt)
+        params = self._build_params(messages, temperature=temperature, max_new_tokens=max_new_tokens)
+        url = self._build_url()
 
         try:
-            response = requests.post(url=f"{self.api_base}/chat/completions", json=params, headers=self.header, proxies=self.proxies)
-            response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
-            # logger.debug(f"LLM server response: {response.json()}")
-            response = response.json()
+            response = requests.post(
+                url=url, 
+                json=params, 
+                headers=self.header, 
+                proxies=self.proxies,
+                timeout=self.timeout)
+            response.raise_for_status()
+            response_data = response.json()
+            status_code = response.status_code
+            
+            content, usage = self._parse_response(response_data)
+            self._update_usage(usage)
 
-            if response['object'] == 'error':
-                error_code = response["code"]
-                return None, None, error_code
-            else:
-                error_code = 0
-
-            content = response["choices"][0]["message"]["content"]
-            usage = UsageInfo(**response["usage"])
-            self.update_usage(usage)
-            return content, usage, error_code
+            return content, usage, status_code
         
         except requests.exceptions.HTTPError as http_err:
-            logger.exception(f"HTTP error occurred: {http_err}, Response: {http_err.response.text}")
-            error_code = response.status_code
-            return None, None, error_code
+            
+            status_code = http_err.response.status_code
+            response_text = http_err.response.text
+            logger.error(f"HTTP Error {status_code}: {response_text}")
+            logger.exception(http_err)
+            return None, None, status_code
         except requests.exceptions.RequestException as req_err:
             logger.exception(f"Request error occurred: {req_err}")
-            error_code = 500
-            return None, None, error_code
+            status_code = 500
+            return None, None, status_code
         except KeyError as key_err:
-            logger.exception(f"Response parsing error: missing key {key_err}, Response: {response.text}")
-            error_code = response.status_code
-            return None, None, error_code
+            response_text = response.text if response else 'No response'
+            status_code = response.status_code if response else 500
+            logger.exception(...)
+            return None, None, status_code
         except Exception as e:
+            status_code = getattr(response, 'status_code', 500)
             logger.exception(f"An unexpected error occurred: {e}")
-            error_code = response.status_code
-            return None, None, error_code
+            return None, None, status_code
  
         
 class AliyunApiLLMModel(ApiLLMModel):   
 
     def __init__(
         self,
-        model_name: str, 
-        api_base: str, 
-        api_key: str, 
-        temperature: float=0.2, 
-        top_p: float=0.1, 
-        system_prompt: Optional[str]=None,
-        use_dashscope: bool = False
-        ) -> None:
+        model_name: str,
+        api_base: str,
+        api_key: str,
+        temperature: float = 0.2,
+        top_p: float = 0.1,
+        system_prompt: Optional[str] = None,
+        use_dashscope: bool = False,
+        http_proxy: Optional[str] = None,  # 新增代理参数
+        https_proxy: Optional[str] = None
+    ) -> None:
         
-        self.model_name = model_name
-        self.api_base = api_base
-        self.api_key = api_key
-        self.temperature = temperature
-        self.top_p = top_p
+        super().__init__(
+            model_name=model_name,
+            api_base=api_base,
+            api_key=api_key,
+            temperature=temperature,
+            top_p=top_p,
+            http_proxy=http_proxy,
+            https_proxy=https_proxy,
+            system_prompt=system_prompt
+        )
 
-        self.usage_count = UsageInfo()
-
+        self.use_dashscope = use_dashscope
         self.header = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
-        self.system_prompt = system_prompt
-        self.use_dashscope = use_dashscope
 
-    def update_usage(self, usage: UsageInfo):
-        self.usage_count.prompt_tokens += usage.prompt_tokens
-        self.usage_count.completion_tokens += usage.completion_tokens
-        self.usage_count.total_tokens+= usage.total_tokens
+    def _build_messages(self, prompt: str) -> list:
+        messages = super()._build_messages(prompt)
+        if "deepseek" in self.model_name:
+            messages = [msg for msg in messages if msg["role"] != "system"]
+        return messages
 
-    def chat(self, prompt: str, max_new_tokens: int, temperature: Optional[float]=None) -> Tuple[str, UsageInfo, int]:
-
-        if self.system_prompt is not None:
-            messages = [
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": prompt}
-                ] if "deepseek" not in self.model_name else [
-                    {"role": "user", "content": prompt}
-                ]
-        else:
-            messages = [
-                    {"role": "user", "content": prompt}
-                ]
+    def _build_params(
+            self, 
+            messages: list[dict[str, str]],
+            max_new_tokens: int, 
+            temperature: Optional[float] = None) -> dict:
+        
         if not self.use_dashscope:
             params = {
                 "model": self.model_name,
@@ -170,57 +211,41 @@ class AliyunApiLLMModel(ApiLLMModel):
                     "top_p": self.top_p
                 }
                 }
-        logger.debug(params)
-
-        try:
-            if not self.use_dashscope:
-                response = requests.post(url=f"{self.api_base}/chat/completions", json=params, headers=self.header)
-            else:
-                response = requests.post(url=f"{self.api_base}/services/aigc/text-generation/generation", json=params, headers=self.header)
-            response.raise_for_status()  # 如果响应状态码不是200，则抛出异常
-            logger.debug(f"LLM server response: {response.json()}")
-            response_data = response.json()
-            error_code = 0
-
-            if not self.use_dashscope:
-                content = response_data["choices"][0]["message"]["content"]
-                usage = UsageInfo(prompt_tokens=response_data["usage"]["prompt_tokens"], completion_tokens=response_data["usage"]["completion_tokens"], total_tokens=response_data["usage"]["total_tokens"])
-            else:
-                content = response_data["output"]["choices"][0]["message"]["content"]
-                usage = UsageInfo(prompt_tokens=response_data["usage"]["input_tokens"], completion_tokens=response_data["usage"]["output_tokens"], total_tokens=response_data["usage"]["total_tokens"])
-            self.update_usage(usage)
-            return content, usage, error_code
+        return params
+    
+    def _build_url(self) -> str:
+        if self.use_dashscope:
+            url = urljoin(self.api_base, "services/aigc/text-generation/generation")
+            return url
+        return super()._build_url()
+    
+    def _parse_response(self, response_data: dict) -> Tuple[str, UsageInfo]:
+        if 'code' in response_data and response_data['code'] != 200:
+            raise ApiError(response_data['message'])
         
-        except requests.exceptions.HTTPError as http_err:
-            logger.error(f"HTTP error occurred: {http_err}, Response: {http_err.response.text}")
-            error_code = response.status_code
-            return None, None, error_code
-        except requests.exceptions.RequestException as req_err:
-            logger.error(f"Request error occurred: {req_err}")
-            error_code = 500
-            return None, None, error_code
-        except KeyError as key_err:
-            logger.error(f"Response parsing error: missing key {key_err}, Response: {response.text}")
-            error_code = response.status_code
-            return None, None, error_code
-        except Exception as e:
-            logger.error(f"An unexpected error occurred: {e}")
-            error_code = response.status_code
-            return None, None, error_code
-        
+        if self.use_dashscope:
+            return (
+                response_data["output"]["choices"][0]["message"]["content"],
+                UsageInfo(
+                    prompt_tokens=response_data["usage"]["input_tokens"],
+                    completion_tokens=response_data["usage"]["output_tokens"],
+                    total_tokens=response_data["usage"]["total_tokens"]
+                )
+            )
+        return super()._parse_response(response_data)
         
 if __name__ == "__main__":
+    model = AliyunApiLLMModel(
+        model_name="qwen2.5-7b-instruct",
+        api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+        api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    )
+
     # model = AliyunApiLLMModel(
     #     model_name="qwen2.5-7b-instruct-ft-202504180131-7f77",
-    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    #     api_base="https://dashscope.aliyuncs.com/api/v1/",
     #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    #     # use_dashscope=True
     # )
-
-    model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct-ft-202504180131-7f77",
-        api_base="https://dashscope.aliyuncs.com/api/v1",
-        api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
-        use_dashscope=True
-    )
 
     print(model.chat(prompt="你好，你是谁？", max_new_tokens=1000))
