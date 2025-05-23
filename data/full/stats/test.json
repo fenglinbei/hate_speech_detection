@@ -1,0 +1,99 @@
+{
+  "total_samples": 1605,
+  "total_quadruples": 1902,
+  "text_length_stats": {
+    "tokenizer": "./models/Erlangshen-Roberta-330M-NLI",
+    "all": {
+      "max": 395,
+      "min": 5,
+      "mean": 38.33,
+      "median": 26,
+      "std_dev": 40.7
+    },
+    "hate": {
+      "max": 395,
+      "min": 5,
+      "mean": 50.07,
+      "median": 33,
+      "std_dev": 51.57
+    },
+    "non_hate": {
+      "max": 302,
+      "min": 7,
+      "mean": 34.08,
+      "median": 23,
+      "std_dev": 37.85
+    }
+  },
+  "target_groups": {
+    "Region": 298,
+    "Racism": 374,
+    "Sexism": 486,
+    "others": 120,
+    "LGBTQ": 133
+  },
+  "hate_ratio": {
+    "hate": 1217,
+    "non_hate": 684
+  },
+  "quadruple_distribution": {
+    "per_sample": {
+      "max": 6,
+      "min": 1,
+      "mean": 1.19,
+      "median": 1,
+      "std_dev": 0.48
+    },
+    "hate_per_sample": {
+      "max": 6,
+      "min": 0,
+      "mean": 0.76,
+      "median": 1,
+      "std_dev": 0.72
+    },
+    "non_hate_per_sample": {
+      "max": 3,
+      "min": 0,
+      "mean": 0.43,
+      "median": 0,
+      "std_dev": 0.58
+    }
+  },
+  "hate_by_group": {
+    "Region": {
+      "hate": 298
+    },
+    "Racism": {
+      "hate": 373,
+      "NULL": 1
+    },
+    "Sexism": {
+      "hate": 484,
+      "NULL": 1,
+      "non-hate": 1
+    },
+    "others": {
+      "hate": 118,
+      "NULL": 1,
+      "non-hate": 1
+    },
+    "LGBTQ": {
+      "hate": 131,
+      "non-hate": 2
+    }
+  },
+  "multi_category_labels": {
+    "Racism,Region": 11,
+    "LGBTQ,Racism": 2,
+    "Racism,Sexism": 96,
+    "Sexism,others": 7,
+    "Region,others": 12,
+    "Region,Sexism": 12,
+    "Racism,others": 10,
+    "LGBTQ,others": 13,
+    "LGBTQ,Sexism": 4,
+    "Racism,Sexism,others": 9,
+    "LGBTQ,Sexism,others": 2,
+    "LGBTQ,Region": 1
+  }
+}
