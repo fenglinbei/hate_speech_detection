@@ -2,6 +2,7 @@
 import sys
 import json
 import random
+from typing import Any
 
 sys.path.append(".")
 
@@ -149,17 +150,17 @@ def partition_to_json(raw_json_data_path: str, train_set_save_path: str, test_se
     with open(test_set_save_path, "w", encoding="utf-8") as f:
         json.dump(partitioned["test"], f, ensure_ascii=False, indent=2)
 
-def convert_to_raw_txt(output_json_data_path: str, raw_test_data: str):
+def convert_to_raw_txt(output_json_data_path: str, raw_test_data_path: str):
     # 读取原始JSON数据
 
-    with open(raw_test_data, "r") as f:
-        raw_test_datas = json.load(f)
+    with open(raw_test_data_path, "r") as f:
+        raw_test_datas: list[dict] = json.load(f)
 
     with open(output_json_data_path, "r", encoding="utf-8") as f:
         raw_data = json.load(f)
 
     results: list[dict] = raw_data["results"]
-    results_dict: dict[str, dict] = {}
+    results_dict: dict[str, str] = {}
 
     output_str_list: list[str] = []
 
@@ -186,6 +187,47 @@ def convert_to_raw_txt(output_json_data_path: str, raw_test_data: str):
     with open(output_json_data_path[:-5] + ".txt", "w") as f:
         f.write("\n".join(output_str_list))
 
+def convert_to_std_format(input_file_path: str, output_file_path: str):
+    # convert data to std format
+
+    with open(file=input_file_path, mode="r") as input_file:
+        input_datas: list[dict[str, Any]] = json.load(fp=input_file)
+
+    std_datas: list[dict] = []
+
+    for input_data in input_datas:
+        new_entry = {
+            "id": input_data["id"],
+            "content": input_data["content"],
+            "quadruples": []
+        }
+
+        # 收集所有Qn前缀（如Q1, Q2等）
+        prefixes = set()
+        for key in input_data:
+            if key.startswith("Q") and " Target" in key:
+                prefix = key.split(" ")[0]  # 提取Qn前缀
+                prefixes.add(prefix)
+        
+        # 处理每个Qn前缀并生成四元组
+        for prefix in sorted(prefixes):
+            target = input_data.get(f"{prefix} Target", "")
+            argument = input_data.get(f"{prefix} Argument", "")
+            group = input_data.get(f"{prefix} Group", "")
+            hateful = input_data.get(f"{prefix} hateful", "")
+            
+            if target and argument and group and hateful:
+                new_entry["quadruples"].append({
+                    "target": target,
+                    "argument": argument,
+                    "targeted_group": group,
+                    "hateful": hateful
+                })
+
+        std_datas.append(new_entry)
+
+    with open(output_file_path, "w") as output_file:
+        json.dump(std_datas, output_file, indent=2, ensure_ascii=False)
 
 
 
@@ -194,5 +236,7 @@ if __name__ == "__main__":
     # convert_to_train_json("./data/train_data_parsed.json", "train_data.jsonl")
     # convert_to_json("./data/raw/train.json", "./data/train_data_parsed.json")
     # partition_to_json("./data/train_data_parsed.json", "./data/temp_train_data.json", "./data/temp_test_data.json", 0.1)
-    convert_to_raw_txt(output_json_data_path="./data/result/output_qwen2.5-7b-instruct-ft-202504222112-4336_0_23333333.json", raw_test_data="./data/raw/test.json")
-    
+    # convert_to_raw_txt(output_json_data_path="./data/result/output_qwen2.5-7b-instruct-ft-202504222112-4336_0_23333333.json", raw_test_data="./data/raw/test.json")
+
+    # convert_to_std_format("data/full/raw/train.json", "data/full/std/train.json")
+    convert_to_std_format("data/full/raw/test.json", "data/full/std/test.json")

@@ -11,6 +11,9 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+
 # 自定义数据集类
 class TextClassificationDataset(Dataset):
     def __init__(self, encodings, labels):
@@ -75,7 +78,7 @@ def train_classifier(data_file, model_dir, label_field, num_labels, seed: int = 
     # IDEA-CCNL/Erlangshen-ZEN2-345M-Chinese
     # IDEA-CCNL/Erlangshen-TCBert-1.3B-Classification-Chinese
     # IDEA-CCNL/Erlangshen-TCBert-330M-Classification-Chinese
-    tokenizer = AutoTokenizer.from_pretrained("IDEA-CCNL/Erlangshen-Roberta-330M-NLI")
+    tokenizer = AutoTokenizer.from_pretrained("./models/Erlangshen-Roberta-330M-NLI")
     
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     accuracies = []
@@ -90,15 +93,16 @@ def train_classifier(data_file, model_dir, label_field, num_labels, seed: int = 
         val_labels = [labels[i] for i in val_idx]
 
         # 数据编码（动态分词，避免内存爆炸）
-        train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=256)
-        val_encodings = tokenizer(val_texts, truncation=True, padding=True, max_length=256)
+        train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=1024)
+        val_encodings = tokenizer(val_texts, truncation=True, padding=True, max_length=1024)
         
         # 创建数据集
         train_dataset = TextClassificationDataset(train_encodings, train_labels)
         val_dataset = TextClassificationDataset(val_encodings, val_labels)
         
         # 加载模型
-        model = AutoModelForSequenceClassification.from_pretrained("IDEA-CCNL/Erlangshen-Roberta-330M-NLI", num_labels=num_labels, ignore_mismatched_sizes=True)
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        model = AutoModelForSequenceClassification.from_pretrained("./models/Erlangshen-Roberta-330M-NLI", num_labels=num_labels, ignore_mismatched_sizes=True).to(device)
         
         new_model_dir = os.path.join(model_dir, str(fold))
         os.makedirs(new_model_dir, exist_ok=True)
@@ -112,9 +116,9 @@ def train_classifier(data_file, model_dir, label_field, num_labels, seed: int = 
             logging_strategy="steps",
             logging_steps=100,
             learning_rate=2e-5,
-            per_device_train_batch_size=16,
-            per_device_eval_batch_size=4,
-            num_train_epochs=10,
+            per_device_train_batch_size=32,
+            per_device_eval_batch_size=16,
+            num_train_epochs=30,
             weight_decay=0.01,
             load_best_model_at_end=False,
             metric_for_best_model="f1",
@@ -147,8 +151,8 @@ def train_classifier(data_file, model_dir, label_field, num_labels, seed: int = 
 if __name__ == "__main__":
     # 训练第一个分类任务（二分类）
     train_classifier(
-        data_file="/workspace/data/temp_train_data.json",
-        model_dir="/workspace/two_step/step2/classfication/is_hate_model",
+        data_file="./data/temp_train_data.json",
+        model_dir="./two_step/step2/classfication/is_hate_model",
         label_field="hateful",
         num_labels=2
     )
