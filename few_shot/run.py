@@ -1,5 +1,5 @@
 from utils.log import init_logger
-logger = init_logger(show=True)
+logger = init_logger(level="DEBUG", show=True)
 
 import concurrent.futures
 import os
