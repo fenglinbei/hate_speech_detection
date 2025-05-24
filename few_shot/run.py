@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.append(".")
 
 from prompt import *
-from api.llm import AliyunApiLLMModel
+from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 
@@ -59,7 +59,7 @@ def build_shot_prompt(
 class FewShotLLMTester:
     def __init__(
         self,
-        llm_model: AliyunApiLLMModel,
+        llm_model: AliyunApiLLMModel | ApiLLMModel,
         shot_dataset_file: str,
         test_dataset_file: str,
         shot_num: int,
@@ -359,7 +359,7 @@ class FewShotLLMTester:
                     prompt=prompt,
                     max_new_tokens=self.max_tokens,
                     temperature=self.temperature
-                )
+                )S
                 logger.debug(f"输出: {response}")
 
                 # 更新使用统计
@@ -556,12 +556,19 @@ if __name__ == "__main__" :
 
     from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
 
-    model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct-ft-202504180934-6766",
-        api_base="https://dashscope.aliyuncs.com/api/v1",
-        api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
-        use_dashscope=True,
-        system_prompt=TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct-ft-202504180934-6766",
+    #     api_base="https://dashscope.aliyuncs.com/api/v1",
+    #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    #     use_dashscope=True,
+    #     system_prompt=TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+    # )
+
+    model = ApiLLMModel(
+        model_name="qwen3-8b",
+        api_base="http://127.0.0.1:5001/api/v2",
+        api_key='23333333',
+        system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2
     )
 
     # tester = FewShotLLMTester(
@@ -577,13 +584,13 @@ if __name__ == "__main__" :
 
     tester = FewShotLLMTester(
         llm_model=model,
-        shot_dataset_file="./data/temp_train_data.json",
-        test_dataset_file="./data/temp_test_data.json",
-        shot_num=15,
+        shot_dataset_file="data/full/std/train.json",
+        test_dataset_file="data/full/std/test.json",
+        shot_num=0,
         seed=23333333,
         concurrency=1,
         prompts_save_dir="./data/prompts/",
-        output_dir="/workspace/few_shot/output/"
+        output_dir="few_shot/output/"
     )
 
     tester.run()
