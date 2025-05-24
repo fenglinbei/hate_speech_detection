@@ -20,7 +20,7 @@ class ApiLLMModel:
             api_key: str, 
             temperature: float=0.2, 
             top_p: float=0.1, 
-            timeout: int = 10,
+            timeout: int = 30,
             http_proxy: Optional[str] = None,
             https_proxy: Optional[str] = None,
             system_prompt: Optional[str] = None) -> None:
