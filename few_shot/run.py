@@ -359,7 +359,7 @@ class FewShotLLMTester:
                     prompt=prompt,
                     max_new_tokens=self.max_tokens,
                     temperature=self.temperature
-                )S
+                )
                 logger.debug(f"输出: {response}")
 
                 # 更新使用统计
@@ -369,7 +369,7 @@ class FewShotLLMTester:
                         self.total_usage.completion_tokens += usage.completion_tokens
                         self.total_usage.total_tokens += usage.total_tokens
 
-                if error_code == 0:
+                if error_code == 0 and isinstance(response, str):
                     quadruples = self._parse_llm_output(response)
                     if self._validate_quadruples(quadruples):
                         return {
