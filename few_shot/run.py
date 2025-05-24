@@ -1,3 +1,6 @@
+from utils.log import init_logger
+logger = init_logger()
+
 import concurrent.futures
 import os
 import sys
@@ -9,7 +12,6 @@ import requests
 import threading
 import concurrent
 from queue import Queue
-from loguru import logger
 from typing import Optional, List, Dict, Set, Any
 from concurrent.futures import ThreadPoolExecutor
 
@@ -566,7 +568,7 @@ if __name__ == "__main__" :
 
     model = ApiLLMModel(
         model_name="qwen3-8b",
-        api_base="http://127.0.0.1:5001/api/v2",
+        api_base="http://127.0.0.1:5001/api/v2/",
         api_key='23333333',
         system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2
     )

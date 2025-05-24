@@ -4,8 +4,8 @@ import logging
 from datetime import datetime
 from pprint import pformat
 from loguru import logger
-from config import SETTINGS
 
+LOG_PATH = "log/"
 LOG_FORMAT = '<level>{level: <8}</level>  <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> - <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>'
 
 class InterceptHandler(logging.Handler):
@@ -43,7 +43,7 @@ def format_record(record: dict) -> str:
 def init_logger(level: str = "INFO", show: bool = False):
     # Create a new log directory with the current server time
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_dir = os.path.join(SETTINGS.log_path, current_time)
+    log_dir = os.path.join(LOG_PATH, current_time)
     os.makedirs(log_dir, exist_ok=True)
 
     logging.getLogger().handlers = [InterceptHandler()]
