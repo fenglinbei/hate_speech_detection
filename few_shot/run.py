@@ -371,7 +371,7 @@ class FewShotLLMTester:
                         self.total_usage.completion_tokens += usage.completion_tokens
                         self.total_usage.total_tokens += usage.total_tokens
 
-                if error_code == 0 and isinstance(response, str):
+                if error_code == 200 and isinstance(response, str):
                     quadruples = self._parse_llm_output(response)
                     if self._validate_quadruples(quadruples):
                         return {
