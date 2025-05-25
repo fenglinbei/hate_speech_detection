@@ -235,11 +235,11 @@ class AliyunApiLLMModel(ApiLLMModel):
         return super()._parse_response(response_data)
         
 if __name__ == "__main__":
-    model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct",
-        api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
-        api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
-    )
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    # )
 
     # model = AliyunApiLLMModel(
     #     model_name="qwen2.5-7b-instruct-ft-202504180131-7f77",
@@ -247,5 +247,11 @@ if __name__ == "__main__":
     #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
     #     # use_dashscope=True
     # )
+
+    model = ApiLLMModel(
+        model_name="qwen3-8b",
+        api_base="http://127.0.0.1:5001/v2/",
+        api_key='23333333'
+    )
 
     print(model.chat(prompt="你好，你是谁？", max_new_tokens=1000))
