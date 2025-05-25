@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.append(".")
 
-from metric import Metrics
+from metrics.metric_llm import LLMmetrics
 from prompt import *
 from api.llm import AliyunApiLLMModel
 from utils.protocol import UsageInfo
@@ -657,7 +657,7 @@ if __name__ == "__main__" :
     #     output_dir="./two_step/step2/result/"
     # )
 
-    metric = Metrics()
+    # metric = LLMmetrics()
 
     tester.run(metric=metric)
     # print(tester._parse_llm_output("B | D"))

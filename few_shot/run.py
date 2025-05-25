@@ -1,5 +1,5 @@
 from utils.log import init_logger
-logger = init_logger(level="DEBUG", show=True)
+logger = init_logger(level="DEBUG", show_console=True)
 
 import concurrent.futures
 import os
@@ -597,4 +597,5 @@ if __name__ == "__main__" :
     )
 
     tester.run()
+    # print(tester._validate_quadruples(tester._parse_llm_output("NULL | NULL | non_hate | non_hate")))
     # print(tester._parse_llm_output("中国人为啥要吹黑人性能力 | 女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism | hate"))

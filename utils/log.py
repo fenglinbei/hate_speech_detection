@@ -4,88 +4,57 @@ import logging
 from datetime import datetime
 from pprint import pformat
 from loguru import logger
+import inspect
 
-LOG_PATH = "log/"
-LOG_FORMAT = '<level>{level: <8}</level>  <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> - <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>'
+LOG_PATH = os.getenv("LOG_PATH", "logs/")
+LOG_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+CONSOLE_FORMAT = '<level>{level: <8}</level>  <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> - <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>'
+FILE_FORMAT = '{level: <8}  {time:YYYY-MM-DD HH:mm:ss.SSS} - {name}:{function} - {message}'
 
 class InterceptHandler(logging.Handler):
     def emit(self, record):
-        # Get corresponding Loguru level if it exists
         try:
             level = logger.level(record.levelname).name
         except ValueError:
             level = record.levelno
 
-        # Find caller from where originated the logged message
-        frame, depth = logging.currentframe(), 2
-        while frame.f_code.co_filename == logging.__file__:
+        frame = inspect.currentframe().f_back
+        depth = 0
+        while frame and logging.__file__ in frame.f_code.co_filename:
             frame = frame.f_back
             depth += 1
 
-        logger.opt(depth=depth, exception=record.exc_info).log(
-            level, record.getMessage()
-        )
+        logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
-
-def format_record(record: dict) -> str:
-    format_string = LOG_FORMAT
-
-    if record["extra"].get("payload") is not None:
-        record["extra"]["payload"] = pformat(
-            record["extra"]["payload"], indent=4, compact=True, width=88
-        )
-        format_string += "\n<level>{extra[payload]}</level>"
-
-    format_string += "{exception}\n"
-    return format_string
-
-
-def init_logger(level: str = "INFO", show: bool = False):
-    # Create a new log directory with the current server time
+def init_logger(level: str = "INFO", log_path: str = LOG_PATH, show_console: bool = True):
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    log_dir = os.path.join(LOG_PATH, current_time)
-    os.makedirs(log_dir, exist_ok=True)
+    log_dir = os.path.join(log_path, current_time)
 
-    logging.getLogger().handlers = [InterceptHandler()]
-    logger.configure(
-        handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}])
-    
-    # Remove any existing handlers, in case this is not the first call
-    if not show:
-        logger.remove(handler_id=None)
-    
-    # INFO log file
-    logger.add(
-        os.path.join(log_dir, 'info.log'), 
-        encoding="utf-8", 
-        level=level,
-        filter=lambda record: record["level"].name == "INFO"
-    )
+    try:
+        os.makedirs(log_dir, exist_ok=True)
+    except OSError as e:
+        logger.error(f"Failed to create log directory: {e}")
+        raise
 
-    # DEBUG log file
-    logger.add(
-        os.path.join(log_dir, 'debug.log'), 
-        encoding="utf-8", 
-        level=level,
-        filter=lambda record: record["level"].name == "DEBUG"
-    )
+    # 拦截所有标准日志
+    logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
+    logging.getLogger("uvicorn.access").propagate = False
 
-    # ERROR log file
-    logger.add(
-        os.path.join(log_dir, 'error.log'), 
-        encoding="utf-8", 
-        level=level,
-        filter=lambda record: record["level"].name == "ERROR"
-    )
+    # 控制台日志
+    if show_console:
+        logger.add(sys.stdout, level=level, format=CONSOLE_FORMAT)
 
-    # CRITICAL log file
-    logger.add(
-        os.path.join(log_dir, 'critical.log'), 
-        encoding="utf-8", 
-        level=level,
-        filter=lambda record: record["level"].name == "CRITICAL"
-    )
-    
-    logger.info("Logger initialized in new directory: {}", log_dir)
-    logging.getLogger("uvicorn.access").handlers = [InterceptHandler()]
+    # 文件日志
+    for log_level in LOG_LEVELS:
+        logger.add(
+            os.path.join(log_dir, f'{log_level.lower()}.log'),
+            encoding="utf-8",
+            level=log_level,
+            filter=lambda record, lvl=log_level: record["level"].name == lvl,
+            format=FILE_FORMAT,
+            rotation="10 MB",
+            retention="7 days"
+        )
+
+    logger.info("Logger initialized in directory: {}", log_dir)
     return logger
