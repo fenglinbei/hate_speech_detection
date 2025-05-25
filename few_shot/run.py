@@ -346,7 +346,8 @@ class FewShotLLMTester:
         item_id = item['id']
         prompt = item['prompt']
         quadruples = []
-        error_code = 1
+        backoff = 0
+        error_code = 500
         response = ""
         last_error = ""
         
@@ -384,18 +385,23 @@ class FewShotLLMTester:
                     else:
                         last_error = "Validation failed"
                         logger.warning(f"LLM输出验证失败 (ID:{item_id} 尝试:{attempt+1})")
+                        backoff = 0
                 else:
                     last_error = f"API error: error code {error_code}"
                     logger.warning(f"API错误 (ID:{item_id} 尝试:{attempt+1}) 错误码: {error_code}")
+                    if error_code == 429:
+                        backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                     
             except requests.exceptions.Timeout:
                 logger.warning(f"请求超时 (ID:{item_id} 尝试:{attempt+1})")
+                backoff = 2 ** (attempt + self.base_retry_wait_time)
             except Exception as e:
                 logger.exception(e)
                 logger.error(f"处理异常 (ID:{item_id}): {str(e)}", exc_info=True)
+                backoff = 2 ** (attempt + self.base_retry_wait_time)
+                self._shutdown_flag = True
 
             if attempt < self.max_retries:
-                backoff = 2 ** (attempt + self.base_retry_wait_time)
                 logger.info(f"等待{backoff}s后重试")
                 time.sleep(backoff)
 
@@ -591,6 +597,7 @@ if __name__ == "__main__" :
         test_dataset_file="data/full/std/test.json",
         shot_num=0,
         seed=23333333,
+        base_retry_wait_time=0,
         concurrency=1,
         prompts_save_dir="./data/prompts/",
         output_dir="few_shot/output/"
