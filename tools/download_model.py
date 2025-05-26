@@ -10,9 +10,10 @@ text = tokenizer.apply_chat_template(
     add_generation_prompt=True,
     enable_thinking=False,  # Setting enable_thinking=False disables thinking mode
 )
-inputs = tokenizer([text], return_tensors="pt")
+inputs = tokenizer(text).input_ids
 
 print(text)
+print(inputs)
 # model = AutoModel.from_pretrained("models/Qwen3-8B")
 
 # print(model)
