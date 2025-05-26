@@ -416,7 +416,7 @@ class FewShotLLMTester:
         }
     
 
-    def _save_final_results(self):
+    def _save_final_results(self, llm_params: Optional[dict] = None):
         """保存最终结果并清理"""
 
         output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}.json"
@@ -425,7 +425,8 @@ class FewShotLLMTester:
         info = {"model": self.llm.model_name,
                 "shot_num": self.shot_num,
                 "seed": self.seed,
-                'usage': self.total_usage.model_dump()}
+                'usage': self.total_usage.model_dump(),
+                "llm_params": llm_params}
 
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
@@ -438,7 +439,7 @@ class FewShotLLMTester:
             logger.error(f"结果保存失败: {str(e)}")
             raise
     
-    def run(self) -> None:
+    def run(self, llm_params: Optional[dict] = None) -> None:
         """执行分析任务"""
         # 加载进度
         self._load_progress()
@@ -541,7 +542,7 @@ class FewShotLLMTester:
             with self.lock:
                 self._save_progress(force=True)
         else:
-            self._save_final_results()
+            self._save_final_results(llm_params)
             self._show_summary()
 
     def _show_summary(self):
@@ -595,7 +596,7 @@ if __name__ == "__main__" :
         llm_model=model,
         shot_dataset_file="data/full/std/train.json",
         test_dataset_file="data/full/std/test.json",
-        shot_num=0,
+        shot_num=5,
         seed=23333333,
         base_retry_wait_time=0,
         concurrency=1,
@@ -603,6 +604,19 @@ if __name__ == "__main__" :
         output_dir="few_shot/output/"
     )
 
-    tester.run()
+    # for qwen3
+    # 对于思考模式，使用 Temperature=0.6，TopP=0.95，TopK=20，以及 MinP=0
+    # 对于非思考模式，我们建议使用 Temperature=0.7，TopP=0.8，TopK=20，以及 MinP=0。
+    params = {
+        "max_new_tokens": 512, 
+        "n": 1,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0,
+        "temperature": 0.7, 
+        "enable_thinking": False
+    }
+
+    tester.run(llm_params=params)
     # print(tester._validate_quadruples(tester._parse_llm_output("NULL | NULL | non_hate | non_hate")))
     # print(tester._parse_llm_output("中国人为啥要吹黑人性能力 | 女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism | hate"))

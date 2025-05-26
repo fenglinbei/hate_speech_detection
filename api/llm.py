@@ -71,15 +71,19 @@ class ApiLLMModel:
             self, 
             messages: list[dict[str, str]],
             max_new_tokens: int, 
+            n: Optional[int] = 1,
+            top_p: Optional[float] = 1.0,
             temperature: Optional[float] = None, 
-            enable_thinking: Optional[bool] = False) -> dict:
+            enable_thinking: Optional[bool] = False
+            ) -> dict:
         
         params = {
             "model": self.model_name,
             "messages": messages,
             "temperature": temperature if temperature is not None else self.temperature,
-            "top_p": self.top_p,  # 添加此行
+            "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
             "max_tokens": max_new_tokens,
+            "n": n,
             "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
         }
         return params
@@ -100,7 +104,9 @@ class ApiLLMModel:
             self, 
             prompt: str, 
             max_new_tokens: int, 
-            temperature: Optional[float] = None,
+            n: Optional[int] = 1,
+            top_p: Optional[float] = 1.0,
+            temperature: Optional[float] = None, 
             enable_thinking: Optional[bool] = False
             ) -> Tuple[Optional[str], Optional[UsageInfo], int]:
         
@@ -108,7 +114,13 @@ class ApiLLMModel:
         status_code = 200
 
         messages = self._build_messages(prompt)
-        params = self._build_params(messages, temperature=temperature, max_new_tokens=max_new_tokens, enable_thinking=enable_thinking)
+        params = self._build_params(
+            messages, 
+            temperature=temperature, 
+            max_new_tokens=max_new_tokens, 
+            enable_thinking=enable_thinking,
+            n=n,
+            top_p=top_p)
         url = self._build_url()
 
         try:
@@ -191,7 +203,11 @@ class AliyunApiLLMModel(ApiLLMModel):
             self, 
             messages: list[dict[str, str]],
             max_new_tokens: int, 
-            temperature: Optional[float] = None) -> dict:
+            n: Optional[int] = 1,
+            top_p: Optional[float] = 1.0,
+            temperature: Optional[float] = None, 
+            enable_thinking: Optional[bool] = False
+            ) -> dict:
         
         if not self.use_dashscope:
             params = {
@@ -201,7 +217,10 @@ class AliyunApiLLMModel(ApiLLMModel):
                 {
                     "temperature": temperature if temperature is not None else self.temperature,
                     "max_tokens": max_new_tokens,
-                    "top_p": self.top_p
+                    "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
+                    "max_tokens": max_new_tokens,
+                    "n": n,
+                    "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
                 }
                 }
         else:
@@ -213,7 +232,10 @@ class AliyunApiLLMModel(ApiLLMModel):
                     "result_format": "message",
                     "temperature": temperature if temperature is not None else self.temperature,
                     "max_tokens": max_new_tokens,
-                    "top_p": self.top_p
+                    "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
+                    "max_tokens": max_new_tokens,
+                    "n": n,
+                    "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
                 }
                 }
         return params
