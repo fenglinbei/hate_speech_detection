@@ -20,7 +20,8 @@ class ApiLLMModel:
             api_key: str, 
             temperature: float=0.2, 
             top_p: float=0.1, 
-            timeout: int = 10,
+            enable_thinking: bool = False,
+            timeout: int = 30,
             http_proxy: Optional[str] = None,
             https_proxy: Optional[str] = None,
             system_prompt: Optional[str] = None) -> None:
@@ -33,6 +34,7 @@ class ApiLLMModel:
         self.api_key = api_key
         self.temperature = temperature
         self.top_p = top_p
+        self.enable_thinking = enable_thinking
         self.timeout = timeout
 
         self.usage_count = UsageInfo()
@@ -69,14 +71,16 @@ class ApiLLMModel:
             self, 
             messages: list[dict[str, str]],
             max_new_tokens: int, 
-            temperature: Optional[float] = None) -> dict:
+            temperature: Optional[float] = None, 
+            enable_thinking: Optional[bool] = False) -> dict:
         
         params = {
             "model": self.model_name,
             "messages": messages,
             "temperature": temperature if temperature is not None else self.temperature,
             "top_p": self.top_p,  # 添加此行
-            "max_tokens": max_new_tokens
+            "max_tokens": max_new_tokens,
+            "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
         }
         return params
     
@@ -96,14 +100,15 @@ class ApiLLMModel:
             self, 
             prompt: str, 
             max_new_tokens: int, 
-            temperature: Optional[float] = None
+            temperature: Optional[float] = None,
+            enable_thinking: Optional[bool] = False
             ) -> Tuple[Optional[str], Optional[UsageInfo], int]:
         
         response = None
         status_code = 200
 
         messages = self._build_messages(prompt)
-        params = self._build_params(messages, temperature=temperature, max_new_tokens=max_new_tokens)
+        params = self._build_params(messages, temperature=temperature, max_new_tokens=max_new_tokens, enable_thinking=enable_thinking)
         url = self._build_url()
 
         try:
@@ -235,11 +240,11 @@ class AliyunApiLLMModel(ApiLLMModel):
         return super()._parse_response(response_data)
         
 if __name__ == "__main__":
-    model = AliyunApiLLMModel(
-        model_name="qwen2.5-7b-instruct",
-        api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
-        api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
-    )
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    # )
 
     # model = AliyunApiLLMModel(
     #     model_name="qwen2.5-7b-instruct-ft-202504180131-7f77",
@@ -248,4 +253,10 @@ if __name__ == "__main__":
     #     # use_dashscope=True
     # )
 
-    print(model.chat(prompt="你好，你是谁？", max_new_tokens=1000))
+    model = ApiLLMModel(
+        model_name="qwen3-8b",
+        api_base="http://127.0.0.1:5001/v2/",
+        api_key='23333333'
+    )
+
+    print(model.chat(prompt="你好，你是谁？", max_new_tokens=1000, enable_thinking=True))
