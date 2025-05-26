@@ -439,8 +439,19 @@ class FewShotLLMTester:
             logger.error(f"结果保存失败: {str(e)}")
             raise
     
-    def run(self, llm_params: Optional[dict] = None) -> None:
+    def run(
+            self, 
+            llm_params: Optional[dict] = None,
+            seed: Optional[int] = None,
+            shot_num: Optional[int ] = None
+            ) -> None:
         """执行分析任务"""
+
+        if seed is not None:
+            self.seed = seed
+        if shot_num is not None:
+            self.shot_num = shot_num
+
         # 加载进度
         self._load_progress()
         
@@ -617,6 +628,11 @@ if __name__ == "__main__" :
         "enable_thinking": False
     }
 
-    tester.run(llm_params=params)
+    for shot_num in range(0, 32, 2):
+        print(shot_num)
+        tester.run(llm_params=params, shot_num=shot_num)
+    # tester.run(llm_params=params, shot_num=10)
+    # tester.run(llm_params=params, shot_num=15)
+    # tester.run(llm_params=params, shot_num=20)
     # print(tester._validate_quadruples(tester._parse_llm_output("NULL | NULL | non_hate | non_hate")))
     # print(tester._parse_llm_output("中国人为啥要吹黑人性能力 | 女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism | hate"))
