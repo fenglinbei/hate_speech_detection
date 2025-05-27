@@ -21,6 +21,7 @@ from prompt import *
 from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
+from metrics.metric_llm import LLMmetrics
 
 def build_shot_prompt(
         shots: list[dict],
@@ -78,6 +79,7 @@ class FewShotLLMTester:
         progress_dir: str = "./few_shot/progress",
         max_progress_files: int = 5,
         input_file: Optional[str] = None,
+        metric: Optional[LLMmetrics] = None
     ):
         """
         FewShot测试执行器
@@ -117,6 +119,7 @@ class FewShotLLMTester:
         self.checkpoint_interval = checkpoint_interval
         self.progress_dir = progress_dir
         self.max_progress_files = max_progress_files
+        self.metric = metric
         os.makedirs(self.progress_dir, exist_ok=True)
 
         # 状态管理
@@ -347,7 +350,7 @@ class FewShotLLMTester:
         prompt = item['prompt']
         quadruples = []
         backoff = 0
-        error_code = 500
+        status_code = 500
         response = ""
         last_error = ""
         
@@ -358,7 +361,7 @@ class FewShotLLMTester:
             text = item["content"]
             logger.info(f"正在处理文本: {text}")
             try:
-                response, usage, error_code = self.llm.chat(
+                response, usage, status_code = self.llm.chat(
                     prompt=prompt,
                     max_new_tokens=self.max_tokens,
                     temperature=self.temperature
@@ -372,7 +375,7 @@ class FewShotLLMTester:
                         self.total_usage.completion_tokens += usage.completion_tokens
                         self.total_usage.total_tokens += usage.total_tokens
 
-                if error_code == 200 and isinstance(response, str):
+                if status_code == 200 and isinstance(response, str):
                     quadruples = self._parse_llm_output(response)
                     if self._validate_quadruples(quadruples):
                         return {
@@ -387,9 +390,9 @@ class FewShotLLMTester:
                         logger.warning(f"LLM输出验证失败 (ID:{item_id} 尝试:{attempt+1})")
                         backoff = 0
                 else:
-                    last_error = f"API error: error code {error_code}"
-                    logger.warning(f"API错误 (ID:{item_id} 尝试:{attempt+1}) 错误码: {error_code}")
-                    if error_code == 429:
+                    last_error = f"API error: status code {status_code}"
+                    logger.warning(f"API错误 (ID:{item_id} 尝试:{attempt+1}) 错误码: {status_code}")
+                    if status_code == 429:
                         backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                     
             except requests.exceptions.Timeout:
@@ -405,10 +408,10 @@ class FewShotLLMTester:
                 logger.info(f"等待{backoff}s后重试")
                 time.sleep(backoff)
 
-        final_status = "invalid" if error_code == 0 else "failed"
+        final_status = "invalid" if status_code == 200 else "failed"
         return {
             **item,
-            "llm_output": response if error_code == 0 else None,
+            "llm_output": response if status_code == 200 else None,
             "parsed_quadruples": quadruples,
             "status": final_status,
             "attempts": self.max_retries + 1,
@@ -416,7 +419,10 @@ class FewShotLLMTester:
         }
     
 
-    def _save_final_results(self, llm_params: Optional[dict] = None):
+    def _save_final_results(
+            self, 
+            llm_params: Optional[dict] = None,
+            metric_results: Optional[dict] = None):
         """保存最终结果并清理"""
 
         output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}.json"
@@ -430,7 +436,12 @@ class FewShotLLMTester:
 
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
-                json.dump({"info": info, "results": self.results}, f, ensure_ascii=False, indent=2)
+                json.dump(
+                    {
+                        "info": info, 
+                        "results": self.results,
+                        "metric": metric_results
+                        }, f, ensure_ascii=False, indent=2)
             
             self._clean_old_progress_files(keep=0)
             
@@ -443,7 +454,8 @@ class FewShotLLMTester:
             self, 
             llm_params: Optional[dict] = None,
             seed: Optional[int] = None,
-            shot_num: Optional[int ] = None
+            shot_num: Optional[int] = None,
+            enable_metric: Optional[bool] = False
             ) -> None:
         """执行分析任务"""
 
