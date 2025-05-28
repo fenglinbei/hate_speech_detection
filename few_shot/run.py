@@ -1,5 +1,5 @@
 from utils.log import init_logger
-logger = init_logger(level="DEBUG", show_console=True)
+logger = init_logger(level="INFO", show_console=True)
 
 import concurrent.futures
 import os
@@ -11,11 +11,10 @@ import signal
 import requests
 import threading
 import concurrent
+from tqdm import tqdm
 from queue import Queue
 from typing import Optional, List, Dict, Set, Any
 from concurrent.futures import ThreadPoolExecutor
-
-sys.path.append(".")
 
 from prompt import *
 from api.llm import AliyunApiLLMModel, ApiLLMModel
@@ -27,14 +26,11 @@ def build_shot_prompt(
         shots: list[dict],
         prompt_template: str,
         shot_prompt_template: str) -> str:
-    """
-    构建prompt
+    """Construct prompt with examples"""
 
-    shots: 随机挑选的测试样本
-    """
     examples = []
     for shot in shots:
-        # 生成答案部分
+        # Generate answer section
         answer_lines = []
         for q in shot["quadruples"]:
             target = (q.get("target", "") or "NULL").strip()
@@ -44,7 +40,7 @@ def build_shot_prompt(
 
             answer_lines.append(f"{target} | {argument} | {targeted_group} | {hateful}")
         
-        # 构建单个示例
+        # Build single example
         examples.append(
             shot_prompt_template.format(
                 text=shot["content"],
@@ -52,7 +48,7 @@ def build_shot_prompt(
             )
         )
     
-    # 组合所有示例并生成包含示例的prompt模板
+    # Combine all examples into the prompt template
     return prompt_template.format(
         text = "{text}",
         shots="\n\n".join(examples)
@@ -65,10 +61,10 @@ class FewShotLLMTester:
         llm_model: AliyunApiLLMModel | ApiLLMModel,
         shot_dataset_file: str,
         test_dataset_file: str,
-        shot_num: int,
-        seed: int,
         prompts_save_dir: str,
         output_dir: str,
+        shot_num: int = 0,
+        seed: int = 23333333,
         max_tokens: int = 512,
         temperature: Optional[float] = None,
         concurrency: int = 1,
@@ -82,24 +78,26 @@ class FewShotLLMTester:
         metric: Optional[LLMmetrics] = None
     ):
         """
-        FewShot测试执行器
+        Few-shot test executor
 
         Args:
-            llm_model: 配置好的LLM模型实例
-            shot_dataset_file: 例子抽样数据集,
-            test_dataset_file: 测试数据集,
-            shot_num: 例子抽样个数,
-            seed: 随机抽样种子，用于复现结果,
-            prompts_save_dir: 生成的prompt文件的保存路径,
-            output_dir: 输出文件保存路径,
-            max_tokens: 生成文本的最大token数
-            temperature: 采样温度（None表示使用模型默认值）
-            concurrency: 并发请求数
-            max_retries: 最大重试次数
-            request_timeout: 单请求超时时间(秒)
-            checkpoint_interval: 检查点保存间隔(处理数量)
-            progress_file: 进度文件路径
-            input_file: 已经处理好的prompts数据文件（可选）,
+            llm_model: Configured LLM model instance
+            shot_dataset_file: Dataset for demonstration examples
+            test_dataset_file: Test dataset
+            shot_num: Number of demonstration examples
+            seed: Random seed for reproducibility
+            prompts_save_dir: Path to save generated prompts
+            output_dir: Output directory for results
+            max_tokens: Max tokens for generation
+            temperature: Sampling temperature (None for model default)
+            concurrency: Concurrent request limit
+            max_retries: Max retry attempts
+            request_timeout: Request timeout in seconds
+            checkpoint_interval: Checkpoint saving interval
+            progress_dir: Progress tracking directory
+            max_progress_files: Max progress files to retain
+            input_file: Pre-generated prompts file (optional)
+            metric: Evaluation metric module
         """
         self.llm = llm_model
         self.shot_dataset_file = shot_dataset_file
@@ -122,44 +120,46 @@ class FewShotLLMTester:
         self.metric = metric
         os.makedirs(self.progress_dir, exist_ok=True)
 
-        # 状态管理
+        # State management
         self.lock = threading.RLock()
-        self.processed_ids: Set[int] = set()
-        self.results: List[Dict] = []
-        self.total_usage = UsageInfo()
-        self.last_checkpoint = 0
+        self._init_state()
 
         self._shutdown_flag = False
         self.executor = None
 
-        # 注册信号处理
+        # Signal handling
         signal.signal(signal.SIGINT, self._graceful_shutdown)
         signal.signal(signal.SIGTERM, self._graceful_shutdown)
+
+    def _init_state(self):
+        self.processed_ids: Set[int] = set()
+        self.results: List[Dict] = []
+        self.total_usage = UsageInfo()
+        self.last_checkpoint = 0
     
     def _graceful_shutdown(self, signum, frame):
-        """处理中断信号"""
-        logger.warning(f"\n捕获信号 {signum}，开始退出...")
+        """Handle interrupt signals"""
+
+        logger.info(f"\nReceived signal {signum}, initiating shutdown...")
         self._shutdown_flag = True
         
-        # 关闭执行器
         if self.executor:
-            logger.info("正在终止线程池...")
+            logger.info("Terminating Thread Pool...")
             self.executor.shutdown(wait=True)
 
-        # 保存进度
         with self.lock:
             self._save_progress(force=True)
         
-        logger.info("退出进度已保存，可重新运行程序继续处理")
+        logger.info("Progress saved. You can resume by rerunning the program.")
 
     def _load_progress(self) -> None:
-        """加载最新进度文件"""
+        """Load latest progress file"""
+
         try:
-            # 获取所有符合命名规则的进度文件
             progress_files = glob.glob(os.path.join(self.progress_dir, "progress_*.json"))
             
             if not progress_files:
-                logger.info("未找到历史进度文件")
+                logger.warning("No history progress files found.")
                 return
 
             # 按修改时间排序（最新在前）
@@ -171,24 +171,23 @@ class FewShotLLMTester:
 
                 loaded_ids = {res['id'] for res in progress['results']}
                 if loaded_ids != set(progress['processed_ids']):
-                    logger.error("progress文件id不一致，请重新检查再试...")
+                    logger.error("ID mismatch in progress file.")
                     raise Exception()
 
                 self.processed_ids = set(progress['processed_ids'])
                 self.results = progress['results']
                 self.total_usage = UsageInfo(**progress['usage'])
-                logger.info(f"已从 {os.path.basename(latest_file)} 恢复进度，已处理 {len(self.processed_ids)} 条")
+                logger.info(f"Resumed progress from {os.path.basename(latest_file)}, processed {len(self.processed_ids)} items")
 
         except Exception as e:
-            logger.error(f"进度加载失败: {str(e)}")
+            logger.error(f"Progress loading failed: {str(e)}")
 
     def _save_progress(self, force=False) -> None:
-        """保存进度（带时间戳和文件数控制）"""
-        # 保存频率检查
+        """Save progress with timestamp and file rotation"""
+
         if not force and (len(self.results) - self.last_checkpoint < self.checkpoint_interval):
             return
 
-        # 准备进度数据
         progress = {
             'processed_ids': list(self.processed_ids),
             'results': self.results,
@@ -200,21 +199,19 @@ class FewShotLLMTester:
         }
 
         try:
-            # 生成带时间戳的文件名
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             filename = f"progress_{timestamp}.json"
             filepath = os.path.join(self.progress_dir, filename)
             
-            # 写入文件
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(progress, f, ensure_ascii=False, indent=2)
-            logger.debug(f"进度已保存至 {filename}")
+            logger.info(f"Progress saved to {filename}")
 
             self._clean_old_progress_files()
 
             self.last_checkpoint = len(self.results)
         except Exception as e:
-            logger.error(f"进度保存失败: {str(e)}")
+            logger.error(f"Progress save failed: {str(e)}")
 
     def _create_datas(
             self,
@@ -256,13 +253,14 @@ class FewShotLLMTester:
                 {
                     "id": data["id"], 
                     "content": data["content"], 
-                    "quadruples": data.get("quadruples", None), 
+                    "gt_quadruples": data.get("quadruples", None), 
                     "prompt": prompt_template.format(text=data["content"], system_prompt = "")})
         
         return all_datas
     
     def _clean_old_progress_files(self, keep: Optional[int] = None):
-        """清理超出数量限制的旧进度文件"""
+        """Clean up old progress files"""
+
         keep = keep if keep is not None else self.max_progress_files
         progress_files = sorted(glob.glob(os.path.join(self.progress_dir, "progress_*.json")), 
                             key=os.path.getmtime)
@@ -271,12 +269,13 @@ class FewShotLLMTester:
             for filepath in progress_files[:remove_count]:
                 try:
                     os.remove(filepath)
-                    logger.debug(f"清理旧进度文件: {os.path.basename(filepath)}")
+                    logger.debug(f"Cleaned old progress file: {os.path.basename(filepath)}")
                 except Exception as e:
-                    logger.warning(f"文件清理失败 {filepath}: {str(e)}")
+                    logger.warning(f"Failed to clean file {filepath}: {str(e)}")
 
     def _parse_llm_output(self, llm_output: str) -> List[Dict]:
-        """解析LLM输出并标准化格式"""
+        """Parse and standardize LLM output"""
+
         quadruples = []
         group_mapping = {
             'racism': 'Racism',
@@ -284,10 +283,10 @@ class FewShotLLMTester:
             'lgbtq': 'LGBTQ',
             'sexism': 'Sexism',
             'others': 'Others',
-            'non_hate': 'non_hate',  # 特殊处理为全小写
+            'non_hate': 'non_hate',
             'non-hate': 'non_hate',
-            'nonhate': 'non_hate',   # 兼容无下划线格式
-            'nohate': 'non_hate',  # 兼容简写格式
+            'nonhate': 'non_hate',
+            'nohate': 'non_hate',
             'hate': 'hate'
         }
         
@@ -297,11 +296,9 @@ class FewShotLLMTester:
             if len(parts) != 4:
                 continue
 
-            # 处理 target 和 argument
             target = parts[0] if parts[0].upper() != 'NULL' else None
             argument = parts[1] if parts[1].upper() != 'NULL' else None
 
-            # 智能处理 targeted_group
             tg_raw = parts[2].strip().lower()
             targeted_groups: list[str] = []
             for tg_raw_sp in tg_raw.split(","):
@@ -311,12 +308,11 @@ class FewShotLLMTester:
                 targeted_groups.append(tg)
             targeted_group = ", ".join(targeted_groups)
             
-            # 处理 hateful
             hateful = parts[3].strip().lower()
             hateful = group_mapping.get(hateful, None)
             hateful = hateful if hateful in {'hate', 'non_hate'} else None
 
-            if targeted_group and hateful:  # 只有格式合法才保留
+            if targeted_group and hateful:
                 quadruples.append({
                     'target': target,
                     'argument': argument,
@@ -326,11 +322,11 @@ class FewShotLLMTester:
         return quadruples
 
     def _validate_quadruples(self, quadruples: List[Dict]) -> bool:
-        """验证四元组格式"""
+        """Validate quadruple format"""
+
         if not quadruples:
             return False
             
-        # 最终合法值集合（注意大小写）
         valid_targeted_groups = {'Racism', 'Region', 'LGBTQ', 'Sexism', 'Others', 'non_hate'}
         valid_hateful = {'hate', 'non_hate'}
         
@@ -341,10 +337,10 @@ class FewShotLLMTester:
         )
 
     def _process_item(self, item: Dict) -> Optional[Dict[str, Any]]:
-        """处理单个数据项（含重试机制）"""
+        """Process single item with retry mechanism"""
 
         if self._shutdown_flag:
-            return None  # 提前终止处理
+            return None
 
         item_id = item['id']
         prompt = item['prompt']
@@ -356,19 +352,18 @@ class FewShotLLMTester:
         
         for attempt in range(self.max_retries + 1):
             if self._shutdown_flag:
-                logger.debug(f"中断信号已接收，终止处理ID: {item['id']}")
+                logger.debug(f"Shutdown signal received, aborting ID: {item['id']}")
                 return None
             text = item["content"]
-            logger.info(f"正在处理文本: {text}")
+            logger.debug(f"Processing text: {text}")
             try:
                 response, usage, status_code = self.llm.chat(
                     prompt=prompt,
                     max_new_tokens=self.max_tokens,
                     temperature=self.temperature
                 )
-                logger.debug(f"输出: {response}")
+                logger.debug(f"LLM Output: {response}")
 
-                # 更新使用统计
                 with self.lock:
                     if usage:
                         self.total_usage.prompt_tokens += usage.prompt_tokens
@@ -381,31 +376,31 @@ class FewShotLLMTester:
                         return {
                             **item,
                             "llm_output": response,
-                            "parsed_quadruples": quadruples,
+                            "pred_quadruples": quadruples,
                             "status": "success",
                             "attempts": attempt + 1
                         }
                     else:
                         last_error = "Validation failed"
-                        logger.warning(f"LLM输出验证失败 (ID:{item_id} 尝试:{attempt+1})")
+                        logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
                         backoff = 0
                 else:
                     last_error = f"API error: status code {status_code}"
-                    logger.warning(f"API错误 (ID:{item_id} 尝试:{attempt+1}) 错误码: {status_code}")
+                    logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
                     if status_code == 429:
                         backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                     
             except requests.exceptions.Timeout:
-                logger.warning(f"请求超时 (ID:{item_id} 尝试:{attempt+1})")
+                logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
                 backoff = 2 ** (attempt + self.base_retry_wait_time)
             except Exception as e:
                 logger.exception(e)
-                logger.error(f"处理异常 (ID:{item_id}): {str(e)}", exc_info=True)
+                logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
                 backoff = 2 ** (attempt + self.base_retry_wait_time)
                 self._shutdown_flag = True
 
             if attempt < self.max_retries:
-                logger.info(f"等待{backoff}s后重试")
+                logger.debug(f"Retrying after {backoff}s")
                 time.sleep(backoff)
 
         final_status = "invalid" if status_code == 200 else "failed"
@@ -423,7 +418,7 @@ class FewShotLLMTester:
             self, 
             llm_params: Optional[dict] = None,
             metric_results: Optional[dict] = None):
-        """保存最终结果并清理"""
+        """Save final results and clean up"""
 
         output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}.json"
         output_path = os.path.join(self.output_dir, output_name)
@@ -445,29 +440,27 @@ class FewShotLLMTester:
             
             self._clean_old_progress_files(keep=0)
             
-            logger.info(f"最终结果已保存至 {self.output_dir}")
+            logger.info(f"Final results saved to {self.output_dir}")
         except Exception as e:
-            logger.error(f"结果保存失败: {str(e)}")
+            logger.error(f"Result save failed: {str(e)}")
             raise
     
     def run(
             self, 
             llm_params: Optional[dict] = None,
             seed: Optional[int] = None,
-            shot_num: Optional[int] = None,
-            enable_metric: Optional[bool] = False
+            shot_num: Optional[int] = None
             ) -> None:
-        """执行分析任务"""
+        """Execute analysis task"""
+
+        self._init_state()
 
         if seed is not None:
             self.seed = seed
         if shot_num is not None:
             self.shot_num = shot_num
 
-        # 加载进度
         self._load_progress()
-        
-        # 读取数据
         dataset = self._create_datas(
             self.shot_dataset_file, 
             self.test_dataset_file, 
@@ -479,28 +472,37 @@ class FewShotLLMTester:
         total_items = len(dataset)
         pending_items = [item for item in dataset if item['id'] not in self.processed_ids]
 
-        logger.info(f"开始处理，总数据量: {total_items}，待处理: {len(pending_items)}")
+        logger.info(f"LLM Params: {json.dumps(llm_params, ensure_ascii=False, indent=2)}")
+
+        logger.info(f"Starting processing. Total items: {total_items}, Pending: {len(pending_items)}")
+
+        pbar = tqdm(
+            total=len(pending_items),
+            desc=f"Processing shot: {shot_num}",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
 
         with ThreadPoolExecutor(max_workers=self.concurrency) as executor:
             self.executor = executor
             futures = {}
 
             try:
-                # 提交初始批次
+                # Submit initial batch
                 for item in pending_items[:self.concurrency * 2]:
                     future = executor.submit(self._process_item, item)
                     futures[future] = item['id']
 
-                # 主处理循环
+                # Main processing loop
                 while futures and not self._shutdown_flag:
                     done, _ = concurrent.futures.wait(
                         futures,
                         timeout=1.0,
                         return_when=concurrent.futures.FIRST_COMPLETED
                     )
-
                     
-                    # 处理已完成任务
+                    # Process completed tasks
                     for future in done:
                         item_id = futures.pop(future)
                         result = future.result()
@@ -513,16 +515,14 @@ class FewShotLLMTester:
 
                                 self._save_progress()
 
-                            # 打印进度
-                            processed = len(self.processed_ids)
-                            if processed % 1 == 0:
-                                logger.info(
-                                    f"进度: {processed}/{total_items} "
-                                    f"({processed/total_items:.1%}) | "
-                                    f"成功率: {len([r for r in self.results if r['status']=='success'])/processed:.1%}"
-                                    )
+                            pbar.update(1)
+                            success_count = len([r for r in self.results if r['status']=='success'])
+                            pbar.set_postfix({
+                                "success": f"{success_count}/{len(self.results)}",
+                                "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
+                            })
 
-                    # 提交新任务
+                    # Submit new tasks
                     if not self._shutdown_flag:
 
                         for item in pending_items:
@@ -530,7 +530,6 @@ class FewShotLLMTester:
                                 if item['id'] in self.processed_ids:
                                     continue
 
-                                # 检查是否已提交至处理队列
                                 if item['id'] in futures.values():
                                     continue
             
@@ -544,52 +543,54 @@ class FewShotLLMTester:
                             if item['id'] in futures.values():
                                 continue
 
-                            # 提交任务
                             if not self._shutdown_flag:
                                 future = executor.submit(self._process_item, item)
                                 futures[future] = item['id']
 
             except Exception as e:
                 logger.exception(e)
-                logger.error(f"运行时异常: {str(e)}")
+                logger.error(f"Runtime Error: {str(e)}")
                 self._shutdown_flag = True
 
             finally:
-                # 清理线程池
                 self.executor.shutdown(wait=True)
                 self.executor = None
 
-        # 最终处理
         if self._shutdown_flag:
-            logger.warning("处理被中断")
+            logger.warning("Processing interrupted")
             with self.lock:
                 self._save_progress(force=True)
         else:
-            self._save_final_results(llm_params)
+            if isinstance(self.metric, LLMmetrics):
+                metric_results = self.metric.run(datas_list=self.results)
+            else:
+                metric_results = None
+            self._save_final_results(llm_params, metric_results=metric_results)
             self._show_summary()
 
     def _show_summary(self):
-        """显示汇总报告"""
-        logger.info("\n=== 任务汇总 ===")
-        logger.info(f"总处理条目: {len(self.results)}")
-        logger.info(f"成功条目: {len([r for r in self.results if r['status']=='success'])}")
-        logger.info(f"失败条目: {len([r for r in self.results if r['status']!='success'])}")
-        logger.info("\n=== Token消耗 ===")
+        """Display summary report"""
+        logger.info("\n=== Summary ===")
+        logger.info(f"Total processed: {len(self.results)}")
+        logger.info(f"Successful items: {len([r for r in self.results if r['status']=='success'])}")
+        logger.info(f"Failed items: {len([r for r in self.results if r['status']!='success'])}")
+        logger.info("\n=== Token Usage ===")
         logger.info(f"Prompt tokens: {self.total_usage.prompt_tokens}")
         logger.info(f"Completion tokens: {self.total_usage.completion_tokens}")
         logger.info(f"Total tokens: {self.total_usage.total_tokens}")
 
 if __name__ == "__main__" :
+    mertic = LLMmetrics()
     # model = AliyunApiLLMModel(
-    #     model_name="deepseek-v3",
-    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
     #     api_key="sk-06107e55e13c4b67b7f8a262548b9b53",
     # )
 
     from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
 
     # model = AliyunApiLLMModel(
-    #     model_name="qwen2.5-7b-instruct-ft-202504180934-6766",
+    #     model_name="qwen2.5-7b-instruct",
     #     api_base="https://dashscope.aliyuncs.com/api/v1",
     #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
     #     use_dashscope=True,
@@ -606,13 +607,12 @@ if __name__ == "__main__" :
 
     # tester = FewShotLLMTester(
     #     llm_model=model,
-    #     shot_dataset_file="./data/temp_train_data.json",
-    #     test_dataset_file="./data/temp_test_data.json",
-    #     shot_num=20,
-    #     seed=233,
+    #     shot_dataset_file="./data/v1/temp/temp_train_data.json",
+    #     test_dataset_file="./data/v1/temp/temp_test_data.json",
     #     concurrency=5,
     #     prompts_save_dir="./few_shot/data/",
-    #     output_dir="./few_shot/output/"
+    #     output_dir="./few_shot/output/",
+    #     metric=mertic
     # )
 
     tester = FewShotLLMTester(
@@ -620,11 +620,11 @@ if __name__ == "__main__" :
         shot_dataset_file="data/full/std/train.json",
         test_dataset_file="data/full/std/test.json",
         shot_num=5,
-        seed=23333333,
         base_retry_wait_time=0,
         concurrency=1,
         prompts_save_dir="./data/prompts/",
-        output_dir="few_shot/output/"
+        output_dir="few_shot/output/",
+        metric=mertic
     )
 
     # for qwen3
@@ -641,7 +641,6 @@ if __name__ == "__main__" :
     }
 
     for shot_num in range(0, 32, 2):
-        print(shot_num)
         tester.run(llm_params=params, shot_num=shot_num)
     # tester.run(llm_params=params, shot_num=10)
     # tester.run(llm_params=params, shot_num=15)
