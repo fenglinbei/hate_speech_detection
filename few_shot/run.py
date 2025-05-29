@@ -335,12 +335,14 @@ class FewShotLLMTester:
 
     def _process_item(
             self, 
-            item: Dict, 
-            llm_params: Dict) -> Optional[Dict[str, Any]]:
+            input_params: Dict) -> Optional[Dict[str, Any]]:
         """Process single item with retry mechanism"""
 
         if self._shutdown_flag:
             return None
+        
+        item = input_params["item"]
+        llm_params = input_params["llm_params"]
 
         item_id = item['id']
         prompt = item['prompt']
@@ -506,9 +508,8 @@ class FewShotLLMTester:
             try:
                 # Submit initial batch
                 for item in pending_items[:self.concurrency * 2]:
-                    future = executor.submit(
-                        lambda: self._process_item(item=item, llm_params=llm_params)
-                        )
+                    input_params = {"item": item, "llm_params": llm_params}
+                    future = executor.submit(self._process_item, input_params)
                     futures[future] = item['id']
 
                 # Main processing loop
