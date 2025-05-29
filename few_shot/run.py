@@ -13,6 +13,7 @@ import threading
 import concurrent
 from tqdm import tqdm
 from queue import Queue
+from functools import partial
 from typing import Optional, List, Dict, Set, Any
 from concurrent.futures import ThreadPoolExecutor
 
@@ -502,7 +503,8 @@ class FewShotLLMTester:
             try:
                 # Submit initial batch
                 for item in pending_items[:self.concurrency * 2]:
-                    future = executor.submit(self._process_item, item, llm_params)
+                    task = partial(self._process_item, item, llm_params)
+                    future = executor.submit(task)
                     futures[future] = item['id']
 
                 # Main processing loop
