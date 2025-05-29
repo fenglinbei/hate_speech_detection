@@ -65,8 +65,6 @@ class FewShotLLMTester:
         output_dir: str,
         shot_num: int = 0,
         seed: int = 23333333,
-        max_tokens: int = 512,
-        temperature: Optional[float] = None,
         concurrency: int = 1,
         max_retries: int = 3,
         base_retry_wait_time: int = 3,
@@ -108,8 +106,6 @@ class FewShotLLMTester:
         self.prompts_save_dir = prompts_save_dir
         self.input_file = input_file
         self.output_dir = output_dir
-        self.max_tokens = max_tokens
-        self.temperature = temperature
         self.concurrency = concurrency
         self.max_retries = max_retries
         self.base_retry_wait_time = base_retry_wait_time
@@ -336,7 +332,7 @@ class FewShotLLMTester:
             for q in quadruples
         )
 
-    def _process_item(self, item: Dict) -> Optional[Dict[str, Any]]:
+    def _process_item(self, item: Dict, llm_params: Dict) -> Optional[Dict[str, Any]]:
         """Process single item with retry mechanism"""
 
         if self._shutdown_flag:
@@ -349,6 +345,17 @@ class FewShotLLMTester:
         status_code = 500
         response = ""
         last_error = ""
+
+        try:
+            max_new_tokens = llm_params["max_new_tokens"]
+            n = llm_params["n"]
+            top_p = llm_params["top_p"]
+            top_k = llm_params["top_k"]
+            temperature = llm_params["temperature"]
+            enable_thinking = llm_params["enable_thinking"]
+        except KeyError as err:
+            raise ValueError("Invaild llm_params keys.")
+
         
         for attempt in range(self.max_retries + 1):
             if self._shutdown_flag:
@@ -359,8 +366,12 @@ class FewShotLLMTester:
             try:
                 response, usage, status_code = self.llm.chat(
                     prompt=prompt,
-                    max_new_tokens=self.max_tokens,
-                    temperature=self.temperature
+                    max_new_tokens=max_new_tokens,
+                    n=n,
+                    top_p=top_p,
+                    top_k=top_k,
+                    temperature=temperature,
+                    enable_thinking=enable_thinking
                 )
                 logger.debug(f"LLM Output: {response}")
 
@@ -447,7 +458,7 @@ class FewShotLLMTester:
     
     def run(
             self, 
-            llm_params: Optional[dict] = None,
+            llm_params: Dict,
             seed: Optional[int] = None,
             shot_num: Optional[int] = None
             ) -> None:
@@ -491,7 +502,7 @@ class FewShotLLMTester:
             try:
                 # Submit initial batch
                 for item in pending_items[:self.concurrency * 2]:
-                    future = executor.submit(self._process_item, item)
+                    future = executor.submit(self._process_item, item, llm_params)
                     futures[future] = item['id']
 
                 # Main processing loop
@@ -642,6 +653,7 @@ if __name__ == "__main__" :
 
     for shot_num in range(12, 32, 2):
         tester.run(llm_params=params, shot_num=shot_num)
+
     # tester.run(llm_params=params, shot_num=10)
     # tester.run(llm_params=params, shot_num=15)
     # tester.run(llm_params=params, shot_num=20)

@@ -18,8 +18,9 @@ class ApiLLMModel:
             model_name: str, 
             api_base: str, 
             api_key: str, 
-            temperature: float=0.2, 
-            top_p: float=0.1, 
+            temperature: float=0.8, 
+            top_p: float=0.7, 
+            top_k: int = 20,
             enable_thinking: bool = False,
             timeout: int = 30,
             http_proxy: Optional[str] = None,
@@ -34,6 +35,7 @@ class ApiLLMModel:
         self.api_key = api_key
         self.temperature = temperature
         self.top_p = top_p
+        self.top_k = top_k
         self.enable_thinking = enable_thinking
         self.timeout = timeout
 
@@ -70,18 +72,20 @@ class ApiLLMModel:
     def _build_params(
             self, 
             messages: list[dict[str, str]],
-            max_new_tokens: int, 
-            n: Optional[int] = 1,
-            top_p: Optional[float] = 1.0,
-            temperature: Optional[float] = None, 
-            enable_thinking: Optional[bool] = False
+            max_new_tokens: int = 1024, 
+            n: int = 1,
+            top_p: float = 0.8,
+            top_k: int = 20,
+            temperature: float = 0.7, 
+            enable_thinking: bool = False
             ) -> dict:
         
         params = {
             "model": self.model_name,
             "messages": messages,
             "temperature": temperature if temperature is not None else self.temperature,
-            "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
+            "top_p": top_p if top_p is not None else self.top_p,
+            "top_k": top_k if top_k is not None else self.top_k,
             "max_tokens": max_new_tokens,
             "n": n,
             "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
@@ -104,10 +108,11 @@ class ApiLLMModel:
             self, 
             prompt: str, 
             max_new_tokens: int, 
-            n: Optional[int] = 1,
-            top_p: Optional[float] = 1.0,
-            temperature: Optional[float] = None, 
-            enable_thinking: Optional[bool] = False
+            n: int = 1,
+            top_p: float = 0.8,
+            top_k: int = 20,
+            temperature: float = 0.7, 
+            enable_thinking: bool = False
             ) -> Tuple[Optional[str], Optional[UsageInfo], int]:
         
         response = None
@@ -120,7 +125,9 @@ class ApiLLMModel:
             max_new_tokens=max_new_tokens, 
             enable_thinking=enable_thinking,
             n=n,
-            top_p=top_p)
+            top_p=top_p,
+            top_k=top_k
+            )
         url = self._build_url()
 
         try:
@@ -202,11 +209,12 @@ class AliyunApiLLMModel(ApiLLMModel):
     def _build_params(
             self, 
             messages: list[dict[str, str]],
-            max_new_tokens: int, 
-            n: Optional[int] = 1,
-            top_p: Optional[float] = 1.0,
-            temperature: Optional[float] = None, 
-            enable_thinking: Optional[bool] = False
+            max_new_tokens: int = 1024, 
+            n: int = 1,
+            top_p: float = 0.8,
+            top_k: int = 20,
+            temperature: float = 0.7, 
+            enable_thinking: bool = False
             ) -> dict:
         
         if not self.use_dashscope:
@@ -217,7 +225,8 @@ class AliyunApiLLMModel(ApiLLMModel):
                 {
                     "temperature": temperature if temperature is not None else self.temperature,
                     "max_tokens": max_new_tokens,
-                    "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
+                    "top_p": top_p if top_p is not None else self.top_p, 
+                    "top_k": top_k if top_k is not None else self.top_k,
                     "max_tokens": max_new_tokens,
                     "n": n,
                     "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
@@ -232,7 +241,8 @@ class AliyunApiLLMModel(ApiLLMModel):
                     "result_format": "message",
                     "temperature": temperature if temperature is not None else self.temperature,
                     "max_tokens": max_new_tokens,
-                    "top_p": top_p if top_p is not None else self.top_p,  # 添加此行
+                    "top_p": top_p if top_p is not None else self.top_p,
+                    "top_k": top_k if top_k is not None else self.top_k,
                     "max_tokens": max_new_tokens,
                     "n": n,
                     "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
@@ -281,4 +291,10 @@ if __name__ == "__main__":
         api_key='23333333'
     )
 
-    print(model.chat(prompt="你好，你是谁？", max_new_tokens=1000, enable_thinking=True))
+    print(model.chat(
+        prompt="你好，你是谁？", 
+        max_new_tokens=100, 
+        enable_thinking=False,
+        temperature=0.01,
+        top_p=0.74,
+        top_k=10))
