@@ -380,33 +380,44 @@ class FewShotLLMTester:
                     enable_thinking=enable_thinking
                 )
                 logger.debug(f"LLM Output: {response}")
-                answer = response[0][0]
+                if isinstance(response, list):
+                    answer = response[0][0]
 
-                with self.lock:
-                    if usage:
-                        self.total_usage.prompt_tokens += usage.prompt_tokens
-                        self.total_usage.completion_tokens += usage.completion_tokens
-                        self.total_usage.total_tokens += usage.total_tokens
+                    with self.lock:
+                        if usage:
+                            self.total_usage.prompt_tokens += usage.prompt_tokens
+                            self.total_usage.completion_tokens += usage.completion_tokens
+                            self.total_usage.total_tokens += usage.total_tokens
 
-                if status_code == 200 and isinstance(answer, str):
-                    quadruples = self._parse_llm_output(answer)
-                    if self._validate_quadruples(quadruples):
-                        return {
-                            **item,
-                            "llm_output": answer,
-                            "pred_quadruples": quadruples,
-                            "status": "success",
-                            "attempts": attempt + 1
-                        }
+                    if status_code == 200:
+                        
+                        if isinstance(answer, str):
+                            quadruples = self._parse_llm_output(answer)
+                            if self._validate_quadruples(quadruples):
+                                return {
+                                    **item,
+                                    "llm_output": answer,
+                                    "pred_quadruples": quadruples,
+                                    "status": "success",
+                                    "attempts": attempt + 1
+                                }
+                            else:
+                                last_error = "Validation failed"
+                                logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
+                                backoff = 0
+                        else:
+                            last_error = "Invalid Output"
+                            logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                            backoff = 2 ** (attempt + self.base_retry_wait_time)
                     else:
-                        last_error = "Validation failed"
-                        logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
-                        backoff = 0
+                        last_error = f"API error: status code {status_code}"
+                        logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
+                        if status_code == 429:
+                            backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                 else:
-                    last_error = f"API error: status code {status_code}"
-                    logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
-                    if status_code == 429:
-                        backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
+                    last_error = "Invalid Output"
+                    logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                    backoff = 2 ** (attempt + self.base_retry_wait_time)
                     
             except requests.exceptions.Timeout:
                 logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
