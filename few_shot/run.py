@@ -349,7 +349,8 @@ class FewShotLLMTester:
         quadruples = []
         backoff = 0
         status_code = 500
-        response = ""
+        response = None
+        answer = ""
         last_error = ""
 
         try:
@@ -380,6 +381,7 @@ class FewShotLLMTester:
                     enable_thinking=enable_thinking
                 )
                 logger.debug(f"LLM Output: {response}")
+                answer = response[0]
 
                 with self.lock:
                     if usage:
@@ -387,12 +389,12 @@ class FewShotLLMTester:
                         self.total_usage.completion_tokens += usage.completion_tokens
                         self.total_usage.total_tokens += usage.total_tokens
 
-                if status_code == 200 and isinstance(response, str):
-                    quadruples = self._parse_llm_output(response)
+                if status_code == 200 and isinstance(answer, str):
+                    quadruples = self._parse_llm_output(answer)
                     if self._validate_quadruples(quadruples):
                         return {
                             **item,
-                            "llm_output": response,
+                            "llm_output": answer,
                             "pred_quadruples": quadruples,
                             "status": "success",
                             "attempts": attempt + 1
@@ -423,7 +425,7 @@ class FewShotLLMTester:
         final_status = "invalid" if status_code == 200 else "failed"
         return {
             **item,
-            "llm_output": response if status_code == 200 else None,
+            "llm_output": answer if status_code == 200 else None,
             "parsed_quadruples": quadruples,
             "status": final_status,
             "attempts": self.max_retries + 1,
@@ -615,7 +617,7 @@ if __name__ == "__main__" :
     # )
 
     model = ApiLLMModel(
-        model_name="qwen3-8b",
+        model_name="qwen3-8b_think",
         api_base="http://127.0.0.1:5001/v2/",
         api_key='23333333',
         system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2,
@@ -647,17 +649,27 @@ if __name__ == "__main__" :
     # for qwen3
     # 对于思考模式，使用 Temperature=0.6，TopP=0.95，TopK=20，以及 MinP=0
     # 对于非思考模式，我们建议使用 Temperature=0.7，TopP=0.8，TopK=20，以及 MinP=0。
+    # params = {
+    #     "max_new_tokens": 512, 
+    #     "n": 1,
+    #     "top_p": 0.8,
+    #     "top_k": 20,
+    #     "min_p": 0,
+    #     "temperature": 0.7, 
+    #     "enable_thinking": False
+    # }
+
     params = {
         "max_new_tokens": 512, 
         "n": 1,
-        "top_p": 0.8,
+        "top_p": 0.95,
         "top_k": 20,
         "min_p": 0,
-        "temperature": 0.7, 
-        "enable_thinking": False
+        "temperature": 0.6, 
+        "enable_thinking": True
     }
 
-    for shot_num in range(18, 32, 2):
+    for shot_num in range(0, 32, 2):
         tester.run(llm_params=params, shot_num=shot_num)
 
     # tester.run(llm_params=params, shot_num=10)
