@@ -380,7 +380,7 @@ class FewShotLLMTester:
                     enable_thinking=enable_thinking
                 )
                 logger.debug(f"LLM Output: {response}")
-                answer = response[0]
+                answer = response[0][0]
 
                 with self.lock:
                     if usage:
@@ -659,7 +659,7 @@ if __name__ == "__main__" :
     # }
 
     params = {
-        "max_new_tokens": 512, 
+        "max_new_tokens": 4096, 
         "n": 1,
         "top_p": 0.95,
         "top_k": 20,
