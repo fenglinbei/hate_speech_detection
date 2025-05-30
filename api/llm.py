@@ -278,6 +278,11 @@ if __name__ == "__main__":
     #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
     #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
     # )
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    # )
 
     # model = AliyunApiLLMModel(
     #     model_name="qwen2.5-7b-instruct-ft-202504180131-7f77",
