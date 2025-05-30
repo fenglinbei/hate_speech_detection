@@ -96,11 +96,11 @@ class ApiLLMModel:
         url = urljoin(self.api_base, "chat/completions")
         return url
         
-    def _parse_response(self, response_data: dict) -> Tuple[str, UsageInfo]:
+    def _parse_response(self, response_data: dict) -> Tuple[list[str], UsageInfo]:
         if 'error' in response_data:
             raise ApiError(response_data['error'])
         return (
-            response_data["choices"][0]["message"]["content"],
+            [choice["message"]["content"] for choice in response_data["choices"]],
             UsageInfo(**response_data["usage"])
         )
 
@@ -113,7 +113,7 @@ class ApiLLMModel:
             top_k: int = 20,
             temperature: float = 0.7, 
             enable_thinking: bool = False
-            ) -> Tuple[Optional[str], Optional[UsageInfo], int]:
+            ) -> Tuple[Optional[list[str]], Optional[UsageInfo], int]:
         
         response = None
         status_code = 200
@@ -141,10 +141,11 @@ class ApiLLMModel:
             response_data = response.json()
             status_code = response.status_code
             
-            content, usage = self._parse_response(response_data)
+            logger.debug(response_data)
+            contents, usage = self._parse_response(response_data)
             self._update_usage(usage)
 
-            return content, usage, status_code
+            return contents, usage, status_code
         
         except requests.exceptions.HTTPError as http_err:
             
@@ -286,15 +287,16 @@ if __name__ == "__main__":
     # )
 
     model = ApiLLMModel(
-        model_name="qwen3-8b",
+        model_name="qwen3-4b",
         api_base="http://127.0.0.1:5001/v2/",
         api_key='23333333'
     )
 
     print(model.chat(
         prompt="你好，你是谁？", 
+        n=5,
         max_new_tokens=100, 
         enable_thinking=False,
-        temperature=0.01,
-        top_p=0.74,
+        temperature=0.7,
+        top_p=0.8,
         top_k=10))
