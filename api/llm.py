@@ -20,8 +20,6 @@ def parse_text(text: str) -> Tuple[str, Optional[str]]:
     answer = parts[1].strip()
     thought = parts[0].strip()
 
-    print(thought)
-
     thought = thought.split("<think>")[-1].strip()
 
     return answer, thought
