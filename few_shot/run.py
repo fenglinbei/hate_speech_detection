@@ -631,7 +631,8 @@ if __name__ == "__main__" :
         api_base="http://127.0.0.1:5001/v2/",
         api_key='23333333',
         system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2,
-        enable_thinking=False
+        enable_thinking=False,
+        timeout=90
     )
 
     # tester = FewShotLLMTester(
