@@ -61,7 +61,6 @@ class FewShotLLMTester:
     def __init__(
         self,
         llm_model: AliyunApiLLMModel | ApiLLMModel,
-        llm_model: AliyunApiLLMModel | ApiLLMModel,
         shot_dataset_file: str,
         test_dataset_file: str,
         prompts_save_dir: str,
