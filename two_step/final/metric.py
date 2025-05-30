@@ -94,9 +94,9 @@ class LLMmetrics:
             })
         return quadruples
 
-    def _calculate_score(self, pred_list: list[dict[str, str]], gold_list: list[dict[str, str]]):
+    def _calculate_score(self, pred_list: list[dict[str, str]], gt_list: list[dict[str, str]]):
 
-        f1_hard, f1_soft = get_score(pred_list, gold_list)
+        f1_hard, f1_soft = get_score(pred_list, gt_list)
 
         self.total_f1_hard += f1_hard
         self.total_f1_soft += f1_soft

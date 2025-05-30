@@ -75,14 +75,14 @@ def calculate_f1(tp, fp, fn):
     f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
     return f1
 
-def get_score(pred_list: list[dict[str, str]], gold_list: list[dict[str, str]]) -> tuple[float, float]:
+def get_score(pred_list: list[dict[str, str]], gt_list: list[dict[str, str]]) -> tuple[float, float]:
     
     # 计算硬匹配指标
-    tp_hard, fp_hard, fn_hard = compute_metrics(pred_list, gold_list, is_hard_match)
+    tp_hard, fp_hard, fn_hard = compute_metrics(pred_list, gt_list, is_hard_match)
     f1_hard = calculate_f1(tp_hard, fp_hard, fn_hard)
     
     # 计算软匹配指标
-    tp_soft, fp_soft, fn_soft = compute_metrics(pred_list, gold_list, is_soft_match)
+    tp_soft, fp_soft, fn_soft = compute_metrics(pred_list, gt_list, is_soft_match)
     f1_soft = calculate_f1(tp_soft, fp_soft, fn_soft)
     
     # 计算平均分
