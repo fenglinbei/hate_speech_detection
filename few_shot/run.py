@@ -19,6 +19,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
 from api.llm import AliyunApiLLMModel, ApiLLMModel
+from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
@@ -59,6 +60,7 @@ def build_shot_prompt(
 class FewShotLLMTester:
     def __init__(
         self,
+        llm_model: AliyunApiLLMModel | ApiLLMModel,
         llm_model: AliyunApiLLMModel | ApiLLMModel,
         shot_dataset_file: str,
         test_dataset_file: str,
