@@ -680,7 +680,7 @@ if __name__ == "__main__" :
         "enable_thinking": True
     }
 
-    for shot_num in range(8, 24, 4):
+    for shot_num in range(16, 24, 4):
         tester.run(llm_params=params, shot_num=shot_num)
 
     # tester.run(llm_params=params, shot_num=10)
