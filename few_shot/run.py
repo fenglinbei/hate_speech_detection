@@ -680,7 +680,10 @@ if __name__ == "__main__" :
         "enable_thinking": True
     }
 
-    for shot_num in range(16, 24, 4):
+    shots_list = [0, 2, 10, 14, 18, 22, 24, 26, 28, 30]
+
+    for shot_num in shots_list:
+        # print(shot_num)
         tester.run(llm_params=params, shot_num=shot_num)
 
     # tester.run(llm_params=params, shot_num=10)
