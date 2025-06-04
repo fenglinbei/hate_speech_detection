@@ -680,7 +680,7 @@ if __name__ == "__main__" :
         "enable_thinking": True
     }
 
-    shots_list = [0, 2, 10, 14, 18, 22, 24, 26, 28, 30]
+    shots_list = [2, 10, 14, 18, 22, 24, 26, 28, 30]
 
     for shot_num in shots_list:
         # print(shot_num)
