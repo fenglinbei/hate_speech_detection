@@ -14,6 +14,7 @@ from prompt import *
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
+os.environ["CUDA_LAUNCH_BLOCKING"] = '1'
 device_map = {
     'model.embed_tokens': "cuda:0",
     'model.layers.0': "cuda:0",
