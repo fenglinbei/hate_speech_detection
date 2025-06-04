@@ -31,6 +31,29 @@ swanlab.config.update({
     "data_max_length": MAX_LENGTH,
     })
 
+# # 多卡训练初始化
+# def init_distributed_mode(args):
+#     # 如果是多机多卡的机器，WORLD_SIZE代表使用的机器数，RANK对应第几台机器
+#     # 如果是单机多卡的机器，WORLD_SIZE代表有几块GPU，RANK和LOCAL_RANK代表第几块GPU
+#     if'RANK'in os.environ and'WORLD_SIZE'in os.environ:
+#         args.rank = int(os.environ["RANK"])
+#         args.world_size = int(os.environ['WORLD_SIZE'])
+#         # LOCAL_RANK代表某个机器上第几块GPU
+#         args.gpu = int(os.environ['LOCAL_RANK'])
+#     elif'SLURM_PROCID'in os.environ:
+#         args.rank = int(os.environ['SLURM_PROCID'])
+#         args.gpu = args.rank % torch.cuda.device_count()
+#     else:
+#         print('Not using distributed mode')
+#         args.distributed = False
+#         return
+
+#     args.distributed = True
+
+#     torch.cuda.set_device(args.gpu)  # 对当前进程指定使用的GPU
+#     args.dist_backend = 'nccl'# 通信后端，nvidia GPU推荐使用NCCL
+#     dist.barrier()  # 等待每个GPU都运行完这个地方以后再继续
+
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
     """
     将原始数据集转换为大模型微调所需数据格式的新数据集
@@ -134,7 +157,7 @@ def run():
 
     # Transformers加载模型权重
     tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16).cuda()
+    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map="auto")
     model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
     def process_func(example):
