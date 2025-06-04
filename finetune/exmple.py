@@ -11,6 +11,8 @@ from peft import LoraConfig, TaskType, get_peft_model, PeftModel
 from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq
 
 from prompt import *
+from utils.log import init_logger
+logger = init_logger(level="DEBUG", show_console=True)
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
@@ -179,9 +181,13 @@ def run():
     # model_dir = snapshot_download("Qwen/Qwen3-8B", cache_dir="models/", revision="master")
 
     # Transformers加载模型权重
-    tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
-    model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
+    try:
+        tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
+        model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
+    except Exception as err:
+        logger.exception(err)
+        exit()
 
     def process_func(example):
         """
