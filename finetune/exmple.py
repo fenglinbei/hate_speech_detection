@@ -12,7 +12,7 @@ from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataC
 
 from prompt import *
 from utils.log import init_logger
-logger = init_logger(level="DEBUG", show_console=True)
+logger = init_logger(level="INFO", show_console=True)
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
