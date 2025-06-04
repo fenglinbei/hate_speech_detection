@@ -14,6 +14,49 @@ from prompt import *
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
+device_map = {
+    'model.embed_tokens': 0,
+    'model.layers.0': 0,
+    'model.layers.1': 0,
+    'model.layers.2': 0,
+    'model.layers.3': 0,
+    'model.layers.4': 0,
+    'model.layers.5': 0,
+    'model.layers.6': 0,
+    'model.layers.7': 0,
+    'model.layers.8': 0,
+    'model.layers.9': 1,
+    'model.layers.10': 1,
+    'model.layers.11': 1,
+    'model.layers.12': 1,
+    'model.layers.13': 1,
+    'model.layers.14': 1,
+    'model.layers.15': 1,
+    'model.layers.16': 1,
+    'model.layers.17': 1,
+    'model.layers.18': 2,
+    'model.layers.19': 2,
+    'model.layers.20': 2,
+    'model.layers.21': 2,
+    'model.layers.22': 2,
+    'model.layers.23': 2,
+    'model.layers.24': 2,
+    'model.layers.25': 2,
+    'model.layers.26': 2,
+    'model.layers.27': 3,
+    'model.layers.28': 3,
+    'model.layers.29': 3,
+    'model.layers.30': 3,
+    'model.layers.31': 3,
+    'model.layers.32': 3,
+    'model.layers.33': 3,
+    'model.layers.34': 3,
+    'model.layers.35': 3,
+    'model.norm': 3,
+    'lm_head': 3
+}
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
 MAX_LENGTH = 512
 
 label_map = {
@@ -31,28 +74,7 @@ swanlab.config.update({
     "data_max_length": MAX_LENGTH,
     })
 
-# # 多卡训练初始化
-# def init_distributed_mode(args):
-#     # 如果是多机多卡的机器，WORLD_SIZE代表使用的机器数，RANK对应第几台机器
-#     # 如果是单机多卡的机器，WORLD_SIZE代表有几块GPU，RANK和LOCAL_RANK代表第几块GPU
-#     if'RANK'in os.environ and'WORLD_SIZE'in os.environ:
-#         args.rank = int(os.environ["RANK"])
-#         args.world_size = int(os.environ['WORLD_SIZE'])
-#         # LOCAL_RANK代表某个机器上第几块GPU
-#         args.gpu = int(os.environ['LOCAL_RANK'])
-#     elif'SLURM_PROCID'in os.environ:
-#         args.rank = int(os.environ['SLURM_PROCID'])
-#         args.gpu = args.rank % torch.cuda.device_count()
-#     else:
-#         print('Not using distributed mode')
-#         args.distributed = False
-#         return
 
-#     args.distributed = True
-
-#     torch.cuda.set_device(args.gpu)  # 对当前进程指定使用的GPU
-#     args.dist_backend = 'nccl'# 通信后端，nvidia GPU推荐使用NCCL
-#     dist.barrier()  # 等待每个GPU都运行完这个地方以后再继续
 
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
     """
@@ -157,7 +179,7 @@ def run():
 
     # Transformers加载模型权重
     tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
     model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
     def process_func(example):
@@ -203,8 +225,8 @@ def run():
         eval_strategy="steps",
         eval_steps=20,
         logging_steps=20,
-        num_train_epochs=2,
-        save_steps=400,
+        num_train_epochs=4,
+        save_steps=200,
         learning_rate=1e-4,
         save_on_each_node=True,
         gradient_checkpointing=True,
