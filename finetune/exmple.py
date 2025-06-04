@@ -61,10 +61,10 @@ device_map = {
 
 device_map = {
     'model.embed_tokens': "cuda:0",
-    'model.layers.0': "cuda:0",
-    'model.layers.1': "cuda:0",
-    'model.layers.2': "cuda:0",
-    'model.layers.3': "cuda:0",
+    'model.layers.0': "cuda:1",
+    'model.layers.1': "cuda:1",
+    'model.layers.2': "cuda:1",
+    'model.layers.3': "cuda:1",
     'model.layers.4': "cuda:0",
     'model.layers.5': "cuda:0",
     'model.layers.6': "cuda:0",
