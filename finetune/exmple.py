@@ -134,7 +134,7 @@ def run():
 
     # Transformers加载模型权重
     tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", device_map="auto", torch_dtype=torch.bfloat16)
+    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16).cuda()
     model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
     def process_func(example):
@@ -187,6 +187,8 @@ def run():
         gradient_checkpointing=True,
         report_to="swanlab",
         run_name="qwen3-8B-hsd-sft",
+        fsdp="full_shard",  # 添加FSDP支持
+        fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
     )
 
     trainer = Trainer(
