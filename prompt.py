@@ -56,6 +56,18 @@ TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2 = """请分析以下文本，识别其中的评
 
 TRAIN_PROMPT_ZERO_SHOT_V2 = """ {text}"""
 
+TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3 = """你是一名专业的语言学者以及仇恨言论分析人员，请你严格且正确地分析我给出的句子，从中提取出一个或者多个包含主体、评论以及仇恨类别的三元组。
+其中，仇恨类别请在以下选项中选择：
+A: 种族歧视
+B: 地域歧视
+C: LGBTQ歧视
+D: 性别歧视
+E: 其他冒犯
+F: 不构成冒犯"""
+
+TRAIN_PROMPT_ZERO_SHOT_V3 = """句子：{text}
+三元组："""
+
 TRAIN_PROMPT_STEP_1_SYSTEM_V1 = """请分析以下文本，识别其中包含的所有评论对象以及论点，并以以下格式给出回答:
 <评论对象1> | <论点1>
 <评论对象2> | <论点2>
