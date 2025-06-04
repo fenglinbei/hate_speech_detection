@@ -178,7 +178,7 @@ def predict(messages, model, tokenizer):
 
 def run():
     # 在modelscope上下载Qwen模型到本地目录下
-    # model_dir = snapshot_download("Qwen/Qwen3-8B", cache_dir="models/", revision="master")
+    model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="models/", revision="master")
 
     # Transformers加载模型权重
     try:
