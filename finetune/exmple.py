@@ -130,11 +130,11 @@ def predict(messages, model, tokenizer):
 
 def run():
     # 在modelscope上下载Qwen模型到本地目录下
-    model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="models/", revision="master")
+    # model_dir = snapshot_download("Qwen/Qwen3-8B", cache_dir="models/", revision="master")
 
     # Transformers加载模型权重
-    tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-1.7B", device_map="auto", torch_dtype=torch.bfloat16)
+    tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-8B", use_fast=False, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-8B", device_map="auto", torch_dtype=torch.bfloat16)
     model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
     def process_func(example):
@@ -173,13 +173,13 @@ def run():
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
     args = TrainingArguments(
-        output_dir="../lm_server/models/Qwen3-8B/",
+        output_dir="models/Qwen3-8B/",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
         eval_strategy="steps",
-        eval_steps=100,
-        logging_steps=10,
+        eval_steps=20,
+        logging_steps=20,
         num_train_epochs=2,
         save_steps=400,
         learning_rate=1e-4,
