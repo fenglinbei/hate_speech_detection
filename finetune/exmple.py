@@ -93,7 +93,7 @@ device_map = {
     'lm_head': "cuda:0"
 }
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1'
 MAX_LENGTH = 512
 
 label_map = {
@@ -266,8 +266,8 @@ def run():
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
         eval_strategy="steps",
-        eval_steps=20,
-        logging_steps=20,
+        eval_steps=50,
+        logging_steps=50,
         num_train_epochs=4,
         save_steps=200,
         learning_rate=1e-4,
