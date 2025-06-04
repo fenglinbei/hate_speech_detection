@@ -59,6 +59,40 @@ device_map = {
     'lm_head': "cuda:3"
 }
 
+device_map = {
+    'model.embed_tokens': "cuda:0",
+    'model.layers.0': "cuda:0",
+    'model.layers.1': "cuda:0",
+    'model.layers.2': "cuda:0",
+    'model.layers.3': "cuda:0",
+    'model.layers.4': "cuda:0",
+    'model.layers.5': "cuda:0",
+    'model.layers.6': "cuda:0",
+    'model.layers.7': "cuda:0",
+    'model.layers.8': "cuda:0",
+    'model.layers.9': "cuda:0",
+    'model.layers.10': "cuda:0",
+    'model.layers.11': "cuda:0",
+    'model.layers.12': "cuda:0",
+    'model.layers.13': "cuda:0",
+    'model.layers.14': "cuda:1",
+    'model.layers.15': "cuda:1",
+    'model.layers.16': "cuda:1",
+    'model.layers.17': "cuda:1",
+    'model.layers.18': "cuda:1",
+    'model.layers.19': "cuda:1",
+    'model.layers.20': "cuda:1",
+    'model.layers.21': "cuda:1",
+    'model.layers.22': "cuda:1",
+    'model.layers.23': "cuda:1",
+    'model.layers.24': "cuda:1",
+    'model.layers.25': "cuda:1",
+    'model.layers.26': "cuda:1",
+    'model.layers.27': "cuda:1",
+    'model.norm': "cuda:1",
+    'lm_head': "cuda:1"
+}
+
 os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
 MAX_LENGTH = 512
 
@@ -182,8 +216,10 @@ def run():
 
     # Transformers加载模型权重
     try:
-        tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-        model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
+        # tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
+        # model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
+        tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-1.7B", torch_dtype=torch.bfloat16, device_map=device_map)
         model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
     except Exception as err:
         logger.exception(err)
@@ -225,7 +261,7 @@ def run():
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
     args = TrainingArguments(
-        output_dir="models/Qwen3-8B/",
+        output_dir="models/Qwen3-1.7B-sft-hsd/",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
@@ -238,7 +274,7 @@ def run():
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="swanlab",
-        run_name="qwen3-8B-hsd-sft",
+        run_name="qwen3-1.7B-hsd-sft",
         # fsdp="full_shard",  # 添加FSDP支持
         # fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
     )
