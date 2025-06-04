@@ -90,7 +90,7 @@ device_map = {
     'model.layers.26': "cuda:0",
     'model.layers.27': "cuda:0",
     'model.norm': "cuda:0",
-    'lm_head': "cuda:1"
+    'lm_head': "cuda:0"
 }
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
