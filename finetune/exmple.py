@@ -187,8 +187,8 @@ def run():
         gradient_checkpointing=True,
         report_to="swanlab",
         run_name="qwen3-8B-hsd-sft",
-        fsdp="full_shard",  # 添加FSDP支持
-        fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
+        # fsdp="full_shard",  # 添加FSDP支持
+        # fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
     )
 
     trainer = Trainer(
