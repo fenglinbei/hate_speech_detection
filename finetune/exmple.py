@@ -93,7 +93,7 @@ device_map = {
     'lm_head': "cuda:0"
 }
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 MAX_LENGTH = 512
 
 label_map = {
