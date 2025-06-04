@@ -60,21 +60,21 @@ device_map = {
 }
 
 device_map = {
-    'model.embed_tokens': "cuda:1",
-    'model.layers.0': "cuda:1",
-    'model.layers.1': "cuda:1",
-    'model.layers.2': "cuda:1",
-    'model.layers.3': "cuda:1",
-    'model.layers.4': "cuda:1",
-    'model.layers.5': "cuda:1",
-    'model.layers.6': "cuda:1",
-    'model.layers.7': "cuda:1",
-    'model.layers.8': "cuda:1",
-    'model.layers.9': "cuda:1",
-    'model.layers.10': "cuda:1",
-    'model.layers.11': "cuda:1",
-    'model.layers.12': "cuda:1",
-    'model.layers.13': "cuda:1",
+    'model.embed_tokens': "cuda:0",
+    'model.layers.0': "cuda:0",
+    'model.layers.1': "cuda:0",
+    'model.layers.2': "cuda:0",
+    'model.layers.3': "cuda:0",
+    'model.layers.4': "cuda:0",
+    'model.layers.5': "cuda:0",
+    'model.layers.6': "cuda:0",
+    'model.layers.7': "cuda:0",
+    'model.layers.8': "cuda:0",
+    'model.layers.9': "cuda:0",
+    'model.layers.10': "cuda:0",
+    'model.layers.11': "cuda:0",
+    'model.layers.12': "cuda:0",
+    'model.layers.13': "cuda:0",
     'model.layers.14': "cuda:0",
     'model.layers.15': "cuda:0",
     'model.layers.16': "cuda:0",
@@ -90,7 +90,7 @@ device_map = {
     'model.layers.26': "cuda:0",
     'model.layers.27': "cuda:0",
     'model.norm': "cuda:0",
-    'lm_head': "cuda:0"
+    'lm_head': "cuda:1"
 }
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
