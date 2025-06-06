@@ -140,7 +140,7 @@ def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
 
         input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        output = f"<think>\n\n</think>\n\n{answer}"
+        output = f"{answer}"
         message = {
             "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
             "input": f"{input}",
@@ -174,7 +174,7 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
 
         input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        output = f"<think>\n\n</think>\n\n{answer}"
+        output = f"{answer}"
         message = {
             "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
             "input": f"{input}",
@@ -196,18 +196,19 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 def prompt_to_text(prompt: str) -> str:
-    user_start_index = prompt.find("<|im_start|>user") + len("<|im_start|>user\n")
-    user_end_index = prompt.find("<|im_end|>", user_start_index)
-    user_content = prompt[user_start_index:user_end_index]
-
     pattern = r'句子：(.*?)\n三元组：'
     try:
-        match = re.search(pattern, user_content)
+        match = re.search(pattern, prompt)
         original_text = match.group(1)  # group(1) 获取匹配的文本
     except Exception as err:
         logger.exception(err)
         exit(0)
     return original_text
+
+def build_messages(example: pd.Series) -> list[dict]:
+    messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
+    return messages
+
             
 
 class CustomTrainer(Trainer):
@@ -253,9 +254,9 @@ class CustomTrainer(Trainer):
             item_id = idx
             final_status = "success"
             try:
-                
+                messages = build_messages(example)
                 for attempt in range(self.max_retries + 1):
-                    response, prompt = predict(example, model, self.tokenizer)
+                    response = predict(messages, model, self.tokenizer)
                     logger.debug(f"LLM Output: {response}")
                     pred_quads = parse_llm_output_trip(response)  # 需实现此函数
                     gt_quads = parse_llm_output_trip(example['output'])
@@ -272,8 +273,8 @@ class CustomTrainer(Trainer):
                 
             results.append({
                 "id": item_id,
-                "content": prompt_to_text(prompt),
-                "prompt": prompt,
+                "content": prompt_to_text(example["input"]),
+                "prompt": example["input"],
                 "llm_output": response,
                 "gt_quadruples": gt_quads,
                 "pred_quadruples": pred_quads,
@@ -295,7 +296,8 @@ def predict(messages, model, tokenizer):
     text = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
-        add_generation_prompt=True
+        add_generation_prompt=True,
+        enable_thinking=False
     )
     model_inputs = tokenizer([text], return_tensors="pt").to(device)
 
@@ -309,7 +311,7 @@ def predict(messages, model, tokenizer):
 
     response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-    return response, text
+    return response
 
 def run():
     # 在modelscope上下载Qwen模型到本地目录下
@@ -333,8 +335,15 @@ def run():
         将数据集进行预处理
         """ 
         input_ids, attention_mask, labels = [], [], []
+        messages = build_messages(example)
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False,  # Setting enable_thinking=False disables thinking mode
+        )
         instruction = tokenizer(
-            f"<|im_start|>system\n{example['instruction']}<|im_end|>\n<|im_start|>user\n{example['input']}<|im_end|>\n<|im_start|>assistant\n",
+            text,
             add_special_tokens=False,
         )
         response = tokenizer(f"{example['output']}", add_special_tokens=False)
@@ -417,7 +426,7 @@ def run():
             {"role": "user", "content": f"{input_value}"}
         ]
 
-        response, _ = predict(messages, model, tokenizer)
+        response = predict(messages, model, tokenizer)
 
         response_text = f"""
         Question: {input_value}
@@ -544,7 +553,7 @@ def run_lora():
             {"role": "user", "content": f"{input_value}"}
         ]
 
-        response, _ = predict(messages, model, tokenizer)
+        response = predict(messages, model, tokenizer)
 
         response_text = f"""
         Question: {input_value}
@@ -560,6 +569,6 @@ def run_lora():
     swanlab.finish()
 
 if __name__ == "__main__":
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
-    run()
+    dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
+    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
+    # run()
