@@ -226,7 +226,6 @@ class LLMmetrics:
         return self._load_data(data_list)
 
     def _load_data(self, datas: list[dict]) -> Tuple[dict, dict]:
-
         gt_data_dict = {}
         pred_data_dict = {}
         for data in datas:
@@ -269,7 +268,6 @@ class LLMmetrics:
             ) -> Optional[dict]:
         
         self.init_metric()
-
         if isinstance(datas_list, list):
             pred_data_dict, gt_data_dict = self._load_data_from_dict(datas_list)
         elif isinstance(data_path, str):
