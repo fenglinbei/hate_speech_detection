@@ -10,6 +10,21 @@ sys.path.insert(0, ".")
 from utils.error import ApiError
 from utils.protocol import UsageInfo
 
+
+def parse_text(text: str) -> Tuple[str, Optional[str]]:
+    parts = text.split("</think>")
+
+    if len(parts) == 1:
+        return text, None
+    
+    answer = parts[1].strip()
+    thought = parts[0].strip()
+
+    thought = thought.split("<think>")[-1].strip()
+
+    return answer, thought
+    
+
 class ApiLLMModel:
 
     @validate_call
@@ -95,12 +110,12 @@ class ApiLLMModel:
     def _build_url(self) -> str:
         url = urljoin(self.api_base, "chat/completions")
         return url
-        
-    def _parse_response(self, response_data: dict) -> Tuple[list[str], UsageInfo]:
+      
+    def _parse_response(self, response_data: dict) -> Tuple[list[Tuple[str, Optional[str]]], UsageInfo]:
         if 'error' in response_data:
             raise ApiError(response_data['error'])
         return (
-            [choice["message"]["content"] for choice in response_data["choices"]],
+            [parse_text(choice["message"]["content"]) for choice in response_data["choices"]],
             UsageInfo(**response_data["usage"])
         )
 
@@ -113,7 +128,7 @@ class ApiLLMModel:
             top_k: int = 20,
             temperature: float = 0.7, 
             enable_thinking: bool = False
-            ) -> Tuple[Optional[list[str]], Optional[UsageInfo], int]:
+            ) -> Tuple[Optional[list[Tuple[str, Optional[str]]]], Optional[UsageInfo], int]:
         
         response = None
         status_code = 200
@@ -299,9 +314,9 @@ if __name__ == "__main__":
 
     print(model.chat(
         prompt="你好，你是谁？", 
-        n=5,
-        max_new_tokens=100, 
-        enable_thinking=False,
+        n=3,
+        max_new_tokens=1024, 
+        enable_thinking=True,
         temperature=0.7,
         top_p=0.8,
         top_k=10))
