@@ -379,11 +379,11 @@ def run():
             add_special_tokens=False,
         )
         response = tokenizer(f"{example['output']}", add_special_tokens=False)
-        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.pad_token_id]
+        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
         attention_mask = (
             instruction["attention_mask"] + response["attention_mask"] + [1]
         )
-        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.pad_token_id]
+        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
         if len(input_ids) > MAX_LENGTH:  # 做一个截断
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
@@ -459,11 +459,11 @@ def run_lora():
             add_special_tokens=False,
         )
         response = tokenizer(f"{example['output']}", add_special_tokens=False)
-        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.pad_token_id]
+        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
         attention_mask = (
             instruction["attention_mask"] + response["attention_mask"] + [1]
         )
-        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.pad_token_id]
+        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
         if len(input_ids) > MAX_LENGTH:  # 做一个截断
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
