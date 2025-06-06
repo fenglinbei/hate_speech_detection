@@ -61,17 +61,18 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 "F": "non-hate"
             }
         
-        lines = llm_output.strip().split('\n')
+        lines = [line.strip() for line in llm_output.strip().split('[SEP]')]
         hateful = "hate"
         for line in lines:
+            line = line.split("[END]")[0].strip()
             parts = [part.strip() for part in line.split('|')]
             if len(parts) != 3:
                 continue
 
             target = parts[0] if parts[0].upper() != 'NULL' else None
             argument = parts[1] if parts[1].upper() != 'NULL' else None
+            label_raw = parts[2].strip()
 
-            label_raw = parts[2].strip().lower()
             targeted_groups: list[str] = []
             for label_raw_sp in label_raw.split(","):
                 label = label_map.get(label_raw_sp.strip(), None)
@@ -109,3 +110,6 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
             (q['hateful'] in valid_hateful) and q['hateful']
             for q in quadruples
         )
+
+if __name__ == "__main__":
+    print(parse_llm_output_trip("______ | __________ | F [END]"))

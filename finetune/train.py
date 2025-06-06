@@ -214,16 +214,18 @@ def build_messages(example: pd.Series) -> list[dict]:
 class CustomTrainer(Trainer):
     def __init__(self, 
                  *args, 
+                 eval_tokenizer,
                  eval_raw_dataset=None, 
                  llm_metrics=None, 
-                 max_retries: int = 1,
+                 max_retries: int = 0,
                  eval_num: int = 100,
                  **kwargs
                  ):
         
         super().__init__(*args, **kwargs)
-        self.eval_raw_dataset = eval_raw_dataset  # 原始格式验证集
-        self.llm_metrics = llm_metrics          # 评估工具
+        self.eval_raw_dataset = eval_raw_dataset
+        self.eval_tokenizer = eval_tokenizer
+        self.llm_metrics = llm_metrics
         self.max_retries = max_retries
         self.eval_num = eval_num
         
@@ -256,7 +258,7 @@ class CustomTrainer(Trainer):
             try:
                 messages = build_messages(example)
                 for attempt in range(self.max_retries + 1):
-                    response = predict(messages, model, self.tokenizer)
+                    response = predict(messages, model, self.eval_tokenizer)
                     logger.debug(f"LLM Output: {response}")
                     pred_quads = parse_llm_output_trip(response)  # 需实现此函数
                     gt_quads = parse_llm_output_trip(example['output'])
@@ -264,7 +266,7 @@ class CustomTrainer(Trainer):
                         final_status = "success"
                         break
                     else:
-                        logger.warning(f"LLM output validation failed (attempt:{attempt+1})")
+                        logger.debug(f"LLM output validation failed (attempt:{attempt+1})")
                         final_status = "invalid"
 
             except Exception:
@@ -379,22 +381,20 @@ def run():
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
         eval_strategy="steps",
-        eval_steps=10,
+        eval_steps=100,
         logging_steps=20,
         num_train_epochs=4,
-        save_steps=200,
+        save_steps=100,
         learning_rate=1e-4,
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="none",
         run_name="qwen3-1.7B-hsd-sft",
-        # fsdp="full_shard",  # 添加FSDP支持
-        # fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
     )
 
     trainer = CustomTrainer(
         model=model,
-        tokenizer=tokenizer,
+        eval_tokenizer=tokenizer,
         args=args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,  # 用于loss计算
