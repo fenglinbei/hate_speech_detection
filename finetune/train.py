@@ -1,4 +1,6 @@
 import os
+import re
+import uuid
 import json
 import torch
 import random
@@ -8,56 +10,60 @@ import pandas as pd
 from datasets import Dataset
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
+from swanlab.integration.transformers import SwanLabCallback
 from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq
 
 from prompt import *
 from utils.log import init_logger
+from metrics.metric_llm import LLMmetrics
+from utils.parser import parse_llm_output_trip, validate_quadruples
 logger = init_logger(level="INFO", show_console=True)
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
 os.environ["CUDA_LAUNCH_BLOCKING"] = '1'
-device_map = {
-    'model.embed_tokens': "cuda:0",
-    'model.layers.0': "cuda:0",
-    'model.layers.1': "cuda:0",
-    'model.layers.2': "cuda:0",
-    'model.layers.3': "cuda:0",
-    'model.layers.4': "cuda:0",
-    'model.layers.5': "cuda:0",
-    'model.layers.6': "cuda:0",
-    'model.layers.7': "cuda:0",
-    'model.layers.8': "cuda:0",
-    'model.layers.9': "cuda:1",
-    'model.layers.10': "cuda:1",
-    'model.layers.11': "cuda:1",
-    'model.layers.12': "cuda:1",
-    'model.layers.13': "cuda:1",
-    'model.layers.14': "cuda:1",
-    'model.layers.15': "cuda:1",
-    'model.layers.16': "cuda:1",
-    'model.layers.17': "cuda:1",
-    'model.layers.18': "cuda:2",
-    'model.layers.19': "cuda:2",
-    'model.layers.20': "cuda:2",
-    'model.layers.21': "cuda:2",
-    'model.layers.22': "cuda:2",
-    'model.layers.23': "cuda:2",
-    'model.layers.24': "cuda:2",
-    'model.layers.25': "cuda:2",
-    'model.layers.26': "cuda:2",
-    'model.layers.27': "cuda:3",
-    'model.layers.28': "cuda:3",
-    'model.layers.29': "cuda:3",
-    'model.layers.30': "cuda:3",
-    'model.layers.31': "cuda:3",
-    'model.layers.32': "cuda:3",
-    'model.layers.33': "cuda:3",
-    'model.layers.34': "cuda:3",
-    'model.layers.35': "cuda:3",
-    'model.norm': "cuda:3",
-    'lm_head': "cuda:3"
-}
+
+# qwen3_8b_device_map = {
+#     'model.embed_tokens': "cuda:0",
+#     'model.layers.0': "cuda:0",
+#     'model.layers.1': "cuda:0",
+#     'model.layers.2': "cuda:0",
+#     'model.layers.3': "cuda:0",
+#     'model.layers.4': "cuda:0",
+#     'model.layers.5': "cuda:0",
+#     'model.layers.6': "cuda:0",
+#     'model.layers.7': "cuda:0",
+#     'model.layers.8': "cuda:0",
+#     'model.layers.9': "cuda:0",
+#     'model.layers.10': "cuda:0",
+#     'model.layers.11': "cuda:1",
+#     'model.layers.12': "cuda:1",
+#     'model.layers.13': "cuda:1",
+#     'model.layers.14': "cuda:1",
+#     'model.layers.15': "cuda:1",
+#     'model.layers.16': "cuda:1",
+#     'model.layers.17': "cuda:1",
+#     'model.layers.18': "cuda:1",
+#     'model.layers.19': "cuda:1",
+#     'model.layers.20': "cuda:1",
+#     'model.layers.21': "cuda:1",
+#     'model.layers.22': "cuda:1",
+#     'model.layers.23': "cuda:1",
+#     'model.layers.24': "cuda:1",
+#     'model.layers.25': "cuda:1",
+#     'model.layers.26': "cuda:1",
+#     'model.layers.27': "cuda:1",
+#     'model.layers.28': "cuda:3",
+#     'model.layers.29': "cuda:3",
+#     'model.layers.30': "cuda:3",
+#     'model.layers.31': "cuda:3",
+#     'model.layers.32': "cuda:3",
+#     'model.layers.33': "cuda:3",
+#     'model.layers.34': "cuda:3",
+#     'model.layers.35': "cuda:3",
+#     'model.norm': "cuda:0",
+#     'lm_head': "cuda:0"
+# }
 
 device_map = {
     'model.embed_tokens': "cuda:0",
@@ -93,7 +99,7 @@ device_map = {
     'lm_head': "cuda:0"
 }
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 MAX_LENGTH = 512
 
 label_map = {
@@ -166,7 +172,8 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
 
 
         input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
-        output = " [SEP] ".join(triples) + " [END]"
+        answer = " [SEP] ".join(triples) + " [END]"
+        output = f"<think>\n\n</think>\n\n{answer}"
         message = {
             "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
             "input": f"{input}",
@@ -187,6 +194,87 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
         for message in val_datas:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
+def prompt_to_text(prompt: str) -> str:
+    user_start_index = prompt.find("<|im_start|>user") + len("<|im_start|>user\n")
+    user_end_index = prompt.find("<|im_end|>", user_start_index)
+    user_content = prompt[user_start_index:user_end_index]
+
+    pattern = r'句子：(.*?)\n三元组：'
+    match = re.search(pattern, user_content)
+    original_text = match.group(1)  # group(1) 获取匹配的文本
+    return original_text
+            
+
+class CustomTrainer(Trainer):
+    def __init__(self, 
+                 *args, 
+                 eval_raw_dataset=None, 
+                 llm_metrics=None, 
+                 max_retries: int = 3,
+                 eval_num: int = 100,
+                 **kwargs
+                 ):
+        
+        super().__init__(*args, **kwargs)
+        self.eval_raw_dataset = eval_raw_dataset  # 原始格式验证集
+        self.llm_metrics = llm_metrics          # 评估工具
+        self.max_retries = 3
+        self.eval_num = eval_num
+        
+    def evaluate(self, **kwargs):
+        # 1. 标准指标计算（loss等）
+        metrics = super().evaluate(**kwargs)
+        
+        # 2. 自定义指标计算（如果eval_raw_dataset存在）
+        if self.eval_raw_dataset is not None and self.llm_metrics is not None:
+            custom_metrics = self.evaluate_custom()
+            metrics.update(custom_metrics)
+        
+        return metrics
+        
+    def evaluate_custom(self):
+        """生成回复并计算四元组指标"""
+        results = []
+        model = self.model.eval()
+        
+        final_status = "success"
+        item_id = 0
+        for example in self.eval_raw_dataset[:self.eval_num]:
+            # 生成回复
+            response, prompt = predict(example, model, self.tokenizer)
+            logger.debug(f"LLM Output: {response}")
+            # 解析四元组（实际项目需实现parse_quadruples）
+            try:
+                
+                for attempt in range(self.max_retries + 1):
+                    pred_quads = parse_llm_output_trip(response)  # 需实现此函数
+                    gt_quads = parse_llm_output_trip(example['output'])
+                    if validate_quadruples(pred_quads):
+                        status = "success"
+                    else:
+                        last_error = "Validation failed"
+                        logger.warning(f"LLM output validation failed (attempt:{attempt+1})")
+                        final_status = "invalid"
+
+            except Exception:
+                pred_quads, gt_quads = [], []
+                final_status =  "fail"
+                
+            results.append({
+                "id": item_id,
+                "content": prompt_to_text(prompt),
+                "prompt": prompt,
+                "llm_output": response,
+                "gt_quadruples": gt_quads,
+                "pred_quadruples": pred_quads,
+                "status": final_status,
+                "attempts": self.max_retries + 1
+            })
+
+            item_id += 1
+        
+        # 计算指标
+        return self.llm_metrics.run(results)
 
 
 def predict(messages, model, tokenizer):
@@ -208,7 +296,7 @@ def predict(messages, model, tokenizer):
 
     response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-    return response
+    return response, text
 
 def run():
     # 在modelscope上下载Qwen模型到本地目录下
@@ -224,6 +312,8 @@ def run():
     except Exception as err:
         logger.exception(err)
         exit()
+
+    llm_metrics = LLMmetrics()
 
     def process_func(example):
         """
@@ -257,6 +347,7 @@ def run():
 
     # 得到验证集
     eval_df = pd.read_json(val_jsonl_path, lines=True)
+    eval_raw = [row for _, row in eval_df.iterrows()]
     eval_ds = Dataset.from_pandas(eval_df)
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
@@ -273,20 +364,26 @@ def run():
         learning_rate=1e-4,
         save_on_each_node=True,
         gradient_checkpointing=True,
-        report_to="swanlab",
+        report_to="none",
         run_name="qwen3-1.7B-hsd-sft",
         # fsdp="full_shard",  # 添加FSDP支持
         # fsdp_config={"fsdp_transformer_layer_cls_to_wrap": ["QwenBlock"]},  # 根据实际模型结构调整
     )
 
-    trainer = Trainer(
+    trainer = CustomTrainer(
         model=model,
         args=args,
         train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
+        eval_dataset=eval_dataset,  # 用于loss计算
         data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
+        eval_raw_dataset=eval_raw,   # 原始格式用于自定义评估
+        llm_metrics=llm_metrics,
+        callbacks=[SwanLabCallback(  # 添加SwanLab回调
+            project="qwen3-sft-hsd",
+            experiment_name="qwen3-1.7B-hsd-sft",
+            )
+        ]
     )
-
     trainer.train()
     
 
@@ -306,7 +403,7 @@ def run():
             {"role": "user", "content": f"{input_value}"}
         ]
 
-        response = predict(messages, model, tokenizer)
+        response, _ = predict(messages, model, tokenizer)
 
         response_text = f"""
         Question: {input_value}
@@ -315,7 +412,7 @@ def run():
         """
         
         test_text_list.append(swanlab.Text(response_text))
-        print(response_text)
+        logger.info(response_text)
 
     swanlab.log({"Prediction": test_text_list})
 
@@ -433,7 +530,7 @@ def run_lora():
             {"role": "user", "content": f"{input_value}"}
         ]
 
-        response = predict(messages, model, tokenizer)
+        response, _ = predict(messages, model, tokenizer)
 
         response_text = f"""
         Question: {input_value}

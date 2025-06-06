@@ -23,6 +23,7 @@ from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
+from utils.parser import parse_llm_output_quad, validate_quadruples
 
 def build_shot_prompt(
         shots: list[dict],
@@ -271,69 +272,6 @@ class FewShotLLMTester:
                 except Exception as e:
                     logger.warning(f"Failed to clean file {filepath}: {str(e)}")
 
-    def _parse_llm_output(self, llm_output: str) -> List[Dict]:
-        """Parse and standardize LLM output"""
-
-        quadruples = []
-        group_mapping = {
-            'racism': 'Racism',
-            'region': 'Region',
-            'lgbtq': 'LGBTQ',
-            'sexism': 'Sexism',
-            'others': 'Others',
-            'non_hate': 'non_hate',
-            'non-hate': 'non_hate',
-            'nonhate': 'non_hate',
-            'nohate': 'non_hate',
-            'hate': 'hate'
-        }
-        
-        lines = llm_output.strip().split('\n')
-        for line in lines:
-            parts = [part.strip() for part in line.split('|')]
-            if len(parts) != 4:
-                continue
-
-            target = parts[0] if parts[0].upper() != 'NULL' else None
-            argument = parts[1] if parts[1].upper() != 'NULL' else None
-
-            tg_raw = parts[2].strip().lower()
-            targeted_groups: list[str] = []
-            for tg_raw_sp in tg_raw.split(","):
-                tg = group_mapping.get(tg_raw_sp.strip(), None)
-                if not tg:
-                    continue
-                targeted_groups.append(tg)
-            targeted_group = ", ".join(targeted_groups)
-            
-            hateful = parts[3].strip().lower()
-            hateful = group_mapping.get(hateful, None)
-            hateful = hateful if hateful in {'hate', 'non_hate'} else None
-
-            if targeted_group and hateful:
-                quadruples.append({
-                    'target': target,
-                    'argument': argument,
-                    'targeted_group': targeted_group,
-                    'hateful': hateful
-                })
-        return quadruples
-
-    def _validate_quadruples(self, quadruples: List[Dict]) -> bool:
-        """Validate quadruple format"""
-
-        if not quadruples:
-            return False
-            
-        valid_targeted_groups = {'Racism', 'Region', 'LGBTQ', 'Sexism', 'Others', 'non_hate'}
-        valid_hateful = {'hate', 'non_hate'}
-        
-        return all(
-            (all(s in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
-            (q['hateful'] in valid_hateful) and q['hateful']
-            for q in quadruples
-        )
-
     def _process_item(
             self, 
             item: dict,
@@ -392,8 +330,8 @@ class FewShotLLMTester:
                     if status_code == 200:
                         
                         if isinstance(answer, str):
-                            quadruples = self._parse_llm_output(answer)
-                            if self._validate_quadruples(quadruples):
+                            quadruples = parse_llm_output_quad(answer)
+                            if validate_quadruples(quadruples):
                                 return {
                                     **item,
                                     "llm_output": answer,
