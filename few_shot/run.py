@@ -23,6 +23,7 @@ from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
+from utils.parser import parse_llm_output_quad, validate_quadruples
 
 def build_shot_prompt(
         shots: list[dict],
@@ -204,7 +205,7 @@ class FewShotLLMTester:
             
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(progress, f, ensure_ascii=False, indent=2)
-            logger.info(f"Progress saved to {filename}")
+            logger.debug(f"Progress saved to {filename}")
 
             self._clean_old_progress_files()
 
@@ -272,69 +273,6 @@ class FewShotLLMTester:
                 except Exception as e:
                     logger.warning(f"Failed to clean file {filepath}: {str(e)}")
 
-    def _parse_llm_output(self, llm_output: str) -> List[Dict]:
-        """Parse and standardize LLM output"""
-
-        quadruples = []
-        group_mapping = {
-            'racism': 'Racism',
-            'region': 'Region',
-            'lgbtq': 'LGBTQ',
-            'sexism': 'Sexism',
-            'others': 'Others',
-            'non_hate': 'non_hate',
-            'non-hate': 'non_hate',
-            'nonhate': 'non_hate',
-            'nohate': 'non_hate',
-            'hate': 'hate'
-        }
-        
-        lines = llm_output.strip().split('\n')
-        for line in lines:
-            parts = [part.strip() for part in line.split('|')]
-            if len(parts) != 4:
-                continue
-
-            target = parts[0] if parts[0].upper() != 'NULL' else None
-            argument = parts[1] if parts[1].upper() != 'NULL' else None
-
-            tg_raw = parts[2].strip().lower()
-            targeted_groups: list[str] = []
-            for tg_raw_sp in tg_raw.split(","):
-                tg = group_mapping.get(tg_raw_sp.strip(), None)
-                if not tg:
-                    continue
-                targeted_groups.append(tg)
-            targeted_group = ", ".join(targeted_groups)
-            
-            hateful = parts[3].strip().lower()
-            hateful = group_mapping.get(hateful, None)
-            hateful = hateful if hateful in {'hate', 'non_hate'} else None
-
-            if targeted_group and hateful:
-                quadruples.append({
-                    'target': target,
-                    'argument': argument,
-                    'targeted_group': targeted_group,
-                    'hateful': hateful
-                })
-        return quadruples
-
-    def _validate_quadruples(self, quadruples: List[Dict]) -> bool:
-        """Validate quadruple format"""
-
-        if not quadruples:
-            return False
-            
-        valid_targeted_groups = {'Racism', 'Region', 'LGBTQ', 'Sexism', 'Others', 'non_hate'}
-        valid_hateful = {'hate', 'non_hate'}
-        
-        return all(
-            (all(s in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
-            (q['hateful'] in valid_hateful) and q['hateful']
-            for q in quadruples
-        )
-
     def _process_item(
             self, 
             item: dict,
@@ -349,7 +287,8 @@ class FewShotLLMTester:
         quadruples = []
         backoff = 0
         status_code = 500
-        response = ""
+        response = None
+        answer = ""
         last_error = ""
 
         try:
@@ -380,32 +319,44 @@ class FewShotLLMTester:
                     enable_thinking=enable_thinking
                 )
                 logger.debug(f"LLM Output: {response}")
+                if isinstance(response, list):
+                    answer = response[0][0]
 
-                with self.lock:
-                    if usage:
-                        self.total_usage.prompt_tokens += usage.prompt_tokens
-                        self.total_usage.completion_tokens += usage.completion_tokens
-                        self.total_usage.total_tokens += usage.total_tokens
+                    with self.lock:
+                        if usage:
+                            self.total_usage.prompt_tokens += usage.prompt_tokens
+                            self.total_usage.completion_tokens += usage.completion_tokens
+                            self.total_usage.total_tokens += usage.total_tokens
 
-                if status_code == 200 and isinstance(response, str):
-                    quadruples = self._parse_llm_output(response)
-                    if self._validate_quadruples(quadruples):
-                        return {
-                            **item,
-                            "llm_output": response,
-                            "pred_quadruples": quadruples,
-                            "status": "success",
-                            "attempts": attempt + 1
-                        }
+                    if status_code == 200:
+                        
+                        if isinstance(answer, str):
+                            quadruples = parse_llm_output_quad(answer)
+                            if validate_quadruples(quadruples):
+                                return {
+                                    **item,
+                                    "llm_output": answer,
+                                    "pred_quadruples": quadruples,
+                                    "status": "success",
+                                    "attempts": attempt + 1
+                                }
+                            else:
+                                last_error = "Validation failed"
+                                logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
+                                backoff = 0
+                        else:
+                            last_error = "Invalid Output"
+                            logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                            backoff = 2 ** (attempt + self.base_retry_wait_time)
                     else:
-                        last_error = "Validation failed"
-                        logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
-                        backoff = 0
+                        last_error = f"API error: status code {status_code}"
+                        logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
+                        if status_code == 429:
+                            backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                 else:
-                    last_error = f"API error: status code {status_code}"
-                    logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
-                    if status_code == 429:
-                        backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
+                    last_error = "Invalid Output"
+                    logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                    backoff = 2 ** (attempt + self.base_retry_wait_time)
                     
             except requests.exceptions.Timeout:
                 logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
@@ -423,7 +374,7 @@ class FewShotLLMTester:
         final_status = "invalid" if status_code == 200 else "failed"
         return {
             **item,
-            "llm_output": response if status_code == 200 else None,
+            "llm_output": answer if status_code == 200 else None,
             "parsed_quadruples": quadruples,
             "status": final_status,
             "attempts": self.max_retries + 1,
@@ -615,11 +566,12 @@ if __name__ == "__main__" :
     # )
 
     model = ApiLLMModel(
-        model_name="qwen3-8b",
+        model_name="qwen3-8b-think",
         api_base="http://127.0.0.1:5001/v2/",
         api_key='23333333',
         system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2,
-        enable_thinking=False
+        enable_thinking=False,
+        timeout=90
     )
 
     # tester = FewShotLLMTester(
@@ -647,17 +599,30 @@ if __name__ == "__main__" :
     # for qwen3
     # 对于思考模式，使用 Temperature=0.6，TopP=0.95，TopK=20，以及 MinP=0
     # 对于非思考模式，我们建议使用 Temperature=0.7，TopP=0.8，TopK=20，以及 MinP=0。
+    # params = {
+    #     "max_new_tokens": 512, 
+    #     "n": 1,
+    #     "top_p": 0.8,
+    #     "top_k": 20,
+    #     "min_p": 0,
+    #     "temperature": 0.7, 
+    #     "enable_thinking": False
+    # }
+
     params = {
-        "max_new_tokens": 512, 
+        "max_new_tokens": 4096, 
         "n": 1,
-        "top_p": 0.8,
+        "top_p": 0.95,
         "top_k": 20,
         "min_p": 0,
-        "temperature": 0.7, 
-        "enable_thinking": False
+        "temperature": 0.6, 
+        "enable_thinking": True
     }
 
-    for shot_num in range(18, 32, 2):
+    shots_list = [2, 10, 14, 18, 22, 24, 26, 28, 30]
+
+    for shot_num in shots_list:
+        # print(shot_num)
         tester.run(llm_params=params, shot_num=shot_num)
 
     # tester.run(llm_params=params, shot_num=10)

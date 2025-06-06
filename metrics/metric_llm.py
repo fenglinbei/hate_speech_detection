@@ -226,7 +226,6 @@ class LLMmetrics:
         return self._load_data(data_list)
 
     def _load_data(self, datas: list[dict]) -> Tuple[dict, dict]:
-
         gt_data_dict = {}
         pred_data_dict = {}
         for data in datas:
@@ -269,7 +268,6 @@ class LLMmetrics:
             ) -> Optional[dict]:
         
         self.init_metric()
-
         if isinstance(datas_list, list):
             pred_data_dict, gt_data_dict = self._load_data_from_dict(datas_list)
         elif isinstance(data_path, str):
@@ -289,15 +287,18 @@ class LLMmetrics:
             logger.error(f"Runtime Error: {str(e)}", exc_info=True)
             exit()
 
-        metric_dict = {"f1_hard": hard_metrics["f1"],
-                      "f1_soft": soft_metrics["f1"],
-                      "f1_avg": round((hard_metrics["f1"] + soft_metrics["f1"]) / 2, 4),
-                      "success": self.success,
-                      "total": self.total,
-                      "success_rate": round(self.success / self.total, 4),
-                      "hard": hard_metrics,
-                      "soft": soft_metrics
-                      }
+        metric_dict = {
+            "f1_hard": hard_metrics["f1"],
+            "f1_soft": soft_metrics["f1"],
+            "f1_avg": round((hard_metrics["f1"] + soft_metrics["f1"]) / 2, 4),
+            "success": self.success,
+            "total": self.total,
+            "success_rate": round(self.success / self.total, 4),
+            "hard_precision": hard_metrics["precision"],
+            "hard_recall": hard_metrics["recall"],
+            "soft_precision": soft_metrics["precision"],
+            "soft_recall": soft_metrics["recall"],
+            }
 
         if save_data:
             if isinstance(info_data, dict):
