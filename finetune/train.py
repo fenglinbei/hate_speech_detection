@@ -296,6 +296,7 @@ class CustomTrainer(Trainer):
             progress_bar.update(1)
 
         progress_bar.close()
+        swanlab.log({"Prediction": test_text_list})
         
         # 计算指标
         return self.llm_metrics.run(results)
