@@ -373,6 +373,7 @@ def run():
 
     trainer = CustomTrainer(
         model=model,
+        tokenizer=tokenizer,
         args=args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,  # 用于loss计算
