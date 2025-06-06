@@ -23,7 +23,7 @@ model_inputs = tokenizer(text, return_tensors="pt").to(model.device)
 generated_ids = model.generate(
     **model_inputs,
     max_new_tokens=256,
-    repetition_penalty=1.5
+    repetition_penalty=3
 )
 output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist() 
 
