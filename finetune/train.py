@@ -1,12 +1,12 @@
 import os
 import re
-import tqdm
 import json
 import torch
 import random
 import swanlab
 import pandas as pd
 
+from tqdm import tqdm
 from datasets import Dataset
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
