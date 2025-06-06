@@ -569,6 +569,6 @@ def run_lora():
     swanlab.finish()
 
 if __name__ == "__main__":
-    dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
-    # run()
+    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
+    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
+    run()
