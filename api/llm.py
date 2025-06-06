@@ -110,8 +110,7 @@ class ApiLLMModel:
     def _build_url(self) -> str:
         url = urljoin(self.api_base, "chat/completions")
         return url
-    
-        
+      
     def _parse_response(self, response_data: dict) -> Tuple[list[Tuple[str, Optional[str]]], UsageInfo]:
         if 'error' in response_data:
             raise ApiError(response_data['error'])

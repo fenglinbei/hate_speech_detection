@@ -1,4 +1,5 @@
 from transformers import AutoTokenizer, AutoModel, Qwen2TokenizerFast
+from transformers import AutoTokenizer, AutoModel, Qwen2TokenizerFast
 
 tokenizer: Qwen2TokenizerFast = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B")
 model = AutoModel.from_pretrained("models/Qwen/Qwen3-1.7B")
