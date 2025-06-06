@@ -215,7 +215,7 @@ class CustomTrainer(Trainer):
                  *args, 
                  eval_raw_dataset=None, 
                  llm_metrics=None, 
-                 max_retries: int = 3,
+                 max_retries: int = 1,
                  eval_num: int = 100,
                  **kwargs
                  ):
@@ -249,15 +249,14 @@ class CustomTrainer(Trainer):
         )
         
         for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]):
+            logger.debug(example)
             item_id = idx
             final_status = "success"
-            # 生成回复
-            response, prompt = predict(example, model, self.tokenizer)
-            logger.debug(f"LLM Output: {response}")
-            # 解析四元组（实际项目需实现parse_quadruples）
             try:
                 
                 for attempt in range(self.max_retries + 1):
+                    response, prompt = predict(example, model, self.tokenizer)
+                    logger.debug(f"LLM Output: {response}")
                     pred_quads = parse_llm_output_trip(response)  # 需实现此函数
                     gt_quads = parse_llm_output_trip(example['output'])
                     if validate_quadruples(pred_quads):
