@@ -139,14 +139,15 @@ def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
 
 
         input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
-        output = " [SEP] ".join(triples) + " [END]"
+        answer = " [SEP] ".join(triples) + " [END]"
+        output = f"<think>\n\n</think>\n\n{answer}"
         message = {
             "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
             "input": f"{input}",
             "output": output,
         }
         messages.append(message)
-
+        
     # 保存重构后的JSONL文件
     with open(test_output_path, "w", encoding="utf-8") as file:
         for message in messages:
@@ -546,6 +547,6 @@ def run_lora():
     swanlab.finish()
 
 if __name__ == "__main__":
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
-    run()
+    dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
+    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
+    # run()
