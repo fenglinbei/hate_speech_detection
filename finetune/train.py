@@ -218,7 +218,7 @@ class CustomTrainer(Trainer):
                  llm_metrics: LLMmetrics, 
                  eval_raw_dataset=None, 
                  max_retries: int = 0,
-                 eval_num: int = 100,
+                 eval_num: int = 10,
                  **kwargs
                  ):
         
@@ -234,7 +234,7 @@ class CustomTrainer(Trainer):
         custom_metrics = self.evaluate_custom()
         metrics.update(custom_metrics)
         self.log(metrics)
-        
+        swanlab.log(custom_metrics)
         return metrics
         
     def evaluate_custom(self):
@@ -247,7 +247,7 @@ class CustomTrainer(Trainer):
             desc="Evaluating custom metrics",
             dynamic_ncols=True  # 自动适应终端宽度
         )
-        
+        test_text_list = []
         for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]):
             logger.debug(example)
             item_id = idx
@@ -256,6 +256,13 @@ class CustomTrainer(Trainer):
                 messages = build_messages(example)
                 for attempt in range(self.max_retries + 1):
                     response = predict(messages, model, self.eval_tokenizer)
+                    response_text = f"""
+                        Question: {example["input"]}
+
+                        LLM:{response}
+                        """
+                    test_text_list.append(swanlab.Text(response_text))
+
                     logger.debug(f"LLM Output: {response}")
                     pred_quads = parse_llm_output_trip(response)  # 需实现此函数
                     gt_quads = parse_llm_output_trip(example['output'])
