@@ -421,37 +421,6 @@ def run():
         ]
     )
     trainer.train()
-    
-
-    test_jsonl_path = "finetune/data/test.jsonl"
-
-    # 用测试集的前3条，主观看模型
-    test_df = pd.read_json(test_jsonl_path, lines=True)[:20]
-
-    test_text_list = []
-
-    for index, row in test_df.iterrows():
-        instruction = row['instruction']
-        input_value = row['input']
-
-        messages = [
-            {"role": "system", "content": f"{instruction}"},
-            {"role": "user", "content": f"{input_value}"}
-        ]
-
-        response = predict(messages, model, tokenizer)
-
-        response_text = f"""
-        Question: {input_value}
-
-        LLM:{response}
-        """
-        
-        test_text_list.append(swanlab.Text(response_text))
-        logger.info(response_text)
-
-    swanlab.log({"Prediction": test_text_list})
-
     swanlab.finish()
 
 def run_lora():
