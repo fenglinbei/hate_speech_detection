@@ -378,8 +378,8 @@ def run():
 
     args = TrainingArguments(
         output_dir="models/Qwen3-8B-sft-hsd/",
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
+        per_device_train_batch_size=32,
+        per_device_eval_batch_size=32,
         gradient_accumulation_steps=4,
         eval_strategy="steps",
         eval_steps=100,
