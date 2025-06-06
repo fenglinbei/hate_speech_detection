@@ -25,8 +25,8 @@ os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
 
 device_map = {
     'model.embed_tokens': "cuda:0",
-    'model.layers.0': "cuda:0",
-    'model.layers.1': "cuda:0",
+    'model.layers.0': "cuda:1",
+    'model.layers.1': "cuda:1",
     'model.layers.2': "cuda:1",
     'model.layers.3': "cuda:1",
     'model.layers.4': "cuda:1",
@@ -37,7 +37,7 @@ device_map = {
     'model.layers.9': "cuda:1",
     'model.layers.10': "cuda:1",
     'model.layers.11': "cuda:1",
-    'model.layers.12': "cuda:1",
+    'model.layers.12': "cuda:2",
     'model.layers.13': "cuda:2",
     'model.layers.14': "cuda:2",
     'model.layers.15': "cuda:2",
