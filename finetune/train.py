@@ -311,10 +311,14 @@ def predict(messages, model, tokenizer):
         enable_thinking=False
     )
     model_inputs = tokenizer([text], return_tensors="pt").to(device)
+    attention_mask = model_inputs['attention_mask']
 
     generated_ids = model.generate(
         model_inputs.input_ids,
+        attention_mask=attention_mask,
         max_new_tokens=MAX_LENGTH,
+        repetition_penalty=1.15,
+        pad_token_id=tokenizer.eos_token_id
     )
     generated_ids = [
         output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
