@@ -4,9 +4,11 @@ import json
 import torch
 import random
 import swanlab
+import datetime
 import pandas as pd
 
 from tqdm import tqdm
+from pathlib import Path
 from datasets import Dataset
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
@@ -208,8 +210,7 @@ def prompt_to_text(prompt: str) -> str:
 def build_messages(example: pd.Series) -> list[dict]:
     messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
     return messages
-
-            
+       
 
 class CustomTrainer(Trainer):
     def __init__(self, 
@@ -297,6 +298,22 @@ class CustomTrainer(Trainer):
 
         progress_bar.close()
         swanlab.log({"Prediction": test_text_list})
+
+        output_dir = Path("finetune/eval_outputs")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 2. 生成带步数的文件名
+        current_step = self.state.global_step
+        filename = output_dir / f"eval_results_step_{current_step}.json"
+        
+        # 3. 写入JSON文件
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump({
+                "step": current_step,
+                "timestamp": str(datetime.datetime.now()),
+                "eval_num": len(results),
+                "results": results
+            }, f, ensure_ascii=False, indent=2)
         
         # 计算指标
         return self.llm_metrics.run(results)
