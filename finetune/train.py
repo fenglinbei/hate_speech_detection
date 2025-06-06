@@ -23,48 +23,6 @@ random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
 os.environ["CUDA_LAUNCH_BLOCKING"] = '1'
 
-# qwen3_8b_device_map = {
-#     'model.embed_tokens': "cuda:0",
-#     'model.layers.0': "cuda:0",
-#     'model.layers.1': "cuda:0",
-#     'model.layers.2': "cuda:0",
-#     'model.layers.3': "cuda:0",
-#     'model.layers.4': "cuda:0",
-#     'model.layers.5': "cuda:0",
-#     'model.layers.6': "cuda:0",
-#     'model.layers.7': "cuda:0",
-#     'model.layers.8': "cuda:0",
-#     'model.layers.9': "cuda:0",
-#     'model.layers.10': "cuda:0",
-#     'model.layers.11': "cuda:1",
-#     'model.layers.12': "cuda:1",
-#     'model.layers.13': "cuda:1",
-#     'model.layers.14': "cuda:1",
-#     'model.layers.15': "cuda:1",
-#     'model.layers.16': "cuda:1",
-#     'model.layers.17': "cuda:1",
-#     'model.layers.18': "cuda:1",
-#     'model.layers.19': "cuda:1",
-#     'model.layers.20': "cuda:1",
-#     'model.layers.21': "cuda:1",
-#     'model.layers.22': "cuda:1",
-#     'model.layers.23': "cuda:1",
-#     'model.layers.24': "cuda:1",
-#     'model.layers.25': "cuda:1",
-#     'model.layers.26': "cuda:1",
-#     'model.layers.27': "cuda:1",
-#     'model.layers.28': "cuda:3",
-#     'model.layers.29': "cuda:3",
-#     'model.layers.30': "cuda:3",
-#     'model.layers.31': "cuda:3",
-#     'model.layers.32': "cuda:3",
-#     'model.layers.33': "cuda:3",
-#     'model.layers.34': "cuda:3",
-#     'model.layers.35': "cuda:3",
-#     'model.norm': "cuda:0",
-#     'lm_head': "cuda:0"
-# }
-
 device_map = {
     'model.embed_tokens': "cuda:0",
     'model.layers.0': "cuda:0",
@@ -95,9 +53,51 @@ device_map = {
     'model.layers.25': "cuda:1",
     'model.layers.26': "cuda:1",
     'model.layers.27': "cuda:1",
+    'model.layers.28': "cuda:3",
+    'model.layers.29': "cuda:3",
+    'model.layers.30': "cuda:3",
+    'model.layers.31': "cuda:3",
+    'model.layers.32': "cuda:3",
+    'model.layers.33': "cuda:3",
+    'model.layers.34': "cuda:3",
+    'model.layers.35': "cuda:3",
     'model.norm': "cuda:0",
     'lm_head': "cuda:0"
 }
+
+# device_map = {
+#     'model.embed_tokens': "cuda:0",
+#     'model.layers.0': "cuda:0",
+#     'model.layers.1': "cuda:0",
+#     'model.layers.2': "cuda:0",
+#     'model.layers.3': "cuda:0",
+#     'model.layers.4': "cuda:0",
+#     'model.layers.5': "cuda:0",
+#     'model.layers.6': "cuda:0",
+#     'model.layers.7': "cuda:0",
+#     'model.layers.8': "cuda:0",
+#     'model.layers.9': "cuda:0",
+#     'model.layers.10': "cuda:0",
+#     'model.layers.11': "cuda:1",
+#     'model.layers.12': "cuda:1",
+#     'model.layers.13': "cuda:1",
+#     'model.layers.14': "cuda:1",
+#     'model.layers.15': "cuda:1",
+#     'model.layers.16': "cuda:1",
+#     'model.layers.17': "cuda:1",
+#     'model.layers.18': "cuda:1",
+#     'model.layers.19': "cuda:1",
+#     'model.layers.20': "cuda:1",
+#     'model.layers.21': "cuda:1",
+#     'model.layers.22': "cuda:1",
+#     'model.layers.23': "cuda:1",
+#     'model.layers.24': "cuda:1",
+#     'model.layers.25': "cuda:1",
+#     'model.layers.26': "cuda:1",
+#     'model.layers.27': "cuda:1",
+#     'model.norm': "cuda:0",
+#     'lm_head': "cuda:0"
+# }
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
 MAX_LENGTH = 512
@@ -112,7 +112,7 @@ label_map = {
     }
 
 swanlab.config.update({
-    "model": "Qwen/Qwen3-1.7B",
+    "model": "Qwen/Qwen3-8B",
     "prompt": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
     "data_max_length": MAX_LENGTH,
     })
@@ -215,8 +215,8 @@ class CustomTrainer(Trainer):
     def __init__(self, 
                  *args, 
                  eval_tokenizer,
+                 llm_metrics: LLMmetrics, 
                  eval_raw_dataset=None, 
-                 llm_metrics=None, 
                  max_retries: int = 0,
                  eval_num: int = 100,
                  **kwargs
@@ -230,13 +230,10 @@ class CustomTrainer(Trainer):
         self.eval_num = eval_num
         
     def evaluate(self, **kwargs):
-        # 1. 标准指标计算（loss等）
         metrics = super().evaluate(**kwargs)
-        
-        # 2. 自定义指标计算（如果eval_raw_dataset存在）
-        if self.eval_raw_dataset is not None and self.llm_metrics is not None:
-            custom_metrics = self.evaluate_custom()
-            metrics.update(custom_metrics)
+        custom_metrics = self.evaluate_custom()
+        metrics.update(custom_metrics)
+        self.log(metrics)
         
         return metrics
         
@@ -284,7 +281,11 @@ class CustomTrainer(Trainer):
                 "attempts": self.max_retries + 1
             })
 
-            progress_bar.set_postfix({"status": final_status})
+            success_count = len([r for r in results if r['status']=='success'])
+            progress_bar.set_postfix({
+                "success": f"{success_count}/{len(results)}",
+                "rate": f"{success_count/len(results):.1%}" if len(results) else "0%"
+            })
             progress_bar.update(1)
 
         progress_bar.close()
@@ -317,14 +318,14 @@ def predict(messages, model, tokenizer):
 
 def run():
     # 在modelscope上下载Qwen模型到本地目录下
-    model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="models/", revision="master")
+    # model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="models/", revision="master")
 
     # Transformers加载模型权重
     try:
-        # tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-        # model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
-        tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
-        model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-1.7B", torch_dtype=torch.bfloat16, device_map=device_map)
+        tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
+        # tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
+        # model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-1.7B", torch_dtype=torch.bfloat16, device_map=device_map)
         model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
     except Exception as err:
         logger.exception(err)
@@ -376,7 +377,7 @@ def run():
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
     args = TrainingArguments(
-        output_dir="models/Qwen3-1.7B-sft-hsd/",
+        output_dir="models/Qwen3-8B-sft-hsd/",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
@@ -389,7 +390,7 @@ def run():
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="none",
-        run_name="qwen3-1.7B-hsd-sft",
+        run_name="qwen3-8B-hsd-sft",
     )
 
     trainer = CustomTrainer(
@@ -403,7 +404,7 @@ def run():
         llm_metrics=llm_metrics,
         callbacks=[SwanLabCallback(  # 添加SwanLab回调
             project="qwen3-sft-hsd",
-            experiment_name="qwen3-1.7B-hsd-sft",
+            experiment_name="qwen3-8B-hsd-sft",
             )
         ]
     )
@@ -500,7 +501,7 @@ def run_lora():
     model.print_trainable_parameters()  # 打印可训练参数数量（应为原模型的0.1%-1%）
 
     args = TrainingArguments(
-        output_dir="finetune/output_models/Qwen3-1.7B",
+        output_dir="models/Qwen3-8B-lora-hsd/",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
@@ -513,7 +514,7 @@ def run_lora():
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="swanlab",
-        run_name="qwen3-1.7B",
+        run_name="qwen3-8B-hsd-lora",
     )
 
     trainer = Trainer(
@@ -531,7 +532,7 @@ def run_lora():
     
     # 测试时加载基础模型+LoRA权重
     base_model = AutoModelForCausalLM.from_pretrained(
-        "models/Qwen/Qwen3-1.7B", 
+        "models/Qwen/Qwen3-8B", 
         device_map="auto"
     )
     model = PeftModel.from_pretrained(base_model, args.output_dir)
