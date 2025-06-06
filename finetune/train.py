@@ -234,7 +234,7 @@ class CustomTrainer(Trainer):
         custom_metrics = self.evaluate_custom()
         metrics.update(custom_metrics)
         self.log(metrics)
-        swanlab.log(custom_metrics)
+        swanlab.log(metrics)
         return metrics
         
     def evaluate_custom(self):
