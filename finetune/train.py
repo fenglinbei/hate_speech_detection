@@ -17,7 +17,7 @@ from prompt import *
 from utils.log import init_logger
 from metrics.metric_llm import LLMmetrics
 from utils.parser import parse_llm_output_trip, validate_quadruples
-logger = init_logger(level="DEBUG", show_console=True)
+logger = init_logger(level="INFO", show_console=True)
 
 random.seed("23333333")
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
