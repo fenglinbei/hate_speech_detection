@@ -201,8 +201,12 @@ def prompt_to_text(prompt: str) -> str:
     user_content = prompt[user_start_index:user_end_index]
 
     pattern = r'句子：(.*?)\n三元组：'
-    match = re.search(pattern, user_content)
-    original_text = match.group(1)  # group(1) 获取匹配的文本
+    try:
+        match = re.search(pattern, user_content)
+        original_text = match.group(1)  # group(1) 获取匹配的文本
+    except Exception as err:
+        logger.exception(err)
+        exit(0)
     return original_text
             
 
@@ -219,7 +223,7 @@ class CustomTrainer(Trainer):
         super().__init__(*args, **kwargs)
         self.eval_raw_dataset = eval_raw_dataset  # 原始格式验证集
         self.llm_metrics = llm_metrics          # 评估工具
-        self.max_retries = 3
+        self.max_retries = max_retries
         self.eval_num = eval_num
         
     def evaluate(self, **kwargs):
@@ -237,10 +241,16 @@ class CustomTrainer(Trainer):
         """生成回复并计算四元组指标"""
         results = []
         model = self.model.eval()
+
+        progress_bar = tqdm(
+            total=min(self.eval_num, len(self.eval_raw_dataset)),  # 处理数据集小于eval_num的情况
+            desc="Evaluating custom metrics",
+            dynamic_ncols=True  # 自动适应终端宽度
+        )
         
-        final_status = "success"
-        item_id = 0
-        for example in self.eval_raw_dataset[:self.eval_num]:
+        for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]):
+            item_id = idx
+            final_status = "success"
             # 生成回复
             response, prompt = predict(example, model, self.tokenizer)
             logger.debug(f"LLM Output: {response}")
@@ -251,9 +261,9 @@ class CustomTrainer(Trainer):
                     pred_quads = parse_llm_output_trip(response)  # 需实现此函数
                     gt_quads = parse_llm_output_trip(example['output'])
                     if validate_quadruples(pred_quads):
-                        status = "success"
+                        final_status = "success"
+                        break
                     else:
-                        last_error = "Validation failed"
                         logger.warning(f"LLM output validation failed (attempt:{attempt+1})")
                         final_status = "invalid"
 
@@ -272,7 +282,10 @@ class CustomTrainer(Trainer):
                 "attempts": self.max_retries + 1
             })
 
-            item_id += 1
+            progress_bar.set_postfix({"status": final_status})
+            progress_bar.update(1)
+
+        progress_bar.close()
         
         # 计算指标
         return self.llm_metrics.run(results)
