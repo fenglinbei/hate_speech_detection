@@ -219,7 +219,7 @@ class CustomTrainer(Trainer):
                  llm_metrics: LLMmetrics, 
                  eval_raw_dataset=None, 
                  max_retries: int = 0,
-                 eval_num: int = 50,
+                 eval_num: int = 100,
                  **kwargs
                  ):
         
