@@ -26,7 +26,7 @@ os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
 # os.environ["CUDA_LAUNCH_BLOCKING"] = '1'
 
 device_map = {
-    'model.embed_tokens': "cuda:0",
+    'model.embed_tokens': "cuda:3",
     'model.layers.0': "cuda:1",
     'model.layers.1': "cuda:1",
     'model.layers.2': "cuda:1",
@@ -52,19 +52,19 @@ device_map = {
     'model.layers.22': "cuda:2",
     'model.layers.23': "cuda:2",
     'model.layers.24': "cuda:2",
-    'model.layers.25': "cuda:3",
-    'model.layers.26': "cuda:3",
-    'model.layers.27': "cuda:3",
-    'model.layers.28': "cuda:3",
-    'model.layers.29': "cuda:3",
-    'model.layers.30': "cuda:3",
-    'model.layers.31': "cuda:3",
-    'model.layers.32': "cuda:3",
-    'model.layers.33': "cuda:3",
-    'model.layers.34': "cuda:3",
-    'model.layers.35': "cuda:3",
-    'model.norm': "cuda:0",
-    'lm_head': "cuda:0"
+    'model.layers.25': "cuda:0",
+    'model.layers.26': "cuda:0",
+    'model.layers.27': "cuda:0",
+    'model.layers.28': "cuda:0",
+    'model.layers.29': "cuda:0",
+    'model.layers.30': "cuda:0",
+    'model.layers.31': "cuda:0",
+    'model.layers.32': "cuda:0",
+    'model.layers.33': "cuda:0",
+    'model.layers.34': "cuda:0",
+    'model.layers.35': "cuda:0",
+    'model.norm': "cuda:3",
+    'lm_head': "cuda:3"
 }
 
 # device_map = {
