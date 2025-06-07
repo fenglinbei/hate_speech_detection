@@ -11,31 +11,29 @@ import signal
 import requests
 import threading
 import concurrent
-import argparse
 from tqdm import tqdm
 from queue import Queue
 from functools import partial
-from typing import Optional, List, Dict, Set, Any, Union
+from typing import Optional, List, Dict, Set, Any
 from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
 from api.llm import AliyunApiLLMModel, ApiLLMModel
+from api.llm import AliyunApiLLMModel, ApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
-from utils.config import ConfigManager
-from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip
-
-
+from utils.parser import parse_llm_output_quad, validate_quadruples
 
 def build_shot_prompt(
         shots: list[dict],
         prompt_template: str,
         shot_prompt_template: str) -> str:
-    """构造带有示例的提示"""
+    """Construct prompt with examples"""
+
     examples = []
     for shot in shots:
-        # 生成答案部分
+        # Generate answer section
         answer_lines = []
         for q in shot["quadruples"]:
             target = (q.get("target", "") or "NULL").strip()
@@ -45,7 +43,7 @@ def build_shot_prompt(
 
             answer_lines.append(f"{target} | {argument} | {targeted_group} | {hateful}")
         
-        # 构建单个示例
+        # Build single example
         examples.append(
             shot_prompt_template.format(
                 text=shot["content"],
@@ -53,7 +51,7 @@ def build_shot_prompt(
             )
         )
     
-    # 将所有示例组合到提示模板中
+    # Combine all examples into the prompt template
     return prompt_template.format(
         text = "{text}",
         shots="\n\n".join(examples)
@@ -63,35 +61,73 @@ def build_shot_prompt(
 class FewShotLLMTester:
     def __init__(
         self,
-        llm_model: Union[AliyunApiLLMModel, ApiLLMModel],
-        config: dict,
+        llm_model: AliyunApiLLMModel | ApiLLMModel,
+        llm_model: AliyunApiLLMModel | ApiLLMModel,
+        shot_dataset_file: str,
+        test_dataset_file: str,
+        prompts_save_dir: str,
+        output_dir: str,
+        shot_num: int = 0,
+        seed: int = 23333333,
+        concurrency: int = 1,
+        max_retries: int = 3,
+        base_retry_wait_time: int = 3,
+        request_timeout: float = 45.0,
+        checkpoint_interval: int = 10,
+        progress_dir: str = "./few_shot/progress",
+        max_progress_files: int = 5,
+        input_file: Optional[str] = None,
         metric: Optional[LLMmetrics] = None
     ):
         """
-        Few-shot测试执行器
-        
+        Few-shot test executor
+
         Args:
-            llm_model: 配置好的LLM模型实例
-            config: 测试配置字典
-            metric: 评估指标模块
+            llm_model: Configured LLM model instance
+            shot_dataset_file: Dataset for demonstration examples
+            test_dataset_file: Test dataset
+            shot_num: Number of demonstration examples
+            seed: Random seed for reproducibility
+            prompts_save_dir: Path to save generated prompts
+            output_dir: Output directory for results
+            max_tokens: Max tokens for generation
+            temperature: Sampling temperature (None for model default)
+            concurrency: Concurrent request limit
+            max_retries: Max retry attempts
+            request_timeout: Request timeout in seconds
+            checkpoint_interval: Checkpoint saving interval
+            progress_dir: Progress tracking directory
+            max_progress_files: Max progress files to retain
+            input_file: Pre-generated prompts file (optional)
+            metric: Evaluation metric module
         """
         self.llm = llm_model
-        self.config = config.get('tester', {})
-        self.metric = metric
-        
-        # 确保目录存在
-        os.makedirs(self.config.get('progress_dir', './progress'), exist_ok=True)
-        os.makedirs(self.config.get('output_dir', './output'), exist_ok=True)
-        os.makedirs(self.config.get('prompts_save_dir', './prompts'), exist_ok=True)
+        self.shot_dataset_file = shot_dataset_file
+        self.test_dataset_file = test_dataset_file
+        self.shot_num = shot_num
+        self.seed = seed
 
-        # 状态管理
+        self.prompts_save_dir = prompts_save_dir
+        self.input_file = input_file
+        self.output_dir = output_dir
+        self.concurrency = concurrency
+        self.max_retries = max_retries
+        self.base_retry_wait_time = base_retry_wait_time
+        self.request_timeout = request_timeout
+        self.checkpoint_interval = checkpoint_interval
+        self.progress_dir = progress_dir
+        self.max_progress_files = max_progress_files
+        self.metric = metric
+        os.makedirs(self.progress_dir, exist_ok=True)
+
+        # State management
         self.lock = threading.RLock()
         self._init_state()
 
         self._shutdown_flag = False
         self.executor = None
 
-        # 信号处理
+        # Signal handling
         signal.signal(signal.SIGINT, self._graceful_shutdown)
         signal.signal(signal.SIGTERM, self._graceful_shutdown)
 
@@ -100,9 +136,10 @@ class FewShotLLMTester:
         self.results: List[Dict] = []
         self.total_usage = UsageInfo()
         self.last_checkpoint = 0
-
+    
     def _graceful_shutdown(self, signum, frame):
-        """处理中断信号"""
+        """Handle interrupt signals"""
+
         logger.info(f"\nReceived signal {signum}, initiating shutdown...")
         self._shutdown_flag = True
         
@@ -116,10 +153,10 @@ class FewShotLLMTester:
         logger.info("Progress saved. You can resume by rerunning the program.")
 
     def _load_progress(self) -> None:
-        """加载最新的进度文件"""
+        """Load latest progress file"""
+
         try:
-            progress_dir = self.config.get('progress_dir', './progress')
-            progress_files = glob.glob(os.path.join(progress_dir, "progress_*.json"))
+            progress_files = glob.glob(os.path.join(self.progress_dir, "progress_*.json"))
             
             if not progress_files:
                 logger.warning("No history progress files found.")
@@ -146,8 +183,9 @@ class FewShotLLMTester:
             logger.error(f"Progress loading failed: {str(e)}")
 
     def _save_progress(self, force=False) -> None:
-        """保存进度（带时间戳和文件轮换）"""
-        if not force and (len(self.results) - self.last_checkpoint < self.config.get('checkpoint_interval', 10)):
+        """Save progress with timestamp and file rotation"""
+
+        if not force and (len(self.results) - self.last_checkpoint < self.checkpoint_interval):
             return
 
         progress = {
@@ -161,10 +199,9 @@ class FewShotLLMTester:
         }
 
         try:
-            progress_dir = self.config.get('progress_dir', './progress')
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             filename = f"progress_{timestamp}.json"
-            filepath = os.path.join(progress_dir, filename)
+            filepath = os.path.join(self.progress_dir, filename)
             
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(progress, f, ensure_ascii=False, indent=2)
@@ -176,63 +213,56 @@ class FewShotLLMTester:
         except Exception as e:
             logger.error(f"Progress save failed: {str(e)}")
 
-    def _create_datas(self) -> List[dict]:
-        """创建测试数据集"""
-        shot_num = self.config.get('shot_num', 0)
-        seed = self.config.get('seed', 23333333)
+    def _create_datas(
+            self,
+            shot_data_path: Optional[str], 
+            test_data_path: str, 
+            shot_num: int = 5, 
+            seed: int = 23333333,
+            prompt_template: str = TRAIN_PROMPT_FEW_SHOT_V1,
+            shot_prompt_template: str = SHOT_PROMPT_V1,
+            system_prompt: Optional[str] = None):
         
-        # 获取模板
-        train_template = self.config.get('prompt_templates', {}).get('train', TRAIN_PROMPT_FEW_SHOT_V1)
-        shot_template = self.config.get('prompt_templates', {}).get('shot', SHOT_PROMPT_V1)
-        
-        # 加载示例数据
-        shot_data_path = self.config.get('shot_dataset_file')
         if shot_data_path:
             with open(shot_data_path, "r") as f:
-                shot_datas = json.load(f)
+                self.shot_datas = json.load(f)
         else:
-            shot_datas = []
+            self.shot_datas = []
         
-        # 加载测试数据
-        test_data_path = self.config.get('test_dataset_file')
         with open(test_data_path, "r") as f:
-            test_datas = json.load(f)
+            self.test_datas = json.load(f)
 
-        # 处理系统提示
-        system_prompt = self.llm.system_prompt
-        if system_prompt and "{system_prompt}" in train_template:
-            train_template = train_template.replace("{system_prompt}", system_prompt)
+        if system_prompt:
+            prompt_template = prompt_template.replace("{system_prompt}", system_prompt)
         else:
-            train_template = train_template.replace("{system_prompt}", "")
+            prompt_template = prompt_template.replace("{system_prompt}", "")
 
-        # 包含示例的提示
-        if shot_num > 0:
-            sample_shots = get_shots(shot_datas, shot_num=shot_num, seed=seed)
+        if shot_num:
+            sample_shots = get_shots(self.shot_datas, shot_num=shot_num, seed=seed)
             prompt_template = build_shot_prompt(
                 sample_shots, 
-                train_template, 
-                shot_template
-            )
+                prompt_template, 
+                shot_prompt_template)
         else:
-            prompt_template = train_template.replace("{shots}", "")
+            prompt_template = prompt_template.replace("{shots}", "")
 
-        # 构建测试数据
-        all_datas = []
-        for data in test_datas:
-            all_datas.append({
-                "id": data["id"], 
-                "content": data["content"], 
-                "gt_quadruples": data.get("quadruples", []), 
-                "prompt": prompt_template.format(text=data["content"])
-            })
+        all_datas: list[dict] = []
+
+        for data in self.test_datas:
+            all_datas.append(
+                {
+                    "id": data["id"], 
+                    "content": data["content"], 
+                    "gt_quadruples": data.get("quadruples", None), 
+                    "prompt": prompt_template.format(text=data["content"], system_prompt = "")})
         
         return all_datas
-
+    
     def _clean_old_progress_files(self, keep: Optional[int] = None):
-        """清理旧的进度文件"""
-        keep = keep if keep is not None else self.config.get('max_progress_files', 5)
-        progress_dir = self.config.get('progress_dir', './progress')
-        progress_files = sorted(glob.glob(os.path.join(progress_dir, "progress_*.json")), 
+        """Clean up old progress files"""
+
+        keep = keep if keep is not None else self.max_progress_files
+        progress_files = sorted(glob.glob(os.path.join(self.progress_dir, "progress_*.json")), 
                             key=os.path.getmtime)
         remove_count = len(progress_files) - keep
         if remove_count > 0:
@@ -243,8 +273,12 @@ class FewShotLLMTester:
                 except Exception as e:
                     logger.warning(f"Failed to clean file {filepath}: {str(e)}")
 
-    def _process_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
-        """处理单个项目（带重试机制）"""
+    def _process_item(
+            self, 
+            item: dict,
+            llm_params: dict) -> Optional[Dict[str, Any]]:
+        """Process single item with retry mechanism"""
+
         if self._shutdown_flag:
             return None
 
@@ -267,10 +301,8 @@ class FewShotLLMTester:
         except KeyError as err:
             raise ValueError("Invaild llm_params keys.")
 
-        max_retries = self.config.get('max_retries', 3)
-        base_wait = self.config.get('base_retry_wait_time', 0)
         
-        for attempt in range(max_retries + 1):
+        for attempt in range(self.max_retries + 1):
             if self._shutdown_flag:
                 logger.debug(f"Shutdown signal received, aborting ID: {item['id']}")
                 return None
@@ -297,10 +329,9 @@ class FewShotLLMTester:
                             self.total_usage.total_tokens += usage.total_tokens
 
                     if status_code == 200:
+                        
                         if isinstance(answer, str):
                             quadruples = parse_llm_output_quad(answer)
-                            if not quadruples:
-                                quadruples = parse_llm_output_trip(answer)
                             if validate_quadruples(quadruples):
                                 return {
                                     **item,
@@ -316,27 +347,27 @@ class FewShotLLMTester:
                         else:
                             last_error = "Invalid Output"
                             logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
-                            backoff = 2 ** (attempt + base_wait)
+                            backoff = 2 ** (attempt + self.base_retry_wait_time)
                     else:
                         last_error = f"API error: status code {status_code}"
                         logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
                         if status_code == 429:
-                            backoff = 2 ** (attempt + base_wait + 4)
+                            backoff = 2 ** (attempt + self.base_retry_wait_time + 4)
                 else:
                     last_error = "Invalid Output"
                     logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
-                    backoff = 2 ** (attempt + base_wait)
+                    backoff = 2 ** (attempt + self.base_retry_wait_time)
                     
             except requests.exceptions.Timeout:
                 logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
-                backoff = 2 ** (attempt + base_wait)
+                backoff = 2 ** (attempt + self.base_retry_wait_time)
             except Exception as e:
                 logger.exception(e)
                 logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
-                backoff = 2 ** (attempt + base_wait)
+                backoff = 2 ** (attempt + self.base_retry_wait_time)
                 self._shutdown_flag = True
 
-            if attempt < max_retries:
+            if attempt < self.max_retries:
                 logger.debug(f"Retrying after {backoff}s")
                 time.sleep(backoff)
 
@@ -344,9 +375,9 @@ class FewShotLLMTester:
         return {
             **item,
             "llm_output": answer if status_code == 200 else None,
-            "pred_quadruples": quadruples,
+            "parsed_quadruples": quadruples,
             "status": final_status,
-            "attempts": max_retries + 1,
+            "attempts": self.max_retries + 1,
             "error": last_error
         }
     
@@ -355,21 +386,16 @@ class FewShotLLMTester:
             self, 
             llm_params: Optional[dict] = None,
             metric_results: Optional[dict] = None):
-        """保存最终结果并清理"""
-        model_name = self.llm.model_name.replace("/", "_")
-        shot_num = self.config.get('shot_num', 0)
-        seed = self.config.get('seed', 23333333)
-        output_name = f"output_{model_name}_shots{shot_num}_seed{seed}.json"
-        output_path = os.path.join(self.config['output_dir'], output_name)
+        """Save final results and clean up"""
 
-        info = {
-            "model": self.llm.model_name,
-            "shot_num": shot_num,
-            "seed": seed,
-            'usage': self.total_usage.model_dump(),
-            "llm_params": llm_params,
-            "config": self.config
-        }
+        output_name = f"output_{self.llm.model_name}_{self.shot_num}_{self.seed}.json"
+        output_path = os.path.join(self.output_dir, output_name)
+
+        info = {"model": self.llm.model_name,
+                "shot_num": self.shot_num,
+                "seed": self.seed,
+                'usage': self.total_usage.model_dump(),
+                "llm_params": llm_params}
 
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
@@ -378,11 +404,11 @@ class FewShotLLMTester:
                         "info": info, 
                         "results": self.results,
                         "metric": metric_results
-                    }, f, ensure_ascii=False, indent=2)
+                        }, f, ensure_ascii=False, indent=2)
             
             self._clean_old_progress_files(keep=0)
             
-            logger.info(f"Final results saved to {output_path}")
+            logger.info(f"Final results saved to {self.output_dir}")
         except Exception as e:
             logger.error(f"Result save failed: {str(e)}")
             raise
@@ -390,17 +416,26 @@ class FewShotLLMTester:
     def run(
             self, 
             llm_params: Dict,
+            seed: Optional[int] = None,
             shot_num: Optional[int] = None
             ) -> None:
-        """执行分析任务"""
-        # 更新shot_num配置（如果有）
-        if shot_num is not None:
-            self.config['shot_num'] = shot_num
-            logger.info(f"Override shot_num to: {shot_num}")
+        """Execute analysis task"""
 
         self._init_state()
+
+        if seed is not None:
+            self.seed = seed
+        if shot_num is not None:
+            self.shot_num = shot_num
+
         self._load_progress()
-        dataset = self._create_datas()
+        dataset = self._create_datas(
+            self.shot_dataset_file, 
+            self.test_dataset_file, 
+            self.shot_num, 
+            self.seed, 
+            prompt_template=TRAIN_PROMPT_FEW_SHOT_V1, 
+            shot_prompt_template=SHOT_PROMPT_V1)
         
         total_items = len(dataset)
         pending_items = [item for item in dataset if item['id'] not in self.processed_ids]
@@ -411,24 +446,23 @@ class FewShotLLMTester:
 
         pbar = tqdm(
             total=len(pending_items),
-            desc=f"Processing shot: {self.config['shot_num']}",
+            desc=f"Processing shot: {shot_num}",
             unit="item",
             dynamic_ncols=True,
             leave=True
         )
 
-        concurrency = self.config.get('concurrency', 1)
-        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+        with ThreadPoolExecutor(max_workers=self.concurrency) as executor:
             self.executor = executor
             futures = {}
 
             try:
-                # 提交初始批次
-                for item in pending_items[:concurrency * 2]:
+                # Submit initial batch
+                for item in pending_items[:self.concurrency * 2]:
                     future = executor.submit(self._process_item, item, llm_params)
                     futures[future] = item['id']
 
-                # 主处理循环
+                # Main processing loop
                 while futures and not self._shutdown_flag:
                     done, _ = concurrent.futures.wait(
                         futures,
@@ -436,7 +470,7 @@ class FewShotLLMTester:
                         return_when=concurrent.futures.FIRST_COMPLETED
                     )
                     
-                    # 处理完成的任务
+                    # Process completed tasks
                     for future in done:
                         item_id = futures.pop(future)
                         result = future.result()
@@ -456,8 +490,9 @@ class FewShotLLMTester:
                                 "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
                             })
 
-                    # 提交新任务
+                    # Submit new tasks
                     if not self._shutdown_flag:
+
                         for item in pending_items:
                             with self.lock:
                                 if item['id'] in self.processed_ids:
@@ -466,7 +501,7 @@ class FewShotLLMTester:
                                 if item['id'] in futures.values():
                                     continue
             
-                            if len(futures) >= concurrency * 2:
+                            if len(futures) >= self.concurrency * 2:
                                 break
 
                             with self.lock:
@@ -494,7 +529,7 @@ class FewShotLLMTester:
             with self.lock:
                 self._save_progress(force=True)
         else:
-            if self.config.get('compute_metric', False) and self.metric is not None:
+            if isinstance(self.metric, LLMmetrics):
                 metric_results = self.metric.run(datas_list=self.results)
             else:
                 metric_results = None
@@ -502,7 +537,7 @@ class FewShotLLMTester:
             self._show_summary()
 
     def _show_summary(self):
-        """显示摘要报告"""
+        """Display summary report"""
         logger.info("\n=== Summary ===")
         logger.info(f"Total processed: {len(self.results)}")
         logger.info(f"Successful items: {len([r for r in self.results if r['status']=='success'])}")
@@ -512,52 +547,95 @@ class FewShotLLMTester:
         logger.info(f"Completion tokens: {self.total_usage.completion_tokens}")
         logger.info(f"Total tokens: {self.total_usage.total_tokens}")
 
-
-def create_model_from_config(model_config: dict) -> Union[AliyunApiLLMModel, ApiLLMModel]:
-    """根据配置创建模型实例"""
-    model_type = model_config.get('type', 'ApiLLMModel')
-    params = model_config.get('params', {})
-    
-    if model_type == 'AliyunApiLLMModel':
-        return AliyunApiLLMModel(**params)
-    elif model_type == 'ApiLLMModel':
-        return ApiLLMModel(**params)
-    else:
-        raise ValueError(f"Unknown model type: {model_type}")
-
-
 if __name__ == "__main__" :
-    # 命令行参数解析
-    parser = argparse.ArgumentParser(description='Run few-shot LLM testing')
-    parser.add_argument('--config', type=str, default=None, 
-                        help='Path to configuration file (JSON format)')
-    args = parser.parse_args()
-    
-    # 加载配置
-    config = ConfigManager.load_config(args.config)
-    
-    # 配置日志
-    log_config = config.get('log', {})
-    logger = init_logger(level=log_config.get('level', 'INFO'), 
-                         show_console=log_config.get('show_console', True))
-    
-    # 创建模型
-    model = create_model_from_config(config['model'])
-    
-    # 可选地创建metric
-    metric = LLMmetrics() if config['tester'].get('compute_metric', True) else None
-    
-    # 创建tester
+    mertic = LLMmetrics()
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    #     api_key="sk-06107e55e13c4b67b7f8a262548b9b53",
+    # )
+
+    from prompt import TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+
+    # model = AliyunApiLLMModel(
+    #     model_name="qwen2.5-7b-instruct",
+    #     api_base="https://dashscope.aliyuncs.com/api/v1",
+    #     api_key="sk-22deaa18dd6b423983d438ccd0aa4a2c",
+    #     use_dashscope=True,
+    #     system_prompt=TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+    # )
+
+    # model = ApiLLMModel(
+    #     model_name="qwen3-8b-think",
+    #     api_base="http://127.0.0.1:5001/v2/",
+    #     api_key='23333333',
+    #     system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2,
+    #     enable_thinking=False,
+    #     timeout=90
+    # )
+
+    model = ApiLLMModel(
+        model_name="Qwen3-8B-sft-hsd-180-no-think",
+        api_base="http://127.0.0.1:5001/v2/",
+        api_key='23333333',
+        system_prompt=TRAIN_PROMPT_ZERO_SHOT_V2,
+        enable_thinking=False,
+        timeout=90
+    )
+
+    # tester = FewShotLLMTester(
+    #     llm_model=model,
+    #     shot_dataset_file="./data/v1/temp/temp_train_data.json",
+    #     test_dataset_file="./data/v1/temp/temp_test_data.json",
+    #     concurrency=5,
+    #     prompts_save_dir="./few_shot/data/",
+    #     output_dir="./few_shot/output/",
+    #     metric=mertic
+    # )
+
     tester = FewShotLLMTester(
         llm_model=model,
-        config=config,
-        metric=metric
+        shot_dataset_file="data/full/std/train.json",
+        test_dataset_file="data/full/std/test.json",
+        shot_num=5,
+        base_retry_wait_time=0,
+        concurrency=1,
+        prompts_save_dir="./data/prompts/",
+        output_dir="few_shot/output/",
+        metric=mertic
     )
-    
-    # 运行测试
-    run_config = config['tester']['run']
-    shots_list = run_config.get('shots_list', [config['tester'].get('shot_num', 5)])
-    llm_params = run_config['llm_params']
-    
+
+    # for qwen3
+    # 对于思考模式，使用 Temperature=0.6，TopP=0.95，TopK=20，以及 MinP=0
+    # 对于非思考模式，我们建议使用 Temperature=0.7，TopP=0.8，TopK=20，以及 MinP=0。
+    # params = {
+    #     "max_new_tokens": 512, 
+    #     "n": 1,
+    #     "top_p": 0.8,
+    #     "top_k": 20,
+    #     "min_p": 0,
+    #     "temperature": 0.7, 
+    #     "enable_thinking": False
+    # }
+
+    params = {
+        "max_new_tokens": 4096, 
+        "n": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "min_p": 0,
+        "temperature": 0.6, 
+        "enable_thinking": True
+    }
+
+    shots_list = [2, 10, 14, 18, 22, 24, 26, 28, 30]
+
     for shot_num in shots_list:
-        tester.run(llm_params=llm_params, shot_num=shot_num)
+        # print(shot_num)
+        tester.run(llm_params=params, shot_num=shot_num)
+
+    # tester.run(llm_params=params, shot_num=10)
+    # tester.run(llm_params=params, shot_num=15)
+    # tester.run(llm_params=params, shot_num=20)
+    # print(tester._validate_quadruples(tester._parse_llm_output("NULL | NULL | non_hate | non_hate")))
+    # print(tester._parse_llm_output("中国人为啥要吹黑人性能力 | 女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism | hate"))
