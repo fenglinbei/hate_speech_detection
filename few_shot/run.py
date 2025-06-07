@@ -516,11 +516,12 @@ class FewShotLLMTester:
 def create_model_from_config(model_config: dict) -> Union[AliyunApiLLMModel, ApiLLMModel]:
     """根据配置创建模型实例"""
     model_type = model_config.get('type', 'ApiLLMModel')
-    params = model_config.get('params', {})
+    params: dict = model_config.get('params', {})
     
     if model_type == 'AliyunApiLLMModel':
         return AliyunApiLLMModel(**params)
     elif model_type == 'ApiLLMModel':
+        params.pop("use_dashscope")
         return ApiLLMModel(**params)
     else:
         raise ValueError(f"Unknown model type: {model_type}")
