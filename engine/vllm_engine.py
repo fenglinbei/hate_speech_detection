@@ -1,5 +1,7 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["TRITON_PTXAS_PATH"] = "/usr/local/cuda/bin/ptxas"
 import warnings
 warnings.simplefilter('ignore')
 
@@ -88,59 +90,3 @@ class VLLM:
             # 错误处理
             error_text = f"VLLM generation error: {str(e)}"
             return [[error_text]], UsageInfo(), 500
-
-
-# ==================== 修改后处理逻辑 ====================
-import re
-import difflib
-import random
-
-class FewShotLLMTester:
-    # ... 保持原有代码不变 ...
-    
-    def _process_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
-        """修改后处理逻辑为知识点标注任务"""
-        # ... 保持原有代码直到获取answer变量 ...
-        
-        # 提取预测结果（知识点）
-        prediction = self.extract_knowledge_label(answer)
-        # 提取真实标签
-        solution = extract_answer_from_dataset(item.get("solution", ""))
-        
-        # 处理标签匹配
-        label_list = self.config.get('label_list', [])
-        if prediction and label_list:
-            prediction = prediction.strip()
-            if prediction in label_list:
-                valid_pred = prediction
-            else:
-                # 尝试模糊匹配
-                close_match = difflib.get_close_matches(prediction, label_list, n=1, cutoff=0.5)
-                valid_pred = close_match[0] if close_match else random.choice(label_list)
-        else:
-            valid_pred = random.choice(label_list) if label_list else "Unknown"
-        
-        # 返回处理结果
-        return {
-            **item,
-            "llm_output": answer,
-            "pred_label": valid_pred,
-            "true_label": solution,
-            "status": "success" if prediction else "invalid"
-        }
-    
-    def extract_knowledge_label(self, text: str) -> Optional[str]:
-        """从模型输出中提取知识点标签"""
-        if not text:
-            return None
-        # 尝试匹配boxed内容
-        matches = re.findall(r"oxed{(.*?)}", text)
-        if matches:
-            return matches[-1].strip()
-        # 尝试匹配直接给出的标签
-        return text.strip().split('\n')[-1].strip()
-
-# ==================== 工具函数 ====================
-def extract_answer_from_dataset(text: str) -> str:
-    """处理真实标签"""
-    return text.strip().replace(',', '') if text else ""
