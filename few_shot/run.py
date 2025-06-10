@@ -187,10 +187,6 @@ class FewShotLLMTester:
         shot_template = self.config.get('prompt_templates', {}).get('shot')
 
         logger.debug(self.config.get('prompt_templates', {}))
-
-        if any([system_prompt, user_template, shot_template]):
-            logger.error("Invaild promnpt template.")
-            raise ValueError("Invaild promnpt template.")
         
         # 加载示例数据
         shot_data_path = self.config.get('shot_dataset_file')

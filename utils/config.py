@@ -77,7 +77,7 @@ class ConfigManager:
                 sys.exit(1)
         
         # 将字符串映射到实际的prompt变量
-        config['model']['params']['system_prompt'] = cls._resolve_prompt(config['model']['params']['system_prompt'])
+        config['tester']['prompt_templates']['system'] = cls._resolve_prompt(config['tester']['prompt_templates']['system'])
         config['tester']['prompt_templates']['train'] = cls._resolve_prompt(config['tester']['prompt_templates']['train'])
         config['tester']['prompt_templates']['shot'] = cls._resolve_prompt(config['tester']['prompt_templates']['shot'])
         
