@@ -3,7 +3,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import warnings
 warnings.simplefilter('ignore')
 
-from engine.vllm_engine import LLM as VLLModel, SamplingParams
+from vllm import LLM as VLLModel, SamplingParams
 from typing import List, Dict, Any, Optional
 from utils.protocol import UsageInfo
 
