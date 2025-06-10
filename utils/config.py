@@ -2,10 +2,8 @@ import sys
 import json
 from typing import Optional
 
-from utils.log import init_logger
 from prompt import *
 
-logger = init_logger()
 
 class ConfigManager:
     """统一配置管理系统"""

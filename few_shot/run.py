@@ -1,6 +1,3 @@
-from utils.log import init_logger
-logger = init_logger(level="INFO", show_console=True)
-
 import concurrent.futures
 import os
 import sys
