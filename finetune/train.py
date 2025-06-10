@@ -372,7 +372,7 @@ def run():
             messages,
             tokenize=False,
             add_generation_prompt=True,
-            enable_thinking=False,  # Setting enable_thinking=False disables thinking mode
+            enable_thinking=False,
         )
         instruction = tokenizer(
             text,
@@ -384,7 +384,7 @@ def run():
             instruction["attention_mask"] + response["attention_mask"] + [1]
         )
         labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
-        if len(input_ids) > MAX_LENGTH:  # 做一个截断
+        if len(input_ids) > MAX_LENGTH:
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
             labels = labels[:MAX_LENGTH]

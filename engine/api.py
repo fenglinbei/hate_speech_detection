@@ -121,7 +121,7 @@ class ApiLLMModel:
 
     def chat(
             self, 
-            prompt: str, 
+            messages: list[dict], 
             max_new_tokens: int, 
             n: int = 1,
             top_p: float = 0.8,
@@ -133,7 +133,6 @@ class ApiLLMModel:
         response = None
         status_code = 200
 
-        messages = self._build_messages(prompt)
         params = self._build_params(
             messages, 
             temperature=temperature, 

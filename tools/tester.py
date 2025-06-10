@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.append(".")
 
-from api.llm import AliyunApiLLMModel
+from api.engine import AliyunApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import build_all_prompt
 

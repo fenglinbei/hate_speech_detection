@@ -18,7 +18,7 @@ sys.path.append(".")
 
 from metrics.metric_llm import LLMmetrics
 from prompt import *
-from api.llm import AliyunApiLLMModel
+from api.engine import AliyunApiLLMModel
 from utils.protocol import UsageInfo
 
 category_mapping = {
