@@ -185,8 +185,6 @@ class FewShotLLMTester:
         system_prompt = self.config.get('prompt_templates', {}).get('system')
         user_template = self.config.get('prompt_templates', {}).get('train')
         shot_template = self.config.get('prompt_templates', {}).get('shot')
-
-        logger.debug(self.config.get('prompt_templates', {}))
         
         # 加载示例数据
         shot_data_path = self.config.get('shot_dataset_file')
@@ -249,7 +247,7 @@ class FewShotLLMTester:
             return None
 
         item_id = item['id']
-        prompt = item['prompt']
+        messages = item['messages']
         quadruples = []
         backoff = 0
         status_code = 500
@@ -278,7 +276,7 @@ class FewShotLLMTester:
             logger.debug(f"Processing text: {text}")
             try:
                 response, usage, status_code = self.llm.chat(
-                    prompt=prompt,
+                    messages=messages,
                     max_new_tokens=max_new_tokens,
                     n=n,
                     top_p=top_p,
