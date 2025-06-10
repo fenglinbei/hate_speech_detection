@@ -3,7 +3,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import warnings
 warnings.simplefilter('ignore')
 
-from vllm import LLM as VLLModel, SamplingParams
+from engine.vllm_engine import LLM as VLLModel, SamplingParams
 from typing import List, Dict, Any, Optional
 from utils.protocol import UsageInfo
 
@@ -11,9 +11,15 @@ class VLLM:
     """
     用于VLLM推理的模型类，接口与ApiLLMModel一致
     """
-    def __init__(self, model_path: str, tensor_parallel_size: int = 1,
-                 max_num_seqs: int = 32, max_model_len: int = 8192 * 3 // 2,
-                 gpu_memory_utilization: float = 0.95, seed: int = 2024):
+    def __init__(
+            self, 
+            model_path: str, 
+            tensor_parallel_size: int = 1,
+            max_num_seqs: int = 32, 
+            max_model_len: int = 8192 * 3 // 2,
+            gpu_memory_utilization: float = 0.95, 
+            seed: int = 2024):
+        
         self.model_name = model_path
         self.llm = VLLModel(
             model=model_path,
