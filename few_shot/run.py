@@ -186,6 +186,8 @@ class FewShotLLMTester:
         user_template = self.config.get('prompt_templates', {}).get('train')
         shot_template = self.config.get('prompt_templates', {}).get('shot')
 
+        logger.debug(self.config.get('prompt_templates', {}))
+
         if any([system_prompt, user_template, shot_template]):
             logger.error("Invaild promnpt template.")
             raise ValueError("Invaild promnpt template.")
