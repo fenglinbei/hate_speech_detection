@@ -19,7 +19,7 @@ from typing import Optional, List, Dict, Set, Any, Union
 from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
-from api.llm import AliyunApiLLMModel, ApiLLMModel
+from engine import AliyunApiLLMModel, ApiLLMModel, VLLM
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
@@ -182,8 +182,13 @@ class FewShotLLMTester:
         seed = self.config.get('seed', 23333333)
         
         # 获取模板
-        train_template = self.config.get('prompt_templates', {}).get('train', TRAIN_PROMPT_FEW_SHOT_V1)
-        shot_template = self.config.get('prompt_templates', {}).get('shot', SHOT_PROMPT_V1)
+        system_prompt = self.config.get('prompt_templates', {}).get('system')
+        user_template = self.config.get('prompt_templates', {}).get('train')
+        shot_template = self.config.get('prompt_templates', {}).get('shot')
+
+        if any([system_prompt, user_template, shot_template]):
+            logger.error("Invaild promnpt template.")
+            raise ValueError("Invaild promnpt template.")
         
         # 加载示例数据
         shot_data_path = self.config.get('shot_dataset_file')
@@ -198,32 +203,29 @@ class FewShotLLMTester:
         with open(test_data_path, "r") as f:
             test_datas = json.load(f)
 
-        # 处理系统提示
-        system_prompt = self.llm.system_prompt
-        if system_prompt and "{system_prompt}" in train_template:
-            train_template = train_template.replace("{system_prompt}", system_prompt)
-        else:
-            train_template = train_template.replace("{system_prompt}", "")
-
         # 包含示例的提示
         if shot_num > 0:
             sample_shots = get_shots(shot_datas, shot_num=shot_num, seed=seed)
-            prompt_template = build_shot_prompt(
+            user_template = build_shot_prompt(
                 sample_shots, 
-                train_template, 
+                user_template, 
                 shot_template
             )
         else:
-            prompt_template = train_template.replace("{shots}", "")
+            user_template = user_template.replace("{shots}", "")
 
         # 构建测试数据
         all_datas = []
         for data in test_datas:
+
+            user_prompt = user_template.format(text=data["content"])
+            messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+
             all_datas.append({
                 "id": data["id"], 
                 "content": data["content"], 
                 "gt_quadruples": data.get("quadruples", []), 
-                "prompt": prompt_template.format(text=data["content"])
+                "messages": messages
             })
         
         return all_datas
@@ -513,15 +515,25 @@ class FewShotLLMTester:
         logger.info(f"Total tokens: {self.total_usage.total_tokens}")
 
 
-def create_model_from_config(model_config: dict) -> Union[AliyunApiLLMModel, ApiLLMModel]:
-    """根据配置创建模型实例"""
+def create_model_from_config(model_config: dict) -> Any:
+    """根据配置创建模型实例，支持VLLM"""
     model_type = model_config.get('type', 'ApiLLMModel')
     params: dict = model_config.get('params', {})
     
-    if model_type == 'AliyunApiLLMModel':
+    if model_type == 'VLLM':
+        # 从参数中提取VLLM配置
+        return VLLM(
+            model_path=params.get("model_path"),
+            tensor_parallel_size=params.get("tensor_parallel_size", 1),
+            max_num_seqs=params.get("max_num_seqs", 32),
+            max_model_len=params.get("max_model_len", 8192 * 3 // 2),
+            gpu_memory_utilization=params.get("gpu_memory_utilization", 0.95),
+            seed=params.get("seed", 2024),
+        )
+    elif model_type == 'AliyunApiLLMModel':
         return AliyunApiLLMModel(**params)
     elif model_type == 'ApiLLMModel':
-        params.pop("use_dashscope")
+        params.pop("use_dashscope", None)
         return ApiLLMModel(**params)
     else:
         raise ValueError(f"Unknown model type: {model_type}")

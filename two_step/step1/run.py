@@ -17,7 +17,7 @@ sys.path.append(".")
 
 from metric import Metrics
 from prompt import *
-from api.llm import AliyunApiLLMModel
+from api.engine import AliyunApiLLMModel
 from utils.protocol import UsageInfo
 from tools.build_prompt import get_shots
 

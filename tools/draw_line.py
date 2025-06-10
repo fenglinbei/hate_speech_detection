@@ -11,7 +11,8 @@ SAVE_DIR = "few_shot/fig"
 METRICS = ["f1_soft", "f1_hard", "f1_avg"]
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']  # 不同模型的颜色
 MARKERS = ['o', 's', '^', 'D', 'v', '<', '>']  # 不同模型的标记
-MODELS = ["qwen3-8b", "qwen3-8b-think"]
+MODELS = ["qwen3-8b", "qwen3-8b-think", "Qwen3-8B-sft-hsd-220"]
+# MODELS = ["qwen3-8b", "qwen3-8b-think"]
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 
