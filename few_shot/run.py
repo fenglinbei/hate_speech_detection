@@ -18,6 +18,7 @@ from concurrent.futures import ThreadPoolExecutor
 from prompt import *
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM
 from utils.protocol import UsageInfo
+from utils.log import init_logger
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
 from utils.config import ConfigManager
