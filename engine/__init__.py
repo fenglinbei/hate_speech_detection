@@ -1,2 +1,2 @@
 from engine.api import AliyunApiLLMModel, ApiLLMModel
-from engine.vllm import VLLM
+from engine.vllm_engine import VLLM
