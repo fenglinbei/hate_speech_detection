@@ -90,3 +90,6 @@ class VLLM:
             # 错误处理
             error_text = f"VLLM generation error: {str(e)}"
             return [[error_text]], UsageInfo(), 500
+        
+if __name__ == "__main__":
+    model = VLLM(model_path="models/Qwen3-8B-sft-hsd/checkpoint-220", tensor_parallel_size=4)
