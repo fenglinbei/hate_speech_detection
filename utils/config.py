@@ -1,5 +1,6 @@
 import sys
 import json
+from loguru import logger
 from typing import Optional
 
 from prompt import *
