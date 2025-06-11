@@ -5,7 +5,9 @@ os.environ["TRITON_PTXAS_PATH"] = "/usr/local/cuda/bin/ptxas"
 import warnings
 warnings.simplefilter('ignore')
 
+import torch
 from vllm import LLM as VLLModel, SamplingParams
+from transformers import AutoModel, Qwen2TokenizerFast, Qwen3ForCausalLM
 from typing import List, Dict, Any, Optional
 from utils.protocol import UsageInfo
 
@@ -90,6 +92,67 @@ class VLLM:
             # 错误处理
             error_text = f"VLLM generation error: {str(e)}"
             return [[error_text]], UsageInfo(), 500
+        
+class LLM:
+
+    def __init__(
+            self, 
+            model_path: str,
+            **kwarg
+            ):
+        
+        self.model_name = model_path
+        
+        self.tokenizer = Qwen2TokenizerFast.from_pretrained(model_path, use_fast=False, trust_remote_code=True)
+        self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
+        self.model.eval()
+    
+    def chat(
+            self, 
+            messages: str, 
+            max_new_tokens: int = 1024, 
+            n: int = 1,
+            top_p: float = 1.0, 
+            top_k: int = -1, 
+            temperature: float = 0.0,
+            enable_thinking: bool = False
+            ) -> tuple[List[List[str]], UsageInfo, int]:
+
+        text = self.tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False
+        )
+        model_inputs = self.tokenizer([text], return_tensors="pt").to("cuda")
+        attention_mask = model_inputs['attention_mask']
+
+        generated_ids = self.model.generate(
+            model_inputs.input_ids,
+            attention_mask=attention_mask,
+            max_new_tokens=max_new_tokens,
+            repetition_penalty=1.15,
+            pad_token_id=self.tokenizer.eos_token_id
+        )
+        generated_ids = [
+            output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+        ]
+
+        response = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            
+        # 计算token使用量
+        prompt_tokens = len(model_inputs.input_ids)
+        completion_tokens = len(generated_ids)
+        
+        usage = UsageInfo(
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            total_tokens=prompt_tokens + completion_tokens
+        )
+        
+        return response, usage, 200
+        
+        
         
 if __name__ == "__main__":
     model = VLLM(model_path="models/Qwen3-8B-sft-hsd/checkpoint-220", tensor_parallel_size=2)
