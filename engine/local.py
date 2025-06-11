@@ -150,7 +150,7 @@ class LLM:
             total_tokens=prompt_tokens + completion_tokens
         )
         
-        return response, usage, 200
+        return [response], usage, 200
         
         
         
