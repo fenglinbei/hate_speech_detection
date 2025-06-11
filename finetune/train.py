@@ -421,7 +421,7 @@ def run():
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="none",
-        run_name="qwen3-8B-hsd-sft-v4-cosine"，
+        run_name="qwen3-8B-hsd-sft-v4-cosine",
         lr_scheduler_type="cosine",
         warmup_ratio=0.1,
     )
