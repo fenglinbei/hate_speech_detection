@@ -198,7 +198,8 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 def prompt_to_text(prompt: str) -> str:
-    pattern = r'句子：(.*?)\n三元组：'
+    # pattern = r'句子：(.*?)\n三元组：'
+    pattern = r'你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n(.*?)'
     try:
         match = re.search(pattern, prompt)
         original_text = match.group(1)  # group(1) 获取匹配的文本
