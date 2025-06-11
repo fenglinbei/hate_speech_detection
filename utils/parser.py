@@ -102,14 +102,27 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
         if not quadruples:
             return False
             
-        valid_targeted_groups = {'Racism', 'Region', 'LGBTQ', 'Sexism', 'Others', 'non_hate'}
+        valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'non_hate'}
         valid_hateful = {'hate', 'non_hate'}
         
         return all(
-            (all(s in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
+            (all(s.lower().strip() in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
             (q['hateful'] in valid_hateful) and q['hateful']
             for q in quadruples
         )
 
 if __name__ == "__main__":
-    print(parse_llm_output_trip("______ | __________ | F [END]"))
+    print(validate_quadruples([
+        {
+          "target": "基佬",
+          "argument": "为什么不怕染艾",
+          "targeted_group": "LGBTQ, others",
+          "hateful": "hate"
+        },
+        {
+          "target": "基佬",
+          "argument": "不要艾就永久单身",
+          "targeted_group": "LGBTQ, others",
+          "hateful": "hate"
+        }
+      ]))
