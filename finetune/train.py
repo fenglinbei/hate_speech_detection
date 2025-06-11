@@ -408,7 +408,7 @@ def run():
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
     args = TrainingArguments(
-        output_dir="models/Qwen3-8B-sft-hsd-v4/",
+        output_dir="models/Qwen3-8B-sft-hsd-v4-cosine/",
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         gradient_accumulation_steps=4,
@@ -421,7 +421,9 @@ def run():
         save_on_each_node=True,
         gradient_checkpointing=True,
         report_to="none",
-        run_name="qwen3-8B-hsd-sft"
+        run_name="qwen3-8B-hsd-sft-v4-cosine"，
+        lr_scheduler_type="cosine",
+        warmup_ratio=0.1,
     )
 
     trainer = CustomTrainer(
