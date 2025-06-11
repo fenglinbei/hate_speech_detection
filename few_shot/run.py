@@ -16,7 +16,7 @@ from typing import Optional, List, Dict, Set, Any, Union
 from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
-from engine import AliyunApiLLMModel, ApiLLMModel, VLLM
+from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM
 from utils.protocol import UsageInfo
 from utils.log import init_logger
 from tools.build_prompt import get_shots
@@ -513,8 +513,10 @@ def create_model_from_config(model_config: dict) -> Any:
     """根据配置创建模型实例，支持VLLM"""
     model_type = model_config.get('type', 'ApiLLMModel')
     params: dict = model_config.get('params', {})
-    
-    if model_type == 'VLLM':
+
+    if model_type == "LLM":
+        return LLM(model_path=params.get("model_path"))
+    elif model_type == 'VLLM':
         # 从参数中提取VLLM配置
         return VLLM(
             model_path=params.get("model_path"),
