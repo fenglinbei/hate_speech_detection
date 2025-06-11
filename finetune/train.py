@@ -115,7 +115,7 @@ label_map = {
 
 swanlab.config.update({
     "model": "Qwen/Qwen3-8B",
-    "prompt": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
+    "prompt": TRAIN_PROMPT_ZERO_SHOT_V4,
     "data_max_length": MAX_LENGTH,
     })
 
@@ -140,11 +140,11 @@ def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
 
-        input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
+        input = TRAIN_PROMPT_ZERO_SHOT_V4.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
         output = f"{answer}"
         message = {
-            "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
+            "instruction": "",
             "input": f"{input}",
             "output": output,
         }
@@ -174,11 +174,11 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
 
-        input = TRAIN_PROMPT_ZERO_SHOT_V3.format(text=raw_data["content"])
+        input = TRAIN_PROMPT_ZERO_SHOT_V4.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
         output = f"{answer}"
         message = {
-            "instruction": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
+            "instruction": "",
             "input": f"{input}",
             "output": output,
         }
@@ -208,7 +208,8 @@ def prompt_to_text(prompt: str) -> str:
     return original_text
 
 def build_messages(example: pd.Series) -> list[dict]:
-    messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
+    # messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
+    messages = [{'content': example["input"], 'role': 'user'}]
     return messages
        
 
@@ -265,7 +266,7 @@ class CustomTrainer(Trainer):
                     test_text_list.append(swanlab.Text(response_text))
 
                     logger.debug(f"LLM Output: {response}")
-                    pred_quads = parse_llm_output_trip(response)  # 需实现此函数
+                    pred_quads = parse_llm_output_trip(response)
                     gt_quads = parse_llm_output_trip(example['output'])
                     if validate_quadruples(pred_quads):
                         final_status = "success"
@@ -406,7 +407,7 @@ def run():
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
     args = TrainingArguments(
-        output_dir="models/Qwen3-8B-sft-hsd/",
+        output_dir="models/Qwen3-8B-sft-hsd-v4/",
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
         gradient_accumulation_steps=4,
@@ -548,7 +549,6 @@ def run_lora():
         input_value = row['input']
 
         messages = [
-            {"role": "system", "content": f"{instruction}"},
             {"role": "user", "content": f"{input_value}"}
         ]
 
