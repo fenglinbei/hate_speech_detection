@@ -523,7 +523,7 @@ def create_model_from_config(model_config: dict) -> Any:
         # 从参数中提取VLLM配置
         return VLLM(
             model_path=params.get("model_path"),
-            model_name=params.get("model_name")
+            model_name=params.get("model_name"),
             tensor_parallel_size=params.get("tensor_parallel_size", 1),
             max_num_seqs=params.get("max_num_seqs", 32),
             max_model_len=params.get("max_model_len", 8192 * 3 // 2),
