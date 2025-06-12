@@ -72,8 +72,8 @@ def convert_quad(quad):
     return (
         str(quad.get("target", "")).strip(),
         str(quad.get("argument", "")).strip(),
-        str(quad.get("targeted_group", "")).strip().lower(),
-        str(quad.get("hateful", "")).strip().lower()
+        str(quad.get("targeted_group", "")).strip().lower().replace("-", "_"),
+        str(quad.get("hateful", "")).strip().lower().replace("-", "_")
     )
 
 def is_hard_match(pred_quad, gt_quad):
@@ -401,7 +401,7 @@ class LLMmetrics:
 
 if __name__ == "__main__":
     METRIC = LLMmetrics()
-    metric = METRIC.run(data_path="few_shot/output/output_Qwen3-8B-sft-hsd-220_0_23333333.json")
+    metric = METRIC.run(data_path="few_shot/output/output_Qwen3-8B-sft-hsd-v4-cosine-default_shots0_seed23333333.json")
     print(metric)
         
     

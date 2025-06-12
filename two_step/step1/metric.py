@@ -16,7 +16,7 @@ def string_similarity(a, b):
         return 1.0
     if a is None or b is None:
         return 0.0
-    return SequenceMatcher(None, a, b).ratio()
+    return SequenceMatcher(None, str(a), str(b)).ratio()
 
 def align_elements(pred, gt):
     """通过贪心算法建立元素间最优匹配关系"""
@@ -29,8 +29,8 @@ def align_elements(pred, gt):
         # 计算元素综合相似度（取target与argument均值）
         for g_idx, g_elem in enumerate(gt):
             if not gt__used[g_idx]:
-                target_sim = string_similarity(p_elem['target'], g_elem['target'])
-                arg_sim = string_similarity(p_elem['argument'], g_elem['argument'])
+                target_sim = string_similarity(str(p_elem['target']), str(g_elem['target']))
+                arg_sim = string_similarity(str(p_elem['argument']), str(g_elem['argument']))
                 total_sim = (target_sim + arg_sim) / 2
                 if total_sim > best_score:
                     best_score = total_sim
@@ -77,9 +77,6 @@ def label_match(pred: list[str], gt: list[str]) -> bool:
     
     return match_len == gt_len
 
-def hard
-
-
 class Metrics:
 
     def __init__(self, data_path: Optional[str] = None):
@@ -114,26 +111,24 @@ class Metrics:
             if result["status"] != "success":
                 continue
             self.success += 1
-
-            print(result)
-            gt__quads = result["quadruples"]
-            gt__list = [
+            gt_quads = result["gt_quadruples"]
+            gt_list = [
                 {
                     "target": q["target"],
                     "argument": q["argument"],
                 }
-                for q in gt__quads
+                for q in gt_quads
             ]
-            pred_list = result["parsed_quadruples"]
+            pred_list = result["pred_quadruples"]
 
-            self.metric_datas.append((pred_list, gt__list))
+            self.metric_datas.append((pred_list, gt_list))
 
         self.data_len = len(self.metric_datas)
     
 
-    def _calculate_score(self, pred_list: list[dict[str, str]], gt__list: list[dict[str, str]]):
+    def _calculate_score(self, pred_list: list[dict[str, str]], gt_list: list[dict[str, str]]):
 
-        target_sim, arg_sim = get_similarity(pred_list, gt__list)
+        target_sim, arg_sim = get_similarity(pred_list, gt_list)
 
         self.total_target_sim += target_sim
         self.total_arg_sim += arg_sim
@@ -142,8 +137,8 @@ class Metrics:
         logger.info('开始计算分数')
         self._load_data(datas) if datas else self._load_data(data_path=self.data_path)
         try:
-            for idx, (pred_list, gt__list) in enumerate(self.metric_datas, start=1):
-                self._calculate_score(pred_list, gt__list)
+            for idx, (pred_list, gt_list) in enumerate(self.metric_datas, start=1):
+                self._calculate_score(pred_list, gt_list)
 
                 if idx % 10 == 0:
                     logger.info(
@@ -179,9 +174,10 @@ class Metrics:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
-    METRIC = Metrics(data_path="/workspace/two_step/step1/result/output_qwen2.5-7b-instruct_5_23333333_20250517_090431.json")
+    METRIC = Metrics(data_path="few_shot/output/output_Qwen3-8B-sft-hsd-v4-cosine-default_shots0_seed23333333.json")
     score_dict = METRIC.run()
-    METRIC.save_metric(score_dict)
+    print(score_dict)
+    # METRIC.save_metric(score_dict)
         
     
     
