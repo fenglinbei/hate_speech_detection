@@ -18,13 +18,16 @@ class VLLM:
     def __init__(
             self, 
             model_path: str, 
+            model_name: str,
+            
             tensor_parallel_size: int = 1,
             max_num_seqs: int = 32, 
             max_model_len: int = 8192 * 3 // 2,
             gpu_memory_utilization: float = 0.95, 
             seed: int = 2024):
         
-        self.model_name = model_path
+        self.model_path = model_path
+        self.model_name = model_name
         self.llm = VLLModel(
             model=model_path,
             max_num_seqs=max_num_seqs,
@@ -98,10 +101,12 @@ class LLM:
     def __init__(
             self, 
             model_path: str,
+            model_name: str,
             **kwarg
             ):
         
-        self.model_name = model_path
+        self.model_path = model_path
+        self.model_name = model_name
         
         self.tokenizer = Qwen2TokenizerFast.from_pretrained(model_path, use_fast=False, trust_remote_code=True)
         self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
