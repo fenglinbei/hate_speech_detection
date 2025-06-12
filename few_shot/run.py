@@ -213,7 +213,10 @@ class FewShotLLMTester:
         for data in test_datas:
 
             user_prompt = user_template.format(text=data["content"])
-            messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+            if system_prompt:
+                messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+            else:
+                messages = [{'content': user_prompt, 'role': 'user'}]
 
             all_datas.append({
                 "id": data["id"], 
