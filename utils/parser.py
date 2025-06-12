@@ -76,7 +76,6 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
             targeted_groups: list[str] = []
             for label_raw_sp in label_raw.split(","):
                 label = label_map.get(label_raw_sp.strip(), None)
-                label = label_raw_sp.strip()
                 if not label:
                     continue
                 if label != "none_hate":
@@ -113,6 +112,7 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
         )
 
 if __name__ == "__main__":
+    print(parse_llm_output_trip("[['______ | ________________ | D [END]']]"))
     print(validate_quadruples([
         {
           "target": "基佬",
