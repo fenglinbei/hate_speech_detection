@@ -79,11 +79,11 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 label = label_raw_sp.strip()
                 if not label:
                     continue
-                if label != "non-hate":
+                if label != "none_hate":
                     targeted_groups.append(label)
                 else:
-                    hateful = "non_hate"
-                    targeted_groups.append("non_hate")
+                    hateful = "none_hate"
+                    targeted_groups.append("none_hate")
                     break
 
             targeted_group = ", ".join(targeted_groups)
@@ -103,8 +103,8 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
         if not quadruples:
             return False
             
-        valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'non_hate'}
-        valid_hateful = {'hate', 'non_hate'}
+        valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'none_hate'}
+        valid_hateful = {'hate', 'none_hate'}
         
         return all(
             (all(s.lower().strip() in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
