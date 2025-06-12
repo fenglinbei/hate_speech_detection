@@ -58,7 +58,7 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 "C": "LGBTQ",
                 "D": "Sexism",
                 "E": "others",
-                "F": "non-hate"
+                "F": "none_hate"
             }
         
         lines = [line.strip() for line in llm_output.strip().split('[SEP]')]
@@ -75,7 +75,7 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
 
             targeted_groups: list[str] = []
             for label_raw_sp in label_raw.split(","):
-                # label = label_map.get(label_raw_sp.strip(), None)
+                label = label_map.get(label_raw_sp.strip(), None)
                 label = label_raw_sp.strip()
                 if not label:
                     continue
