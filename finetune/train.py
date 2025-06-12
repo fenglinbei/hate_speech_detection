@@ -409,14 +409,14 @@ def run():
 
     args = TrainingArguments(
         output_dir="models/Qwen3-8B-sft-hsd-v4-cosine/",
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
+        per_device_train_batch_size=4,
+        per_device_eval_batch_size=4,
         gradient_accumulation_steps=4,
         eval_strategy="steps",
-        eval_steps=20,
+        eval_steps=40,
         logging_steps=10,
         num_train_epochs=4,
-        save_steps=20,
+        save_steps=40,
         learning_rate=1e-5,
         save_on_each_node=True,
         gradient_checkpointing=True,
