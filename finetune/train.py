@@ -136,7 +136,8 @@ def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
 
         for quadruple in raw_data["quadruples"]:
             raw_labels = quadruple["targeted_group"].split(", ")
-            label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
+            # label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
+            label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
 
@@ -170,7 +171,8 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
 
         for quadruple in raw_data["quadruples"]:
             raw_labels = quadruple["targeted_group"].split(", ")
-            label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
+            # label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
+            label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
 
@@ -571,6 +573,6 @@ def run_lora():
     swanlab.finish()
 
 if __name__ == "__main__":
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
-    run()
+    dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
+    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
+    # run()
