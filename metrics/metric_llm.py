@@ -6,6 +6,7 @@ from tqdm import tqdm
 from loguru import logger
 from difflib import SequenceMatcher
 from typing import Optional, Tuple
+from collections import defaultdict
 
 def string_similarity(a: Optional[str], b: Optional[str]):
     """处理含 None 值的字符串相似度计算"""
@@ -72,8 +73,8 @@ def convert_quad(quad):
     return (
         str(quad.get("target", "")).strip(),
         str(quad.get("argument", "")).strip(),
-        str(quad.get("targeted_group", "")).strip().lower().replace("-", "_"),
-        str(quad.get("hateful", "")).strip().lower().replace("-", "_")
+        str(quad.get("targeted_group", "")).strip().lower(),
+        str(quad.get("hateful", "")).strip().lower()
     )
 
 def is_hard_match(pred_quad, gt_quad):
@@ -146,21 +147,6 @@ def calculate_hard_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
                     hard_matched_gold.add(j)
                     break
 
-        # actual_positives += len(target_quads)
-        # predicted_positives += len(prediction_quads)
-
-        # # 创建可变的副本用于匹配
-        # remaining_targets = target_quads.copy()
-        
-        # # 进行四元组匹配
-        # for pred in prediction_quads:
-        #     for i, targ in enumerate(remaining_targets):
-        #         # 完整匹配四个属性
-        #         if pred == targ:
-        #             true_positives += 1
-        #             del remaining_targets[i]  # 避免重复匹配
-        #             break
-
         hard_tp = len(hard_matched_pred)
         hard_fp = len(pred_quads) - hard_tp
         hard_fn = len(gt_quads) - len(hard_matched_gold)
@@ -168,12 +154,6 @@ def calculate_hard_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
         all_hard_tp += hard_tp
         all_hard_fp += hard_fp
         all_hard_fn += hard_fn
-        
-    
-    # # 计算指标
-    # precision = true_positives / predicted_positives if predicted_positives > 0 else 0
-    # recall = true_positives / actual_positives if actual_positives > 0 else 0
-    # f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
     # 计算硬匹配的精确率、召回率和F1分数
     precision = all_hard_tp / (all_hard_tp + all_hard_fp) if (all_hard_tp + all_hard_fp) > 0 else 0
@@ -228,6 +208,8 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
                     soft_matched_pred.add(i)
                     soft_matched_gold.add(j)
                     break
+                else:
+                    print(pred_quad, gt_quad)
         
         soft_tp = len(soft_matched_pred)
         soft_fp = len(pred_quads) - soft_tp
@@ -236,46 +218,6 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
         all_soft_tp += soft_tp
         all_soft_fp += soft_fp
         all_soft_fn += soft_fn
-
-    #     actual_positives += len(gt_quads)
-    #     predicted_positives += len(pred_quads)
-
-    #     # 创建可变副本用于匹配
-    #     remaining_targets = gt_quads.copy()
-
-    #     # 遍历预测四元组
-    #     for pred in pred_quads:
-    #         for i, targ in enumerate(remaining_targets):
-    #             # 相似度计算
-    #             target_sim = SequenceMatcher(
-    #                 None, 
-    #                 targ["target"], 
-    #                 pred["target"]
-    #             ).ratio()
-                
-    #             argument_sim = SequenceMatcher(
-    #                 None,
-    #                 targ["argument"],
-    #                 pred["argument"]
-    #             ).ratio()
-
-    #             # 多标签匹配（排序后比较）
-    #             group_match = targ["targeted_group"] == pred["targeted_group"]
-                
-    #             # 关键匹配条件
-    #             if (target_sim >= similarity_threshold and 
-    #                 argument_sim >= similarity_threshold and 
-    #                 group_match and 
-    #                 targ["hateful"] == pred["hateful"]):
-                    
-    #                 true_positives += 1
-    #                 del remaining_targets[i]  # 移除已匹配项
-    #                 break  # 跳出当前循环
-
-    # # 计算指标
-    # precision = true_positives / predicted_positives if predicted_positives else 0
-    # recall = true_positives / actual_positives if actual_positives else 0
-    # f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) else 0
 
     soft_precision = all_soft_tp / (all_soft_tp + all_soft_fp) if (all_soft_tp + all_soft_fp) > 0 else 0
     soft_recall = all_soft_tp / (all_soft_tp + all_soft_fn) if (all_soft_tp + all_soft_fn) > 0 else 0
@@ -291,6 +233,7 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
     }
 
 
+
 class LLMmetrics:
 
     def __init__(self, output_dir: str = "./metrics/llm/"):
@@ -302,9 +245,23 @@ class LLMmetrics:
         self.total_f1_hard = 0
         self.total_f1_soft = 0
         self.avg_f1 = 0
-
         self.success = 0
         self.total = 0
+        
+        # 新增的字段级指标统计
+        self.field_metrics = {
+            'target_sim': 0.0,      # Target文本平均相似度
+            'argument_sim': 0.0,    # Argument文本平均相似度
+            'targeted_group': {     # 目标群体分类指标
+                'tp': 0, 'fp': 0, 'fn': 0, 
+                'precision': 0.0, 'recall': 0.0, 'f1': 0.0
+            },
+            'hateful': {            # 仇恨性分类指标
+                'tp': 0, 'fp': 0, 'fn': 0,
+                'precision': 0.0, 'recall': 0.0, 'f1': 0.0
+            }
+        }
+        self.valid_pairs = 0  # 有效匹配对计数
 
     def _load_data_from_path(self, data_path: str) -> Tuple[dict, dict]:
         logger.info("========Reading data========")
@@ -349,6 +306,103 @@ class LLMmetrics:
         
         logger.info("========Data Saved========")
 
+    def calculate_field_metrics(self, pred_data_dict: dict, gt_data_dict: dict):
+        """计算字段级别的评估指标"""
+        tg_metrics = defaultdict(lambda: {'tp': 0, 'fp': 0, 'fn': 0})
+        hate_metrics = defaultdict(lambda: {'tp': 0, 'fp': 0, 'fn': 0})
+        total_target_sim = 0.0
+        total_arg_sim = 0.0
+        valid_pairs = 0
+        
+        # 遍历所有数据
+        for id_, pred_quads in pred_data_dict.items():
+            gt_quads = gt_data_dict.get(id_, [])
+            
+            # 预处理四元组
+            pred_processed = [preprocess_quad(q) for q in pred_quads]
+            gt_processed = [preprocess_quad(q) for q in gt_quads]
+            
+            # 获取对齐匹配
+            matches = align_elements(pred_processed, gt_processed)
+            
+            # 处理每个匹配对
+            for p_idx, g_idx in matches:
+                pred_quad = pred_processed[p_idx]
+                gt_quad = gt_processed[g_idx]
+                
+                # 1. 计算文本相似度
+                target_sim = string_similarity(pred_quad['target'], gt_quad['target'])
+                arg_sim = string_similarity(pred_quad['argument'], gt_quad['argument'])
+                total_target_sim += target_sim
+                total_arg_sim += arg_sim
+                
+                # 2. 计算目标群体分类指标
+                pred_tg = ",".join(sorted(pred_quad['targeted_group']))
+                gt_tg = ",".join(sorted(gt_quad['targeted_group']))
+                
+                if pred_tg == gt_tg:
+                    tg_metrics['all']['tp'] += 1
+                else:
+                    tg_metrics['all']['fp'] += 1
+                    tg_metrics['all']['fn'] += 1
+                
+                # 3. 计算仇恨性分类指标
+                if pred_quad['hateful'] == gt_quad['hateful']:
+                    hate_metrics['all']['tp'] += 1
+                else:
+                    hate_metrics['all']['fp'] += 1
+                    hate_metrics['all']['fn'] += 1
+                
+                valid_pairs += 1
+            
+            # 处理未匹配的预测四元组（FP）
+            matched_pred = {p_idx for p_idx, _ in matches}
+            for p_idx in range(len(pred_processed)):
+                if p_idx not in matched_pred:
+                    tg_metrics['all']['fp'] += 1
+                    hate_metrics['all']['fp'] += 1
+            
+            # 处理未匹配的真实四元组（FN）
+            matched_gt = {g_idx for _, g_idx in matches}
+            for g_idx in range(len(gt_processed)):
+                if g_idx not in matched_gt:
+                    tg_metrics['all']['fn'] += 1
+                    hate_metrics['all']['fn'] += 1
+        
+        # 计算总体指标
+        self.valid_pairs = valid_pairs if valid_pairs > 0 else 1
+        self.field_metrics['target_sim'] = total_target_sim / self.valid_pairs
+        self.field_metrics['argument_sim'] = total_arg_sim / self.valid_pairs
+        
+        # 计算目标群体指标
+        tg = tg_metrics['all']
+        precision = tg['tp'] / (tg['tp'] + tg['fp']) if (tg['tp'] + tg['fp']) > 0 else 0
+        recall = tg['tp'] / (tg['tp'] + tg['fn']) if (tg['tp'] + tg['fn']) > 0 else 0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+        
+        self.field_metrics['targeted_group'].update({
+            'tp': tg['tp'], 'fp': tg['fp'], 'fn': tg['fn'],
+            'precision': round(precision, 4),
+            'recall': round(recall, 4),
+            'f1': round(f1, 4)
+        })
+        
+        # 计算仇恨性指标
+        hate = hate_metrics['all']
+        precision = hate['tp'] / (hate['tp'] + hate['fp']) if (hate['tp'] + hate['fp']) > 0 else 0
+        recall = hate['tp'] / (hate['tp'] + hate['fn']) if (hate['tp'] + hate['fn']) > 0 else 0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+        
+        self.field_metrics['hateful'].update({
+            'tp': hate['tp'], 'fp': hate['fp'], 'fn': hate['fn'],
+            'precision': round(precision, 4),
+            'recall': round(recall, 4),
+            'f1': round(f1, 4)
+        })
+        
+        return self.field_metrics
+
+
     def run(
             self, 
             datas_list: Optional[list[dict]] = None, 
@@ -368,10 +422,10 @@ class LLMmetrics:
         
         logger.info('========Start Calculating The Score========')
         try:
-            
             ids = [k for k in gt_data_dict.keys()]
             hard_metrics = calculate_hard_metrics(ids, pred_data_dict, gt_data_dict)
             soft_metrics = calculate_soft_metrics(ids, pred_data_dict, gt_data_dict, similarity_threshold)
+            field_metrics = self.calculate_field_metrics(pred_data_dict, gt_data_dict)
 
         except Exception as e:
             logger.exception(e)
@@ -379,6 +433,7 @@ class LLMmetrics:
             exit()
 
         metric_dict = {
+            # 基础指标
             "f1_hard": hard_metrics["f1"],
             "f1_soft": soft_metrics["f1"],
             "f1_avg": round((hard_metrics["f1"] + soft_metrics["f1"]) / 2, 4),
@@ -389,7 +444,18 @@ class LLMmetrics:
             "hard_recall": hard_metrics["recall"],
             "soft_precision": soft_metrics["precision"],
             "soft_recall": soft_metrics["recall"],
+            
+            # 新增字段级指标
+            "field_metrics": {
+                "text_similarity": {
+                    "target_avg_sim": round(field_metrics['target_sim'], 4),
+                    "argument_avg_sim": round(field_metrics['argument_sim'], 4)
+                },
+                "targeted_group": dict(field_metrics['targeted_group']),
+                "hateful": dict(field_metrics['hateful']),
+                "matched_pairs": self.valid_pairs
             }
+        }
 
         if save_data:
             if isinstance(info_data, dict):
@@ -401,7 +467,7 @@ class LLMmetrics:
 
 if __name__ == "__main__":
     METRIC = LLMmetrics()
-    metric = METRIC.run(data_path="few_shot/output/output_Qwen3-8B-sft-hsd-v4-cosine-default_shots0_seed23333333.json")
+    metric = METRIC.run(data_path="few_shot/output/output_models_Qwen3-8B-sft-hsd_checkpoint-220_shots0_seed23333333.json")
     print(metric)
         
     
