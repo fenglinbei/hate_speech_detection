@@ -14,7 +14,7 @@ from datasets import Dataset
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
 from swanlab.integration.transformers import SwanLabCallback
-from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq
+from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq # type: ignore
 
 from prompt import *
 from utils.log import init_logger
@@ -118,7 +118,7 @@ def prompt_to_text(prompt: str, prompt_template: str) -> str:
     return prompt.split(placeholder)[0] if placeholder in prompt else prompt
 
 def build_messages(example: pd.Series) -> list[dict]:
-    if example["instruction"]
+    if example["instruction"]:
         messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
     else:
         messages = [{'content': example["input"], 'role': 'user'}]
@@ -147,12 +147,12 @@ class CustomTrainer(Trainer):
         self.eval_num = eval_num
         self.prompt_template = prompt_template
         
-    def evaluate(self, **kwargs):
+    def evaluate(self, **kwargs): # type: ignore
         """自定义评估逻辑"""
         metrics = super().evaluate(**kwargs)
         logger.debug(metrics)
         custom_metrics = self.evaluate_custom()
-        metrics.update(custom_metrics)
+        metrics.update(custom_metrics) # type: ignore
         self.log(metrics)
         swanlab.log(metrics)
         return metrics
@@ -163,13 +163,13 @@ class CustomTrainer(Trainer):
         model = self.model.eval()
 
         progress_bar = tqdm(
-            total=min(self.eval_num, len(self.eval_raw_dataset)),
+            total=min(self.eval_num, len(self.eval_raw_dataset)), # type: ignore
             desc="Evaluating custom metrics",
             dynamic_ncols=True
         )
         
         test_text_list = []
-        for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]):
+        for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]): # type: ignore
             item_id = idx
             final_status = "success"
             try:
@@ -198,9 +198,9 @@ class CustomTrainer(Trainer):
                 "id": item_id,
                 "content": prompt_to_text(example["input"], self.prompt_template),
                 "prompt": example["input"],
-                "llm_output": response,
-                "gt_quadruples": gt_quads,
-                "pred_quadruples": pred_quads,
+                "llm_output": response, # type: ignore
+                "gt_quadruples": gt_quads, # type: ignore
+                "pred_quadruples": pred_quads, # type: ignore
                 "status": final_status,
                 "attempts": self.max_retries + 1
             })
