@@ -4,6 +4,7 @@ import json
 import torch
 import random
 import swanlab
+import argparse
 import datetime
 import pandas as pd
 
@@ -21,51 +22,14 @@ from metrics.metric_llm import LLMmetrics
 from utils.parser import parse_llm_output_trip, validate_quadruples
 logger = init_logger(level="INFO", show_console=True)
 
-random.seed("23333333")
-os.environ["SWANLAB_PROJECT"]="qwen3-sft-hsd"
-# os.environ["CUDA_LAUNCH_BLOCKING"] = '1'
+def load_config(config_path):
+    """从指定路径加载JSON配置文件"""
+    with open(config_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
-device_map = {
-    'model.embed_tokens': "cuda:3",
-    'model.layers.0': "cuda:1",
-    'model.layers.1': "cuda:1",
-    'model.layers.2': "cuda:1",
-    'model.layers.3': "cuda:1",
-    'model.layers.4': "cuda:1",
-    'model.layers.5': "cuda:1",
-    'model.layers.6': "cuda:1",
-    'model.layers.7': "cuda:1",
-    'model.layers.8': "cuda:1",
-    'model.layers.9': "cuda:1",
-    'model.layers.10': "cuda:1",
-    'model.layers.11': "cuda:1",
-    'model.layers.12': "cuda:2",
-    'model.layers.13': "cuda:2",
-    'model.layers.14': "cuda:2",
-    'model.layers.15': "cuda:2",
-    'model.layers.16': "cuda:2",
-    'model.layers.17': "cuda:2",
-    'model.layers.18': "cuda:2",
-    'model.layers.19': "cuda:2",
-    'model.layers.20': "cuda:2",
-    'model.layers.21': "cuda:2",
-    'model.layers.22': "cuda:2",
-    'model.layers.23': "cuda:2",
-    'model.layers.24': "cuda:2",
-    'model.layers.25': "cuda:0",
-    'model.layers.26': "cuda:0",
-    'model.layers.27': "cuda:0",
-    'model.layers.28': "cuda:0",
-    'model.layers.29': "cuda:0",
-    'model.layers.30': "cuda:0",
-    'model.layers.31': "cuda:0",
-    'model.layers.32': "cuda:0",
-    'model.layers.33': "cuda:0",
-    'model.layers.34': "cuda:0",
-    'model.layers.35': "cuda:0",
-    'model.norm': "cuda:3",
-    'lm_head': "cuda:3"
-}
+def build_device_map(config):
+    """从配置中构建设备映射，如未提供则返回None使用自动分配"""
+    return config.get('device_map', "auto")
 
 # device_map = {
 #     'model.embed_tokens': "cuda:0",
@@ -101,141 +65,92 @@ device_map = {
 #     'lm_head': "cuda:0"
 # }
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0, 1, 2, 3'
-MAX_LENGTH = 512
-
-label_map = {
-    "Racism": "A",
-    "Region": "B",
-    "LGBTQ": "C",
-    "Sexism": "D",
-    "others": "E",
-    "non-hate": "F"
-    }
-
-swanlab.config.update({
-    "model": "Qwen/Qwen3-8B",
-    "prompt": TRAIN_PROMPT_ZERO_SHOT_V4,
-    "data_max_length": MAX_LENGTH,
-    })
-
-
-
-def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str):
-    """
-    将原始数据集转换为大模型微调所需数据格式的新数据集
-    """
+def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str):
+    """转换测试集数据格式"""
     messages = []
-
-    # 读取旧的JSONL文件
     with open(raw_data_path, "r") as file:
         raw_datas = json.load(file)
 
     for raw_data in raw_datas:
         triples = []
-
         for quadruple in raw_data["quadruples"]:
-            raw_labels = quadruple["targeted_group"].split(", ")
-            # label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-
-
-        input = TRAIN_PROMPT_ZERO_SHOT_V4.format(text=raw_data["content"])
+        
+        input = prompt_template.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        output = f"{answer}"
-        message = {
-            "instruction": "",
-            "input": f"{input}",
-            "output": output,
-        }
+        message = {"instruction": "", "input": f"{input}", "output": answer}
         messages.append(message)
-
-    # 保存重构后的JSONL文件
+    
     with open(test_output_path, "w", encoding="utf-8") as file:
         for message in messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_output_path: str):
-    """
-    将原始数据集转换为大模型微调所需数据格式的新数据集
-    """
+def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_output_path: str, prompt_template: str):
+    """转换训练/验证集数据格式"""
     messages = []
-
-    # 读取旧的JSONL文件
     with open(raw_data_path, "r") as file:
         raw_datas = json.load(file)
 
     for raw_data in raw_datas:
         triples = []
-
         for quadruple in raw_data["quadruples"]:
-            raw_labels = quadruple["targeted_group"].split(", ")
-            # label = ", ".join([label_map[raw_label.strip()] for raw_label in raw_labels])
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-
-
-        input = TRAIN_PROMPT_ZERO_SHOT_V4.format(text=raw_data["content"])
+        
+        input = prompt_template.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        output = f"{answer}"
-        message = {
-            "instruction": "",
-            "input": f"{input}",
-            "output": output,
-        }
+        message = {"instruction": "", "input": f"{input}", "output": answer}
         messages.append(message)
-
+    
     split_idx = int(len(messages) * 0.9)
-    train_datas = messages[:split_idx]
-    val_datas = messages[split_idx:]
-
-    # 保存重构后的JSONL文件
     with open(train_output_path, "w", encoding="utf-8") as file:
-        for message in train_datas:
+        for message in messages[:split_idx]:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
-
+    
     with open(val_output_path, "w", encoding="utf-8") as file:
-        for message in val_datas:
+        for message in messages[split_idx:]:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-def prompt_to_text(prompt: str) -> str:
-    # pattern = r'句子：(.*?)\n三元组：'
-    pattern = r'你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n(.*?)'
-    try:
-        match = re.search(pattern, prompt)
-        original_text = match.group(1)  # group(1) 获取匹配的文本
-    except Exception as err:
-        logger.exception(err)
-        exit(0)
-    return original_text
+def prompt_to_text(prompt: str, prompt_template: str) -> str:
+    """从提示模板中提取原始文本"""
+    placeholder = "{text}"
+    return prompt.split(placeholder)[0] if placeholder in prompt else prompt
 
 def build_messages(example: pd.Series) -> list[dict]:
-    # messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
-    messages = [{'content': example["input"], 'role': 'user'}]
+    if example["instruction"]
+        messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
+    else:
+        messages = [{'content': example["input"], 'role': 'user'}]
     return messages
        
 
 class CustomTrainer(Trainer):
+    """自定义Trainer类增加评估指标"""
     def __init__(self, 
                  *args, 
                  eval_tokenizer,
+                 eval_config: dict,
                  llm_metrics: LLMmetrics, 
                  eval_raw_dataset=None, 
                  max_retries: int = 0,
                  eval_num: int = 100,
-                 **kwargs
-                 ):
+                 prompt_template: str = "",
+                 **kwargs):
         
         super().__init__(*args, **kwargs)
+        self.eval_config = eval_config
         self.eval_raw_dataset = eval_raw_dataset
         self.eval_tokenizer = eval_tokenizer
         self.llm_metrics = llm_metrics
         self.max_retries = max_retries
         self.eval_num = eval_num
+        self.prompt_template = prompt_template
         
     def evaluate(self, **kwargs):
+        """自定义评估逻辑"""
         metrics = super().evaluate(**kwargs)
+        logger.debug(metrics)
         custom_metrics = self.evaluate_custom()
         metrics.update(custom_metrics)
         self.log(metrics)
@@ -248,43 +163,40 @@ class CustomTrainer(Trainer):
         model = self.model.eval()
 
         progress_bar = tqdm(
-            total=min(self.eval_num, len(self.eval_raw_dataset)),  # 处理数据集小于eval_num的情况
+            total=min(self.eval_num, len(self.eval_raw_dataset)),
             desc="Evaluating custom metrics",
-            dynamic_ncols=True  # 自动适应终端宽度
+            dynamic_ncols=True
         )
+        
         test_text_list = []
         for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]):
-            logger.debug(example)
             item_id = idx
             final_status = "success"
             try:
                 messages = build_messages(example)
+                response = ""
                 for attempt in range(self.max_retries + 1):
-                    response = predict(messages, model, self.eval_tokenizer)
-                    response_text = f"""
-                        Question: {example["input"]}
-
-                        LLM:{response}
-                        """
+                    response = predict(messages, model, self.eval_tokenizer, config=self.eval_config)
+                    response_text = f"Question: {example['input']}\nLLM:{response}"
                     test_text_list.append(swanlab.Text(response_text))
-
-                    logger.debug(f"LLM Output: {response}")
+                    
                     pred_quads = parse_llm_output_trip(response)
                     gt_quads = parse_llm_output_trip(example['output'])
+                    
                     if validate_quadruples(pred_quads):
                         final_status = "success"
                         break
                     else:
-                        logger.debug(f"LLM output validation failed (attempt:{attempt+1})")
+                        logger.debug(f"Validation failed (attempt:{attempt+1})")
                         final_status = "invalid"
-
-            except Exception:
+            except Exception as e:
+                logger.error(f"Evaluation error: {str(e)}")
                 pred_quads, gt_quads = [], []
-                final_status =  "fail"
+                final_status = "fail"
                 
             results.append({
                 "id": item_id,
-                "content": prompt_to_text(example["input"]),
+                "content": prompt_to_text(example["input"], self.prompt_template),
                 "prompt": example["input"],
                 "llm_output": response,
                 "gt_quadruples": gt_quads,
@@ -303,14 +215,12 @@ class CustomTrainer(Trainer):
         progress_bar.close()
         swanlab.log({"Prediction": test_text_list})
 
+        # 保存评估结果
         output_dir = Path("finetune/eval_outputs")
         output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # 2. 生成带步数的文件名
         current_step = self.state.global_step
         filename = output_dir / f"eval_results_step_{current_step}.json"
         
-        # 3. 写入JSON文件
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump({
                 "step": current_step,
@@ -319,11 +229,10 @@ class CustomTrainer(Trainer):
                 "results": results
             }, f, ensure_ascii=False, indent=2)
         
-        # 计算指标
         return self.llm_metrics.run(results)
 
 
-def predict(messages, model, tokenizer):
+def predict(messages, model, tokenizer, config):
     device = "cuda"
     text = tokenizer.apply_chat_template(
         messages,
@@ -337,8 +246,12 @@ def predict(messages, model, tokenizer):
     generated_ids = model.generate(
         model_inputs.input_ids,
         attention_mask=attention_mask,
-        max_new_tokens=MAX_LENGTH,
-        repetition_penalty=1.15,
+        max_new_tokens=config.get("max_length", 512),
+        repetition_penalty=config.get("repetition_penalty", 1.15),
+        temperature=config.get("temperature"),
+        top_p=config.get("top_p"),
+        top_k=config.get("top_k"),
+        min_p=config.get("min_p"),
         pad_token_id=tokenizer.eos_token_id
     )
     generated_ids = [
@@ -349,17 +262,33 @@ def predict(messages, model, tokenizer):
 
     return response
 
-def run():
-    # 在modelscope上下载Qwen模型到本地目录下
-    # model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="models/", revision="master")
+def run(config: dict):
+    MAX_LENGTH = config.get('max_length', 512)
+    os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, config.get('cuda_devices', [0,1,2,3])))
 
-    # Transformers加载模型权重
+    swanlab.config.update({ # type: ignore
+        "model": config['model_name'],
+        "prompt": config['prompt_template'],
+        "data_max_length": MAX_LENGTH,
+        "use_bf16": config['training'].get('bf16', False)
+    })
+
     try:
-        tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-        model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", torch_dtype=torch.bfloat16, device_map=device_map)
-        # tokenizer = AutoTokenizer.from_pretrained("models/Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
-        # model = AutoModelForCausalLM.from_pretrained("models/Qwen/Qwen3-1.7B", torch_dtype=torch.bfloat16, device_map=device_map)
-        model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
+        tokenizer = AutoTokenizer.from_pretrained(
+            config['model_path'], 
+            use_fast=False, 
+            trust_remote_code=True
+        )
+
+        torch_dtype = torch.bfloat16 if config['training'].get('bf16', False) else torch.float32
+        device_map = build_device_map(config)
+
+        model = AutoModelForCausalLM.from_pretrained(
+            config['model_path'], 
+            torch_dtype=torch_dtype,
+            device_map=device_map
+        )
+        model.enable_input_require_grads()
     except Exception as err:
         logger.exception(err)
         exit()
@@ -392,187 +321,64 @@ def run():
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
             labels = labels[:MAX_LENGTH]
-        return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}   
+        return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
+    
+    # 数据准备
+    data_config = config['data']
 
-    # 加载、处理数据集和测试集
-    train_jsonl_path = "finetune/data/train.jsonl"
-    val_jsonl_path = "finetune/data/val.jsonl"
-
-    # 得到训练集
-    train_df = pd.read_json(train_jsonl_path, lines=True)
+    # 加载数据集
+    train_df = pd.read_json(data_config['train_data_path'], lines=True)
     train_ds = Dataset.from_pandas(train_df)
     train_dataset = train_ds.map(process_func, remove_columns=train_ds.column_names)
 
-    # 得到验证集
-    eval_df = pd.read_json(val_jsonl_path, lines=True)
+    eval_df = pd.read_json(data_config['val_data_path'], lines=True)
     eval_raw = [row for _, row in eval_df.iterrows()]
     eval_ds = Dataset.from_pandas(eval_df)
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
-    args = TrainingArguments(
-        output_dir="models/Qwen3-8B-sft-hsd-v4-cosine/",
-        per_device_train_batch_size=4,
-        per_device_eval_batch_size=4,
-        gradient_accumulation_steps=4,
-        eval_strategy="steps",
-        eval_steps=40,
-        logging_steps=10,
-        num_train_epochs=4,
-        save_steps=40,
-        learning_rate=1e-5,
-        save_on_each_node=True,
-        gradient_checkpointing=True,
-        report_to="none",
-        run_name="qwen3-8B-hsd-sft-v4-cosine",
-        lr_scheduler_type="cosine",
-        warmup_ratio=0.1,
+    # 训练参数配置
+    training_args = TrainingArguments(
+        **config['training']
     )
 
+    # 训练器初始化
     trainer = CustomTrainer(
         model=model,
         eval_tokenizer=tokenizer,
-        args=args,
-        train_dataset=train_dataset,
-        eval_dataset=eval_dataset,  # 用于loss计算
-        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
-        eval_raw_dataset=eval_raw,   # 原始格式用于自定义评估
-        llm_metrics=llm_metrics,
-        callbacks=[SwanLabCallback(  # 添加SwanLab回调
-            project="qwen3-sft-hsd",
-            experiment_name="qwen3-8B-hsd-sft",
-            )
-        ]
-    )
-    trainer.train()
-    swanlab.finish()
-
-def run_lora():
-    # 在modelscope上下载Qwen模型到本地目录下
-    model_dir = snapshot_download("models/Qwen3-8B", cache_dir="models/", revision="master")
-
-    # Transformers加载模型权重
-    tokenizer = AutoTokenizer.from_pretrained("models/Qwen3-8B", use_fast=False, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained("models/Qwen3-8B", device_map="auto", torch_dtype=torch.bfloat16)
-    model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
-
-    def process_func(example):
-        """
-        将数据集进行预处理
-        """ 
-        input_ids, attention_mask, labels = [], [], []
-        instruction = tokenizer(
-            f"<|im_start|>system\n{example['instruction']}<|im_end|>\n<|im_start|>user\n{example['input']}<|im_end|>\n<|im_start|>assistant\n",
-            add_special_tokens=False,
-        )
-        response = tokenizer(f"{example['output']}", add_special_tokens=False)
-        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
-        attention_mask = (
-            instruction["attention_mask"] + response["attention_mask"] + [1]
-        )
-        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
-        if len(input_ids) > MAX_LENGTH:  # 做一个截断
-            input_ids = input_ids[:MAX_LENGTH]
-            attention_mask = attention_mask[:MAX_LENGTH]
-            labels = labels[:MAX_LENGTH]
-        return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}   
-
-    # 加载、处理数据集和测试集
-    train_jsonl_path = "finetune/data/train.jsonl"
-    val_jsonl_path = "finetune/data/val.jsonl"
-
-    # 得到训练集
-    train_df = pd.read_json(train_jsonl_path, lines=True)
-    train_ds = Dataset.from_pandas(train_df)
-    train_dataset = train_ds.map(process_func, remove_columns=train_ds.column_names)
-
-    # 得到验证集
-    eval_df = pd.read_json(val_jsonl_path, lines=True)
-    eval_ds = Dataset.from_pandas(eval_df)
-    eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
-
-    # 配置LoRA参数
-    peft_config = LoraConfig(
-        task_type=TaskType.CAUSAL_LM,  # 因果语言模型
-        inference_mode=False,
-        r=8,              # LoRA秩
-        lora_alpha=32,    # 缩放因子
-        lora_dropout=0.1, # Dropout概率
-        target_modules=["q_proj", "v_proj"]  # 针对Qwen的注意力层
-    )
-
-    # 将基础模型转换为LoRA模型
-    model = get_peft_model(model, peft_config)
-    model.print_trainable_parameters()  # 打印可训练参数数量（应为原模型的0.1%-1%）
-
-    args = TrainingArguments(
-        output_dir="models/Qwen3-8B-lora-hsd/",
-        per_device_train_batch_size=4,
-        per_device_eval_batch_size=4,
-        gradient_accumulation_steps=4,
-        eval_strategy="steps",
-        eval_steps=100,
-        logging_steps=10,
-        num_train_epochs=2,
-        save_steps=400,
-        learning_rate=2e-5,
-        save_on_each_node=True,
-        gradient_checkpointing=True,
-        report_to="swanlab",
-        run_name="qwen3-8B-hsd-lora",
-    )
-
-    trainer = Trainer(
-        model=model,
-        args=args,
+        args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
         data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
+        eval_raw_dataset=eval_raw,
+        llm_metrics=llm_metrics,
+        max_retries=config['eval'].get('max_retries', 0),
+        eval_num=config['eval'].get('eval_num', 100),
+        eval_config=config["eval"],
+        prompt_template=config['prompt_template'],
+        callbacks=[SwanLabCallback(
+            project=os.environ["SWANLAB_PROJECT"],
+            experiment_name=config['exp_name'],
+        )]
     )
 
     trainer.train()
-    
-    # 保存训练后的LoRA权重
-    model.save_pretrained(args.output_dir)
-    
-    # 测试时加载基础模型+LoRA权重
-    base_model = AutoModelForCausalLM.from_pretrained(
-        "models/Qwen/Qwen3-8B", 
-        device_map="auto"
-    )
-    model = PeftModel.from_pretrained(base_model, args.output_dir)
-    model = model.merge_and_unload()  # 合并权重便于推理
-
-    test_jsonl_path = "finetune/data/test.jsonl"
-
-    # 用测试集的前3条，主观看模型
-    test_df = pd.read_json(test_jsonl_path, lines=True)[:20]
-
-    test_text_list = []
-
-    for index, row in test_df.iterrows():
-        instruction = row['instruction']
-        input_value = row['input']
-
-        messages = [
-            {"role": "user", "content": f"{input_value}"}
-        ]
-
-        response = predict(messages, model, tokenizer)
-
-        response_text = f"""
-        Question: {input_value}
-
-        LLM:{response}
-        """
-        
-        test_text_list.append(swanlab.Text(response_text))
-        print(response_text)
-
-    swanlab.log({"Prediction": test_text_list})
-
     swanlab.finish()
 
 if __name__ == "__main__":
-    dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
+    parser = argparse.ArgumentParser(description='LLM Fine-tuning Script')
+    parser.add_argument('--config', type=str, default='config.json', help='Path to config file')
+    args = parser.parse_args()
+
+    config = load_config(args.config)
+    config.setdefault('transfer_data', True)
+    config.setdefault('exp_name', 'default-exp')
+
+    # 设置随机种子
+    if 'random_seed' in config:
+        random.seed(config['random_seed'])
+        torch.manual_seed(config['random_seed'])
+
+    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
+    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
     # run()
+    run(config)
