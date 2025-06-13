@@ -76,8 +76,13 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
             targeted_groups: list[str] = []
             for label_raw_sp in label_raw.split(","):
                 label = label_map.get(label_raw_sp.strip(), None)
+
+                if label_raw_sp.strip() in label_map.values():
+                    label = label_raw_sp
+
                 if not label:
                     continue
+
                 if label != "non_hate":
                     targeted_groups.append(label)
                 else:
