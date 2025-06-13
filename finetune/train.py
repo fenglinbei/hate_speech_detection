@@ -264,6 +264,7 @@ def predict(messages, model, tokenizer, config):
 
 def run(config: dict):
     MAX_LENGTH = config.get('max_length', 512)
+    os.environ["SWANLAB_PROJECT"] = config.get("project_name", "qwen3-8b-sft-hsd")
     os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, config.get('cuda_devices', [0,1,2,3])))
 
     swanlab.config.update({ # type: ignore
