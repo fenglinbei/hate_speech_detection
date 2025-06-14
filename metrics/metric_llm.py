@@ -467,8 +467,8 @@ class LLMmetrics:
 
 if __name__ == "__main__":
     METRIC = LLMmetrics()
-    metric = METRIC.run(data_path="few_shot/output/output_models_Qwen3-8B-sft-hsd_checkpoint-220_shots0_seed23333333.json")
-    print(metric)
+    metric = METRIC.run(data_path="few_shot/output/output_Qwen3-8B-sft-hsd-v4-cosine-default_shots0_seed23333333.json")
+    print(json.dumps(metric, indent=2, ensure_ascii=False))
         
     
     
