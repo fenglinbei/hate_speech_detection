@@ -1,17 +1,17 @@
 {
-  "step": 480,
-  "timestamp": "2025-06-13 23:45:26.579205",
+  "step": 1080,
+  "timestamp": "2025-06-14 00:55:22.798614",
   "eval_num": 100,
   "results": [
     {
       "id": 0,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n好吧，你说是就是吧，不过你的一切将被伪娘掠夺",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n好吧，你说是就是吧，不过你的一切将被伪娘掠夺",
-      "llm_output": "伪娘 | 一切将被伪娘掠夺 | LGBTQ [END]",
+      "llm_output": "你 | 一切将被伪娘掠夺 | LGBTQ [END]",
       "gt_quadruples": [],
       "pred_quadruples": [
         {
-          "target": "伪娘",
+          "target": "你",
           "argument": "一切将被伪娘掠夺",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
@@ -24,7 +24,7 @@
       "id": 1,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n就是这个垃圾，天天刷屏",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n就是这个垃圾，天天刷屏",
-      "llm_output": "这个垃圾 | 天天刷屏 | non-hate [END]",
+      "llm_output": "NULL | 垃圾 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -164,7 +164,7 @@
       "id": 7,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n为什么不找外星优质男人呢，人家有太空战舰呢",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n为什么不找外星优质男人呢，人家有太空战舰呢",
-      "llm_output": "外星 | 优质男人 | Sexism [END]",
+      "llm_output": "外星优质男人 | 为什么不去找 | Sexism, Racism [END]",
       "gt_quadruples": [
         {
           "target": "外星优质男人",
@@ -175,9 +175,9 @@
       ],
       "pred_quadruples": [
         {
-          "target": "外星",
-          "argument": "优质男人",
-          "targeted_group": "Sexism",
+          "target": "外星优质男人",
+          "argument": "为什么不去找",
+          "targeted_group": "Sexism,  Racism",
           "hateful": "hate"
         }
       ],
@@ -188,10 +188,17 @@
       "id": 8,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n第一产业就业转移第三产业这么多，说明新的女性劳动力逐步脱离第一产业，男性还是真的惨",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n第一产业就业转移第三产业这么多，说明新的女性劳动力逐步脱离第一产业，男性还是真的惨",
-      "llm_output": "男性 | 还是真的很惨 | non-hate [END]",
+      "llm_output": "新女性劳动力 | 逐步脱离第一产业 | non-hate [SEP] 男性 | 还是真的很惨 | Sexism [END]",
       "gt_quadruples": [],
-      "pred_quadruples": [],
-      "status": "invalid",
+      "pred_quadruples": [
+        {
+          "target": "男性",
+          "argument": "还是真的很惨",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
       "attempts": 1
     },
     {
@@ -297,7 +304,7 @@
       "id": 14,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n作为一个正人君子，又怎么会轻易就跟一个完全不了解的女人上床？国内有些艾滋女也好，可以让那些好色之徒不敢肆无忌惮！",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n作为一个正人君子，又怎么会轻易就跟一个完全不了解的女人上床？国内有些艾滋女也好，可以让那些好色之徒不敢肆无忌惮！",
-      "llm_output": "国内 | 有些艾滋女也好 | Sexism, others [END]",
+      "llm_output": "艾滋女 | 国内有些艾滋女也好，可以让那些好色之徒不敢肆无忌惮！| Sexism, others [END]",
       "gt_quadruples": [
         {
           "target": "艾滋女",
@@ -308,8 +315,8 @@
       ],
       "pred_quadruples": [
         {
-          "target": "国内",
-          "argument": "有些艾滋女也好",
+          "target": "艾滋女",
+          "argument": "国内有些艾滋女也好，可以让那些好色之徒不敢肆无忌惮！",
           "targeted_group": "Sexism,  others",
           "hateful": "hate"
         }
@@ -321,7 +328,7 @@
       "id": 15,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n基佬为什么不怕染艾？因为艾是判断对方是不是基？找不到无艾的基？基佬不要艾就永久单身？对基佬来说无艾不是真爱，无艾不是真基。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n基佬为什么不怕染艾？因为艾是判断对方是不是基？找不到无艾的基？基佬不要艾就永久单身？对基佬来说无艾不是真爱，无艾不是真基。",
-      "llm_output": "基佬 | 不要艾就永久单身 | LGBTQ [SEP] 基佬 | 无艾不是真爱 | LGBTQ, others [END]",
+      "llm_output": "基佬 | 不怕染艾 | LGBTQ, others [SEP] 基佬 | 艾是判断对方是不是基 | LGBTQ, others [END]",
       "gt_quadruples": [
         {
           "target": "基佬",
@@ -339,13 +346,13 @@
       "pred_quadruples": [
         {
           "target": "基佬",
-          "argument": "不要艾就永久单身",
-          "targeted_group": "LGBTQ",
+          "argument": "不怕染艾",
+          "targeted_group": "LGBTQ,  others",
           "hateful": "hate"
         },
         {
           "target": "基佬",
-          "argument": "无艾不是真爱",
+          "argument": "艾是判断对方是不是基",
           "targeted_group": "LGBTQ,  others",
           "hateful": "hate"
         }
@@ -367,17 +374,10 @@
       "id": 17,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我已经胖的走上了不归路了！还发吃的！你是多恶毒啊！于是我决定今天晚上去吃潮汕火锅安慰自己！辣火锅太提胃口了！！",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我已经胖的走上了不归路了！还发吃的！你是多恶毒啊！于是我决定今天晚上去吃潮汕火锅安慰自己！辣火锅太提胃口了！！",
-      "llm_output": "我 | 已经胖的走上了不归路了！ | non-hate [SEP] 你 | 是多么恶毒啊！ | others [END]",
+      "llm_output": "我 | 胖的走上不归路 | non-hate [END]",
       "gt_quadruples": [],
-      "pred_quadruples": [
-        {
-          "target": "你",
-          "argument": "是多么恶毒啊！",
-          "targeted_group": "others",
-          "hateful": "hate"
-        }
-      ],
-      "status": "success",
+      "pred_quadruples": [],
+      "status": "invalid",
       "attempts": 1
     },
     {
@@ -394,7 +394,7 @@
       "id": 19,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我恶心的是有些同性恋以为全世界都是同性恋，无底线的试探自己喜欢的同性，超级恶心！",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我恶心的是有些同性恋以为全世界都是同性恋，无底线的试探自己喜欢的同性，超级恶心！",
-      "llm_output": "同性恋 | 以为全世界都是同性恋 | LGBTQ [SEP] 同性恋 | 超级恶心 | LGBTQ, others [END]",
+      "llm_output": "同性恋 | 超级恶心 | LGBTQ [END]",
       "gt_quadruples": [
         {
           "target": "同性恋",
@@ -406,14 +406,8 @@
       "pred_quadruples": [
         {
           "target": "同性恋",
-          "argument": "以为全世界都是同性恋",
-          "targeted_group": "LGBTQ",
-          "hateful": "hate"
-        },
-        {
-          "target": "同性恋",
           "argument": "超级恶心",
-          "targeted_group": "LGBTQ,  others",
+          "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
       ],
@@ -448,7 +442,7 @@
       "id": 21,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n军阀割据占领华夏，分别是：北方人（一般北方人、辽宁、黑龙江）、南方人（被地狱狗蔑称为南大人）。北方分裂，南方人赢一局。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n军阀割据占领华夏，分别是：北方人（一般北方人、辽宁、黑龙江）、南方人（被地狱狗蔑称为南大人）。北方分裂，南方人赢一局。",
-      "llm_output": "北方人 | 被地狱狗蔑称 | Region [SEP] 南方人 | 被地狱狗蔑称为南大人 | Region [END]",
+      "llm_output": "南方人 | 被地狱狗蔑称 | Region [END]",
       "gt_quadruples": [
         {
           "target": "南方人",
@@ -459,14 +453,8 @@
       ],
       "pred_quadruples": [
         {
-          "target": "北方人",
-          "argument": "被地狱狗蔑称",
-          "targeted_group": "Region",
-          "hateful": "hate"
-        },
-        {
           "target": "南方人",
-          "argument": "被地狱狗蔑称为南大人",
+          "argument": "被地狱狗蔑称",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -478,7 +466,7 @@
       "id": 22,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n不跟他们接触就是最好的，都烦他们不是没有原因。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n不跟他们接触就是最好的，都烦他们不是没有原因。",
-      "llm_output": "他们 | 都烦他们不是没有原因 | non-hate [END]",
+      "llm_output": "他们 | 都烦 | non-hate [END]",
       "gt_quadruples": [
         {
           "target": "他们",
@@ -529,7 +517,7 @@
       "id": 25,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n哈哈哈嘿畜就是一群没有脑子的寄生虫",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n哈哈哈嘿畜就是一群没有脑子的寄生虫",
-      "llm_output": "嘿畜 | 一群没有脑子的寄生虫 | Racism [END]",
+      "llm_output": "畜 | 一群没有脑子的寄生虫 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "嘿畜",
@@ -540,7 +528,7 @@
       ],
       "pred_quadruples": [
         {
-          "target": "嘿畜",
+          "target": "畜",
           "argument": "一群没有脑子的寄生虫",
           "targeted_group": "Racism",
           "hateful": "hate"
@@ -621,7 +609,7 @@
       "id": 30,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有些男的就确实可以分分钟买的呀",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有些男的就确实可以分分钟买的呀",
-      "llm_output": "有些男的 | 确实可以分分钟买的呀 | non-hate [END]",
+      "llm_output": "有些男的 | 分分钟买 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -631,7 +619,7 @@
       "id": 31,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n黑人也有好人，不能一棒子打死。因为人家身体素质好，一棒子多半打不死，建议多来几棒。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n黑人也有好人，不能一棒子打死。因为人家身体素质好，一棒子多半打不死，建议多来几棒。",
-      "llm_output": "黑人 | 有好人 | Racism [SEP] 黑人 | 身体素质好 | Racism, Region [END]",
+      "llm_output": "黑人 | 有好人 | non-hate [SEP] 黑人 | 身体素质好 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "黑人",
@@ -643,14 +631,8 @@
       "pred_quadruples": [
         {
           "target": "黑人",
-          "argument": "有好人",
-          "targeted_group": "Racism",
-          "hateful": "hate"
-        },
-        {
-          "target": "黑人",
           "argument": "身体素质好",
-          "targeted_group": "Racism,  Region",
+          "targeted_group": "Racism",
           "hateful": "hate"
         }
       ],
@@ -671,7 +653,7 @@
       "id": 33,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n如果有恶熏的txl帅哥记得艾特我我来打击惹",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n如果有恶熏的txl帅哥记得艾特我我来打击惹",
-      "llm_output": "txl | 记得艾特我我来打击惹 | LGBTQ [END]",
+      "llm_output": "有恶熏的txl帅哥 | 记得艾特我我来打击惹 | Sexism [END]",
       "gt_quadruples": [
         {
           "target": "txl帅哥",
@@ -682,9 +664,9 @@
       ],
       "pred_quadruples": [
         {
-          "target": "txl",
+          "target": "有恶熏的txl帅哥",
           "argument": "记得艾特我我来打击惹",
-          "targeted_group": "LGBTQ",
+          "targeted_group": "Sexism",
           "hateful": "hate"
         }
       ],
@@ -719,12 +701,12 @@
       "id": 35,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n东南亚对中国男应该蛮友好 欧美发达国家女生对中国男… 我说各位要提高个人魅力主动一些 不光是钱 怎么了？当然不能像你一样 素质要高一些 可惜很多人都不能在自己身上找原因啊",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n东南亚对中国男应该蛮友好 欧美发达国家女生对中国男… 我说各位要提高个人魅力主动一些 不光是钱 怎么了？当然不能像你一样 素质要高一些 可惜很多人都不能在自己身上找原因啊",
-      "llm_output": "欧美 | 发达国家女生对中国男… | Sexism [END]",
+      "llm_output": "欧美发达国家女生 | 对中国男… | Sexism [END]",
       "gt_quadruples": [],
       "pred_quadruples": [
         {
-          "target": "欧美",
-          "argument": "发达国家女生对中国男…",
+          "target": "欧美发达国家女生",
+          "argument": "对中国男…",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -778,7 +760,7 @@
       "id": 37,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n说了半天，你都没说中最大的要害。黑河南的主要是南方系媒体，南方系媒体总部在哪你去查一下。你说的这几个除了西安都不叫地域黑，只能叫地域矛盾。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n说了半天，你都没说中最大的要害。黑河南的主要是南方系媒体，南方系媒体总部在哪你去查一下。你说的这几个除了西安都不叫地域黑，只能叫地域矛盾。",
-      "llm_output": "南方系媒体 | 黑河南的主要是南方系媒体 | Region [END]",
+      "llm_output": "南方系媒体 | 黑河南 | Region [END]",
       "gt_quadruples": [
         {
           "target": "南方系媒体",
@@ -790,7 +772,7 @@
       "pred_quadruples": [
         {
           "target": "南方系媒体",
-          "argument": "黑河南的主要是南方系媒体",
+          "argument": "黑河南",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -812,7 +794,7 @@
       "id": 39,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n河南的盖盖呗，还能有谁",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n河南的盖盖呗，还能有谁",
-      "llm_output": "河南 | 盖盖呗 | Region [END]",
+      "llm_output": "河南 | 盖盖呗 | non-hate [END]",
       "gt_quadruples": [
         {
           "target": "河南的盖盖",
@@ -821,22 +803,15 @@
           "hateful": "hate"
         }
       ],
-      "pred_quadruples": [
-        {
-          "target": "河南",
-          "argument": "盖盖呗",
-          "targeted_group": "Region",
-          "hateful": "hate"
-        }
-      ],
-      "status": "success",
+      "pred_quadruples": [],
+      "status": "invalid",
       "attempts": 1
     },
     {
       "id": 40,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n作为河南人真的很心塞😭",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n作为河南人真的很心塞😭",
-      "llm_output": "河南 | 作为河南人真的很心塞😭 | non-hate [END]",
+      "llm_output": "河南人 | 很伤心 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -893,7 +868,7 @@
       "id": 43,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n十有八九是领美刀的。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n十有八九是领美刀的。",
-      "llm_output": "领美刀 | 十有八九是领美刀的 | Sexism [END]",
+      "llm_output": "NULL | 十有八九是领美刀的 | Sexism [END]",
       "gt_quadruples": [
         {
           "target": null,
@@ -904,7 +879,7 @@
       ],
       "pred_quadruples": [
         {
-          "target": "领美刀",
+          "target": null,
           "argument": "十有八九是领美刀的",
           "targeted_group": "Sexism",
           "hateful": "hate"
@@ -1005,7 +980,7 @@
       "id": 48,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我记得小时候常放日本动画片，现在一些孩子更是被日本的动漫洗脑精日媚日，反正我是讨厌日本的还有黑，我们是几千年的文明古国，中国有很优秀的文化传统，一些人反而说喜欢日本的文化，我想说的是他们所谓的文化传统很多都来自中国，而一些人把自己国家的文化当成别国的，很可悲",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我记得小时候常放日本动画片，现在一些孩子更是被日本的动漫洗脑精日媚日，反正我是讨厌日本的还有黑，我们是几千年的文明古国，中国有很优秀的文化传统，一些人反而说喜欢日本的文化，我想说的是他们所谓的文化传统很多都来自中国，而一些人把自己国家的文化当成别国的，很可悲",
-      "llm_output": "我 | 讨厌日本的还有黑 | Region [SEP] 一些人 | 把自己国家的文化当成别国的 | Region, Racism [END]",
+      "llm_output": "我 | 讨厌日本的还有黑 | Region [SEP] 一些人 | 把自己国家的文化当成别国的 | others [END]",
       "gt_quadruples": [
         {
           "target": "日本",
@@ -1036,7 +1011,7 @@
         {
           "target": "一些人",
           "argument": "把自己国家的文化当成别国的",
-          "targeted_group": "Region,  Racism",
+          "targeted_group": "others",
           "hateful": "hate"
         }
       ],
@@ -1064,7 +1039,7 @@
       "id": 50,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n嘿枸浑身弥漫着低劣程度的气息，天生令人厌恶，源于基因记忆！无法容忍嘿枸做饿，其实是生态地位的颠复，开启人类基因防御应激。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n嘿枸浑身弥漫着低劣程度的气息，天生令人厌恶，源于基因记忆！无法容忍嘿枸做饿，其实是生态地位的颠复，开启人类基因防御应激。",
-      "llm_output": "嘿枸 | 源于基因记忆 | Racism [SEP] 嘿枸 | 无法容忍嘿枸做饿 | Racism, others [END]",
+      "llm_output": "嘿枸 | 源于基因记忆！ | Racism [END]",
       "gt_quadruples": [
         {
           "target": "嘿枸",
@@ -1076,14 +1051,8 @@
       "pred_quadruples": [
         {
           "target": "嘿枸",
-          "argument": "源于基因记忆",
+          "argument": "源于基因记忆！",
           "targeted_group": "Racism",
-          "hateful": "hate"
-        },
-        {
-          "target": "嘿枸",
-          "argument": "无法容忍嘿枸做饿",
-          "targeted_group": "Racism,  others",
           "hateful": "hate"
         }
       ],
@@ -1158,7 +1127,7 @@
       "id": 54,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n好多买媳妇都是东南亚和朝鲜的吧，最起码不是黑人",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n好多买媳妇都是东南亚和朝鲜的吧，最起码不是黑人",
-      "llm_output": "东南亚 | 好多买媳妇都是东南亚和朝鲜的吧 | Region [SEP] 朝鲜 | 最起码不是黑人 | Region [END]",
+      "llm_output": "东南亚和朝鲜 | 好多买媳妇都是东南亚和朝鲜的吧 | Region [SEP] 黑人 | 最起码不是黑人 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "东南亚和朝鲜的",
@@ -1175,15 +1144,15 @@
       ],
       "pred_quadruples": [
         {
-          "target": "东南亚",
+          "target": "东南亚和朝鲜",
           "argument": "好多买媳妇都是东南亚和朝鲜的吧",
           "targeted_group": "Region",
           "hateful": "hate"
         },
         {
-          "target": "朝鲜",
+          "target": "黑人",
           "argument": "最起码不是黑人",
-          "targeted_group": "Region",
+          "targeted_group": "Racism",
           "hateful": "hate"
         }
       ],
@@ -1306,12 +1275,12 @@
       "id": 60,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n体育运动改变不了一个国家的国运。巴西五冠王有何用世界话语权根本没有。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n体育运动改变不了一个国家的国运。巴西五冠王有何用世界话语权根本没有。",
-      "llm_output": "巴西 | 五冠王有何用世界话语权根本没有 | Region [END]",
+      "llm_output": "巴西 | 有何用世界话语权根本没有 | Region [END]",
       "gt_quadruples": [],
       "pred_quadruples": [
         {
           "target": "巴西",
-          "argument": "五冠王有何用世界话语权根本没有",
+          "argument": "有何用世界话语权根本没有",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -1323,7 +1292,7 @@
       "id": 61,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n今天去钓鱼，结果钓的全是清道夫。又黑，骨头又多，又不好吃，繁殖速度又快，还会吃光本土鱼的卵，对鱼业一点贡献都没有。简直就是一群没有用的垃圾。还挤压了本土鱼的生存空间。真不知道当初引进来放到河里的人脑子是不是装的垃圾。以前根本没有这么多，但当地没人注意到没有天敌的清道夫大量繁殖所带来的危害。导致现在一条河里全是清道夫，本土鱼都灭绝了。水还被这些吃垃圾的清道夫搞的又脏又臭，当年出了名的好山，好水，鱼肥，现在却变成了臭水沟。清道夫作为一种观赏鱼，喜欢的话放在自己家养着就行了。干嘛还扔到河里来威胁本士鱼的生存？作为一个钓鱼爱好者我是十分不能忍受这件事的！如果可能，我真希望把这些清道夫全部弄死。本来还想着钓几条鱼回去烧烤的，却被这些清道夫坏了心情。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n今天去钓鱼，结果钓的全是清道夫。又黑，骨头又多，又不好吃，繁殖速度又快，还会吃光本土鱼的卵，对鱼业一点贡献都没有。简直就是一群没有用的垃圾。还挤压了本土鱼的生存空间。真不知道当初引进来放到河里的人脑子是不是装的垃圾。以前根本没有这么多，但当地没人注意到没有天敌的清道夫大量繁殖所带来的危害。导致现在一条河里全是清道夫，本土鱼都灭绝了。水还被这些吃垃圾的清道夫搞的又脏又臭，当年出了名的好山，好水，鱼肥，现在却变成了臭水沟。清道夫作为一种观赏鱼，喜欢的话放在自己家养着就行了。干嘛还扔到河里来威胁本士鱼的生存？作为一个钓鱼爱好者我是十分不能忍受这件事的！如果可能，我真希望把这些清道夫全部弄死。本来还想着钓几条鱼回去烧烤的，却被这些清道夫坏了心情。",
-      "llm_output": "清道夫 | 一堆垃圾 | Racism [SEP] 清道夫 | 挤压了本土鱼的生存空间 | Region, others [END]",
+      "llm_output": "清道夫 | 一群没有用的垃圾 | Racism [SEP] 清道夫 | 垃圾 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "清道夫",
@@ -1335,14 +1304,14 @@
       "pred_quadruples": [
         {
           "target": "清道夫",
-          "argument": "一堆垃圾",
+          "argument": "一群没有用的垃圾",
           "targeted_group": "Racism",
           "hateful": "hate"
         },
         {
           "target": "清道夫",
-          "argument": "挤压了本土鱼的生存空间",
-          "targeted_group": "Region,  others",
+          "argument": "垃圾",
+          "targeted_group": "Racism",
           "hateful": "hate"
         }
       ],
@@ -1395,7 +1364,7 @@
       "id": 63,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。",
-      "llm_output": "嫁给了默 | 能自愿放弃中国国籍 | Sexism, Racism [END]",
+      "llm_output": "嫁给了默的国女 | 能自愿放弃中国国籍，绝对值得立牌坊 | Sexism, Racism [END]",
       "gt_quadruples": [
         {
           "target": "嫁给默的国女",
@@ -1406,8 +1375,8 @@
       ],
       "pred_quadruples": [
         {
-          "target": "嫁给了默",
-          "argument": "能自愿放弃中国国籍",
+          "target": "嫁给了默的国女",
+          "argument": "能自愿放弃中国国籍，绝对值得立牌坊",
           "targeted_group": "Sexism,  Racism",
           "hateful": "hate"
         }
@@ -1419,12 +1388,12 @@
       "id": 64,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n他自称，想演变态同性恋，他是反同态度吗？",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n他自称，想演变态同性恋，他是反同态度吗？",
-      "llm_output": "他 | 反同态度吗？ | LGBTQ [END]",
+      "llm_output": "他 | 想演变态同性恋 | LGBTQ [END]",
       "gt_quadruples": [],
       "pred_quadruples": [
         {
           "target": "他",
-          "argument": "反同态度吗？",
+          "argument": "想演变态同性恋",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -1436,7 +1405,7 @@
       "id": 65,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我也会脱皮",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我也会脱皮",
-      "llm_output": "我 | 也会脱皮 | non-hate [END]",
+      "llm_output": "我 | 会脱皮 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -1463,7 +1432,7 @@
       "id": 67,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有的女的真的是嘴贱，随时随地张口就对男性下定义，女性凝视和偏见，普信女真下头。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有的女的真的是嘴贱，随时随地张口就对男性下定义，女性凝视和偏见，普信女真下头。",
-      "llm_output": "有的女的 | 嘴贱 | Sexism [SEP] 普信女 | 真下头 | Sexism, Region [END]",
+      "llm_output": "有的女的 | 嘴贱 | Sexism [SEP] 普信女 | 真下头 | Sexism, others [END]",
       "gt_quadruples": [
         {
           "target": "有的女的",
@@ -1488,7 +1457,7 @@
         {
           "target": "普信女",
           "argument": "真下头",
-          "targeted_group": "Sexism,  Region",
+          "targeted_group": "Sexism,  others",
           "hateful": "hate"
         }
       ],
@@ -1540,7 +1509,7 @@
       "id": 70,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n当年西北三线建设东北人去支援大西北的老鼻子了，我爷爷当年东北国企业务员基本西北大城市都跑个遍。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n当年西北三线建设东北人去支援大西北的老鼻子了，我爷爷当年东北国企业务员基本西北大城市都跑个遍。",
-      "llm_output": "东北 | 老鼻子了 | non-hate [END]",
+      "llm_output": "东北人 | 支援大西北的老鼻子了 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -1550,7 +1519,7 @@
       "id": 71,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n你们同性恋同婚有什么用。你们就是爱快乐地互相伤害互相传播疾病的怪物。同性伴侣都是短命，因艾滋死了又换另一个伴侣，只会不断离离结结进行没有意义的婚姻",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n你们同性恋同婚有什么用。你们就是爱快乐地互相伤害互相传播疾病的怪物。同性伴侣都是短命，因艾滋死了又换另一个伴侣，只会不断离离结结进行没有意义的婚姻",
-      "llm_output": "同性恋 | 你们同性恋同婚有什么用 | LGBTQ [SEP] 同性恋 | 怪物 | LGBTQ, others [SEP] 同性伴侣 | 短命 | LGBTQ [END]",
+      "llm_output": "同性恋 | 有什么用 | LGBTQ [SEP] 同性恋 | 怪物 | LGBTQ, others [SEP] 同性伴侣 | 短命 | LGBTQ [END]",
       "gt_quadruples": [
         {
           "target": "同性恋",
@@ -1568,7 +1537,7 @@
       "pred_quadruples": [
         {
           "target": "同性恋",
-          "argument": "你们同性恋同婚有什么用",
+          "argument": "有什么用",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         },
@@ -1592,7 +1561,7 @@
       "id": 72,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n本可是一名坚决的饭桶斗士惹",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n本可是一名坚决的饭桶斗士惹",
-      "llm_output": "本 | 可是一名坚决的饭桶斗士惹 | non-hate [END]",
+      "llm_output": "本 | 可是一名坚决的饭桶斗士 | non-hate [END]",
       "gt_quadruples": [
         {
           "target": "本可",
@@ -1663,12 +1632,12 @@
       "id": 75,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n那教主怎么反“女本位”。你说吧。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n那教主怎么反“女本位”。你说吧。",
-      "llm_output": "NULL | 那教主怎么反\"女本位\" | Sexism [END]",
+      "llm_output": "教主 | 怎么反“女本位” | Sexism [END]",
       "gt_quadruples": [],
       "pred_quadruples": [
         {
-          "target": null,
-          "argument": "那教主怎么反\"女本位\"",
+          "target": "教主",
+          "argument": "怎么反“女本位”",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -1680,7 +1649,7 @@
       "id": 76,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n弱智基佬二次元《为您排解苦闷💄》这条基佬在外面乱玩得了HIV，顶着被家里人催婚的压力骗婚。他发的帖子已经被自己删除了，你野📉我好心相劝却被基佬拉黑了",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n弱智基佬二次元《为您排解苦闷💄》这条基佬在外面乱玩得了HIV，顶着被家里人催婚的压力骗婚。他发的帖子已经被自己删除了，你野📉我好心相劝却被基佬拉黑了",
-      "llm_output": "基佬 | 乱玩得了HIV | LGBTQ [SEP] 基佬 | 被家人催婚 | LGBTQ [END]",
+      "llm_output": "基佬 | 乱玩得了HIV | LGBTQ [SEP] 基佬 | 被家人催婚 | LGBTQ, others [END]",
       "gt_quadruples": [
         {
           "target": "基佬二次元",
@@ -1705,7 +1674,7 @@
         {
           "target": "基佬",
           "argument": "被家人催婚",
-          "targeted_group": "LGBTQ",
+          "targeted_group": "LGBTQ,  others",
           "hateful": "hate"
         }
       ],
@@ -1756,7 +1725,7 @@
       "id": 79,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n这个人其实也未必就一定是成都人。只能说明当时他就在成都。不过他绝对当的起一句“狗日的”。行了，送朕进小黑屋吧🐶",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n这个人其实也未必就一定是成都人。只能说明当时他就在成都。不过他绝对当的起一句“狗日的”。行了，送朕进小黑屋吧🐶",
-      "llm_output": "他 | 当的起一句\"狗日的\" | non-hate [END]",
+      "llm_output": "这个人 | 当的起一句“狗日的” | non-hate [END]",
       "gt_quadruples": [
         {
           "target": "这个人",
@@ -1809,17 +1778,24 @@
       "id": 81,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n他和他们的孩子以后还会做流星😜因为没家",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n他和他们的孩子以后还会做流星😜因为没家",
-      "llm_output": "他们 | 以后还会做流星😜 | non-hate [END]",
+      "llm_output": "他们 | 以后还会做流星😜 | Racism [END]",
       "gt_quadruples": [],
-      "pred_quadruples": [],
-      "status": "invalid",
+      "pred_quadruples": [
+        {
+          "target": "他们",
+          "argument": "以后还会做流星😜",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
       "attempts": 1
     },
     {
       "id": 82,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n而且网民根本不会过问你之前经历了多少，只会拿一句【不管怎么说也不能打人】来否认你之前承受过的所有折磨，【不能打人】这一句就是【无论如何都是你有罪】的最大筹码",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n而且网民根本不会过问你之前经历了多少，只会拿一句【不管怎么说也不能打人】来否认你之前承受过的所有折磨，【不能打人】这一句就是【无论如何都是你有罪】的最大筹码",
-      "llm_output": "网民 | 只会拿一句【不管怎么说也不能打人】来否认你之前承受过的所有折磨 | non-hate [END]",
+      "llm_output": "你 | 不能打人 | non-hate [END]",
       "gt_quadruples": [],
       "pred_quadruples": [],
       "status": "invalid",
@@ -1887,7 +1863,7 @@
       "id": 86,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有些gay努力奋斗却依然挣扎在追求自己美好生活的路上，为了顾及多病的父母，用终身不婚的单身贵族形象搪塞了家人，为了找到愿意安安稳稳过日子的那个他，从不约p，被同为gay的圈内人说成是表面圣母白莲花私底下放荡的伪纯洁，被异性恋朋友说成长不大要求高不现实的大龄单身狗，我们活着好难，这时候如果有一个人跟我说朋友我不反对你找同性，但是我恶心你们，我可能不会多生你的气，但我肯定高兴不到哪儿去。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n有些gay努力奋斗却依然挣扎在追求自己美好生活的路上，为了顾及多病的父母，用终身不婚的单身贵族形象搪塞了家人，为了找到愿意安安稳稳过日子的那个他，从不约p，被同为gay的圈内人说成是表面圣母白莲花私底下放荡的伪纯洁，被异性恋朋友说成长不大要求高不现实的大龄单身狗，我们活着好难，这时候如果有一个人跟我说朋友我不反对你找同性，但是我恶心你们，我可能不会多生你的气，但我肯定高兴不到哪儿去。",
-      "llm_output": "有些gay | 努力奋斗却依然挣扎在追求自己美好生活的路上 | LGBTQ [SEP] 有些gay | 被同为gay的圈内人说成是表面圣母白莲花私底下放荡的伪纯洁 | LGBTQ, others [END]",
+      "llm_output": "有些gay | 努力奋斗却依然挣扎在追求自己美好生活的路上 | non-hate [SEP] 有些gay | 被同为gay的圈内人说成是表面圣母白莲花私底下放荡的伪纯洁 | LGBTQ, others [END]",
       "gt_quadruples": [
         {
           "target": "有些gay",
@@ -1909,12 +1885,6 @@
         }
       ],
       "pred_quadruples": [
-        {
-          "target": "有些gay",
-          "argument": "努力奋斗却依然挣扎在追求自己美好生活的路上",
-          "targeted_group": "LGBTQ",
-          "hateful": "hate"
-        },
         {
           "target": "有些gay",
           "argument": "被同为gay的圈内人说成是表面圣母白莲花私底下放荡的伪纯洁",
@@ -1963,7 +1933,7 @@
       "id": 89,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n里腾豪斯打死打伤3个黑玫瑰示威者，被判无罪。",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n里腾豪斯打死打伤3个黑玫瑰示威者，被判无罪。",
-      "llm_output": "里腾豪斯 | 打死打伤3个黑玫瑰示威者 | Racism [SEP] 里腾豪斯 | 判无罪 | others [END]",
+      "llm_output": "里腾豪斯 | 打死打伤3个黑玫瑰示威者 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "里腾豪斯",
@@ -1977,12 +1947,6 @@
           "target": "里腾豪斯",
           "argument": "打死打伤3个黑玫瑰示威者",
           "targeted_group": "Racism",
-          "hateful": "hate"
-        },
-        {
-          "target": "里腾豪斯",
-          "argument": "判无罪",
-          "targeted_group": "others",
           "hateful": "hate"
         }
       ],
@@ -2027,7 +1991,7 @@
       "id": 92,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n一般女的都嫉妒好看的，所以把“白幼瘦”归为畸形审美?",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n一般女的都嫉妒好看的，所以把“白幼瘦”归为畸形审美?",
-      "llm_output": "NULL | 把\"白幼瘦\"归为畸形审美 | Sexism [END]",
+      "llm_output": "一般女的 | 嫉妒好看的 | Sexism [END]",
       "gt_quadruples": [
         {
           "target": "女的",
@@ -2044,8 +2008,8 @@
       ],
       "pred_quadruples": [
         {
-          "target": null,
-          "argument": "把\"白幼瘦\"归为畸形审美",
+          "target": "一般女的",
+          "argument": "嫉妒好看的",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -2117,17 +2081,10 @@
       "id": 95,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我觉得，你可以在淘宝开定制戒指服务，接单给小黑做，你这等于有一个几百个小工的工厂啊",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我觉得，你可以在淘宝开定制戒指服务，接单给小黑做，你这等于有一个几百个小工的工厂啊",
-      "llm_output": "你 | 可以在淘宝开定制戒指服务，接单给小黑做 | Racism [END]",
+      "llm_output": "你 | 可以在淘宝开定制戒指服务，接单给小黑做 | non-hate [END]",
       "gt_quadruples": [],
-      "pred_quadruples": [
-        {
-          "target": "你",
-          "argument": "可以在淘宝开定制戒指服务，接单给小黑做",
-          "targeted_group": "Racism",
-          "hateful": "hate"
-        }
-      ],
-      "status": "success",
+      "pred_quadruples": [],
+      "status": "invalid",
       "attempts": 1
     },
     {
@@ -2144,7 +2101,7 @@
       "id": 97,
       "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我们的同胞被倭寇屠杀时，请问这个黑色的永恒族使者在哪里？",
       "prompt": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n我们的同胞被倭寇屠杀时，请问这个黑色的永恒族使者在哪里？",
-      "llm_output": "倭寇 | 杀死同胞 | Racism [END]",
+      "llm_output": "倭寇 | 黑色的永恒族使者 | Racism [END]",
       "gt_quadruples": [
         {
           "target": "倭寇",
@@ -2162,7 +2119,7 @@
       "pred_quadruples": [
         {
           "target": "倭寇",
-          "argument": "杀死同胞",
+          "argument": "黑色的永恒族使者",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
