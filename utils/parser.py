@@ -58,7 +58,7 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 "C": "LGBTQ",
                 "D": "Sexism",
                 "E": "others",
-                "F": "non_hate"
+                "F": "non-hate"
             }
         
         lines = [line.strip() for line in llm_output.strip().split('[SEP]')]
@@ -75,9 +75,10 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
 
             targeted_groups: list[str] = []
             for label_raw_sp in label_raw.split(","):
-                label = label_map.get(label_raw_sp.strip(), None)
+                label_raw_sp = label_raw_sp.strip().replace("_", "-")
+                label = label_map.get(label_raw_sp, None)
 
-                if label_raw_sp.strip() in label_map.values():
+                if label_raw_sp in label_map.values():
                     label = label_raw_sp
 
                 if not label:
@@ -107,7 +108,7 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
         if not quadruples:
             return False
             
-        valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'non_hate'}
+        valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'non-hate'}
         valid_hateful = {'hate', 'non_hate'}
         
         return all(
