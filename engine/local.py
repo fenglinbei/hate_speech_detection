@@ -6,7 +6,6 @@ import warnings
 warnings.simplefilter('ignore')
 
 import torch
-from vllm import LLM as VLLModel, SamplingParams
 from transformers import AutoModel, Qwen2TokenizerFast, Qwen3ForCausalLM
 from typing import List, Dict, Any, Optional
 from utils.protocol import UsageInfo
@@ -25,6 +24,8 @@ class VLLM:
             max_model_len: int = 8192 * 3 // 2,
             gpu_memory_utilization: float = 0.95, 
             seed: int = 2024):
+        
+        from vllm import LLM as VLLModel, SamplingParams
         
         self.model_path = model_path
         self.model_name = model_name
