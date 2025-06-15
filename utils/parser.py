@@ -84,11 +84,11 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 if not label:
                     continue
 
-                if label != "non_hate":
+                if label != "non-hate":
                     targeted_groups.append(label)
                 else:
-                    hateful = "non_hate"
-                    targeted_groups.append("non_hate")
+                    hateful = "non-hate"
+                    targeted_groups.append("non-hate")
                     break
 
             targeted_group = ", ".join(targeted_groups)
