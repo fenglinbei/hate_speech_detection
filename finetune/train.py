@@ -11,6 +11,7 @@ import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
 from datasets import Dataset
+from typing import Optional
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
 from swanlab.integration.transformers import SwanLabCallback
@@ -31,41 +32,7 @@ def build_device_map(config):
     """从配置中构建设备映射，如未提供则返回None使用自动分配"""
     return config.get('device_map', "auto")
 
-# device_map = {
-#     'model.embed_tokens': "cuda:0",
-#     'model.layers.0': "cuda:0",
-#     'model.layers.1': "cuda:0",
-#     'model.layers.2': "cuda:0",
-#     'model.layers.3': "cuda:0",
-#     'model.layers.4': "cuda:0",
-#     'model.layers.5': "cuda:0",
-#     'model.layers.6': "cuda:0",
-#     'model.layers.7': "cuda:0",
-#     'model.layers.8': "cuda:0",
-#     'model.layers.9': "cuda:0",
-#     'model.layers.10': "cuda:0",
-#     'model.layers.11': "cuda:1",
-#     'model.layers.12': "cuda:1",
-#     'model.layers.13': "cuda:1",
-#     'model.layers.14': "cuda:1",
-#     'model.layers.15': "cuda:1",
-#     'model.layers.16': "cuda:1",
-#     'model.layers.17': "cuda:1",
-#     'model.layers.18': "cuda:1",
-#     'model.layers.19': "cuda:1",
-#     'model.layers.20': "cuda:1",
-#     'model.layers.21': "cuda:1",
-#     'model.layers.22': "cuda:1",
-#     'model.layers.23': "cuda:1",
-#     'model.layers.24': "cuda:1",
-#     'model.layers.25': "cuda:1",
-#     'model.layers.26': "cuda:1",
-#     'model.layers.27': "cuda:1",
-#     'model.norm': "cuda:0",
-#     'lm_head': "cuda:0"
-# }
-
-def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str):
+def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
     """转换测试集数据格式"""
     messages = []
     with open(raw_data_path, "r") as file:
@@ -79,14 +46,14 @@ def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, pr
         
         input = prompt_template.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": "", "input": f"{input}", "output": answer}
+        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": raw_data["content"]}
         messages.append(message)
     
     with open(test_output_path, "w", encoding="utf-8") as file:
         for message in messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_output_path: str, prompt_template: str):
+def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
     """转换训练/验证集数据格式"""
     messages = []
     with open(raw_data_path, "r") as file:
@@ -100,7 +67,7 @@ def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_ou
         
         input = prompt_template.format(text=raw_data["content"])
         answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": "", "input": f"{input}", "output": answer}
+        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": raw_data["content"]}
         messages.append(message)
     
     split_idx = int(len(messages) * 0.9)
@@ -196,7 +163,7 @@ class CustomTrainer(Trainer):
                 
             results.append({
                 "id": item_id,
-                "content": prompt_to_text(example["input"], self.prompt_template),
+                "content": example["content"],
                 "prompt": example["input"],
                 "llm_output": response, # type: ignore
                 "gt_quadruples": gt_quads, # type: ignore
@@ -269,7 +236,8 @@ def run(config: dict):
 
     swanlab.config.update({ # type: ignore
         "model": config['model_name'],
-        "prompt": config['prompt_template'],
+        "system_prompt": get_prompt(config["system_prompt"]),
+        "prompt": get_prompt(config['prompt_template']),
         "data_max_length": MAX_LENGTH,
         "use_bf16": config['training'].get('bf16', False)
     })
@@ -355,7 +323,7 @@ def run(config: dict):
         max_retries=config['eval'].get('max_retries', 0),
         eval_num=config['eval'].get('eval_num', 100),
         eval_config=config["eval"],
-        prompt_template=config['prompt_template'],
+        prompt_template=get_prompt(config['prompt_template']),
         callbacks=[SwanLabCallback(
             project=os.environ["SWANLAB_PROJECT"],
             experiment_name=config['exp_name'],
@@ -364,6 +332,12 @@ def run(config: dict):
 
     trainer.train()
     swanlab.finish()
+
+def get_prompt(prompt_name_or_prompt: str):
+    try:
+        return eval(prompt_name_or_prompt)
+    except:
+        return prompt_name_or_prompt
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='LLM Fine-tuning Script')
@@ -379,7 +353,6 @@ if __name__ == "__main__":
         random.seed(config['random_seed'])
         torch.manual_seed(config['random_seed'])
 
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl")
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl")
-    # run()
+    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl", TRAIN_PROMPT_USER_V5, TRAIN_PROMPT_SYSTEM_V5)
+    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", TRAIN_PROMPT_USER_V5, TRAIN_PROMPT_SYSTEM_V5)
     run(config)
