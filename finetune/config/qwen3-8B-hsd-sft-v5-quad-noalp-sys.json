@@ -3,7 +3,7 @@
     "model_path": "models/Qwen3-8B",
     "system_prompt": "TRAIN_PROMPT_SYSTEM_V5",
     "prompt_template": "TRAIN_PROMPT_USER_V5",
-    "max_length": 2048,
+    "max_length": 1024,
     "lora": false,
     "random_seed": 23333333,
     "exp_name": "qwen3-8B-hsd-sft-v5-quad-noalp-sys",
@@ -71,8 +71,7 @@
         "gradient_checkpointing": true,
         "report_to": "none",
         "run_name": "qwen3-8B-hsd-sft-v5-quad-noalp-sys",
-        "lr_scheduler_type": "cosine",
-        "warmup_ratio": 0.05,
+        "lr_scheduler_type": "linear",
         "bf16": true
     },
     
