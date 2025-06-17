@@ -353,6 +353,6 @@ if __name__ == "__main__":
         random.seed(config['random_seed'])
         torch.manual_seed(config['random_seed'])
 
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl", TRAIN_PROMPT_USER_V5, TRAIN_PROMPT_SYSTEM_V5)
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", TRAIN_PROMPT_USER_V5, TRAIN_PROMPT_SYSTEM_V5)
+    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl", TRAIN_PROMPT_ZERO_SHOT_V4)
+    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", TRAIN_PROMPT_ZERO_SHOT_V4)
     run(config)
