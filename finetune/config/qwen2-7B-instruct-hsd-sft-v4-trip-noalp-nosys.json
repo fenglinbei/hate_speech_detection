@@ -2,6 +2,7 @@
     "model_name": "Qwen/Qwen2-7B-Instruct",
     "model_path": "models/Qwen2-7B-Instruct",
     "prompt_template": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n{text}\n三元组：",
+    "system_prompt": "",
     "max_length": 512,
     "lora": false,
     "random_seed": 23333333,
@@ -62,8 +63,7 @@
         "gradient_checkpointing": true,
         "report_to": "none",
         "run_name": "qwen2-7B-instruct-hsd-sft-v4-trip-noalp-nosys",
-        "lr_scheduler_type": "cosine",
-        "warmup_ratio": 0.05,
+        "lr_scheduler_type": "linear",
         "bf16": true
     },
     
