@@ -37,5 +37,6 @@ CUDA_VISIBLE_DEVICES=${gpus} llamafactory-cli train \
     --plot_loss \
     --bf16 \
     --save_total_limit 5 \
-    --temperature 0.7
+    --temperature 0.7 \
+    --use_swanlab true
 
