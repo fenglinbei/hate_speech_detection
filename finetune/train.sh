@@ -5,7 +5,7 @@ epoch=2
 learning_rate=1.0e-5
 
 # 训练的权重的名字
-ex_name="Qwen3-8B-llamafactory"
+ex_name="Qwen2.5-7B-Instruct-llamafactory"
 
 # sft权重的保存路径
 save_model=../models/${ex_name}
@@ -18,7 +18,7 @@ CUDA_VISIBLE_DEVICES=${gpus} llamafactory-cli train \
     --do_train \
     --finetuning_type full \
     --deepspeed finetune/config/ds_z2_config.json \
-    --model_name_or_path models/Qwen3-8B \
+    --model_name_or_path models/Qwen2.5-7B-Instruct \
     --dataset ${train_dataset} \
     --dataset_dir finetune/data \
     --template empty \
