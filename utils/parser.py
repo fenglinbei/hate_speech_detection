@@ -109,7 +109,7 @@ def validate_quadruples(quadruples: List[Dict]) -> bool:
             return False
             
         valid_targeted_groups = {'racism', 'region', 'lgbtq', 'sexism', 'others', 'non-hate'}
-        valid_hateful = {'hate', 'non_hate'}
+        valid_hateful = {'hate', 'non-hate'}
         
         return all(
             (all(s.lower().strip() in valid_targeted_groups for s in q['targeted_group'].split(", "))) and q['targeted_group'] and
