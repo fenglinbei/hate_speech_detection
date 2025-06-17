@@ -27,8 +27,8 @@ CUDA_VISIBLE_DEVICES=${gpus} llamafactory-cli train \
     --overwrite_output_dir \
     --cutoff_len 1024 \
     --preprocessing_num_workers 16 \
-    --per_device_train_batch_size 1 \
-    --gradient_accumulation_steps 1 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
     --lr_scheduler_type cosine \
     --logging_steps 10 \
     --save_steps 1000 \
