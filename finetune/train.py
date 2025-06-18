@@ -32,53 +32,6 @@ def build_device_map(config):
     """从配置中构建设备映射，如未提供则返回None使用自动分配"""
     return config.get('device_map', "auto")
 
-def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
-    """转换测试集数据格式"""
-    messages = []
-    with open(raw_data_path, "r") as file:
-        raw_datas = json.load(file)
-
-    for raw_data in raw_datas:
-        triples = []
-        for quadruple in raw_data["quadruples"]:
-            label = quadruple["targeted_group"]
-            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-        
-        input = prompt_template.format(text=raw_data["content"])
-        answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": raw_data["content"]}
-        messages.append(message)
-    
-    with open(test_output_path, "w", encoding="utf-8") as file:
-        for message in messages:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
-
-def dataset_transfer_no_think(raw_data_path: str, train_output_path: str, val_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
-    """转换训练/验证集数据格式"""
-    messages = []
-    with open(raw_data_path, "r") as file:
-        raw_datas = json.load(file)
-
-    for raw_data in raw_datas:
-        triples = []
-        for quadruple in raw_data["quadruples"]:
-            label = quadruple["targeted_group"]
-            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-        
-        input = prompt_template.format(text=raw_data["content"])
-        answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": raw_data["content"]}
-        messages.append(message)
-    
-    split_idx = int(len(messages) * 0.9)
-    with open(train_output_path, "w", encoding="utf-8") as file:
-        for message in messages[:split_idx]:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
-    
-    with open(val_output_path, "w", encoding="utf-8") as file:
-        for message in messages[split_idx:]:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
-
 def prompt_to_text(prompt: str, prompt_template: str) -> str:
     """从提示模板中提取原始文本"""
     placeholder = "{text}"
@@ -353,6 +306,4 @@ if __name__ == "__main__":
         random.seed(config['random_seed'])
         torch.manual_seed(config['random_seed'])
 
-    # dataset_transfer_no_think_test("data/full/std/train.json", "finetune/data/test.jsonl", TRAIN_PROMPT_ZERO_SHOT_V4)
-    # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", TRAIN_PROMPT_ZERO_SHOT_V4)
     run(config)
