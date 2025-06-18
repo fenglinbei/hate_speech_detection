@@ -123,6 +123,6 @@ RAG_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句�
 # ### 三元组：
 # {retrieve_output}
 # ### 句子：
-# {content}
+# {text}
 # ### 三元组：
 # """
