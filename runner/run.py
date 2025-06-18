@@ -210,6 +210,15 @@ class LLMTester:
             user_template = user_template.replace("{shots}", "")
 
         # 构建测试数据
+
+        pbar = tqdm(
+            total=len(test_datas),
+            desc=f"Preprocessing datas",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+
         all_datas = []
         for data in test_datas:
             
@@ -233,6 +242,7 @@ class LLMTester:
                 "gt_quadruples": data.get("quadruples", []), 
                 "messages": messages
             })
+            pbar.update(1)
         
         return all_datas
 
