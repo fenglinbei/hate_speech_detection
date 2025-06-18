@@ -237,6 +237,13 @@ def output2triple(text):
         triple += f'{parts[0]} | {parts[1]} | {parts[2]} [SEP] '
     return triple[:-7] + ' [END]'
 
+def parsed_quad_to_raw_quad(parsed_quads: list[dict]):
+    quads = []
+    for parsed_quad in parsed_quads:
+        quads.append(f"{parsed_quad['target']} | {parsed_quad['argument']} | {parsed_quad['targeted_group']} | {parsed_quad['hateful']}")
+    
+    return " [SEP] ".join(quads) + " [END]"
+
 if __name__ == "__main__":
     # convert_to_json("./data/raw/test.json", "./data/test_data_parsed.json", is_test_data=True)
     # convert_to_train_json("./data/train_data_parsed.json", "train_data.jsonl")
