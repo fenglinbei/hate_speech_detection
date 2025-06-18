@@ -2,8 +2,6 @@
 from loguru import logger
 from typing import Optional
 from tools.json_tools import load_json
-from qwen_gen import QwenGen
-from get_prompt import generate_rag_prompt
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -61,47 +59,3 @@ class Retriver:
         retrieved_texts = [self.texts[idx] for idx in top_k_indices]
         
         return retrieved_texts, [self.test2item[retrieved_text]['output'] for retrieved_text in retrieved_texts]
-
-
-data = get_json('../data/train.json')
-texts = [item['content'] for item in data]
-
-
-
-
-qwen = QwenGen(port=35000, temperature=0.1)
-integration_num = 5
-threshold = 3
-
-def gen_output(item):
-    while True:
-        retriver_contents = retriever(texts, item['content'], top_k=integration_num)
-        all_responses = []
-        for retriver_content in retriver_contents:
-            retriver_item = test2item[retriver_content]
-            prompt = generate_rag_prompt(item['content'], retriver_item, 'triple')
-            result = qwen.response(prompt)
-            all_responses.append(result)
-
-        response_counts = Counter(all_responses)
-        most_common_list = response_counts.most_common(1)
-        actual_most_common_response = most_common_list[0][0]
-        count_of_most_common = most_common_list[0][1]
-
-        if count_of_most_common >= threshold:
-            return actual_most_common_response
-
-
-test_data = get_json('../data/test2.json')
-with open(f'../data/output/qwen2_7b_instruct_train_rag_triple_integration{integration_num}_{threshold}_t_0.1.txt', 'w', encoding='utf-8') as f:
-    for item in tqdm(test_data):
-        item['output'] = process_triple(gen_output(item))
-
-        while not check_response(item['output']):
-            item['output'] = process_triple(gen_output(item))
-            print(item['output'])
-        f.write(item['output'] + '\n')
-
-
-
-# CUDA_VISIBLE_DEVICES="0,1" python -m vllm.entrypoints.openai.api_server --served-model-name default --model="/data3/zlh/king/CCL2025-final/models/Qwen2___5-7B-Instruct-traindata_train_rag_triple/full/sft" --trust-remote-code --tensor-parallel-size=2 --port="35000" --max_model_len 10000
