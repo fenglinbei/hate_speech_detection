@@ -119,10 +119,10 @@ TRAIN_PROMPT_USER_V5 = '''请从下面的文本抽取一个或多个四元组，
 RAG_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
 示例：
 ### 句子：
-# {retrieve_content}
-# ### 三元组：
-# {retrieve_output}
-# ### 句子：
-# {text}
-# ### 三元组：
-# """
+{retrieve_content}
+### 三元组：
+{retrieve_output}
+### 句子：
+{text}
+### 三元组：
+"""
