@@ -229,7 +229,13 @@ def convert_to_std_format(input_file_path: str, output_file_path: str):
     with open(output_file_path, "w") as output_file:
         json.dump(std_datas, output_file, indent=2, ensure_ascii=False)
 
-
+def output2triple(text):
+    triple = ''
+    seqs = text.split(' [SEP] ')
+    for seq in seqs:
+        parts = seq.split(' | ')
+        triple += f'{parts[0]} | {parts[1]} | {parts[2]} [SEP] '
+    return triple[:-7] + ' [END]'
 
 if __name__ == "__main__":
     # convert_to_json("./data/raw/test.json", "./data/test_data_parsed.json", is_test_data=True)

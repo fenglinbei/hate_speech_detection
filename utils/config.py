@@ -95,18 +95,8 @@ class ConfigManager:
     @staticmethod
     def _resolve_prompt(prompt_name: str) -> str:
         """将prompt名称映射到实际变量"""
-        prompt_map = {
-            "TRAIN_PROMPT_FEW_SHOT_V1": TRAIN_PROMPT_FEW_SHOT_V1,
-            "SHOT_PROMPT_V1": SHOT_PROMPT_V1,
-            "TRAIN_PROMPT_ZERO_SHOT_V2": TRAIN_PROMPT_ZERO_SHOT_V2,
-            "TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2,
-            "TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3": TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
-            "TRAIN_PROMPT_ZERO_SHOT_V3": TRAIN_PROMPT_ZERO_SHOT_V3,
-            "TRAIN_PROMPT_ZERO_SHOT_V4": TRAIN_PROMPT_ZERO_SHOT_V4,
-        }
-        
-        if prompt_name in prompt_map:
-            return prompt_map[prompt_name]
-        
-        # 如果不是已知的名称，直接返回原始值（可能是自定义的prompt字符串）
-        return prompt_name
+        try:
+            prompt_templete = eval(prompt_name)
+            return prompt_templete
+        except:
+            return prompt_name
