@@ -16,7 +16,7 @@ from typing import Optional, List, Dict, Set, Any, Union
 from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
-from rag.core import Retriver
+from rag.core import Retriever
 from utils.log import init_logger
 from utils.protocol import UsageInfo
 from utils.config import ConfigManager
@@ -175,7 +175,7 @@ class LLMTester:
         except Exception as e:
             logger.error(f"Progress save failed: {str(e)}")
 
-    def _create_datas(self, use_rag: bool = False, retriever: Optional[Retriver] = None) -> List[dict]:
+    def _create_datas(self, use_rag: bool = False, retriever: Optional[Retriever] = None) -> List[dict]:
         """创建测试数据集"""
         shot_num = self.config.get('shot_num', 0)
         seed = self.config.get('seed', 23333333)
@@ -225,7 +225,7 @@ class LLMTester:
             if not use_rag:
                 user_prompt = user_template.format(text=data["content"])
             else:
-                assert isinstance(retriever, Retriver)
+                assert isinstance(retriever, Retriever)
                 retrieve_contents, retrieve_outputs = retriever.retrieve(data['content'])
                 user_prompt = user_template.replace("{retrieve_content}", retrieve_contents[0]).\
                                             replace("{retrieve_output}", retrieve_outputs[0]).\
@@ -411,7 +411,7 @@ class LLMTester:
             self, 
             llm_params: Dict,
             shot_num: Optional[int] = None,
-            retriever: Optional[Retriver] = None,
+            retriever: Optional[Retriever] = None,
             output_name: Optional[str] = None
             ) -> None:
         """执行分析任务"""
@@ -422,7 +422,7 @@ class LLMTester:
 
         self._init_state()
         self._load_progress()
-        if isinstance(retriever, Retriver):
+        if isinstance(retriever, Retriever):
             dataset = self._create_datas(use_rag=True, retriever=retriever)
         else:
             dataset = self._create_datas()
@@ -572,7 +572,7 @@ def create_retriever_from_config(retriever_config: dict):
     params: dict = retriever_config.get('params', {})
 
     if retriever_type == "Retriever":
-        return Retriver(
+        return Retriever(
             model_path=params.get("model_path"),
             model_name=params.get("model_name"),
             data_path=params.get("data_path")
