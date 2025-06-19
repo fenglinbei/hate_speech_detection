@@ -133,36 +133,60 @@ class LLM:
         text = self.tokenizer.apply_chat_template(
             messages,
             tokenize=False,
-            add_generation_prompt=True,
-            enable_thinking=False
+            add_generation_prompt=True
         )
-        model_inputs = self.tokenizer([text], return_tensors="pt").to("cuda")
+        # 扩展输入以适应n个候选结果
+        model_inputs = self.tokenizer([text] * n, return_tensors="pt", padding=True).to("cuda")
         attention_mask = model_inputs['attention_mask']
+        
+        # 准备generate参数
+        generate_kwargs = {
+            "input_ids": model_inputs.input_ids,
+            "attention_mask": attention_mask,
+            "max_new_tokens": max_new_tokens,
+            "repetition_penalty": 1.15,
+            "pad_token_id": self.tokenizer.eos_token_id,
+            "do_sample": temperature > 0 or top_p < 1.0 or top_k > 0,  # 当需要采样时启用
+            "num_return_sequences": 1  # 因为通过批次维度控制n
+        }
+        
+        # 添加可选采样参数
+        if temperature > 0:
+            generate_kwargs["temperature"] = temperature
+        if top_p < 1.0:
+            generate_kwargs["top_p"] = top_p
+        if top_k > 0:
+            generate_kwargs["top_k"] = top_k
 
-        generated_ids = self.model.generate(
-            model_inputs.input_ids,
-            attention_mask=attention_mask,
-            max_new_tokens=max_new_tokens,
-            repetition_penalty=1.15,
-            pad_token_id=self.tokenizer.eos_token_id
-        )
-        generated_ids = [
-            output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-        ]
+        generated_ids = self.model.generate(**generate_kwargs)
 
-        response = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+        # 分离每个生成的序列
+        responses = []
+        for i in range(n):
+            # 计算每个样本的起始位置
+            start_index = i * generate_kwargs["input_ids"].size(0) // n
+            output_seq = generated_ids[start_index]
             
-        # 计算token使用量
-        prompt_tokens = len(model_inputs.input_ids)
-        completion_tokens = len(generated_ids)
+            # 跳过输入部分只取生成的token
+            input_length = model_inputs.input_ids.size(1)
+            gen_tokens = output_seq[input_length:]
+            
+            # 解码并添加到结果
+            response = self.tokenizer.decode(gen_tokens, skip_special_tokens=True)
+            responses.append(response)
+        
+        # 计算token使用量 (基于单个输入)
+        prompt_tokens = len(model_inputs.input_ids[0])
+        completion_tokens = max(len(r) for r in responses)  # 取最长生成的token数
         
         usage = UsageInfo(
-            prompt_tokens=prompt_tokens,
+            prompt_tokens=prompt_tokens * n,  # 实际输入token * n
             completion_tokens=completion_tokens,
-            total_tokens=prompt_tokens + completion_tokens
+            total_tokens=prompt_tokens * n + completion_tokens
         )
         
-        return [[response]], usage, 200
+        # 包装结果以适应n>1的格式
+        return [[r] for r in responses], usage, 200
         
         
         
