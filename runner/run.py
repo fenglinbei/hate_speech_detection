@@ -24,6 +24,7 @@ from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM
 from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip
+from tools.convert import output2triple
 
 
 
@@ -228,7 +229,7 @@ class LLMTester:
                 assert isinstance(retriever, Retriever)
                 retrieve_contents, retrieve_outputs = retriever.retrieve(data['content'])
                 user_prompt = user_template.replace("{retrieve_content}", retrieve_contents[0]).\
-                                            replace("{retrieve_output}", retrieve_outputs[0]).\
+                                            replace("{retrieve_output}", output2triple(retrieve_outputs[0])).\
                                             replace("{text}", data["content"])
 
             if system_prompt:
