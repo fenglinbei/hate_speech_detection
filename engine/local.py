@@ -1,7 +1,7 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["TRITON_PTXAS_PATH"] = "/usr/local/cuda/bin/ptxas"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+# os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# os.environ["TRITON_PTXAS_PATH"] = "/usr/local/cuda/bin/ptxas"
 import warnings
 warnings.simplefilter('ignore')
 
