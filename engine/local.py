@@ -6,7 +6,7 @@ import warnings
 warnings.simplefilter('ignore')
 
 import torch
-from transformers import AutoModel, Qwen2TokenizerFast, Qwen3ForCausalLM
+from transformers import AutoModel, Qwen2TokenizerFast, Qwen3ForCausalLM, Qwen2ForCausalLM
 from typing import List, Dict, Any, Optional
 from utils.protocol import UsageInfo
 
@@ -113,7 +113,10 @@ class LLM:
         self.model_name = model_name
         
         self.tokenizer = Qwen2TokenizerFast.from_pretrained(model_path, use_fast=False, trust_remote_code=True)
-        self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
+        if "qwen3" in model_name:
+            self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
+        else:
+            self.model = Qwen2ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
         self.model.eval()
     
     def chat(
