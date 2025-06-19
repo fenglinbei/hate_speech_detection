@@ -287,9 +287,10 @@ class LLMTester:
 
         max_retries = self.config.get('max_retries', 3)
         base_wait = self.config.get('base_retry_wait_time', 0)
-        
+
         text = item["content"]
         logger.debug(f"Processing text: {text}")
+        logger.debug(f"Processing messages: {messages}")
         for attempt in range(max_retries + 1):
             if self._shutdown_flag:
                 logger.debug(f"Shutdown signal received, aborting ID: {item['id']}")
