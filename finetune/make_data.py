@@ -4,6 +4,7 @@ from typing import Optional
 
 from prompt import *
 from rag.core import Retriever
+from tools.convert import output2triple
 
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
     """转换测试集数据格式"""
@@ -63,7 +64,7 @@ def dataset_transfer_no_think(
             assert isinstance(retriever, Retriever)
             retrieve_contents, retrieve_outputs = retriever.retrieve(raw_data['content'])
             input = prompt_template.replace("{retrieve_content}", retrieve_contents[0]).\
-            replace("{retrieve_output}", retrieve_outputs[0]).\
+            replace("{retrieve_output}", output2triple(retrieve_outputs[0])).\
             replace("{text}", raw_data["content"])
 
         answer = " [SEP] ".join(triples) + " [END]"
