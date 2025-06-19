@@ -30,6 +30,8 @@ class VLLM:
         self.model_path = model_path
         self.model_name = model_name
         print(os.environ["CUDA_VISIBLE_DEVICES"])
+        import torch
+        torch.cuda.set_device(1) 
         self.llm = VLLModel(
             model=model_path,
             max_num_seqs=max_num_seqs,
