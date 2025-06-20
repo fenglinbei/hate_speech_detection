@@ -14,7 +14,7 @@ class Retriever:
     def __init__(self, model_path: str, model_name: str, data_path: Optional[str]=None):
 
         logger.info(f"Loading model from path: {model_path}")
-        self.model = SentenceTransformer(model_path).to("cuda:1")
+        self.model = SentenceTransformer(model_path).to("cuda:0")
         self.model_name = model_name
 
         if data_path:
