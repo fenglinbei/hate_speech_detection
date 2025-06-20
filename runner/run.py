@@ -260,7 +260,7 @@ class LLMTester:
                     messages_list.append(messages)
             else:
                 for user_prompt in prompt_list:
-                    messages = [{'content': user_prompt, 'role': 'user'}]
+                    messages = [{'content': "", 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
                     messages_list.append(messages)
 
             all_datas.append({
