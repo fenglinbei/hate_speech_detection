@@ -186,8 +186,16 @@ class LLMTester:
         except Exception as e:
             logger.error(f"Progress save failed: {str(e)}")
 
-    def _create_datas(self, use_rag: bool = False, retriever: Optional[Retriever] = None, parallel_num: int = 1) -> List[dict]:
+    def _create_datas(
+            self, 
+            use_rag: bool = False, 
+            retriever: Optional[Retriever] = None, 
+            parallel_num: int = 1, 
+            use_cache: bool = False, 
+            save_cache: bool = False
+            ) -> List[dict]:
         """创建测试数据集"""
+
         shot_num = self.config.get('shot_num', 0)
         seed = self.config.get('seed', 23333333)
         
@@ -262,7 +270,7 @@ class LLMTester:
                 "messages_list": messages_list
             })
             pbar.update(1)
-        
+    
         return all_datas
 
     def _clean_old_progress_files(self, keep: Optional[int] = None):
