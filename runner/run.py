@@ -12,6 +12,7 @@ import argparse
 from tqdm import tqdm
 from queue import Queue
 from functools import partial
+from collections import Counter
 from typing import Optional, List, Dict, Set, Any, Union
 from concurrent.futures import ThreadPoolExecutor
 
@@ -95,11 +96,20 @@ class LLMTester:
         signal.signal(signal.SIGINT, self._graceful_shutdown)
         signal.signal(signal.SIGTERM, self._graceful_shutdown)
 
+        self.f1_hard = 0
+        self.f1_soft = 0
+        self.f1_avg = 0
+
     def _init_state(self):
         self.processed_ids: Set[int] = set()
         self.results: List[Dict] = []
         self.total_usage = UsageInfo()
         self.last_checkpoint = 0
+        
+        self.f1_hard = 0
+        self.f1_soft = 0
+        self.f1_avg = 0
+
 
     def _graceful_shutdown(self, signum, frame):
         """处理中断信号"""
@@ -176,7 +186,7 @@ class LLMTester:
         except Exception as e:
             logger.error(f"Progress save failed: {str(e)}")
 
-    def _create_datas(self, use_rag: bool = False, retriever: Optional[Retriever] = None) -> List[dict]:
+    def _create_datas(self, use_rag: bool = False, retriever: Optional[Retriever] = None, parallel_num: int = 1) -> List[dict]:
         """创建测试数据集"""
         shot_num = self.config.get('shot_num', 0)
         seed = self.config.get('seed', 23333333)
@@ -222,26 +232,34 @@ class LLMTester:
 
         all_datas = []
         for data in test_datas:
-            
+            prompt_list = []
             if not use_rag:
                 user_prompt = user_template.format(text=data["content"])
+                prompt_list.append(user_prompt)
             else:
                 assert isinstance(retriever, Retriever)
-                retrieve_contents, retrieve_outputs = retriever.retrieve(data['content'])
-                user_prompt = user_template.replace("{retrieve_content}", retrieve_contents[0]).\
-                                            replace("{retrieve_output}", output2triple(retrieve_outputs[0])).\
-                                            replace("{text}", data["content"])
+                retrieve_contents, retrieve_outputs = retriever.retrieve(data['content'], top_k=parallel_num)
+                for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+                    user_prompt = user_template.replace("{retrieve_content}", retrieve_content).\
+                                                replace("{retrieve_output}", output2triple(retrieve_output)).\
+                                                replace("{text}", data["content"])
+                    prompt_list.append(user_prompt)
 
+            messages_list = []
             if system_prompt:
-                messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+                for user_prompt in prompt_list:
+                    messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+                    messages_list.append(messages)
             else:
-                messages = [{'content': user_prompt, 'role': 'user'}]
+                for user_prompt in prompt_list:
+                    messages = [{'content': user_prompt, 'role': 'user'}]
+                    messages_list.append(messages)
 
             all_datas.append({
                 "id": data["id"], 
                 "content": data["content"], 
                 "gt_quadruples": data.get("quadruples", []), 
-                "messages": messages
+                "messages_list": messages_list
             })
             pbar.update(1)
         
@@ -268,7 +286,6 @@ class LLMTester:
             return None
 
         item_id = item['id']
-        messages = item['messages']
         quadruples = []
         backoff = 0
         status_code = 500
@@ -287,89 +304,123 @@ class LLMTester:
             raise ValueError("Invaild llm_params keys.")
 
         max_retries = self.config.get('max_retries', 3)
+        per_parallel_attempts_num = self.config.get('per_parallel_attempts_num', 1)
         base_wait = self.config.get('base_retry_wait_time', 0)
 
         text = item["content"]
         logger.debug(f"Processing text: {text}")
-        logger.debug(f"Processing messages: {messages}")
-        for attempt in range(max_retries + 1):
-            if self._shutdown_flag:
-                logger.debug(f"Shutdown signal received, aborting ID: {item['id']}")
-                return None
+        
+        pbar = tqdm(
+            total=len(item["messages_list"]) * per_parallel_attempts_num,
+            desc=f'Processing parallel total: {len(item["messages_list"])}',
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+       
+        llm_output_list = []     
+        final_status = "failed"
+        total_attemps = 0
+
+        for messages in item["messages_list"]:
+            logger.debug(f"Processing messages: {messages}")
+            for _ in range(per_parallel_attempts_num):
             
-            try:
-                response, usage, status_code = self.llm.chat(
-                    messages=messages,
-                    max_new_tokens=max_new_tokens,
-                    n=n,
-                    top_p=top_p,
-                    top_k=top_k,
-                    temperature=temperature,
-                    enable_thinking=enable_thinking
-                )
-                logger.debug(f"LLM Output: {response}")
-                if isinstance(response, list):
-                    answer = response[0][0]
+                for attempt in range(max_retries + 1):
+                    if self._shutdown_flag:
+                        logger.debug(f"Shutdown signal received, aborting ID: {item['id']}")
+                        return None
+                    
+                    try:
+                        response, usage, status_code = self.llm.chat(
+                            messages=messages,
+                            max_new_tokens=max_new_tokens,
+                            n=n,
+                            top_p=top_p,
+                            top_k=top_k,
+                            temperature=temperature,
+                            enable_thinking=enable_thinking
+                        )
+                        logger.debug(f"LLM Output: {response}")
+                        total_attemps += 1
+                        if isinstance(response, list):
+                            answer = response[0][0]
 
-                    with self.lock:
-                        if usage:
-                            self.total_usage.prompt_tokens += usage.prompt_tokens
-                            self.total_usage.completion_tokens += usage.completion_tokens
-                            self.total_usage.total_tokens += usage.total_tokens
+                            with self.lock:
+                                if usage:
+                                    self.total_usage.prompt_tokens += usage.prompt_tokens
+                                    self.total_usage.completion_tokens += usage.completion_tokens
+                                    self.total_usage.total_tokens += usage.total_tokens
 
-                    if status_code == 200:
-                        if isinstance(answer, str):
-                            quadruples = parse_llm_output_quad(answer)
-                            if not quadruples:
-                                quadruples = parse_llm_output_trip(answer)
-                            if validate_quadruples(quadruples):
-                                return {
-                                    **item,
-                                    "llm_output": answer,
-                                    "pred_quadruples": quadruples,
-                                    "status": "success",
-                                    "attempts": attempt + 1
-                                }
+                            if status_code == 200:
+                                if isinstance(answer, str):
+                                    quadruples = parse_llm_output_quad(answer)
+                                    if not quadruples:
+                                        quadruples = parse_llm_output_trip(answer)
+                                    if validate_quadruples(quadruples):
+                                        llm_output_list.append(answer)
+                                        break
+                                    else:
+                                        last_error = "Validation failed"
+                                        logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
+                                        backoff = 0
+                                else:
+                                    last_error = "Invalid Output"
+                                    logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                                    backoff = 2 ** (attempt + base_wait)
                             else:
-                                last_error = "Validation failed"
-                                logger.warning(f"LLM output validation failed (ID:{item_id} attempt:{attempt+1})")
-                                backoff = 0
+                                last_error = f"API error: status code {status_code}"
+                                logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
+                                if status_code == 429:
+                                    backoff = 2 ** (attempt + base_wait + 4)
                         else:
                             last_error = "Invalid Output"
                             logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
                             backoff = 2 ** (attempt + base_wait)
-                    else:
-                        last_error = f"API error: status code {status_code}"
-                        logger.warning(f"API error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
-                        if status_code == 429:
-                            backoff = 2 ** (attempt + base_wait + 4)
-                else:
-                    last_error = "Invalid Output"
-                    logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
-                    backoff = 2 ** (attempt + base_wait)
-                    
-            except requests.exceptions.Timeout:
-                logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
-                backoff = 2 ** (attempt + base_wait)
-            except Exception as e:
-                logger.exception(e)
-                logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
-                backoff = 2 ** (attempt + base_wait)
-                self._shutdown_flag = True
+                            
+                    except requests.exceptions.Timeout:
+                        logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
+                        backoff = 2 ** (attempt + base_wait)
+                    except Exception as e:
+                        logger.exception(e)
+                        logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
+                        backoff = 2 ** (attempt + base_wait)
+                        self._shutdown_flag = True
 
-            if attempt < max_retries:
-                logger.debug(f"Retrying after {backoff}s")
-                time.sleep(backoff)
+                    if attempt < max_retries:
+                        logger.debug(f"Retrying after {backoff}s")
+                        time.sleep(backoff)
 
-        final_status = "invalid" if status_code == 200 else "failed"
+                final_status = "invalid" if status_code == 200 else "failed"
+                pbar.update(1)
+        
+        output_couter = Counter(llm_output_list)
+
+        if len(output_couter) == 0:
+            return {
+                **item,
+                "llm_output": None,
+                "pred_quadruples": [],
+                "status": final_status,
+                "attempts": (max_retries + 1) * len(item["messages_list"]),
+                "error": last_error
+            }
+        
+        max_item = output_couter.most_common(1)[0]
+        answer = max_item[0]
+        quadruples = parse_llm_output_quad(answer)
+        if not quadruples:
+            quadruples = parse_llm_output_trip(answer)
+
         return {
-            **item,
-            "llm_output": answer if status_code == 200 else None,
-            "pred_quadruples": quadruples,
-            "status": final_status,
-            "attempts": max_retries + 1,
-            "error": last_error
-        }
+                **item,
+                "llm_output": answer,
+                "frequency": max_item[1],
+                "pred_quadruples": quadruples,
+                "status": "success",
+                "attempts": total_attemps
+            }
+
     
 
     def _save_final_results(
@@ -414,6 +465,7 @@ class LLMTester:
             llm_params: Dict,
             shot_num: Optional[int] = None,
             retriever: Optional[Retriever] = None,
+            parallel_num: int = 1,
             output_name: Optional[str] = None
             ) -> None:
         """执行分析任务"""
@@ -425,7 +477,7 @@ class LLMTester:
         self._init_state()
         self._load_progress()
         if isinstance(retriever, Retriever):
-            dataset = self._create_datas(use_rag=True, retriever=retriever)
+            dataset = self._create_datas(use_rag=True, retriever=retriever, parallel_num=parallel_num)
         else:
             dataset = self._create_datas()
         
@@ -478,7 +530,16 @@ class LLMTester:
 
                             pbar.update(1)
                             success_count = len([r for r in self.results if r['status']=='success'])
+                            
+                            if len(self.results) % 100 == 0:
+                                step_metric = self.metric.run(datas_list=self.results)
+                                self.f1_hard = step_metric["f1_hard"]
+                                self.f1_soft = step_metric["f1_soft"]
+                                self.f1_avg = step_metric["f1_avg"]
                             pbar.set_postfix({
+                                "f1_hard": self.f1_hard,
+                                "f1_soft": self.f1_soft,
+                                "f1_avg": f1_avg,
                                 "success": f"{success_count}/{len(self.results)}",
                                 "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
                             })
@@ -619,8 +680,9 @@ if __name__ == "__main__" :
     shots_list = run_config.get('shots_list', [config['tester'].get('shot_num', 5)])
     llm_params = run_config['llm_params']
     output_name = config.get("output_name", None)
+    parallel_num = config["tester"].get("parallel_num", 1)
 
     
     
     for shot_num in shots_list:
-        tester.run(llm_params=llm_params, shot_num=shot_num, retriever=retriever, output_name=output_name)
+        tester.run(llm_params=llm_params, shot_num=shot_num, retriever=retriever, output_name=output_name, parallel_num=parallel_num)
