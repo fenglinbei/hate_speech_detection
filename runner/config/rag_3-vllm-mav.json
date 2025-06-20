@@ -5,15 +5,13 @@
     "show_console": true
   },
   "model": {
-    "type": "VLLM",
+    "type": "ApiLLMModel",
     "params": {
-      "model_name": "qwen2.5-7B-instruct-hsd-sft-rag-trip-noalp-nosys",
-      "model_path": "models/qwen2.5-7B-instruct-hsd-sft-rag-trip-noalp-nosys/checkpoint-920",
-      "tensor_parallel_size": 1,
-      "max_num_seqs": 32,
-      "max_model_len": 12288,
-      "gpu_memory_utilization": 0.95,
-      "seed": 23333333
+      "model_name": "default",
+      "api_base": "http://127.0.0.1:35000/v1/",
+      "api_key": "EMPTY",
+      "temperature": 0.3, 
+      "top_p": 0.8
     }
   },
   "retriever": {
@@ -46,7 +44,7 @@
          "top_p": 0.8,
          "top_k": 20,
          "min_p": 0,
-         "temperature": 0.5, 
+         "temperature": 0.3, 
          "enable_thinking": false
         }
     }

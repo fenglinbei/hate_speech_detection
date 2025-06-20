@@ -187,7 +187,7 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
 
     all_soft_tp, all_soft_fp, all_soft_fn = 0, 0, 0
 
-    for idx, id in tqdm(enumerate(ids), desc="Calculate Soft Metric"):
+    for idx, id in enumerate(ids):
 
         # 提取真实和预测的四元组列表
         gt_quads = gt_data_dict[id]
