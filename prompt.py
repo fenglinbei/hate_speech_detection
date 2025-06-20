@@ -1,3 +1,5 @@
+QWEN2_DEFAULT_SYSTEM_PROMPT = "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."
+
 TRAIN_PROMPT_FEW_SHOT_V1 = """请分析以下文本，识别其中的评论对象、论点、是否仇恨和仇恨类别。
 
 其中仇恨类别包含以下标签：
