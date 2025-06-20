@@ -105,7 +105,7 @@ class LLMTester:
         self.results: List[Dict] = []
         self.total_usage = UsageInfo()
         self.last_checkpoint = 0
-        
+
         self.f1_hard = 0
         self.f1_soft = 0
         self.f1_avg = 0
@@ -539,7 +539,7 @@ class LLMTester:
                             pbar.set_postfix({
                                 "f1_hard": self.f1_hard,
                                 "f1_soft": self.f1_soft,
-                                "f1_avg": f1_avg,
+                                "f1_avg": self.f1_avg,
                                 "success": f"{success_count}/{len(self.results)}",
                                 "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
                             })
