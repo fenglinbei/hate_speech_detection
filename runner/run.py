@@ -259,8 +259,12 @@ class LLMTester:
                     messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
                     messages_list.append(messages)
             else:
+                if "qwen2" in self.llm.model_name:
+                    system_prompt = QWEN2_DEFAULT_SYSTEM_PROMPT
+                else:
+                    system_prompt = ""
                 for user_prompt in prompt_list:
-                    messages = [{'content': "", 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
+                    messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
                     messages_list.append(messages)
 
             all_datas.append({
