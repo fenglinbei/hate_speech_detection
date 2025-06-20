@@ -124,7 +124,7 @@ def calculate_hard_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
     # 收集每个示例的硬匹配和软匹配结果，用于计算总体F1
     all_hard_tp, all_hard_fp, all_hard_fn = 0, 0, 0
 
-    for idx, id in tqdm(enumerate(ids), desc="Calculate Hard Metric"):
+    for idx, id in enumerate(ids):
 
         # 提取真实和预测的四元组列表
         gt_quads = gt_data_dict[id]
@@ -208,8 +208,8 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
                     soft_matched_pred.add(i)
                     soft_matched_gold.add(j)
                     break
-                else:
-                    print(pred_quad, gt_quad)
+                # else:
+                #     print(pred_quad, gt_quad)
         
         soft_tp = len(soft_matched_pred)
         soft_fp = len(pred_quads) - soft_tp
@@ -420,12 +420,21 @@ class LLMmetrics:
         else:
             raise ValueError(f"Invaild Input, datas_list: {type(datas_list)} expected: list[dict], data_path: {type(data_path)} expected: str")
         
-        logger.info('Calculating Score')
+        pbar = tqdm(
+            total=3,
+            desc=f"Calculating Score",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
         try:
             ids = [k for k in gt_data_dict.keys()]
             hard_metrics = calculate_hard_metrics(ids, pred_data_dict, gt_data_dict)
+            pbar.update(1)
             soft_metrics = calculate_soft_metrics(ids, pred_data_dict, gt_data_dict, similarity_threshold)
+            pbar.update(1)
             field_metrics = self.calculate_field_metrics(pred_data_dict, gt_data_dict)
+            pbar.update(1)
 
         except Exception as e:
             logger.exception(e)
