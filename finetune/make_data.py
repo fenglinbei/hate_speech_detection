@@ -81,4 +81,4 @@ def dataset_transfer_no_think(
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 if __name__ == "__main__":
-    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1)
+    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
