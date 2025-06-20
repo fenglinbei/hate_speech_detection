@@ -420,7 +420,7 @@ class LLMmetrics:
         else:
             raise ValueError(f"Invaild Input, datas_list: {type(datas_list)} expected: list[dict], data_path: {type(data_path)} expected: str")
         
-        logger.info('========Start Calculating The Score========')
+        logger.info('Calculating Score')
         try:
             ids = [k for k in gt_data_dict.keys()]
             hard_metrics = calculate_hard_metrics(ids, pred_data_dict, gt_data_dict)
