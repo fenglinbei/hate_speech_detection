@@ -1,0 +1,50 @@
+{
+  "output_name": "rag-4-vllm-emptysys-1080.json",
+  "log": {
+    "level": "INFO",
+    "show_console": true
+  },
+   "model": {
+    "type": "ApiLLMModel",
+    "params": {
+      "model_name": "checkpoint-1080",
+      "api_base": "http://127.0.0.1:35000/v1/",
+      "api_key": "EMPTY",
+      "temperature": 0.1, 
+      "top_p": 0.8
+    }
+  },
+  "retriever": {
+    "type": "Retriever",
+    "params": {
+        "model_path": "./models/bge-large-zh-v1.5",
+        "model_name": "bge-large-zh-v1.5",
+        "data_path": "data/full/std/train.json"
+    }
+  },
+  "tester": {
+    "shot_dataset_file": "data/full/std/train.json",
+    "test_dataset_file": "data/full/std/test.json",
+    "shot_num": 0,
+    "max_retries": 50,
+    "concurrency": 1,
+    "compute_metric": true,
+    "prompt_templates": {
+      "system": "QWEN2_DEFAULT_SYSTEM_PROMPT",
+      "train": "RAG_PROMPT_USER_V1",
+      "shot": ""
+    },
+    "run": {
+      "shots_list": [0],
+      "llm_params": {
+         "max_new_tokens": 512, 
+         "n": 1,
+         "top_p": 0.8,
+         "top_k": 20,
+         "min_p": 0,
+         "temperature": 0.1, 
+         "enable_thinking": false
+        }
+    }
+  }
+}
