@@ -476,7 +476,7 @@ class LLMmetrics:
 
 if __name__ == "__main__":
     METRIC = LLMmetrics()
-    metric = METRIC.run(data_path="finetune/eval_outputs/eval_results_step_40.json")
+    metric = METRIC.run(data_path="runner/output/output_Qwen3-8B-sft-hsd-v5-cosine-default_shots0_seed23333333.json")
     print(json.dumps(metric, indent=2, ensure_ascii=False))
         
     

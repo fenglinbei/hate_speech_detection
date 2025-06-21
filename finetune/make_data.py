@@ -42,7 +42,7 @@ def dataset_transfer_no_think(
 
     split_idx = int(len(raw_datas) * 0.9)
     retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
-    retriever.create_embeddings(raw_datas[:split_idx])
+    retriever.create_embeddings(raw_datas)
     
     pbar = tqdm(
             total=len(raw_datas),
@@ -73,7 +73,7 @@ def dataset_transfer_no_think(
         pbar.update(1)
     
     with open(train_output_path, "w", encoding="utf-8") as file:
-        for message in messages[:split_idx]:
+        for message in messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
     
     with open(val_output_path, "w", encoding="utf-8") as file:
@@ -81,4 +81,4 @@ def dataset_transfer_no_think(
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 if __name__ == "__main__":
-    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
+    dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train_full.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
