@@ -11,10 +11,10 @@ from tools.convert import output2triple, parsed_quad_to_raw_quad
 
 class Retriever:
 
-    def __init__(self, model_path: str, model_name: str, data_path: Optional[str]=None):
+    def __init__(self, model_path: str, model_name: str, data_path: Optional[str]=None, device: str = "cuda:0"):
 
         logger.info(f"Loading model from path: {model_path}")
-        self.model = SentenceTransformer(model_path).to("cuda:1")
+        self.model = SentenceTransformer(model_path).to(device)
         self.model_name = model_name
 
         if data_path:

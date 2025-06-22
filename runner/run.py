@@ -651,7 +651,8 @@ def create_retriever_from_config(retriever_config: dict):
         return Retriever(
             model_path=params.get("model_path"),
             model_name=params.get("model_name"),
-            data_path=params.get("data_path")
+            data_path=params.get("data_path"),
+            device=params.get("device", "cuda:0")
         )
 
 

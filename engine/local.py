@@ -106,6 +106,7 @@ class LLM:
             self, 
             model_path: str,
             model_name: str,
+            device_map: dict | str = "auto",
             **kwarg
             ):
         
@@ -114,9 +115,9 @@ class LLM:
         
         self.tokenizer = Qwen2TokenizerFast.from_pretrained(model_path, use_fast=False, trust_remote_code=True)
         if "qwen3" in model_name:
-            self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
+            self.model = Qwen3ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map=device_map)
         else:
-            self.model = Qwen2ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map="auto")
+            self.model = Qwen2ForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16, device_map=device_map)
         self.model.eval()
     
     def chat(
