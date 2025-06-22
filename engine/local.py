@@ -144,7 +144,7 @@ class LLM:
             "input_ids": model_inputs.input_ids,
             "attention_mask": attention_mask,
             "max_new_tokens": max_new_tokens,
-            "repetition_penalty": 1.15,
+            "repetition_penalty": 1.05,
             "pad_token_id": self.tokenizer.eos_token_id,
             "do_sample": temperature > 0 or top_p < 1.0 or top_k > 0,  # 当需要采样时启用
             "num_return_sequences": 1  # 因为通过批次维度控制n

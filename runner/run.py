@@ -621,7 +621,8 @@ def create_model_from_config(model_config: dict) -> Any:
     if model_type == "LLM":
         return LLM(
             model_path=params.get("model_path"),
-            model_name=params.get("model_name")
+            model_name=params.get("model_name"),
+            device_map=params.get("device_map", "auto")
             )
     elif model_type == 'VLLM':
         # 从参数中提取VLLM配置
