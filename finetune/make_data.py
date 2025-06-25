@@ -169,7 +169,7 @@ def make_lexcion_rag_data(
 
     
     with open(val_output_path, "w", encoding="utf-8") as file:
-        for message in messages[split_idx:]:
+        for message in messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 if __name__ == "__main__":
