@@ -17,10 +17,10 @@ from typing import Optional, List, Dict, Set, Any, Union
 from concurrent.futures import ThreadPoolExecutor
 
 from prompt import *
-from rag.core import Retriever
+from rag.core import Retriever, LexiconRetriever
 from utils.log import init_logger
 from utils.protocol import UsageInfo
-from utils.config import ConfigManager
+from config import ConfigManager
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM
@@ -78,6 +78,7 @@ class LLMTester:
         """
         self.llm = llm_model
         self.config = config.get('tester', {})
+        self.global_config = config
         self.metric = metric
         
         # 确保目录存在
@@ -188,13 +189,33 @@ class LLMTester:
 
     def _create_datas(
             self, 
-            use_rag: bool = False, 
-            retriever: Optional[Retriever] = None, 
             parallel_num: int = 1, 
-            use_cache: bool = False, 
             save_cache: bool = False
             ) -> List[dict]:
         """创建测试数据集"""
+
+        use_cache = self.config.get("use_cache", False)
+        if use_cache:
+            save_cache = True
+            cache_dir = self.config.get("cache_dir", "runner/cache")
+            os.makedirs(cache_dir, exist_ok=True)
+            cache_file_name = "test_data" + self.config.get("output_name", ".json")
+            if os.path.exists(os.path.join(cache_dir, cache_file_name)):
+                with open(os.path.join(cache_dir, cache_file_name), "r") as f:
+                    all_datas = json.load(f)
+                return all_datas
+            else:
+                logger.warning("Data cache not exist.")
+
+        srag_retriever = None
+        if self.global_config.get("srag_retriever"):
+            srag_retriever_config = config["srag_retriever"]
+            srag_retriever = create_retriever_from_config(srag_retriever_config)
+
+        lex_retriever = None
+        if self.global_config.get("lex_retriever"):
+            lex_retriever_config = config["lex_retriever"]
+            lex_retriever = create_retriever_from_config(lex_retriever_config)
 
         shot_num = self.config.get('shot_num', 0)
         seed = self.config.get('seed', 23333333)
@@ -203,6 +224,7 @@ class LLMTester:
         system_prompt = self.config.get('prompt_templates', {}).get('system')
         user_template = self.config.get('prompt_templates', {}).get('train')
         shot_template = self.config.get('prompt_templates', {}).get('shot')
+        example_template = self.config.get('prompt_templates', {}).get('example')
         
         # 加载示例数据
         shot_data_path = self.config.get('shot_dataset_file', "")
@@ -241,17 +263,29 @@ class LLMTester:
         all_datas = []
         for data in test_datas:
             prompt_list = []
-            if not use_rag:
+            if not isinstance(srag_retriever, Retriever):
                 user_prompt = user_template.format(text=data["content"])
                 prompt_list.append(user_prompt)
             else:
-                assert isinstance(retriever, Retriever)
-                retrieve_contents, retrieve_outputs = retriever.retrieve(data['content'], top_k=parallel_num)
-                for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
-                    user_prompt = user_template.replace("{retrieve_content}", retrieve_content).\
-                                                replace("{retrieve_output}", output2triple(retrieve_output)).\
-                                                replace("{text}", data["content"])
-                    prompt_list.append(user_prompt)
+                if not isinstance(lex_retriever, LexiconRetriever):
+                    retrieve_contents, retrieve_outputs = srag_retriever.retrieve(data['content'], top_k=parallel_num)
+                    for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+                        user_prompt = user_template.replace("{retrieve_content}", retrieve_content).\
+                                                    replace("{retrieve_output}", output2triple(retrieve_output)).\
+                                                    replace("{text}", data["content"])
+                        prompt_list.append(user_prompt)
+                else:
+                    retrieve_contents, retrieve_outputs = srag_retriever.retrieve(data['content'], top_k=parallel_num)
+                    lex_prompt = "\n".join(lex_retriever.including_retrieve(data['content'], -1))
+                    for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+                        example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
+                                                          replace("{retrieve_output}", output2triple(retrieve_output))
+                        
+                        user_prompt = user_template.replace("{examples}", example_prompt).\
+                                                    replace("{lexicons}", lex_prompt).\
+                                                    replace("{text}", data["content"])
+                        prompt_list.append(user_prompt)
+
 
             messages_list = []
             if system_prompt:
@@ -274,6 +308,13 @@ class LLMTester:
                 "messages_list": messages_list
             })
             pbar.update(1)
+        
+        if save_cache:
+            cache_dir = self.config.get("cache_dir", "runner/cache")
+            os.makedirs(cache_dir, exist_ok=True)
+            cache_file_name = "test_data" + self.config.get("output_name", ".json")
+            with open(os.path.join(cache_dir, cache_file_name), "w") as f:
+                json.dump(all_datas, f, indent=2, ensure_ascii=False)
     
         return all_datas
 
@@ -476,7 +517,6 @@ class LLMTester:
             self, 
             llm_params: Dict,
             shot_num: Optional[int] = None,
-            retriever: Optional[Retriever] = None,
             parallel_num: int = 1,
             output_name: Optional[str] = None
             ) -> None:
@@ -488,10 +528,8 @@ class LLMTester:
 
         self._init_state()
         self._load_progress()
-        if isinstance(retriever, Retriever):
-            dataset = self._create_datas(use_rag=True, retriever=retriever, parallel_num=parallel_num)
-        else:
-            dataset = self._create_datas()
+        dataset = self._create_datas(
+            parallel_num=parallel_num)
         
         total_items = len(dataset)
         pending_items = [item for item in dataset if item['id'] not in self.processed_ids]
@@ -654,6 +692,13 @@ def create_retriever_from_config(retriever_config: dict):
             data_path=params.get("data_path"),
             device=params.get("device", "cuda:0")
         )
+    elif retriever_type == "LexiconRetriever":
+        return LexiconRetriever(
+            model_path=params.get("model_path"),
+            model_name=params.get("model_name"),
+            data_path=params.get("data_path"),
+            device=params.get("device", "cuda:0")
+        )
 
 
 if __name__ == "__main__" :
@@ -673,11 +718,6 @@ if __name__ == "__main__" :
     
     # 创建模型
     model = create_model_from_config(config['model'])
-
-    retriever = None
-    if config.get("retriever"):
-        retriever_config = config["retriever"]
-        retriever = create_retriever_from_config(retriever_config)
     
     # 可选地创建metric
     metric = LLMmetrics() if config['tester'].get('compute_metric', True) else None
@@ -699,4 +739,8 @@ if __name__ == "__main__" :
     
     
     for shot_num in shots_list:
-        tester.run(llm_params=llm_params, shot_num=shot_num, retriever=retriever, output_name=output_name, parallel_num=parallel_num)
+        tester.run(
+            llm_params=llm_params, 
+            shot_num=shot_num, 
+            output_name=output_name, 
+            parallel_num=parallel_num,)
