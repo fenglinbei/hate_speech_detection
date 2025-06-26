@@ -147,3 +147,9 @@ RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 LEXICON_RAG_PROMPT = """关键词：{word}
 类别：{category}
 定义：{definition}"""
+
+RAG_PROMPT_USER_V3 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+### 句子：
+{text}
+### 三元组：
+"""
