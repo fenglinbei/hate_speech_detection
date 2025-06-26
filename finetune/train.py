@@ -70,9 +70,9 @@ class CustomTrainer(Trainer):
     def evaluate(self, **kwargs): # type: ignore
         """自定义评估逻辑"""
         metrics = super().evaluate(**kwargs)
-        logger.debug(metrics)
-        custom_metrics = self.evaluate_custom()
-        metrics.update(custom_metrics) # type: ignore
+        # logger.debug(metrics)
+        # custom_metrics = self.evaluate_custom()
+        # metrics.update(custom_metrics) # type: ignore
         self.log(metrics)
         swanlab.log(metrics)
         return metrics
