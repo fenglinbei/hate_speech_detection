@@ -96,7 +96,7 @@ def calculate_similarity(pred_text, gt_text):
     return similarity
 
 
-def is_soft_match(pred_quad, gt_quad):
+def is_soft_match(pred_quad, gt_quad, similarity_threshold: float = 0.5):
     """
     判断预测四元组和标准答案是否软匹配
     软匹配：Targeted_Group和Hateful完全一致，Target和Argument相似度>0.5
@@ -113,7 +113,7 @@ def is_soft_match(pred_quad, gt_quad):
     argument_similarity = calculate_similarity(pred_quad["argument"], gt_quad["argument"])
     
     # 如果相似度都超过0.5则匹配成功
-    return target_similarity > 0.5 and argument_similarity > 0.5
+    return target_similarity > similarity_threshold and argument_similarity > similarity_threshold
 
 def calculate_hard_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: dict):
 
@@ -204,7 +204,7 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
             for j, gt_quad in enumerate(gt_quads):
                 if j in soft_matched_gold:
                     continue
-                if is_soft_match(pred_quad, gt_quad):
+                if is_soft_match(pred_quad, gt_quad, similarity_threshold):
                     soft_matched_pred.add(i)
                     soft_matched_gold.add(j)
                     break
@@ -476,7 +476,7 @@ class LLMmetrics:
 
 if __name__ == "__main__":
     METRIC = LLMmetrics()
-    metric = METRIC.run(data_path="runner/output/output_Qwen3-8B-sft-hsd-v5-cosine-default_shots0_seed23333333.json")
+    metric = METRIC.run(data_path="runner/output/qwen2.5-7b-instruct/rag-lex-1-vllm-720-mav-1.json", similarity_threshold=0.25)
     print(json.dumps(metric, indent=2, ensure_ascii=False))
         
     
