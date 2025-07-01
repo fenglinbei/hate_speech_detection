@@ -1,0 +1,77 @@
+{
+    "model_name": "Qwen/Qwen2.5-7B-Instruct",
+    "model_path": "models/Qwen2.5-7B-Instruct",
+    "prompt_template": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n{text}\n三元组：",
+    "system_prompt": "",
+    "max_length": 512,
+    "lora": false,
+    "random_seed": 23333333,
+    "exp_name": "Qwen2.5-7B-instruct-hsd-sft-v4-trip-noalp-nosys",
+    "project_name": "Qwen2.5-7B-instruct-hsd",
+    
+    "device_map": {
+        "model.embed_tokens": "cuda:3",
+        "model.layers.0": "cuda:1",
+        "model.layers.1": "cuda:1",
+        "model.layers.2": "cuda:1",
+        "model.layers.3": "cuda:1",
+        "model.layers.4": "cuda:1",
+        "model.layers.5": "cuda:1",
+        "model.layers.6": "cuda:1",
+        "model.layers.7": "cuda:1",
+        "model.layers.8": "cuda:1",
+        "model.layers.9": "cuda:2",
+        "model.layers.10": "cuda:2",
+        "model.layers.11": "cuda:2",
+        "model.layers.12": "cuda:2",
+        "model.layers.13": "cuda:2",
+        "model.layers.14": "cuda:2",
+        "model.layers.15": "cuda:2",
+        "model.layers.16": "cuda:2",
+        "model.layers.17": "cuda:2",
+        "model.layers.18": "cuda:0",
+        "model.layers.19": "cuda:0",
+        "model.layers.20": "cuda:0",
+        "model.layers.21": "cuda:0",
+        "model.layers.22": "cuda:0",
+        "model.layers.23": "cuda:0",
+        "model.layers.24": "cuda:0",
+        "model.layers.25": "cuda:0",
+        "model.layers.26": "cuda:0",
+        "model.layers.27": "cuda:0",
+        "model.norm": "cuda:0",
+        "lm_head": "cuda:3"
+    },
+    
+    "data": {
+        "train_data_path": "finetune/data/train.jsonl",
+        "val_data_path": "finetune/data/val.jsonl"
+    },
+    
+    "training": {
+        "output_dir": "models/Qwen2.5-7B-instruct-hsd-sft-v4-trip-noalp-nosys/",
+        "per_device_train_batch_size": 4,
+        "per_device_eval_batch_size": 4,
+        "gradient_accumulation_steps": 4,
+        "eval_strategy": "steps",
+        "eval_steps": 40,
+        "logging_steps": 10,
+        "num_train_epochs": 4,
+        "save_steps": 40,
+        "learning_rate": 1e-5,
+        "save_on_each_node": true,
+        "gradient_checkpointing": true,
+        "report_to": "none",
+        "run_name": "Qwen2.5-7B-instruct-hsd-sft-v4-trip-noalp-nosys",
+        "lr_scheduler_type": "linear",
+        "bf16": true
+    },
+    
+    "eval": {
+        "max_retries": 0,
+        "eval_num": 100,
+        "max_length": 512
+    },
+    
+    "cuda_devices": [0, 1, 2, 3]
+}
