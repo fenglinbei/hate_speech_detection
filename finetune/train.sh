@@ -5,7 +5,7 @@ epoch=2
 learning_rate=1.0e-5
 
 # 训练的权重的名字
-ex_name="Qwen2.5-7B-Instruct-llamafactory"
+ex_name="Qwen2.5-7B-Instruct-llamafactory-no_rag_nosys"
 
 # sft权重的保存路径
 save_model=../models/${ex_name}
