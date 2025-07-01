@@ -218,20 +218,20 @@ def make_no_rag_data(
 
 if __name__ == "__main__":
     # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train_full.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
-    # make_lexcion_rag_data(
-    #     raw_data_path="data/full/std/train.json", 
-    #     train_output_path="finetune/data/train_lex_rag.jsonl", 
-    #     val_output_path="finetune/data/val_lex_rag.jsonl",
-    #     prompt_template=RAG_PROMPT_USER_V2,
-    #     example_template=RAG_PROMPT_EXAMPLE_V2,
-    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-    #     srag_top_k=1,
-    #     lex_top_k=-1)
-
-    make_no_rag_data(
+    make_lexcion_rag_data(
         raw_data_path="data/full/std/train.json", 
-        train_output_path="finetune/data/train_no_rag.jsonl", 
-        val_output_path="finetune/data/val_no_rag.jsonl",
-        prompt_template=RAG_PROMPT_USER_V3,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT
-        )
+        train_output_path="finetune/data/train_lex_rag_5.jsonl", 
+        val_output_path="finetune/data/val_lex_rag_5.jsonl",
+        prompt_template=RAG_PROMPT_USER_V2,
+        example_template=RAG_PROMPT_EXAMPLE_V2,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        srag_top_k=5,
+        lex_top_k=-1)
+
+    # make_no_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     train_output_path="finetune/data/train_no_rag.jsonl", 
+    #     val_output_path="finetune/data/val_no_rag.jsonl",
+    #     prompt_template=RAG_PROMPT_USER_V3,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT
+    #     )
