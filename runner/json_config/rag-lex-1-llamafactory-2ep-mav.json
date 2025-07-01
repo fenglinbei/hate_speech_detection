@@ -1,5 +1,5 @@
 {
-  "output_name": "no-rag-1-llamafactory-2ep.json",
+  "output_name": "rag-lex-1-llamafactory-2ep.json",
   "log": {
     "level": "INFO",
     "show_console": true
@@ -14,22 +14,38 @@
       "top_p": 0.8
     }
   },
+  "srag_retriever": {
+    "type": "Retriever",
+    "params": {
+        "model_path": "./models/bge-large-zh-v1.5",
+        "model_name": "bge-large-zh-v1.5",
+        "data_path": "data/full/std/train.json"
+    }
+  },
+  "lex_retriever": {
+    "type": "LexiconRetriever",
+    "params": {
+        "model_path": "./models/bge-large-zh-v1.5",
+        "model_name": "bge-large-zh-v1.5",
+        "data_path": "data/lexicon/annotated_lexicon.json"
+    }
+  },
   "tester": {
     "use_cache": true,
     "shot_dataset_file": "data/full/std/train.json",
     "test_dataset_file": "data/full/std/test.json",
     "shot_num": 0,
-    "max_retries": 50,
-    "concurrency": 5,
+    "max_retries": 5,
+    "concurrency": 4,
+    "parallel_num": 10,
+    "per_parallel_attempts_num": 2,
     "compute_metric": true,
     "prompt_templates": {
-      "system": "",
-      "train": "RAG_PROMPT_USER_V3",
+      "system": "QWEN2_DEFAULT_SYSTEM_PROMPT",
+      "train": "RAG_PROMPT_USER_V2",
       "shot": "",
-      "example": ""
+      "example": "RAG_PROMPT_EXAMPLE_V2"
     },
-    "parallel_num": 1,
-    "per_parallel_attempts_num": 1,
     "run": {
       "shots_list": [0],
       "llm_params": {
