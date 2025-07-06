@@ -18,9 +18,9 @@ CUDA_VISIBLE_DEVICES=${gpus} llamafactory-cli train \
     --do_train \
     --finetuning_type full \
     --deepspeed ../data/ds_z2_config.json \
-    --model_name_or_path models/Qwen3-8B \
+    --model_name_or_path =./models/Qwen2.5-7B-Instruc \
     --dataset ${train_dataset} \
-    --dataset_dir ../data \
+    --dataset_dir ./finetune/data \
     --template empty \
     --output_dir ${save_model} \
     --overwrite_cache \
