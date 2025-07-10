@@ -207,6 +207,14 @@ class LLMTester:
             else:
                 logger.warning("Data cache not exist.")
 
+        if self.config.get("test_data_file"):
+            test_data_file = self.config["test_data_file"]
+            if not os.path.exists(test_data_file):
+                raise FileNotFoundError(f"Test data file {test_data_file} does not exist.")
+            with open(test_data_file, "r") as f:
+                test_datas = json.load(f)
+            return test_datas
+
         srag_retriever = None
         if self.global_config.get("srag_retriever"):
             srag_retriever_config = config["srag_retriever"]
