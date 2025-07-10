@@ -46,21 +46,20 @@ class Retriever:
         for item in data:
             item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
             self.test2item[item['content']] = item
-
-
-    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True) -> tuple[list[str], list[str]]:
+    
+    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0) -> tuple[list[str], list[str]]:
         query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
-
+        
         if query_embedding.is_cuda:
             query_embedding = query_embedding.cpu()
-
+            
         query_embedding_np = query_embedding.numpy().reshape(1, -1)
-
+        
         similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
-
+        
         # 获取所有索引并按相似度排序
         sorted_indices = np.argsort(similarities)[::-1]
-
+        
         unique_texts = []
         unique_outputs = []
         seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
@@ -68,7 +67,12 @@ class Retriever:
         # 遍历所有排序后的索引
         for idx in sorted_indices:
             content = self.texts[idx]
+            sim_score = similarities[idx]  # 获取当前相似度分数
             
+            # 阈值过滤：如果相似度低于阈值则跳过
+            if sim_score < threshold:
+                continue  # 跳过低于阈值的结果
+                
             # 去重逻辑
             if deduplicate:
                 if content in seen_contents:
@@ -124,7 +128,7 @@ class LexiconRetriever:
             self.word2item[data["term"]] = prompt
         
     
-    def similarity_retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True) -> list[str]:
+    def similarity_retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0) -> list[str]:
         query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
 
         if query_embedding.is_cuda:
@@ -143,6 +147,11 @@ class LexiconRetriever:
         # 遍历所有排序后的索引
         for idx in sorted_indices:
             content = self.texts[idx]
+            sim_score = similarities[idx]  # 获取当前相似度分数
+            
+            # 阈值过滤：如果相似度低于阈值则跳过
+            if sim_score < threshold:
+                continue  # 跳过低于阈值的结果
             
             # 去重逻辑
             if deduplicate:
