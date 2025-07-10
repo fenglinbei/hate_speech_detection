@@ -17,8 +17,8 @@ CUDA_VISIBLE_DEVICES=${gpus} llamafactory-cli train \
     --stage sft \
     --do_train \
     --finetuning_type full \
-    --deepspeed ../data/ds_z2_config.json \
-    --model_name_or_path =./models/Qwen2.5-7B-Instruc \
+    --deepspeed /data/liaozijie/hate_speech_detection/finetune/config/ds_z2_config.json \
+    --model_name_or_path ./models/Qwen2.5-7B-Instruct \
     --dataset ${train_dataset} \
     --dataset_dir ./finetune/data \
     --template empty \
