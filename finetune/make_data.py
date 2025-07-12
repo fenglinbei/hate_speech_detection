@@ -210,6 +210,7 @@ def build_lex_rag_prompt(
         system_prompt: Optional[str] = None,
         srag_top_k: int = 1,
         lex_top_k: int = -1,
+        is_test_data: bool = False
         ):
     """构建RAG提示"""
     pbar = tqdm(
@@ -249,7 +250,7 @@ def build_lex_rag_prompt(
             "input": f"{input}", 
             "output": answer, 
             "content": raw_data["content"],
-            "gt_quadruples": raw_data["quadruples"]
+            "gt_quadruples": raw_data["quadruples"] if  is_test_data else ""
             }
         messages.append(message)
         pbar.update(1)
@@ -320,7 +321,8 @@ def make_lexcion_rag_data(
         example_template=example_template,
         system_prompt=system_prompt,
         srag_top_k=srag_top_k,
-        lex_top_k=lex_top_k
+        lex_top_k=lex_top_k,
+        is_test_data=True
     )
 
     with open(test_output_path, "w", encoding="utf-8") as file:
