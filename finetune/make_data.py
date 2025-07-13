@@ -671,7 +671,8 @@ def make_sim_lexcion_threshold_rag_data(
         system_prompt=system_prompt,
         srag_top_k=srag_top_k,
         lex_top_k=lex_top_k,
-        lex_sim_top_k=lex_sim_top_k
+        lex_sim_top_k=lex_sim_top_k,
+        is_test_data=True
     )
 
     with open(test_output_path, "w", encoding="utf-8") as file:
@@ -748,32 +749,32 @@ if __name__ == "__main__":
         lex_sim_top_k=5,
         lex_sim_threshold=0)
 
-    make_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag5/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag5/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag5/test.json",
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=5,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0)
+    # make_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag5/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag5/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag5/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=5,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0)
     
-    make_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag5_threshold05/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag5_threshold05/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag5_threshold05/test.json",
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=5,
-        srag_threshold=0.5,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0.5)
+    # make_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag5_threshold05/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag5_threshold05/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag5_threshold05/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=5,
+    #     srag_threshold=0.5,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0.5)
