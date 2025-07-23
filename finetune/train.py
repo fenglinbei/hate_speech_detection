@@ -208,7 +208,7 @@ def run(config: dict):
         model = AutoModelForCausalLM.from_pretrained(
             config['model_path'], 
             torch_dtype=torch_dtype,
-            device_map=device_map
+            # device_map=device_map
         )
         model.enable_input_require_grads()
     except Exception as err:
