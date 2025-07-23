@@ -686,7 +686,7 @@ def make_sim_lexcion_threshold_rag_data(
                 "gt_quadruples": message.get("gt_quadruples", []), 
                 "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': message["input"], 'role': 'user'}]],
             } for message in messages], file, ensure_ascii=False, indent=4)
-
+        
 if __name__ == "__main__":
     # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train_full.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
     # make_lexcion_rag_data(

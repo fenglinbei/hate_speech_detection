@@ -65,7 +65,9 @@
         "run_name": "qwen2.5-7B-instruct-simlex5-rag5-trip-noalp-2048",
         "lr_scheduler_type": "cosine",
         "warmup_ratio": 0,
-        "bf16": true
+        "bf16": true,
+        "deepspeed": "finetune/config/ds_config.json",
+        "optim": "adamw_torch"
     },
     
     "eval": {
