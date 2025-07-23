@@ -542,6 +542,7 @@ def build_sim_lexcion_threshold_prompt(
             leave=True
         )
     messages = []
+    srag_examples_nums = 0
     for raw_data in datas:
         triples = []
         for quadruple in raw_data["quadruples"]:
@@ -561,7 +562,8 @@ def build_sim_lexcion_threshold_prompt(
         for simlex_content in simlex_contents:
             if simlex_content not in lex_contents:
                 lex_contents.append(simlex_content)
-            
+        
+        srag_examples_nums += len(examples)
         prompt = prompt_template.replace("{examples}", "\n".join(examples)).\
                                 replace("{lexicons}", "\n".join(lex_contents)).\
                                 replace("{text}", raw_data["content"])
@@ -583,6 +585,8 @@ def build_sim_lexcion_threshold_prompt(
             }
         messages.append(message)
         pbar.update(1)
+    
+    print(f"SRAG avg examples nums: {srag_examples_nums / len(datas)}")
 
     return messages
 
@@ -627,9 +631,9 @@ def make_sim_lexcion_threshold_rag_data(
         lex_sim_threshold=lex_sim_threshold
     )
 
-    examples = random.sample(messages, k=int(len(messages) * 0.01))
-    for i in examples:
-        print(i['input'])
+    # examples = random.sample(messages, k=int(len(messages) * 0.01))
+    # for i in examples:
+    #     print(i['input'])
     
     with open(train_output_path, "w", encoding="utf-8") as file:
         for message in messages:
@@ -651,9 +655,9 @@ def make_sim_lexcion_threshold_rag_data(
         lex_sim_threshold=lex_sim_threshold
     )
 
-    examples = random.sample(messages, k=10)
-    for i in examples:
-        print(i['input'])
+    # examples = random.sample(messages, k=10)
+    # for i in examples:
+    #     print(i['input'])
 
     with open(val_output_path, "w", encoding="utf-8") as file:
         for message in messages:
