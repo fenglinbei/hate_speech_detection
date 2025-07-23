@@ -295,7 +295,7 @@ def run(config: dict):
             optimizer=optimizer,
             lr_scheduler=lr_scheduler,
             config=training_args.deepspeed,
-            dist_init_required=True
+            dist_init_required=False
         )
         trainer.model = model
 
