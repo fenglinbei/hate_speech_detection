@@ -163,3 +163,22 @@ RAG_PROMPT_USER_V4 = """你是一个内容审查专家，请你分析我的句�
 {text}
 ### 三元组：
 """
+
+STEP_ONE_RAG_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个评论对象和论点:
+示例：
+{examples}
+### 句子：
+{text}
+### 二元组：
+""" 
+
+STEP_ONE_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个评论对象和论点:
+### 句子：
+{text}
+### 二元组：
+""" 
+
+STEP_ONE_RAG_PROMPT_EXAMPLE_V1 = """### 句子：
+{retrieve_content}
+### 二元组：
+{retrieve_output}"""
