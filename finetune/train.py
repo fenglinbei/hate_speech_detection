@@ -4,6 +4,7 @@ import json
 import torch
 import random
 import swanlab
+import deepspeed
 import argparse
 import datetime
 import pandas as pd
