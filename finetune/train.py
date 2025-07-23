@@ -210,7 +210,7 @@ def run(config: dict):
         model = AutoModelForCausalLM.from_pretrained(
             config['model_path'], 
             torch_dtype=torch_dtype,
-            # device_map=device_map
+            device_map=device_map
         )
         model.enable_input_require_grads()
 
@@ -286,18 +286,18 @@ def run(config: dict):
         )]
     )
 
-    if not isinstance(model, DeepSpeedEngine):
-        optimizer = trainer.create_optimizer()
-        lr_scheduler = trainer.create_scheduler(num_training_steps=182)
+    # if not isinstance(model, DeepSpeedEngine):
+    #     optimizer = trainer.create_optimizer()
+    #     lr_scheduler = trainer.create_scheduler(num_training_steps=182)
         
-        model, optimizer, _, _ = deepspeed.initialize(
-            model=model,
-            optimizer=optimizer,
-            lr_scheduler=lr_scheduler,
-            config=training_args.deepspeed,
-            dist_init_required=True,
-        )
-        trainer.model = model
+    #     model, optimizer, _, _ = deepspeed.initialize(
+    #         model=model,
+    #         optimizer=optimizer,
+    #         lr_scheduler=lr_scheduler,
+    #         config=training_args.deepspeed,
+    #         dist_init_required=True,
+    #     )
+    #     trainer.model = model
 
     trainer.train()
     swanlab.finish()
