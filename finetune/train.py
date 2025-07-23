@@ -12,6 +12,7 @@ from tqdm import tqdm
 from pathlib import Path
 from datasets import Dataset
 from typing import Optional
+from deepspeed.runtime.engine import DeepSpeedEngine
 from modelscope import snapshot_download, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, PeftModel
 from swanlab.integration.transformers import SwanLabCallback
@@ -211,6 +212,7 @@ def run(config: dict):
             # device_map=device_map
         )
         model.enable_input_require_grads()
+
     except Exception as err:
         logger.exception(err)
         exit()
@@ -282,6 +284,19 @@ def run(config: dict):
             experiment_name=config['exp_name'],
         )]
     )
+
+    if not isinstance(model, DeepSpeedEngine):
+        optimizer = trainer.create_optimizer()
+        lr_scheduler = trainer.create_scheduler(num_training_steps=182)
+        
+        model, optimizer, _, _ = deepspeed.initialize(
+            model=model,
+            optimizer=optimizer,
+            lr_scheduler=lr_scheduler,
+            config=training_args.deepspeed,
+            dist_init_required=True
+        )
+        trainer.model = model
 
     trainer.train()
     swanlab.finish()
