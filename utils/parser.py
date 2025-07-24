@@ -102,6 +102,27 @@ def parse_llm_output_trip(llm_output: str) -> List[Dict]:
                 })
         return quadruples
 
+def parse_llm_output_tuples(llm_output: str) -> List[Dict]:
+        """Parse and standardize LLM output"""
+
+        tuples = []
+        
+        lines = [line.strip() for line in llm_output.strip().split('[SEP]')]
+        for line in lines:
+            line = line.split("[END]")[0].strip()
+            parts = [part.strip() for part in line.split('|')]
+            if len(parts) != 2:
+                continue
+
+            target = parts[0] if parts[0].upper() != 'NULL' else None
+            argument = parts[1] if parts[1].upper() != 'NULL' else None
+
+            tuples.append({
+                'target': target,
+                'argument': argument
+            })
+        return tuples
+
 def validate_quadruples(quadruples: List[Dict]) -> bool:
         """Validate quadruple format"""
 
