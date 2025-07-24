@@ -232,8 +232,6 @@ def calculate_soft_metrics(ids: list[str], pred_data_dict: dict, gt_data_dict: d
         "actual_positives": actual_positives
     }
 
-
-
 class LLMmetrics:
 
     def __init__(self, output_dir: str = "./metrics/llm/"):
@@ -462,6 +460,175 @@ class LLMmetrics:
                 },
                 "targeted_group": dict(field_metrics['targeted_group']),
                 "hateful": dict(field_metrics['hateful']),
+                "matched_pairs": self.valid_pairs
+            }
+        }
+
+        if save_data:
+            if isinstance(info_data, dict):
+                self._save_result(info_data, metric_dict)
+            else:
+                raise ValueError(f"Invaild Input, info_data: {type(info_data)} expected: dict")
+        else:
+            return metric_dict
+        
+class StepOneMetrics:
+
+    def __init__(self, output_dir: str = "./metrics/llm/"):
+        self.output_dir = output_dir
+
+        self.init_metric()
+
+    def init_metric(self):
+        self.success = 0
+        self.total = 0
+        
+        # 新增的字段级指标统计
+        self.field_metrics = {
+            'target_sim': 0.0,      # Target文本平均相似度
+            'argument_sim': 0.0,    # Argument文本平均相似度
+            'match': 0,
+            'soft_match': 0,
+        }
+
+    def _load_data_from_path(self, data_path: str) -> Tuple[dict, dict]:
+        logger.info("========Reading data========")
+        with open(data_path, 'r') as f:
+            json_datas = json.load(f)
+        
+        datas = json_datas["results"]
+        return self._load_data(datas)
+
+    def _load_data_from_dict(self, data_list: list[dict]) -> Tuple[dict, dict]:
+        logger.info("========Reading data========")
+        return self._load_data(data_list)
+
+    def _load_data(self, datas: list[dict]) -> Tuple[dict, dict]:
+        gt_data_dict = {}
+        pred_data_dict = {}
+        for data in datas:
+            
+            self.total += 1
+            if data["status"] == "success":
+                self.success += 1
+
+            content_id = str(data["id"])
+            gt_data_dict[content_id] = data["gt_quadruples"]
+            pred_data_dict[content_id] = data["pred_tuples"]
+
+        return pred_data_dict, gt_data_dict
+    
+    def _save_result(self, info_data: dict, score_dict: dict):
+
+        logger.info("========Saving data========")
+        os.makedirs(self.output_dir, exist_ok=True)
+        
+        model_name = info_data["model"]
+        shot_num = info_data["shot_num"]
+        seed = info_data["seed"]
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        file_path = os.path.join(self.output_dir, f"metric_{model_name}_{shot_num}_{seed}_{timestamp}.json")
+
+        with open(file_path, 'w') as f:
+            f.write(json.dumps({"info": info_data, "metrics": score_dict}, ensure_ascii=False, indent=2))
+        
+        logger.info("========Data Saved========")
+
+    def calculate_field_metrics(self, pred_data_dict: dict, gt_data_dict: dict, similarity_threshold: float = 0.5):
+        """计算字段级别的评估指标"""
+
+        total_target_sim = 0.0
+        total_arg_sim = 0.0
+        hard_match = 0
+        soft_match = 0
+        valid_pairs = 0
+        
+        # 遍历所有数据
+        for id_, pred_quads in pred_data_dict.items():
+            gt_quads = gt_data_dict.get(id_, [])
+            
+            # 预处理四元组
+            pred_processed = [preprocess_quad(q) for q in pred_quads]
+            gt_processed = [preprocess_quad(q) for q in gt_quads]
+            
+            # 获取对齐匹配
+            matches = align_elements(pred_processed, gt_processed)
+            
+            # 处理每个匹配对
+            for p_idx, g_idx in matches:
+                pred_quad = pred_processed[p_idx]
+                gt_quad = gt_processed[g_idx]
+                
+                # 1. 计算文本相似度
+                target_sim = string_similarity(pred_quad['target'], gt_quad['target'])
+                arg_sim = string_similarity(pred_quad['argument'], gt_quad['argument'])
+                total_target_sim += target_sim
+                total_arg_sim += arg_sim
+                
+                if target_sim == 1 and arg_sim == 1:
+                    hard_match += 1
+                if target_sim > similarity_threshold and arg_sim > similarity_threshold:
+                    soft_match += 1
+
+                valid_pairs += 1
+        
+        # 计算总体指标
+        self.valid_pairs = valid_pairs if valid_pairs > 0 else 1
+        self.field_metrics['target_sim'] = total_target_sim / self.valid_pairs
+        self.field_metrics['argument_sim'] = total_arg_sim / self.valid_pairs
+        self.field_metrics['match'] = hard_match
+        self.field_metrics['soft_match'] = soft_match
+        
+        return self.field_metrics
+
+    def run(
+            self, 
+            datas_list: Optional[list[dict]] = None, 
+            data_path: Optional[str] = None,
+            info_data: Optional[dict] = None,
+            save_data: bool = False,
+            similarity_threshold: float = 0.5
+            ) -> dict:
+        
+        self.init_metric()
+        if isinstance(datas_list, list):
+            pred_data_dict, gt_data_dict = self._load_data_from_dict(datas_list)
+        elif isinstance(data_path, str):
+            pred_data_dict, gt_data_dict = self._load_data_from_path(data_path)
+        else:
+            raise ValueError(f"Invaild Input, datas_list: {type(datas_list)} expected: list[dict], data_path: {type(data_path)} expected: str")
+        
+        pbar = tqdm(
+            total=3,
+            desc=f"Calculating Score",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+        try:
+            ids = [k for k in gt_data_dict.keys()]
+            field_metrics = self.calculate_field_metrics(pred_data_dict, gt_data_dict, similarity_threshold)
+            pbar.update(1)
+
+        except Exception as e:
+            logger.exception(e)
+            logger.error(f"Runtime Error: {str(e)}", exc_info=True)
+            exit()
+
+        metric_dict = {
+            # 基础指标
+            "success": self.success,
+            "total": self.total,
+            "success_rate": round(self.success / self.total, 4),
+            "match": field_metrics['match'],
+            "soft_match": field_metrics['soft_match'],
+            "match_rate": round(field_metrics['match'] / self.valid_pairs, 4),
+            "soft_match_rate": round(field_metrics['soft_match'] / self.valid_pairs, 4),
+            "field_metrics": {
+                "text_similarity": {
+                    "target_avg_sim": round(field_metrics['target_sim'], 4),
+                    "argument_avg_sim": round(field_metrics['argument_sim'], 4)
+                },
                 "matched_pairs": self.valid_pairs
             }
         }
