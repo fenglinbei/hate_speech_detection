@@ -213,6 +213,8 @@ class StepOneRetriever:
             self.test2item[item['content']] = item
     
     def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0) -> tuple[list[str], list[str]]:
+        if top_k == 0:
+            return [], []
         query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
         
         if query_embedding.is_cuda:
