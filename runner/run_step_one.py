@@ -594,10 +594,10 @@ if __name__ == "__main__" :
     model = create_model_from_config(config['model'])
     
     # 可选地创建metric
-    metric = LLMmetrics() if config['tester'].get('compute_metric', True) else None
+    metric = StepOneMetrics() if config['tester'].get('compute_metric', True) else None
     
     # 创建tester
-    tester = LLMTester(
+    tester = StepOneTester(
         llm_model=model,
         config=config,
         metric=metric
