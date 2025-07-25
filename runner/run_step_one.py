@@ -291,6 +291,9 @@ class StepOneTester:
                             if status_code == 200:
                                 if isinstance(answer, str):
                                     tuples = parse_llm_output_tuples(answer)
+                                    if tuples:
+                                        llm_output_list.append(answer)
+                                        break
                                 else:
                                     last_error = "Invalid Output"
                                     logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
@@ -455,18 +458,18 @@ class StepOneTester:
                             
                             if len(self.results) % 100 == 0:
                                 step_metric = self.metric.run(datas_list=self.results)
-                                self.hard_match_rate = step_metric["hard_match_rate"]
+                                self.hard_match_rate = step_metric["match_rate"]
                                 self.soft_match_rate = step_metric["soft_match_rate"]
-                                self.argument_sim = step_metric["argument_sim"]
-                                self.target_sim = step_metric["target_sim"]
-                            pbar.set_postfix({
-                                "hard_match_rate": self.hard_match_rate,
-                                "soft_match_rate": self.soft_match_rate,
-                                "argument_sim": self.argument_sim,
-                                "target_sim": self.target_sim,
-                                "success": f"{success_count}/{len(self.results)}",
-                                "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
-                            })
+                                self.argument_avg_sim = step_metric["field_metrics"]["text_similarity"]["argument_avg_sim"]
+                                self.target_avg_sim = step_metric["field_metrics"]["text_similarity"]["target_avg_sim"]
+                                pbar.set_postfix({
+                                    "hard_match_rate": self.hard_match_rate,
+                                    "soft_match_rate": self.soft_match_rate,
+                                    "argument_avg_sim": self.argument_avg_sim,
+                                    "target_avg_sim": self.target_avg_sim,
+                                    "success": f"{success_count}/{len(self.results)}",
+                                    "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
+                                })
 
                     # 提交新任务
                     if not self._shutdown_flag:
@@ -587,7 +590,7 @@ if __name__ == "__main__" :
     
     # 配置日志
     log_config = config.get('log', {})
-    logger = init_logger(level=log_config.get('level', 'INFO'), 
+    logger = init_logger(level=log_config.get('level', 'DEBUG'), 
                          show_console=log_config.get('show_console', True))
     
     # 创建模型
