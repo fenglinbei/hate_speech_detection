@@ -530,6 +530,8 @@ def build_sim_lexcion_threshold_prompt(
         lex_top_k: int = -1,
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
+        rerank: bool = False,
+        resort: bool = False,
         is_test_data: bool = False
         ):
     """构建相似词典检索的提示模板"""
@@ -550,7 +552,7 @@ def build_sim_lexcion_threshold_prompt(
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         
 
-        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold)
+        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, rerank=rerank, resort=resort)
         examples = []
         for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
             example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
@@ -604,6 +606,8 @@ def make_sim_lexcion_threshold_rag_data(
         lex_top_k: int = -1,
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
+        rerank: bool = False,
+        resort: bool = False
         ):
     """转换训练/验证集数据格式"""
 
@@ -612,7 +616,7 @@ def make_sim_lexcion_threshold_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", reranker_model_path="./models/Qwen3-Reranker-0.6B" if rerank else None)
     lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     
     srag_retriever.create_embeddings(raw_datas[:split_idx])
@@ -628,7 +632,9 @@ def make_sim_lexcion_threshold_rag_data(
         srag_threshold=srag_threshold,
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
-        lex_sim_threshold=lex_sim_threshold
+        lex_sim_threshold=lex_sim_threshold,
+        rerank=rerank,
+        resort=resort
     )
 
     # examples = random.sample(messages, k=int(len(messages) * 0.01))
@@ -652,7 +658,9 @@ def make_sim_lexcion_threshold_rag_data(
         srag_threshold=srag_threshold,
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
-        lex_sim_threshold=lex_sim_threshold
+        lex_sim_threshold=lex_sim_threshold,
+        rerank=rerank,
+        resort=resort
     )
 
     # examples = random.sample(messages, k=10)
@@ -676,7 +684,9 @@ def make_sim_lexcion_threshold_rag_data(
         srag_top_k=srag_top_k,
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
-        is_test_data=True
+        is_test_data=True,
+        rerank=rerank,
+        resort=resort
     )
 
     with open(test_output_path, "w", encoding="utf-8") as file:
@@ -813,32 +823,51 @@ if __name__ == "__main__":
     #     lex_sim_top_k=5,
     #     lex_sim_threshold=0)
 
-    make_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag13/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag13/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag13/test.json",
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=13,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0)
+    # make_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag13/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag13/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag13/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=13,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0)
 
     make_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag15/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag15/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag15/test.json",
+        train_output_path="finetune/data/simlex5_rag9_rerank/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_rerank/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_rerank/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=15,
+        srag_top_k=9,
         srag_threshold=0,
         lex_top_k=-1,
         lex_sim_top_k=5,
-        lex_sim_threshold=0)
+        lex_sim_threshold=0,
+        rerank=True,
+        resort=False)
+    
+    make_sim_lexcion_threshold_rag_data(
+        raw_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="finetune/data/simlex5_rag9_rerank_resort/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_rerank_resort/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_rerank_resort/test.json",
+        prompt_template=RAG_PROMPT_USER_V2,
+        example_template=RAG_PROMPT_EXAMPLE_V2,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        srag_top_k=9,
+        srag_threshold=0,
+        lex_top_k=-1,
+        lex_sim_top_k=5,
+        lex_sim_threshold=0,
+        rerank=True,
+        resort=True)
