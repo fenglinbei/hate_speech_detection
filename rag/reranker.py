@@ -23,7 +23,7 @@ def format_instruction(instruction, query, doc):
     ]
     return text
 
-def process_inputs(tokenizer, pairs, instruction, max_length, suffix_tokens):
+def process_inputs(pairs, instruction, max_length, suffix_tokens):
     messages = [format_instruction(instruction, query, doc) for query, doc in pairs]
     messages =  tokenizer.apply_chat_template(
         messages, tokenize=True, add_generation_prompt=False, enable_thinking=False
@@ -71,20 +71,19 @@ class Reranker:
             allowed_token_ids=[true_token, false_token],
         )
     
-    def rerank(self, queries: List[str], documents: List[str], instruction: str = "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\".") -> List[float]:
-        pairs = list(zip(queries, documents))
-        inputs = process_inputs(self.tokenizer, pairs, instruction, self.max_length - len(self.suffix_tokens), self.suffix_tokens)
+    def rerank(self, query: str, documents: List[str], instruction: str = "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\".") -> List[float]:
+        pairs = list(zip([query * len(documents)], documents))
+        inputs = process_inputs(pairs, instruction, self.max_length - len(self.suffix_tokens), self.suffix_tokens)
         scores = compute_logits(self.model, inputs, self.sampling_params, self.tokenizer("yes", add_special_tokens=False).input_ids[0], self.tokenizer("no", add_special_tokens=False).input_ids[0])
         return scores
 
 # Example usage
 if __name__ == "__main__":
     reranker = Reranker(model_path='./models/Qwen3-Reranker-0.6B')
-    queries = ["What is the capital of China?", "Explain gravity", "What is the capital of China?"]
+    query = "What is the capital of China?"
     documents = [
         "The capital of China is Beijing.",
         "Gravity is a force that attracts two bodies towards each other. It gives weight to physical objects and is responsible for the movement of planets around the sun.",
-        "Gravity is a force that attracts two bodies towards each other. It gives weight to physical objects and is responsible for the movement of planets around the sun."
     ]
-    scores = reranker.rerank(queries, documents)
+    scores = reranker.rerank(query, documents)
     print("Scores:", scores)
