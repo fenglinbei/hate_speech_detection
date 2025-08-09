@@ -8,15 +8,26 @@ import numpy as np
 from collections import Counter
 
 from prompt import *
+from rag.reranker import Reranker
 from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg
 
 class Retriever:
 
-    def __init__(self, model_path: str, model_name: str, data_path: Optional[str]=None, device: str = "cuda:0"):
+    def __init__(
+            self, 
+            model_path: str, 
+            model_name: str, 
+            data_path: Optional[str] = None, 
+            reranker_model_path: Optional[str] = None,
+            device: str = "cuda:0"):
 
         logger.info(f"Loading model from path: {model_path}")
         self.model = SentenceTransformer(model_path).to(device)
         self.model_name = model_name
+
+        self.reranker = None
+        if reranker_model_path:
+            self.reranker = Reranker(model_path=reranker_model_path)
 
         if data_path:
             self.load_datas(data_path)
@@ -47,9 +58,27 @@ class Retriever:
             item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
             self.test2item[item['content']] = item
     
-    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0) -> tuple[list[str], list[str]]:
+    def retrieve(
+            self, 
+            query: str, 
+            top_k: int = 1, 
+            deduplicate: bool = True, 
+            threshold: float = 0,
+            rerank: bool = False,
+            resort: bool = False,
+            ) -> tuple[list[str], list[str]]:
         if top_k == 0:
             return [], []
+        
+        if rerank and self.reranker:
+            new_top_k = top_k * 5
+            if new_top_k < 10:
+                new_top_k = 10
+            elif new_top_k > 100:   
+                new_top_k = 100
+        else:
+            new_top_k = top_k
+
         query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
         
         if query_embedding.is_cuda:
@@ -85,8 +114,30 @@ class Retriever:
             unique_outputs.append(self.test2item[content]['output'])
             
             # 达到需要的 top_k 数量时停止
-            if len(unique_texts) >= top_k:
+            if len(unique_texts) >= new_top_k:
                 break
+
+        if rerank and self.reranker:
+            scores = self.reranker.rerank(query, unique_texts)
+            sorted_indices = np.argsort(scores)[::-1][:top_k]
+            unique_texts = [unique_texts[i] for i in sorted_indices]
+            unique_outputs = [unique_outputs[i] for i in sorted_indices]
+
+        if resort:
+            resorted_indices = [0] * len(unique_texts)
+            resorted_indices = [0] * len(unique_texts)
+            l = 0
+            r = len(unique_texts) - 1
+            for i in range(len(unique_texts)):
+                if i % 2 == 0:
+                    resorted_indices[l] = i
+                    l += 1
+                else:
+                    resorted_indices[r] = i
+                    r -= 1
+                    
+            unique_texts = [unique_texts[i] for i in resorted_indices]
+            unique_outputs = [unique_outputs[i] for i in resorted_indices]
 
         return unique_texts, unique_outputs
     
@@ -262,5 +313,19 @@ class StepOneRetriever:
 if __name__ == "__main__":
     # retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     # print(retriever.including_retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=-1))
-    retriever = StepOneRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
-    print(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=5, threshold=0.5))
+    # retriever = StepOneRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
+    # print(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=5, threshold=0.5))
+
+    unique_texts = ["test"] * 9
+    resorted_indices = [0] * len(unique_texts)
+    l = 0
+    r = len(unique_texts) - 1
+    for i in range(len(unique_texts)):
+        if i % 2 == 0:
+            resorted_indices[i] = l
+            l += 1
+        else:
+            resorted_indices[i] = r
+            r -= 1
+
+    print(resorted_indices)
