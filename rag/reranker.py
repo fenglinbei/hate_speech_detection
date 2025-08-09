@@ -72,7 +72,7 @@ class Reranker:
         )
     
     def rerank(self, query: str, documents: List[str], instruction: str = "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\".") -> List[float]:
-        pairs = list(zip([query * len(documents)], documents))
+        pairs = list(zip([query] * len(documents), documents))
         inputs = process_inputs(self.tokenizer, pairs, instruction, self.max_length - len(self.suffix_tokens), self.suffix_tokens)
         scores = compute_logits(self.model, inputs, self.sampling_params, self.tokenizer("yes", add_special_tokens=False).input_ids[0], self.tokenizer("no", add_special_tokens=False).input_ids[0])
         return scores
