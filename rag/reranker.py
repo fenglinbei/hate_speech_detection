@@ -52,35 +52,38 @@ def compute_logits(model, messages, sampling_params, true_token, false_token):
         scores.append(score)
     return scores
 
-number_of_gpu = torch.cuda.device_count()
-tokenizer = AutoTokenizer.from_pretrained('./models/Qwen3-Reranker-0.6B')
-model = LLM(model='./models/Qwen3-Reranker-0.6B', tensor_parallel_size=1, max_model_len=10000, enable_prefix_caching=True, gpu_memory_utilization=0.8)
-tokenizer.padding_side = "left"
-tokenizer.pad_token = tokenizer.eos_token
-suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
-max_length=8192
-suffix_tokens = tokenizer.encode(suffix, add_special_tokens=False)
-true_token = tokenizer("yes", add_special_tokens=False).input_ids[0]
-false_token = tokenizer("no", add_special_tokens=False).input_ids[0]
-sampling_params = SamplingParams(temperature=0, 
-    max_tokens=1,
-    logprobs=20, 
-    allowed_token_ids=[true_token, false_token],
-)
+class Reranker:
 
-        
-task = 'Given a web search query, retrieve relevant passages that answer the query'
-queries = ["What is the capital of China?",
-    "Explain gravity",
-]
-documents = [
-    "The capital of China is Beijing.",
-    "Gravity is a force that attracts two bodies towards each other. It gives weight to physical objects and is responsible for the movement of planets around the sun.",
-]
+    def __init__(self, model_path: str = './models/Qwen3-Reranker-0.6B'):
+        self.model_path = model_path
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.model = LLM(model=model_path, tensor_parallel_size=1, max_model_len=10000, enable_prefix_caching=True, gpu_memory_utilization=0.8)
+        self.tokenizer.padding_side = "left"
+        self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.suffix = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+        self.max_length = 8192
+        self.suffix_tokens = self.tokenizer.encode(self.suffix, add_special_tokens=False)
+        true_token = self.tokenizer("yes", add_special_tokens=False).input_ids[0]
+        false_token = self.tokenizer("no", add_special_tokens=False).input_ids[0]
+        self.sampling_params = SamplingParams(temperature=0, 
+            max_tokens=1,
+            logprobs=20, 
+            allowed_token_ids=[true_token, false_token],
+        )
+    
+    def rerank(self, queries: List[str], documents: List[str], instruction: str = "Judge whether the Document meets the requirements based on the Query and the Instruct provided. Note that the answer can only be \"yes\" or \"no\".") -> List[float]:
+        pairs = list(zip(queries, documents))
+        inputs = process_inputs(pairs, instruction, self.max_length - len(self.suffix_tokens), self.suffix_tokens)
+        scores = compute_logits(self.model, inputs, self.sampling_params, self.tokenizer("yes", add_special_tokens=False).input_ids[0], self.tokenizer("no", add_special_tokens=False).input_ids[0])
+        return scores
 
-pairs = list(zip(queries, documents))
-inputs = process_inputs(pairs, task, max_length-len(suffix_tokens), suffix_tokens)
-scores = compute_logits(model, inputs, sampling_params, true_token, false_token)
-print('scores', scores)
-
-destroy_model_parallel()
+# Example usage
+if __name__ == "__main__":
+    reranker = Reranker(model_path='./models/Qwen3-Reranker-0.6B')
+    queries = ["What is the capital of China?", "Explain gravity"]
+    documents = [
+        "The capital of China is Beijing.",
+        "Gravity is a force that attracts two bodies towards each other. It gives weight to physical objects and is responsible for the movement of planets around the sun.",
+    ]
+    scores = reranker.rerank(queries, documents)
+    print("Scores:", scores)
