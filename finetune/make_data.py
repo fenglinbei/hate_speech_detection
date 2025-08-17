@@ -553,6 +553,7 @@ def build_sim_lexcion_threshold_prompt(
         
 
         retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, rerank=rerank, resort=resort)
+        print(len(retrieve_contents))
         examples = []
         for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
             example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
