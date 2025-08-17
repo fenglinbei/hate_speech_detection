@@ -674,7 +674,7 @@ def make_sim_lexcion_threshold_rag_data(
     with open(test_data_path, "r") as file:
         test_datas = json.load(file)
 
-    messages = build_simlex_rag_prompt(
+    messages = build_sim_lexcion_threshold_prompt(
         datas=test_datas,
         srag_retriever=srag_retriever,
         lex_retriever=lex_retriever,
