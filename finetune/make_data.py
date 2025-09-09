@@ -4,7 +4,7 @@ from tqdm import tqdm
 from typing import Optional
 
 from prompt import *
-from rag.core import Retriever, LexiconRetriever
+from rag.core import Retriever, LexiconRetriever, MultiClassRetriever
 from tools.convert import output2triple
 
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
@@ -697,6 +697,178 @@ def make_sim_lexcion_threshold_rag_data(
                 "gt_quadruples": message.get("gt_quadruples", []), 
                 "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': message["input"], 'role': 'user'}]],
             } for message in messages], file, ensure_ascii=False, indent=4)
+
+def build_multi_class_sim_lexcion_threshold_prompt(
+        datas: list,
+        srag_retriever: MultiClassRetriever,
+        lex_retriever: LexiconRetriever,
+        prompt_template: str,
+        example_template: str,
+        system_prompt: Optional[str] = None,
+        srag_top_k: int = 1,
+        srag_threshold: float = 0,
+        lex_top_k: int = -1,
+        lex_sim_top_k: int = -1,
+        lex_sim_threshold: float = 0,
+        is_test_data: bool = False
+        ):
+    """构建相似词典检索的提示模板"""
+
+    pbar = tqdm(
+            total=len(datas),
+            desc=f"Preprocessing datas",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+    messages = []
+    srag_examples_nums = 0
+    for raw_data in datas:
+        triples = []
+        for quadruple in raw_data["quadruples"]:
+            label = quadruple["targeted_group"]
+            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
+        
+
+        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold)
+        print(len(retrieve_contents))
+        examples = []
+        for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+            example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
+                                              replace("{retrieve_output}", output2triple(retrieve_output))
+            examples.append(example_prompt)
+
+        lex_contents = lex_retriever.including_retrieve(raw_data['content'], lex_top_k)
+        simlex_contents = lex_retriever.similarity_retrieve(raw_data['content'], lex_sim_top_k, deduplicate=True, threshold=lex_sim_threshold)
+        for simlex_content in simlex_contents:
+            if simlex_content not in lex_contents:
+                lex_contents.append(simlex_content)
+        
+        srag_examples_nums += len(examples)
+        prompt = prompt_template.replace("{examples}", "\n".join(examples)).\
+                                replace("{lexicons}", "\n".join(lex_contents)).\
+                                replace("{text}", raw_data["content"])
+        
+        if not examples:
+            prompt.replace("示例：\n\n", "")
+
+        if not lex_contents:
+            prompt = prompt.replace("背景知识：\n\n", "")
+
+        answer = " [SEP] ".join(triples) + " [END]"
+        message = {
+            "id": raw_data["id"],
+            "instruction": system_prompt if system_prompt else "", 
+            "input": f"{prompt}", 
+            "output": answer, 
+            "content": raw_data["content"],
+            "gt_quadruples": raw_data["quadruples"] if  is_test_data else ""
+            }
+        messages.append(message)
+        pbar.update(1)
+    
+    print(f"SRAG avg examples nums: {srag_examples_nums / len(datas)}")
+
+    return messages
+
+def make_multi_class_sim_lexcion_threshold_rag_data(
+        raw_data_path: str, 
+        test_data_path: str,
+        train_output_path: str, 
+        val_output_path: str, 
+        test_output_path: str,
+        prompt_template: str, 
+        example_template: str,
+        system_prompt: Optional[str] = None,
+        srag_top_k: int = 1,
+        srag_threshold: float = 0,
+        lex_top_k: int = -1,
+        lex_sim_top_k: int = -1,
+        lex_sim_threshold: float = 0,
+        ):
+    """转换训练/验证集数据格式"""
+
+    messages = []
+    with open(raw_data_path, "r") as file:
+        raw_datas = json.load(file)
+
+    split_idx = int(len(raw_datas) * 0.9)
+    srag_retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    
+    srag_retriever.load_datas(data_list=raw_datas[:split_idx])
+    srag_retriever.build_retrievers()
+
+    messages = build_multi_class_sim_lexcion_threshold_prompt(
+        raw_datas[:split_idx],
+        srag_retriever,
+        lex_retriever,
+        prompt_template,
+        example_template,
+        system_prompt=system_prompt,
+        srag_top_k=srag_top_k,
+        srag_threshold=srag_threshold,
+        lex_top_k=lex_top_k,
+        lex_sim_top_k=lex_sim_top_k,
+        lex_sim_threshold=lex_sim_threshold
+    )
+
+    # examples = random.sample(messages, k=int(len(messages) * 0.01))
+    # for i in examples:
+    #     print(i['input'])
+    
+    with open(train_output_path, "w", encoding="utf-8") as file:
+        for message in messages:
+            file.write(json.dumps(message, ensure_ascii=False) + "\n")
+    
+    srag_retriever.load_datas(data_list=raw_datas)
+    srag_retriever.build_retrievers()
+
+    messages = build_multi_class_sim_lexcion_threshold_prompt(
+        raw_datas[split_idx:],
+        srag_retriever,
+        lex_retriever,
+        prompt_template,
+        example_template,
+        system_prompt=system_prompt,
+        srag_top_k=srag_top_k,
+        srag_threshold=srag_threshold,
+        lex_top_k=lex_top_k,
+        lex_sim_top_k=lex_sim_top_k,
+        lex_sim_threshold=lex_sim_threshold
+    )
+
+    # examples = random.sample(messages, k=10)
+    # for i in examples:
+    #     print(i['input'])
+
+    with open(val_output_path, "w", encoding="utf-8") as file:
+        for message in messages:
+            file.write(json.dumps(message, ensure_ascii=False) + "\n")
+
+    with open(test_data_path, "r") as file:
+        test_datas = json.load(file)
+
+    messages = build_multi_class_sim_lexcion_threshold_prompt(
+        datas=test_datas,
+        srag_retriever=srag_retriever,
+        lex_retriever=lex_retriever,
+        prompt_template=prompt_template,
+        example_template=example_template,
+        system_prompt=system_prompt,
+        srag_top_k=srag_top_k,
+        lex_top_k=lex_top_k,
+        lex_sim_top_k=lex_sim_top_k,
+        is_test_data=True
+    )
+
+    with open(test_output_path, "w", encoding="utf-8") as file:
+        json.dump([{
+                "id": message["id"], 
+                "content": message["content"], 
+                "gt_quadruples": message.get("gt_quadruples", []), 
+                "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': message["input"], 'role': 'user'}]],
+            } for message in messages], file, ensure_ascii=False, indent=4)
         
 if __name__ == "__main__":
     # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train_full.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
@@ -839,24 +1011,41 @@ if __name__ == "__main__":
     #     lex_sim_top_k=5,
     #     lex_sim_threshold=0)
 
-    make_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_rerank/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_rerank/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_rerank/test.json",
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=9,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        rerank=True,
-        resort=False)
+    # make_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag9_rerank/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag9_rerank/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag9_rerank/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=9,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     rerank=True,
+    #     resort=False)
     
-    make_sim_lexcion_threshold_rag_data(
+    # make_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag9_rerank_resort/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag9_rerank_resort/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag9_rerank_resort/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=9,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     rerank=True,
+    #     resort=True)
+
+    make_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
         train_output_path="finetune/data/simlex5_rag9_rerank_resort/train.jsonl", 
@@ -869,6 +1058,4 @@ if __name__ == "__main__":
         srag_threshold=0,
         lex_top_k=-1,
         lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        rerank=True,
-        resort=True)
+        lex_sim_threshold=0)

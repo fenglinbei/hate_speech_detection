@@ -357,27 +357,27 @@ class MultiClassRetriever:
             self, 
             model_path: str, 
             model_name: str, 
-            data_path: str, 
-            reranker_model_path: Optional[str] = None,
+            data_path: Optional[str] = None, 
             device: str = "cuda:0"):
 
         logger.info(f"Loading model from path: {model_path}")
         self.model = SentenceTransformer(model_path).to(device)
         self.model_name = model_name
+        self.model_path = model_path
+        self.device = device
 
         self.reranker = None
-        if reranker_model_path:
-            self.reranker = Reranker(model_path=reranker_model_path)
+        if data_path:
+            self.load_datas(data_path)
+            self.build_retrievers()
 
-        self.load_datas(data_path)
-        self.retrievers = {}
-        for class_name in self.class_data_dict.keys():
-            retriever = Retriever(model_path=model_path, model_name=model_name, device=device)
-            retriever.create_embeddings(self.class_data_dict[class_name])
-            self.retrievers[class_name] = retriever
-
-    def load_datas(self, data_path: str):
-        data_list = load_json(data_path)
+    def load_datas(self, data_path: Optional[str] = None, data_list: Optional[list[dict]] = None):
+        if data_list is None:
+            if data_path is None:
+                raise ValueError("Either data_path or data_list must be provided.")
+            loaded_data_list: list[dict] = load_json(data_path)
+        else:
+            loaded_data_list = data_list
 
         self.class_data_dict = {}
         self.class_texts = {}
@@ -385,11 +385,17 @@ class MultiClassRetriever:
 
         for targeted_group in TARGETED_GROUPS:
             new_data_list = []
-            for data in data_list:
+            for data in loaded_data_list:
                 if targeted_group in [quadruple["targeted_group"] for quadruple in data["quadruples"]]:
                     new_data_list.append(data)
             self.class_data_dict[targeted_group] = new_data_list
-
+    
+    def build_retrievers(self):
+        self.retrievers = {}
+        for class_name in self.class_data_dict.keys():
+            retriever = Retriever(model_path=self.model_path, model_name=self.model_name, device=self.device)
+            retriever.create_embeddings(self.class_data_dict[class_name])
+            self.retrievers[class_name] = retriever
 
     def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: dict[str, float] = DEFAULT_WEIGHTS) -> tuple[list[str], list[str]]:
         
