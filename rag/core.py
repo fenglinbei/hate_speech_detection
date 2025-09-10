@@ -23,11 +23,16 @@ DEFAULT_WEIGHTS = {
     "others": 12.6
 }
 
-def allocate_class_num(i, weights_dict):
+def allocate_class_num(i, weights_dict, reverse: bool = False):
     # 初始化字典用于存储初始分配值和小数部分
     initial_allocation = {}
     fractions = []
     total_integer = 0
+
+    if reverse:
+        weights_dict = {k: 1/v for k, v in weights_dict.items()}
+        total_weight = sum(weights_dict.values())
+        weights_dict = {k: (v / total_weight) * 100 for k, v in weights_dict.items()}
     
     # 遍历权重字典，计算每个类别的理论值、整数部分和小数部分
     for key, weight in weights_dict.items():
@@ -397,9 +402,9 @@ class MultiClassRetriever:
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
 
-    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: dict[str, float] = DEFAULT_WEIGHTS) -> tuple[list[str], list[str]]:
-        
-        allocated_class_top_k = allocate_class_num(top_k, weights)
+    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: dict[str, float] = DEFAULT_WEIGHTS, reverse: bool = False) -> tuple[list[str], list[str]]:
+
+        allocated_class_top_k = allocate_class_num(top_k, weights, reverse)
         all_texts = []
         all_outputs = []
 
