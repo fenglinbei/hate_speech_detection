@@ -1048,9 +1048,9 @@ if __name__ == "__main__":
     make_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_rerank_resort/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_rerank_resort/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_rerank_resort/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
