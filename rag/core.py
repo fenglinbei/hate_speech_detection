@@ -402,7 +402,9 @@ class MultiClassRetriever:
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
 
-    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: dict[str, float] = DEFAULT_WEIGHTS, reverse: bool = False) -> tuple[list[str], list[str]]:
+    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: Optional[dict[str, float]] = None, reverse: bool = False) -> tuple[list[str], list[str]]:
+        if weights is None:
+            weights = DEFAULT_WEIGHTS
 
         allocated_class_top_k = allocate_class_num(top_k, weights, reverse)
         all_texts = []
