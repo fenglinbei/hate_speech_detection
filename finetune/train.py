@@ -283,7 +283,8 @@ def run(config: dict):
         callbacks=[SwanLabCallback(
             project=os.environ["SWANLAB_PROJECT"],
             experiment_name=config['exp_name'],
-        )]
+        )],
+        save_model_only=True
     )
 
     # if not isinstance(model, DeepSpeedEngine):

@@ -710,8 +710,8 @@ def build_multi_class_sim_lexcion_threshold_prompt(
         lex_top_k: int = -1,
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
-        weight: Optional[dict] = None,
-        weight_reverse: bool = False,
+        weights: Optional[dict] = None,
+        weights_reverse: bool = False,
         is_test_data: bool = False
         ):
     """构建相似词典检索的提示模板"""
@@ -732,7 +732,7 @@ def build_multi_class_sim_lexcion_threshold_prompt(
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         
 
-        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weight, weight_reverse=weight_reverse)
+        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
         print(len(retrieve_contents))
         examples = []
         for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
@@ -787,8 +787,8 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_top_k: int = -1,
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
-        weight: Optional[dict] = None,
-        weight_reverse: bool = False
+        weights: Optional[dict] = None,
+        weights_reverse: bool = False
         ):
     """转换训练/验证集数据格式"""
 
@@ -815,8 +815,8 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
-        weight=weight,
-        weight_reverse=weight_reverse
+        weights=weights,
+        weights_reverse=weights_reverse
     )
 
     # examples = random.sample(messages, k=int(len(messages) * 0.01))
@@ -842,8 +842,8 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
-        weight=weight,
-        weight_reverse=weight_reverse
+        weights=weights,
+        weights_reverse=weights_reverse
     )
 
     # examples = random.sample(messages, k=10)
@@ -867,8 +867,8 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         srag_top_k=srag_top_k,
         lex_top_k=lex_top_k,
         lex_sim_top_k=lex_sim_top_k,
-        weight=weight,
-        weight_reverse=weight_reverse,
+        weights=weights,
+        weights_reverse=weights_reverse,
         is_test_data=True
     )
 
@@ -1084,4 +1084,4 @@ if __name__ == "__main__":
         lex_top_k=-1,
         lex_sim_top_k=5,
         lex_sim_threshold=0,
-        weight_reverse=True)
+        weights_reverse=True)
