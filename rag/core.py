@@ -454,7 +454,10 @@ class WrongExpRetriever:
         self.text2item = {}
         self.text2wrong_exp = {}
         for item in data_list:
-            item['output'] = parsed_quad_to_trip(item.get('quadruples', item["gt_quadruples"]))
+            quadruples = item.get('quadruples', item.get("gt_quadruples"))
+            if not quadruples:
+                continue
+            item['output'] = parsed_quad_to_trip(quadruples)
             self.text2item[item['content']] = item
             if "llm_output" in item:
                 self.text2wrong_exp[item['content']] = item["llm_output"]
