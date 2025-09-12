@@ -4,7 +4,7 @@ from tqdm import tqdm
 from typing import Optional
 
 from prompt import *
-from rag.core import Retriever, LexiconRetriever, MultiClassRetriever
+from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
 from tools.convert import output2triple
 
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
@@ -882,10 +882,11 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         
 def build_n_step_multi_class_sim_lexcion_threshold_prompt(
         datas: list,
-        srag_retriever: MultiClassRetriever,
+        srag_retriever: MultiClassWrongExpRetriever,
         lex_retriever: LexiconRetriever,
         prompt_template: str,
         example_template: str,
+        wrong_exp_template: str,
         system_prompt: Optional[str] = None,
         srag_top_k: int = 1,
         srag_threshold: float = 0,
@@ -914,12 +915,16 @@ def build_n_step_multi_class_sim_lexcion_threshold_prompt(
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         
 
-        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
-        print(len(retrieve_contents))
+        retrieve_contents, retrieve_outputs, wrong_exps = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
         examples = []
-        for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
-            example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
-                                              replace("{retrieve_output}", output2triple(retrieve_output))
+        for retrieve_content, retrieve_output, wrong_exp in zip(retrieve_contents, retrieve_outputs, wrong_exps):
+            if wrong_exp:
+                example_prompt = wrong_exp_template.replace("{retrieve_content}", retrieve_content).\
+                                                    replace("{retrieve_output}", output2triple(retrieve_output)).\
+                                                    replace("{retrieve_wrong_exp}", wrong_exp)
+            else:
+                example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
+                                                replace("{retrieve_output}", output2triple(retrieve_output))
             examples.append(example_prompt)
 
         lex_contents = lex_retriever.including_retrieve(raw_data['content'], lex_top_k)
@@ -963,6 +968,7 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         test_output_path: str,
         prompt_template: str, 
         example_template: str,
+        wrong_exp_template: str,
         system_prompt: Optional[str] = None,
         step: int = 1,
         total_step: int = 2,
@@ -984,21 +990,31 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
     total_length = len(raw_datas)
     start_index = int((step - 1) * total_length / total_step)
     end_index = int(step * total_length / total_step)
-    raw_datas = raw_datas[start_index:end_index]
+    data_list = raw_datas[start_index:end_index] # 训练与验证集数据
 
-    split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    if step == 1:
+        result_data_list = []
+    else:
+        assert last_output_data_path is not None, "last_output_data_path must be provided for step > 1"
+        with open(last_output_data_path, "r") as file:
+            result_data_list = json.load(file)["result"]
+
+    split_idx = int(len(data_list) * 0.9) # 训练与验证集划分点
+    train_data_list = data_list[:split_idx]
+    val_data_list = data_list[split_idx:]
+
+    srag_data_list = data_list[:split_idx] + raw_datas[:start_index] # srag可见范围为当前训练集+之前所有数据
+    srag_result_data_list = result_data_list # 错例范围为先前所有验证集推理数据
+    srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=srag_data_list, result_data_list=srag_result_data_list)
     lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
-    
-    srag_retriever.load_datas(data_list=raw_datas[:split_idx])
-    srag_retriever.build_retrievers()
 
-    messages = build_multi_class_sim_lexcion_threshold_prompt(
-        raw_datas[:split_idx],
+    train_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
+        train_data_list,
         srag_retriever,
         lex_retriever,
         prompt_template,
         example_template,
+        wrong_exp_template,
         system_prompt=system_prompt,
         srag_top_k=srag_top_k,
         srag_threshold=srag_threshold,
@@ -1008,24 +1024,18 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         weights=weights,
         weights_reverse=weights_reverse
     )
-
-    # examples = random.sample(messages, k=int(len(messages) * 0.01))
-    # for i in examples:
-    #     print(i['input'])
     
     with open(train_output_path, "w", encoding="utf-8") as file:
-        for message in messages:
+        for message in train_messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
-    
-    srag_retriever.load_datas(data_list=raw_datas)
-    srag_retriever.build_retrievers()
 
-    messages = build_multi_class_sim_lexcion_threshold_prompt(
-        raw_datas[split_idx:],
+    val_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
+        val_data_list,
         srag_retriever,
         lex_retriever,
         prompt_template,
         example_template,
+        wrong_exp_template,
         system_prompt=system_prompt,
         srag_top_k=srag_top_k,
         srag_threshold=srag_threshold,
@@ -1036,23 +1046,22 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         weights_reverse=weights_reverse
     )
 
-    # examples = random.sample(messages, k=10)
-    # for i in examples:
-    #     print(i['input'])
-
     with open(val_output_path, "w", encoding="utf-8") as file:
-        for message in messages:
+        for message in val_messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
     with open(test_data_path, "r") as file:
         test_datas = json.load(file)
 
-    messages = build_multi_class_sim_lexcion_threshold_prompt(
+    # 测试集srag可见范围为完整整训练集，错例范围为所有验证集推理数据
+    srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=raw_datas, result_data_list=result_data_list)
+    messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
         datas=test_datas,
         srag_retriever=srag_retriever,
         lex_retriever=lex_retriever,
         prompt_template=prompt_template,
         example_template=example_template,
+        wrong_exp_template=wrong_exp_template,
         system_prompt=system_prompt,
         srag_top_k=srag_top_k,
         lex_top_k=lex_top_k,
@@ -1260,18 +1269,36 @@ if __name__ == "__main__":
     #         lex_sim_top_k=5,
     #         lex_sim_threshold=0)
     
-    make_multi_class_sim_lexcion_threshold_rag_data(
+    # make_multi_class_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag9_multi_class_reverse/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag9_multi_class_reverse/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag9_multi_class_reverse/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     srag_top_k=9,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     weights_reverse=True)
+
+    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_multi_class_reverse/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_multi_class_reverse/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_multi_class_reverse/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
+        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        step=1,
+        total_step=2,
         srag_top_k=9,
         srag_threshold=0,
         lex_top_k=-1,
         lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        weights_reverse=True)
+        lex_sim_threshold=0)

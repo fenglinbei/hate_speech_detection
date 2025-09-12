@@ -148,7 +148,7 @@ RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 RAG_PROMPT_EXAMPLE_V3 = """### 句子：
 {retrieve_content}
 ### 错例：
-{retrieve_wrong_output}
+{retrieve_wrong_exp}
 ### 三元组：
 {retrieve_output}"""
 
