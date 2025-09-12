@@ -9,11 +9,16 @@ DEFAULT_WEIGHTS = {
     "others": 12.6
 }
 
-def allocate_class_num(i, weights_dict):
+def allocate_class_num(i, weights_dict, reverse: bool = False):
     # 初始化字典用于存储初始分配值和小数部分
     initial_allocation = {}
     fractions = []
     total_integer = 0
+
+    if reverse:
+        weights_dict = {k: 1/v for k, v in weights_dict.items()}
+        total_weight = sum(weights_dict.values())
+        weights_dict = {k: (v / total_weight) * 100 for k, v in weights_dict.items()}
     
     # 遍历权重字典，计算每个类别的理论值、整数部分和小数部分
     for key, weight in weights_dict.items():
@@ -38,4 +43,4 @@ def allocate_class_num(i, weights_dict):
     
     return initial_allocation
 
-print(allocate_class_num(9, DEFAULT_WEIGHTS))
+print(allocate_class_num(5, DEFAULT_WEIGHTS, False))

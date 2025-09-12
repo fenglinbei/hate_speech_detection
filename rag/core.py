@@ -11,7 +11,7 @@ from collections import Counter
 
 from prompt import *
 from rag.reranker import Reranker
-from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg
+from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg, parsed_quad_to_trip
 
 TARGETED_GROUPS = ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"]
 DEFAULT_WEIGHTS = {
@@ -396,7 +396,7 @@ class MultiClassRetriever:
             self.class_data_dict[targeted_group] = new_data_list
     
     def build_retrievers(self):
-        self.retrievers = {}
+        self.retrievers: dict[str, Retriever] = {}
         for class_name in self.class_data_dict.keys():
             retriever = Retriever(model_path=self.model_path, model_name=self.model_name, device=self.device)
             retriever.create_embeddings(self.class_data_dict[class_name])
@@ -421,6 +421,161 @@ class MultiClassRetriever:
             all_outputs.extend(outputs)
 
         return all_texts, all_outputs
+    
+
+class WrongExpRetriever:
+
+    def __init__(
+            self, 
+            model_path: str, 
+            model_name: str, 
+            data_list: list[dict], 
+            result_data_list: list[dict],
+            device: str = "cuda:0"):
+
+        logger.info(f"Loading model from path: {model_path}")
+        self.model = SentenceTransformer(model_path).to(device)
+        self.model_name = model_name
+
+        self.load_datas(data_list, result_data_list)
+        self.create_embeddings()
+
+    def create_embeddings(self):
+        logger.info("Processing embedding")
+
+        corpus_embeddings = self.model.encode(self.texts, convert_to_tensor=True, show_progress_bar=True)
+        if corpus_embeddings.is_cuda:
+            corpus_embeddings = corpus_embeddings.cpu()
+        self.corpus_embeddings_np = corpus_embeddings.numpy()
+
+    def load_datas(self, data_list: list[dict], result_data_list: list[dict]):
+        data_list.extend(result_data_list)
+        self.texts: list[str] = [item['content'] for item in data_list]
+        self.text2item = {}
+        self.text2wrong_exp = {}
+        for item in data_list:
+            item['output'] = parsed_quad_to_trip(item.get('quadruples', item["gt_quadruples"]))
+            self.text2item[item['content']] = item
+            if "llm_output" in item:
+                self.text2wrong_exp[item['content']] = item["llm_output"]
+
+    def retrieve(
+            self, 
+            query: str, 
+            top_k: int = 1, 
+            deduplicate: bool = True, 
+            threshold: float = 0
+            ) -> tuple[list[str], list[str], list[Optional[str]]]:
+        if top_k == 0:
+            return [], [], []
+
+        query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+        
+        if query_embedding.is_cuda:
+            query_embedding = query_embedding.cpu()
+            
+        query_embedding_np = query_embedding.numpy().reshape(1, -1)
+        
+        similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
+        
+        # 获取所有索引并按相似度排序
+        sorted_indices = np.argsort(similarities)[::-1]
+        
+        unique_texts = []
+        unique_outputs = []
+        unique_wrong_exps = []
+        seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
+        
+        # 遍历所有排序后的索引
+        for idx in sorted_indices:
+            content = self.texts[idx]
+            sim_score = similarities[idx]  # 获取当前相似度分数
+            
+            # 阈值过滤：如果相似度低于阈值则跳过
+            if sim_score < threshold:
+                continue  # 跳过低于阈值的结果
+                
+            # 去重逻辑
+            if deduplicate:
+                if content in seen_contents:
+                    continue  # 已处理过相同内容，跳过
+                seen_contents.add(content)
+            
+            unique_texts.append(content)
+            unique_outputs.append(self.text2item[content]['output'])
+            unique_wrong_exps.append(self.text2wrong_exp.get(content, None))
+            
+            # 达到需要的 top_k 数量时停止
+            if len(unique_texts) >= top_k:
+                break
+
+        return unique_texts, unique_outputs, unique_wrong_exps
+    
+
+class MultiClassWrongExpRetriever:
+
+    def __init__(
+            self, 
+            model_path: str, 
+            model_name: str, 
+            data_list: list[dict], 
+            result_data_list: list[dict],
+            device: str = "cuda:0"):
+
+        logger.info(f"Loading model from path: {model_path}")
+        self.model = SentenceTransformer(model_path).to(device)
+        self.model_name = model_name
+        self.model_path = model_path
+        self.device = device
+
+        self.reranker = None
+        self.load_datas(data_list, result_data_list)
+        self.build_retrievers()
+
+    def load_datas(self, data_list: list[dict], result_data_list: list[dict]):
+
+        self.class_data_dict = {}
+        self.class_result_data_dict = {}
+
+        for targeted_group in TARGETED_GROUPS:
+            new_data_list = []
+            new_result_data_list = []
+            for data in data_list:
+                if targeted_group in [quadruple["targeted_group"] for quadruple in data["quadruples"]]:
+                    new_data_list.append(data)
+            for data in result_data_list:
+                if targeted_group in [quadruple["targeted_group"] for quadruple in data["gt_quadruples"]]:
+                    new_data_list.append(data)
+            self.class_data_dict[targeted_group] = new_data_list
+            self.class_result_data_dict[targeted_group] = new_result_data_list
+    
+    def build_retrievers(self):
+        self.retrievers: dict[str, WrongExpRetriever] = {}
+        for class_name in self.class_data_dict.keys():
+            retriever = WrongExpRetriever(model_path=self.model_path, model_name=self.model_name, device=self.device, data_list=self.class_data_dict[class_name], result_data_list=self.class_result_data_dict[class_name])
+            self.retrievers[class_name] = retriever
+
+    def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: Optional[dict[str, float]] = None, weights_reverse: bool = False) -> tuple[list[str], list[str], list[Optional[str]]]:
+        if weights is None:
+            weights = DEFAULT_WEIGHTS
+
+        allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
+        all_texts = []
+        all_outputs = []
+        all_wrong_exps = []
+
+        for class_name in TARGETED_GROUPS:
+            if class_name not in self.retrievers:
+                continue
+            class_top_k = allocated_class_top_k[class_name]
+            if class_top_k == 0:
+                continue
+            texts, outputs, wrong_exps = self.retrievers[class_name].retrieve(query, class_top_k, deduplicate, threshold)
+            all_texts.extend(texts)
+            all_outputs.extend(outputs)
+            all_wrong_exps.extend(wrong_exps)
+
+        return all_texts, all_outputs, all_wrong_exps
 
 if __name__ == "__main__":
     # retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
@@ -428,5 +583,8 @@ if __name__ == "__main__":
     # retriever = StepOneRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
     # print(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=5, threshold=0.5))
     import json
-    retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
+    # retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
+    data_list = load_json("data/full/std/train.json")
+    result_data_list = load_json("runner/output/simlex5_rag9_multi_class.json")
+    retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=data_list, result_data_list=result_data_list)
     print(json.dumps(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=9), ensure_ascii=False, indent=2))

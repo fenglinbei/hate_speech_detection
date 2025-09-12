@@ -243,6 +243,12 @@ def parsed_quad_to_raw_quad(parsed_quads: list[dict]):
         quads.append(f"{parsed_quad['target']} | {parsed_quad['argument']} | {parsed_quad['targeted_group']} | {parsed_quad['hateful']}")
     return " [SEP] ".join(quads) + " [END]"
 
+def parsed_quad_to_trip(parsed_quads: list[dict]):
+    quads = []
+    for parsed_quad in parsed_quads:
+        quads.append(f"{parsed_quad['target']} | {parsed_quad['argument']} | {parsed_quad['targeted_group']}")
+    return " [SEP] ".join(quads) + " [END]"
+
 def parsed_quad_to_tar_and_arg(parsed_quads: list[dict]):
     quads = []
     for parsed_quad in parsed_quads:
