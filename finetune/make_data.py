@@ -1288,9 +1288,9 @@ if __name__ == "__main__":
     make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep1/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
