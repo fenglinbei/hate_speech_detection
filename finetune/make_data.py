@@ -1008,6 +1008,8 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
     srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=srag_data_list, result_data_list=srag_result_data_list)
     lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
 
+    total_sentence_length = 0
+
     train_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
         train_data_list,
         srag_retriever,
@@ -1024,6 +1026,10 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         weights=weights,
         weights_reverse=weights_reverse
     )
+
+    total_sentence_length = sum([len(message['input']) for message in train_messages])
+    avg_sentence_length = total_sentence_length / len(train_messages)
+    print(f"Avg train input sentence length: {avg_sentence_length}")
     
     with open(train_output_path, "w", encoding="utf-8") as file:
         for message in train_messages:
