@@ -585,6 +585,6 @@ if __name__ == "__main__":
     import json
     # retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
     data_list = load_json("data/full/std/train.json")
-    result_data_list = load_json("runner/output/simlex5_rag9_multi_class.json")
+    result_data_list = load_json("runner/output/simlex5_rag9_multi_class.json")["results"]
     retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=data_list, result_data_list=result_data_list)
     print(json.dumps(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=9), ensure_ascii=False, indent=2))
