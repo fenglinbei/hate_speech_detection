@@ -145,6 +145,13 @@ RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 ### 三元组：
 {retrieve_output}"""
 
+RAG_PROMPT_EXAMPLE_V3 = """### 句子：
+{retrieve_content}
+### 错例：
+{retrieve_wrong_output}
+### 三元组：
+{retrieve_output}"""
+
 LEXICON_RAG_PROMPT = """### 
 关键词：{word}
 类别：{category}
