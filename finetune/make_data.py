@@ -4,6 +4,7 @@ from tqdm import tqdm
 from typing import Optional
 
 from prompt import *
+from finetune.utils import get_tokenizer, is_overlength
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
 from tools.convert import output2triple
 
@@ -895,26 +896,28 @@ def build_n_step_multi_class_sim_lexcion_threshold_prompt(
         lex_sim_threshold: float = 0,
         weights: Optional[dict] = None,
         weights_reverse: bool = False,
+        auto_length: bool = False,
+        model_path: Optional[str] = None,
+        max_length: int = 2048,
         is_test_data: bool = False
         ):
     """构建相似词典检索的提示模板"""
 
-    pbar = tqdm(
-            total=len(datas),
-            desc=f"Preprocessing datas",
-            unit="item",
-            dynamic_ncols=True,
-            leave=True
-        )
-    messages = []
-    srag_examples_nums = 0
-    for raw_data in datas:
-        triples = []
-        for quadruple in raw_data["quadruples"]:
-            label = quadruple["targeted_group"]
-            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
+    def build_prompt(
+            raw_data, 
+            srag_retriever, 
+            lex_retriever, 
+            prompt_template, 
+            example_template, 
+            wrong_exp_template, 
+            srag_top_k, 
+            srag_threshold, 
+            lex_top_k, 
+            lex_sim_top_k, 
+            lex_sim_threshold, 
+            weights, 
+            weights_reverse):
         
-
         retrieve_contents, retrieve_outputs, wrong_exps = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
         examples = []
         for retrieve_content, retrieve_output, wrong_exp in zip(retrieve_contents, retrieve_outputs, wrong_exps):
@@ -933,16 +936,70 @@ def build_n_step_multi_class_sim_lexcion_threshold_prompt(
             if simlex_content not in lex_contents:
                 lex_contents.append(simlex_content)
         
-        srag_examples_nums += len(examples)
         prompt = prompt_template.replace("{examples}", "\n".join(examples)).\
                                 replace("{lexicons}", "\n".join(lex_contents)).\
                                 replace("{text}", raw_data["content"])
         
-        if not examples:
-            prompt.replace("示例：\n\n", "")
+        return prompt, examples, lex_contents
 
-        if not lex_contents:
-            prompt = prompt.replace("背景知识：\n\n", "")
+    if auto_length and model_path is not None:
+        tokenizer = get_tokenizer(model_path)
+    else:
+        tokenizer = None
+
+    pbar = tqdm(
+            total=len(datas),
+            desc=f"Preprocessing datas",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+    messages = []
+    srag_examples_nums = 0
+    for raw_data in datas:
+        triples = []
+        for quadruple in raw_data["quadruples"]:
+            label = quadruple["targeted_group"]
+            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
+        
+        
+        prompt, examples, lex_contents = build_prompt(
+            raw_data,
+            srag_retriever,
+            lex_retriever,
+            prompt_template,
+            example_template,
+            wrong_exp_template,
+            srag_top_k,
+            srag_threshold,
+            lex_top_k,
+            lex_sim_top_k,
+            lex_sim_threshold,
+            weights,
+            weights_reverse
+        )
+
+        i = 1
+        while auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, max_length):
+            print(f"Over length: {len(tokenizer(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
+            prompt, examples, lex_contents = build_prompt(
+                raw_data,
+                srag_retriever,
+                lex_retriever,
+                prompt_template,
+                example_template,
+                wrong_exp_template,
+                srag_top_k - i,
+                srag_threshold,
+                lex_top_k,
+                lex_sim_top_k,
+                lex_sim_threshold,
+                weights,
+                weights_reverse
+            )
+            i += 1
+
+        srag_examples_nums += len(examples)
 
         answer = " [SEP] ".join(triples) + " [END]"
         message = {
@@ -979,7 +1036,10 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
         weights: Optional[dict] = None,
-        weights_reverse: bool = False
+        weights_reverse: bool = False,
+        auto_length: bool = False,
+        model_path: Optional[str] = None,
+        max_length: int = 2048,
         ):
     """转换训练/验证集数据格式"""
 
@@ -1024,7 +1084,10 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
         weights=weights,
-        weights_reverse=weights_reverse
+        weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length
     )
 
     total_sentence_length = sum([len(message['input']) for message in train_messages])
@@ -1049,7 +1112,10 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
         weights=weights,
-        weights_reverse=weights_reverse
+        weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length
     )
 
     with open(val_output_path, "w", encoding="utf-8") as file:
@@ -1074,6 +1140,9 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         weights=weights,
         weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length,
         is_test_data=True
     )
 
@@ -1307,4 +1376,7 @@ if __name__ == "__main__":
         srag_threshold=0,
         lex_top_k=-1,
         lex_sim_top_k=5,
-        lex_sim_threshold=0)
+        lex_sim_threshold=0,
+        auto_length=True,
+        model_path="models/Qwen2.5-7B-Instruct",
+        max_length=2048)
