@@ -2,11 +2,24 @@ import json
 import random
 from tqdm import tqdm
 from typing import Optional
+from modelscope import AutoTokenizer
 
 from prompt import *
 from finetune.utils import get_tokenizer, is_overlength
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
 from tools.convert import output2triple
+
+def get_tokenizer(model_path: str):
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_path, 
+        use_fast=False, 
+        trust_remote_code=True
+    )
+    return tokenizer
+
+def is_overlength(tokenizer, text, max_length):
+    input_ids = tokenizer.encode(text, return_tensors="pt")[0]
+    return len(input_ids) > max_length
 
 def dataset_transfer_no_think_test(raw_data_path: str, test_output_path: str, prompt_template: str, system_prompt: Optional[str] = None):
     """转换测试集数据格式"""
@@ -1363,9 +1376,9 @@ if __name__ == "__main__":
     make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
@@ -1379,4 +1392,4 @@ if __name__ == "__main__":
         lex_sim_threshold=0,
         auto_length=True,
         model_path="models/Qwen2.5-7B-Instruct",
-        max_length=2048)
+        max_length=1536)
