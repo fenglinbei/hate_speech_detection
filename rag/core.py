@@ -363,13 +363,20 @@ class MultiClassRetriever:
             model_path: str, 
             model_name: str, 
             data_path: Optional[str] = None, 
-            device: str = "cuda:0"):
+            device: str = "cuda:0",
+            model: Optional[SentenceTransformer] = None):
 
-        logger.info(f"Loading model from path: {model_path}")
-        self.model = SentenceTransformer(model_path).to(device)
-        self.model_name = model_name
-        self.model_path = model_path
-        self.device = device
+        if model:
+            self.model = model
+            self.model_name = model_name
+            self.model_path = model_path
+            self.device = device
+        else:
+            logger.info(f"Loading model from path: {model_path}")
+            self.model = SentenceTransformer(model_path).to(device)
+            self.model_name = model_name
+            self.model_path = model_path
+            self.device = device
 
         self.reranker = None
         if data_path:
@@ -431,11 +438,18 @@ class WrongExpRetriever:
             model_name: str, 
             data_list: list[dict], 
             result_data_list: list[dict],
-            device: str = "cuda:0"):
+            device: str = "cuda:0",
+            model: Optional[SentenceTransformer] = None):
 
-        logger.info(f"Loading model from path: {model_path}")
-        self.model = SentenceTransformer(model_path).to(device)
-        self.model_name = model_name
+        if model:
+            self.model = model
+            self.model_name = model_name
+            self.model_path = model_path
+            self.device = device
+        else:
+            logger.info(f"Loading model from path: {model_path}")
+            self.model = SentenceTransformer(model_path).to(device)
+            self.model_name = model_name
 
         self.load_datas(data_list, result_data_list)
         self.create_embeddings()
@@ -555,7 +569,14 @@ class MultiClassWrongExpRetriever:
     def build_retrievers(self):
         self.retrievers: dict[str, WrongExpRetriever] = {}
         for class_name in self.class_data_dict.keys():
-            retriever = WrongExpRetriever(model_path=self.model_path, model_name=self.model_name, device=self.device, data_list=self.class_data_dict[class_name], result_data_list=self.class_result_data_dict[class_name])
+            retriever = WrongExpRetriever(
+                model_path=self.model_path, 
+                model_name=self.model_name, 
+                device=self.device, 
+                data_list=self.class_data_dict[class_name], 
+                result_data_list=self.class_result_data_dict[class_name],
+                model=self.model
+                )
             self.retrievers[class_name] = retriever
 
     def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: Optional[dict[str, float]] = None, weights_reverse: bool = False) -> tuple[list[str], list[str], list[Optional[str]]]:
