@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES="1" python -m vllm.entrypoints.openai.api_server \
---served-model-name checkpoint-726 \
---model=./models/qwen2.5-7B-instruct-simlex5-rag9-multi-classnstep2-1-autol-trip-noalp/checkpoint-726 \
+--served-model-name checkpoint-724 \
+--model=./models/qwen2.5-7B-instruct-simlex5-rag9-multi-classnstep2-1-autol-trip-noalp/checkpoint-724 \
 --trust-remote-code \
 --tensor-parallel-size=1 \
 --port="35003" \

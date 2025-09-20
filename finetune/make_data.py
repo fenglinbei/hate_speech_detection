@@ -1415,3 +1415,24 @@ if __name__ == "__main__":
         auto_length=True,
         model_path="models/Qwen2.5-7B-Instruct",
         max_length=1536)
+    
+    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
+        raw_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/test.json",
+        prompt_template=RAG_PROMPT_USER_V2,
+        example_template=RAG_PROMPT_EXAMPLE_V2,
+        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        step=1,
+        total_step=2,
+        srag_top_k=9,
+        srag_threshold=0,
+        lex_top_k=-1,
+        lex_sim_top_k=5,
+        lex_sim_threshold=0,
+        auto_length=True,
+        model_path="models/Qwen2.5-7B-Instruct",
+        max_length=1536)
