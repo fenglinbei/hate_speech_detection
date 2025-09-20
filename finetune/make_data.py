@@ -5,7 +5,6 @@ from typing import Optional
 from modelscope import AutoTokenizer
 
 from prompt import *
-from finetune.utils import get_tokenizer, is_overlength
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
 from tools.convert import output2triple
 
@@ -1139,34 +1138,57 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         test_datas = json.load(file)
 
     # 测试集srag可见范围为完整整训练集，错例范围为所有验证集推理数据
-    srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=raw_datas, result_data_list=result_data_list)
-    messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
-        datas=test_datas,
-        srag_retriever=srag_retriever,
-        lex_retriever=lex_retriever,
-        prompt_template=prompt_template,
-        example_template=example_template,
-        wrong_exp_template=wrong_exp_template,
-        system_prompt=system_prompt,
-        srag_top_k=srag_top_k,
-        lex_top_k=lex_top_k,
-        lex_sim_top_k=lex_sim_top_k,
-        weights=weights,
-        weights_reverse=weights_reverse,
-        auto_length=auto_length,
-        model_path=model_path,
-        max_length=max_length,
-        is_test_data=True
-    )
+    # 当step小于total_step时，测试集=验证集
+    if step < total_step:
+        test_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
+            val_data_list,
+            srag_retriever,
+            lex_retriever,
+            prompt_template,
+            example_template,
+            wrong_exp_template,
+            system_prompt=system_prompt,
+            srag_top_k=srag_top_k,
+            srag_threshold=srag_threshold,
+            lex_top_k=lex_top_k,
+            lex_sim_top_k=lex_sim_top_k,
+            lex_sim_threshold=lex_sim_threshold,
+            weights=weights,
+            weights_reverse=weights_reverse,
+            auto_length=auto_length,
+            model_path=model_path,
+            max_length=max_length,
+            is_test_data=True
+        )
+    else:
+        srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=raw_datas, result_data_list=result_data_list)
+        test_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
+            datas=test_datas,
+            srag_retriever=srag_retriever,
+            lex_retriever=lex_retriever,
+            prompt_template=prompt_template,
+            example_template=example_template,
+            wrong_exp_template=wrong_exp_template,
+            system_prompt=system_prompt,
+            srag_top_k=srag_top_k,
+            lex_top_k=lex_top_k,
+            lex_sim_top_k=lex_sim_top_k,
+            weights=weights,
+            weights_reverse=weights_reverse,
+            auto_length=auto_length,
+            model_path=model_path,
+            max_length=max_length,
+            is_test_data=True
+        )
 
     with open(test_output_path, "w", encoding="utf-8") as file:
         json.dump([{
-                "id": message["id"], 
-                "content": message["content"], 
-                "gt_quadruples": message.get("gt_quadruples", []), 
-                "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': message["input"], 'role': 'user'}]],
-            } for message in messages], file, ensure_ascii=False, indent=4)
-        
+                "id": test_message["id"], 
+                "content": test_message["content"], 
+                "gt_quadruples": test_message.get("gt_quadruples", []), 
+                "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': test_message["input"], 'role': 'user'}]],
+            } for test_message in test_messages], file, ensure_ascii=False, indent=4)
+
 if __name__ == "__main__":
     # dataset_transfer_no_think("data/full/std/train.json", "finetune/data/train_full.jsonl", "finetune/data/val.jsonl", RAG_PROMPT_USER_V1, system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT)
     # make_lexcion_rag_data(
