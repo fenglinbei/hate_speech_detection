@@ -1441,4 +1441,4 @@ if __name__ == "__main__":
         lex_sim_threshold=0,
         auto_length=True,
         model_path="models/Qwen2.5-7B-Instruct",
-        max_length=1536)
+        max_length=1280)
