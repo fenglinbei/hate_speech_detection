@@ -1041,7 +1041,7 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         system_prompt: Optional[str] = None,
         step: int = 1,
         total_step: int = 2,
-        last_output_data_path: Optional[str] = None,
+        last_output_data_path_list: Optional[list[str]] = None,
         srag_top_k: int = 1,
         srag_threshold: float = 0,
         lex_top_k: int = -1,
@@ -1055,21 +1055,26 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         ):
     """转换训练/验证集数据格式"""
 
-    messages = []
     with open(raw_data_path, "r") as file:
         raw_datas = json.load(file)
     
     total_length = len(raw_datas)
-    start_index = int((step - 1) * total_length / total_step)
-    end_index = int(step * total_length / total_step)
-    data_list = raw_datas[start_index:end_index] # 训练与验证集数据
+    if step > total_step:
+        data_list = []
+        start_index = end_index = 0
+    else:
+        start_index = int((step - 1) * total_length / total_step)
+        end_index = int(step * total_length / total_step)
+        data_list = raw_datas[start_index:end_index] # 训练与验证集数据
 
     if step == 1:
         result_data_list = []
     else:
-        assert last_output_data_path is not None, "last_output_data_path must be provided for step > 1"
-        with open(last_output_data_path, "r") as file:
-            result_data_list = json.load(file)["result"]
+        assert last_output_data_path_list is not None, "last_output_data_path must be provided for step > 1"
+        result_data_list = []
+        for last_output_data_path in last_output_data_path_list:
+            with open(last_output_data_path, "r") as file:
+                result_data_list.extend(json.load(file)["results"])
 
     split_idx = int(len(data_list) * 0.9) # 训练与验证集划分点
     train_data_list = data_list[:split_idx]
@@ -1139,7 +1144,7 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
 
     # 测试集srag可见范围为完整整训练集，错例范围为所有验证集推理数据
     # 当step小于total_step时，测试集=验证集
-    if step < total_step:
+    if step < total_step + 1:
         test_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
             val_data_list,
             srag_retriever,
@@ -1395,38 +1400,39 @@ if __name__ == "__main__":
     #     lex_sim_threshold=0,
     #     weights_reverse=True)
 
-    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/test.json",
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        step=1,
-        total_step=2,
-        srag_top_k=9,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        auto_length=True,
-        model_path="models/Qwen2.5-7B-Instruct",
-        max_length=1536)
+    # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     step=1,
+    #     total_step=2,
+    #     srag_top_k=9,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     auto_length=True,
+    #     model_path="models/Qwen2.5-7B-Instruct",
+    #     max_length=1536)
     
     make_n_step_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_1_autolength/test.json",
+        train_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_2_autolength/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_2_autolength/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag9_multi_class_nstep2_2_autolength/test.json",
+        last_output_data_path_list=["runner/output/simlex5_rag9_multi_class_nstep2_1_autolength.json"],
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        step=1,
+        step=2,
         total_step=2,
         srag_top_k=9,
         srag_threshold=0,
