@@ -488,38 +488,40 @@ def make_sim_lexcion_rag_data(
             } for message in messages], file, ensure_ascii=False, indent=4)
 
 def make_no_rag_data(
-        raw_data_path: str, 
+        train_data_path: str, 
+        test_data_path: str, 
         train_output_path: str, 
         val_output_path: str, 
+        test_output_path: str,
         prompt_template: str, 
         system_prompt: Optional[str] = None
         ):
     
     messages = []
-    with open(raw_data_path, "r") as file:
-        raw_datas = json.load(file)
+    with open(train_data_path, "r") as file:
+        train_datas = json.load(file)
 
-    split_idx = int(len(raw_datas) * 0.9)
+    split_idx = int(len(train_datas) * 0.9)
     
     pbar = tqdm(
-            total=len(raw_datas),
-            desc=f"Preprocessing datas",
+            total=len(train_datas),
+            desc=f"Preprocessing train datas",
             unit="item",
             dynamic_ncols=True,
             leave=True
         )
 
-    for raw_data in raw_datas:
+    for train_data in train_datas:
         triples = []
-        for quadruple in raw_data["quadruples"]:
+        for quadruple in train_data["quadruples"]:
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
-        input = prompt_template.format(text=raw_data["content"])
+        input = prompt_template.format(text=train_data["content"])
         
 
         answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": raw_data["content"]}
+        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": train_data["content"]}
         messages.append(message)
         pbar.update(1)
     
@@ -530,6 +532,35 @@ def make_no_rag_data(
     with open(val_output_path, "w", encoding="utf-8") as file:
         for message in messages[split_idx:]:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
+
+    messages = []
+    with open(test_data_path, "r") as file:
+        test_datas = json.load(file)
+    
+    pbar = tqdm(
+            total=len(test_datas),
+            desc=f"Preprocessing test datas",
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+
+    for test_data in test_datas:
+        triples = []
+        for quadruple in test_data["quadruples"]:
+            label = quadruple["targeted_group"]
+            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
+
+        input = prompt_template.format(text=test_data["content"])
+        
+
+        answer = " [SEP] ".join(triples) + " [END]"
+        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": test_data["content"]}
+        messages.append(message)
+        pbar.update(1)
+    
+    with open(test_output_path, "w", encoding="utf-8") as file:
+        json.dump(messages, file, ensure_ascii=False)
 
 def build_sim_lexcion_threshold_prompt(
         datas: list,
@@ -1211,13 +1242,15 @@ if __name__ == "__main__":
     #     srag_top_k=5,
     #     lex_top_k=-1)
 
-    # make_no_rag_data(
-    #     raw_data_path="data/full/std/train.json", 
-    #     train_output_path="finetune/data/train_no_rag.jsonl", 
-    #     val_output_path="finetune/data/val_no_rag.jsonl",
-    #     prompt_template=RAG_PROMPT_USER_V3,
-    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT
-    #     )
+    make_no_rag_data(
+        train_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="finetune/data/general_prompt/train.jsonl", 
+        val_output_path="finetune/data/general_prompt/val.jsonl",
+        test_output_path="finetune/data/general_prompt/test.json",
+        prompt_template=RAG_PROMPT_USER_V3,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT
+        )
     
     # make_no_rag_data(
     #     raw_data_path="data/full/std/train.json", 
@@ -1538,24 +1571,24 @@ if __name__ == "__main__":
     #     model_path="models/Qwen2.5-7B-Instruct",
     #     max_length=1280)
 
-    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag11_multi_class/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag11_multi_class/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag11_multi_class/test.json",
-        last_output_data_path_list=[],
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        full_data=True,
-        test_data=True,
-        srag_top_k=11,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        auto_length=True,
-        model_path="models/Qwen2.5-7B-Instruct",
-        max_length=1280)
+    # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag11_multi_class/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag11_multi_class/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag11_multi_class/test.json",
+    #     last_output_data_path_list=[],
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     full_data=True,
+    #     test_data=True,
+    #     srag_top_k=11,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     auto_length=True,
+    #     model_path="models/Qwen2.5-7B-Instruct",
+    #     max_length=1280)
