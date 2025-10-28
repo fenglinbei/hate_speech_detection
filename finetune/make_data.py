@@ -533,7 +533,7 @@ def make_no_rag_data(
         for message in messages[split_idx:]:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-    messages = []
+    test_messages = []
     with open(test_data_path, "r") as file:
         test_datas = json.load(file)
     
@@ -551,16 +551,28 @@ def make_no_rag_data(
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
 
-        input = prompt_template.format(text=test_data["content"])
+        prompt = prompt_template.format(text=test_data["content"])
         
 
         answer = " [SEP] ".join(triples) + " [END]"
-        message = {"instruction": system_prompt if system_prompt else "", "input": f"{input}", "output": answer, "content": test_data["content"]}
-        messages.append(message)
+        message = {
+            "id": test_data["id"],
+            "instruction": system_prompt if system_prompt else "", 
+            "input": f"{prompt}", 
+            "output": answer, 
+            "content": test_data["content"],
+            "gt_quadruples": test_data["quadruples"]
+            }
+        test_messages.append(message)
         pbar.update(1)
     
     with open(test_output_path, "w", encoding="utf-8") as file:
-        json.dump(messages, file, ensure_ascii=False)
+        json.dump([{
+                "id": test_message["id"], 
+                "content": test_message["content"], 
+                "gt_quadruples": test_message.get("gt_quadruples", []), 
+                "messages_list": [[{'content': system_prompt, 'role': 'system'}, {'content': test_message["input"], 'role': 'user'}]],
+            } for test_message in test_messages], file, ensure_ascii=False, indent=4)
 
 def build_sim_lexcion_threshold_prompt(
         datas: list,
