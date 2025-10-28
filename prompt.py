@@ -65,7 +65,11 @@ TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3 = """你是一名专业的语言学者以及仇
 'LGBTQ': 'LGBTQ'
 'Sexism': '性别'
 'others': '其他'
-'non_hate': 不包含仇恨言论"""
+'non_hate': 不包含仇恨言论
+
+### 句子：
+{text}
+### 三元组："""
 
 TRAIN_PROMPT_ZERO_SHOT_V3 = """句子：{text}
 三元组："""
