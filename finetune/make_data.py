@@ -177,7 +177,7 @@ def make_rag_data(
 
     with open(train_output_path, "w", encoding="utf-8") as file:
         for message in messages:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
+            file.write(json.dumps({"instruction": system_prompt if system_prompt else "", "input": message["input"], "output": message["answer"], "content": message["content"]}, ensure_ascii=False) + "\n")
     
     srag_retriever.create_embeddings(raw_datas)
 
