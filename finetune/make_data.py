@@ -1257,10 +1257,10 @@ if __name__ == "__main__":
     make_no_rag_data(
         train_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/general_prompt/train.jsonl", 
-        val_output_path="finetune/data/general_prompt/val.jsonl",
-        test_output_path="finetune/data/general_prompt/test.json",
-        prompt_template=RAG_PROMPT_USER_V3,
+        train_output_path="finetune/data/complex_prompt/train.jsonl", 
+        val_output_path="finetune/data/complex_prompt/val.jsonl",
+        test_output_path="finetune/data/complex_prompt/test.json",
+        prompt_template=TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT
         )
     
