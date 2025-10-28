@@ -768,9 +768,50 @@ def build_multi_class_sim_lexcion_threshold_prompt(
         lex_sim_threshold: float = 0,
         weights: Optional[dict] = None,
         weights_reverse: bool = False,
+        auto_length: bool = True,
+        model_path: Optional[str] = None,
+        max_length: int = 2048,
         is_test_data: bool = False
         ):
     """构建相似词典检索的提示模板"""
+
+    def build_prompt(
+            raw_data, 
+            srag_retriever, 
+            lex_retriever, 
+            prompt_template, 
+            example_template, 
+            srag_top_k, 
+            srag_threshold, 
+            lex_top_k, 
+            lex_sim_top_k, 
+            lex_sim_threshold, 
+            weights, 
+            weights_reverse):
+        
+        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
+        examples = []
+        for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+            example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
+                                                replace("{retrieve_output}", output2triple(retrieve_output))
+            examples.append(example_prompt)
+
+        lex_contents = lex_retriever.including_retrieve(raw_data['content'], lex_top_k)
+        simlex_contents = lex_retriever.similarity_retrieve(raw_data['content'], lex_sim_top_k, deduplicate=True, threshold=lex_sim_threshold)
+        for simlex_content in simlex_contents:
+            if simlex_content not in lex_contents:
+                lex_contents.append(simlex_content)
+        
+        prompt = prompt_template.replace("{examples}", "\n".join(examples)).\
+                                replace("{lexicons}", "\n".join(lex_contents)).\
+                                replace("{text}", raw_data["content"])
+        
+        return prompt, examples, lex_contents
+
+    if auto_length and model_path is not None:
+        tokenizer = get_tokenizer(model_path)
+    else:
+        tokenizer = None
 
     pbar = tqdm(
             total=len(datas),
@@ -787,31 +828,42 @@ def build_multi_class_sim_lexcion_threshold_prompt(
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         
-
-        retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
-        print(len(retrieve_contents))
-        examples = []
-        for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
-            example_prompt = example_template.replace("{retrieve_content}", retrieve_content).\
-                                              replace("{retrieve_output}", output2triple(retrieve_output))
-            examples.append(example_prompt)
-
-        lex_contents = lex_retriever.including_retrieve(raw_data['content'], lex_top_k)
-        simlex_contents = lex_retriever.similarity_retrieve(raw_data['content'], lex_sim_top_k, deduplicate=True, threshold=lex_sim_threshold)
-        for simlex_content in simlex_contents:
-            if simlex_content not in lex_contents:
-                lex_contents.append(simlex_content)
         
+        prompt, examples, lex_contents = build_prompt(
+            raw_data,
+            srag_retriever,
+            lex_retriever,
+            prompt_template,
+            example_template,
+            srag_top_k,
+            srag_threshold,
+            lex_top_k,
+            lex_sim_top_k,
+            lex_sim_threshold,
+            weights,
+            weights_reverse
+        )
+
+        i = 1
+        while auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, max_length):
+            print(f"Over length: {len(tokenizer(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
+            prompt, examples, lex_contents = build_prompt(
+                raw_data,
+                srag_retriever,
+                lex_retriever,
+                prompt_template,
+                example_template,
+                srag_top_k - i,
+                srag_threshold,
+                lex_top_k,
+                lex_sim_top_k,
+                lex_sim_threshold,
+                weights,
+                weights_reverse
+            )
+            i += 1
+
         srag_examples_nums += len(examples)
-        prompt = prompt_template.replace("{examples}", "\n".join(examples)).\
-                                replace("{lexicons}", "\n".join(lex_contents)).\
-                                replace("{text}", raw_data["content"])
-        
-        if not examples:
-            prompt.replace("示例：\n\n", "")
-
-        if not lex_contents:
-            prompt = prompt.replace("背景知识：\n\n", "")
 
         answer = " [SEP] ".join(triples) + " [END]"
         message = {
@@ -824,8 +876,8 @@ def build_multi_class_sim_lexcion_threshold_prompt(
             }
         messages.append(message)
         pbar.update(1)
-    
-    print(f"SRAG avg examples nums: {srag_examples_nums / len(datas)}")
+    if len(datas) > 0:
+        print(f"SRAG avg examples nums: {srag_examples_nums / len(datas)}")
 
     return messages
 
@@ -844,7 +896,10 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k: int = -1,
         lex_sim_threshold: float = 0,
         weights: Optional[dict] = None,
-        weights_reverse: bool = False
+        weights_reverse: bool = False,
+        auto_length=True,
+        model_path: Optional[str] = None,
+        max_length: int = 2048,
         ):
     """转换训练/验证集数据格式"""
 
@@ -872,7 +927,10 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
         weights=weights,
-        weights_reverse=weights_reverse
+        weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length,
     )
 
     # examples = random.sample(messages, k=int(len(messages) * 0.01))
@@ -899,7 +957,10 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         lex_sim_threshold=lex_sim_threshold,
         weights=weights,
-        weights_reverse=weights_reverse
+        weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length,
     )
 
     # examples = random.sample(messages, k=10)
@@ -925,6 +986,9 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         lex_sim_top_k=lex_sim_top_k,
         weights=weights,
         weights_reverse=weights_reverse,
+        auto_length=auto_length,
+        model_path=model_path,
+        max_length=max_length,
         is_test_data=True
     )
 
@@ -1434,21 +1498,21 @@ if __name__ == "__main__":
     #         lex_sim_top_k=5,
     #         lex_sim_threshold=0)
     
-    # make_multi_class_sim_lexcion_threshold_rag_data(
-    #     raw_data_path="data/full/std/train.json", 
-    #     test_data_path="data/full/std/test.json",
-    #     train_output_path="finetune/data/simlex5_rag9_multi_class_reverse/train.jsonl", 
-    #     val_output_path="finetune/data/simlex5_rag9_multi_class_reverse/val.jsonl",
-    #     test_output_path="finetune/data/simlex5_rag9_multi_class_reverse/test.json",
-    #     prompt_template=RAG_PROMPT_USER_V2,
-    #     example_template=RAG_PROMPT_EXAMPLE_V2,
-    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-    #     srag_top_k=9,
-    #     srag_threshold=0,
-    #     lex_top_k=-1,
-    #     lex_sim_top_k=5,
-    #     lex_sim_threshold=0,
-    #     weights_reverse=True)
+    make_multi_class_sim_lexcion_threshold_rag_data(
+        raw_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="finetune/data/n_shot_prompt/train.jsonl", 
+        val_output_path="finetune/data/n_shot_prompt/val.jsonl",
+        test_output_path="finetune/data/n_shot_prompt/test.json",
+        prompt_template=RAG_PROMPT_USER_V5,
+        example_template=RAG_PROMPT_EXAMPLE_V2,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        srag_top_k=11,
+        srag_threshold=0,
+        lex_top_k=0,
+        lex_sim_top_k=0,
+        lex_sim_threshold=0,
+        auto_length=True)
 
     # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
     #     raw_data_path="data/full/std/train.json", 
@@ -1583,24 +1647,24 @@ if __name__ == "__main__":
     #     model_path="models/Qwen2.5-7B-Instruct",
     #     max_length=1280)
 
-    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/simlex5_rag11_multi_class_al/train.jsonl", 
-        val_output_path="finetune/data/simlex5_rag11_multi_class_al/val.jsonl",
-        test_output_path="finetune/data/simlex5_rag11_multi_class_al/test.json",
-        last_output_data_path_list=[],
-        prompt_template=RAG_PROMPT_USER_V2,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        full_data=True,
-        test_data=True,
-        srag_top_k=11,
-        srag_threshold=0,
-        lex_top_k=-1,
-        lex_sim_top_k=5,
-        lex_sim_threshold=0,
-        auto_length=True,
-        model_path="models/Qwen2.5-7B-Instruct",
-        max_length=1280)
+    # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/simlex5_rag9_multi_class_al/train.jsonl", 
+    #     val_output_path="finetune/data/simlex5_rag9_multi_class_al/val.jsonl",
+    #     test_output_path="finetune/data/simlex5_rag9_multi_class_al/test.json",
+    #     last_output_data_path_list=[],
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
+    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #     full_data=True,
+    #     test_data=True,
+    #     srag_top_k=9,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     auto_length=True,
+    #     model_path="models/Qwen2.5-7B-Instruct",
+    #     max_length=1280)
