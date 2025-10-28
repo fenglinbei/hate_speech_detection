@@ -144,6 +144,14 @@ RAG_PROMPT_USER_V2 = """你是一个内容审查专家，请你分析我的句�
 ### 三元组：
 """
 
+RAG_PROMPT_USER_V5 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+示例：
+{examples}
+### 句子：
+{text}
+### 三元组：
+"""
+
 RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 {retrieve_content}
 ### 三元组：
