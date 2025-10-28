@@ -60,12 +60,12 @@ TRAIN_PROMPT_ZERO_SHOT_V2 = """ {text}"""
 
 TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V3 = """你是一名专业的语言学者以及仇恨言论分析人员，请你严格且正确地分析我给出的句子，从中提取出一个或者多个包含主体、评论以及仇恨类别的三元组。
 其中，仇恨类别请在以下选项中选择：
-A: 种族歧视
-B: 地域歧视
-C: LGBTQ歧视
-D: 性别歧视
-E: 其他冒犯
-F: 不构成冒犯"""
+'Racism': 种族歧视
+'Region': 地域
+'LGBTQ': 'LGBTQ'
+'Sexism': '性别'
+'others': '其他'
+'non_hate': 不包含仇恨言论"""
 
 TRAIN_PROMPT_ZERO_SHOT_V3 = """句子：{text}
 三元组："""
