@@ -177,7 +177,7 @@ def make_rag_data(
 
     with open(train_output_path, "w", encoding="utf-8") as file:
         for message in messages:
-            file.write(json.dumps({"instruction": system_prompt if system_prompt else "", "input": message["input"], "output": message["answer"], "content": message["content"]}, ensure_ascii=False) + "\n")
+            file.write(json.dumps({"instruction": system_prompt if system_prompt else "", "input": message["input"], "output": message["output"], "content": message["content"]}, ensure_ascii=False) + "\n")
     
     srag_retriever.create_embeddings(raw_datas)
 
@@ -1272,16 +1272,16 @@ if __name__ == "__main__":
     #     system_prompt=""
     #     )
 
-    make_rag_data(
-        raw_data_path="data/full/std/train.json", 
-        test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/one_shot_prompt/train.jsonl", 
-        val_output_path="finetune/data/one_shot_prompt/val.jsonl",
-        test_output_path="finetune/data/one_shot_prompt/test.json",
-        prompt_template=RAG_PROMPT_USER_V4,
-        example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-        srag_top_k=1)
+    #     make_rag_data(
+    #         raw_data_path="data/full/std/train.json", 
+    #         test_data_path="data/full/std/test.json",
+    #         train_output_path="finetune/data/one_shot_prompt/train.jsonl", 
+    #         val_output_path="finetune/data/one_shot_prompt/val.jsonl",
+    #         test_output_path="finetune/data/one_shot_prompt/test.json",
+    #         prompt_template=RAG_PROMPT_USER_V4,
+    #         example_template=RAG_PROMPT_EXAMPLE_V2,
+    #         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+    #         srag_top_k=1)
     
     # make_lexcion_rag_data(
     #     raw_data_path="data/full/std/train.json", 
@@ -1583,24 +1583,24 @@ if __name__ == "__main__":
     #     model_path="models/Qwen2.5-7B-Instruct",
     #     max_length=1280)
 
-    # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
-    #     raw_data_path="data/full/std/train.json", 
-    #     test_data_path="data/full/std/test.json",
-    #     train_output_path="finetune/data/simlex5_rag11_multi_class/train.jsonl", 
-    #     val_output_path="finetune/data/simlex5_rag11_multi_class/val.jsonl",
-    #     test_output_path="finetune/data/simlex5_rag11_multi_class/test.json",
-    #     last_output_data_path_list=[],
-    #     prompt_template=RAG_PROMPT_USER_V2,
-    #     example_template=RAG_PROMPT_EXAMPLE_V2,
-    #     wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
-    #     system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
-    #     full_data=True,
-    #     test_data=True,
-    #     srag_top_k=11,
-    #     srag_threshold=0,
-    #     lex_top_k=-1,
-    #     lex_sim_top_k=5,
-    #     lex_sim_threshold=0,
-    #     auto_length=True,
-    #     model_path="models/Qwen2.5-7B-Instruct",
-    #     max_length=1280)
+    make_n_step_multi_class_sim_lexcion_threshold_rag_data(
+        raw_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="finetune/data/simlex5_rag11_multi_class_al/train.jsonl", 
+        val_output_path="finetune/data/simlex5_rag11_multi_class_al/val.jsonl",
+        test_output_path="finetune/data/simlex5_rag11_multi_class_al/test.json",
+        last_output_data_path_list=[],
+        prompt_template=RAG_PROMPT_USER_V2,
+        example_template=RAG_PROMPT_EXAMPLE_V2,
+        wrong_exp_template=RAG_PROMPT_EXAMPLE_V3,
+        system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
+        full_data=True,
+        test_data=True,
+        srag_top_k=11,
+        srag_threshold=0,
+        lex_top_k=-1,
+        lex_sim_top_k=5,
+        lex_sim_threshold=0,
+        auto_length=True,
+        model_path="models/Qwen2.5-7B-Instruct",
+        max_length=1280)
