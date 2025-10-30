@@ -1501,9 +1501,9 @@ if __name__ == "__main__":
     make_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/ours_prompt_al1536/train.jsonl", 
-        val_output_path="finetune/data/ours_prompt_al1536/val.jsonl",
-        test_output_path="finetune/data/ours_prompt_al1536/test.json",
+        train_output_path="finetune/data/ours_prompt_al1280/train.jsonl", 
+        val_output_path="finetune/data/ours_prompt_al1280/val.jsonl",
+        test_output_path="finetune/data/ours_prompt_al1280/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
         system_prompt=QWEN2_DEFAULT_SYSTEM_PROMPT,
@@ -1513,7 +1513,7 @@ if __name__ == "__main__":
         lex_sim_top_k=5,
         lex_sim_threshold=0,
         auto_length=True,
-        max_length=1536,
+        max_length=1280,
         model_path="models/Qwen2.5-7B-Instruct")
 
     # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
