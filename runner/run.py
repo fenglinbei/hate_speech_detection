@@ -361,6 +361,7 @@ class LLMTester:
             top_k = llm_params["top_k"]
             temperature = llm_params["temperature"]
             enable_thinking = llm_params["enable_thinking"]
+            seed = llm_params.get("seed", None)
         except KeyError as err:
             raise ValueError("Invaild llm_params keys.")
 
@@ -400,7 +401,8 @@ class LLMTester:
                             top_p=top_p,
                             top_k=top_k,
                             temperature=temperature,
-                            enable_thinking=enable_thinking
+                            enable_thinking=enable_thinking,
+                            seed=seed
                         )
                         logger.debug(f"LLM Output: {response}")
                         total_attemps += 1

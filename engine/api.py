@@ -92,7 +92,8 @@ class ApiLLMModel:
             top_p: float = 0.8,
             top_k: int = 20,
             temperature: float = 0.7, 
-            enable_thinking: bool = False
+            enable_thinking: bool = False,
+            seed: Optional[int] = None
             ) -> dict:
         
         params = {
@@ -103,7 +104,8 @@ class ApiLLMModel:
             "top_k": top_k if top_k is not None else self.top_k,
             "max_tokens": max_new_tokens,
             "n": n,
-            "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking
+            "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking,
+            "seed": seed
         }
         return params
     
@@ -127,7 +129,8 @@ class ApiLLMModel:
             top_p: float = 0.8,
             top_k: int = 20,
             temperature: float = 0.7, 
-            enable_thinking: bool = False
+            enable_thinking: bool = False,
+            seed: Optional[int] = None
             ) -> Tuple[Optional[list[Tuple[str, Optional[str]]]], Optional[UsageInfo], int]:
         
         response = None
@@ -140,7 +143,8 @@ class ApiLLMModel:
             enable_thinking=enable_thinking,
             n=n,
             top_p=top_p,
-            top_k=top_k
+            top_k=top_k,
+            seed=seed
             )
         url = self._build_url()
 
