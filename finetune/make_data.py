@@ -1513,7 +1513,7 @@ if __name__ == "__main__":
         lex_sim_top_k=5,
         lex_sim_threshold=0,
         auto_length=True,
-        max_length=2048,
+        max_length=1536,
         model_path="models/Qwen2.5-7B-Instruct")
 
     # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
