@@ -104,7 +104,7 @@ class ApiLLMModel:
             "top_k": top_k if top_k is not None else self.top_k,
             "max_tokens": max_new_tokens,
             "n": n,
-            "enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking,
+            "chat_template_kwargs": {"enable_thinking": enable_thinking if enable_thinking is not None else self.enable_thinking},
             "seed": seed
         }
         return params
