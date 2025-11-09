@@ -7,6 +7,11 @@ from transformers import BertForSequenceClassification, BertTokenizer
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
+from transformers import BertTokenizer, BertModel
+from sklearn.metrics import accuracy_score
+import torch
+import torch.nn as nn
+
 random.seed(23333333)
 torch.manual_seed(23333333)
 
@@ -19,7 +24,51 @@ label_dict = {
     "non-hate": 5
 }
 
+binary_label_dict = {
+    "hate": 0,
+    "non-hate": 1
+}
+
 label_dict_inv = {v: k for k, v in label_dict.items()}
+binary_label_dict_inv = {v: k for k, v in binary_label_dict.items()}
+
+class RoBertFusion(nn.Module):
+    def __init__(self, Robert_model, gru_hidden_size=128, num_filters=100, kernel_sizes=[3, 4, 5], n_classes=2):
+        super(RoBertFusion, self).__init__()
+        self.bert = BertModel.from_pretrained(Robert_model)
+        
+        self.gru = nn.GRU(self.bert.config.hidden_size, 
+                          gru_hidden_size, 
+                          bidirectional=True, 
+                          batch_first=True)
+        
+        self.textcnn = nn.ModuleList([
+            nn.Conv2d(1, num_filters, (k, self.bert.config.hidden_size)) 
+            for k in kernel_sizes
+        ])
+
+        self.fc = nn.Linear(gru_hidden_size * 2 + num_filters * len(kernel_sizes), n_classes)
+
+    def forward(self, input_ids, attention_mask, labels=None):
+        outputs = self.bert(input_ids, attention_mask=attention_mask)
+        last_hidden_state = outputs.last_hidden_state
+
+        gru_outputs, _ = self.gru(last_hidden_state)
+        gru_outputs = gru_outputs[:, -1, :]
+
+        x = last_hidden_state.unsqueeze(1)
+        cnn_outputs = [torch.relu(conv(x)).squeeze(3) for conv in self.textcnn]
+        cnn_outputs = [torch.max(out, dim=2)[0] for out in cnn_outputs]
+        cnn_outputs = torch.cat(cnn_outputs, dim=1)
+
+        combined_features = torch.cat((gru_outputs, cnn_outputs), dim=1)
+
+        logits = self.fc(combined_features)
+        
+        if labels is not None:
+            loss = nn.CrossEntropyLoss()(logits, labels)
+            return loss, logits
+        return logits
 
 def get_data(data_path):
     texts = []
@@ -45,6 +94,24 @@ def get_data(data_path):
                     break
         
         labels.append(label_dict[text_label])
+    return texts, labels
+
+def get_data_with_binary_label(data_path):
+    texts = []
+    datas = json.load(open(data_path, "r", encoding="utf-8"))
+    labels = []
+    for data in datas:
+        text = data['content']
+        texts.append(text)
+        quadruples: list[dict[str, str]] = data['quadruples']
+        
+        for quadruple in quadruples:
+            target, argument, target_groups, is_hate = quadruple.values()
+            if is_hate == 'hate':
+                labels.append(binary_label_dict['hate'])
+                break
+        else:
+            labels.append(binary_label_dict['non-hate'])
     return texts, labels
 
 
@@ -79,26 +146,18 @@ class F1Calculator:
         recall = F1Calculator.calculate_recall(tp, fn)
         return F1Calculator.calculate_f1(precision, recall)
 
-# F1计算示例
-if __name__ == "__main__":
-    # F1计算工具使用示例
-    calculator = F1Calculator()
-    
-    # 示例数据
-    true_positive = 80
-    false_positive = 20
-    false_negative = 10
-    
-    f1_value = calculator.f1_from_confusion_matrix(true_positive, false_positive, false_negative)
-    print(f"\nF1计算示例:")
-    print(f"TP={true_positive}, FP={false_positive}, FN={false_negative}")
-    print(f"F1分数: {f1_value:.4f}")
-
 
 class BertInference:
-    def __init__(self, model_path, max_length=512):
-        self.model = BertForSequenceClassification.from_pretrained(model_path)
-        self.tokenizer = BertTokenizer.from_pretrained(model_path)
+    def __init__(self, model_path, max_length=512, pth_model: bool=False, tokenizer_path: str=None):
+        self.pth_model = pth_model
+        if pth_model:
+            self.model = RoBertFusion(tokenizer_path, n_classes=6)
+            pretrained_dict = torch.load(model_path)
+            self.model.load_state_dict(pretrained_dict, strict=False)
+            self.tokenizer = BertTokenizer.from_pretrained(tokenizer_path)
+        else:
+            self.model = BertForSequenceClassification.from_pretrained(model_path)
+            self.tokenizer = BertTokenizer.from_pretrained(model_path)
         self.max_length = max_length
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
@@ -118,6 +177,8 @@ class BertInference:
         # 移动到设备
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
+        if self.pth_model:
+            inputs.pop("token_type_ids")
         # 推理
         with torch.no_grad():
             outputs = self.model(**inputs)
@@ -134,7 +195,7 @@ class BertInference:
             # "all_probabilities": probabilities.cpu().numpy()[0]
         }
     
-    def predict_batch(self, texts, batch_size=32):
+    def predict_batch(self, texts, batch_size=32, binary_label=False):
         """批量预测"""
         results = []
         
@@ -149,29 +210,44 @@ class BertInference:
                 max_length=self.max_length,
                 return_tensors="pt"
             )
+
+            if self.pth_model:
+                inputs.pop("token_type_ids")
             
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            
             with torch.no_grad():
                 outputs = self.model(**inputs)
-                logits = outputs.logits
+                logits = outputs.logits if not self.pth_model else outputs
                 probabilities = torch.softmax(logits, dim=-1)
                 predicted_classes = torch.argmax(logits, dim=-1).cpu().numpy()
                 confidences = torch.max(probabilities, dim=-1)[0].cpu().numpy()
             
-            # 处理批量结果
-            for j, text in enumerate(batch_texts):
-                results.append({
-                    "text": text,
-                    "predicted_label": int(predicted_classes[j]),
-                    "label_description": label_dict_inv.get(int(predicted_classes[j]), "未知"),
-                    "confidence": float(confidences[j]),
-                    # "all_probabilities": probabilities[j].cpu().numpy()
-                })
-        
+            if not binary_label:
+                for j, text in enumerate(batch_texts):
+                    results.append({
+                        "text": text,
+                        "predicted_label": int(predicted_classes[j]),
+                        "label_description": label_dict_inv.get(int(predicted_classes[j]), "未知"),
+                        "confidence": float(confidences[j]),
+                        # "all_probabilities": probabilities[j].cpu().numpy()
+                    })
+            else:
+                for j, text in enumerate(batch_texts):
+                    raw_predicted_label = int(predicted_classes[j])
+                    if raw_predicted_label in [0, 1, 2, 3, 4]:
+                        predicted_label = 0
+                    else:
+                        predicted_label = 1  # non-hate
+                    results.append({
+                        "text": text,
+                        "predicted_label": predicted_label,
+                        "label_description": binary_label_dict_inv.get(int(predicted_classes[j]), "未知"),
+                        "confidence": float(confidences[j]),
+                        # "all_probabilities": probabilities[j].cpu().numpy()
+                    })
         return results
     
-    def evaluate_with_f1(self, test_texts, true_labels, average='weighted'):
+    def evaluate_with_f1(self, test_texts, true_labels, average='weighted', binary_label=False):
         """
         评估模型并计算F1分数
         Args:
@@ -182,8 +258,12 @@ class BertInference:
             dict: 包含各项评估指标的结果
         """
         # 批量预测
-        predictions = self.predict_batch(test_texts)
+        predictions = self.predict_batch(test_texts, binary_label=binary_label)
         pred_labels = [pred['predicted_label'] for pred in predictions]
+
+        print("Sample predictions vs true labels:")
+        for i in range(10):
+            print(f"Text: {predictions[i]['text'][:50]}... | Predicted: {predictions[i]['predicted_label']} ({predictions[i]['label_description']}) | True: {true_labels[i]}")
         
         # 计算各项指标
         accuracy = accuracy_score(true_labels, pred_labels)
@@ -194,7 +274,7 @@ class BertInference:
         
         # 生成详细分类报告
         class_report = classification_report(true_labels, pred_labels, 
-                                           target_names=[label_dict_inv.get(i, f'Class_{i}') for i in sorted(set(true_labels))], digits=4, output_dict=True)
+                                           target_names=[(label_dict_inv if not binary_label else binary_label_dict_inv).get(i, f'Class_{i}') for i in sorted(set(true_labels))], digits=4, output_dict=True)
         
         # 计算混淆矩阵相关指标
         from sklearn.metrics import confusion_matrix
@@ -321,61 +401,28 @@ class BertInference:
                 stats["accuracy"] = 0.0
         
         return class_stats
+    
+def evaluate_target_group_model(inference: BertInference, test_data_path: str, output_path: str="exps/bert/results.json"):
+    texts, labels = get_data(test_data_path)
+
+    evaluation_results = inference.evaluate_with_f1(texts, labels)
+    saved_results = inference.save_results_to_json(evaluation_results, output_path)
+    return saved_results
+
+def evaluate_binary_model(inference: BertInference, test_data_path: str, output_path: str="exps/bert/binary_results.json"):
+    texts, labels = get_data_with_binary_label(test_data_path)
+
+    print("Binary labels loaded. Sample labels:", labels[:10])
+
+    evaluation_results = inference.evaluate_with_f1(texts, labels, binary_label=True)
+    saved_results = inference.save_results_to_json(evaluation_results, output_path)
+    return saved_results
 
 # 使用示例
 if __name__ == "__main__":
     # 初始化推理器
-    inference = BertInference('./models/bert-finetuned/checkpoint-2409')
-    
-    # 单条文本推理
-    text = "这个产品质量非常好，强烈推荐！"
-    result = inference.predict_single(text)
-    print("单条推理结果:")
-    print(f"文本: {result['text']}")
-    print(f"预测标签: {result['predicted_label']} ({result['label_description']})")
-    print(f"置信度: {result['confidence']:.4f}")
-    # print(f"所有类别概率: {result['all_probabilities']}")
-    print("-" * 50)
-    
-    # 批量推理
-    texts, labels = get_data("data/full/std/test.json")
-    
-    # batch_results = inference.predict_batch(texts[:10])
-    # print("批量推理结果:")
-    # for i, res in enumerate(batch_results):
-    #     print(f"{i+1}. {res['text']} -> {res['label_description']} (置信度: {res['confidence']:.4f})")
+    # inference = BertInference('./models/bert-finetuned/checkpoint-2409')
+    inference = BertInference(model_path="models/roberta-chsd-new/best_model.pth", pth_model=True, tokenizer_path="./models/chinese-roberta-wwm-ext")
 
-    # 进行评估并计算F1值
-    evaluation_results = inference.evaluate_with_f1(texts, labels)
-    saved_results = inference.save_results_to_json(evaluation_results, output_path="exps/bert/results.json")
-    
-    print("=== 模型评估结果 ===")
-    print(f"准确率 (Accuracy): {evaluation_results['accuracy']:.4f}")
-    print(f"加权F1分数 (Weighted F1): {evaluation_results['f1_score']:.4f}")
-    print()
-    
-    print("=== 各类别详细指标 ===")
-    for class_id in sorted(evaluation_results['f1_per_class'].keys()):
-        class_name = label_dict_inv.get(class_id, f'Class_{class_id}')
-        print(f"{class_name} (类别{class_id}):")
-        print(f"  - F1分数: {evaluation_results['f1_per_class'][class_id]:.4f}")
-        print(f"  - 精确率: {evaluation_results['precision_per_class'][class_id]:.4f}")
-        print(f"  - 召回率: {evaluation_results['recall_per_class'][class_id]:.4f}")
-    print()
-    
-    print("=== 详细分类报告 ===")
-    print(evaluation_results['classification_report'])
-    
-    print("=== 混淆矩阵 ===")
-    print(evaluation_results['confusion_matrix'])
-    
-    # 单条文本推理示例
-    print("\n" + "="*50)
-    print("单条文本推理示例:")
-    
-    test_text = "这个电影太精彩了！"
-    result = inference.predict_single(test_text)
-    print(f"文本: {result['text']}")
-    print(f"预测标签: {result['predicted_label']} ({result['label_description']})")
-    print(f"置信度: {result['confidence']:.4f}")
-    # print(f"概率分布: {result['all_probabilities']}")
+    evaluate_target_group_model(inference, 'data/full/std/test.json', "exps/RoBERTa-CHSD/results.json")
+    evaluate_binary_model(inference, 'data/full/std/test.json', "exps/RoBERTa-CHSD/binary_results.json")

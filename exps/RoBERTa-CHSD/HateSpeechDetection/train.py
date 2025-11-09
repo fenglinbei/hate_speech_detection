@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from transformers import BertTokenizer, BertModel
 from torch.utils.data import DataLoader, Dataset
@@ -55,7 +56,7 @@ class DatasetProcessor:
         return DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
 
 class RoBertFusion(nn.Module):
-    def __init__(self, Robert_model, gru_hidden_size=128, num_filters=100, kernel_sizes=[3, 4, 5]):
+    def __init__(self, Robert_model, gru_hidden_size=128, num_filters=100, kernel_sizes=[3, 4, 5], n_classes=2):
         super(RoBertFusion, self).__init__()
         self.bert = BertModel.from_pretrained(Robert_model)
         
@@ -69,7 +70,7 @@ class RoBertFusion(nn.Module):
             for k in kernel_sizes
         ])
 
-        self.fc = nn.Linear(gru_hidden_size * 2 + num_filters * len(kernel_sizes), 2)
+        self.fc = nn.Linear(gru_hidden_size * 2 + num_filters * len(kernel_sizes), n_classes)
 
     def forward(self, input_ids, attention_mask, labels=None):
         outputs = self.bert(input_ids, attention_mask=attention_mask)
@@ -117,7 +118,7 @@ def train(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     print(f'Using device: {device}')
 
-    processor = DatasetProcessor(tokenizer_name=args.model_path, max_length=args.max_length, batch_size=args.batch_size)
+    processor = DatasetProcessor(tokenizer_name=args.model_path if not args.from_pretrained else args.tokenizer_name, max_length=args.max_length, batch_size=args.batch_size)
     (train_texts, train_labels), (dev_texts, dev_labels), (test_texts, test_labels) = processor.load_data(args.train_path, args.dev_path, args.test_path)
     train_dataset = processor.create_dataset(train_texts, train_labels)
     dev_dataset = processor.create_dataset(dev_texts, dev_labels)
@@ -129,7 +130,16 @@ def train(args):
     print(f'Development samples: {len(dev_loader.dataset)}')
     print(f'Test samples: {len(test_loader.dataset)}')
 
-    model = RoBertFusion(args.model_path).to(device)
+    if args.from_pretrained:
+        device = torch.device(device) if torch.cuda.is_available() else torch.device('cpu')
+        model = RoBertFusion(args.tokenizer_name, n_classes=6).to(device)
+        pretrained_dict = torch.load(args.model_path)
+        # 直接弹出不匹配的键
+        pretrained_dict.pop('fc.weight', None)
+        pretrained_dict.pop('fc.bias', None)
+        model.load_state_dict(pretrained_dict, strict=False)
+    else:
+        model = RoBertFusion(args.model_path).to(device)
     optimizer = AdamW(model.parameters(), lr=1e-5)
 
     total_steps = len(train_loader) * args.epochs
@@ -173,21 +183,24 @@ def train(args):
 
         if acc > best_acc:
             best_acc = acc
-            torch.save(model.state_dict(), 'models/roberta-chsd/best_model.pth')
+            torch.save(model.state_dict(), args.save_path)
             print('Model saved!')
 
     print('Testing...')
-    model.load_state_dict(torch.load('models/roberta-chsd/best_model.pth'))
+    model.load_state_dict(torch.load(args.save_path))
     evaluate(model, test_loader, device)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hate Speech Detection')
     parser.add_argument('--model_path', type=str, default='./models/chinese-roberta-wwm-ext', help='pretrained model path')
+    parser.add_argument('--from_pretrained', action='store_true', help='whether to load from a pretrained model')
+    parser.add_argument('--tokenizer_name', type=str, default='./models/chinese-roberta-wwm-ext/', help='pretrained tokenizer path')
     parser.add_argument('--max_length', type=int, default=512, help='max length of input sequence')
     parser.add_argument('--batch_size', type=int, default=64, help='batch size')
     parser.add_argument('--train_path', type=str, default='exps/RoBERTa-CHSD/HateSpeechDetection/Data/train.csv', help='train file path')
     parser.add_argument('--dev_path', type=str, default='exps/RoBERTa-CHSD/HateSpeechDetection/Data/dev.csv', help='dev file path')
     parser.add_argument('--test_path', type=str, default='exps/RoBERTa-CHSD/HateSpeechDetection/Data/test.csv', help='test file path')
     parser.add_argument('--epochs', type=int, default=5, help='number of training epochs')
+    parser.add_argument('--save_path', type=str, default='models/roberta-chsd-new/best_model.pth', help='path to save the best model')
     args = parser.parse_args()
     train(args)
