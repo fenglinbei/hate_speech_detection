@@ -1516,15 +1516,33 @@ if __name__ == "__main__":
     #         max_length=1280,
     #         model_path="models/Qwen2.5-7B-Instruct")
     
+    # make_multi_class_sim_lexcion_threshold_rag_data(
+    #     raw_data_path="data/full/std/train.json", 
+    #     test_data_path="data/full/std/test.json",
+    #     train_output_path="finetune/data/ours_prompt_al1280_glm4/train.jsonl", 
+    #     val_output_path="finetune/data/ours_prompt_al1280_glm4/val.jsonl",
+    #     test_output_path="finetune/data/ours_prompt_al1280_glm4/test.json",
+    #     prompt_template=RAG_PROMPT_USER_V2,
+    #     example_template=RAG_PROMPT_EXAMPLE_V2,
+    #     system_prompt=None,
+    #     srag_top_k=11,
+    #     srag_threshold=0,
+    #     lex_top_k=-1,
+    #     lex_sim_top_k=5,
+    #     lex_sim_threshold=0,
+    #     auto_length=True,
+    #     max_length=1280,
+    #     model_path="./models/glm-4-9b-chat")
+    
     make_multi_class_sim_lexcion_threshold_rag_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="finetune/data/ours_prompt_al1280_glm4/train.jsonl", 
-        val_output_path="finetune/data/ours_prompt_al1280_glm4/val.jsonl",
-        test_output_path="finetune/data/ours_prompt_al1280_glm4/test.json",
+        train_output_path="data/exp_data/ours_prompt_al1280_glm3/train.jsonl", 
+        val_output_path="data/exp_data/ours_prompt_al1280_glm3/val.jsonl",
+        test_output_path="data/exp_data/ours_prompt_al1280_glm3/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         example_template=RAG_PROMPT_EXAMPLE_V2,
-        system_prompt=None,
+        system_prompt=CHATGLM3_DEFAULT_SYSTEM_PROMPT,
         srag_top_k=11,
         srag_threshold=0,
         lex_top_k=-1,
@@ -1532,7 +1550,7 @@ if __name__ == "__main__":
         lex_sim_threshold=0,
         auto_length=True,
         max_length=1280,
-        model_path="./models/glm-4-9b-chat")
+        model_path="./models/base/chatglm3-6b")
 
     # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
     #     raw_data_path="data/full/std/train.json", 
