@@ -8,6 +8,7 @@ import deepspeed
 import argparse
 import datetime
 import pandas as pd
+from io import StringIO
 
 from tqdm import tqdm
 from pathlib import Path
@@ -252,11 +253,12 @@ def run(config: dict):
     data_config = config['data']
 
     # 加载数据集
-    train_df = pd.read_json(data_config['train_data_path'], lines=True)
+    print(data_config['train_data_path'])
+    train_df = pd.read_json(StringIO(data_config['train_data_path']), orient='records', lines=True)
     train_ds = Dataset.from_pandas(train_df)
     train_dataset = train_ds.map(process_func, remove_columns=train_ds.column_names)
 
-    eval_df = pd.read_json(data_config['val_data_path'], lines=True)
+    eval_df = pd.read_json(StringIO(data_config['val_data_path']), orient='records', lines=True)
     eval_raw = [row for _, row in eval_df.iterrows()]
     eval_ds = Dataset.from_pandas(eval_df)
     eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)

@@ -55,7 +55,7 @@ def dataset_transfer_no_think(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    retriever = Retriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
     retriever.create_embeddings(raw_datas)
     
     pbar = tqdm(
@@ -161,7 +161,7 @@ def make_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    srag_retriever = Retriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
     
     srag_retriever.create_embeddings(raw_datas[:split_idx])
 
@@ -288,8 +288,8 @@ def make_lexcion_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
-    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    srag_retriever = Retriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     
     srag_retriever.create_embeddings(raw_datas[:split_idx])
  
@@ -425,8 +425,8 @@ def make_sim_lexcion_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
-    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    srag_retriever = Retriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     
     srag_retriever.create_embeddings(raw_datas[:split_idx])
     
@@ -673,8 +673,8 @@ def make_sim_lexcion_threshold_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = Retriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", reranker_model_path="./models/Qwen3-Reranker-0.6B" if rerank else None)
-    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    srag_retriever = Retriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", reranker_model_path="./models/Qwen3-Reranker-0.6B" if rerank else None)
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     
     srag_retriever.create_embeddings(raw_datas[:split_idx])
 
@@ -908,8 +908,8 @@ def make_multi_class_sim_lexcion_threshold_rag_data(
         raw_datas = json.load(file)
 
     split_idx = int(len(raw_datas) * 0.9)
-    srag_retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
-    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    srag_retriever = MultiClassRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
     
     srag_retriever.load_datas(data_list=raw_datas[:split_idx])
     srag_retriever.build_retrievers()
@@ -1194,8 +1194,8 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
 
     srag_data_list = data_list[:split_idx] + raw_datas[:start_index] # srag可见范围为当前训练集+之前所有数据
     srag_result_data_list = result_data_list # 错例范围为先前所有验证集推理数据
-    srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=srag_data_list, result_data_list=srag_result_data_list)
-    lex_retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    srag_retriever = MultiClassWrongExpRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=srag_data_list, result_data_list=srag_result_data_list)
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
 
     total_sentence_length = 0
 
@@ -1278,7 +1278,7 @@ def make_n_step_multi_class_sim_lexcion_threshold_rag_data(
             is_test_data=True
         )
     else:
-        srag_retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=raw_datas, result_data_list=result_data_list)
+        srag_retriever = MultiClassWrongExpRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=raw_datas, result_data_list=result_data_list)
         test_messages = build_n_step_multi_class_sim_lexcion_threshold_prompt(
             datas=test_datas,
             srag_retriever=srag_retriever,
@@ -1550,7 +1550,7 @@ if __name__ == "__main__":
         lex_sim_threshold=0,
         auto_length=True,
         max_length=1280,
-        model_path="./models/base/chatglm3-6b")
+        model_path="./models/base/glm_4_9b_chat")
 
     # make_n_step_multi_class_sim_lexcion_threshold_rag_data(
     #     raw_data_path="data/full/std/train.json", 
