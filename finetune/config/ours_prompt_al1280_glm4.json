@@ -9,7 +9,57 @@
     "exp_name": "glm-4-9b-chat-ours-prompt-al1280",
     "project_name": "glm-4-9b-chat",
     
-    "device_map": "auto",
+    "device_map": {
+        "transformer.embedding": "cuda:0",
+        "transformer.rotary_pos_emb": "cuda:0",
+
+        "transformer.encoder.layers.0": "cuda:0",
+        "transformer.encoder.layers.1": "cuda:0",
+        "transformer.encoder.layers.2": "cuda:0",
+        "transformer.encoder.layers.3": "cuda:0",
+        "transformer.encoder.layers.4": "cuda:0",
+        "transformer.encoder.layers.5": "cuda:0",
+        "transformer.encoder.layers.6": "cuda:0",
+        "transformer.encoder.layers.7": "cuda:0",
+        "transformer.encoder.layers.8": "cuda:0",
+        "transformer.encoder.layers.9": "cuda:0",
+
+        "transformer.encoder.layers.10": "cuda:1",
+        "transformer.encoder.layers.11": "cuda:1",
+        "transformer.encoder.layers.12": "cuda:1",
+        "transformer.encoder.layers.13": "cuda:1",
+        "transformer.encoder.layers.14": "cuda:1",
+        "transformer.encoder.layers.15": "cuda:1",
+        "transformer.encoder.layers.16": "cuda:1",
+        "transformer.encoder.layers.17": "cuda:1",
+        "transformer.encoder.layers.18": "cuda:1",
+        "transformer.encoder.layers.19": "cuda:1",
+
+        "transformer.encoder.layers.20": "cuda:2",
+        "transformer.encoder.layers.21": "cuda:2",
+        "transformer.encoder.layers.22": "cuda:2",
+        "transformer.encoder.layers.23": "cuda:2",
+        "transformer.encoder.layers.24": "cuda:2",
+        "transformer.encoder.layers.25": "cuda:2",
+        "transformer.encoder.layers.26": "cuda:2",
+        "transformer.encoder.layers.27": "cuda:2",
+        "transformer.encoder.layers.28": "cuda:2",
+        "transformer.encoder.layers.29": "cuda:2",
+
+        "transformer.encoder.layers.30": "cuda:3",
+        "transformer.encoder.layers.31": "cuda:3",
+        "transformer.encoder.layers.32": "cuda:3",
+        "transformer.encoder.layers.33": "cuda:3",
+        "transformer.encoder.layers.34": "cuda:3",
+        "transformer.encoder.layers.35": "cuda:3",
+        "transformer.encoder.layers.36": "cuda:3",
+        "transformer.encoder.layers.37": "cuda:3",
+        "transformer.encoder.layers.38": "cuda:3",
+        "transformer.encoder.layers.39": "cuda:3",
+
+        "transformer.encoder.final_layernorm": "cuda:0",
+        "transformer.output_layer": "cuda:0"
+    },
     
     "data": {
         "train_data_path": "finetune/data/ours_prompt_al1280_glm4/train.jsonl",
