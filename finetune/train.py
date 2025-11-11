@@ -203,7 +203,7 @@ def run(config: dict):
             use_fast=False, 
             trust_remote_code=True
         )
-        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token = tokenizer.eos_token if tokenizer.pad_token is None else tokenizer.pad_token
         torch_dtype = torch.bfloat16 if config['training'].get('bf16', False) else torch.float32
         device_map = build_device_map(config)
 
@@ -246,7 +246,7 @@ def run(config: dict):
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
             labels = labels[:MAX_LENGTH]
-        return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
+        return {"input_ids": input_ids.to("cuda:0"), "attention_mask": attention_mask.to("cuda:0"), "labels": labels.to("cuda:0")}
     
     # 数据准备
     data_config = config['data']
