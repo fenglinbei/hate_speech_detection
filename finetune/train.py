@@ -274,7 +274,7 @@ def run(config: dict):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True, device="cuda:0"),
+        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
         eval_raw_dataset=eval_raw,
         llm_metrics=llm_metrics,
         max_retries=config['eval'].get('max_retries', 0),
