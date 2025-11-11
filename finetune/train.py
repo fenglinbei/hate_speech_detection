@@ -203,7 +203,7 @@ def run(config: dict):
             use_fast=False, 
             trust_remote_code=True
         )
-
+        tokenizer.pad_token = tokenizer.eos_token
         torch_dtype = torch.bfloat16 if config['training'].get('bf16', False) else torch.float32
         device_map = build_device_map(config)
 
