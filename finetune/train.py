@@ -212,6 +212,7 @@ def run(config: dict):
             torch_dtype=torch_dtype,
             device_map=device_map
         )
+        print(model)
         model.enable_input_require_grads()
 
     except Exception as err:
