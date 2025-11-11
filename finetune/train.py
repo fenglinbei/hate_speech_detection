@@ -246,7 +246,7 @@ def run(config: dict):
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
             labels = labels[:MAX_LENGTH]
-        return {"input_ids": input_ids.to("cuda:0"), "attention_mask": attention_mask.to("cuda:0"), "labels": labels.to("cuda:0")}
+        return {"input_ids": torch.tensor(input_ids).to("cuda:0"), "attention_mask": torch.tensor(attention_mask).to("cuda:0"), "labels": torch.tensor(labels).to("cuda:0")}
     
     # 数据准备
     data_config = config['data']
