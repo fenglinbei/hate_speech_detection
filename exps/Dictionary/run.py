@@ -1,6 +1,7 @@
 import json
 
 from exps.utils.data import *
+from exps.utils.calculator import F1Calculator
 
 class DictClassfier:
     def __init__(self, dict_path: str):
@@ -80,23 +81,22 @@ def run(test_data_file: str, classfier: DictClassfier, binary_label=False):
     return results
 
 
-def evaluate_target_group_model(classifier: DictClassfier, test_data_path: str, output_path: str="exps/bert/results.json"):
+def evaluate_target_group_model(classifier: DictClassfier, calculator: F1Calculator,  test_data_path: str, output_path: str="exps/Dictionary/results.json"):
     texts, labels = get_data(test_data_path)
-
-    evaluation_results = run(test_data_path, classifier, binary_label=False)
-    saved_results = inference.save_results_to_json(evaluation_results, output_path)
+    results = run(test_data_path, classifier, binary_label=False)
+    f1_result = calculator.get_f1(results, labels, average='macro', binary_label=False)
+    saved_results = calculator.save_results_to_json(f1_result, output_path)
     return saved_results
 
-def evaluate_binary_model(classifier: DictClassfier, test_data_path: str, output_path: str="exps/bert/binary_results.json"):
+def evaluate_binary_model(classifier: DictClassfier, calculator: F1Calculator, test_data_path: str, output_path: str="exps/Dictionary/binary_results.json"):
     texts, labels = get_data_with_binary_label(test_data_path)
-
-    print("Binary labels loaded. Sample labels:", labels[:10])
-
-    evaluation_results = inference.evaluate_with_f1(texts, labels, binary_label=True)
-    saved_results = inference.save_results_to_json(evaluation_results, output_path)
+    results = run(test_data_path, classifier, binary_label=True)
+    f1_result = calculator.get_f1(results, labels, average='macro', binary_label=True)
+    saved_results = calculator.save_results_to_json(f1_result, output_path)
     return saved_results
 
 if __name__ == "__main__":
     dict_classifier = DictClassfier("data/lexicon/annotated_lexicon.json")
-    results = run("data/full/std/test.json", dict_classifier, binary_label=False)
-    print(json.dumps(results[:10], ensure_ascii=False, indent=2))
+    calculator = F1Calculator()
+    evaluate_target_group_model(dict_classifier, calculator, 'data/full/std/test.json', "exps/Dictionary/results.json")
+    evaluate_binary_model(dict_classifier, calculator, 'data/full/std/test.json', "exps/Dictionary/binary_results.json")

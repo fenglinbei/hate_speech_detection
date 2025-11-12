@@ -1,68 +1,66 @@
 {
     "evaluation_info": {
-        "timestamp": "2025-11-09T22:09:17.806228",
-        "model_path": "fine_tuned_bert",
-        "device": "cuda",
+        "timestamp": "2025-11-11T20:04:54.381562",
         "total_samples": 1605
     },
     "metrics": {
-        "accuracy": 0.7327102803738318,
-        "f1_score": 0.7281436551826098,
+        "accuracy": 0.735202492211838,
+        "f1_score": 0.6855689896644866,
         "f1_per_class": {
-            "0": 0.7412587412587412,
-            "1": 0.7527839643652561,
-            "2": 0.8035714285714286,
-            "3": 0.7130434782608696,
-            "4": 0.3148148148148148,
+            "0": 0.7636363636363637,
+            "1": 0.7488372093023256,
+            "2": 0.7788461538461539,
+            "3": 0.7185840707964601,
+            "4": 0.35,
             "5": 0.7535101404056163
         },
         "precision_per_class": {
-            "0": 0.7653429602888087,
-            "1": 0.7934272300469484,
-            "2": 0.7964601769911505,
-            "3": 0.721830985915493,
-            "4": 0.4473684210526316,
+            "0": 0.8339350180505415,
+            "1": 0.755868544600939,
+            "2": 0.7168141592920354,
+            "3": 0.7147887323943662,
+            "4": 0.5526315789473685,
             "5": 0.7102941176470589
         },
         "recall_per_class": {
-            "0": 0.7186440677966102,
-            "1": 0.7161016949152542,
-            "2": 0.8108108108108109,
-            "3": 0.7044673539518901,
-            "4": 0.24285714285714285,
+            "0": 0.7042682926829268,
+            "1": 0.7419354838709677,
+            "2": 0.8526315789473684,
+            "3": 0.7224199288256228,
+            "4": 0.25609756097560976,
             "5": 0.8023255813953488
         }
     },
     "detailed_classification_report": {
         "Racism": {
-            "precision": 0.7653429602888087,
-            "recall": 0.7186440677966102,
-            "f1-score": 0.7412587412587412,
-            "support": 295.0
+            "precision": 0.8339350180505415,
+            "recall": 0.7042682926829268,
+            "f1-score": 0.7636363636363637,
+            "support": 328.0
         },
         "Region": {
-            "precision": 0.7934272300469484,
-            "recall": 0.7161016949152542,
-            "f1-score": 0.7527839643652561,
-            "support": 236.0
+            "precision": 0.755868544600939,
+            "recall": 0.7419354838709677,
+            "f1-score": 0.7488372093023256,
+            "support": 217.0
         },
         "LGBTQ": {
-            "precision": 0.7964601769911505,
-            "recall": 0.8108108108108109,
-            "f1-score": 0.8035714285714286,
-            "support": 111.0
+            "precision": 0.7168141592920354,
+            "recall": 0.8526315789473684,
+            "f1-score": 0.7788461538461539,
+            "support": 95.0
         },
         "Sexism": {
-            "precision": 0.721830985915493,
-            "recall": 0.7044673539518901,
-            "f1-score": 0.7130434782608696,
-            "support": 291.0
+            "precision": 0.7147887323943662,
+            "recall": 0.7224199288256228,
+            "f1-score": 0.7185840707964601,
+            "support": 281.0
         },
         "others": {
-            "precision": 0.4473684210526316,
-            "recall": 0.24285714285714285,
-            "f1-score": 0.3148148148148148,
-            "support": 70.0
+            "precision": 0.5526315789473685,
+            "recall": 0.25609756097560976,
+            "f1-score": 0.35,
+            "support": 82.0
         },
         "non-hate": {
             "precision": 0.7102941176470589,
@@ -70,60 +68,60 @@
             "f1-score": 0.7535101404056163,
             "support": 602.0
         },
-        "accuracy": 0.7327102803738318,
+        "accuracy": 0.735202492211838,
         "macro avg": {
-            "precision": 0.7057873153236818,
-            "recall": 0.6658677752878429,
-            "f1-score": 0.679830427946121,
+            "precision": 0.7140553584887183,
+            "recall": 0.6799464044496406,
+            "f1-score": 0.6855689896644866,
             "support": 1605.0
         },
         "weighted avg": {
-            "precision": 0.7292197784554006,
-            "recall": 0.7327102803738318,
-            "f1-score": 0.7281436551826098,
+            "precision": 0.7348411136023397,
+            "recall": 0.735202492211838,
+            "f1-score": 0.729717143130656,
             "support": 1605.0
         }
     },
     "confusion_matrix": [
         [
-            212,
+            231,
+            6,
             2,
-            0,
-            29,
-            4,
-            48
-        ],
-        [
-            13,
-            169,
-            0,
-            4,
-            2,
-            48
-        ],
-        [
-            1,
-            2,
-            90,
-            2,
-            4,
-            12
-        ],
-        [
-            13,
-            3,
-            3,
-            205,
-            3,
-            64
-        ],
-        [
-            13,
-            1,
+            31,
             5,
+            53
+        ],
+        [
+            7,
+            161,
+            0,
+            4,
+            0,
+            45
+        ],
+        [
+            1,
+            1,
+            81,
+            2,
+            1,
+            9
+        ],
+        [
+            8,
+            3,
+            3,
+            203,
+            3,
+            61
+        ],
+        [
+            5,
+            6,
+            12,
             9,
-            17,
-            25
+            21,
+            29
         ],
         [
             25,
@@ -170,10 +168,10 @@
             "text": "这暴躁老哥说的好呀👍️要不是疫情我也去东南亚快乐一下，抖音上那群老板也去霍霍非洲世界小姐们了",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5249772071838379,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 4,
@@ -760,10 +758,10 @@
             "text": "黑驴基狗一家亲",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5164246559143066,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 63,
@@ -1330,10 +1328,10 @@
             "text": "中国大概2016年取消了入境艾滋病检查，南非的艾滋病病毒携带者高达25%，这还是黑非洲经济最好国家，其他的。😆😆你仔细想想。",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.5991524457931519,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 120,
@@ -1350,10 +1348,10 @@
             "text": "貌似很多非洲国家半数人口有艾滋病，而且他们也不怕，因为寿命低，活不到艾滋病发就会因其他原因死了",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.42990612983703613,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 122,
@@ -1760,10 +1758,10 @@
             "text": "ZF2010年因为政治正确取消外籍留学生艾滋病强制筛查之后,国内的艾滋病感染率大幅度增加。",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.49852675199508667,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 163,
@@ -2020,10 +2018,10 @@
             "text": "学校和黑狗都不是好东西",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9721224308013916,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 189,
@@ -2060,10 +2058,10 @@
             "text": "你一个精致的利己主义者，说这些话真是让人反胃。黑人艾滋病感染率了解一下，你母亲给你找个黑人继父你乐意不？",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5283427238464355,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 193,
@@ -2410,10 +2408,10 @@
             "text": "我的治疗力大所以30天。百度是想基佬越来越少，没有反同人士的救援，基佬染艾身亡就会越来越多。",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.7105714678764343,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 228,
@@ -2460,10 +2458,10 @@
             "text": "这个也和曾经香港人骂大陆客“蝗虫” 台湾人骂大陆人“zhina人”有关🤔台湾名嘴每天上节目就希望三峡大坝崩溃，淹死三亿大陆人。去年疫情刚开始，台湾名嘴对大陆疫情幸灾乐祸哈哈大笑。还有台湾“海巡署”经常在厦门附近抓大陆渔民，船被罚没，还要交赎金。类似的事情还有很多，两岸关系逐步走向敌对。。。",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.9642680883407593,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 233,
@@ -2840,10 +2838,10 @@
             "text": "艾滋病会攻击大脑，希望同性癖们，能保住大脑，不要变成痴呆，智商低下",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.7779463529586792,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 271,
@@ -3050,10 +3048,10 @@
             "text": "骗婚gay不能接受",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.9719304442405701,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 292,
@@ -3200,10 +3198,10 @@
             "text": "非洲佬跟你结婚吗⁉",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9572615027427673,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 307,
@@ -3580,8 +3578,8 @@
             "text": "要不是亲眼所见，我也不相信，这还得从我在十一点吃烧烤，看见一个黑人搂两个妹子说起…………",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8867712020874023,
             "correct": false
         },
@@ -4050,10 +4048,10 @@
             "text": "我们不是种族歧视，是种族鄙视。我们不歧视他们，就像我不会歧视猫狗一样，不歧视不等于和其性交，如果不歧视成了一定要和其恋爱结婚生子，那我们穷光棍就太高兴了，可没有一位体面的小姐愿意嫁给我们，看来按某些人的逻辑歧视穷人是真歧视，比歧视黑人都歧视。",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.978906512260437,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 392,
@@ -4720,8 +4718,8 @@
             "text": "这些黑人崇拜者为黑人做了大量正面宣传。应该占据了国内所有渠道对黑人的正面宣传的99%以上吧。而且是完全自愿，义务，积极，和免费的。宣传多了，那么自然就会有越来越多的女孩倒贴黑人。",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5903231501579285,
             "correct": false
         },
@@ -4910,10 +4908,10 @@
             "text": "我可以接受非处，但是绝对不能接受跟黑人搞过对象的，更不能接受黑人女孩，哪怕是处都不行",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8932766318321228,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 478,
@@ -5020,10 +5018,10 @@
             "text": "问为什么反？凭什么支持？反男同不反女同？太可笑了，原来撑同也带性别节奏，你这种“高尚”的人还要搞性别歧视哦？同恋婚姻不合法是因为涉及其他相关婚恋的法条都要修改甚至变成危害社会的bug，法律是需要兼顾多个情况而不是像你这种**自私自利",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.837500810623169,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 489,
@@ -5210,8 +5208,8 @@
             "text": "3.同性恋人士常要求社会必须保护他们作为“性少数的权益”，却很少谈自己的义务。比如艾滋病感染率高出异性恋几十倍等，是否应该谈一谈自己在这方面的防治义务？---染病首先受害者是自己，而你在这里说自己不尽义务？男同感染率虽然高，但总感染数异性任然超过7成，这可以的出异性恋也不尽义务的结论不？而且全国所有的LGBT组织都把这事放在第一位！公平化和正面教育正是减少感染的有效手段。欧美已证明。",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.8232465982437134,
             "correct": false
         },
@@ -5330,10 +5328,10 @@
             "text": "美国亏欠黑人，他们在美国要补偿理所应当，可中国不欠他们，中国又没有搞过黑奴贸易🍉又没有压迫过黑人，凭什么来中国耍横",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9711589813232422,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 520,
@@ -5700,8 +5698,8 @@
             "text": "因此想让txl不去滥交和大量传播艾滋病的话，就需要打破这个“环”，但是，虽然txl比例小，可是总人数还是很大的，社会教育的再完美，也无法阻止在这个群体中有给同性恋抹黑的“坏人”存在，每个群体都有“人渣”这点无论是在异性恋还是同性恋中都无可避免。而只要有人渣，就会被别人捕捉到导致整个群体的风评变差，这个环也就不会打破，想打破这个环的办法就是需要绝对力量的介入。",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.38256755471229553,
             "correct": false
         },
@@ -5750,10 +5748,10 @@
             "text": "：首先打拳这方面是韩国先兴起的，间接就导致了韩国社会问题频发，像是的争端。到这两年中国也开始严重了，总不是近几年才通网吧？大面积的互相打拳，已经不是单纯的男女平等，个人权利保障问题，再这样下去只会破坏社会和谐。以下是假设：会不会是网特通过棒子事件的成功，而一样手法破坏我们的网络环境，导致有许多判断力低的人士盲目认同。最后导致自我内耗。",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.8861321210861206,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 562,
@@ -5910,10 +5908,10 @@
             "text": "原来是昔日的反同小将战淋。",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.9486685991287231,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 578,
@@ -6180,10 +6178,10 @@
             "text": "反黑时不要一上来就开骂，反而会引起吃瓜群众的反感，起到负作用。到学校里发传单是个好办法，不用举大堆例子，字太多有的人反而懒得看，只宣传“中国取消入境艾滋病强制检疫，黑人艾滋病携带率高”足矣，我相信对艾滋的恐惧足够警醒大多数人了",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5238270163536072,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 605,
@@ -7170,10 +7168,10 @@
             "text": "这些地域黑的通稿基本都是复旦新闻系徒子徒孙出来的🤣",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.8035864233970642,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 704,
@@ -7740,10 +7738,10 @@
             "text": "黑人玩腻了就离婚，据说这个离婚了，离婚前说得多好。飞周人很多病的",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9627094268798828,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 761,
@@ -8550,8 +8548,8 @@
             "text": "留学生院招“翻译”的时候都排长队，我班女生因为没被选上还闷闷不乐。",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8048468232154846,
             "correct": false
         },
@@ -8910,8 +8908,8 @@
             "text": "带着你的家人移民非洲吧！还有圣母的爱……",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.4177287817001343,
             "correct": false
         },
@@ -9130,10 +9128,10 @@
             "text": "日本这次为了sb政治正确，所谓修正别人排外的观点。，才搞了一堆混血运动员，这简直是nt。不过日本本身混血比例很低。",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8509023189544678,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 900,
@@ -9910,10 +9908,10 @@
             "text": "黑人如果多了，闹分裂了，圣母们担的起这个责任吗？",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8623761534690857,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 978,
@@ -10390,10 +10388,10 @@
             "text": "他们就是男同，要联合腐女打压女权和女性。我之前也是腐女但是我现在抵制男同",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.906869649887085,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1026,
@@ -10410,10 +10408,10 @@
             "text": "为什么不发中国的研究？反同的是中国人",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.923151433467865,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1028,
@@ -10470,10 +10468,10 @@
             "text": "国铝只会pua国男，怎么可能骂洋大人呢",
             "predicted_label": 3,
             "predicted_label_description": "Sexism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8581205606460571,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1034,
@@ -11030,8 +11028,8 @@
             "text": "搞种族歧视是不对的，不过先看一看非洲艾滋病流行率如何？",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.5175151228904724,
             "correct": false
         },
@@ -11040,10 +11038,10 @@
             "text": "河南比较特殊。河南有2300万人常年在省外漂泊，某些地方的人会认为这是一种“人口扩张、文化侵略”。你没见过真正的“排斥”，那是非常可怕的，搜一下“印尼事件图片”就知道了。印尼事件中，受害的都是广东同胞、福建同胞。另外，举个例子:江浙沪（吴语区）的吴语，迅速断代、灭绝，他们可能会认为这是外地人/内陆人太多而导致的。江浙沪的户籍人口严重老龄化，迅速被“中原各省”的人口替换掉。。。总之就是利益冲突",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8769350647926331,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1091,
@@ -11090,10 +11088,10 @@
             "text": "😆我也发现广东🐵最爱地域黑。我现在看见广东ip就提醒他们该吃🍌了😆",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9682315587997437,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1096,
@@ -11810,10 +11808,10 @@
             "text": "我们对黑人（功成名就的不算）的看法，不就和以前欧美对亚裔的看法一样吗？都当对方低人一等，有各种各样的毛病。大体感觉就是较落后的地方来的乡巴佬，能配上自己？",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9753478765487671,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1168,
@@ -12210,10 +12208,10 @@
             "text": "你要看概率，黑人百分之三十以上的艾滋病，套套放不住，国内万分之几，你要活腻歪了，你上，得了后你就知道生活了",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.599064826965332,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1208,
@@ -12230,10 +12228,10 @@
             "text": "十月怀胎，黑小子呱呱坠地，你沉浸在做母亲的幸福里，却发现，小孩子们都不愿意跟黑小子玩，黑小子学习东西很费劲，考试总是最后一名，也没有朋友，所以这时候学校就及时出了规定，每个黑小子要配上2个以上的女学生做“学伴”以避免这黑小子寂寞。当然，这些女学生得找无权无势的，另外，假如她们不小心怀孕了，学校还给加学分，保研😆",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.966202974319458,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1210,
@@ -12290,8 +12288,8 @@
             "text": "现在很多人莫名反感小鲜肉和网红，就跟反感同性恋一样，为什么反感讨厌啊？因为觉得这种风气很腐败很不好😓可能是因为，觉得男不男女不女，男性女性化缺少阳刚之气吧。但是我有个互关是同性恋，我不会反感他，反而还比较喜欢他的人格。因为他人真的不错。有些小鲜肉和网红也是如此，看人吧。但是你如果一说网红小鲜肉同性恋，那我肯定是厌恶反感的。",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.9420080184936523,
             "correct": false
         },
@@ -12770,10 +12768,10 @@
             "text": "汉人自古以来都看不上其他的民族吧，也就是最近一百年年民族团结什么的，不然别说黑人就是一些外貌和汉人区别大的少数民族估计我都看不上",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8770478963851929,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1264,
@@ -13000,8 +12998,8 @@
             "text": "猪肉真香😆😆😆润回阿拉伯野father去😆😆😆",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.8336774706840515,
             "correct": false
         },
@@ -13220,10 +13218,10 @@
             "text": "首先，艾滋病起源于美国，泛滥于非洲，这个泛滥的主因是非洲人喜欢滥交，其次是遗传，血液等，非洲艾滋病是百分之三十，中国是万分之几，滥交的原因你可以细细分析一下为什么会这样。其次，你有能力辩识出来是真的洁身自好还是假的吗，毕竟种族爱滥交，这是风气。当然谈恋爱都是信誓旦旦。我相信每个eg能免费被嫖，肯定离不开甜言蜜语，信誓旦旦，最后中枪。最后，我们假设一下，你愿意冒着这个艾滋病的风险，想象过这个后果吗？这么大概率的风险，这是一个让你活的没有尊严，整天担心什么时候爆发的疾病，据说疾病发作时，全身溃烂，外表就能看出来。摄像下周围鄙视你的眼神，害怕接触你的态度。另外，得了病，自找的，别想着别的种族乱搞传染，报复本民族，可耻",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.4679099917411804,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1309,
@@ -13300,10 +13298,10 @@
             "text": "白左真可怕",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9111378192901611,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1317,
@@ -13440,10 +13438,10 @@
             "text": "说的对因为真正属于它们故土东部飞舟和西部飞舟和中部飞舟和南部飞舟而它们自从踏上飞舟土地都可视为入寝在根本不属于它们土地寄生殖敏",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8328108191490173,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1331,
@@ -13910,10 +13908,10 @@
             "text": "白左笑说吧要殖民我们，少跟他们来往",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9778004884719849,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1378,
@@ -14750,10 +14748,10 @@
             "text": "成都自杀女教师吴诗蒙确实是被老黑睡服了！不是崇洋媚外！不是崇洋媚外！",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9636640548706055,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1462,
@@ -14890,10 +14888,10 @@
             "text": "黑政府不作为，假模假式倒还能理解，黑唐山人我是真的一直都看不懂。黑社会多，明明最受苦的就是唐山的老百姓了，还要被网暴？",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.9288747906684875,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1476,
@@ -14910,10 +14908,10 @@
             "text": "欧美大规模艾滋病成灾就是因为男同，给那个0号病人再洗地设多少人设，他也是几千个X伴侣把艾滋传播开的，所以说艾滋病最早有个称呼叫gay cancer。",
             "predicted_label": 2,
             "predicted_label_description": "LGBTQ",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.6776421070098877,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1478,
@@ -15350,10 +15348,10 @@
             "text": "预防hiv就要求我们要绞杀桶屈他们是传播疾病的恶人！",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.915547788143158,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1522,
@@ -15450,8 +15448,8 @@
             "text": "得不得病我不知道，反正狐臭遗传没跑了🤣，估计在中国他的味道肯定会很受欢迎吧",
             "predicted_label": 5,
             "predicted_label_description": "non-hate",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.7389836311340332,
             "correct": false
         },
@@ -15470,20 +15468,20 @@
             "text": "高等性就是不一样，外国男性放的屁就是香的🤣她们已经无药可救，病入药膏了，让她们自生自灭吧",
             "predicted_label": 3,
             "predicted_label_description": "Sexism",
-            "true_label": 3,
-            "true_label_description": "Sexism",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.8183697462081909,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1534,
             "text": "什么？同连小日本都跪？",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 1,
+            "true_label_description": "Region",
             "confidence": 0.43514057993888855,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1535,
@@ -15670,20 +15668,20 @@
             "text": "圣母不会认识到自己坚持的观点有多么荒谬的。到时候圣母还是会指责我们不善待黑大爷，没有给黑大爷更多的权利以及超国民待遇才会导致它们闹分裂。",
             "predicted_label": 0,
             "predicted_label_description": "Racism",
-            "true_label": 4,
-            "true_label_description": "others",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.972660481929779,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1554,
             "text": "蛆佬智商都高感染hiv后更高",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.7400760054588318,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1555,
@@ -15860,10 +15858,10 @@
             "text": "HIV群体十之八九都是基佬。",
             "predicted_label": 4,
             "predicted_label_description": "others",
-            "true_label": 2,
-            "true_label_description": "LGBTQ",
+            "true_label": 4,
+            "true_label_description": "others",
             "confidence": 0.8693631291389465,
-            "correct": false
+            "correct": true
         },
         {
             "sample_id": 1573,
@@ -15900,10 +15898,10 @@
             "text": "南非从来都不是发达国家，从哪个维度来看都是社会问题极为严重的发展中国家，只不过南非借了指标计算方法的空子，一度让自己的人均GDP到达了发达国家的标准。换句话来说，白人政府造假。",
             "predicted_label": 1,
             "predicted_label_description": "Region",
-            "true_label": 1,
-            "true_label_description": "Region",
+            "true_label": 0,
+            "true_label_description": "Racism",
             "confidence": 0.9613798260688782,
-            "correct": true
+            "correct": false
         },
         {
             "sample_id": 1577,
@@ -16187,16 +16185,16 @@
         }
     ],
     "summary": {
-        "total_correct": 1176,
-        "total_incorrect": 429,
-        "overall_accuracy": 0.7327102803738318,
+        "total_correct": 1180,
+        "total_incorrect": 425,
+        "overall_accuracy": 0.735202492211838,
         "per_class_stats": {
             "1": {
                 "class_name": "Region",
-                "total_samples": 236,
-                "correct_predictions": 169,
-                "incorrect_predictions": 67,
-                "accuracy": 0.7161016949152542
+                "total_samples": 217,
+                "correct_predictions": 161,
+                "incorrect_predictions": 56,
+                "accuracy": 0.7419354838709677
             },
             "5": {
                 "class_name": "non-hate",
@@ -16205,33 +16203,33 @@
                 "incorrect_predictions": 119,
                 "accuracy": 0.8023255813953488
             },
-            "3": {
-                "class_name": "Sexism",
-                "total_samples": 291,
-                "correct_predictions": 205,
-                "incorrect_predictions": 86,
-                "accuracy": 0.7044673539518901
-            },
             "0": {
                 "class_name": "Racism",
-                "total_samples": 295,
-                "correct_predictions": 212,
-                "incorrect_predictions": 83,
-                "accuracy": 0.7186440677966102
+                "total_samples": 328,
+                "correct_predictions": 231,
+                "incorrect_predictions": 97,
+                "accuracy": 0.7042682926829268
+            },
+            "3": {
+                "class_name": "Sexism",
+                "total_samples": 281,
+                "correct_predictions": 203,
+                "incorrect_predictions": 78,
+                "accuracy": 0.7224199288256228
             },
             "4": {
                 "class_name": "others",
-                "total_samples": 70,
-                "correct_predictions": 17,
-                "incorrect_predictions": 53,
-                "accuracy": 0.24285714285714285
+                "total_samples": 82,
+                "correct_predictions": 21,
+                "incorrect_predictions": 61,
+                "accuracy": 0.25609756097560976
             },
             "2": {
                 "class_name": "LGBTQ",
-                "total_samples": 111,
-                "correct_predictions": 90,
-                "incorrect_predictions": 21,
-                "accuracy": 0.8108108108108109
+                "total_samples": 95,
+                "correct_predictions": 81,
+                "incorrect_predictions": 14,
+                "accuracy": 0.8526315789473684
             }
         }
     }
