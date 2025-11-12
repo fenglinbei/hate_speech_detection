@@ -22,10 +22,10 @@ label_dict_inv = {v: k for k, v in label_dict.items()}
 binary_label_dict_inv = {v: k for k, v in binary_label_dict.items()}
 
 
-def get_data(data_path):
-    texts = []
+def get_data(data_path: str) -> tuple[list[str], list[int]]:
+    texts: list[str] = []
     datas = json.load(open(data_path, "r", encoding="utf-8"))
-    labels = []
+    labels: list[int] = []
     for data in datas:
         text = data['content']
         texts.append(text)
