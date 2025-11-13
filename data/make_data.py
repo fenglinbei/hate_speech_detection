@@ -1724,3 +1724,12 @@ if __name__ == "__main__":
     #     auto_length=True,
     #     model_path="models/Qwen2.5-7B-Instruct",
     #     max_length=1280)
+
+    make_multi_class_sim_lexcion_threshold_rag_data(
+        raw_data_path="data/full/std/train.json", 
+        test_data_path="data/full/std/test.json",
+        train_output_path="data/exp_data/before/train.jsonl", 
+        val_output_path="data/exp_data/before/val.jsonl",
+        test_output_path="data/exp_data/before/test.json",
+        prompt_template=TRAIN_PROMPT_ZERO_SHOT_V4,
+        system_prompt=DEFAULT_SYSTEM_PTOMPT_EN)
