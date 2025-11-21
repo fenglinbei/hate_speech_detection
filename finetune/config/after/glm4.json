@@ -1,0 +1,96 @@
+{
+    "model_name": "GLM-4-9B-Chat",
+    "model_path": "./models/base/GLM-4-9B-Chat",
+    "prompt_template": "RAG_PROMPT_USER_V2",
+    "system_prompt": "DEFAULT_SYSTEM_PROMPT",
+    "max_length": 1280,
+    "lora": false,
+    "random_seed": 23333333,
+    "exp_name": "glm4",
+    "project_name": "after",
+    
+    "device_map": {
+        "transformer.embedding": "cuda:1",
+        "transformer.rotary_pos_emb": "cuda:1",
+
+        "transformer.encoder.layers.0": "cuda:1",
+        "transformer.encoder.layers.1": "cuda:1",
+        "transformer.encoder.layers.2": "cuda:1",
+        "transformer.encoder.layers.3": "cuda:1",
+        "transformer.encoder.layers.4": "cuda:1",
+        "transformer.encoder.layers.5": "cuda:1",
+        "transformer.encoder.layers.6": "cuda:1",
+        "transformer.encoder.layers.7": "cuda:1",
+        "transformer.encoder.layers.8": "cuda:1",
+        "transformer.encoder.layers.9": "cuda:1",
+
+        "transformer.encoder.layers.10": "cuda:2",
+        "transformer.encoder.layers.11": "cuda:2",
+        "transformer.encoder.layers.12": "cuda:2",
+        "transformer.encoder.layers.13": "cuda:2",
+        "transformer.encoder.layers.14": "cuda:2",
+        "transformer.encoder.layers.15": "cuda:2",
+        "transformer.encoder.layers.16": "cuda:2",
+        "transformer.encoder.layers.17": "cuda:2",
+        "transformer.encoder.layers.18": "cuda:2",
+        "transformer.encoder.layers.19": "cuda:2",
+
+        "transformer.encoder.layers.20": "cuda:2",
+        "transformer.encoder.layers.21": "cuda:2",
+        "transformer.encoder.layers.22": "cuda:2",
+        "transformer.encoder.layers.23": "cuda:2",
+        "transformer.encoder.layers.24": "cuda:2",
+        "transformer.encoder.layers.25": "cuda:3",
+        "transformer.encoder.layers.26": "cuda:3",
+        "transformer.encoder.layers.27": "cuda:3",
+        "transformer.encoder.layers.28": "cuda:3",
+        "transformer.encoder.layers.29": "cuda:3",
+
+        "transformer.encoder.layers.30": "cuda:3",
+        "transformer.encoder.layers.31": "cuda:3",
+        "transformer.encoder.layers.32": "cuda:3",
+        "transformer.encoder.layers.33": "cuda:3",
+        "transformer.encoder.layers.34": "cuda:3",
+        "transformer.encoder.layers.35": "cuda:3",
+        "transformer.encoder.layers.36": "cuda:3",
+        "transformer.encoder.layers.37": "cuda:3",
+        "transformer.encoder.layers.38": "cuda:3",
+        "transformer.encoder.layers.39": "cuda:3",
+
+        "transformer.encoder.final_layernorm": "cuda:1",
+        "transformer.output_layer": "cuda:1"
+    },
+    
+    "data": {
+        "train_data_path": "data/exp_data/after/train.jsonl",
+        "val_data_path": "data/exp_data/after/val.jsonl"
+    },
+    
+    "training": {
+        "output_dir": "models/exps/after/glm4",
+        "per_device_train_batch_size": 2,
+        "per_device_eval_batch_size": 2,
+        "gradient_accumulation_steps": 4,
+        "eval_strategy": "steps",
+        "eval_steps": 100,
+        "logging_steps": 10,
+        "num_train_epochs": 2,
+        "save_strategy": "epoch",
+        "learning_rate": 1e-5,
+        "save_on_each_node": true,
+        "gradient_checkpointing": true,
+        "report_to": "none",
+        "run_name": "glm4",
+        "lr_scheduler_type": "cosine",
+        "warmup_ratio": 0,
+        "bf16": true
+    },
+    
+    "eval": {
+        "max_retries": 0,
+        "eval_num": 100,
+        "max_length": 2048
+    },
+    
+    "cuda_devices": [0, 1, 2, 3]
+}
