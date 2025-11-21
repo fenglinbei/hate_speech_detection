@@ -118,7 +118,7 @@ def build_prompt(
 
         i = 1
         while auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, max_length):
-            print(f"Over length: {len(tokenizer._tokenize(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
+            print(f"Over length: {len(tokenizer(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
             prompt, examples, lex_contents = build_prompt(
                 raw_data=raw_data,
                 use_srag=use_srag,
