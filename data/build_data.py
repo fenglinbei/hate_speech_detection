@@ -2,7 +2,7 @@ import json
 import random
 from tqdm import tqdm
 from typing import Optional
-from modelscope import AutoTokenizer
+from transformers import AutoTokenizer
 
 from prompt import *
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
@@ -11,7 +11,7 @@ from tools.convert import output2triple
 def get_tokenizer(model_path: str):
     tokenizer = AutoTokenizer.from_pretrained(
         model_path, 
-        use_fast=False, 
+        use_fast=True, 
         trust_remote_code=True
     )
     return tokenizer
@@ -37,7 +37,7 @@ def build_prompt(
         weights: Optional[dict] = None,
         weights_reverse: bool = False,
         auto_length: bool = False,
-        model_path: Optional[str] = None,
+        tokenizer: Optional[AutoTokenizer] = None,
         max_length: int = 2048,
         is_test_data: bool = False
         ):
@@ -47,10 +47,10 @@ def build_prompt(
             raw_data: dict, 
             use_srag: bool,
             use_lex: bool,
-            srag_retriever: MultiClassRetriever, 
-            lex_retriever: LexiconRetriever, 
+            srag_retriever: Optional[MultiClassRetriever], 
+            lex_retriever: Optional[LexiconRetriever], 
             prompt_template: str, 
-            example_template: str, 
+            example_template: Optional[str], 
             srag_top_k: int, 
             srag_threshold: float, 
             lex_top_k: int, 
@@ -59,7 +59,7 @@ def build_prompt(
             weights: Optional[dict], 
             weights_reverse: bool):
         
-        if use_srag:
+        if use_srag and srag_retriever is not None and example_template is not None:
             retrieve_contents, retrieve_outputs = srag_retriever.retrieve(raw_data['content'], srag_top_k, threshold=srag_threshold, weights=weights, weights_reverse=weights_reverse)
             examples = []
             for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
@@ -69,7 +69,7 @@ def build_prompt(
         else:
             examples = []
         
-        if use_lex:
+        if use_lex and lex_retriever is not None:
             lex_contents = lex_retriever.including_retrieve(raw_data['content'], lex_top_k)
             simlex_contents = lex_retriever.similarity_retrieve(raw_data['content'], lex_sim_top_k, deduplicate=True, threshold=lex_sim_threshold)
             for simlex_content in simlex_contents:
@@ -83,11 +83,6 @@ def build_prompt(
                                 replace("{text}", raw_data["content"])
         
         return prompt, examples, lex_contents
-
-    if auto_length and model_path is not None:
-        tokenizer = get_tokenizer(model_path)
-    else:
-        tokenizer = None
 
     pbar = tqdm(
             total=len(datas),
@@ -104,27 +99,26 @@ def build_prompt(
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         
-        
         prompt, examples, lex_contents = build_prompt(
-            raw_data,
-            use_srag,
-            use_lex,
-            srag_retriever,
-            lex_retriever,
-            prompt_template,
-            example_template,
-            srag_top_k,
-            srag_threshold,
-            lex_top_k,
-            lex_sim_top_k,
-            lex_sim_threshold,
-            weights,
-            weights_reverse
+            raw_data=raw_data,
+            use_srag=use_srag,
+            use_lex=use_lex,
+            srag_retriever=srag_retriever,
+            lex_retriever=lex_retriever,
+            prompt_template=prompt_template,
+            example_template=example_template,
+            srag_top_k=srag_top_k,
+            srag_threshold=srag_threshold,
+            lex_top_k=lex_top_k,
+            lex_sim_top_k=lex_sim_top_k,
+            lex_sim_threshold=lex_sim_threshold,
+            weights=weights,
+            weights_reverse=weights_reverse
         )
 
         i = 1
         while auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, max_length):
-            print(f"Over length: {len(tokenizer(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
+            print(f"Over length: {len(tokenizer.encode(prompt)['input_ids'])} > {max_length}, reduce srag examples and rebuild prompt.")
             prompt, examples, lex_contents = build_prompt(
                 raw_data=raw_data,
                 use_srag=use_srag,
@@ -180,7 +174,7 @@ def make_data(
         weights: Optional[dict] = None,
         weights_reverse: bool = False,
         auto_length=False,
-        model_path: Optional[str] = None,
+        tokenizer_path: Optional[str] = None,
         max_length: int = 2048,
         ):
     """转换训练/验证集数据格式"""
@@ -203,7 +197,9 @@ def make_data(
     else:
         lex_retriever = None
     
-    
+    tokenizer = None
+    if auto_length and tokenizer_path is not None:
+        tokenizer = get_tokenizer(tokenizer_path)
 
     messages = build_prompt(
         datas=raw_datas[:split_idx],
@@ -222,7 +218,7 @@ def make_data(
         weights=weights,
         weights_reverse=weights_reverse,
         auto_length=auto_length,
-        model_path=model_path,
+        tokenizer=tokenizer,
         max_length=max_length,
     )
 
@@ -231,7 +227,7 @@ def make_data(
         for message in messages:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
     
-    if use_srag:
+    if use_srag and srag_retriever is not None:
         srag_retriever.load_datas(data_list=raw_datas)
         srag_retriever.build_retrievers()
 
@@ -252,7 +248,7 @@ def make_data(
         weights=weights,
         weights_reverse=weights_reverse,
         auto_length=auto_length,
-        model_path=model_path,
+        tokenizer=tokenizer,
         max_length=max_length,
     )
 
@@ -280,7 +276,7 @@ def make_data(
         weights=weights,
         weights_reverse=weights_reverse,
         auto_length=auto_length,
-        model_path=model_path,
+        tokenizer=tokenizer,
         max_length=max_length,
         is_test_data=True
     )
@@ -297,9 +293,9 @@ if __name__ == "__main__":
     make_data(
         raw_data_path="data/full/std/train.json", 
         test_data_path="data/full/std/test.json",
-        train_output_path="data/exp_data/after/train.jsonl", 
-        val_output_path="data/exp_data/after/val.jsonl",
-        test_output_path="data/exp_data/after/test.json",
+        train_output_path="data/exp_data/after/glm4/train.jsonl", 
+        val_output_path="data/exp_data/after/glm4/val.jsonl",
+        test_output_path="data/exp_data/after/glm4/test.json",
         prompt_template=RAG_PROMPT_USER_V2,
         use_srag=True,
         srag_top_k=11,
@@ -308,6 +304,6 @@ if __name__ == "__main__":
         lex_top_k=5,
         lex_sim_top_k=5,
         auto_length=True,
-        model_path="models/base/Qwen2.5-7B-Instruct",
+        tokenizer_path="./models/base/GLM-4-9B-Chat",
         max_length=1280,
         system_prompt=DEFAULT_SYSTEM_PTOMPT_EN)
