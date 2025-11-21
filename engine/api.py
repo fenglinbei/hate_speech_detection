@@ -310,13 +310,13 @@ if __name__ == "__main__":
     # )
 
     model = ApiLLMModel(
-        model_name="qwen3-4b",
-        api_base="http://127.0.0.1:5001/v2/",
+        model_name="llama3",
+        api_base="http://127.0.0.1:35003/v1/",
         api_key='23333333'
     )
 
     print(model.chat(
-        prompt="你好，你是谁？", 
+        messages=[{"role": "user", "content": "你好，你是谁？"}], 
         n=3,
         max_new_tokens=1024, 
         enable_thinking=True,
