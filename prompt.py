@@ -147,6 +147,20 @@ RAG_PROMPT_USER_V2 = """你是一个内容审查专家，请你分析我的句�
 ### 三元组：
 """
 
+RAG_PROMPT_USER_V4 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+示例：
+{examples}
+### 句子：
+{text}
+### 三元组：
+"""
+
+RAG_PROMPT_USER_V3 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+### 句子：
+{text}
+### 三元组：
+"""
+
 RAG_PROMPT_USER_V5 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
 示例：
 {examples}
@@ -172,19 +186,6 @@ LEXICON_RAG_PROMPT = """###
 类别：{category}
 定义：{definition}"""
 
-RAG_PROMPT_USER_V3 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
-### 句子：
-{text}
-### 三元组：
-"""
-
-RAG_PROMPT_USER_V4 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
-示例：
-{examples}
-### 句子：
-{text}
-### 三元组：
-"""
 
 STEP_ONE_RAG_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个评论对象和论点:
 示例：
@@ -204,3 +205,20 @@ STEP_ONE_RAG_PROMPT_EXAMPLE_V1 = """### 句子：
 {retrieve_content}
 ### 二元组：
 {retrieve_output}"""
+
+RAG_PROMPT_USER_WO_NSHOT = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+背景知识：
+{lexicons}
+
+### 句子：
+{text}
+### 三元组：
+"""
+
+RAG_PROMPT_USER_WO_LEX = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+示例：
+{examples}
+### 句子：
+{text}
+### 三元组：
+"""
