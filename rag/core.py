@@ -61,15 +61,20 @@ class Retriever:
 
     def __init__(
             self, 
-            model_path: str, 
-            model_name: str, 
+            model_path: Optional[str] = None, 
+            model_name: Optional[str] = None, 
+            model: Optional[SentenceTransformer] = None,
             data_path: Optional[str] = None, 
             reranker_model_path: Optional[str] = None,
             device: str = "cuda:0"):
 
         logger.info(f"Loading model from path: {model_path}")
-        self.model = SentenceTransformer(model_path).to(device)
-        self.model_name = model_name
+        if model:
+            self.model = model
+            self.model_name = model_name
+        else:
+            self.model = SentenceTransformer(model_path).to(device)
+            self.model_name = model_name
 
         self.reranker = None
         if reranker_model_path:
@@ -405,7 +410,7 @@ class MultiClassRetriever:
     def build_retrievers(self):
         self.retrievers: dict[str, Retriever] = {}
         for class_name in self.class_data_dict.keys():
-            retriever = Retriever(model_path=self.model_path, model_name=self.model_name, device=self.device)
+            retriever = Retriever(model=self.model)
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
 
