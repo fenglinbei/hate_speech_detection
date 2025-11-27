@@ -115,7 +115,8 @@ TRAIN_PROMPT_STEP_2_V1 = """{system_prompt}{shots}文本: {text}
 SHOT_PROMPT_STEP_2_V1 = """文本: {text}
 评论对象: {target}
 论点: {argument}
-输出:{answer}"""
+输出:{answer}
+"""
 
 TRAIN_PROMPT_SYSTEM_V5 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个四元组"""
 TRAIN_PROMPT_USER_V5 = '''请从下面的文本抽取一个或多个四元组，每一个四元组输出格式为评论对象|对象观点|仇恨群体|是否仇恨，评论对象可以为"NULL", 对象观点尽量简洁,仇恨群体只包括(LGBTQ、Region、Sexism、Racism、others、non-hate)，同一四元组可能涉及多个仇恨群体，是否仇恨标签为(hate、non-hate),多个四元组之间用[SEP]分隔,最后一个四元组后面加[END]。
@@ -172,19 +173,22 @@ RAG_PROMPT_USER_V5 = """你是一个内容审查专家，请你分析我的句�
 RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 {retrieve_content}
 ### 三元组：
-{retrieve_output}"""
+{retrieve_output}
+"""
 
 RAG_PROMPT_EXAMPLE_V3 = """### 句子：
 {retrieve_content}
 ### 错例：
 {retrieve_wrong_exp}
 ### 三元组：
-{retrieve_output}"""
+{retrieve_output}
+"""
 
 LEXICON_RAG_PROMPT = """### 
 关键词：{word}
 类别：{category}
-定义：{definition}"""
+定义：{definition}
+"""
 
 
 STEP_ONE_RAG_PROMPT_USER_V1 = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个评论对象和论点:
