@@ -21,6 +21,7 @@ class Config:
         self.val_output_path = paths.get('val_output_path')
         self.test_output_path = paths.get('test_output_path')
         self.lexicon_data_path = paths.get('lexicon_data_path')
+        self.tokenizer_path = paths.get('tokenizer_path', None)
         
         # 提示模板配置
         templates = config_data.get('prompt_templates', {})
@@ -31,6 +32,7 @@ class Config:
         # 检索设置
         retrieval = config_data.get('retrieval_settings', {})
         self.use_srag = retrieval.get('use_srag', False)
+        self.stratified = retrieval.get('stratified', True)
         self.srag_top_k = retrieval.get('srag_top_k', 1)
         self.srag_threshold = retrieval.get('srag_threshold', 0)
         self.use_lex = retrieval.get('use_lex', False)
@@ -50,4 +52,3 @@ class Config:
         models = config_data.get('model_settings', {})
         self.srag_model_path = models.get('srag_model_path', './models/base/bge-large-zh-v1.5')
         self.lexicon_model_path = models.get('lexicon_model_path', './models/base/bge-large-zh-v1.5')
-        self.tokenizer_path = paths.get('tokenizer_path', None)
