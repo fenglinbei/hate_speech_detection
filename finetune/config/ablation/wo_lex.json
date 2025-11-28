@@ -1,13 +1,13 @@
 {
     "model_name": "Qwen/Qwen2.5-7B-Instruct",
     "model_path": "models/base/Qwen2.5-7B-Instruct",
-    "prompt_template": "RAG_PROMPT_USER_WO_NSHOT",
+    "prompt_template": "RAG_PROMPT_USER_WO_LEX",
     "example_template": "RAG_PROMPT_EXAMPLE_V2",
     "system_prompt": "DEFAULT_SYSTEM_PTOMPT_EN",
     "max_length": 1280,
     "lora": false,
     "random_seed": 23333333,
-    "exp_name": "wo_n_shot",
+    "exp_name": "wo_lex",
     "project_name": "ablation",
     
     "device_map": {
@@ -45,13 +45,13 @@
     },
     
     "data": {
-        "config_path": "finetune/config/ablation/wo_n_shot/config.json",
-        "train_data_path": "data/exp_data/ablation/wo_n_shot/train.jsonl",
-        "val_data_path": "data/exp_data/ablation/wo_n_shot/val.jsonl"
+        "config_path": "finetune/config/ablation/wo_lex/config.json",
+        "train_data_path": "data/exp_data/ablation/wo_lex/train.jsonl",
+        "val_data_path": "data/exp_data/ablation/wo_lex/val.jsonl"
     },
     
     "training": {
-        "output_dir": "models/exps/ablation/wo_n_shot",
+        "output_dir": "models/exps/ablation/wo_lex",
         "per_device_train_batch_size": 2,
         "per_device_eval_batch_size": 2,
         "gradient_accumulation_steps": 4,
@@ -63,7 +63,7 @@
         "save_on_each_node": true,
         "gradient_checkpointing": true,
         "report_to": "none",
-        "run_name": "wo_n_shot",
+        "run_name": "wo_lex",
         "lr_scheduler_type": "cosine",
         "warmup_ratio": 0,
         "bf16": true
