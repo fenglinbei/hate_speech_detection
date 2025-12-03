@@ -464,7 +464,7 @@ class LexiconRetriever:
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
-                logger.debug(f"Cache hit for query: {query}")
+                # logger.debug(f"Cache hit for query: {query}")
                 return cached_result
         
         if top_k == 0:
@@ -530,7 +530,7 @@ class LexiconRetriever:
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
-                logger.debug(f"Cache hit for query: {query}")
+                # logger.debug(f"Cache hit for query: {query}")
                 return cached_result
         
         result = []
@@ -838,7 +838,7 @@ class MultiClassRetriever:
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
-                logger.debug(f"Cache hit for query: {query}")
+                # logger.debug(f"Cache hit for query: {query}")
                 return cached_result
         
         if weights is None:
