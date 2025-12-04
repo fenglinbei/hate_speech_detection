@@ -1,4 +1,38 @@
+import re
 from typing import List, Dict
+
+def extract_triplets(text):
+    # 查找三元组开始标记
+    triplets_start = re.search(r'(?:###\s*)?三元组：\s*', text)
+    if not triplets_start:
+        return ""
+    
+    # 从三元组开始位置提取内容
+    start_pos = triplets_start.end()
+    triplets_text = text[start_pos:]
+    
+    # 清理文本：去除多余空格和换行
+    triplets_text = re.sub(r'\s*\n\s*', ' ', triplets_text)
+    triplets_text = re.sub(r'\s+', ' ', triplets_text).strip()
+    
+    # 提取所有三元组模式：内容 | 内容 | 内容 [标记]
+    triplet_pattern = r'([^|]+\|[^|]+\|[^\[\]]+)(?:\s*\[(END|SEP)\])?'
+    triplets = re.findall(triplet_pattern, triplets_text)
+    
+    if triplets:
+        # 提取纯净的三元组内容
+        triplet_contents = [t[0].strip() for t in triplets]
+        
+        # 构建结果
+        if len(triplet_contents) == 1:
+            return f"{triplet_contents[0]} [END]"
+        else:
+            result = " [SEP] ".join(triplet_contents[:-1])
+            result += f" [SEP] {triplet_contents[-1]} [END]"
+            return result
+    
+    # 如果正则匹配失败，尝试简单清理后返回
+    return triplets_text
 
 def parse_llm_output_quad(llm_output: str) -> List[Dict]:
         """Parse and standardize LLM output"""

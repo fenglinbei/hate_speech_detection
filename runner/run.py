@@ -24,7 +24,7 @@ from config import ConfigManager
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM
-from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip
+from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
 from tools.convert import output2triple
 
 
@@ -419,7 +419,11 @@ class LLMTester:
                                 if isinstance(answer, str):
                                     quadruples = parse_llm_output_quad(answer)
                                     if not quadruples:
-                                        quadruples = parse_llm_output_trip(answer)
+                                        extracted_triplets = extract_triplets(answer)
+                                        if extracted_triplets:
+                                            quadruples = parse_llm_output_trip(extracted_triplets)
+                                        else:
+                                            quadruples = parse_llm_output_trip(answer)
                                     if validate_quadruples(quadruples):
                                         llm_output_list.append(answer)
                                         break
@@ -472,8 +476,13 @@ class LLMTester:
         max_item = output_couter.most_common(1)[0]
         answer = max_item[0]
         quadruples = parse_llm_output_quad(answer)
+
         if not quadruples:
-            quadruples = parse_llm_output_trip(answer)
+            extracted_triplets = extract_triplets(answer)
+            if extracted_triplets:
+                quadruples = parse_llm_output_trip(extracted_triplets)
+            else:
+                quadruples = parse_llm_output_trip(answer)
 
         return {
                 **item,
