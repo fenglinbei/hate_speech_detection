@@ -7,7 +7,7 @@ from transformers import AutoTokenizer
 
 from prompt import *
 from data.config import Config
-from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever
+from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
 from tools.convert import output2triple
 
 def get_tokenizer(model_path: str):
@@ -27,7 +27,7 @@ def is_overlength(tokenizer, text, max_length):
 def build_prompt(
         datas: list,
         config: Config,
-        srag_retriever: Optional[MultiClassRetriever | Retriever] = None,
+        srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever] = None,
         lex_retriever: Optional[LexiconRetriever] = None,
         tokenizer: Optional[AutoTokenizer] = None,
         is_test_data: bool = False
@@ -36,7 +36,7 @@ def build_prompt(
 
     def build_single_prompt(
             raw_data: dict, 
-            srag_retriever: Optional[MultiClassRetriever], 
+            srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever], 
             lex_retriever: Optional[LexiconRetriever]
         ):
         """构建单个数据的提示"""
@@ -47,7 +47,12 @@ def build_prompt(
                 config.srag_top_k, 
                 threshold=config.srag_threshold, 
                 weights=config.weights, 
-                weights_reverse=config.weights_reverse
+                weights_reverse=config.weights_reverse,
+                similarity_alpha=config.similarity_alpha,
+                random_strategy=config.ramdom_strategy,
+                random_ratio=config.random_ratio,
+                random_temperature=config.random_temperature,
+                candidate_multiplier=config.candidate_multiplier
             )
             examples = []
             for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
@@ -155,10 +160,17 @@ def make_data(config: Config):
             srag_retriever.load_datas(data_list=raw_datas[:split_idx])
             srag_retriever.build_retrievers()
         else:
-            srag_retriever = Retriever(
+            if config.ramdom_strategy != "none":
+                srag_retriever = StochasticWeightedRetriever(
                 model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5"
+                model_name="bge-large-zh-v1.5",
+                random_state=config.random_state
             )
+            else:
+                srag_retriever = Retriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5"
+                )
             srag_retriever.load_datas(data_list=raw_datas[:split_idx])
             srag_retriever.create_embeddings(raw_datas[:split_idx])
     else:
@@ -172,6 +184,7 @@ def make_data(config: Config):
         )
     else:
         lex_retriever = None
+
 
     # 处理训练数据
     messages = build_prompt(
@@ -196,10 +209,17 @@ def make_data(config: Config):
             srag_retriever.load_datas(data_list=raw_datas)
             srag_retriever.build_retrievers()
         else:
-            srag_retriever = Retriever(
+            if config.ramdom_strategy != "none":
+                srag_retriever = StochasticWeightedRetriever(
                 model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5"
+                model_name="bge-large-zh-v1.5",
+                random_state=config.random_state
             )
+            else:
+                srag_retriever = Retriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5"
+                )
             srag_retriever.load_datas(data_list=raw_datas)
             srag_retriever.create_embeddings(raw_datas)
         

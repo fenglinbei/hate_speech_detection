@@ -41,6 +41,13 @@ class Config:
         self.lex_sim_threshold = retrieval.get('lex_sim_threshold', 0)
         self.weights = retrieval.get('weights', None)
         self.weights_reverse = retrieval.get('weights_reverse', False)
+
+        self.random_state = retrieval.get('random_state', 42)
+        self.ramdom_strategy = retrieval.get('random_strategy', 'none')
+        self.random_ratio = retrieval.get('random_ratio', 0.0)
+        self.random_temperature = retrieval.get('random_temperature', 1.0)
+        self.similarity_alpha = retrieval.get('similarity_alpha', 1)
+        self.candidate_multiplier = retrieval.get('candidate_multiplier', 3)
         
         # 训练设置
         training = config_data.get('training_settings', {})
