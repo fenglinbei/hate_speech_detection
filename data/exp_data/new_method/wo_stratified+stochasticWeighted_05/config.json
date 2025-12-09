@@ -1,0 +1,42 @@
+{
+  "data_paths": {
+    "raw_data_path": "data/full/std/train.json",
+    "test_data_path": "data/full/std/test.json",
+    "train_output_path": "data/exp_data/new_method/wo_stratified+stochasticWeighted_05/train.jsonl",
+    "val_output_path": "data/exp_data/new_method/wo_stratified+stochasticWeighted_05/val.jsonl",
+    "test_output_path": "data/exp_data/new_method/wo_stratified+stochasticWeighted_05/test.json",
+    "lexicon_data_path": "data/lexicon/annotated_lexicon.json",
+    "tokenizer_path": "./models/base/Qwen2.5-7B-Instruct"
+  },
+  "prompt_templates": {
+    "prompt_template": "RAG_PROMPT_USER_V2",
+    "example_template": "RAG_PROMPT_EXAMPLE_V2",
+    "system_prompt": "DEFAULT_SYSTEM_PTOMPT_EN"
+  },
+  "retrieval_settings": {
+    "use_srag": true,
+    "stratified": false,
+    "srag_top_k": 11,
+    "srag_threshold": 0,
+    "use_lex": true,
+    "lex_top_k": 5,
+    "lex_sim_top_k": 5,
+    "lex_sim_threshold": 0,
+    "weights": null,
+    "weights_reverse": false,
+    "random_strategy": "hybrid",
+    "random_ratio": 0.5,
+    "random_temperature": 1.0,
+    "similarity_alpha": 1,
+    "candidate_multiplier": 3
+  },
+  "training_settings": {
+    "auto_length": true,
+    "max_length": 1280,
+    "split_ratio": 0.9
+  },
+  "model_settings": {
+    "srag_model_path": "./models/base/bge-large-zh-v1.5",
+    "lexicon_model_path": "./models/base/bge-large-zh-v1.5"
+  }
+}
