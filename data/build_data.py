@@ -155,7 +155,9 @@ def make_data(config: Config):
         if config.stratified:
             srag_retriever = MultiClassRetriever(
                 model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5"
+                model_name="bge-large-zh-v1.5",
+                ramdom_strategy=config.ramdom_strategy,
+                random_state=config.random_state
             )
             srag_retriever.load_datas(data_list=raw_datas[:split_idx])
             srag_retriever.build_retrievers()
@@ -204,7 +206,9 @@ def make_data(config: Config):
         if config.stratified:
             srag_retriever = MultiClassRetriever(
                 model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5"
+                model_name="bge-large-zh-v1.5",
+                ramdom_strategy=config.ramdom_strategy,
+                random_state=config.random_state
             )
             srag_retriever.load_datas(data_list=raw_datas)
             srag_retriever.build_retrievers()

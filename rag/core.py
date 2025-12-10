@@ -765,6 +765,8 @@ class MultiClassRetriever:
             data_path: Optional[str] = None, 
             device: str = "cuda:0",
             model: Optional[SentenceTransformer] = None,
+            ramdom_strategy: Literal["none", "sample", "hybrid"] = "none",
+            random_state: int = 42,
             cache_dir: str = "./cache",
             enable_cache: bool = True):
 
@@ -779,6 +781,9 @@ class MultiClassRetriever:
             self.model_name = model_name
             self.model_path = model_path
             self.device = device
+
+        self.ramdom_strategy = ramdom_strategy
+        self.random_state = random_state
 
         # 初始化缓存管理器
         self.cache_manager = CacheManager(cache_dir, enable_cache)
@@ -808,9 +813,15 @@ class MultiClassRetriever:
             self.class_data_dict[targeted_group] = new_data_list
     
     def build_retrievers(self):
-        self.retrievers: dict[str, Retriever] = {}
+        self.retrievers: dict[str, Retriever | StochasticWeightedRetriever] = {}
         for class_name in self.class_data_dict.keys():
-            retriever = Retriever(model=self.model, enable_cache=False)  # 禁用子检索器的缓存，由父级管理
+            if self.ramdom_strategy == "none":
+                retriever = Retriever(model=self.model, enable_cache=False)  # 禁用子检索器的缓存，由父级管理
+            else:
+                retriever = StochasticWeightedRetriever(
+                    model=self.model, 
+                    random_state=self.random_state,
+                    enable_cache=False)  # 禁用子检索器的缓存，由父级管理
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
 
@@ -822,6 +833,11 @@ class MultiClassRetriever:
             threshold: float = 0, 
             weights: Optional[dict[str, float]] = None, 
             weights_reverse: bool = False,
+            similarity_alpha: float = 1.0,
+            random_strategy: Literal["none", "sample", "hybrid"] = "none", 
+            random_ratio: float = 0.3,
+            temperature: float = 1.0,
+            candidate_multiplier: float = 3.0,
             use_cache: bool = True,
             **kwargs
             ) -> tuple[list[str], list[str]]:
@@ -832,7 +848,12 @@ class MultiClassRetriever:
             "deduplicate": deduplicate,
             "threshold": threshold,
             "weights": weights,
-            "weights_reverse": weights_reverse
+            "weights_reverse": weights_reverse,
+            "similarity_alpha": similarity_alpha,
+            "random_strategy": random_strategy,
+            "random_ratio": random_ratio,
+            "temperature": temperature,
+            "candidate_multiplier": candidate_multiplier
         }
         
         if use_cache:
@@ -854,7 +875,18 @@ class MultiClassRetriever:
             class_top_k = allocated_class_top_k[class_name]
             if class_top_k == 0:
                 continue
-            texts, outputs = self.retrievers[class_name].retrieve(query, class_top_k, deduplicate, threshold, use_cache=False)
+            texts, outputs = self.retrievers[class_name].retrieve(
+                query=query, 
+                top_k=class_top_k, 
+                deduplicate=deduplicate, 
+                threshold=threshold, 
+                use_cache=False,
+                similarity_alpha=similarity_alpha,
+                random_strategy=random_strategy,
+                random_ratio=random_ratio,
+                temperature=temperature,
+                candidate_multiplier=candidate_multiplier
+                )
             all_texts.extend(texts)
             all_outputs.extend(outputs)
 
@@ -865,69 +897,6 @@ class MultiClassRetriever:
             self.cache_manager.set(query, params, result)
             
         return result
-    
-    def batch_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = 1,
-            deduplicate: bool = True,
-            threshold: float = 0,
-            weights: Optional[dict[str, float]] = None,
-            weights_reverse: bool = False,
-            use_cache: bool = True,
-            batch_size: int = 32
-            ) -> List[tuple[list[str], list[str]]]:
-        """批量检索多个查询"""
-        
-        results = []
-        
-        for query in tqdm(queries, desc="Multi-class batch retrieving"):
-            # 检查缓存
-            params = {
-                "top_k": top_k,
-                "deduplicate": deduplicate,
-                "threshold": threshold,
-                "weights": weights,
-                "weights_reverse": weights_reverse
-            }
-            
-            if use_cache:
-                cached_result = self.cache_manager.get(query, params)
-                if cached_result is not None:
-                    results.append(cached_result)
-                    continue
-            
-            if weights is None:
-                weights = DEFAULT_WEIGHTS
-
-            allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
-            all_texts = []
-            all_outputs = []
-
-            for class_name in TARGETED_GROUPS:
-                if class_name not in self.retrievers:
-                    continue
-                class_top_k = allocated_class_top_k[class_name]
-                if class_top_k == 0:
-                    continue
-                
-                # 使用子检索器的批量检索功能
-                class_results = self.retrievers[class_name].batch_retrieve(
-                    [query], class_top_k, deduplicate, threshold, use_cache=False, batch_size=1
-                )
-                if class_results:
-                    texts, outputs = class_results[0]
-                    all_texts.extend(texts)
-                    all_outputs.extend(outputs)
-
-            result = (all_texts, all_outputs)
-            results.append(result)
-            
-            # 保存到缓存
-            if use_cache:
-                self.cache_manager.set(query, params, result)
-        
-        return results
 
 class WrongExpRetriever:
 
