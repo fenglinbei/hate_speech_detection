@@ -152,7 +152,20 @@ def make_data(config: Config):
         tokenizer = get_tokenizer(config.tokenizer_path)
 
     if config.use_srag:
-        if config.stratified:
+        if config.clustered:
+            srag_retriever = ClusteredRetriever(
+                model_path=config.srag_model_path, 
+                model_name="bge-large-zh-v1.5",
+                n_clusters=config.n_clusters,
+                random_state=config.random_state
+            )
+
+            srag_retriever._load_datas(data_list=raw_datas[:split_idx])
+            srag_retriever._build_global_retriever()
+            srag_retriever._build_clusters()
+            srag_retriever._build_cluster_retrievers()
+
+        elif config.stratified:
             srag_retriever = MultiClassRetriever(
                 model_path=config.srag_model_path, 
                 model_name="bge-large-zh-v1.5",
@@ -203,7 +216,18 @@ def make_data(config: Config):
     
     # 更新检索器用于验证数据
     if config.use_srag and srag_retriever is not None:
-        if config.stratified:
+        if config.clustered:
+            srag_retriever = ClusteredRetriever(
+                model_path=config.srag_model_path, 
+                model_name="bge-large-zh-v1.5",
+                n_clusters=config.n_clusters,
+                random_state=config.random_state
+            )
+            srag_retriever._load_datas(data_list=raw_datas)
+            srag_retriever._build_global_retriever()
+            srag_retriever._build_clusters()
+            srag_retriever._build_cluster_retrievers()
+        elif config.stratified:
             srag_retriever = MultiClassRetriever(
                 model_path=config.srag_model_path, 
                 model_name="bge-large-zh-v1.5",
