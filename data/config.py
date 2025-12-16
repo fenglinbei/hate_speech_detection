@@ -41,6 +41,8 @@ class Config:
         self.lex_sim_threshold = retrieval.get('lex_sim_threshold', 0)
         self.weights = retrieval.get('weights', None)
         self.weights_reverse = retrieval.get('weights_reverse', False)
+        self.clustered = retrieval.get('clustered', False)
+        self.n_clusters = retrieval.get('n_clusters', 8)
 
         self.random_state = retrieval.get('random_state', 42)
         self.ramdom_strategy = retrieval.get('random_strategy', 'none')

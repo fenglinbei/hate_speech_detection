@@ -1114,19 +1114,22 @@ class ClusteredRetriever:
         # 缓存管理
         self.cache_manager = CacheManager(cache_dir, enable_cache)
 
-        # 加载数据、构建主 retriever（全部数据）
-        self._load_datas(data_path, data_list)
-        self._build_global_retriever()
-
-        # 聚类 & 按 cluster 划分数据
+        
         self.n_clusters = n_clusters
         self.random_state = random_state
-        self._build_clusters(cluster_model)
 
-        # 构建每个 cluster 对应的子 Retriever
-        self._build_cluster_retrievers()
+        # 加载数据、构建主 retriever（全部数据）
+        if data_path:
+            self._load_datas(data_path)
+            self._build_global_retriever()
 
-    def _load_datas(self, data_path: Optional[str], data_list: Optional[list[dict]]) -> None:
+            # 聚类 & 按 cluster 划分数据
+            self._build_clusters(cluster_model)
+
+            # 构建每个 cluster 对应的子 Retriever
+            self._build_cluster_retrievers()
+    
+    def _load_datas(self, data_path: Optional[str] = None, data_list: Optional[list[dict]] = None) -> None:
         """加载原始数据，结构与 Retriever.load_datas 保持一致"""
         if data_list is None:
             if data_path is None:
@@ -1226,6 +1229,7 @@ class ClusteredRetriever:
             "threshold": threshold,
             "weights": weights,
             "weights_reverse": weights_reverse,
+            "n_clusters": self.n_clusters
         }
 
         if use_cache:
@@ -1270,74 +1274,6 @@ class ClusteredRetriever:
             self.cache_manager.set(query, params, result)
 
         return result
-
-    def batch_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = 1,
-            deduplicate: bool = True,
-            threshold: float = 0,
-            weights: Optional[Dict[int, float]] = None,
-            weights_reverse: bool = False,
-            use_cache: bool = True,
-            batch_size: int = 32,
-            **kwargs
-    ) -> List[tuple[list[str], list[str]]]:
-        """批量分层检索，接口风格与 MultiClassRetriever.batch_retrieve 对齐"""
-
-        results: List[tuple[list[str], list[str]]] = []
-
-        for query in tqdm(queries, desc="Clustered batch retrieving"):
-            params = {
-                "top_k": top_k,
-                "deduplicate": deduplicate,
-                "threshold": threshold,
-                "weights": weights,
-                "weights_reverse": weights_reverse,
-            }
-
-            if use_cache:
-                cached_result = self.cache_manager.get(query, params)
-                if cached_result is not None:
-                    results.append(cached_result)
-                    continue
-
-            if weights is None:
-                weights = self._default_cluster_weights()
-
-            allocated_cluster_top_k = allocate_class_num(top_k, weights, reverse=weights_reverse)
-
-            all_texts: List[str] = []
-            all_outputs: List[Any] = []
-
-            for c in self.cluster_ids:
-                if c not in self.cluster_retrievers:
-                    continue
-
-                cluster_top_k = allocated_cluster_top_k.get(c, 0)
-                if cluster_top_k <= 0:
-                    continue
-
-                # 这里可以选择是否用 batch_retrieve；为简单和一致起见，直接调用单次 retrieve
-                texts, outputs = self.cluster_retrievers[c].retrieve(
-                    query=query,
-                    top_k=cluster_top_k,
-                    deduplicate=deduplicate,
-                    threshold=threshold,
-                    use_cache=False,
-                    **kwargs
-                )
-
-                all_texts.extend(texts)
-                all_outputs.extend(outputs)
-
-            result = (all_texts, all_outputs)
-            results.append(result)
-
-            if use_cache:
-                self.cache_manager.set(query, params, result)
-
-        return results
     
 class StochasticWeightedRetriever(Retriever):
     """
