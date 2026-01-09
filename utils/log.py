@@ -26,7 +26,7 @@ class InterceptHandler(logging.Handler):
 
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
-def init_logger(level: str = "INFO", log_path: str = LOG_PATH, show_console: bool = True):
+def init_logger(level: str = "INFO", log_path: str = LOG_PATH, show_console: bool = True, record_levels: list = LOG_LEVELS):
 
     logger.remove()  # 移除Loguru的默认处理器
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -47,7 +47,7 @@ def init_logger(level: str = "INFO", log_path: str = LOG_PATH, show_console: boo
         logger.add(sys.stdout, level=level, format=CONSOLE_FORMAT)
 
     # 文件日志
-    for log_level in LOG_LEVELS:
+    for log_level in record_levels:
         logger.add(
             os.path.join(log_dir, f'{log_level.lower()}.log'),
             encoding="utf-8",
