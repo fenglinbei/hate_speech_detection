@@ -6,7 +6,7 @@ import json
 import numpy as np
 from typing import Any, Dict, Optional
 
-from rag.tools import ensure_dir
+from rag.tool import ensure_dir
 
 class CacheManager:
     """

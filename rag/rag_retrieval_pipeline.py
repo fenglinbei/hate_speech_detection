@@ -18,7 +18,8 @@ from rag.embedder import STEmbedder
 from rag.faiss_hnsw_index import FaissHNSWIndex
 from rag.filters import mmr_select, filter_with_fallback
 from rag.config import RetrievalParams
-from rag.tools import sha1_text, ensure_dir, l2_normalize
+from rag.tool import sha1_text, ensure_dir, l2_normalize
+from tools.convert import parsed_quad_to_trip, parsed_quad_to_raw_quad
 
 logger = init_logger(level="INFO", record_levels=["INFO", "WARNING", "ERROR", "CRITICAL"])
 
@@ -103,11 +104,19 @@ class DiversityRetrievalPipeline:
         with open(self.params.trace_jsonl_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-    def retrieve_shots(self, query_id: str, query_text: str, query_label: Optional[Any], n_shot: Optional[int]) -> Dict[str, Any]:
+    def retrieve_shots(
+            self, query_id: str, 
+            query_text: str, 
+            query_label: Optional[Any], 
+            n_shot: Optional[int],
+            mmr_lambda: Optional[float]) -> Dict[str, Any]:
         t0 = time.time()
 
         if n_shot is not None:
             self.params.n_shot = n_shot
+
+        if mmr_lambda is not None:
+            self.params.mmr_lambda = mmr_lambda
 
         # ---------- cache keys (optional)
         qkey = sha1_text(str(query_id) + "|" + query_text)
@@ -329,6 +338,7 @@ def main_build_index(
 class MMRReterever:
     def __init__(
         self,
+        data_path: str,
         model_path: str,
         index_path: str,
         docs_path: str,
@@ -336,6 +346,11 @@ class MMRReterever:
     ):
         cache = CacheManager(params.cache_dir)
         embedder = STEmbedder(model_path=model_path, device="cuda:0", batch_size=64, cache=cache, normalize=True)
+
+        self.data = load_json_dataset(data_path)
+        self.data_dict = {}
+        for item in self.data:
+            self.data_dict[str(item["id"])] = item
 
         # load index + doc_store
         index = FaissHNSWIndex.load(index_path)
@@ -356,8 +371,18 @@ class MMRReterever:
             cache=cache,
         )
 
-    def retrieve(self, query_id: str, query_text: str, query_label: Optional[Any], n_shot: Optional[int] = None) -> Dict[str, Any]:
-        return self.pipeline.retrieve_shots(query_id=query_id, query_text=query_text, query_label=query_label, n_shot=n_shot)["shots"]
+    def retrieve(
+            self, 
+            query_id: str, 
+            query_text: str, 
+            query_label: Optional[Any] = None, 
+            n_shot: Optional[int] = None,
+            mmr_lambda: Optional[float] = None
+            ) -> tuple[list[str], list[str]]:
+        shots =  self.pipeline.retrieve_shots(query_id=query_id, query_text=query_text, query_label=query_label, n_shot=n_shot, mmr_lambda=mmr_lambda)["shots"]
+        texts = [s["text"] for s in shots]
+        labels = [parsed_quad_to_raw_quad(self.data_dict[s["doc_id"]]["quadruples"]) for s in shots]
+        return texts, labels
 
 def main_make_nshot_dataset(
         data_path: str = "data/full/classify/train.json",
@@ -418,9 +443,13 @@ if __name__ == "__main__":
     # main_make_nshot_dataset()
 
     retriever = MMRReterever(
+        data_path="data/full/std/train.json",
         model_path="models/base/bge-large-zh-v1.5",
         index_path="./cache_retrieval/faiss_hnsw.index",
         docs_path="./cache_retrieval/doc_store.json",
         params=RETRIEVAL_PARAMS,
     )
     results = retriever.retrieve(query_id="test1", query_text="这是一个测试文本，用于分类任务。", n_shot=5)
+    print("Retrieved shots:")
+    for r in results:
+        print(r)

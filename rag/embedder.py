@@ -5,7 +5,7 @@ from typing import Optional, List
 from sentence_transformers import SentenceTransformer
 
 from rag.cache import CacheManager
-from rag.tools import sha1_text, l2_normalize
+from rag.tool import sha1_text, l2_normalize
 
 
 class STEmbedder:

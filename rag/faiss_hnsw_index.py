@@ -5,7 +5,7 @@ import faiss
 import numpy as np
 from typing import List, Tuple
 
-from rag.tools import ensure_dir
+from rag.tool import ensure_dir
 
 class FaissHNSWIndex:
     """

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class RetrievalParams:
     # retrieval
     top_k: int = 100                 # initial recall size
