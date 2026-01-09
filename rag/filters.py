@@ -8,7 +8,7 @@ from collections import Counter
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from utils.log import logger
-from rag.tools import sha1_text
+from rag.tool import sha1_text
 
 
 import numpy as np

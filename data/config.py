@@ -50,6 +50,9 @@ class Config:
         self.random_temperature = retrieval.get('random_temperature', 1.0)
         self.similarity_alpha = retrieval.get('similarity_alpha', 1)
         self.candidate_multiplier = retrieval.get('candidate_multiplier', 3)
+
+        self.mmr = retrieval.get('mmr', False)
+        self.mmr_lambda = retrieval.get('mmr_lambda', 0.75)
         
         # 训练设置
         training = config_data.get('training_settings', {})

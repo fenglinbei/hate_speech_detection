@@ -8,6 +8,7 @@ from transformers import AutoTokenizer
 from prompt import *
 from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
+from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS
 from tools.convert import output2triple
 
 def get_tokenizer(model_path: str):
@@ -27,7 +28,7 @@ def is_overlength(tokenizer, text, max_length):
 def build_prompt(
         datas: list,
         config: Config,
-        srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever] = None,
+        srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever | MMRReterever] = None,
         lex_retriever: Optional[LexiconRetriever] = None,
         tokenizer: Optional[AutoTokenizer] = None,
         is_test_data: bool = False
@@ -42,18 +43,26 @@ def build_prompt(
         """构建单个数据的提示"""
         
         if config.use_srag and srag_retriever is not None and config.example_template is not None:
-            retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
-                raw_data['content'], 
-                config.srag_top_k, 
-                threshold=config.srag_threshold, 
-                weights=config.weights, 
-                weights_reverse=config.weights_reverse,
-                similarity_alpha=config.similarity_alpha,
-                random_strategy=config.ramdom_strategy,
-                random_ratio=config.random_ratio,
-                random_temperature=config.random_temperature,
-                candidate_multiplier=config.candidate_multiplier
-            )
+            if config.mmr and isinstance(srag_retriever, MMRReterever):
+                retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
+                    query_id=raw_data['id'],
+                    query_text=raw_data['content'],
+                    n_shot=config.srag_top_k,
+                    mmr_lambda=config.mmr_lambda
+                )
+            else:
+                retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
+                    raw_data['content'], 
+                    config.srag_top_k, 
+                    threshold=config.srag_threshold, 
+                    weights=config.weights, 
+                    weights_reverse=config.weights_reverse,
+                    similarity_alpha=config.similarity_alpha,
+                    random_strategy=config.ramdom_strategy,
+                    random_ratio=config.random_ratio,
+                    random_temperature=config.random_temperature,
+                    candidate_multiplier=config.candidate_multiplier
+                )
             examples = []
             for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
                 example_prompt = config.example_template.replace("{retrieve_content}", retrieve_content).\
@@ -174,6 +183,14 @@ def make_data(config: Config):
             )
             srag_retriever.load_datas(data_list=raw_datas[:split_idx])
             srag_retriever.build_retrievers()
+        elif config.mmr:
+            srag_retriever = MMRReterever(
+                data_path=config.raw_data_path,
+                model_path="models/base/bge-large-zh-v1.5",
+                index_path="./cache_retrieval/faiss_hnsw.index",
+                docs_path="./cache_retrieval/doc_store.json",
+                params=RETRIEVAL_PARAMS,
+            )
         else:
             if config.ramdom_strategy != "none":
                 srag_retriever = StochasticWeightedRetriever(
@@ -236,6 +253,8 @@ def make_data(config: Config):
             )
             srag_retriever.load_datas(data_list=raw_datas)
             srag_retriever.build_retrievers()
+        elif config.mmr:
+            srag_retriever = srag_retriever
         else:
             if config.ramdom_strategy != "none":
                 srag_retriever = StochasticWeightedRetriever(
