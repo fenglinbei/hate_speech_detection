@@ -4,7 +4,7 @@
     "prompt_template": "RAG_PROMPT_USER_V2",
     "example_template": "RAG_PROMPT_EXAMPLE_V2",
     "system_prompt": "DEFAULT_SYSTEM_PTOMPT_EN",
-    "max_length": 512,
+    "max_length": 1280,
     "lora": false,
     "random_seed": 23333333,
     "exp_name": "lambda08",
@@ -52,9 +52,9 @@
     
     "training": {
         "output_dir": "models/exps/mmr/lambda08",
-        "per_device_train_batch_size": 1,
-        "per_device_eval_batch_size": 1,
-        "gradient_accumulation_steps": 2,
+        "per_device_train_batch_size": 2,
+        "per_device_eval_batch_size": 2,
+        "gradient_accumulation_steps": 4,
         "eval_strategy": "epoch",
         "logging_steps": 10,
         "num_train_epochs": 2,
@@ -72,7 +72,7 @@
     "eval": {
         "max_retries": 0,
         "eval_num": 100,
-        "max_length": 512
+        "max_length": 1280
     },
     
     "cuda_devices": [0, 1, 2, 3]
