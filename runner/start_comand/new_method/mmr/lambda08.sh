@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES="1" python -m vllm.entrypoints.openai.api_server \
 --served-model-name qwen2.5 \
---model=./models/exps/new_method/mmr/lambda08 \
+--model=./models/exps/mmr/lambda08/checkpoint-1446 \
 --trust-remote-code \
 --tensor-parallel-size=1 \
 --port="35003" \
