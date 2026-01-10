@@ -4,7 +4,6 @@ import json
 import torch
 import random
 import swanlab
-import deepspeed
 import argparse
 import datetime
 import pandas as pd
@@ -13,9 +12,7 @@ from tqdm import tqdm
 from pathlib import Path
 from datasets import Dataset
 from typing import Optional
-from deepspeed.runtime.engine import DeepSpeedEngine
 from modelscope import snapshot_download, AutoTokenizer
-from peft import LoraConfig, TaskType, get_peft_model, PeftModel
 from swanlab.integration.transformers import SwanLabCallback
 from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq # type: ignore
 
@@ -72,86 +69,9 @@ class CustomTrainer(Trainer):
     def evaluate(self, **kwargs): # type: ignore
         """自定义评估逻辑"""
         metrics = super().evaluate(**kwargs)
-        # logger.debug(metrics)
-        # custom_metrics = self.evaluate_custom()
-        # metrics.update(custom_metrics) # type: ignore
         self.log(metrics)
         swanlab.log(metrics)
         return metrics
-        
-    def evaluate_custom(self):
-        """生成回复并计算四元组指标"""
-        results = []
-        model = self.model.eval()
-
-        progress_bar = tqdm(
-            total=min(self.eval_num, len(self.eval_raw_dataset)), # type: ignore
-            desc="Evaluating custom metrics",
-            dynamic_ncols=True
-        )
-        
-        test_text_list = []
-        for idx, example in enumerate(self.eval_raw_dataset[:self.eval_num]): # type: ignore
-            item_id = idx
-            final_status = "success"
-            try:
-                messages = build_messages(example)
-                response = ""
-                for attempt in range(self.max_retries + 1):
-                    response = predict(messages, model, self.eval_tokenizer, config=self.eval_config)
-                    response_text = f"Question: {example['input']}\nLLM:{response}"
-                    test_text_list.append(swanlab.Text(response_text))
-                    
-                    pred_quads = parse_llm_output_trip(response)
-                    gt_quads = parse_llm_output_trip(example['output'])
-                    
-                    if validate_quadruples(pred_quads):
-                        final_status = "success"
-                        break
-                    else:
-                        logger.debug(f"Validation failed (attempt:{attempt+1})")
-                        final_status = "invalid"
-            except Exception as e:
-                logger.error(f"Evaluation error: {str(e)}")
-                pred_quads, gt_quads = [], []
-                final_status = "fail"
-                
-            results.append({
-                "id": item_id,
-                "content": example["content"],
-                "prompt": example["input"],
-                "llm_output": response, # type: ignore
-                "gt_quadruples": gt_quads, # type: ignore
-                "pred_quadruples": pred_quads, # type: ignore
-                "status": final_status,
-                "attempts": self.max_retries + 1
-            })
-
-            success_count = len([r for r in results if r['status']=='success'])
-            progress_bar.set_postfix({
-                "success": f"{success_count}/{len(results)}",
-                "rate": f"{success_count/len(results):.1%}" if len(results) else "0%"
-            })
-            progress_bar.update(1)
-
-        progress_bar.close()
-        swanlab.log({"Prediction": test_text_list})
-
-        # 保存评估结果
-        output_dir = Path("finetune/eval_outputs")
-        output_dir.mkdir(parents=True, exist_ok=True)
-        current_step = self.state.global_step
-        filename = output_dir / f"eval_results_step_{current_step}.json"
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump({
-                "step": current_step,
-                "timestamp": str(datetime.datetime.now()),
-                "eval_num": len(results),
-                "results": results
-            }, f, ensure_ascii=False, indent=2)
-        
-        return self.llm_metrics.run(results)
 
 
 def predict(messages, model, tokenizer, config):
@@ -213,7 +133,6 @@ def run(config: dict):
             device_map=device_map
         )
         print(model)
-        model.enable_input_require_grads()
 
     except Exception as err:
         logger.exception(err)
@@ -247,7 +166,11 @@ def run(config: dict):
             input_ids = input_ids[:MAX_LENGTH]
             attention_mask = attention_mask[:MAX_LENGTH]
             labels = labels[:MAX_LENGTH]
-        return {"input_ids": torch.tensor(input_ids).to("cuda:0"), "attention_mask": torch.tensor(attention_mask).to("cuda:0"), "labels": torch.tensor(labels).to("cuda:0")}
+        return {
+            "input_ids": input_ids, 
+            "attention_mask": attention_mask, 
+            "labels": labels
+            }
     
     # 数据准备
     data_config = config['data']
@@ -287,19 +210,6 @@ def run(config: dict):
             experiment_name=config['exp_name'],
         )]
     )
-
-    # if not isinstance(model, DeepSpeedEngine):
-    #     optimizer = trainer.create_optimizer()
-    #     lr_scheduler = trainer.create_scheduler(num_training_steps=182)
-        
-    #     model, optimizer, _, _ = deepspeed.initialize(
-    #         model=model,
-    #         optimizer=optimizer,
-    #         lr_scheduler=lr_scheduler,
-    #         config=training_args.deepspeed,
-    #         dist_init_required=True,
-    #     )
-    #     trainer.model = model
 
     trainer.train()
     swanlab.finish()
