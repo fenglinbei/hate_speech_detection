@@ -63,7 +63,7 @@ X_train_text, X_val_text, y_train, y_val = train_test_split(
 # 3. Load Qwen3-4B (GPU)
 # =========================
 
-MODEL_PATH = "/home/fenglin/project/hateSpeechDetection/models/base/Qwen3-4B"
+MODEL_PATH = "/home/data/liaozijie/hate_speech_detection/models/base/Qwen3-4B"
 
 print("Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
@@ -163,7 +163,7 @@ clf = xgb.XGBClassifier(
     eval_metric=["logloss", "error"],
     n_jobs=-1,
     tree_method='hist',
-    device='cuda:0',
+    device='cpu',
     random_state=42             # 固定随机种子
 )
 clf.fit(
