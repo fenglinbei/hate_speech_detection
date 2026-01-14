@@ -19,8 +19,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
 
 # 模型和数据路径（与训练时一致）
-MODEL_PATH = "/mnt/Data/multi-agent/Qwen/Qwen3-4B"  # 同训练时的模型路径
-VALIDATION_DATA_PATH = "test_split.json"  # 验证集数据路径（可替换为新的验证集）
+MODEL_PATH = "/home/data/liaozijie/hate_speech_detection/models/base/Qwen3-4B"  # 同训练时的模型路径
+VALIDATION_DATA_PATH = "Demo/data/phase1_test_with_labels.json"  # 验证集数据路径（可替换为新的验证集）
 SCALER_PATH = "qwen_scaler1.pkl"          # 训练好的scaler
 CALIBRATED_MODEL_PATH = "qwen_xgb_calibrated1.pkl"  # 校准后的模型
 
