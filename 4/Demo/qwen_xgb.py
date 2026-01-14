@@ -63,7 +63,7 @@ X_train_text, X_val_text, y_train, y_val = train_test_split(
 # 3. Load Qwen3-4B (GPU)
 # =========================
 
-MODEL_PATH = "/mnt/Data/multi-agent/Qwen/Qwen3-4B"
+MODEL_PATH = "data/liaozijie/hate_speech_detection/models/base/Qwen3-4B"
 
 print("Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
