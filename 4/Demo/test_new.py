@@ -21,11 +21,11 @@ print("Using device:", device)
 # 模型和数据路径（与训练时一致）
 MODEL_PATH = "/home/data/liaozijie/hate_speech_detection/models/base/Qwen3-4B"
 VALIDATION_DATA_PATH = "Demo/data/phase1_test_with_labels.json"
-SCALER_PATH = "qwen_scaler1.pkl"
-CALIBRATED_MODEL_PATH = "qwen_xgb_calibrated1.pkl"
+SCALER_PATH = "Demo/qwen_scaler1.pkl"
+CALIBRATED_MODEL_PATH = "Demo/qwen_xgb_calibrated1.pkl"
 
 # 输出文件路径（新增）
-OUTPUT_PRED_JSON = "qwen_validation_predictions.json"
+OUTPUT_PRED_JSON = "4_test.json"
 
 
 # =========================
