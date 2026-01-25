@@ -36,12 +36,34 @@ def prompt_to_text(prompt: str, prompt_template: str) -> str:
     placeholder = "{text}"
     return prompt.split(placeholder)[0] if placeholder in prompt else prompt
 
-def build_messages(example: pd.Series) -> list[dict]:
-    if example["instruction"]:
-        messages = [{'content': example["instruction"], 'role': 'system'}, {'content': example["input"], 'role': 'user'}]
+def to_str(x):
+    if x is None:
+        return ""
+    # pandas NaN
+    try:
+        import pandas as pd
+        if isinstance(x, float) and pd.isna(x):
+            return ""
+    except Exception:
+        pass
+
+    if isinstance(x, list):
+        return "\n".join(map(str, x))
+    if isinstance(x, dict):
+        return json.dumps(x, ensure_ascii=False)
+    return str(x)
+
+def build_messages(example) -> list[dict]:
+    inst = to_str(example.get("instruction"))
+    inp = to_str(example.get("input"))
+
+    if inst.strip():
+        return [
+            {"role": "system", "content": inst},
+            {"role": "user", "content": inp},
+        ]
     else:
-        messages = [{'content': example["input"], 'role': 'user'}]
-    return messages
+        return [{"role": "user", "content": inp}]
        
 
 class CustomTrainer(Trainer):
@@ -158,7 +180,7 @@ def run(config: dict):
             text,
             add_special_tokens=False,
         )
-        response = tokenizer(f"{example['output']}", add_special_tokens=False)
+        response = tokenizer(to_str(example.get("output")), add_special_tokens=False)
         input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
         attention_mask = (
             instruction["attention_mask"] + response["attention_mask"] + [1]
