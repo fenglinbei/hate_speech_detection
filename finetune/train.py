@@ -227,6 +227,21 @@ def run(config: dict):
         group_by_length=True,
     )
 
+    local_rank = int(os.environ.get("LOCAL_RANK", "-1"))
+    if local_rank in (-1, 0):
+        print("features:", train_dataset.features)
+        ex0 = train_dataset[0]["input_ids"]
+        print("type(input_ids[0]):", type(ex0), "sample:", ex0 if isinstance(ex0, int) else ex0[:10])
+
+        bad = []
+        for i in range(min(2000, len(train_dataset))):
+            x = train_dataset[i]["input_ids"]
+            if isinstance(x, int):
+                bad.append(i)
+                if len(bad) <= 5:
+                    print("bad idx:", i, "value:", x)
+        print("bad count:", len(bad))
+
     # 训练器初始化
     trainer = CustomTrainer(
         model=model,
