@@ -8,11 +8,11 @@ import math
 import hashlib
 import random
 from tqdm import tqdm
+from loguru import logger
 from dataclasses import dataclass, asdict
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from utils.log import init_logger
 from rag.cache import CacheManager
 from rag.embedder import STEmbedder
 from rag.faiss_hnsw_index import FaissHNSWIndex
@@ -21,7 +21,6 @@ from rag.config import RetrievalParams
 from rag.tool import sha1_text, ensure_dir, l2_normalize
 from tools.convert import parsed_quad_to_trip, parsed_quad_to_raw_quad
 
-logger = init_logger(level="INFO", record_levels=["INFO", "WARNING", "ERROR", "CRITICAL"])
 
 def params_signature(params: RetrievalParams, extra: Optional[Dict[str, Any]] = None) -> str:
     d = asdict(params)
