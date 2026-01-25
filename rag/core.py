@@ -866,6 +866,7 @@ class MultiClassRetriever:
             weights = DEFAULT_WEIGHTS
 
         allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
+        # logger.debug(f"Allocated top_k per class: {allocated_class_top_k}")
         all_texts = []
         all_outputs = []
 

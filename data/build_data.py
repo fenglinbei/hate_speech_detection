@@ -1,11 +1,12 @@
 import json
 import random
 from tqdm import tqdm
-from loguru import logger
 from typing import Optional
 from transformers import AutoTokenizer
 
 from prompt import *
+from utils.log import init_logger
+logger = init_logger(level="DEBUG", show_console=True)
 from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
 from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS
@@ -216,7 +217,6 @@ def make_data(config: Config):
         )
     else:
         lex_retriever = None
-
 
     # 处理训练数据
     messages = build_prompt(
