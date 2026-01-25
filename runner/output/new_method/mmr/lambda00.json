@@ -4,9 +4,9 @@
     "shot_num": 0,
     "seed": 23333333,
     "usage": {
-      "completion_tokens": 34677,
+      "completion_tokens": 34668,
       "prompt_tokens": 1475526,
-      "total_tokens": 1510203
+      "total_tokens": 1510194
     },
     "llm_params": {
       "max_new_tokens": 2048,
@@ -719,18 +719,12 @@
           }
         ]
       ],
-      "llm_output": "腐癌 | 说的 | LGBTQ [SEP] 异性恋女生 | 哭 | LGBTQ [END]",
+      "llm_output": "腐癌 | 你们异性恋女生😓 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "腐癌",
-          "argument": "说的",
-          "targeted_group": "LGBTQ",
-          "hateful": "hate"
-        },
-        {
-          "target": "异性恋女生",
-          "argument": "哭",
+          "argument": "你们异性恋女生😓",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -1193,14 +1187,14 @@
           }
         ]
       ],
-      "llm_output": "黑人同婚 | 国家宣传口的风向都是在推进 | Racism [END]",
+      "llm_output": "黑人同婚 | 国家宣传口的风向都是在推进 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人同婚",
           "argument": "国家宣传口的风向都是在推进",
-          "targeted_group": "Racism",
-          "hateful": "hate"
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -1277,14 +1271,14 @@
           }
         ]
       ],
-      "llm_output": "别的女人 | 关我鸟事 | Sexism [END]",
+      "llm_output": "我 | 只关爱自己身边的女性 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "别的女人",
-          "argument": "关我鸟事",
-          "targeted_group": "Sexism",
-          "hateful": "hate"
+          "target": "我",
+          "argument": "只关爱自己身边的女性",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -1751,14 +1745,14 @@
           }
         ]
       ],
-      "llm_output": "群满嘴道德仁义的狗 | 在搞笑 | non-hate [END]",
+      "llm_output": "群满嘴道德仁义的狗 | 在搞笑 | others [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "群满嘴道德仁义的狗",
           "argument": "在搞笑",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "others",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -2129,12 +2123,12 @@
           }
         ]
       ],
-      "llm_output": "大连 | 净是负面的 | Region [END]",
+      "llm_output": "大连 | 倒是有存在感可净是负面的 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "大连",
-          "argument": "净是负面的",
+          "argument": "倒是有存在感可净是负面的",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -3827,14 +3821,14 @@
           }
         ]
       ],
-      "llm_output": "它们 | 类人 | non-hate [END]",
+      "llm_output": "它们 | 类人 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "它们",
           "argument": "类人",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "Racism",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -4331,14 +4325,14 @@
           }
         ]
       ],
-      "llm_output": "它们 | zzzq | non-hate [END]",
+      "llm_output": "它们 | zzzq | others [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "它们",
           "argument": "zzzq",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "others",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -4733,12 +4727,12 @@
           }
         ]
       ],
-      "llm_output": "这种货色 | 背后捅刀往往致命 | non-hate [END]",
+      "llm_output": "这种货色 | 宁可当敌人也不能当朋友 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "这种货色",
-          "argument": "背后捅刀往往致命",
+          "argument": "宁可当敌人也不能当朋友",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -5117,12 +5111,18 @@
           }
         ]
       ],
-      "llm_output": "龟男舔狗 | 难怪女拳这么凶? | Sexism [END]",
+      "llm_output": "龟男舔狗 | 龟男舔狗 | Sexism [SEP] 女拳 | 这帮龟男舔狗 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "龟男舔狗",
-          "argument": "难怪女拳这么凶?",
+          "argument": "龟男舔狗",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        },
+        {
+          "target": "女拳",
+          "argument": "这帮龟男舔狗",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -5237,7 +5237,7 @@
           }
         ]
       ],
-      "llm_output": "现代女生 | 接受教育了 | non-hate [SEP] 你 | 思想留在三从四德时期 | Sexism [END]",
+      "llm_output": "现代女生 | 接受教育了 | non-hate [SEP] 你 | 思想留在三从四德时期吧 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -5248,7 +5248,7 @@
         },
         {
           "target": "你",
-          "argument": "思想留在三从四德时期",
+          "argument": "思想留在三从四德时期吧",
           "targeted_group": "Sexism",
           "hateful": "non-hate"
         }
@@ -5879,12 +5879,12 @@
           }
         ]
       ],
-      "llm_output": "狗 | 觉得人类的屎很香 | non-hate [END]",
+      "llm_output": "狗 | 觉得人类的屎很香？并且吃的津津有味？ | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "狗",
-          "argument": "觉得人类的屎很香",
+          "argument": "觉得人类的屎很香？并且吃的津津有味？",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -7187,14 +7187,14 @@
           }
         ]
       ],
-      "llm_output": "你 | 打压少数人的借口 | others [END]",
+      "llm_output": "你 | 打压少数人的借口 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "你",
           "argument": "打压少数人的借口",
-          "targeted_group": "others",
-          "hateful": "hate"
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -7751,18 +7751,12 @@
           }
         ]
       ],
-      "llm_output": "男性 | 战争中死的最多 | non-hate [SEP] 男性 | 获胜受益的却不仅仅是男性 | non-hate [END]",
+      "llm_output": "男性 | 战争中死的最多 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "男性",
           "argument": "战争中死的最多",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "男性",
-          "argument": "获胜受益的却不仅仅是男性",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -7793,12 +7787,12 @@
           }
         ]
       ],
-      "llm_output": "同性异蛆 | 你发正常的帖子是钓不到同性异蛆的 | LGBTQ [END]",
+      "llm_output": "同性异蛆 | 钓不到 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "同性异蛆",
-          "argument": "你发正常的帖子是钓不到同性异蛆的",
+          "argument": "钓不到",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -8081,11 +8075,11 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 心胸狭隘种族歧视 | Racism [END]",
+      "llm_output": "我 | 心胸狭隘种族歧视 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "黑人",
+          "target": "我",
           "argument": "心胸狭隘种族歧视",
           "targeted_group": "Racism",
           "hateful": "hate"
@@ -8123,12 +8117,12 @@
           }
         ]
       ],
-      "llm_output": "非处 | 不一定是鸡，但鸡一定是非处 | Sexism [SEP] 非处 | 没有非处，就没有色情产业 | Sexism [END]",
+      "llm_output": "非处 | 鸡一定是非处 | Sexism [SEP] 非处 | 没有非处，就没有色情产业 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "非处",
-          "argument": "不一定是鸡，但鸡一定是非处",
+          "argument": "鸡一定是非处",
           "targeted_group": "Sexism",
           "hateful": "hate"
         },
@@ -9191,12 +9185,12 @@
           }
         ]
       ],
-      "llm_output": "基佬 | 自嗨型 | LGBTQ [END]",
+      "llm_output": "基佬 | 自嗨型基佬 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "基佬",
-          "argument": "自嗨型",
+          "argument": "自嗨型基佬",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -9761,12 +9755,12 @@
           }
         ]
       ],
-      "llm_output": "非正常的女性 | 对非正常的女性毫不同情，毫不留情，毫不共情，从日常做起 | Sexism [END]",
+      "llm_output": "非正常的女性 | 毫不同情，毫不留情，毫不共情 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "非正常的女性",
-          "argument": "对非正常的女性毫不同情，毫不留情，毫不共情，从日常做起",
+          "argument": "毫不同情，毫不留情，毫不共情",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -10049,12 +10043,12 @@
           }
         ]
       ],
-      "llm_output": "国女 | 一群情绪化的** | Sexism [END]",
+      "llm_output": "国女 | 情绪化的** | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "国女",
-          "argument": "一群情绪化的**",
+          "argument": "情绪化的**",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -10577,20 +10571,14 @@
           }
         ]
       ],
-      "llm_output": "有的病人 | 隐瞒病史 | non-hate [SEP] 有的人渣 | 染病毒狗真的会故意把病传给缉毒警察 | others [END]",
+      "llm_output": "缉毒警 | 有的人渣染病毒狗真的会故意把病传给缉毒警察 | others [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "有的病人",
-          "argument": "隐瞒病史",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "有的人渣",
-          "argument": "染病毒狗真的会故意把病传给缉毒警察",
+          "target": "缉毒警",
+          "argument": "有的人渣染病毒狗真的会故意把病传给缉毒警察",
           "targeted_group": "others",
-          "hateful": "non-hate"
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -16312,14 +16300,26 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 种族歧视 | Racism [END]",
+      "llm_output": "黑人 | 种族歧视的核心是对于同工同酬的双标问题 | Racism [SEP] 一个外国人在中国打工 | 同工同酬付同样的钱能买到同样的商品怎么能算是种族歧视呢 | non-hate [SEP] 中国 | 原住民国家本来就没有黑人这个种族 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人",
-          "argument": "种族歧视",
+          "argument": "种族歧视的核心是对于同工同酬的双标问题",
           "targeted_group": "Racism",
           "hateful": "hate"
+        },
+        {
+          "target": "一个外国人在中国打工",
+          "argument": "同工同酬付同样的钱能买到同样的商品怎么能算是种族歧视呢",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "中国",
+          "argument": "原住民国家本来就没有黑人这个种族",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -16708,12 +16708,12 @@
           }
         ]
       ],
-      "llm_output": "结婚率 | 血崩了 | non-hate [END]",
+      "llm_output": "结婚率 | 血崩 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "结婚率",
-          "argument": "血崩了",
+          "argument": "血崩",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -16894,7 +16894,7 @@
           }
         ]
       ],
-      "llm_output": "东北人 | 我们这对东北人的看法非常统一大家都挺反感他们的 | Region [SEP] 东北人 | 有些人是非常不讲理还感觉自己很有理 | Region [SEP] 东北人 | 10次吵架8次东北的 | Region [END]",
+      "llm_output": "东北人 | 我们这对东北人的看法非常统一大家都挺反感他们的 | Region [SEP] 东北人 | 这不是少数现象，10次吵架8次东北的 | Region [SEP] 东北人 | 打心底里反感东北人 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -16905,13 +16905,13 @@
         },
         {
           "target": "东北人",
-          "argument": "有些人是非常不讲理还感觉自己很有理",
+          "argument": "这不是少数现象，10次吵架8次东北的",
           "targeted_group": "Region",
           "hateful": "hate"
         },
         {
           "target": "东北人",
-          "argument": "10次吵架8次东北的",
+          "argument": "打心底里反感东北人",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -17782,12 +17782,12 @@
           }
         ]
       ],
-      "llm_output": "他 | 欠收拾了 | non-hate [END]",
+      "llm_output": "他 | 欠收拾 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "他",
-          "argument": "欠收拾了",
+          "argument": "欠收拾",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -18328,12 +18328,18 @@
           }
         ]
       ],
-      "llm_output": "eg | 上赶着的 | Sexism, Racism [END]",
+      "llm_output": "没想过找外国人的女生 | 提升洋垃圾来中国的门槛吧 | Sexism, Racism [SEP] 上赶着的eg | 当然批判 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "eg",
-          "argument": "上赶着的",
+          "target": "没想过找外国人的女生",
+          "argument": "提升洋垃圾来中国的门槛吧",
+          "targeted_group": "Sexism, Racism",
+          "hateful": "hate"
+        },
+        {
+          "target": "上赶着的eg",
+          "argument": "当然批判",
           "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
@@ -18976,15 +18982,9 @@
           }
         ]
       ],
-      "llm_output": "这种科学的说法 | 应该是支持的 | non-hate [SEP] 我们吧里 | 整体还是有点偏的 | non-hate [END]",
+      "llm_output": "我们吧里 | 整体还是有点偏的 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
-        {
-          "target": "这种科学的说法",
-          "argument": "应该是支持的",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
         {
           "target": "我们吧里",
           "argument": "整体还是有点偏的",
@@ -19822,13 +19822,13 @@
           }
         ]
       ],
-      "llm_output": "美国 | 亏欠黑人 | Region, Racism [SEP] 黑人 | 在中国都不负责任 | Racism [END]",
+      "llm_output": "美国 | 亏欠黑人 | Region [SEP] 黑人 | 在中国都不负责任 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "美国",
           "argument": "亏欠黑人",
-          "targeted_group": "Region, Racism",
+          "targeted_group": "Region",
           "hateful": "hate"
         },
         {
@@ -20818,12 +20818,18 @@
           }
         ]
       ],
-      "llm_output": "河南朋友 | 这……我见过一次，那就是楞抢那种 | Region [END]",
+      "llm_output": "河南朋友 | 真的是不错，能处 | Region [SEP] 河南朋友 | 晌抢那种 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "河南朋友",
-          "argument": "这……我见过一次，那就是楞抢那种",
+          "argument": "真的是不错，能处",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        },
+        {
+          "target": "河南朋友",
+          "argument": "晌抢那种",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -20926,14 +20932,14 @@
           }
         ]
       ],
-      "llm_output": "同性 | 大部分人都不会在职场中公开自己同性的取向 | non-hate [END]",
+      "llm_output": "同性 | 大部分人都不会在职场中公开自己同性的取向 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "同性",
           "argument": "大部分人都不会在职场中公开自己同性的取向",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -22288,12 +22294,12 @@
           }
         ]
       ],
-      "llm_output": "回族 | 被黑被歧视吗？ | non-hate [END]",
+      "llm_output": "回族 | 被黑的 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "回族",
-          "argument": "被黑被歧视吗？",
+          "argument": "被黑的",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -22396,12 +22402,12 @@
           }
         ]
       ],
-      "llm_output": "你 | 道德绑架也太厉害了逻辑也不对 | non-hate [END]",
+      "llm_output": "你 | 逻辑也不对 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "你",
-          "argument": "道德绑架也太厉害了逻辑也不对",
+          "argument": "逻辑也不对",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -23536,11 +23542,11 @@
           }
         ]
       ],
-      "llm_output": "黑混 | 这年头没啥爱情都是合作式的婚姻关系谁会给黑娃喜当爹呢🤣 | Racism [END]",
+      "llm_output": "黑娃 | 这年头没啥爱情都是合作式的婚姻关系谁会给黑娃喜当爹呢🤣 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "黑混",
+          "target": "黑娃",
           "argument": "这年头没啥爱情都是合作式的婚姻关系谁会给黑娃喜当爹呢🤣",
           "targeted_group": "Racism",
           "hateful": "hate"
@@ -23626,12 +23632,12 @@
           }
         ]
       ],
-      "llm_output": "默 | 黑除默 | Racism [END]",
+      "llm_output": "默 | 黍黑 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "默",
-          "argument": "黑除默",
+          "argument": "黍黑",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
@@ -25228,12 +25234,12 @@
           }
         ]
       ],
-      "llm_output": "光棍 | 当光棍足以成为一支军队的时候女性就再没有恋爱自由的权利了 | Sexism [END]",
+      "llm_output": "女性 | 没有恋爱自由的权利了 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "光棍",
-          "argument": "当光棍足以成为一支军队的时候女性就再没有恋爱自由的权利了",
+          "target": "女性",
+          "argument": "没有恋爱自由的权利了",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -25492,12 +25498,12 @@
           }
         ]
       ],
-      "llm_output": "名媛空姐高级女白领 | 男人眼中女神 | Sexism, Racism [END]",
+      "llm_output": "那帮子人 | 绝对打破你的三观 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "名媛空姐高级女白领",
-          "argument": "男人眼中女神",
+          "target": "那帮子人",
+          "argument": "绝对打破你的三观",
           "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
@@ -26950,7 +26956,7 @@
           }
         ]
       ],
-      "llm_output": "国男 | 包容大度一直都是这么无私 | Sexism [SEP] eg | 劲浪 | Sexism [END]",
+      "llm_output": "国男 | 包容大度一直都是这么无私 | Sexism [SEP] eg | 劲浪 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -26962,7 +26968,7 @@
         {
           "target": "eg",
           "argument": "劲浪",
-          "targeted_group": "Sexism",
+          "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
       ],
@@ -27898,12 +27904,12 @@
           }
         ]
       ],
-      "llm_output": "NULL | 又变态又普信，还要当理中客，纯纯下头男！！ | Sexism [END]",
+      "llm_output": "NULL | 又变态又普信，还要当理中客，纯纯下头男 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": null,
-          "argument": "又变态又普信，还要当理中客，纯纯下头男！！",
+          "argument": "又变态又普信，还要当理中客，纯纯下头男",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -28168,12 +28174,12 @@
           }
         ]
       ],
-      "llm_output": "大家 | 咋看 | non-hate [END]",
+      "llm_output": "来自接盘侠吧的神贴 | 大家咋看 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "大家",
-          "argument": "咋看",
+          "target": "来自接盘侠吧的神贴",
+          "argument": "大家咋看",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -31906,12 +31912,12 @@
           }
         ]
       ],
-      "llm_output": "上海 | 只是说了实话怎么能算黑 | non-hate [END]",
+      "llm_output": "上海 | 说了实话怎么能算黑 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "上海",
-          "argument": "只是说了实话怎么能算黑",
+          "argument": "说了实话怎么能算黑",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -32206,12 +32212,12 @@
           }
         ]
       ],
-      "llm_output": "他们 | 低估他们了 | non-hate [END]",
+      "llm_output": "他们 | 低估 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "他们",
-          "argument": "低估他们了",
+          "argument": "低估",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -33400,12 +33406,12 @@
           }
         ]
       ],
-      "llm_output": "被黑人睡过的女人 | 恶心 | Sexism, Racism [END]",
+      "llm_output": "黑人 | 嫌被黑人睡过的女人恶心 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "被黑人睡过的女人",
-          "argument": "恶心",
+          "target": "黑人",
+          "argument": "嫌被黑人睡过的女人恶心",
           "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
@@ -33520,19 +33526,13 @@
           }
         ]
       ],
-      "llm_output": "你 | 带着你的家人移民非洲吧！ | Racism [SEP] 圣母 | 还有圣母的爱…… | others [END]",
+      "llm_output": "你 | 带着你的家人移民非洲吧！还有圣母的爱…… | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "你",
-          "argument": "带着你的家人移民非洲吧！",
+          "argument": "带着你的家人移民非洲吧！还有圣母的爱……",
           "targeted_group": "Racism",
-          "hateful": "hate"
-        },
-        {
-          "target": "圣母",
-          "argument": "还有圣母的爱……",
-          "targeted_group": "others",
           "hateful": "hate"
         }
       ],
@@ -33772,18 +33772,18 @@
           }
         ]
       ],
-      "llm_output": "中国女人 | 跪舔地步 | Sexism [SEP] 白人模特 | 经常换中国女人拍抖音，搂搂抱抱 | Sexism, Racism [END]",
+      "llm_output": "中国女人 | 跪舔 | Sexism [SEP] 白人模特 | 搂搂抱抱 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "中国女人",
-          "argument": "跪舔地步",
+          "argument": "跪舔",
           "targeted_group": "Sexism",
           "hateful": "hate"
         },
         {
           "target": "白人模特",
-          "argument": "经常换中国女人拍抖音，搂搂抱抱",
+          "argument": "搂搂抱抱",
           "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
@@ -33964,7 +33964,7 @@
           }
         ]
       ],
-      "llm_output": "女拳受益者 | 直接女拳受益者 | Sexism [SEP] 女拳受益者 | 间接女拳受益者 | Sexism [SEP] 隐藏的女拳手 | 最可恨的 | Sexism [END]",
+      "llm_output": "女拳受益者 | 直接女拳受益者 | Sexism [SEP] 女拳受益者 | 间接女拳受益者 | Sexism [SEP] 隐藏的女拳手 | 最可恨 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -33981,7 +33981,7 @@
         },
         {
           "target": "隐藏的女拳手",
-          "argument": "最可恨的",
+          "argument": "最可恨",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -34156,7 +34156,7 @@
           }
         ]
       ],
-      "llm_output": "舔狗 | 很恶毒的男淫 | Sexism [SEP] 它们 | 自己未必真对女人好 | Sexism [SEP] 它们 | 希望全天下男的都当跪男 | Sexism [END]",
+      "llm_output": "舔狗 | 很恶毒的男淫 | Sexism [SEP] 它们 | 自己未必真对女人好，只是希望全天下男的都当跪男，这样，它们才有一点优越感 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -34167,13 +34167,7 @@
         },
         {
           "target": "它们",
-          "argument": "自己未必真对女人好",
-          "targeted_group": "Sexism",
-          "hateful": "hate"
-        },
-        {
-          "target": "它们",
-          "argument": "希望全天下男的都当跪男",
+          "argument": "自己未必真对女人好，只是希望全天下男的都当跪男，这样，它们才有一点优越感",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -34996,12 +34990,12 @@
           }
         ]
       ],
-      "llm_output": "娶媳妇没用的关键 | 大小 | Sexism [END]",
+      "llm_output": "娶媳妇没用的关键 | 大小不然会被绿当老实人接盘侠 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "娶媳妇没用的关键",
-          "argument": "大小",
+          "argument": "大小不然会被绿当老实人接盘侠",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -35554,14 +35548,14 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 你在现实见到黑人也这么说？ | non-hate [END]",
+      "llm_output": "黑人 | 你在现实见到黑人也这么说？ | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人",
           "argument": "你在现实见到黑人也这么说？",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "Racism",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -36064,12 +36058,12 @@
           }
         ]
       ],
-      "llm_output": "河南老乡 | 来前报道 | non-hate [END]",
+      "llm_output": "河南老乡 | 前来报道 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "河南老乡",
-          "argument": "来前报道",
+          "argument": "前来报道",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -36562,7 +36556,7 @@
           }
         ]
       ],
-      "llm_output": "内蒙 | 全境苦寒，祖国边疆北端 | Region [SEP] 内蒙 | 人口两千余万，毫无啥存在感 | Region [SEP] 李诞 | 好客 | non-hate [SEP] 马亲王 | 通辽可汗 | non-hate [SEP] 三十二郎 | 杨坤 | non-hate [SEP] 包头钢铁集团 | 我是歌手冠军 | non-hate [SEP] 大汉名磊 | 姓韩 | non-hate [SEP] 钢铁之翼 | 腾格尔翻唱欢 | non-hate [END]",
+      "llm_output": "内蒙 | 全境苦寒，祖国边疆北端 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -36570,48 +36564,6 @@
           "argument": "全境苦寒，祖国边疆北端",
           "targeted_group": "Region",
           "hateful": "hate"
-        },
-        {
-          "target": "内蒙",
-          "argument": "人口两千余万，毫无啥存在感",
-          "targeted_group": "Region",
-          "hateful": "hate"
-        },
-        {
-          "target": "李诞",
-          "argument": "好客",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "马亲王",
-          "argument": "通辽可汗",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "三十二郎",
-          "argument": "杨坤",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "包头钢铁集团",
-          "argument": "我是歌手冠军",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "大汉名磊",
-          "argument": "姓韩",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
-        },
-        {
-          "target": "钢铁之翼",
-          "argument": "腾格尔翻唱欢",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -37180,13 +37132,13 @@
           }
         ]
       ],
-      "llm_output": "男的 | 输得一塌糊涂 | Sexism [END]",
+      "llm_output": "徐州 | 男的又输得一塌糊涂 | Region, Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "男的",
-          "argument": "输得一塌糊涂",
-          "targeted_group": "Sexism",
+          "target": "徐州",
+          "argument": "男的又输得一塌糊涂",
+          "targeted_group": "Region, Sexism",
           "hateful": "hate"
         }
       ],
@@ -37438,12 +37390,12 @@
           }
         ]
       ],
-      "llm_output": "犹太人 | 祸害全球人类各民族罪恶嘴脸 | Racism [END]",
+      "llm_output": "犹太人 | 把犹太人祸害全球人类各民族罪恶嘴脸公之于众 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "犹太人",
-          "argument": "祸害全球人类各民族罪恶嘴脸",
+          "argument": "把犹太人祸害全球人类各民族罪恶嘴脸公之于众",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
@@ -38464,7 +38416,7 @@
           }
         ]
       ],
-      "llm_output": "竖切社会 | 很扯淡 | non-hate [SEP] 有人 | 反的是女特权 | non-hate [SEP] 有人 | 反的是女权 | non-hate [SEP] 有的人 | 反人类 | non-hate [SEP] 他 | 性别为男 | non-hate [END]",
+      "llm_output": "竖切社会 | 很扯淡 | non-hate [SEP] 有人 | 反的是女特权 | non-hate [SEP] 有人 | 反的是女权 | non-hate [SEP] 有的人 | 反人类 | non-hate [SEP] 有的 | 建立男女平等的社会 | non-hate [SEP] 有的 | 建立男尊女卑的社会 | non-hate [SEP] 有的 | 建立奴隶社会 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -38492,8 +38444,20 @@
           "hateful": "non-hate"
         },
         {
-          "target": "他",
-          "argument": "性别为男",
+          "target": "有的",
+          "argument": "建立男女平等的社会",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "有的",
+          "argument": "建立男尊女卑的社会",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "有的",
+          "argument": "建立奴隶社会",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -38560,12 +38524,12 @@
           }
         ]
       ],
-      "llm_output": "这女虫 | 应该成了脑瘫了 | Sexism, Racism [END]",
+      "llm_output": "女虫 | 脑瘫 | Sexism, Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "这女虫",
-          "argument": "应该成了脑瘫了",
+          "target": "女虫",
+          "argument": "脑瘫",
           "targeted_group": "Sexism, Racism",
           "hateful": "hate"
         }
@@ -38608,7 +38572,7 @@
           }
         ]
       ],
-      "llm_output": "绝大多数黑人 | 没有素质 | Racism [SEP] 黑人 | 张口就要的生活 | Racism [SEP] 黑人 | 搞双标 | Racism [SEP] 黑人 | 利用种族歧视这张牌恰烂钱 | Racism [SEP] 黑人 | 疯狂歧视亚裔特别是中国人 | Racism [END]",
+      "llm_output": "绝大多数黑人 | 没有素质 | Racism [SEP] 黑人 | 弄双标 | Racism [SEP] 黑人 | 利用种族歧视这张牌恰烂钱 | Racism [SEP] 黑人 | 疯狂歧视亚裔特别是中国人 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -38619,13 +38583,7 @@
         },
         {
           "target": "黑人",
-          "argument": "张口就要的生活",
-          "targeted_group": "Racism",
-          "hateful": "hate"
-        },
-        {
-          "target": "黑人",
-          "argument": "搞双标",
+          "argument": "弄双标",
           "targeted_group": "Racism",
           "hateful": "hate"
         },
@@ -38674,12 +38632,18 @@
           }
         ]
       ],
-      "llm_output": "他 | 应该在家哭了 | non-hate [END]",
+      "llm_output": "他 | 应该在家哭了 | non-hate [SEP] 他 | 三天后可能被劝退学或处分 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "他",
           "argument": "应该在家哭了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "他",
+          "argument": "三天后可能被劝退学或处分",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -38938,12 +38902,12 @@
           }
         ]
       ],
-      "llm_output": "NULL | 真的怕民族分裂，国家灭亡，种族替换 | non-hate [END]",
+      "llm_output": "NULL | 怕民族分裂，国家灭亡，种族替换 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": null,
-          "argument": "真的怕民族分裂，国家灭亡，种族替换",
+          "argument": "怕民族分裂，国家灭亡，种族替换",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -39658,18 +39622,12 @@
           }
         ]
       ],
-      "llm_output": "国铝 | 只会pua国男 | Sexism [SEP] 国铝 | 怎么可能骂洋大人呢 | Sexism [END]",
+      "llm_output": "国铝 | 只会pua国男 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "国铝",
           "argument": "只会pua国男",
-          "targeted_group": "Sexism",
-          "hateful": "hate"
-        },
-        {
-          "target": "国铝",
-          "argument": "怎么可能骂洋大人呢",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -41266,7 +41224,7 @@
           }
         ]
       ],
-      "llm_output": "虫混和它们祖先虫类 | 天生一致直把他乡做故土的寄生虫 | Racism [SEP] 国际鬼子虫类及其它们后代虫混 | 是过人从这片土地的记忆里就从来没有昆虫纲 | Racism [END]",
+      "llm_output": "虫混和它们祖先虫类 | 天生一致直把他乡做故土的寄生虫 | Racism [SEP] 国际鬼子虫类及其它们后代虫混 | 是我过人从这片土地的记忆里就从来没有昆虫纲 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -41277,7 +41235,7 @@
         },
         {
           "target": "国际鬼子虫类及其它们后代虫混",
-          "argument": "是过人从这片土地的记忆里就从来没有昆虫纲",
+          "argument": "是我过人从这片土地的记忆里就从来没有昆虫纲",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
@@ -41584,12 +41542,12 @@
           }
         ]
       ],
-      "llm_output": "你 |  | non-hate [END]",
+      "llm_output": "你 | 没人像你这么 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "你",
-          "argument": "",
+          "argument": "没人像你这么",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -41830,32 +41788,32 @@
           }
         ]
       ],
-      "llm_output": "河南 | 有2300万人常年在省外漂泊 | Region [SEP] 某些地方的人 | 会认为这是一种“人口扩张、文化侵略” | Region [SEP] 江浙沪（吴语区） | 吴语，迅速断代、灭绝 | Region [SEP] 江浙沪的户籍人口 | 严重老龄化，迅速被“中原各省”的人口替换掉 | Region [END]",
+      "llm_output": "河南 | 有2300万人常年在省外漂泊 | non-hate [SEP] 某些地方的人 | 会认为这是一种“人口扩张、文化侵略” | Region [SEP] 江浙沪（吴语区） | 吴语，迅速断代、灭绝 | Region [SEP] 江浙沪的户籍人口 | 严重老龄化，迅速被“中原各省”的人口替换掉 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "河南",
           "argument": "有2300万人常年在省外漂泊",
-          "targeted_group": "Region",
-          "hateful": "hate"
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         },
         {
           "target": "某些地方的人",
           "argument": "会认为这是一种“人口扩张、文化侵略”",
           "targeted_group": "Region",
-          "hateful": "hate"
+          "hateful": "non-hate"
         },
         {
           "target": "江浙沪（吴语区）",
           "argument": "吴语，迅速断代、灭绝",
           "targeted_group": "Region",
-          "hateful": "hate"
+          "hateful": "non-hate"
         },
         {
           "target": "江浙沪的户籍人口",
           "argument": "严重老龄化，迅速被“中原各省”的人口替换掉",
           "targeted_group": "Region",
-          "hateful": "hate"
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -41926,12 +41884,18 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 有好人 | non-hate [END]",
+      "llm_output": "不学无术到处惹是生非毫无法律意识的人渣 | 我讨厌 | others [SEP] 高素质的人才 | 到哪里都能得到尊重，无论肤色种族 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "黑人",
-          "argument": "有好人",
+          "target": "不学无术到处惹是生非毫无法律意识的人渣",
+          "argument": "我讨厌",
+          "targeted_group": "others",
+          "hateful": "hate"
+        },
+        {
+          "target": "高素质的人才",
+          "argument": "到哪里都能得到尊重，无论肤色种族",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -43096,20 +43060,20 @@
           }
         ]
       ],
-      "llm_output": "每个男人 | 在高龄光棍前绝不会以为内卷的会是自己 | non-hate [SEP] 这些女人 | 会找年龄一大把的老男人吗？ | Sexism [END]",
+      "llm_output": "每个男人 | 在高龄光棍前绝不会以为内卷的会是自己 | Sexism [SEP] 这些女人 | 会找年龄一大把的老男人吗？ | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "每个男人",
           "argument": "在高龄光棍前绝不会以为内卷的会是自己",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "Sexism",
+          "hateful": "hate"
         },
         {
           "target": "这些女人",
           "argument": "会找年龄一大把的老男人吗？",
           "targeted_group": "Sexism",
-          "hateful": "non-hate"
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -43216,7 +43180,7 @@
           }
         ]
       ],
-      "llm_output": "基佬 | 不搞女人的渣男 | LGBTQ [SEP] 骗婚的 | 尤其是骗婚的 | LGBTQ [END]",
+      "llm_output": "基佬 | 不搞女人的渣男 | LGBTQ [SEP] 骗婚的 | 特别是骗婚的 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
@@ -43227,7 +43191,7 @@
         },
         {
           "target": "骗婚的",
-          "argument": "尤其是骗婚的",
+          "argument": "特别是骗婚的",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -43918,12 +43882,12 @@
           }
         ]
       ],
-      "llm_output": "南满 | 你这个南满 | Region [END]",
+      "llm_output": "你 | 南满 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "南满",
-          "argument": "你这个南满",
+          "target": "你",
+          "argument": "南满",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -45298,20 +45262,20 @@
           }
         ]
       ],
-      "llm_output": "丈夫（未婚夫），公婆 | 真正受压迫者 | non-hate [SEP] 中老年断子老苟 | 它们好作威作福，充分体会欺负人的乐趣 | Sexism, Ageism [END]",
+      "llm_output": "丈夫（未婚夫），公婆 | 真正受压迫者 | Sexism [SEP] 中老年断子老苟 | 它们好作威作福，充分体会欺负人的乐趣 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "丈夫（未婚夫），公婆",
           "argument": "真正受压迫者",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "Sexism",
+          "hateful": "hate"
         },
         {
           "target": "中老年断子老苟",
           "argument": "它们好作威作福，充分体会欺负人的乐趣",
           "targeted_group": "Sexism",
-          "hateful": "non-hate"
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -47674,12 +47638,12 @@
           }
         ]
       ],
-      "llm_output": "女权和女拳 | 分不清 | non-hate [END]",
+      "llm_output": "女权和女拳 | 现在很多人分不清 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "女权和女拳",
-          "argument": "分不清",
+          "argument": "现在很多人分不清",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -47968,12 +47932,18 @@
           }
         ]
       ],
-      "llm_output": "大家 | 智商在线 | non-hate [END]",
+      "llm_output": "网上 | 捍卫女性的恋爱自由 | non-hate [SEP] 现实里 | 大家都智商在线 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "大家",
-          "argument": "智商在线",
+          "target": "网上",
+          "argument": "捍卫女性的恋爱自由",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "现实里",
+          "argument": "大家都智商在线",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -48706,12 +48676,12 @@
           }
         ]
       ],
-      "llm_output": "湖南 | 除了媒体以外其他全部符合🤔 | Region [END]",
+      "llm_output": "湖南 | 除了媒体以外其他全部符合🤔这个有点放之四海而皆准的感觉⁉ | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "湖南",
-          "argument": "除了媒体以外其他全部符合🤔",
+          "argument": "除了媒体以外其他全部符合🤔这个有点放之四海而皆准的感觉⁉",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -49672,14 +49642,14 @@
           }
         ]
       ],
-      "llm_output": "长三角人民 | 多卑微 | non-hate [END]",
+      "llm_output": "长三角人民 | 多卑微 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "长三角人民",
           "argument": "多卑微",
-          "targeted_group": "non-hate",
-          "hateful": "non-hate"
+          "targeted_group": "Region",
+          "hateful": "hate"
         }
       ],
       "status": "success",
@@ -50698,18 +50668,12 @@
           }
         ]
       ],
-      "llm_output": "女性 | 不婚不育还是太少了 | Sexism [SEP] 男性 | 劝他外娶 | Sexism [END]",
+      "llm_output": "女性 | 不婚不育还是太少了 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "女性",
           "argument": "不婚不育还是太少了",
-          "targeted_group": "Sexism",
-          "hateful": "hate"
-        },
-        {
-          "target": "男性",
-          "argument": "劝他外娶",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -50812,12 +50776,12 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 在哪个领域比别人强？嗯，犯罪领域 | Racism [END]",
+      "llm_output": "黑人 | 犯罪领域 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人",
-          "argument": "在哪个领域比别人强？嗯，犯罪领域",
+          "argument": "犯罪领域",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
@@ -51352,12 +51316,12 @@
           }
         ]
       ],
-      "llm_output": "中国的女性 | 事实意义上的精神殖民者 | Sexism [END]",
+      "llm_output": "中国的女性 | 成为事实意义上的精神殖民者 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "中国的女性",
-          "argument": "事实意义上的精神殖民者",
+          "argument": "成为事实意义上的精神殖民者",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -51862,14 +51826,14 @@
           }
         ]
       ],
-      "llm_output": "NULL | 我是煞笔 | others [END]",
+      "llm_output": "NULL | 我是煞笔 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": null,
           "argument": "我是煞笔",
-          "targeted_group": "others",
-          "hateful": "hate"
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
         }
       ],
       "status": "success",
@@ -52732,13 +52696,13 @@
           }
         ]
       ],
-      "llm_output": "外国女权 | 眼红我们 | Sexism, Region [END]",
+      "llm_output": "外国女权 | 眼红我们 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "外国女权",
           "argument": "眼红我们",
-          "targeted_group": "Sexism, Region",
+          "targeted_group": "Sexism",
           "hateful": "hate"
         }
       ],
@@ -54784,12 +54748,12 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 现实生活中找黑人的没有那么多吧 | non-hate [END]",
+      "llm_output": "黑人 | 我只在网上看到过，现实生活中一个也没见着 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人",
-          "argument": "现实生活中找黑人的没有那么多吧",
+          "argument": "我只在网上看到过，现实生活中一个也没见着",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -56536,12 +56500,24 @@
           }
         ]
       ],
-      "llm_output": "欧美 | 大规模艾滋病成灾就是因为男同 | LGBTQ, others [END]",
+      "llm_output": "欧美 | 大规模艾滋病成灾就是因为男同 | LGBTQ, others [SEP] 0号病人 | 再洗地设多少人设 | LGBTQ, others [SEP] 他 | 几千个X伴侣把艾滋传播开 | LGBTQ, others [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "欧美",
           "argument": "大规模艾滋病成灾就是因为男同",
+          "targeted_group": "LGBTQ, others",
+          "hateful": "hate"
+        },
+        {
+          "target": "0号病人",
+          "argument": "再洗地设多少人设",
+          "targeted_group": "LGBTQ, others",
+          "hateful": "hate"
+        },
+        {
+          "target": "他",
+          "argument": "几千个X伴侣把艾滋传播开",
           "targeted_group": "LGBTQ, others",
           "hateful": "hate"
         }
@@ -56614,12 +56590,12 @@
           }
         ]
       ],
-      "llm_output": "lkd | 应该在随机带走几个 | Sexism [END]",
+      "llm_output": "lkd | 随机带走几个 | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "lkd",
-          "argument": "应该在随机带走几个",
+          "argument": "随机带走几个",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -57868,12 +57844,12 @@
           }
         ]
       ],
-      "llm_output": "南方人 | 黑陕西可能是因为江苏、浙江陕西人很多，跟河南一样出一两个人啥b就会扯到整个陕西身上 | Region [END]",
+      "llm_output": "南方人 | 黑陕西 | Region [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "南方人",
-          "argument": "黑陕西可能是因为江苏、浙江陕西人很多，跟河南一样出一两个人啥b就会扯到整个陕西身上",
+          "argument": "黑陕西",
           "targeted_group": "Region",
           "hateful": "hate"
         }
@@ -58330,12 +58306,12 @@
           }
         ]
       ],
-      "llm_output": "黑人 | 在互联网的语境下，我认为这不是保守，而是道德尚未崩溃 | Racism [END]",
+      "llm_output": "黑人 | 不要接受不了黑人就保守 | Racism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "黑人",
-          "argument": "在互联网的语境下，我认为这不是保守，而是道德尚未崩溃",
+          "argument": "不要接受不了黑人就保守",
           "targeted_group": "Racism",
           "hateful": "hate"
         }
@@ -58762,13 +58738,13 @@
           }
         ]
       ],
-      "llm_output": "同 | 连小日本都跪 | Region [END]",
+      "llm_output": "同 | 连小日本都跪 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "同",
           "argument": "连小日本都跪",
-          "targeted_group": "Region",
+          "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
       ],
@@ -59266,12 +59242,12 @@
           }
         ]
       ],
-      "llm_output": "txl | 别去宣扬txl跳脚没人管你 | LGBTQ [END]",
+      "llm_output": "txl | 跳脚没人管你 | LGBTQ [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "txl",
-          "argument": "别去宣扬txl跳脚没人管你",
+          "argument": "跳脚没人管你",
           "targeted_group": "LGBTQ",
           "hateful": "hate"
         }
@@ -59680,12 +59656,12 @@
           }
         ]
       ],
-      "llm_output": "索玛女王 | 是什么底细？ | non-hate [END]",
+      "llm_output": "索玛女王 | 什么底细？ | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "索玛女王",
-          "argument": "是什么底细？",
+          "argument": "什么底细？",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -60826,12 +60802,12 @@
           }
         ]
       ],
-      "llm_output": "漂亮的中国女人 | 漂亮的中国女人 | non-hate [END]",
+      "llm_output": "漂亮的中国女人 | 漂亮 | non-hate [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
           "target": "漂亮的中国女人",
-          "argument": "漂亮的中国女人",
+          "argument": "漂亮",
           "targeted_group": "non-hate",
           "hateful": "non-hate"
         }
@@ -61378,12 +61354,12 @@
           }
         ]
       ],
-      "llm_output": "妈 | 不给男宝性 | Sexism [END]",
+      "llm_output": "男宝 | 不给男宝性，男宝会爱她吗？ | Sexism [END]",
       "frequency": 1,
       "pred_quadruples": [
         {
-          "target": "妈",
-          "argument": "不给男宝性",
+          "target": "男宝",
+          "argument": "不给男宝性，男宝会爱她吗？",
           "targeted_group": "Sexism",
           "hateful": "hate"
         }
@@ -61429,38 +61405,38 @@
     }
   ],
   "metric": {
-    "f1_hard": 0.2411,
-    "f1_soft": 0.4512,
-    "f1_avg": 0.3462,
+    "f1_hard": 0.2424,
+    "f1_soft": 0.4548,
+    "f1_avg": 0.3486,
     "success": 1604,
     "total": 1605,
     "success_rate": 0.9994,
-    "hard_precision": 0.2408,
-    "hard_recall": 0.2413,
-    "soft_precision": 0.4507,
-    "soft_recall": 0.4516,
+    "hard_precision": 0.2424,
+    "hard_recall": 0.2424,
+    "soft_precision": 0.4548,
+    "soft_recall": 0.4548,
     "field_metrics": {
       "text_similarity": {
-        "target_avg_sim": 0.7798,
-        "argument_avg_sim": 0.6859
+        "target_avg_sim": 0.779,
+        "argument_avg_sim": 0.6868
       },
       "targeted_group": {
         "tp": 1309,
-        "fp": 597,
+        "fp": 593,
         "fn": 593,
-        "precision": 0.6868,
+        "precision": 0.6882,
         "recall": 0.6882,
-        "f1": 0.6875
+        "f1": 0.6882
       },
       "hateful": {
         "tp": 1473,
-        "fp": 433,
+        "fp": 429,
         "fn": 429,
-        "precision": 0.7728,
+        "precision": 0.7744,
         "recall": 0.7744,
-        "f1": 0.7736
+        "f1": 0.7744
       },
-      "matched_pairs": 1756
+      "matched_pairs": 1758
     }
   }
 }
