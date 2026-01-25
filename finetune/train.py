@@ -1,4 +1,8 @@
-import os
+import os, torch
+print("CUDA_VISIBLE_DEVICES =", os.environ.get("CUDA_VISIBLE_DEVICES"))
+print("torch.cuda.device_count() =", torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(i, torch.cuda.get_device_name(i))
 import re
 import json
 import torch
@@ -128,7 +132,7 @@ def predict(messages, model, tokenizer, config):
 
 def run(config: dict):
     MAX_LENGTH = config.get('max_length', 512)
-    # os.environ["SWANLAB_PROJECT"] = config.get("project_name", "qwen3-8b-sft-hsd")
+    os.environ["SWANLAB_PROJECT"] = config.get("project_name", "qwen3-8b-sft-hsd")
     # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, config.get('cuda_devices', [0,1,2,3])))
 
     swanlab.config.update({ # type: ignore
