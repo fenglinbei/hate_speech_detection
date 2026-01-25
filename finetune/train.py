@@ -164,37 +164,38 @@ def run(config: dict):
 
     llm_metrics = LLMmetrics()
 
-    def process_func(example):
-        """
-        将数据集进行预处理
-        """ 
-        input_ids, attention_mask, labels = [], [], []
-        messages = build_messages(example)
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-            enable_thinking=False,
-        )
-        instruction = tokenizer(
-            text,
-            add_special_tokens=False,
-        )
-        response = tokenizer(to_str(example.get("output")), add_special_tokens=False)
-        input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
-        attention_mask = (
-            instruction["attention_mask"] + response["attention_mask"] + [1]
-        )
-        labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
-        if len(input_ids) > MAX_LENGTH:
-            input_ids = input_ids[:MAX_LENGTH]
-            attention_mask = attention_mask[:MAX_LENGTH]
-            labels = labels[:MAX_LENGTH]
+    def process_func(batch):
+        input_ids_list, attention_list, labels_list = [], [], []
+
+        for inst, inp, out in zip(batch["instruction"], batch["input"], batch["output"]):
+            messages = build_messages({"instruction": inst, "input": inp})
+            text = tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+                enable_thinking=False,
+            )
+            instruction = tokenizer(text, add_special_tokens=False)
+            response = tokenizer(to_str(out), add_special_tokens=False)
+
+            input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.eos_token_id]
+            attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]
+            labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
+
+            if len(input_ids) > MAX_LENGTH:
+                input_ids = input_ids[:MAX_LENGTH]
+                attention_mask = attention_mask[:MAX_LENGTH]
+                labels = labels[:MAX_LENGTH]
+
+            input_ids_list.append(input_ids)
+            attention_list.append(attention_mask)
+            labels_list.append(labels)
+
         return {
-            "input_ids": input_ids, 
-            "attention_mask": attention_mask, 
-            "labels": labels
-            }
+            "input_ids": input_ids_list,
+            "attention_mask": attention_list,
+            "labels": labels_list,
+        }
     
     # 数据准备
     data_config = config['data']
