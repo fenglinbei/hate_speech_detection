@@ -130,8 +130,10 @@ def run(config: dict):
         model = AutoModelForCausalLM.from_pretrained(
             config['model_path'], 
             torch_dtype=torch_dtype,
-            device_map=device_map
+            attn_implementation="flash_attention_2",
+            trust_remote_code=True
         )
+        model.config.use_cache = False
         print(model)
 
     except Exception as err:
@@ -179,16 +181,28 @@ def run(config: dict):
     print(data_config['train_data_path'])
     train_df = pd.read_json(data_config['train_data_path'], lines=True)
     train_ds = Dataset.from_pandas(train_df)
-    train_dataset = train_ds.map(process_func, remove_columns=train_ds.column_names)
+    train_dataset = train_ds.map(
+        process_func,
+        remove_columns=train_ds.column_names,
+        batched=True,
+        num_proc=8
+    )
 
     eval_df = pd.read_json(data_config['val_data_path'], lines=True)
     eval_raw = [row for _, row in eval_df.iterrows()]
     eval_ds = Dataset.from_pandas(eval_df)
-    eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
+    eval_dataset = eval_ds.map(
+        process_func, 
+        remove_columns=eval_ds.column_names,
+        batched=True,
+        num_proc=8
+    )
 
     # 训练参数配置
     training_args = TrainingArguments(
-        **config['training']
+        **config['training'],
+        deepspeed="finetune/ds_config.json",
+        group_by_length=True,
     )
 
     # 训练器初始化
@@ -198,7 +212,11 @@ def run(config: dict):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
+        data_collator = DataCollatorForSeq2Seq(
+            tokenizer=tokenizer,
+            padding=True,
+            pad_to_multiple_of=8
+        ),
         eval_raw_dataset=eval_raw,
         llm_metrics=llm_metrics,
         max_retries=config['eval'].get('max_retries', 0),
