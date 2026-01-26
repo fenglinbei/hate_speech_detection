@@ -160,7 +160,6 @@ def run(config: dict):
             trust_remote_code=True
         )
         model.config.use_cache = False
-        print(model)
 
     except Exception as err:
         logger.exception(err)
@@ -205,7 +204,6 @@ def run(config: dict):
     data_config = config['data']
 
     # 加载数据集
-    print(data_config['train_data_path'])
     train_df = pd.read_json(data_config['train_data_path'], lines=True)
     train_ds = Dataset.from_pandas(train_df)
     train_dataset = train_ds.map(
