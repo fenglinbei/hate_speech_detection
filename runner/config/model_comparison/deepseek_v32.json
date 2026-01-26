@@ -8,7 +8,7 @@
     "type": "ApiLLMModel",
     "params": {
       "model_name": "deepseek-v3.2",
-      "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1/",
       "api_key": "sk-06107e55e13c4b67b7f8a262548b9b53",
       "temperature": 0.7, 
       "top_p": 0.8
@@ -16,9 +16,9 @@
   },
   "tester": {
     "use_cache": false,
-    "test_data_file": "./finetune/data/ours_prompt_al1280/test.json",
+    "test_data_file": "data/exp_data/model_comparison/after/test.json",
     "shot_num": 0,
-    "max_retries": 50,
+    "max_retries": 5,
     "concurrency": 1,
     "compute_metric": true,
     "prompt_templates": {
