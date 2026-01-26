@@ -96,7 +96,7 @@ class CustomTrainer(Trainer):
         """自定义评估逻辑"""
         metrics = super().evaluate(**kwargs)
         self.log(metrics)
-        swanlab.log(metrics)
+        # swanlab.log(metrics)
         return metrics
 
 
