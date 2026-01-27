@@ -1,0 +1,47 @@
+{
+  "output_name": "k20.json",
+  "log": {
+    "level": "INFO",
+    "show_console": true
+  },
+  "model": {
+    "type": "ApiLLMModel",
+    "params": {
+      "model_name": "qwen2.5",
+      "api_base": "http://127.0.0.1:35020/v1/",
+      "api_key": "EMPTY",
+      "temperature": 0.7,
+      "top_p": 0.8
+    }
+  },
+  "tester": {
+    "output_dir": "runner/output/k_ablation",
+    "use_cache": false,
+    "test_data_file": "data/exp_data/k_ablation/k20/test.json",
+    "shot_num": 0,
+    "max_retries": 50,
+    "concurrency": 1,
+    "compute_metric": true,
+    "prompt_templates": {
+      "system": "DEFAULT_SYSTEM_PTOMPT_EN",
+      "train": "RAG_PROMPT_USER_V2",
+      "shot": "",
+      "example": "RAG_PROMPT_EXAMPLE_V2"
+    },
+    "run": {
+      "shots_list": [
+        0
+      ],
+      "llm_params": {
+        "max_new_tokens": 2048,
+        "n": 1,
+        "top_p": 0.5,
+        "top_k": 20,
+        "min_p": 0,
+        "temperature": 0.7,
+        "enable_thinking": false,
+        "seed": 42424242
+      }
+    }
+  }
+}
