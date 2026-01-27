@@ -1,5 +1,5 @@
 {
-  "output_name": "deepseek_v32.json",
+  "output_name": "runner/output/model_comparison/after/ds.json",
   "log": {
     "level": "INFO",
     "show_console": true
@@ -7,22 +7,23 @@
    "model": {
     "type": "ApiLLMModel",
     "params": {
-      "model_name": "deepseek-v3.2",
-      "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1/",
-      "api_key": "sk-06107e55e13c4b67b7f8a262548b9b53",
+      "model_name": "ds",
+      "api_base": "http://127.0.0.1:35003/v1/",
+      "api_key": "EMPTY",
       "temperature": 0.7, 
       "top_p": 0.8
     }
   },
   "tester": {
+    "output_dir": "runner/output/model_comparison",
     "use_cache": false,
-    "test_data_file": "data/exp_data/model_comparison/after/test.json",
+    "test_data_file": "data/exp_data/model_comparison/ds/test.json",
     "shot_num": 0,
-    "max_retries": 5,
+    "max_retries": 50,
     "concurrency": 1,
     "compute_metric": true,
     "prompt_templates": {
-      "system": "QWEN2_DEFAULT_SYSTEM_PROMPT",
+      "system": "CHATGLM3_DEFAULT_SYSTEM_PROMPT",
       "train": "RAG_PROMPT_USER_V2",
       "shot": "",
       "example": "RAG_PROMPT_EXAMPLE_V2"

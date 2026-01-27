@@ -1,5 +1,5 @@
 {
-  "output_name": "runner/output/model_comparison/after/llama3.json",
+  "output_name": "runner/output/model_comparison/after/qwen3-max.json",
   "log": {
     "level": "INFO",
     "show_console": true
@@ -7,23 +7,22 @@
    "model": {
     "type": "ApiLLMModel",
     "params": {
-      "model_name": "llama3",
-      "api_base": "http://127.0.0.1:35003/v1/",
-      "api_key": "EMPTY",
+      "model_name": "qwen3-max-2026-01-23",
+      "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1/",
+      "api_key": "sk-06107e55e13c4b67b7f8a262548b9b53",
       "temperature": 0.7, 
       "top_p": 0.8
     }
   },
   "tester": {
-    "output_dir": "runner/output/after",
     "use_cache": false,
-    "test_data_file": "data/exp_data/after/llama3/test.json",
+    "test_data_file": "data/exp_data/model_comparison/after/test.json",
     "shot_num": 0,
-    "max_retries": 50,
+    "max_retries": 5,
     "concurrency": 1,
     "compute_metric": true,
     "prompt_templates": {
-      "system": "DEFAULT_SYSTEM_PROMPT",
+      "system": "QWEN2_DEFAULT_SYSTEM_PROMPT",
       "train": "RAG_PROMPT_USER_V2",
       "shot": "",
       "example": "RAG_PROMPT_EXAMPLE_V2"
@@ -31,7 +30,7 @@
     "run": {
       "shots_list": [0],
       "llm_params": {
-         "max_new_tokens": 2048, 
+         "max_new_tokens": 1280, 
          "n": 1,
          "top_p": 0.5,
          "top_k": 20,

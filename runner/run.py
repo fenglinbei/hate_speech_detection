@@ -23,7 +23,7 @@ from utils.protocol import UsageInfo
 from config import ConfigManager
 from tools.build_prompt import get_shots
 from metrics.metric_llm import LLMmetrics
-from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM
+from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM, OpenAIApiLLMModel
 from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
 from tools.convert import output2triple
 
@@ -697,6 +697,11 @@ def create_model_from_config(model_config: dict) -> Any:
     elif model_type == 'ApiLLMModel':
         params.pop("use_dashscope", None)
         return ApiLLMModel(**params)
+    elif model_type == 'OpenAIApiLLMModel':
+        print(params)
+        params.pop("use_dashscope", None)
+        params.pop("enable_thinking", None)
+        return OpenAIApiLLMModel(**params)
     else:
         raise ValueError(f"Unknown model type: {model_type}")
     
