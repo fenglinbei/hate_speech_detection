@@ -2,6 +2,7 @@ import os
 import math
 import pickle
 import hashlib
+import json
 from loguru import logger
 from typing import Optional, Dict, Any, List, Literal
 from tools.json_tools import load_json
@@ -60,51 +61,143 @@ def allocate_class_num(i, weights_dict, reverse: bool = False):
     return initial_allocation
 
 class CacheManager:
-    """缓存管理器"""
-    
+    """分阶段缓存管理器（embedding / retrieval / selection）。
+
+    设计目标：
+    - key 稳定：使用 json.dumps(sort_keys=True) 而不是 str(dict)
+    - 分阶段：selection 缓存可按需关闭，但 embedding / retrieval 仍可复用
+    - 自动建目录：{cache_dir}/{stage}/...
+    """
+
     def __init__(self, cache_dir: str = "./cache", enabled: bool = True):
         self.cache_dir = cache_dir
         self.enabled = enabled
         os.makedirs(cache_dir, exist_ok=True)
-        
-    def _get_cache_key(self, query: str, params: Dict[str, Any]) -> str:
-        """生成缓存键"""
-        key_str = f"{query}_{str(params)}"
-        return hashlib.md5(key_str.encode()).hexdigest()
-    
-    def _get_cache_path(self, cache_key: str) -> str:
-        """获取缓存文件路径"""
-        return os.path.join(self.cache_dir, f"{cache_key}.pkl")
-    
-    def get(self, query: str, params: Dict[str, Any]):
-        """从缓存中获取结果"""
+        for stage in ("selection", "embedding", "retrieval"):
+            os.makedirs(os.path.join(cache_dir, stage), exist_ok=True)
+
+    # --------- helpers
+    @staticmethod
+    def _stable_dumps(obj: Any) -> str:
+        def _default(o):
+            # 兜底：把无法 json 的对象转成 str
+            return str(o)
+        return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=_default)
+
+    @staticmethod
+    def _md5(s: str) -> str:
+        return hashlib.md5(s.encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def sha1_text(s: str) -> str:
+        h = hashlib.sha1()
+        h.update(s.encode("utf-8"))
+        return h.hexdigest()
+
+    @staticmethod
+    def texts_signature(texts: List[str]) -> str:
+        """对语料做顺序敏感签名，用于 cache 失效。"""
+        h = hashlib.sha1()
+        for t in texts:
+            # 使用  分隔，避免拼接歧义
+            h.update(t.encode("utf-8"))
+            h.update(b"\0")
+        return h.hexdigest()
+
+    def make_key(self, payload: Dict[str, Any]) -> str:
+        return self._md5(self._stable_dumps(payload))
+
+    def _path(self, stage: str, key: str, ext: str) -> str:
+        return os.path.join(self.cache_dir, stage, f"{key}.{ext}")
+
+    # --------- selection (pickle)
+    def get_selection(self, key: str):
         if not self.enabled:
             return None
-            
-        cache_key = self._get_cache_key(query, params)
-        cache_path = self._get_cache_path(cache_key)
-        
-        if os.path.exists(cache_path):
-            try:
-                with open(cache_path, 'rb') as f:
-                    return pickle.load(f)
-            except Exception as e:
-                logger.warning(f"Failed to load cache: {e}")
-        return None
-    
-    def set(self, query: str, params: Dict[str, Any], result: Any):
-        """将结果存入缓存"""
+        p = self._path("selection", key, "pkl")
+        if not os.path.exists(p):
+            return None
+        try:
+            with open(p, "rb") as f:
+                return pickle.load(f)
+        except Exception as e:
+            logger.warning(f"Failed to load selection cache: {e}")
+            return None
+
+    def set_selection(self, key: str, value: Any):
         if not self.enabled:
             return
-            
-        cache_key = self._get_cache_key(query, params)
-        cache_path = self._get_cache_path(cache_key)
-        
+        p = self._path("selection", key, "pkl")
         try:
-            with open(cache_path, 'wb') as f:
-                pickle.dump(result, f)
+            with open(p, "wb") as f:
+                pickle.dump(value, f)
         except Exception as e:
-            logger.warning(f"Failed to save cache: {e}")
+            logger.warning(f"Failed to save selection cache: {e}")
+
+    # --------- embedding (npy)
+    def get_embedding(self, key: str):
+        if not self.enabled:
+            return None
+        p = self._path("embedding", key, "npy")
+        if not os.path.exists(p):
+            return None
+        try:
+            return np.load(p, allow_pickle=False)
+        except Exception as e:
+            logger.warning(f"Failed to load embedding cache: {e}")
+            return None
+
+    def set_embedding(self, key: str, arr: np.ndarray):
+        if not self.enabled:
+            return
+        p = self._path("embedding", key, "npy")
+        try:
+            np.save(p, arr)
+        except Exception as e:
+            logger.warning(f"Failed to save embedding cache: {e}")
+
+    # --------- retrieval (npz: indices + sims + optional meta)
+    def get_retrieval(self, key: str):
+        if not self.enabled:
+            return None
+        p = self._path("retrieval", key, "npz")
+        if not os.path.exists(p):
+            return None
+        try:
+            z = np.load(p, allow_pickle=False)
+            indices = z["indices"]
+            sims = z["sims"]
+            meta = dict(z["meta"].item()) if "meta" in z.files else {}
+            return indices, sims, meta
+        except Exception as e:
+            logger.warning(f"Failed to load retrieval cache: {e}")
+            return None
+
+    def set_retrieval(self, key: str, indices: np.ndarray, sims: np.ndarray, meta: Optional[Dict[str, Any]] = None):
+        if not self.enabled:
+            return
+        p = self._path("retrieval", key, "npz")
+        try:
+            if meta is None:
+                np.savez_compressed(p, indices=indices, sims=sims)
+            else:
+                np.savez_compressed(p, indices=indices, sims=sims, meta=np.array(meta, dtype=object))
+        except Exception as e:
+            logger.warning(f"Failed to save retrieval cache: {e}")
+
+    # --------- backward-compatible wrappers: treat get/set as selection cache
+    def get(self, query: str, params: Dict[str, Any]):
+        if not self.enabled:
+            return None
+        key = self.make_key({"query": query, "params": params})
+        return self.get_selection(key)
+
+    def set(self, query: str, params: Dict[str, Any], result: Any):
+        if not self.enabled:
+            return
+        key = self.make_key({"query": query, "params": params})
+        self.set_selection(key, result)
+
 
 class Retriever:
 
@@ -122,7 +215,7 @@ class Retriever:
         logger.info(f"Loading model from path: {model_path}")
         if model:
             self.model = model
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(model_path) if model_path else 'sentence-transformer')
         else:
             self.model = SentenceTransformer(model_path).to(device)
             self.model_name = model_name
@@ -131,12 +224,12 @@ class Retriever:
         if reranker_model_path:
             self.reranker = Reranker(model_path=reranker_model_path)
 
+        # 初始化缓存管理器（需早于 create_embeddings，便于复用 corpus embedding cache）
+        self.cache_manager = CacheManager(cache_dir, enable_cache)
+
         if data_path:
             self.load_datas(data_path)
             self.create_embeddings()
-
-        # 初始化缓存管理器
-        self.cache_manager = CacheManager(cache_dir, enable_cache)
 
     def create_embeddings(self, datas: Optional[list[dict]] = None):
         logger.info("Processing embedding")
@@ -150,10 +243,29 @@ class Retriever:
                 self.test2item[item['content']] = item
             texts = self.texts
 
+        # 语料签名（用于 cache 失效）
+        self.corpus_sig = CacheManager.texts_signature(texts)
+
+        # corpus embedding cache
+        emb_key = None
+        if self.cache_manager.enabled:
+            emb_key = self.cache_manager.make_key({
+                "stage": "corpus_embedding",
+                "model": self.model_name,
+                "corpus_sig": self.corpus_sig,
+            })
+            cached = self.cache_manager.get_embedding(emb_key)
+            if cached is not None:
+                self.corpus_embeddings_np = cached
+                return
+
         corpus_embeddings = self.model.encode(texts, convert_to_tensor=True, show_progress_bar=True)
-        if corpus_embeddings.is_cuda:
+        if hasattr(corpus_embeddings, 'is_cuda') and corpus_embeddings.is_cuda:
             corpus_embeddings = corpus_embeddings.cpu()
-        self.corpus_embeddings_np = corpus_embeddings.numpy()
+        self.corpus_embeddings_np = corpus_embeddings.numpy().astype(np.float32)
+
+        if self.cache_manager.enabled and emb_key is not None:
+            self.cache_manager.set_embedding(emb_key, self.corpus_embeddings_np)
 
 
     def load_datas(self, data_path: Optional[str] = None, data_list: Optional[list[dict]] = None):
@@ -181,79 +293,124 @@ class Retriever:
             use_cache: bool = True,
             **kwargs
             ) -> tuple[list[str], list[str]]:
-        
+
+        # selection params（纳入 model + corpus_sig，避免跨模型/跨语料误命中）
         params = {
             "top_k": top_k,
             "deduplicate": deduplicate,
             "threshold": threshold,
             "rerank": rerank,
-            "resort": resort
+            "resort": resort,
+            "model": self.model_name,
+            "corpus_sig": getattr(self, "corpus_sig", None),
         }
-        
+
+        # 1) selection cache（受 use_cache 控制）
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
-                # logger.debug(f"Cache hit for query: {query}")
                 return cached_result
 
         if top_k == 0:
             return [], []
-        
+
+        # rerank 时扩大候选池
         if rerank and self.reranker:
             new_top_k = top_k * 5
             if new_top_k < 10:
                 new_top_k = 10
-            elif new_top_k > 100:   
+            elif new_top_k > 100:
                 new_top_k = 100
         else:
             new_top_k = top_k
 
-        query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
-        
-        if query_embedding.is_cuda:
-            query_embedding = query_embedding.cpu()
-            
-        query_embedding_np = query_embedding.numpy().reshape(1, -1)
-        
-        similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
-        
-        # 获取所有索引并按相似度排序
-        sorted_indices = np.argsort(similarities)[::-1]
-        
-        unique_texts = []
-        unique_outputs = []
-        seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
-        
-        # 遍历所有排序后的索引
-        for idx in sorted_indices:
-            content = self.texts[idx]
-            sim_score = similarities[idx]  # 获取当前相似度分数
-            
-            # 阈值过滤：如果相似度低于阈值则跳过
+        # 2) query embedding cache（不受 use_cache 影响，只要开启 cache 就复用）
+        q_sha1 = CacheManager.sha1_text(query)
+        q_key = None
+        query_embedding_np = None
+        if self.cache_manager.enabled:
+            q_key = self.cache_manager.make_key({
+                "stage": "query_embedding",
+                "model": self.model_name,
+                "q_sha1": q_sha1,
+            })
+            query_embedding_np = self.cache_manager.get_embedding(q_key)
+
+        if query_embedding_np is None:
+            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
+                query_embedding = query_embedding.cpu()
+            query_embedding_np = query_embedding.numpy().astype(np.float32)
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
+            if self.cache_manager.enabled and q_key is not None:
+                self.cache_manager.set_embedding(q_key, query_embedding_np)
+        else:
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
+
+        # 3) retrieval cache：缓存 topK indices + sims，避免重复 cosine
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
+
+        # 这里的 retrieval_k 不直接等于 top_k，留出 dedup/threshold 的余量
+        retrieval_k = int(max(2048, new_top_k * 10))
+        retrieval_k = min(retrieval_k, len(self.texts))
+
+        r_key = None
+        cached_retr = None
+        if self.cache_manager.enabled:
+            r_key = self.cache_manager.make_key({
+                "stage": "retrieval",
+                "model": self.model_name,
+                "corpus_sig": corpus_sig,
+                "q_sha1": q_sha1,
+                "k": retrieval_k,
+            })
+            cached_retr = self.cache_manager.get_retrieval(r_key)
+
+        if cached_retr is None:
+            similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
+            min_sim = float(similarities.min())
+            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_sims = similarities[sorted_indices].astype(np.float32)
+            if self.cache_manager.enabled and r_key is not None:
+                self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta={"min_sim": min_sim})
+        else:
+            sorted_indices, sorted_sims, _meta = cached_retr
+
+        # 4) selection：threshold + dedup + (optional) rerank + resort
+        unique_texts: List[str] = []
+        unique_outputs: List[Any] = []
+        seen_contents = set([query]) if deduplicate else set()
+
+        for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
             if sim_score < threshold:
-                continue  # 跳过低于阈值的结果
-                
-            # 去重逻辑
+                continue
+            content = self.texts[int(idx)]
+            if deduplicate and content in seen_contents:
+                continue
             if deduplicate:
-                if content in seen_contents:
-                    continue  # 已处理过相同内容，跳过
                 seen_contents.add(content)
-            
+
             unique_texts.append(content)
             unique_outputs.append(self.test2item[content]['output'])
-            
-            # 达到需要的 top_k 数量时停止
+
             if len(unique_texts) >= new_top_k:
                 break
 
-        if rerank and self.reranker:
+        if rerank and self.reranker and len(unique_texts) > 0:
             scores = self.reranker.rerank(query, unique_texts)
-            sorted_indices = np.argsort(scores)[::-1][:top_k]
-            unique_texts = [unique_texts[i] for i in sorted_indices]
-            unique_outputs = [unique_outputs[i] for i in sorted_indices]
+            rr_idx = np.argsort(scores)[::-1][:top_k]
+            unique_texts = [unique_texts[i] for i in rr_idx]
+            unique_outputs = [unique_outputs[i] for i in rr_idx]
+        else:
+            unique_texts = unique_texts[:top_k]
+            unique_outputs = unique_outputs[:top_k]
 
-        if resort:
-            resorted_indices = [0] * len(unique_texts)
+        if resort and len(unique_texts) > 1:
             resorted_indices = [0] * len(unique_texts)
             l = 0
             r = len(unique_texts) - 1
@@ -264,135 +421,18 @@ class Retriever:
                 else:
                     resorted_indices[r] = i
                     r -= 1
-                    
             unique_texts = [unique_texts[i] for i in resorted_indices]
             unique_outputs = [unique_outputs[i] for i in resorted_indices]
 
         result = (unique_texts, unique_outputs)
-        # 保存到缓存
+
+        # 5) selection cache（受 use_cache 控制）
         if use_cache:
             self.cache_manager.set(query, params, result)
 
         return result
-    
-    def batch_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = 1,
-            deduplicate: bool = True,
-            threshold: float = 0,
-            rerank: bool = False,
-            resort: bool = False,
-            use_cache: bool = True,
-            batch_size: int = 32
-            ) -> List[tuple[list[str], list[str]]]:
-        """批量检索多个查询"""
-        
-        results = []
-        
-        # 分批处理查询
-        for i in tqdm(range(0, len(queries), batch_size), desc="Batch retrieving"):
-            batch_queries = queries[i:i+batch_size]
-            batch_results = []
-            
-            # 批量编码查询
-            query_embeddings = self.model.encode(batch_queries, convert_to_tensor=True, show_progress_bar=False)
-            
-            if query_embeddings.is_cuda:
-                query_embeddings = query_embeddings.cpu()
-                
-            query_embeddings_np = query_embeddings.numpy()
-            
-            # 批量计算相似度
-            similarities = cosine_similarity(query_embeddings_np, self.corpus_embeddings_np)
-            
-            for j, query in enumerate(batch_queries):
-                # 检查缓存
-                params = {
-                    "top_k": top_k,
-                    "deduplicate": deduplicate,
-                    "threshold": threshold,
-                    "rerank": rerank,
-                    "resort": resort
-                }
-                
-                if use_cache:
-                    cached_result = self.cache_manager.get(query, params)
-                    if cached_result is not None:
-                        results.append(cached_result)
-                        continue
-                
-                # 处理单个查询的相似度
-                query_similarities = similarities[j]
-                
-                if rerank and self.reranker:
-                    new_top_k = top_k * 5
-                    if new_top_k < 10:
-                        new_top_k = 10
-                    elif new_top_k > 100:   
-                        new_top_k = 100
-                else:
-                    new_top_k = top_k
-                
-                # 获取所有索引并按相似度排序
-                sorted_indices = np.argsort(query_similarities)[::-1]
-                
-                unique_texts = []
-                unique_outputs = []
-                seen_contents = set() if not deduplicate else set([query])
-                
-                # 遍历所有排序后的索引
-                for idx in sorted_indices:
-                    content = self.texts[idx]
-                    sim_score = query_similarities[idx]
-                    
-                    # 阈值过滤
-                    if sim_score < threshold:
-                        continue
-                        
-                    # 去重逻辑
-                    if deduplicate:
-                        if content in seen_contents:
-                            continue
-                        seen_contents.add(content)
-                    
-                    unique_texts.append(content)
-                    unique_outputs.append(self.test2item[content]['output'])
-                    
-                    # 达到需要的 top_k 数量时停止
-                    if len(unique_texts) >= new_top_k:
-                        break
 
-                if rerank and self.reranker:
-                    scores = self.reranker.rerank(query, unique_texts)
-                    sorted_indices = np.argsort(scores)[::-1][:top_k]
-                    unique_texts = [unique_texts[i] for i in sorted_indices]
-                    unique_outputs = [unique_outputs[i] for i in sorted_indices]
 
-                if resort:
-                    resorted_indices = [0] * len(unique_texts)
-                    l = 0
-                    r = len(unique_texts) - 1
-                    for k in range(len(unique_texts)):
-                        if k % 2 == 0:
-                            resorted_indices[l] = k
-                            l += 1
-                        else:
-                            resorted_indices[r] = k
-                            r -= 1
-                    
-                    unique_texts = [unique_texts[k] for k in resorted_indices]
-                    unique_outputs = [unique_outputs[k] for k in resorted_indices]
-
-                result = (unique_texts, unique_outputs)
-                results.append(result)
-                
-                # 保存到缓存
-                if use_cache:
-                    self.cache_manager.set(query, params, result)
-        
-        return results
-    
 class LexiconRetriever:
 
     def __init__(
@@ -427,10 +467,22 @@ class LexiconRetriever:
                 self.test2item[item['content']] = item
             texts = self.texts
 
+        self.corpus_sig = CacheManager.texts_signature(texts)
+        emb_key = None
+        if self.cache_manager.enabled:
+            emb_key = self.cache_manager.make_key({"stage":"lex_corpus_embedding","model": self.model_name,"corpus_sig": self.corpus_sig})
+            cached = self.cache_manager.get_embedding(emb_key)
+            if cached is not None:
+                self.corpus_embeddings_np = cached
+                return
+
         corpus_embeddings = self.model.encode(texts, convert_to_tensor=True, show_progress_bar=True)
-        if corpus_embeddings.is_cuda:
+        if hasattr(corpus_embeddings, 'is_cuda') and corpus_embeddings.is_cuda:
             corpus_embeddings = corpus_embeddings.cpu()
-        self.corpus_embeddings_np = corpus_embeddings.numpy()
+        self.corpus_embeddings_np = corpus_embeddings.numpy().astype(np.float32)
+
+        if self.cache_manager.enabled and emb_key is not None:
+            self.cache_manager.set_embedding(emb_key, self.corpus_embeddings_np)
 
     def load_datas(self, data_path: str):
         datas = load_json(data_path)["terms"]
@@ -452,64 +504,91 @@ class LexiconRetriever:
             threshold: float = 0,
             use_cache: bool = True
             ) -> list[str]:
-        
-        # 检查缓存
+
+        # selection params（纳入 model + corpus_sig）
         params = {
             "method": "similarity",
             "top_k": top_k,
             "deduplicate": deduplicate,
-            "threshold": threshold
+            "threshold": threshold,
+            "model": self.model_name,
+            "corpus_sig": getattr(self, "corpus_sig", None),
         }
-        
+
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
-                # logger.debug(f"Cache hit for query: {query}")
                 return cached_result
-        
+
         if top_k == 0:
             return []
-        
-        query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
 
-        if query_embedding.is_cuda:
-            query_embedding = query_embedding.cpu()
+        q_sha1 = CacheManager.sha1_text(query)
+        q_key = None
+        query_embedding_np = None
+        if self.cache_manager.enabled:
+            q_key = self.cache_manager.make_key({"stage": "lex_query_embedding", "model": self.model_name, "q_sha1": q_sha1})
+            query_embedding_np = self.cache_manager.get_embedding(q_key)
 
-        query_embedding_np = query_embedding.numpy().reshape(1, -1)
+        if query_embedding_np is None:
+            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
+                query_embedding = query_embedding.cpu()
+            query_embedding_np = query_embedding.numpy().astype(np.float32)
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
+            if self.cache_manager.enabled and q_key is not None:
+                self.cache_manager.set_embedding(q_key, query_embedding_np)
+        else:
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
 
-        similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
 
-        # 获取所有索引并按相似度排序
-        sorted_indices = np.argsort(similarities)[::-1]
+        retrieval_k = int(max(1024, top_k * 20))
+        retrieval_k = min(retrieval_k, len(self.texts))
+
+        r_key = None
+        cached_retr = None
+        if self.cache_manager.enabled:
+            r_key = self.cache_manager.make_key({
+                "stage": "lex_retrieval",
+                "model": self.model_name,
+                "corpus_sig": corpus_sig,
+                "q_sha1": q_sha1,
+                "k": retrieval_k,
+            })
+            cached_retr = self.cache_manager.get_retrieval(r_key)
+
+        if cached_retr is None:
+            similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
+            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_sims = similarities[sorted_indices].astype(np.float32)
+            if self.cache_manager.enabled and r_key is not None:
+                self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims)
+        else:
+            sorted_indices, sorted_sims, _meta = cached_retr
 
         unique_texts = []
-        seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
-        
-        # 遍历所有排序后的索引
-        for idx in sorted_indices:
-            content = self.texts[idx]
-            sim_score = similarities[idx]  # 获取当前相似度分数
-            
-            # 阈值过滤：如果相似度低于阈值则跳过
+        seen_contents = set([query]) if deduplicate else set()
+        for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
             if sim_score < threshold:
-                continue  # 跳过低于阈值的结果
-            
-            # 去重逻辑
+                continue
+            content = self.texts[int(idx)]
+            if deduplicate and content in seen_contents:
+                continue
             if deduplicate:
-                if content in seen_contents:
-                    continue  # 已处理过相同内容，跳过
                 seen_contents.add(content)
-            
             unique_texts.append(content)
-            
-            # 达到需要的 top_k 数量时停止
             if len(unique_texts) >= top_k:
                 break
 
-        # 保存到缓存
         if use_cache:
             self.cache_manager.set(query, params, unique_texts)
-            
+
         return unique_texts
     
     def including_retrieve(
@@ -551,130 +630,6 @@ class LexiconRetriever:
             
         return final_result
     
-    def batch_similarity_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = 1,
-            deduplicate: bool = True,
-            threshold: float = 0,
-            use_cache: bool = True,
-            batch_size: int = 32
-            ) -> List[list[str]]:
-        """批量相似度检索"""
-        
-        results = []
-        
-        # 分批处理查询
-        for i in tqdm(range(0, len(queries), batch_size), desc="Batch similarity retrieving"):
-            batch_queries = queries[i:i+batch_size]
-            
-            # 批量编码查询
-            query_embeddings = self.model.encode(batch_queries, convert_to_tensor=True, show_progress_bar=False)
-            
-            if query_embeddings.is_cuda:
-                query_embeddings = query_embeddings.cpu()
-                
-            query_embeddings_np = query_embeddings.numpy()
-            
-            # 批量计算相似度
-            similarities = cosine_similarity(query_embeddings_np, self.corpus_embeddings_np)
-            
-            for j, query in enumerate(batch_queries):
-                # 检查缓存
-                params = {
-                    "method": "similarity",
-                    "top_k": top_k,
-                    "deduplicate": deduplicate,
-                    "threshold": threshold
-                }
-                
-                if use_cache:
-                    cached_result = self.cache_manager.get(query, params)
-                    if cached_result is not None:
-                        results.append(cached_result)
-                        continue
-                
-                # 处理单个查询的相似度
-                query_similarities = similarities[j]
-                
-                # 获取所有索引并按相似度排序
-                sorted_indices = np.argsort(query_similarities)[::-1]
-
-                unique_texts = []
-                seen_contents = set() if not deduplicate else set([query])
-                
-                # 遍历所有排序后的索引
-                for idx in sorted_indices:
-                    content = self.texts[idx]
-                    sim_score = query_similarities[idx]
-                    
-                    # 阈值过滤
-                    if sim_score < threshold:
-                        continue
-                    
-                    # 去重逻辑
-                    if deduplicate:
-                        if content in seen_contents:
-                            continue
-                        seen_contents.add(content)
-                    
-                    unique_texts.append(content)
-                    
-                    # 达到需要的 top_k 数量时停止
-                    if len(unique_texts) >= top_k:
-                        break
-
-                results.append(unique_texts)
-                
-                # 保存到缓存
-                if use_cache:
-                    self.cache_manager.set(query, params, unique_texts)
-        
-        return results
-    
-    def batch_including_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = -1,
-            deduplicate: bool = True,
-            use_cache: bool = True
-            ) -> List[list[str]]:
-        """批量包含检索"""
-        
-        results = []
-        
-        for query in tqdm(queries, desc="Batch including retrieving"):
-            # 检查缓存
-            params = {
-                "method": "including",
-                "top_k": top_k,
-                "deduplicate": deduplicate
-            }
-            
-            if use_cache:
-                cached_result = self.cache_manager.get(query, params)
-                if cached_result is not None:
-                    results.append(cached_result)
-                    continue
-            
-            result = []
-            seen_words = set()
-            
-            for word in self.word2item.keys():
-                if word in query:
-                    if deduplicate and word in seen_words:
-                        continue
-                    result.append(self.word2item[word])
-                    seen_words.add(word)
-            
-            final_result = result if top_k == -1 else result[:top_k]
-            results.append(final_result)
-            
-            # 保存到缓存
-            if use_cache:
-                self.cache_manager.set(query, params, final_result)
-        
-        return results
 
 class StepOneRetriever:
 
@@ -813,15 +768,31 @@ class MultiClassRetriever:
             self.class_data_dict[targeted_group] = new_data_list
     
     def build_retrievers(self):
+        """构建分层子检索器。
+
+        关键点：
+        - 子检索器**开启 cache**（embedding / retrieval 可复用）
+        - 父检索器统一管理 selection cache（调用子检索器时 use_cache=False）
+        """
         self.retrievers: dict[str, Retriever | StochasticWeightedRetriever] = {}
+
+        common = dict(
+            model=self.model,
+            model_name=self.model_name,
+            device=self.device,
+            cache_dir=self.cache_manager.cache_dir,
+            enable_cache=self.cache_manager.enabled,
+        )
+
         for class_name in self.class_data_dict.keys():
             if self.ramdom_strategy == "none":
-                retriever = Retriever(model=self.model, enable_cache=False)  # 禁用子检索器的缓存，由父级管理
+                retriever = Retriever(**common)
             else:
                 retriever = StochasticWeightedRetriever(
-                    model=self.model, 
                     random_state=self.random_state,
-                    enable_cache=False)  # 禁用子检索器的缓存，由父级管理
+                    **common,
+                )
+
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
 
@@ -856,6 +827,22 @@ class MultiClassRetriever:
             "candidate_multiplier": candidate_multiplier
         }
         
+        # 将子检索器的语料签名纳入 selection cache key，避免数据更新后误命中
+        try:
+            parts = []
+            for _cls, _ret in getattr(self, 'retrievers', {}).items():
+                _sig = getattr(_ret, 'corpus_sig', None)
+                if _sig is not None:
+                    parts.append(f'{_cls}:{_sig}')
+            composite_sig = CacheManager.sha1_text('|'.join(sorted(parts))) if parts else None
+        except Exception:
+            composite_sig = None
+
+        params.update({
+            'model': getattr(self, 'model_name', None),
+            'corpus_sig': composite_sig,
+        })
+
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
@@ -1146,7 +1133,8 @@ class ClusteredRetriever:
         self.global_retriever = Retriever(
             model=self.model,
             model_name=self.model_name,
-            enable_cache=False,  # 这里禁用子层缓存，由 ClusteredRetriever 统一管理
+            cache_dir=self.cache_manager.cache_dir,
+            enable_cache=self.cache_manager.enabled,
         )
         # 使用 Retriever.create_embeddings 的 datas 分支，保证结构与原项目一致
         self.global_retriever.create_embeddings(self.data)
@@ -1445,8 +1433,11 @@ class StochasticWeightedRetriever(Retriever):
             "random_ratio": random_ratio,
             "temperature": temperature,
             "candidate_multiplier": candidate_multiplier,
+            "model": getattr(self, "model_name", None),
+            "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
+        # selection cache（仅在 use_cache=True 时使用）
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
@@ -1463,43 +1454,90 @@ class StochasticWeightedRetriever(Retriever):
 
         # 额外放大候选池，便于做“多样性采样”
         candidate_k = int(max(base_candidate_k, top_k * candidate_multiplier))
+        candidate_k = min(candidate_k, len(self.texts))
 
-        # 1) 编码 query
-        query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
-        if query_embedding.is_cuda:
-            query_embedding = query_embedding.cpu()
-        query_embedding_np = query_embedding.numpy().reshape(1, -1)
+        # 1) query embedding（embedding cache）
+        q_sha1 = CacheManager.sha1_text(query)
+        q_key = None
+        query_embedding_np = None
+        if self.cache_manager.enabled:
+            q_key = self.cache_manager.make_key({"stage": "query_embedding", "model": self.model_name, "q_sha1": q_sha1})
+            query_embedding_np = self.cache_manager.get_embedding(q_key)
 
-        # 2) 计算 cosine 相似度
-        similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
+        if query_embedding_np is None:
+            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
+                query_embedding = query_embedding.cpu()
+            query_embedding_np = query_embedding.numpy().astype(np.float32)
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
+            if self.cache_manager.enabled and q_key is not None:
+                self.cache_manager.set_embedding(q_key, query_embedding_np)
+        else:
+            if query_embedding_np.ndim == 1:
+                query_embedding_np = query_embedding_np.reshape(1, -1)
 
-        # 3) 形状变换（相似度加权）
-        transformed_scores = self._transform_similarities(similarities, similarity_alpha)
+        # 2) retrieval cache：缓存 top-k indices/sims + min_sim
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
 
-        # 4) 先按 transformed_scores 做排序，但只取 candidate_k 作为候选
-        sorted_indices = np.argsort(transformed_scores)[::-1]
+        retrieval_k = int(max(2048, candidate_k * 10))
+        retrieval_k = min(retrieval_k, len(self.texts))
 
+        r_key = None
+        cached_retr = None
+        if self.cache_manager.enabled:
+            r_key = self.cache_manager.make_key({
+                "stage": "retrieval",
+                "model": self.model_name,
+                "corpus_sig": corpus_sig,
+                "q_sha1": q_sha1,
+                "k": retrieval_k,
+            })
+            cached_retr = self.cache_manager.get_retrieval(r_key)
+
+        if cached_retr is None:
+            similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
+            min_sim = float(similarities.min())
+            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_sims = similarities[sorted_indices].astype(np.float32)
+            if self.cache_manager.enabled and r_key is not None:
+                self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta={"min_sim": min_sim})
+        else:
+            sorted_indices, sorted_sims, meta = cached_retr
+            if isinstance(meta, dict) and 'min_sim' in meta:
+                min_sim = float(meta['min_sim'])
+            else:
+                min_sim = float(min(sorted_sims.tolist())) if len(sorted_sims) else 0.0
+
+        # 3) selection：threshold + dedup + scoring（相似度 shape 变换）
         unique_texts: List[str] = []
         unique_outputs: List[Any] = []
-        sim_scores: List[float] = []  # 用于后续 sample
+        scores_after_transform: List[float] = []
 
-        seen_contents = set() if not deduplicate else set([query])
+        seen_contents = set([query]) if deduplicate else set()
 
-        for idx in sorted_indices:
-            content = self.texts[idx]
-            sim_score = similarities[idx]
-            score_after_transform = transformed_scores[idx]
-
+        for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
             if sim_score < threshold:
                 continue
 
+            content = self.texts[int(idx)]
             if deduplicate and content in seen_contents:
                 continue
 
-            seen_contents.add(content)
+            if deduplicate:
+                seen_contents.add(content)
+
             unique_texts.append(content)
             unique_outputs.append(self.test2item[content]['output'])
-            sim_scores.append(score_after_transform)
+
+            # transform(similarity) (等价于 _transform_similarities 的局部版本)
+            val = sim_score - min_sim
+            if val < 0:
+                val = 0.0
+            scores_after_transform.append(float(val ** similarity_alpha))
 
             if len(unique_texts) >= candidate_k:
                 break
@@ -1510,14 +1548,14 @@ class StochasticWeightedRetriever(Retriever):
                 self.cache_manager.set(query, params, result)
             return result
 
-        # 5) 如果有 reranker，先在候选集合上 rerank 一次，再作为 scores
+        # 4) rerank（可选）：在候选集合上重算 scores
         if rerank and self.reranker:
             scores = self.reranker.rerank(query, unique_texts)
             scores = np.array(scores, dtype=np.float64)
         else:
-            scores = np.array(sim_scores, dtype=np.float64)
+            scores = np.array(scores_after_transform, dtype=np.float64)
 
-        # 6) 根据 random_strategy，从候选集合中选择最终 top_k
+        # 5) 根据 random_strategy，从候选集合中选择最终 top_k
         local_indices = self._sample_indices(
             scores=scores,
             candidate_indices=np.arange(len(unique_texts)),
@@ -1530,7 +1568,7 @@ class StochasticWeightedRetriever(Retriever):
         unique_texts = [unique_texts[i] for i in local_indices]
         unique_outputs = [unique_outputs[i] for i in local_indices]
 
-        # 7) 若需要 resort，则对选出的结果做“左右穿插重排”，逻辑与原实现一致
+        # 6) resort（可选）
         if resort and len(unique_texts) > 1:
             resorted_indices = [0] * len(unique_texts)
             l, r = 0, len(unique_texts) - 1
@@ -1548,48 +1586,6 @@ class StochasticWeightedRetriever(Retriever):
         if use_cache:
             self.cache_manager.set(query, params, result)
         return result
-
-    def batch_retrieve(
-            self,
-            queries: List[str],
-            top_k: int = 1,
-            deduplicate: bool = True,
-            threshold: float = 0,
-            rerank: bool = False,
-            resort: bool = False,
-            use_cache: bool = True,
-            batch_size: int = 32,
-            # 新增参数（与单次 retrieve 对齐）
-            similarity_alpha: float = 1.0,
-            random_strategy: str = "none",
-            random_ratio: float = 0.3,
-            temperature: float = 1.0,
-            candidate_multiplier: float = 3.0,
-            **kwargs
-    ) -> List[tuple[list[str], list[str]]]:
-        """
-        批量版本，这里为了简洁直接循环调用单次 retrieve。
-        如果你对性能有极致需求，可以再做真正的批量优化（类似你原来的 batch_retrieve）。
-        """
-        results: List[tuple[list[str], list[str]]] = []
-        for q in tqdm(queries, desc="Stochastic batch retrieving"):
-            res = self.retrieve(
-                query=q,
-                top_k=top_k,
-                deduplicate=deduplicate,
-                threshold=threshold,
-                rerank=rerank,
-                resort=resort,
-                use_cache=use_cache,
-                similarity_alpha=similarity_alpha,
-                random_strategy=random_strategy,
-                random_ratio=random_ratio,
-                temperature=temperature,
-                candidate_multiplier=candidate_multiplier,
-                **kwargs
-            )
-            results.append(res)
-        return results
 
 
 

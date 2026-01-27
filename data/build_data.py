@@ -1,4 +1,7 @@
 import json
+import hashlib
+import pickle
+import os
 import random
 from tqdm import tqdm
 from typing import Optional
@@ -11,6 +14,95 @@ from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
 from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS
 from tools.convert import output2triple
+
+
+def _stable_dumps(obj):
+    def _default(o):
+        return str(o)
+    return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=_default)
+
+
+def _sha1_text(s: str) -> str:
+    h = hashlib.sha1()
+    h.update(s.encode("utf-8"))
+    return h.hexdigest()
+
+
+def _config_signature(cfg: Config) -> str:
+    d = {}
+    for k, v in vars(cfg).items():
+        if k.startswith('_'):
+            continue
+        if isinstance(v, (str, int, float, bool, type(None))):
+            d[k] = v
+        elif isinstance(v, (list, dict)):
+            d[k] = v
+        else:
+            d[k] = str(v)
+    return _sha1_text(_stable_dumps(d))
+
+
+def _retriever_signature(r) -> str | None:
+    if r is None:
+        return None
+    # base retriever / lexicon retriever
+    sig = getattr(r, 'corpus_sig', None)
+    if sig:
+        return sig
+    # multiclass retriever
+    if hasattr(r, 'retrievers'):
+        parts = []
+        for cls, child in getattr(r, 'retrievers', {}).items():
+            csig = getattr(child, 'corpus_sig', None)
+            if csig:
+                parts.append(f"{cls}:{csig}")
+        if parts:
+            return _sha1_text('|'.join(sorted(parts)))
+    return None
+
+
+class BuildCacheManager:
+    """build_data.py 的 prompt 构建缓存。
+
+    缓存粒度：单条样本（raw_data）-> 最终 message 以及该条使用的 SRAG examples 数量。
+
+    说明：
+    - key 同时包含 config 签名、retriever 语料签名、tokenizer 关键信息，避免缓存污染
+    - 兼容 train/val/test 三种数据阶段（is_test_data 纳入 key）
+    """
+
+    def __init__(self, cache_dir: str = './cache_build_data', enabled: bool = True):
+        self.cache_dir = cache_dir
+        self.enabled = enabled
+        os.makedirs(cache_dir, exist_ok=True)
+
+    def _path(self, key: str) -> str:
+        return os.path.join(self.cache_dir, f"{key}.pkl")
+
+    def make_key(self, payload: dict) -> str:
+        return hashlib.md5(_stable_dumps(payload).encode('utf-8')).hexdigest()
+
+    def get(self, key: str):
+        if not self.enabled:
+            return None
+        p = self._path(key)
+        if not os.path.exists(p):
+            return None
+        try:
+            with open(p, 'rb') as f:
+                return pickle.load(f)
+        except Exception:
+            return None
+
+    def set(self, key: str, value):
+        if not self.enabled:
+            return
+        p = self._path(key)
+        try:
+            with open(p, 'wb') as f:
+                pickle.dump(value, f)
+        except Exception:
+            return
 
 def get_tokenizer(model_path: str):
     """获取tokenizer"""
@@ -32,7 +124,8 @@ def build_prompt(
         srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever | MMRReterever] = None,
         lex_retriever: Optional[LexiconRetriever] = None,
         tokenizer: Optional[AutoTokenizer] = None,
-        is_test_data: bool = False
+        is_test_data: bool = False,
+        build_cache: Optional[BuildCacheManager] = None
         ):
     """构建相似词典检索的提示模板[3](@ref)"""
 
@@ -101,8 +194,37 @@ def build_prompt(
         )
     messages = []
     srag_examples_nums = 0
+
+    # build_data 级缓存（单样本粒度）
+    if build_cache is None:
+        enable_build_cache = getattr(config, "enable_build_cache", True)
+        build_cache_dir = getattr(config, "build_cache_dir", "./cache_build_data")
+        build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
     
     for raw_data in datas:
+        # cache key（包含 config/retriever/tokenizer 签名，避免缓存污染）
+        if build_cache is not None and getattr(build_cache, 'enabled', False):
+            payload = {
+                'id': raw_data.get('id'),
+                'content_sha1': _sha1_text(raw_data.get('content', '')),
+                'quadruples_sha1': _sha1_text(_stable_dumps(raw_data.get('quadruples', []))),
+                'is_test_data': bool(is_test_data),
+                'config_sig': _config_signature(config),
+                'tokenizer': getattr(tokenizer, 'name_or_path', None) if tokenizer is not None else None,
+                'max_length': getattr(config, 'max_length', None),
+                'srag_sig': _retriever_signature(srag_retriever),
+                'lex_sig': _retriever_signature(lex_retriever),
+                'retriever_type': type(srag_retriever).__name__ if srag_retriever is not None else None,
+            }
+            _key = build_cache.make_key(payload)
+            cached = build_cache.get(_key)
+            if cached is not None:
+                message, ex_len = cached
+                messages.append(message)
+                srag_examples_nums += int(ex_len or 0)
+                pbar.update(1)
+                continue
+
         triples = []
         for quadruple in raw_data["quadruples"]:
             label = quadruple["targeted_group"]
@@ -141,6 +263,14 @@ def build_prompt(
             "gt_quadruples": raw_data["quadruples"] if is_test_data else ""
             }
         messages.append(message)
+
+        # 写入缓存
+        if build_cache is not None and getattr(build_cache, "enabled", False):
+            try:
+                build_cache.set(_key, (message, len(examples)))
+            except Exception:
+                pass
+
         pbar.update(1)
     
     if len(datas) > 0:
@@ -160,6 +290,10 @@ def make_data(config: Config):
     tokenizer = None
     if config.auto_length and config.tokenizer_path is not None:
         tokenizer = get_tokenizer(config.tokenizer_path)
+
+    enable_build_cache = getattr(config, 'enable_build_cache', True)
+    build_cache_dir = getattr(config, 'build_cache_dir', './cache_build_data')
+    build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
 
     if config.use_srag:
         if config.clustered:
@@ -225,6 +359,7 @@ def make_data(config: Config):
         srag_retriever=srag_retriever,
         lex_retriever=lex_retriever,
         tokenizer=tokenizer,
+        build_cache=build_cache
     )
 
     with open(config.train_output_path, "w", encoding="utf-8") as file:
@@ -278,6 +413,7 @@ def make_data(config: Config):
         srag_retriever=srag_retriever,
         lex_retriever=lex_retriever,
         tokenizer=tokenizer,
+        build_cache=build_cache
     )
 
     with open(config.val_output_path, "w", encoding="utf-8") as file:
@@ -294,7 +430,8 @@ def make_data(config: Config):
         srag_retriever=srag_retriever,
         lex_retriever=lex_retriever,
         tokenizer=tokenizer,
-        is_test_data=True
+        is_test_data=True,
+        build_cache=build_cache
     )
 
     with open(config.test_output_path, "w", encoding="utf-8") as file:

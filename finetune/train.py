@@ -156,6 +156,7 @@ def run(config: dict):
         model = AutoModelForCausalLM.from_pretrained(
             config['model_path'], 
             torch_dtype=torch_dtype,
+            device_map=device_map,
             attn_implementation="flash_attention_2",
             trust_remote_code=True
         )
@@ -226,7 +227,7 @@ def run(config: dict):
     # 训练参数配置
     training_args = TrainingArguments(
         **config['training'],
-        deepspeed="finetune/ds_config.json",
+        # deepspeed="finetune/ds_config.json",
         group_by_length=True,
     )
 
