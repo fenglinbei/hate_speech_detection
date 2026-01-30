@@ -39,7 +39,7 @@ SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-qwen2.5}"
 # 是否跳过已存在的产物
 SKIP_BUILD_IF_EXISTS="${SKIP_BUILD_IF_EXISTS:-1}"   # 1=若 train/val/test 已存在则跳过 build_data
 SKIP_TRAIN_IF_EXISTS="${SKIP_TRAIN_IF_EXISTS:-1}"   # 1=若 checkpoint-* 已存在则跳过训练
-SKIP_RUN_IF_EXISTS="${SKIP_RUN_IF_EXISTS:-0}"       # 1=若 runner 输出文件已存在则跳过推理评测
+SKIP_RUN_IF_EXISTS="${SKIP_RUN_IF_EXISTS:-1}"       # 1=若 runner 输出文件已存在则跳过推理评测
 
 # ===== vLLM GPU memory utilization (dynamic) =====
 DYNAMIC_GPU_MEM_UTIL="${DYNAMIC_GPU_MEM_UTIL:-1}"     # 1=动态计算 0=固定值
