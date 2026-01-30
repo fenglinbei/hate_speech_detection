@@ -4,14 +4,14 @@ set -euo pipefail
 # =============================
 # Configurable parameters
 # =============================
-K_START="${K_START:-6}"
+K_START="${K_START:-1}"
 K_END="${K_END:-20}"
 
 # 端口映射：port = PORT_BASE + k
 PORT_BASE="${PORT_BASE:-35000}"
 
 # vLLM 启动参数（按需改）
-CUDA_DEVICES="${CUDA_DEVICES:-2,3}"
+CUDA_DEVICES="${CUDA_DEVICES:-0,1,2,3}"
 TENSOR_PARALLEL_SIZE="${TENSOR_PARALLEL_SIZE:-2}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
 SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-qwen2.5}"
