@@ -209,7 +209,7 @@ def plot_cost_curve(x, avg_k_used, trunc_ratio, width_in, height_in):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input_dir", type=str, default="runner/output/k_ablation")
-    ap.add_argument("--out_dir", type=str, default="runner/output/k_ablation/figs")
+    ap.add_argument("--out_dir", type=str, default="analyse/k_ablation")
     ap.add_argument("--k_min", type=int, default=6)
     ap.add_argument("--k_max", type=int, default=20)
 
