@@ -1,29 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Long-tail breakdown for quadruple extraction results.
-
-Input: result JSONs in the format like yours:
-{
-  "info": {...},
-  "results": [
-    {
-      "id": ...,
-      "gt_quadruples": [{"target":..., "argument":..., "targeted_group":..., "hateful":...}, ...],
-      "pred_quadruples": [...],
-      ...
-    }, ...
-  ],
-  "metric": {...}  # optional, not used
-}
-
-Outputs:
-- per_class_metrics.csv
-- bucket_metrics.csv
-- (optional) per_class_stability.csv (if multiple seeds/runs per method)
-"""
-
 import argparse
 import csv
 import glob
@@ -33,22 +10,16 @@ import os
 import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple
 
-# -----------------------------
-# Utilities
-# -----------------------------
+import matplotlib.pyplot as plt
 
-def read_json_or_jsonl(path: str) -> Any:
-    if path.endswith(".jsonl"):
-        arr = []
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                arr.append(json.loads(line))
-        return arr
+
+# -------------------------
+# Helpers
+# -------------------------
+
+def read_json(path: str) -> dict:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -58,8 +29,24 @@ def ensure_dir(d: str):
 def infer_method_name(path: str) -> str:
     # e.g. ours_prompt_al1280_qwen3.json -> ours
     base = os.path.basename(path)
-    m = re.split(r"[._\-]+", base)
-    return m[0] if m and m[0] else "method"
+    tok = re.split(r"[._\-]+", base)
+    return tok[0] if tok and tok[0] else "method"
+
+def split_labels(s: str) -> List[str]:
+    """
+    支持: "Racism, Sexism\\LGBTQ/Region" 等
+    分隔符：逗号/中文逗号/斜杠/反斜杠/竖线/分号
+    """
+    if s is None:
+        return []
+    s = str(s).strip()
+    if not s:
+        return []
+    parts = re.split(r"[,\，/\\|;；]+", s)
+    return [p.strip() for p in parts if p.strip()]
+
+def norm_text(x) -> str:
+    return "" if x is None else str(x).strip()
 
 def safe_div(a: float, b: float) -> float:
     return a / b if b != 0 else 0.0
@@ -67,11 +54,6 @@ def safe_div(a: float, b: float) -> float:
 def f1(p: float, r: float) -> float:
     return safe_div(2 * p * r, p + r) if (p + r) != 0 else 0.0
 
-def normalize_text(s: str) -> str:
-    if s is None:
-        return ""
-    # 你也可以按需更激进：去空格、全角半角等
-    return str(s).strip()
 
 @dataclass(frozen=True)
 class Quad:
@@ -80,373 +62,176 @@ class Quad:
     targeted_group: str
     hateful: str
 
-    def as_tuple(self):
+    def key(self) -> Tuple[str, str, str, str]:
         return (self.target, self.argument, self.targeted_group, self.hateful)
 
-def normalize_quad(q: Dict[str, Any]) -> Quad:
+
+def normalize_quad(q: dict) -> Quad:
     return Quad(
-        target=normalize_text(q.get("target", "")),
-        argument=normalize_text(q.get("argument", "")),
-        targeted_group=normalize_text(q.get("targeted_group", "")),
-        hateful=normalize_text(q.get("hateful", "")),
+        target=norm_text(q.get("target")),
+        argument=norm_text(q.get("argument")),
+        targeted_group=norm_text(q.get("targeted_group")),
+        hateful=norm_text(q.get("hateful")),
     )
 
-def get_label(quad: Quad, label_mode: str) -> Optional[str]:
+
+def expand_by_group(q: Quad) -> List[Quad]:
     """
-    label_mode:
-      - targeted_group: 只按 targeted_group 分解（通常仅关心 hateful==hate）
-      - combined: hate -> targeted_group, non-hate -> non-hate（把非仇恨作为一类）
-      - hateful: 仅按 hateful 二分类（不推荐做长尾）
+    多类别 targeted_group 展开成多个单类别 quad
     """
-    if label_mode == "hateful":
-        return quad.hateful or "unknown"
-    if label_mode == "combined":
-        if quad.hateful.lower() == "hate":
-            return quad.targeted_group or "unknown"
-        return "non-hate"
-    # targeted_group
-    return quad.targeted_group or "unknown"
+    labs = split_labels(q.targeted_group)
+    if not labs:
+        labs = ["unknown"]
+    return [Quad(q.target, q.argument, lab, q.hateful) for lab in labs]
 
-def filter_quads(quads: List[Quad], label_mode: str, hate_only: bool) -> List[Quad]:
-    if not hate_only:
-        return quads
-    # hate_only 时，过滤掉 hateful != hate
-    if label_mode in ("targeted_group", "combined"):
-        return [q for q in quads if (q.hateful or "").lower() == "hate"]
-    return quads
 
-# -----------------------------
-# Similarity backends for SOFT matching
-# -----------------------------
-
-class Similarity:
-    def sim(self, a: str, b: str) -> float:
-        raise NotImplementedError
-
-class RatioSimilarity(Similarity):
-    def sim(self, a: str, b: str) -> float:
-        # 简单字符相似度（无依赖）
-        # 也可以换成 edit distance / token-jaccard
-        import difflib
-        return difflib.SequenceMatcher(None, a, b).ratio()
-
-class EmbeddingSimilarity(Similarity):
-    def __init__(self, model_name_or_path: str, batch_size: int = 128):
-        try:
-            from sentence_transformers import SentenceTransformer
-            import numpy as np
-        except Exception as e:
-            raise RuntimeError(
-                "需要 sentence-transformers + numpy。请先安装：pip install sentence-transformers numpy"
-            ) from e
-        self.np = __import__("numpy")
-        self.model = SentenceTransformer(model_name_or_path)
-        self.batch_size = batch_size
-        self.cache: Dict[str, Any] = {}
-
-    def _encode(self, texts: List[str]):
-        # sentence-transformers 输出 numpy
-        import numpy as np
-        embs = self.model.encode(
-            texts,
-            batch_size=self.batch_size,
-            show_progress_bar=False,
-            normalize_embeddings=True,  # 归一化后余弦=点积
-        )
-        return embs
-
-    def sim(self, a: str, b: str) -> float:
-        if a == b:
-            return 1.0
-        if not a or not b:
-            return 0.0
-        # 缓存单句 embedding
-        if a not in self.cache:
-            self.cache[a] = self._encode([a])[0]
-        if b not in self.cache:
-            self.cache[b] = self._encode([b])[0]
-        va = self.cache[a]
-        vb = self.cache[b]
-        # 归一化后用点积即可
-        return float(self.np.dot(va, vb))
-
-# -----------------------------
-# Matching
-# -----------------------------
-
-def hard_match_count(pred: List[Quad], gold: List[Quad]) -> int:
+def hard_match_tp(pred: List[Quad], gold: List[Quad]) -> int:
     """
-    多重集 strict match: 完全一致的四元组一一匹配
+    strict multiset match within one sample & one class
     """
-    cp = Counter([q.as_tuple() for q in pred])
-    cg = Counter([q.as_tuple() for q in gold])
+    cp = Counter([x.key() for x in pred])
+    cg = Counter([x.key() for x in gold])
     tp = 0
     for k, v in cp.items():
         tp += min(v, cg.get(k, 0))
     return tp
 
-def soft_match_count(
-    pred: List[Quad],
-    gold: List[Quad],
-    sim_backend: Similarity,
-    gamma: float = 0.5,
-) -> int:
-    """
-    在同一 label 内做 soft matching（由外层按 label 分组保证）
-    soft 条件：sim(target) >= gamma AND sim(argument) >= gamma
-    使用贪心最大匹配（按平均相似度从高到低）
-    """
-    if not pred or not gold:
-        return 0
 
-    # 构造候选边
-    candidates: List[Tuple[float, int, int]] = []
-    for i, p in enumerate(pred):
-        for j, g in enumerate(gold):
-            st = sim_backend.sim(p.target, g.target)
-            sa = sim_backend.sim(p.argument, g.argument)
-            if st >= gamma and sa >= gamma:
-                score = (st + sa) / 2.0
-                candidates.append((score, i, j))
+# -------------------------
+# Evaluation (per-class)
+# -------------------------
 
-    if not candidates:
-        return 0
-
-    candidates.sort(reverse=True, key=lambda x: x[0])
-    used_p = set()
-    used_g = set()
-    tp = 0
-    for score, i, j in candidates:
-        if i in used_p or j in used_g:
-            continue
-        used_p.add(i)
-        used_g.add(j)
-        tp += 1
-    return tp
-
-# -----------------------------
-# Core evaluation per-class
-# -----------------------------
-
-@dataclass
-class Counts:
-    tp: int = 0
-    fp: int = 0
-    fn: int = 0
-
-def update_counts(counts: Counts, tp: int, fp: int, fn: int):
-    counts.tp += tp
-    counts.fp += fp
-    counts.fn += fn
-
-def counts_to_metrics(c: Counts) -> Dict[str, float]:
-    p = safe_div(c.tp, c.tp + c.fp)
-    r = safe_div(c.tp, c.tp + c.fn)
-    return {"p": p, "r": r, "f1": f1(p, r), "tp": c.tp, "fp": c.fp, "fn": c.fn}
-
-def evaluate_one_run(
-    run_json_path: str,
-    label_mode: str,
+def eval_one_file(
+    path: str,
+    classes: List[str],
     hate_only: bool,
-    sim_backend: Similarity,
-    gamma: float,
-) -> Dict[str, Any]:
-    d = read_json_or_jsonl(run_json_path)
-    if isinstance(d, dict) and "results" in d:
-        results = d["results"]
-        info = d.get("info", {}) or {}
-    elif isinstance(d, list):
-        results = d
-        info = {}
-    else:
-        raise ValueError(f"Unrecognized format: {run_json_path}")
+) -> Dict[str, Dict[str, float]]:
+    """
+    Return: class -> {p, r, f1, tp, fp, fn}
+    """
+    d = read_json(path)
+    results = d.get("results", [])
+    if not isinstance(results, list):
+        raise ValueError(f"Bad format: {path}")
 
-    method = infer_method_name(run_json_path)
-    seed = None
-    try:
-        seed = info.get("seed", None)
-    except Exception:
-        seed = None
+    # counts per class
+    tp = Counter()
+    fp = Counter()
+    fn = Counter()
 
-    hard_counts_by_class: Dict[str, Counts] = defaultdict(Counts)
-    soft_counts_by_class: Dict[str, Counts] = defaultdict(Counts)
+    class_set = set(classes)
 
     for item in results:
-        gt = [normalize_quad(q) for q in item.get("gt_quadruples", [])]
-        pr = [normalize_quad(q) for q in item.get("pred_quadruples", [])]
+        gt_raw = item.get("gt_quadruples", []) or []
+        pr_raw = item.get("pred_quadruples", []) or []
 
-        gt = filter_quads(gt, label_mode=label_mode, hate_only=hate_only)
-        pr = filter_quads(pr, label_mode=label_mode, hate_only=hate_only)
+        gt_all = []
+        pr_all = []
 
-        # 按 label 分组
+        for q in gt_raw:
+            qq = normalize_quad(q)
+            if hate_only and (qq.hateful.lower() != "hate"):
+                continue
+            gt_all.extend(expand_by_group(qq))
+
+        for q in pr_raw:
+            qq = normalize_quad(q)
+            if hate_only and (qq.hateful.lower() != "hate"):
+                continue
+            pr_all.extend(expand_by_group(qq))
+
+        # group by class for this sample
         gt_by = defaultdict(list)
         pr_by = defaultdict(list)
 
-        for q in gt:
-            lab = get_label(q, label_mode)
-            if lab is not None:
-                gt_by[lab].append(q)
-        for q in pr:
-            lab = get_label(q, label_mode)
-            if lab is not None:
-                pr_by[lab].append(q)
+        for q in gt_all:
+            if q.targeted_group in class_set:
+                gt_by[q.targeted_group].append(q)
+        for q in pr_all:
+            if q.targeted_group in class_set:
+                pr_by[q.targeted_group].append(q)
 
-        labels = set(gt_by.keys()) | set(pr_by.keys())
-        for lab in labels:
-            g_list = gt_by.get(lab, [])
-            p_list = pr_by.get(lab, [])
-
-            # hard
-            tp_h = hard_match_count(p_list, g_list)
-            fp_h = len(p_list) - tp_h
-            fn_h = len(g_list) - tp_h
-            update_counts(hard_counts_by_class[lab], tp_h, fp_h, fn_h)
-
-            # soft
-            tp_s = soft_match_count(p_list, g_list, sim_backend, gamma=gamma)
-            fp_s = len(p_list) - tp_s
-            fn_s = len(g_list) - tp_s
-            update_counts(soft_counts_by_class[lab], tp_s, fp_s, fn_s)
-
-    return {
-        "method": method,
-        "seed": seed,
-        "hard_counts_by_class": hard_counts_by_class,
-        "soft_counts_by_class": soft_counts_by_class,
-    }
-
-# -----------------------------
-# Frequency / Bucketing (Head/Med/Tail)
-# -----------------------------
-
-def extract_quads_from_dataset_item(item: Dict[str, Any]) -> List[Dict[str, Any]]:
-    # 兼容多种字段名
-    for k in ["quadruples", "gt_quadruples", "labels", "label", "annotation", "annotations"]:
-        if k in item and isinstance(item[k], list):
-            # 只有 quadruples / gt_quadruples 一般是 list[dict]
-            if item[k] and isinstance(item[k][0], dict) and "target" in item[k][0]:
-                return item[k]
-    return []
-
-def compute_train_freq(
-    train_path: str,
-    label_mode: str,
-    hate_only: bool,
-) -> Dict[str, int]:
-    data = read_json_or_jsonl(train_path)
-    if isinstance(data, dict) and "data" in data and isinstance(data["data"], list):
-        data = data["data"]
-    if not isinstance(data, list):
-        raise ValueError(f"Train file should be list/jsonl: {train_path}")
-
-    freq = Counter()
-    for item in data:
-        quads = extract_quads_from_dataset_item(item)
-        if not quads:
-            # 如果你的训练集结构不同，可以在这里加解析规则
-            continue
-        for q in quads:
-            qq = normalize_quad(q)
-            qqs = filter_quads([qq], label_mode=label_mode, hate_only=hate_only)
-            if not qqs:
-                continue
-            lab = get_label(qqs[0], label_mode)
-            if lab is not None:
-                freq[lab] += 1
-    return dict(freq)
-
-def make_buckets(
-    freq: Dict[str, int],
-    bucket_method: str = "percentile",
-    head_pct: float = 0.3,
-    tail_pct: float = 0.3,
-    tail_max_freq: int = -1,
-) -> Dict[str, str]:
-    """
-    Return: class -> bucket in {"head","medium","tail"}
-    Methods:
-      - percentile: head=top head_pct classes, tail=bottom tail_pct classes
-      - threshold: tail if freq <= tail_max_freq, head otherwise (medium not used much)
-    """
-    classes = sorted(freq.keys(), key=lambda c: (freq[c], c))
-    n = len(classes)
-    if n == 0:
-        return {}
-
-    buckets = {}
-
-    if bucket_method == "threshold":
-        if tail_max_freq <= 0:
-            # 默认：尾类取 <= 中位数
-            sorted_freq = sorted(freq.values())
-            tail_max_freq = sorted_freq[n // 2]
         for c in classes:
-            buckets[c] = "tail" if freq[c] <= tail_max_freq else "head"
-        return buckets
+            g = gt_by.get(c, [])
+            p = pr_by.get(c, [])
 
-    # percentile default
-    tail_n = max(1, int(math.ceil(n * tail_pct)))
-    head_n = max(1, int(math.ceil(n * head_pct)))
+            tpc = hard_match_tp(p, g)
+            fpc = len(p) - tpc
+            fnc = len(g) - tpc
 
-    tail_set = set(classes[:tail_n])
-    head_set = set(classes[-head_n:])
+            tp[c] += tpc
+            fp[c] += fpc
+            fn[c] += fnc
 
+    out = {}
     for c in classes:
-        if c in tail_set and c in head_set:
-            buckets[c] = "medium"
-        elif c in tail_set:
-            buckets[c] = "tail"
-        elif c in head_set:
-            buckets[c] = "head"
-        else:
-            buckets[c] = "medium"
+        p = safe_div(tp[c], tp[c] + fp[c])
+        r = safe_div(tp[c], tp[c] + fn[c])
+        out[c] = {
+            "precision": p,
+            "recall": r,
+            "f1": f1(p, r),
+            "tp": float(tp[c]),
+            "fp": float(fp[c]),
+            "fn": float(fn[c]),
+        }
+    return out
 
-    return buckets
 
-# -----------------------------
-# Aggregation / Output
-# -----------------------------
+def mean_std(xs: List[float]) -> Tuple[float, float]:
+    if not xs:
+        return 0.0, 0.0
+    if len(xs) == 1:
+        return xs[0], 0.0
+    mu = sum(xs) / len(xs)
+    var = sum((x - mu) ** 2 for x in xs) / (len(xs) - 1)
+    return mu, math.sqrt(var)
 
-def summarize_per_class(run_eval: Dict[str, Any]) -> List[Dict[str, Any]]:
-    method = run_eval["method"]
-    seed = run_eval["seed"]
-    hard = run_eval["hard_counts_by_class"]
-    soft = run_eval["soft_counts_by_class"]
 
-    rows = []
-    all_classes = set(hard.keys()) | set(soft.keys())
-    for c in sorted(all_classes):
-        hm = counts_to_metrics(hard.get(c, Counts()))
-        sm = counts_to_metrics(soft.get(c, Counts()))
-        rows.append({
-            "method": method,
-            "seed": seed,
-            "class": c,
-            "hard_p": hm["p"], "hard_r": hm["r"], "hard_f1": hm["f1"],
-            "soft_p": sm["p"], "soft_r": sm["r"], "soft_f1": sm["f1"],
-            "avg_f1": (hm["f1"] + sm["f1"]) / 2.0,
-            "hard_tp": hm["tp"], "hard_fp": hm["fp"], "hard_fn": hm["fn"],
-            "soft_tp": sm["tp"], "soft_fp": sm["fp"], "soft_fn": sm["fn"],
-        })
-    return rows
+# -------------------------
+# Plot
+# -------------------------
 
-def macro_over_classes(rows: List[Dict[str, Any]], classes: List[str]) -> Dict[str, float]:
-    if not classes:
-        return {"macro_hard_f1": 0.0, "macro_soft_f1": 0.0, "macro_avg_f1": 0.0,
-                "macro_hard_r": 0.0, "macro_soft_r": 0.0}
-    sel = [r for r in rows if r["class"] in classes]
-    if not sel:
-        return {"macro_hard_f1": 0.0, "macro_soft_f1": 0.0, "macro_avg_f1": 0.0,
-                "macro_hard_r": 0.0, "macro_soft_r": 0.0}
-    return {
-        "macro_hard_f1": sum(r["hard_f1"] for r in sel) / len(sel),
-        "macro_soft_f1": sum(r["soft_f1"] for r in sel) / len(sel),
-        "macro_avg_f1":  sum(r["avg_f1"]  for r in sel) / len(sel),
-        "macro_hard_r":  sum(r["hard_r"]  for r in sel) / len(sel),
-        "macro_soft_r":  sum(r["soft_r"]  for r in sel) / len(sel),
-    }
+def plot_grouped_bars(
+    agg: Dict[str, Dict[str, Tuple[float, float]]],
+    classes: List[str],
+    methods: List[str],
+    metric: str,
+    out_path: str,
+    title: str = "",
+):
+    """
+    agg[method][class] = (mean, std)
+    """
+    n_cls = len(classes)
+    n_m = len(methods)
 
-def write_csv(path: str, rows: List[Dict[str, Any]]):
+    x = list(range(n_cls))
+    total_width = 0.8
+    bar_w = total_width / max(1, n_m)
+    left = [i - total_width / 2 for i in x]
+
+    plt.figure(figsize=(12, 4.8))
+    for mi, m in enumerate(methods):
+        vals = [agg[m][c][0] for c in classes]
+        errs = [agg[m][c][1] for c in classes]
+        xpos = [left[i] + mi * bar_w for i in range(n_cls)]
+        plt.bar(xpos, vals, width=bar_w, yerr=errs, capsize=3, label=m)
+
+    # center ticks
+    tick_pos = [left[i] + total_width / 2 - bar_w / 2 for i in range(n_cls)]
+    plt.xticks(tick_pos, classes, rotation=0)
+    plt.ylim(0, 1.0)
+    plt.ylabel(metric)
+    if title:
+        plt.title(title)
+    plt.legend(ncol=min(4, n_m), fontsize=9)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=200)
+    plt.close()
+
+
+def write_csv(path: str, rows: List[dict]):
     if not rows:
         return
     keys = list(rows[0].keys())
@@ -456,30 +241,29 @@ def write_csv(path: str, rows: List[Dict[str, Any]]):
         for r in rows:
             w.writerow(r)
 
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inputs", nargs="+", required=True,
-                    help="Result JSON paths or glob patterns, e.g. outputs/ours_*.json outputs/topk_*.json")
-    ap.add_argument("--out_dir", default="analysis_long_tail", help="Output directory")
-    ap.add_argument("--train_path", default="", help="Optional: training set path to compute class frequency for bucketing")
-    ap.add_argument("--label_mode", default="targeted_group",
-                    choices=["targeted_group", "combined", "hateful"],
-                    help="How to define class label for breakdown")
+                    help="Result JSON paths or glob patterns")
+    ap.add_argument("--method_names", nargs="*",
+                    help="Optional: method names aligned with expanded inputs. If omitted, inferred from filename prefix.")
+    ap.add_argument("--out_dir", default="analysis_6class_bar")
+    ap.add_argument("--classes", default="Racism,Sexism,LGBTQ,Region,others,non-hate",
+                    help="Comma-separated 6 classes in desired order")
     ap.add_argument("--hate_only", action="store_true",
-                    help="If set, only keep hateful==hate (recommended for targeted_group long-tail)")
-    ap.add_argument("--gamma", type=float, default=0.5, help="Soft match threshold")
-    ap.add_argument("--sim", default="ratio", choices=["ratio", "embedding"], help="Soft similarity backend")
-    ap.add_argument("--embed_model", default="BAAI/bge-large-zh-v1.5",
-                    help="SentenceTransformer model name/path (only used when --sim embedding)")
-    ap.add_argument("--bucket_method", default="percentile", choices=["percentile", "threshold"])
-    ap.add_argument("--head_pct", type=float, default=0.3)
-    ap.add_argument("--tail_pct", type=float, default=0.3)
-    ap.add_argument("--tail_max_freq", type=int, default=-1)
+                    help="If set, only evaluate hateful=='hate' (注意：这样会排除 non-hate 类)")
+    ap.add_argument("--metrics", default="recall,f1",
+                    help="Comma-separated metrics to plot: precision,recall,f1")
+    ap.add_argument("--title_prefix", default="Six-class breakdown")
 
     args = ap.parse_args()
     ensure_dir(args.out_dir)
 
-    # Expand globs
+    classes = [c.strip() for c in args.classes.split(",") if c.strip()]
+    metrics = [m.strip() for m in args.metrics.split(",") if m.strip()]
+
+    # expand globs
     paths = []
     for p in args.inputs:
         g = glob.glob(p)
@@ -487,125 +271,76 @@ def main():
             paths.extend(g)
         else:
             paths.append(p)
-    paths = sorted(list(dict.fromkeys(paths)))
+    paths = sorted(paths)
     if not paths:
         raise SystemExit("No input files found.")
 
-    # Build similarity backend
-    if args.sim == "embedding":
-        sim_backend = EmbeddingSimilarity(args.embed_model)
+    # method names
+    if args.method_names:
+        if len(args.method_names) != len(paths):
+            raise SystemExit("Length of --method_names must match number of expanded inputs.")
+        mnames = args.method_names
     else:
-        sim_backend = RatioSimilarity()
+        mnames = [infer_method_name(p) for p in paths]
 
-    # Evaluate each run
-    run_rows_all = []
-    run_rows_by_method_seed = defaultdict(list)
+    # run eval per file
+    # store rows for CSV and for aggregation
+    csv_rows = []
+    per_method_class_metric = defaultdict(lambda: defaultdict(list))  # m -> c -> metric list
 
-    for rp in paths:
-        run_eval = evaluate_one_run(
-            rp,
-            label_mode=args.label_mode,
-            hate_only=args.hate_only,
-            sim_backend=sim_backend,
-            gamma=args.gamma,
+    for path, method in zip(paths, mnames):
+        res = eval_one_file(path, classes=classes, hate_only=args.hate_only)
+        run_id = os.path.basename(path)
+        for c in classes:
+            row = {
+                "method": method,
+                "run": run_id,
+                "class": c,
+                "precision": res[c]["precision"],
+                "recall": res[c]["recall"],
+                "f1": res[c]["f1"],
+                "tp": res[c]["tp"],
+                "fp": res[c]["fp"],
+                "fn": res[c]["fn"],
+            }
+            csv_rows.append(row)
+            for met in ["precision", "recall", "f1"]:
+                per_method_class_metric[method][(c, met)].append(row[met])
+
+    # save csv
+    csv_path = os.path.join(args.out_dir, "six_class_metrics.csv")
+    write_csv(csv_path, csv_rows)
+
+    methods = sorted(set(mnames), key=lambda x: mnames.index(x))  # preserve first appearance order
+
+    # aggregate mean/std per method/class/metric
+    agg = {m: {c: {} for c in classes} for m in methods}
+    for m in methods:
+        for c in classes:
+            for met in ["precision", "recall", "f1"]:
+                vals = per_method_class_metric[m].get((c, met), [])
+                mu, sd = mean_std(vals)
+                agg[m][c][met] = (mu, sd)
+
+    # plot each requested metric
+    for met in metrics:
+        # reformat for plotting: agg_plot[m][c] = (mean,std)
+        agg_plot = {m: {c: agg[m][c][met] for c in classes} for m in methods}
+        out_png = os.path.join(args.out_dir, f"bar_{met}.png")
+        title = f"{args.title_prefix} ({met})"
+        plot_grouped_bars(
+            agg=agg_plot,
+            classes=classes,
+            methods=methods,
+            metric=met,
+            out_path=out_png,
+            title=title,
         )
-        rows = summarize_per_class(run_eval)
-        run_rows_all.extend(rows)
-        key = (run_eval["method"], run_eval["seed"])
-        run_rows_by_method_seed[key] = rows
 
-    # Attach frequency and bucket (if train provided)
-    freq = {}
-    buckets = {}
-    if args.train_path:
-        freq = compute_train_freq(args.train_path, label_mode=args.label_mode, hate_only=args.hate_only)
-        buckets = make_buckets(
-            freq, bucket_method=args.bucket_method,
-            head_pct=args.head_pct, tail_pct=args.tail_pct,
-            tail_max_freq=args.tail_max_freq
-        )
+    print(f"[OK] CSV: {csv_path}")
+    for met in metrics:
+        print(f"[OK] PNG: {os.path.join(args.out_dir, f'bar_{met}.png')}")
 
-    for r in run_rows_all:
-        c = r["class"]
-        r["freq_train"] = freq.get(c, 0) if freq else 0
-        r["bucket"] = buckets.get(c, "unknown") if buckets else "unknown"
-
-    # Save per-class metrics (run-level)
-    per_class_path = os.path.join(args.out_dir, "per_class_metrics.csv")
-    write_csv(per_class_path, run_rows_all)
-
-    # Bucket summary per run (macro)
-    bucket_rows = []
-    for (method, seed), rows in run_rows_by_method_seed.items():
-        # decide class sets from this run
-        classes_in_run = sorted({r["class"] for r in rows})
-        if buckets:
-            head = [c for c in classes_in_run if buckets.get(c) == "head"]
-            mid  = [c for c in classes_in_run if buckets.get(c) == "medium"]
-            tail = [c for c in classes_in_run if buckets.get(c) == "tail"]
-        else:
-            # if no bucketing info, treat all as one bucket
-            head, mid, tail = [], [], []
-
-        if buckets:
-            for bname, clz in [("head", head), ("medium", mid), ("tail", tail)]:
-                m = macro_over_classes(rows, clz)
-                bucket_rows.append({
-                    "method": method, "seed": seed, "bucket": bname,
-                    **m, "num_classes": len(clz)
-                })
-        else:
-            m = macro_over_classes(rows, classes_in_run)
-            bucket_rows.append({
-                "method": method, "seed": seed, "bucket": "all",
-                **m, "num_classes": len(classes_in_run)
-            })
-
-    bucket_path = os.path.join(args.out_dir, "bucket_metrics.csv")
-    write_csv(bucket_path, bucket_rows)
-
-    # Stability (if multiple runs per method)
-    # mean/std over seeds for each (method, class)
-    stability_rows = []
-    by_method_class = defaultdict(list)
-    for r in run_rows_all:
-        by_method_class[(r["method"], r["class"])].append(r)
-
-    for (method, c), items in by_method_class.items():
-        if len(items) <= 1:
-            continue
-        def mean_std(xs):
-            mu = sum(xs) / len(xs)
-            var = sum((x - mu) ** 2 for x in xs) / (len(xs) - 1) if len(xs) > 1 else 0.0
-            return mu, math.sqrt(var)
-
-        hard_r_mu, hard_r_sd = mean_std([it["hard_r"] for it in items])
-        soft_r_mu, soft_r_sd = mean_std([it["soft_r"] for it in items])
-        avg_mu, avg_sd       = mean_std([it["avg_f1"] for it in items])
-
-        stability_rows.append({
-            "method": method,
-            "class": c,
-            "n_runs": len(items),
-            "freq_train": items[0].get("freq_train", 0),
-            "bucket": items[0].get("bucket", "unknown"),
-            "hard_r_mean": hard_r_mu, "hard_r_std": hard_r_sd,
-            "soft_r_mean": soft_r_mu, "soft_r_std": soft_r_sd,
-            "avg_f1_mean": avg_mu, "avg_f1_std": avg_sd,
-            "hard_r_cv": safe_div(hard_r_sd, hard_r_mu),
-            "soft_r_cv": safe_div(soft_r_sd, soft_r_mu),
-        })
-
-    if stability_rows:
-        stability_path = os.path.join(args.out_dir, "per_class_stability.csv")
-        write_csv(stability_path, stability_rows)
-
-    print(f"[OK] Saved: {per_class_path}")
-    print(f"[OK] Saved: {bucket_path}")
-    if stability_rows:
-        print(f"[OK] Saved: {stability_path}")
-    else:
-        print("[INFO] Only one run per class; stability file not generated.")
 
 if __name__ == "__main__":
     main()

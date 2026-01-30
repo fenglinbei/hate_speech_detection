@@ -41,6 +41,16 @@ SKIP_BUILD_IF_EXISTS="${SKIP_BUILD_IF_EXISTS:-1}"   # 1=若 train/val/test 已�
 SKIP_TRAIN_IF_EXISTS="${SKIP_TRAIN_IF_EXISTS:-1}"   # 1=若 checkpoint-* 已存在则跳过训练
 SKIP_RUN_IF_EXISTS="${SKIP_RUN_IF_EXISTS:-0}"       # 1=若 runner 输出文件已存在则跳过推理评测
 
+# ===== vLLM GPU memory utilization (dynamic) =====
+DYNAMIC_GPU_MEM_UTIL="${DYNAMIC_GPU_MEM_UTIL:-1}"     # 1=动态计算 0=固定值
+DEFAULT_GPU_MEM_UTIL="${DEFAULT_GPU_MEM_UTIL:-0.90}"  # 动态关闭时使用
+
+GPU_MEM_HEADROOM_MB="${GPU_MEM_HEADROOM_MB:-1200}"    # 预留给碎片/驱动/波动的安全余量
+GPU_MEM_UTIL_MARGIN="${GPU_MEM_UTIL_MARGIN:-0.92}"    # 在“可用比例”基础上再乘一个保险系数
+GPU_MEM_UTIL_MIN="${GPU_MEM_UTIL_MIN:-0.10}"          # 下限，太小 vLLM 可能不可用/吞吐太差
+GPU_MEM_UTIL_MAX="${GPU_MEM_UTIL_MAX:-0.95}"          # 上限，别太激进
+
+
 # vLLM 启动后等待就绪的最长秒数
 VLLM_WAIT_SECONDS="${VLLM_WAIT_SECONDS:-180}"
 
@@ -123,6 +133,94 @@ safe_jq_to_file() {
     exit 1
   fi
 }
+
+# 解析 CUDA_VISIBLE_DEVICES="2,3" -> 数组 [2 3]
+parse_cuda_devices() {
+  local s="${1// /}"
+  IFS=',' read -r -a arr <<< "$s"
+  echo "${arr[@]}"
+}
+
+# 读取单张 GPU 的 total/free（单位 MB）
+# 输出格式：total free
+gpu_mem_total_free_mb() {
+  local gpu_id="$1"
+  # 例输出: "24576, 18320"
+  local line
+  line="$(nvidia-smi -i "$gpu_id" --query-gpu=memory.total,memory.free --format=csv,noheader,nounits 2>/dev/null | head -n 1 || true)"
+  if [[ -z "$line" ]]; then
+    echo "0 0"
+    return
+  fi
+  # shellcheck disable=SC2001
+  line="$(echo "$line" | sed 's/ //g')"
+  local total free
+  total="$(echo "$line" | cut -d',' -f1)"
+  free="$(echo "$line" | cut -d',' -f2)"
+  echo "$total" "$free"
+}
+
+# 基于指定 GPU 列表动态计算 vLLM --gpu-memory-utilization
+compute_vllm_gpu_mem_util() {
+  local cuda_list="$1"
+  local headroom_mb="$2"
+  local margin="$3"
+  local umin="$4"
+  local umax="$5"
+
+  local -a gpus
+  read -r -a gpus <<< "$(parse_cuda_devices "$cuda_list")"
+
+  if [[ "${#gpus[@]}" -eq 0 ]]; then
+    echo "$DEFAULT_GPU_MEM_UTIL"
+    return
+  fi
+
+  # 收集 total/free
+  local pairs=()
+  for gid in "${gpus[@]}"; do
+    read -r total free < <(gpu_mem_total_free_mb "$gid")
+    pairs+=("${total}:${free}:${gid}")
+  done
+
+  # 用 python 做浮点计算更稳
+  python - "$headroom_mb" "$margin" "$umin" "$umax" "${pairs[@]}" <<'PY'
+import sys
+
+headroom = float(sys.argv[1])
+margin   = float(sys.argv[2])
+umin     = float(sys.argv[3])
+umax     = float(sys.argv[4])
+pairs    = sys.argv[5:]
+
+utils = []
+detail = []
+for p in pairs:
+    total_s, free_s, gid_s = p.split(":")
+    total = float(total_s)
+    free  = float(free_s)
+    gid   = gid_s
+    if total <= 0:
+        u = 0.0
+    else:
+        avail = max(0.0, free - headroom)
+        u = (avail / total) * margin
+    utils.append(u)
+    detail.append((gid, total, free, u))
+
+u = min(utils) if utils else umin
+u = max(umin, min(umax, u))
+
+# 打印到 stdout：最终利用率（给 bash 接收）
+print(f"{u:.3f}")
+
+# 也把明细写到 stderr，方便你看每张卡的状态（不会影响 bash 取值）
+for gid, total, free, uu in detail:
+    print(f"[GPU-MEM] gpu={gid} total={int(total)}MB free={int(free)}MB -> raw_util={uu:.3f}", file=sys.stderr)
+print(f"[GPU-MEM] chosen --gpu-memory-utilization={u:.3f} (headroom={headroom}MB margin={margin})", file=sys.stderr)
+PY
+}
+
 
 # =========================
 # Preconditions
@@ -236,6 +334,20 @@ for k in $(seq "$K_START" "$K_END"); do
     echo "[STEP] start vLLM for k=${k} on port ${PORT}"
     echo "[INFO] checkpoint=${CKPT_DIR}"
 
+    # ====== 在启动 vLLM 前动态计算 gpu-memory-utilization ======
+    GPU_MEM_UTIL="$DEFAULT_GPU_MEM_UTIL"
+    if [[ "${DYNAMIC_GPU_MEM_UTIL}" == "1" ]]; then
+      # 注意：这里用的是“物理 GPU id 列表”，即 VLLM_CUDA_VISIBLE_DEVICES=2,3
+      GPU_MEM_UTIL="$(compute_vllm_gpu_mem_util \
+        "$VLLM_CUDA_VISIBLE_DEVICES" \
+        "$GPU_MEM_HEADROOM_MB" \
+        "$GPU_MEM_UTIL_MARGIN" \
+        "$GPU_MEM_UTIL_MIN" \
+        "$GPU_MEM_UTIL_MAX")"
+    fi
+
+    echo "[INFO] vLLM gpu-memory-utilization=${GPU_MEM_UTIL} (dynamic=${DYNAMIC_GPU_MEM_UTIL})"
+
     CUDA_VISIBLE_DEVICES="$VLLM_CUDA_VISIBLE_DEVICES" \
       python -m vllm.entrypoints.openai.api_server \
         --served-model-name "$SERVED_MODEL_NAME" \
@@ -244,7 +356,9 @@ for k in $(seq "$K_START" "$K_END"); do
         --tensor-parallel-size "$TENSOR_PARALLEL_SIZE" \
         --port "$PORT" \
         --max_model_len "$MAX_MODEL_LEN" \
+        --gpu-memory-utilization "$GPU_MEM_UTIL" \
         > "$VLLM_LOG" 2>&1 &
+
 
     VLLM_PID="$!"
     echo "[INFO] vLLM pid=${VLLM_PID}, log=${VLLM_LOG}"
