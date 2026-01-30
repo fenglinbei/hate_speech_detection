@@ -7,7 +7,7 @@ PORT=35012
 
 # You can override these at runtime:
 # CUDA_VISIBLE_DEVICES="2,3" bash runner/start_comand/k_ablation/k12.sh
-CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-2,3}"
+CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
 
 MODEL_ROOT="./models/exps/k_ablation/k${K}"
 CKPT_DIR="$(ls -d "${MODEL_ROOT}"/checkpoint-* 2>/dev/null | sort -V | tail -n 1 || true)"
