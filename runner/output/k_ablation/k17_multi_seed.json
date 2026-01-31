@@ -1,0 +1,701 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "shot_num": 0,
+    "seeds_list": [
+      42,
+      4242,
+      424242,
+      42424242,
+      4242424242
+    ],
+    "base_output_name": "k17.json",
+    "generated_at": "20260131_230149",
+    "llm_params_base": {
+      "max_new_tokens": 2048,
+      "n": 1,
+      "top_p": 0.5,
+      "top_k": 20,
+      "min_p": 0,
+      "temperature": 0.7,
+      "enable_thinking": false
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "k17_s42.json",
+      "metric": {
+        "f1_hard": 0.2434,
+        "f1_soft": 0.4447,
+        "f1_avg": 0.344,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2439,
+        "hard_recall": 0.2429,
+        "soft_precision": 0.4456,
+        "soft_recall": 0.4437,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.7698,
+            "argument_avg_sim": 0.6759
+          },
+          "targeted_group": {
+            "tp": 1314,
+            "fp": 580,
+            "fn": 588,
+            "precision": 0.6938,
+            "recall": 0.6909,
+            "f1": 0.6923
+          },
+          "hateful": {
+            "tp": 1490,
+            "fp": 404,
+            "fn": 412,
+            "precision": 0.7867,
+            "recall": 0.7834,
+            "f1": 0.785
+          },
+          "matched_pairs": 1745
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "completion_tokens": 34218,
+          "prompt_tokens": 1921148,
+          "total_tokens": 1955366
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42,
+          "prompts_save_dir": "./data/prompts/k17_s42",
+          "output_dir": "runner/output/k_ablation",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "./runner/progress/k17_s42",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42,
+              4242,
+              424242,
+              42424242,
+              4242424242
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "data/exp_data/k_ablation/k17/test.json",
+          "output_name": "k17_s42.json",
+          "cache_dir": "runner/cache/k17_s42"
+        }
+      }
+    },
+    {
+      "seed": 4242,
+      "output_file": "k17_s4242.json",
+      "metric": {
+        "f1_hard": 0.2411,
+        "f1_soft": 0.4447,
+        "f1_avg": 0.3429,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2419,
+        "hard_recall": 0.2403,
+        "soft_precision": 0.4463,
+        "soft_recall": 0.4432,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.7719,
+            "argument_avg_sim": 0.6789
+          },
+          "targeted_group": {
+            "tp": 1317,
+            "fp": 572,
+            "fn": 585,
+            "precision": 0.6972,
+            "recall": 0.6924,
+            "f1": 0.6948
+          },
+          "hateful": {
+            "tp": 1483,
+            "fp": 406,
+            "fn": 419,
+            "precision": 0.7851,
+            "recall": 0.7797,
+            "f1": 0.7824
+          },
+          "matched_pairs": 1742
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 4242,
+        "usage": {
+          "completion_tokens": 34140,
+          "prompt_tokens": 1921148,
+          "total_tokens": 1955288
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 4242
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 4242,
+          "prompts_save_dir": "./data/prompts/k17_s4242",
+          "output_dir": "runner/output/k_ablation",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "./runner/progress/k17_s4242",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42,
+              4242,
+              424242,
+              42424242,
+              4242424242
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "data/exp_data/k_ablation/k17/test.json",
+          "output_name": "k17_s4242.json",
+          "cache_dir": "runner/cache/k17_s4242"
+        }
+      }
+    },
+    {
+      "seed": 424242,
+      "output_file": "k17_s424242.json",
+      "metric": {
+        "f1_hard": 0.2409,
+        "f1_soft": 0.447,
+        "f1_avg": 0.3439,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2409,
+        "hard_recall": 0.2408,
+        "soft_precision": 0.4471,
+        "soft_recall": 0.4469,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.7694,
+            "argument_avg_sim": 0.6773
+          },
+          "targeted_group": {
+            "tp": 1318,
+            "fp": 583,
+            "fn": 584,
+            "precision": 0.6933,
+            "recall": 0.693,
+            "f1": 0.6931
+          },
+          "hateful": {
+            "tp": 1485,
+            "fp": 416,
+            "fn": 417,
+            "precision": 0.7812,
+            "recall": 0.7808,
+            "f1": 0.781
+          },
+          "matched_pairs": 1746
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 424242,
+        "usage": {
+          "completion_tokens": 34251,
+          "prompt_tokens": 1921148,
+          "total_tokens": 1955399
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 424242
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 424242,
+          "prompts_save_dir": "./data/prompts/k17_s424242",
+          "output_dir": "runner/output/k_ablation",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "./runner/progress/k17_s424242",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42,
+              4242,
+              424242,
+              42424242,
+              4242424242
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "data/exp_data/k_ablation/k17/test.json",
+          "output_name": "k17_s424242.json",
+          "cache_dir": "runner/cache/k17_s424242"
+        }
+      }
+    },
+    {
+      "seed": 42424242,
+      "output_file": "k17_s42424242.json",
+      "metric": {
+        "f1_hard": 0.2403,
+        "f1_soft": 0.4431,
+        "f1_avg": 0.3417,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2414,
+        "hard_recall": 0.2392,
+        "soft_precision": 0.4451,
+        "soft_recall": 0.4411,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.772,
+            "argument_avg_sim": 0.6774
+          },
+          "targeted_group": {
+            "tp": 1308,
+            "fp": 577,
+            "fn": 594,
+            "precision": 0.6939,
+            "recall": 0.6877,
+            "f1": 0.6908
+          },
+          "hateful": {
+            "tp": 1482,
+            "fp": 403,
+            "fn": 420,
+            "precision": 0.7862,
+            "recall": 0.7792,
+            "f1": 0.7827
+          },
+          "matched_pairs": 1741
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42424242,
+        "usage": {
+          "completion_tokens": 33972,
+          "prompt_tokens": 1921148,
+          "total_tokens": 1955120
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 42424242
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42424242,
+          "prompts_save_dir": "./data/prompts/k17_s42424242",
+          "output_dir": "runner/output/k_ablation",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "./runner/progress/k17_s42424242",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42,
+              4242,
+              424242,
+              42424242,
+              4242424242
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "data/exp_data/k_ablation/k17/test.json",
+          "output_name": "k17_s42424242.json",
+          "cache_dir": "runner/cache/k17_s42424242"
+        }
+      }
+    },
+    {
+      "seed": 4242424242,
+      "output_file": "k17_s4242424242.json",
+      "metric": {
+        "f1_hard": 0.239,
+        "f1_soft": 0.4412,
+        "f1_avg": 0.3401,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2393,
+        "hard_recall": 0.2387,
+        "soft_precision": 0.4418,
+        "soft_recall": 0.4406,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.7684,
+            "argument_avg_sim": 0.6789
+          },
+          "targeted_group": {
+            "tp": 1315,
+            "fp": 582,
+            "fn": 587,
+            "precision": 0.6932,
+            "recall": 0.6914,
+            "f1": 0.6923
+          },
+          "hateful": {
+            "tp": 1486,
+            "fp": 411,
+            "fn": 416,
+            "precision": 0.7833,
+            "recall": 0.7813,
+            "f1": 0.7823
+          },
+          "matched_pairs": 1747
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 4242424242,
+        "usage": {
+          "completion_tokens": 34381,
+          "prompt_tokens": 1921148,
+          "total_tokens": 1955529
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 4242424242
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 4242424242,
+          "prompts_save_dir": "./data/prompts/k17_s4242424242",
+          "output_dir": "runner/output/k_ablation",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "./runner/progress/k17_s4242424242",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42,
+              4242,
+              424242,
+              42424242,
+              4242424242
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "data/exp_data/k_ablation/k17/test.json",
+          "output_name": "k17_s4242424242.json",
+          "cache_dir": "runner/cache/k17_s4242424242"
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "f1_hard": {
+      "mean": 0.2409,
+      "std": 0.0016,
+      "n": 5
+    },
+    "f1_soft": {
+      "mean": 0.4441,
+      "std": 0.0022,
+      "n": 5
+    },
+    "f1_avg": {
+      "mean": 0.3425,
+      "std": 0.0016,
+      "n": 5
+    },
+    "success": {
+      "mean": 1605.0,
+      "std": 0.0,
+      "n": 5
+    },
+    "total": {
+      "mean": 1605.0,
+      "std": 0.0,
+      "n": 5
+    },
+    "success_rate": {
+      "mean": 1.0,
+      "std": 0.0,
+      "n": 5
+    },
+    "hard_precision": {
+      "mean": 0.2415,
+      "std": 0.0017,
+      "n": 5
+    },
+    "hard_recall": {
+      "mean": 0.2404,
+      "std": 0.0016,
+      "n": 5
+    },
+    "soft_precision": {
+      "mean": 0.4452,
+      "std": 0.002,
+      "n": 5
+    },
+    "soft_recall": {
+      "mean": 0.4431,
+      "std": 0.0025,
+      "n": 5
+    },
+    "field_metrics": {
+      "text_similarity": {
+        "target_avg_sim": {
+          "mean": 0.7703,
+          "std": 0.0016,
+          "n": 5
+        },
+        "argument_avg_sim": {
+          "mean": 0.6777,
+          "std": 0.0013,
+          "n": 5
+        }
+      },
+      "targeted_group": {
+        "tp": {
+          "mean": 1314.4,
+          "std": 3.9115,
+          "n": 5
+        },
+        "fp": {
+          "mean": 578.8,
+          "std": 4.4385,
+          "n": 5
+        },
+        "fn": {
+          "mean": 587.6,
+          "std": 3.9115,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.6943,
+          "std": 0.0017,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.6911,
+          "std": 0.0021,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.6927,
+          "std": 0.0015,
+          "n": 5
+        }
+      },
+      "hateful": {
+        "tp": {
+          "mean": 1485.2,
+          "std": 3.1145,
+          "n": 5
+        },
+        "fp": {
+          "mean": 408.0,
+          "std": 5.4314,
+          "n": 5
+        },
+        "fn": {
+          "mean": 416.8,
+          "std": 3.1145,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.7845,
+          "std": 0.0023,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.7809,
+          "std": 0.0016,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.7827,
+          "std": 0.0015,
+          "n": 5
+        }
+      },
+      "matched_pairs": {
+        "mean": 1744.2,
+        "std": 2.5884,
+        "n": 5
+      }
+    }
+  }
+}
