@@ -9,6 +9,9 @@ import requests
 import threading
 import concurrent
 import argparse
+import copy
+import statistics
+from pathlib import Path
 from tqdm import tqdm
 from queue import Queue
 from functools import partial
@@ -60,6 +63,75 @@ def build_shot_prompt(
         shots="\n\n".join(examples)
     )
 
+def _is_number(x: Any) -> bool:    # bool 是 int 子类，这里排除
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def _flatten_numeric(d: Any, prefix: str = "") -> Dict[str, float]:
+    """把嵌套 dict 展平为 { 'a.b.c': value }，仅保留数值叶子节点"""
+    out: Dict[str, float] = {}
+    if isinstance(d, dict):
+        for k, v in d.items():
+            key = f"{prefix}.{k}" if prefix else str(k)
+            out.update(_flatten_numeric(v, key))
+    else:
+        if _is_number(d) and prefix:
+            out[prefix] = float(d)
+    return out
+
+
+def _set_nested(d: dict, keys: List[str], value: Any) -> None:
+    cur = d
+    for k in keys[:-1]:
+        if k not in cur or not isinstance(cur[k], dict):
+            cur[k] = {}
+        cur = cur[k]
+    cur[keys[-1]] = value
+
+
+def _compute_mean_std(metrics_list: List[dict], round_ndigits: int = 4) -> dict:
+    """
+    输入多次运行的 metric dict 列表，输出同构的聚合 dict：
+      aggregate: {path: {mean, std, n}}
+    """
+    flats = [_flatten_numeric(m) for m in metrics_list if isinstance(m, dict)]
+    key2vals: Dict[str, List[float]] = {}
+    for f in flats:
+        for k, v in f.items():
+            key2vals.setdefault(k, []).append(v)
+
+    agg: dict = {}
+    for k, vals in key2vals.items():
+        if not vals:
+            continue
+        mean_v = statistics.mean(vals)
+        std_v = statistics.stdev(vals) if len(vals) > 1 else 0.0
+        _set_nested(
+            agg,
+            k.split("."),
+            {
+                "mean": round(mean_v, round_ndigits),
+                "std": round(std_v, round_ndigits),
+                "n": len(vals),
+            },
+        )
+    return agg
+
+
+def _make_seeded_output_name(base_name: str, seed: Any) -> str:
+    """
+    base_name: e.g. "k6.json" -> "k6_s42424242.json"
+    """
+    p = Path(base_name)
+    suffix = p.suffix if p.suffix else ".json"
+    seed_str = str(seed) if seed is not None else "none"
+    return f"{p.stem}_s{seed_str}{suffix}"
+
+
+def _make_summary_output_name(base_name: str) -> str:
+    p = Path(base_name)
+    suffix = p.suffix if p.suffix else ".json"
+    return f"{p.stem}_multi_seed{suffix}"
 
 class LLMTester:
     def __init__(
@@ -655,6 +727,11 @@ class LLMTester:
                 metric_results = self.metric.run(datas_list=self.results)
             else:
                 metric_results = None
+            
+            # 让保存的 info.seed 与实际采样 seed 一致（否则会永远是 tester.seed 或默认值）
+            if isinstance(llm_params, dict) and ("seed" in llm_params) and (llm_params["seed"] is not None):
+                self.config["seed"] = llm_params["seed"]
+
             self._save_final_results(llm_params, metric_results=metric_results, output_name=output_name)
             self._show_summary()
 
@@ -746,13 +823,6 @@ if __name__ == "__main__" :
     # 可选地创建metric
     metric = LLMmetrics() if config['tester'].get('compute_metric', True) else None
     
-    # 创建tester
-    tester = LLMTester(
-        llm_model=model,
-        config=config,
-        metric=metric
-    )
-    
     # 运行测试
     run_config = config['tester']['run']
     shots_list = run_config.get('shots_list', [config['tester'].get('shot_num', 5)])
@@ -760,11 +830,106 @@ if __name__ == "__main__" :
     output_name = config.get("output_name", None)
     parallel_num = config["tester"].get("parallel_num", 1)
 
-    
-    
+    # multi-seed 支持：在 tester.run 下配置 seeds_list
+    seeds_list = run_config.get("seeds_list", None)
+
     for shot_num in shots_list:
-        tester.run(
-            llm_params=llm_params, 
-            shot_num=shot_num, 
-            output_name=output_name, 
-            parallel_num=parallel_num,)
+        # 若没给 output_name，给一个可复现的默认名（避免 multi-seed 时无法派生文件名）
+        base_output_name = output_name
+        if not base_output_name:
+            model_tag = model.model_name.replace("/", "_") if hasattr(model, "model_name") else "llm"
+            base_output_name = f"output_{model_tag}_shots{shot_num}.json"
+
+        if isinstance(seeds_list, list) and len(seeds_list) > 0:
+            # ===== Multi-seed mode =====
+            output_dir = config.get("tester", {}).get("output_dir", "./output")
+            os.makedirs(output_dir, exist_ok=True)
+
+            per_seed_metrics: List[dict] = []
+            per_seed_records: List[dict] = []
+            per_seed_files: List[str] = []
+
+            # 用于隔离每个 seed 的 progress/cache/prompts
+            base_progress_dir = config.get("tester", {}).get("progress_dir", "./progress")
+            base_prompts_dir = config.get("tester", {}).get("prompts_save_dir", "./prompts")
+            base_cache_dir = config.get("tester", {}).get("cache_dir", "runner/cache")
+
+            for seed in seeds_list:
+                seed_out_name = _make_seeded_output_name(base_output_name, seed)
+                seed_output_path = os.path.join(output_dir, seed_out_name)
+
+                # 复制 config，确保每个 seed 有独立 progress/cache/prompts 目录，避免串进度
+                seed_cfg = copy.deepcopy(config)
+                seed_cfg["tester"]["seed"] = seed
+                seed_cfg["tester"]["output_name"] = seed_out_name  # 供 use_cache 等逻辑使用
+
+                stem = Path(seed_out_name).stem
+                seed_cfg["tester"]["progress_dir"] = os.path.join(base_progress_dir, stem)
+                seed_cfg["tester"]["prompts_save_dir"] = os.path.join(base_prompts_dir, stem)
+                seed_cfg["tester"]["cache_dir"] = os.path.join(base_cache_dir, stem)
+
+                # llm_params 注入 seed
+                seed_llm_params = copy.deepcopy(llm_params)
+                seed_llm_params["seed"] = seed
+
+                tester = LLMTester(llm_model=model, config=seed_cfg, metric=metric)
+                tester.run(
+                    llm_params=seed_llm_params,
+                    shot_num=shot_num,
+                    output_name=seed_out_name,
+                    parallel_num=parallel_num,
+                )
+
+                # 读取本次输出文件中的 metric（用于后续聚合）
+                metric_dict = None
+                info_dict = None
+                try:
+                    with open(seed_output_path, "r", encoding="utf-8") as f:
+                        out_json = json.load(f)
+                    metric_dict = out_json.get("metric", None)
+                    info_dict = out_json.get("info", None)
+                except Exception as e:
+                    logger.error(f"Failed to read seed output: {seed_output_path}, err={e}")
+
+                per_seed_files.append(seed_out_name)
+                per_seed_records.append({
+                    "seed": seed,
+                    "output_file": seed_out_name,
+                    "metric": metric_dict,
+                    "info": info_dict,
+                })
+                if isinstance(metric_dict, dict):
+                    per_seed_metrics.append(metric_dict)
+
+            # 聚合均值/标准差
+            aggregate = _compute_mean_std(per_seed_metrics, round_ndigits=4) if per_seed_metrics else {}
+
+            summary_name = _make_summary_output_name(base_output_name)
+            summary_path = os.path.join(output_dir, summary_name)
+
+            summary_json = {
+                "info": {
+                    "model": getattr(model, "model_name", None),
+                    "shot_num": shot_num,
+                    "seeds_list": seeds_list,
+                    "base_output_name": base_output_name,
+                    "generated_at": time.strftime("%Y%m%d_%H%M%S"),
+                    "llm_params_base": {k: v for k, v in llm_params.items() if k != "seed"},
+                },
+                "per_seed": per_seed_records,
+                "aggregate": aggregate,
+            }
+
+            with open(summary_path, "w", encoding="utf-8") as f:
+                json.dump(summary_json, f, ensure_ascii=False, indent=2)
+            logger.info(f"Multi-seed summary saved to: {summary_path}")
+
+        else:
+            # ===== Single-seed mode (backward compatible) =====
+            tester = LLMTester(llm_model=model, config=config, metric=metric)
+            tester.run(
+                llm_params=llm_params,
+                shot_num=shot_num,
+                output_name=base_output_name,
+                parallel_num=parallel_num,
+            )

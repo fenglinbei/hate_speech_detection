@@ -4,7 +4,7 @@ set -euo pipefail
 # =============================
 # Configurable parameters
 # =============================
-K_START="${K_START:-1}"
+K_START="${K_START:-2}"
 K_END="${K_END:-20}"
 
 # 端口映射：port = PORT_BASE + k
@@ -16,8 +16,8 @@ TENSOR_PARALLEL_SIZE="${TENSOR_PARALLEL_SIZE:-2}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
 SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-qwen2.5}"
 
-# 模板（默认用 k6 作为模板）
-BASE_K="${BASE_K:-6}"
+# 模板（默认用 k1 作为模板）
+BASE_K="${BASE_K:-1}"
 BASE_BUILD_CFG="${BASE_BUILD_CFG:-data/exp_data/k_ablation/k${BASE_K}/config.json}"
 BASE_FINETUNE_CFG="${BASE_FINETUNE_CFG:-finetune/config/k_ablation/k${BASE_K}.json}"
 BASE_RUNNER_CFG="${BASE_RUNNER_CFG:-runner/config/k_ablation/k${BASE_K}.json}"
