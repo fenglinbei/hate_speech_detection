@@ -24,6 +24,10 @@ esac
 K_START="${K_START:-6}"
 K_END="${K_END:-20}"
 
+# ===== multi-seed inference =====
+# 逗号分隔，例如：SEEDS="42424242,1,2,3"
+SEEDS="${SEEDS:-42,4242,424242,42424242,4242424242}"
+
 # 端口：port = PORT_BASE + k  (例如 k=6 -> 35006)
 PORT_BASE="${PORT_BASE:-35000}"
 
@@ -61,6 +65,13 @@ mkdir -p "$LOG_DIR"
 # =========================
 # Helpers
 # =========================
+parse_csv_list() {
+  local s="${1// /}"
+  IFS=',' read -r -a arr <<< "$s"
+  echo "${arr[@]}"
+}
+
+
 require_cmd() {
   command -v "$1" >/dev/null 2>&1 || { echo "[ERROR] Missing command: $1" >&2; exit 1; }
 }
