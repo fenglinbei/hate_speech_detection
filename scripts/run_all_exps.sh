@@ -13,7 +13,7 @@ MODE="${MODE:-full}"
 
 ROOT="$(python - <<PY
 import os,sys
-print(sys.argv)
+print(f"sys.argv: {sys.argv}")
 print(os.path.abspath(sys.argv[1]))
 PY
 "$ROOT")"
