@@ -87,16 +87,22 @@ PY
 # Read manifest runtime defaults
 read_manifest_field() {
   local key="$1"
-  python - <<PY
+  python -c '
 import json,sys
-m=json.load(open("${MANIFEST}","r",encoding="utf-8"))
+manifest_path=sys.argv[1]
+key=sys.argv[2]
+m=json.load(open(manifest_path,"r",encoding="utf-8"))
 cur=m
-for p in sys.argv[1].split("."):
-    cur=cur.get(p)
-print(cur if cur is not None else "")
-PY
-"$key"
+for p in key.split("."):
+    if isinstance(cur, dict) and p in cur:
+        cur=cur[p]
+    else:
+        cur=None
+        break
+print("" if cur is None else cur)
+' "$MANIFEST" "$key"
 }
+
 
 PORT="${PORT:-$(read_manifest_field port)}"
 TRAIN_CUDA_VISIBLE_DEVICES="${TRAIN_CUDA_VISIBLE_DEVICES:-$(read_manifest_field runtime_defaults.train_cuda_visible_devices)}"
