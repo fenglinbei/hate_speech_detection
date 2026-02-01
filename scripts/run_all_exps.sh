@@ -6,7 +6,7 @@ if [[ -z "$ROOT" ]]; then
   echo "[ERROR] Missing ROOT. Usage: bash scripts/run_all_exps.sh <experiments_root>" >&2
   exit 1
 fi
-
+echp $ROOT
 MODE="${MODE:-full}"
 # 可透传给 run_one_exp.sh 的 runtime override：
 # DATA_DIR_OVERRIDE=... MODEL_CKPT_OVERRIDE=... FORCE_TRAIN=... 等
