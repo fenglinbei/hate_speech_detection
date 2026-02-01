@@ -164,7 +164,7 @@ class CacheManager:
         if not os.path.exists(p):
             return None
         try:
-            z = np.load(p, allow_pickle=False)
+            z = np.load(p, allow_pickle=True)
             indices = z["indices"]
             sims = z["sims"]
             meta = dict(z["meta"].item()) if "meta" in z.files else {}
