@@ -4,8 +4,7 @@
 """
 Plot K_e ablation curves from runner/output/k_ablation/k{6..20}.json
 
-Figure 1: K_e vs Avg-F1 (main) with Hard-F1 & Soft-F1.
-Figure 2: K_e vs Avg K_used + truncation ratio (K_used < K_e).
+Figure: K_e vs Avg K_used + truncation ratio (K_used < K_e).
 
 K_used definition (fixed):
 - Count actual demonstration examples inserted in the prompt.
@@ -14,7 +13,6 @@ K_used definition (fixed):
 - Fallback: count occurrences of "### 句子：" inside "示例：" section minus 1 (exclude final query).
 
 Outputs:
-- ke_perf_curve.pdf/.png
 - ke_cost_curve.pdf/.png
 """
 
@@ -147,20 +145,26 @@ def setup_matplotlib_paper(fontsize: int = 8) -> None:
     plt.rcParams.update({
         "font.family": "serif",
         "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
-        "font.size": fontsize,
 
-        "axes.linewidth": 1.2,
+        "font.size": fontsize,
+        "axes.titlesize": fontsize + 2,
+        "axes.labelsize": fontsize + 2,
+
+        "axes.linewidth": 1.3,
+
         "xtick.direction": "in",
         "ytick.direction": "in",
-        "xtick.major.size": 3,
-        "ytick.major.size": 3,
-        "xtick.major.width": 1.0,
-        "ytick.major.width": 1.0,
+        "xtick.major.size": 3.5,
+        "ytick.major.size": 3.5,
+        "xtick.major.width": 1.1,
+        "ytick.major.width": 1.1,
 
-        "lines.linewidth": 1.1,
-        "lines.markersize": 3.2,
+        "lines.linewidth": 1.2,
+        "lines.markersize": 2,
 
         "legend.frameon": False,
+
+        # avoid Type3 fonts in pdf
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
     })
@@ -173,128 +177,32 @@ def save_fig(fig, out_base: Path, dpi: int = 300) -> None:
     fig.savefig(str(out_base.with_suffix(".png")), dpi=dpi, bbox_inches="tight")
     plt.close(fig)
 
-
-import matplotlib.ticker as mticker
-
-def plot_perf_curve_paper(x, avg, hard, soft, width_in, height_in,
-                          avg_err=None, hard_err=None, soft_err=None,
-                          title=None, use_percent=False):
-    import matplotlib.pyplot as plt
-
-    x = np.array(x)
-    avg = np.array(avg, dtype=float)
-    hard = np.array(hard, dtype=float)
-    soft = np.array(soft, dtype=float)
-
-    scale = 100.0 if use_percent else 1.0
-    avg *= scale; hard *= scale; soft *= scale
-    if avg_err is not None: avg_err = np.array(avg_err, dtype=float) * scale
-    if hard_err is not None: hard_err = np.array(hard_err, dtype=float) * scale
-    if soft_err is not None: soft_err = np.array(soft_err, dtype=float) * scale
-
-    fig, ax = plt.subplots(figsize=(width_in, height_in))
-
-    # 阴影带（如果有误差）
-    if avg_err is not None:
-        ax.fill_between(x, avg-avg_err, avg+avg_err, alpha=0.15, linewidth=0)
-    if hard_err is not None:
-        ax.fill_between(x, hard-hard_err, hard+hard_err, alpha=0.12, linewidth=0)
-    if soft_err is not None:
-        ax.fill_between(x, soft-soft_err, soft+soft_err, alpha=0.12, linewidth=0)
-
-    # 线+小marker（像图1）
-    ax.plot(x, avg,  marker="s", label="Avg-F1")
-    ax.plot(x, hard, marker="s", label="Hard-F1")
-    ax.plot(x, soft, marker="s", label="Soft-F1")
-
-    ax.set_xlabel(r"$K_e$")
-    ax.set_ylabel("F1 (%)" if use_percent else "F1")
-
-    # x刻度稀疏一点（像图1那样干净）
-    step = 2 if len(x) >= 10 else 1
-    ax.set_xticks(x[::step])
-
-    # 不要网格（图1就是干净底）
-    ax.grid(False)
-
-    # 全边框保留（图1风格）
-    for s in ["top", "right", "left", "bottom"]:
-        ax.spines[s].set_visible(True)
-
-    if title:
-        ax.set_title(title, fontweight="bold")
-
-    # legend 放在图内上方，别挡线（也更像图1）
-    ax.legend(loc="upper right")
-
-    return fig
-
-def plot_perf_curve(x, f1_avg, f1_hard, f1_soft, width_in, height_in):
-    fig, ax = plt.subplots(figsize=(width_in, height_in))
-    
-    # 线条：稍细；marker：更小；markevery：减少marker密度
-    ax.plot(x, f1_avg,  marker="o", markevery=2, label="Avg-F1")
-    ax.plot(x, f1_hard, marker="s", markevery=2, label="Hard-F1")
-    ax.plot(x, f1_soft, marker="^", markevery=2, label="Soft-F1")
-
-    ax.set_xlabel(r"$K_e$")
-    ax.set_ylabel("F1")
-
-    # x轴：减少刻度密度（每2个一个），不旋转
-    if len(x) > 0:
-        step = 2 if len(x) >= 10 else 1
-        ax.set_xticks(x[::step])
-
-    # y轴：合理刻度，且略收紧范围（留一点padding）
-    y_all = np.array(f1_avg + f1_hard + f1_soft, dtype=float)
-    y_min, y_max = np.nanmin(y_all), np.nanmax(y_all)
-    pad = (y_max - y_min) * 0.15 if y_max > y_min else 0.02
-    ax.set_ylim(y_min - pad, y_max + pad)
-    ax.yaxis.set_major_locator(mticker.MaxNLocator(nbins=5))
-
-    # 网格：只保留y方向，变淡
-    ax.grid(axis="y", linestyle="--", linewidth=0.4, alpha=0.5)
-
-    # 边框：去掉上/右，更“论文风”
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-
-    # 图例：移到图外上方，横排，不占数据区
-    ax.legend(
-        loc="lower center",
-        bbox_to_anchor=(0.5, 1.02),
-        ncol=3,
-        frameon=False,
-        columnspacing=1.2,
-        handletextpad=0.6,
-    )
-
-    # 给图例留空间（上方）
-    fig.subplots_adjust(top=0.80)
-
-    return fig
-
-
-
 def plot_cost_curve(x, avg_k_used, trunc_ratio, width_in, height_in):
     fig, ax1 = plt.subplots(figsize=(width_in, height_in), constrained_layout=True)
 
-    l1 = ax1.plot(x, avg_k_used, marker="o", label=r"Avg $K_{used}$")
+    l1 = ax1.plot(x, avg_k_used, marker="o", label=r"Avg $K_{used}$", color="maroon")
     ax1.set_xlabel(r"$K_e$")
     ax1.set_ylabel(r"Avg $K_{used}$")
-    ax1.set_xticks(x)
+
+    # x刻度稀疏一点（像图1那样干净）
+    step = 2 if len(x) >= 10 else 1
+    ax1.set_xticks(x[::step])
+
     if len(x) >= 10:
-        ax1.tick_params(axis="x", labelrotation=45)
-    ax1.grid(True, linestyle="--", linewidth=0.4, alpha=0.6)
+        ax1.tick_params(axis="x")
+    # ax1.grid(True, linestyle="--", linewidth=0.4, alpha=0.6)
 
     ax2 = ax1.twinx()
-    l2 = ax2.plot(x, trunc_ratio, marker="s", linestyle="--", label="Truncation ratio")
+    l2 = ax2.plot(x, trunc_ratio, marker="s", linestyle="--", label="Truncation ratio", color="blue")
     ax2.set_ylabel("Truncation ratio")
     ax2.set_ylim(0.0, 1.0)
 
     lines = l1 + l2
     labels = [ln.get_label() for ln in lines]
     ax1.legend(lines, labels, frameon=False, loc="best")
+
+    # 不要网格
+    ax1.grid(False)
     return fig
 
 
@@ -350,19 +258,6 @@ def main():
               f"{s if s is not None else 'NA'}\t{ku if ku is not None else 'NA'}\t"
               f"{tr if tr is not None else 'NA'}\t{nc}")
 
-    # performance figure (require metrics exist)
-    keep_perf = [i for i in range(len(x)) if f1_avg[i] is not None and f1_hard[i] is not None and f1_soft[i] is not None]
-    x_perf = [x[i] for i in keep_perf]
-    fig1 = plot_perf_curve_paper(
-        x_perf,
-        [f1_avg[i] for i in keep_perf],
-        [f1_hard[i] for i in keep_perf],
-        [f1_soft[i] for i in keep_perf],
-        width_in=args.width_in,
-        height_in=args.height_in,
-    )
-    save_fig(fig1, out_dir / "ke_perf_curve", dpi=args.dpi)
-
     # cost figure (require K_used stats exist)
     keep_cost = [i for i in range(len(x)) if avg_k_used[i] is not None and trunc_ratio[i] is not None]
     if keep_cost:
@@ -380,7 +275,6 @@ def main():
               "Check if results/messages_list contains the full prompt with '示例：' and '[END]' markers.")
 
     print(f"\nSaved figures to: {out_dir.resolve()}")
-    print(" - ke_perf_curve.pdf / ke_perf_curve.png")
     print(" - ke_cost_curve.pdf / ke_cost_curve.png (if cost stats available)\n")
 
 

@@ -1353,6 +1353,15 @@ class StochasticWeightedRetriever(Retriever):
             sorted_local_idx = np.argsort(scores)[::-1][:n]
             return sorted_local_idx.tolist()
 
+        elif random_strategy == "random":
+            # 完全随机采样，不放回
+            chosen = self.random_state.choice(
+                len(candidate_indices),
+                size=n,
+                replace=False
+            )
+            return chosen.tolist()
+
         elif random_strategy == "sample":
             # 完全基于概率采样，不放回
             chosen = self.random_state.choice(

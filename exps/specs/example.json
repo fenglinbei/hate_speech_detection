@@ -1,0 +1,25 @@
+{
+  "project": "k_ablation",
+  "output_root": "exps/k_ablation_sweep",
+  "base": {
+    "build": "data/exp_data/k_ablation/k6/config.json",
+    "train": "finetune/config/k_ablation/k6.json",
+    "runner": "runner/config/k_ablation/k6.json"
+  },
+  "port_base": 35000,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "2,3",
+    "tensor_parallel_size": 2,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": {
+    "build.retrieval_settings.srag_top_k": [6,7,8,9,10,12,14,16,18,20],
+    "runner.tester.run.seeds_list": [[42,4242,424242,42424242,4242424242]]
+  }
+}
