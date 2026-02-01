@@ -16,11 +16,8 @@ if [[ -z "$EXP_DIR" ]]; then
   echo "[ERROR] Missing EXP_DIR. Usage: bash scripts/run_one_exp.sh <exp_dir>" >&2
   exit 1
 fi
-EXP_DIR="$(python - <<PY
-import os,sys
-print(os.path.abspath(sys.argv[0]))
-PY
-"$EXP_DIR")"
+EXP_DIR="$(python -c 'import os,sys; print(os.path.abspath(sys.argv[1]))' "$EXP_DIR")"
+
 
 MANIFEST="${EXP_DIR}/manifest.json"
 BUILD_CFG="${EXP_DIR}/build_config.json"
