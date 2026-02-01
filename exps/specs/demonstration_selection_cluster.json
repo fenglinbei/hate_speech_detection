@@ -1,0 +1,26 @@
+{
+  "project": "demonstration_selection",
+  "output_root": "exps/emonstration_selection/cluster",
+  "base": {
+    "build": "data/exp_data/new_method/clustered_n5/config.json",
+    "train": "finetune/config/ablation/wo_stratified.json",
+    "runner": "runner/config/ablation/wo_stratified.json"
+  },
+  "port_base": 35000,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": {
+    "build.retrieval_settings.srag_top_k": [10],
+    "build.retrieval_settings.n_clusters": [4,5,6,7],
+    "runner.tester.run.seeds_list": [[42,4242,424242,42424242,4242424242]]
+  }
+}
