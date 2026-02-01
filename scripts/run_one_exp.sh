@@ -18,7 +18,7 @@ if [[ -z "$EXP_DIR" ]]; then
 fi
 EXP_DIR="$(python - <<PY
 import os,sys
-print(os.path.abspath(sys.argv[1]))
+print(os.path.abspath(sys.argv[0]))
 PY
 "$EXP_DIR")"
 
