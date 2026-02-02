@@ -438,7 +438,7 @@ def main_make_nshot_dataset(
 
 if __name__ == "__main__":
     # Choose one:
-    # main_build_index(data_path="data/full/classify/train.json", model_path="models/base/bge-large-zh-v1.5")
+    main_build_index(data_path="data/full/classify/train.json", model_path="models/base/bge-large-zh-v1.5")
     # main_make_nshot_dataset()
 
     retriever = MMRReterever(
