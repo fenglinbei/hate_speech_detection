@@ -1,0 +1,41 @@
+{
+  "project": "demonstration_selection",
+  "exp_id": "a27871ab4d",
+  "exp_dir": "exps/emonstration_selection/cluster/exp_a27871ab4d",
+  "created_at": "2026-02-01 23:52:50",
+  "index": 2,
+  "port": 35002,
+  "overrides": {
+    "build.retrieval_settings.srag_top_k": 10,
+    "build.retrieval_settings.n_clusters": 6,
+    "runner.tester.run.seeds_list": [
+      42,
+      4242,
+      424242,
+      42424242,
+      4242424242
+    ]
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/emonstration_selection/cluster/exp_a27871ab4d/build_config.json",
+    "train_config": "exps/emonstration_selection/cluster/exp_a27871ab4d/train_config.json",
+    "runner_config": "exps/emonstration_selection/cluster/exp_a27871ab4d/runner_config.json",
+    "data_dir": "exps/emonstration_selection/cluster/exp_a27871ab4d/data",
+    "model_dir": "exps/emonstration_selection/cluster/exp_a27871ab4d/model",
+    "runner_output_dir": "exps/emonstration_selection/cluster/exp_a27871ab4d/runner_output",
+    "logs_dir": "exps/emonstration_selection/cluster/exp_a27871ab4d/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
