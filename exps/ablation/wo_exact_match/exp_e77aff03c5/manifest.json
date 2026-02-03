@@ -1,0 +1,41 @@
+{
+  "project": "ablation",
+  "exp_id": "e77aff03c5",
+  "exp_dir": "exps/ablation/wo_exact_match/exp_e77aff03c5",
+  "created_at": "2026-02-03 00:09:50",
+  "index": 0,
+  "port": 35000,
+  "overrides": {
+    "build.retrieval_settings.lex_top_k": 0,
+    "build.retrieval_settings.srag_top_k": 10,
+    "runner.tester.run.seeds_list": [
+      42,
+      4242,
+      424242,
+      42424242,
+      4242424242
+    ]
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/ablation/wo_exact_match/exp_e77aff03c5/build_config.json",
+    "train_config": "exps/ablation/wo_exact_match/exp_e77aff03c5/train_config.json",
+    "runner_config": "exps/ablation/wo_exact_match/exp_e77aff03c5/runner_config.json",
+    "data_dir": "exps/ablation/wo_exact_match/exp_e77aff03c5/data",
+    "model_dir": "exps/ablation/wo_exact_match/exp_e77aff03c5/model",
+    "runner_output_dir": "exps/ablation/wo_exact_match/exp_e77aff03c5/runner_output",
+    "logs_dir": "exps/ablation/wo_exact_match/exp_e77aff03c5/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
