@@ -1599,21 +1599,21 @@ class StochasticWeightedRetriever(Retriever):
 
 
 if __name__ == "__main__":
-    # retriever = LexiconRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json")
+    lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json", enable_cache=False)
     # print(retriever.including_retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=-1))
     # retriever = StepOneRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
     # print(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=5, threshold=0.5))
     import json
-    # retriever = MultiClassRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
+    retriever = MultiClassRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
     data_list = load_json("data/full/std/train.json")
     result_data_list = load_json("runner/output/simlex5_rag9_multi_class.json")["results"]
     # retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=data_list, result_data_list=result_data_list)
     # print(json.dumps(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=9), ensure_ascii=False, indent=2))
 
-    retriever = StochasticWeightedRetriever(random_state=42, model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
-    retriever.create_embeddings(data_list)
+    # retriever = StochasticWeightedRetriever(random_state=42, model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
+    retriever.build_retrievers()
     texts, outputs = retriever.retrieve(
-        "那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。",
+        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
         top_k=5,
         similarity_alpha=0.5,
         random_strategy="hybrid",
@@ -1622,3 +1622,17 @@ if __name__ == "__main__":
         candidate_multiplier=4.0
     )
     print(json.dumps({"texts": texts, "outputs": outputs}, ensure_ascii=False, indent=2))
+
+    include_results = lex_retriever.including_retrieve(
+        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
+        top_k=5,
+        use_cache=False
+    )
+    print(json.dumps(include_results, ensure_ascii=False, indent=2))
+
+    sim_results = lex_retriever.similarity_retrieve(
+        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
+        top_k=5,
+        use_cache=False
+    )
+    print(json.dumps(sim_results, ensure_ascii=False, indent=2))
