@@ -247,7 +247,9 @@ class LLMmetrics:
                 self._save_result(info_data, metric_dict)
                 return metric_dict
             else:
-                raise ValueError(f"Invaild Input, info_data: {type(info_data)} expected: dict")
+                self._save_result({}, metric_dict)
+                return metric_dict
+                # raise ValueError(f"Invaild Input, info_data: {type(info_data)} expected: dict")
         else:
             return metric_dict
         
