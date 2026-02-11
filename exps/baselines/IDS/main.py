@@ -8,6 +8,8 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import requests
 
 from rag.core import Retriever
+from utils.parser import parse_llm_output_trip
+from tools.convert import output2triple
 
 
 # =========================
@@ -278,7 +280,7 @@ class IDSRetriever:
 
     # ---------- LLM calls ----------
     def _llm_reason_only(self, text: str) -> str:
-        user = self.prompt_reason_only_user.format(text=text)
+        user = self.prompt_reason_only_user.replace("{text}", text)
         messages = [
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": user},
@@ -293,11 +295,7 @@ class IDSRetriever:
         return out
 
     def _llm_reason_and_triples(self, text: str, examples: str, lexicons: str) -> str:
-        user = self.prompt_reason_and_triples_user.format(
-            lexicons=lexicons,
-            examples=examples,
-            text=text,
-        )
+        user = self.prompt_reason_and_triples_user.replace("{lexicons}", lexicons).replace("{examples}", examples).replace("{text}", text)
         messages = [
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": user},
@@ -349,6 +347,7 @@ class IDSRetriever:
                 query=reason_for_retrieval,
                 top_k=top_k
             )
+            demo_outs = [output2triple(o) for o in demo_outs] 
             examples = self.format_examples_fn(demo_texts, demo_outs)
             lexicons = self.lexicons_fn(text)
 
@@ -417,6 +416,7 @@ class IDSRetriever:
                 top_k=top_k,
                 **retriever_kwargs
             )
+            demo_outs = [output2triple(o) for o in demo_outs]
             examples = self.format_examples_fn(demo_texts, demo_outs)
             lexicons = self.lexicons_fn(text)
 
@@ -459,8 +459,14 @@ class IDSRetriever:
                 exemplar.setdefault(key, t)
 
         voted = [exemplar[k] for k, v in cnt.items() if v >= need]
+
+        
         # 可选：保持一个稳定顺序（按票数降序 + 字典序）
         voted.sort(key=lambda x: (-cnt[self._normalize_triple_key(x)], x))
+
+        if not voted:
+            # backoff 1：直接用最后一轮（IDS 常用）
+            voted = per_round_triples_lists[-1]
 
         final_triples = self._join_triples(voted)
 
@@ -493,7 +499,8 @@ IDS_PROMPT_REASON_ONLY_USER = """你是一个内容审查专家。
 ### 分析：
 """
 
-IDS_PROMPT_REASON_AND_TRIPLES_USER = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:
+IDS_PROMPT_REASON_AND_TRIPLES_USER = """你是一个内容审查专家，请你分析我的句子并且从原文中提取出一个或者多个三元组target, argument, target_proup)。
+targeted_group 必须且只能从 {Racism, Sexism, LGBTQ, Region, others, non-hate} 中选择，禁止输出其它标签。
 
 背景知识：
 {lexicons}
@@ -511,30 +518,201 @@ IDS_PROMPT_REASON_AND_TRIPLES_USER = """你是一个内容审查专家，请你�
 """
 
 
-# =========================
-# 6) 用法示例（把它接到你现有 Retriever 上）
-# =========================
+import traceback
+
+class JSONLProgress:
+    """
+    用 JSONL 做进度保存与断点续传：
+    - 结果逐条 append 到 .jsonl
+    - 重跑时读取 .jsonl，收集已完成 key，自动跳过
+    - 可随时 materialize 成最终的 .json（list）
+    """
+    def __init__(self, jsonl_path: str):
+        self.jsonl_path = jsonl_path
+        os.makedirs(os.path.dirname(jsonl_path), exist_ok=True)
+        self.done_keys = set()
+        self._load_existing()
+
+    @staticmethod
+    def _default_key(item: Dict[str, Any], idx: int) -> str:
+        """
+        优先使用 item['id']；否则用 content 的 sha1；再否则用 idx。
+        """
+        if isinstance(item, dict) and "id" in item:
+            return str(item["id"])
+        content = (item.get("content") if isinstance(item, dict) else None) or ""
+        if content:
+            return hashlib.sha1(content.encode("utf-8")).hexdigest()
+        return str(idx)
+
+    def _load_existing(self) -> None:
+        if not os.path.exists(self.jsonl_path):
+            return
+        # 逐行读取，最后一行若写到一半导致 JSON 解析失败，则直接忽略
+        with open(self.jsonl_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    obj = json.loads(line)
+                except Exception:
+                    break
+                key = obj.get("_key")
+                if key is not None:
+                    self.done_keys.add(str(key))
+
+    def is_done(self, key: str) -> bool:
+        return str(key) in self.done_keys
+
+    def append(self, record: Dict[str, Any]) -> None:
+        """
+        追加写入一条记录，并立即 flush。
+        """
+        with open(self.jsonl_path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            f.flush()
+        self.done_keys.add(str(record.get("_key")))
+
+    def materialize_json(self, json_path: str, sort_by_index: bool = True) -> None:
+        """
+        将 jsonl 汇总为一个 json(list)。使用原子写避免写坏。
+        """
+        records = []
+        if os.path.exists(self.jsonl_path):
+            with open(self.jsonl_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        obj = json.loads(line)
+                        records.append(obj)
+                    except Exception:
+                        break
+
+        if sort_by_index:
+            records.sort(key=lambda x: x.get("_index", 10**18))
+
+        tmp = json_path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(records, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, json_path)
+
 
 if __name__ == "__main__":
-    base = Retriever(model_path="models/base/bge-large-zh-v1.5", data_path="data/full/std/train.json")
-    llm = VLLMChatClient(
-        base_url="http://localhost:35000/v1",
-        model="Qwen2.5-7B-Instruct",
-        api_key="EMPTY"
-    )
+    # import json
+    # from tqdm import tqdm
+    # from utils.parser import parse_llm_output_trip
 
-    ids = IDSRetriever(
-        base_retriever=base,
-        llm=llm,
-        system_prompt="You are Qwen, created by Alibaba Cloud. You are a helpful assistant.",
-        prompt_reason_only_user=IDS_PROMPT_REASON_ONLY_USER,
-        prompt_reason_and_triples_user=IDS_PROMPT_REASON_AND_TRIPLES_USER,
-        lexicons_fn=lambda _text: "",   # baseline：不注入 lexicons
-        config=IDSConfig(q=3, top_k=10), # q=3, top_k=Ke
-        cache=SimpleDiskCache("./exps/baselines/IDS/cache_ids", enabled=True),
-    )
+    # base = Retriever(model_path="models/base/bge-large-zh-v1.5", data_path="data/full/std/train.json")
+    # llm = VLLMChatClient(
+    #     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    #     model="qwen2.5-7b-instruct",
+    #     api_key=os.getenv("ALI_VLLM_API_KEY", "EMPTY")
+    # )
 
-    sel = ids.iterative_select("说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。")
+    # ids = IDSRetriever(
+    #     base_retriever=base,
+    #     llm=llm,
+    #     system_prompt="You are Qwen, created by Alibaba Cloud. You are a helpful assistant.",
+    #     prompt_reason_only_user=IDS_PROMPT_REASON_ONLY_USER,
+    #     prompt_reason_and_triples_user=IDS_PROMPT_REASON_AND_TRIPLES_USER,
+    #     lexicons_fn=lambda _text: "",
+    #     config=IDSConfig(q=3, top_k=10),
+    #     cache=SimpleDiskCache("./exps/baselines/IDS/cache_ids", enabled=True),
+    # )
+
+    # with open("data/full/std/test.json", "r", encoding="utf-8") as f:
+    #     test_data: list[dict] = json.load(f)
+
+    # out_dir = "exps/baselines/IDS"
+    # os.makedirs(out_dir, exist_ok=True)
+    # out_jsonl = os.path.join(out_dir, "ids_results.jsonl")  # 断点续传靠它
+    # out_json = os.path.join(out_dir, "ids_results.json")    # 最终汇总文件
+
+    # progress = JSONLProgress(out_jsonl)
+
+    # # tqdm 初始进度 = 已完成条数（更直观）
+    # pbar = tqdm(total=len(test_data), desc="Running IDS on test set")
+    # pbar.update(len(progress.done_keys))
+
+    # # 可选：每处理多少条就把 jsonl 汇总成 json（方便你随时看结果）
+    # MATERIALIZE_EVERY = 10
+
+    # processed_since_materialize = 0
+
+    # for idx, item in enumerate(test_data):
+    #     key = JSONLProgress._default_key(item, idx)
+    #     if progress.is_done(key):
+    #         continue
+
+    #     text = item.get("content", "")
+    #     gt_quads = item.get("quadruples", None)
+
+    #     try:
+    #         pred = ids.predict_with_ids(text, use_cache=False)
+    #         final_triples = pred["final_triples"]
+    #         pred_quads = parse_llm_output_trip(final_triples)
+
+    #         record = {
+    #             **{k: v for k, v in item.items() if k != "quadruples"},
+    #             "gt_quadruples": gt_quads,
+    #             "pred_quadruples": pred_quads,
+    #             "status": "success",
+    #             "attempts": int(sum(pred.get("vote_counts", {}).values())) if pred.get("vote_counts") else 0,
+
+    #             # 断点续传字段
+    #             "_key": key,
+    #             "_index": idx,
+    #         }
+
+    #     except Exception as e:
+    #         # 失败也写入，避免每次都卡在同一条；你也可以后续单独重跑失败样本
+    #         record = {
+    #             **{k: v for k, v in item.items() if k != "quadruples"},
+    #             "gt_quadruples": gt_quads,
+    #             "pred_quadruples": [],
+    #             "status": "error",
+    #             "error": str(e),
+    #             "traceback": traceback.format_exc(),
+
+    #             "_key": key,
+    #             "_index": idx,
+    #         }
+
+    #     progress.append(record)
+    #     pbar.update(1)
+    #     processed_since_materialize += 1
+
+    #     if processed_since_materialize >= MATERIALIZE_EVERY:
+    #         progress.materialize_json(out_json, sort_by_index=True)
+    #         processed_since_materialize = 0
+
+    # # 最后再汇总一次
+    # progress.materialize_json(out_json, sort_by_index=True)
+    # pbar.close()
+
+    # print(f"[DONE] JSONL saved to: {out_jsonl}")
+    # print(f"[DONE] JSON  saved to: {out_json}")
+
+    from metrics.metric_llm import LLMmetrics
+
+    metrics = LLMmetrics(output_dir="exps/baselines/IDS")
+    with open("exps/baselines/IDS/ids_results.json", "r", encoding="utf-8") as f:
+        results = json.load(f)
+    metrics_result = metrics.run(datas_list=results)
+    with open("exps/baselines/IDS/ids_metrics.json", "w", encoding="utf-8") as f:
+        json.dump(metrics_result, f, ensure_ascii=False, indent=2)
+
+
+    # test_text = "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。"
+    # sel = ids.iterative_select(text=test_text, use_cache=False)
+    # print(json.dumps(sel, ensure_ascii=False, indent=2))
+    # pred = ids.predict_with_ids(text=test_text, use_cache=False)
+    # print(json.dumps(pred, ensure_ascii=False, indent=2))
+    # print("最终三元组：", pred["final_triples"])
+    # print("解析后的三元组列表：", parse_llm_output_trip(pred["final_triples"]))
 """
 # 你已有：
 # base = Retriever(model_path=..., data_path=..., ...)
