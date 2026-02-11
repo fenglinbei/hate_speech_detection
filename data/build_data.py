@@ -4,7 +4,7 @@ import pickle
 import os
 import random
 from tqdm import tqdm
-from typing import Optional
+from typing import Optional, List, Tuple, Any
 from transformers import AutoTokenizer
 
 from prompt import *
@@ -59,6 +59,81 @@ def _retriever_signature(r) -> str | None:
         if parts:
             return _sha1_text('|'.join(sorted(parts)))
     return None
+
+
+def _file_sha1(path: str) -> str | None:
+    """Return sha1 of file content. None if file not exists."""
+    if not path:
+        return None
+    if not os.path.exists(path):
+        return None
+    h = hashlib.sha1()
+    try:
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return None
+
+
+def _quadruples_to_triples_fallback(quadruples: Any) -> str:
+    """A lightweight fallback when tools.convert.output2triple is incompatible."""
+    if isinstance(quadruples, str):
+        return quadruples
+    triples = []
+    if isinstance(quadruples, list):
+        for q in quadruples:
+            if isinstance(q, dict):
+                label = q.get("targeted_group", q.get("label", ""))
+                triples.append(f"{q.get('target', '')} | {q.get('argument', '')} | {label}")
+            else:
+                triples.append(str(q))
+    return (" [SEP] ".join(triples) + " [END]") if triples else "[END]"
+
+
+def load_global_demo_examples(
+    demos_path: str,
+    example_template: str,
+    top_k: int = -1,
+    shuffle: bool = False,
+    seed: int = 42,
+) -> tuple[list[str], str | None]:
+    """Load a fixed demo file (e.g., demos_k10.json) and build example prompts.
+
+    Returns:
+      - examples: List[str], already rendered by example_template
+      - demos_sig: sha1 signature of the demo file content (for cache key)
+    """
+    if not demos_path:
+        return [], None
+    with open(demos_path, "r", encoding="utf-8") as f:
+        demos = json.load(f)
+
+    if shuffle:
+        rng = random.Random(seed)
+        rng.shuffle(demos)
+
+    if top_k is not None and int(top_k) > 0:
+        demos = demos[: int(top_k)]
+
+    examples: list[str] = []
+    for d in demos:
+        retrieve_content = d.get("content", "")
+        retrieve_output = d.get("quadruples", d.get("output", []))
+        try:
+            retrieve_output_text = output2triple(retrieve_output)
+        except Exception:
+            retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
+
+        ex = (
+            example_template.replace("{retrieve_content}", retrieve_content)
+            .replace("{retrieve_output}", retrieve_output_text)
+        )
+        examples.append(ex)
+
+    demos_sig = _file_sha1(demos_path) or _sha1_text(_stable_dumps(demos))
+    return examples, demos_sig
 
 
 class BuildCacheManager:
@@ -125,18 +200,25 @@ def build_prompt(
         lex_retriever: Optional[LexiconRetriever] = None,
         tokenizer: Optional[AutoTokenizer] = None,
         is_test_data: bool = False,
-        build_cache: Optional[BuildCacheManager] = None
+        build_cache: Optional[BuildCacheManager] = None,
+        global_examples: Optional[List[str]] = None,
+        global_examples_sig: Optional[str] = None
         ):
     """构建相似词典检索的提示模板[3](@ref)"""
 
     def build_single_prompt(
             raw_data: dict, 
             srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever], 
-            lex_retriever: Optional[LexiconRetriever]
+            lex_retriever: Optional[LexiconRetriever],
+            global_examples: Optional[List[str]] = None,
+            global_k: Optional[int] = None
         ):
         """构建单个数据的提示"""
-        
-        if config.use_srag and srag_retriever is not None and config.example_template is not None:
+        use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
+        if use_global_demos:
+            k = len(global_examples) if global_k is None else max(0, min(int(global_k), len(global_examples)))
+            examples = global_examples[:k]
+        elif config.use_srag and srag_retriever is not None and config.example_template is not None:
             if config.mmr and isinstance(srag_retriever, MMRReterever):
                 retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
                     query_id=raw_data['id'],
@@ -210,6 +292,9 @@ def build_prompt(
                 'quadruples_sha1': _sha1_text(_stable_dumps(raw_data.get('quadruples', []))),
                 'is_test_data': bool(is_test_data),
                 'config_sig': _config_signature(config),
+                'use_global_demos': bool(getattr(config, 'use_global_demos', False)),
+                'global_demos_sig': global_examples_sig,
+                'global_demos_top_k': getattr(config, 'global_demos_top_k', None),
                 'tokenizer': getattr(tokenizer, 'name_or_path', None) if tokenizer is not None else None,
                 'max_length': getattr(config, 'max_length', None),
                 'srag_sig': _retriever_signature(srag_retriever),
@@ -229,27 +314,54 @@ def build_prompt(
         for quadruple in raw_data["quadruples"]:
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-        
+        # global demos (fixed demos for all samples)
+        global_k = None
+        if bool(getattr(config, "use_global_demos", False)) and global_examples:
+            top_k = int(getattr(config, "global_demos_top_k", -1) or -1)
+            global_k = min(top_k, len(global_examples)) if top_k > 0 else len(global_examples)
+
         prompt, examples, lex_contents = build_single_prompt(
             raw_data=raw_data,
             srag_retriever=srag_retriever,
-            lex_retriever=lex_retriever
+            lex_retriever=lex_retriever,
+            global_examples=global_examples,
+            global_k=global_k
         )
 
         # 自动长度调整
         i = 1
         while config.auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, config.max_length):
-            print(f"Over length: {len(tokenizer(prompt)['input_ids'])} > {config.max_length}, reduce srag examples and rebuild prompt.")
-            # 临时减少srag_top_k
-            original_top_k = config.srag_top_k
-            config.srag_top_k = original_top_k - i
-            prompt, examples, lex_contents = build_single_prompt(
-                raw_data=raw_data,
-                srag_retriever=srag_retriever,
-                lex_retriever=lex_retriever
-            )
+            cur_len = len(tokenizer(prompt)['input_ids'])
+            use_global = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
+            if use_global:
+                new_k = max(0, int(global_k or 0) - i)
+                print(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
+                prompt, examples, lex_contents = build_single_prompt(
+                    raw_data=raw_data,
+                    srag_retriever=srag_retriever,
+                    lex_retriever=lex_retriever,
+                    global_examples=global_examples,
+                    global_k=new_k
+                )
+                global_k = new_k
+                if new_k <= 0:
+                    break
+            else:
+                print(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
+                original_top_k = config.srag_top_k
+                config.srag_top_k = max(0, original_top_k - i)
+                prompt, examples, lex_contents = build_single_prompt(
+                    raw_data=raw_data,
+                    srag_retriever=srag_retriever,
+                    lex_retriever=lex_retriever,
+                    global_examples=global_examples,
+                    global_k=global_k
+                )
+                if config.srag_top_k <= 0:
+                    config.srag_top_k = original_top_k
+                    break
+                config.srag_top_k = original_top_k  # 恢复原值
             i += 1
-            config.srag_top_k = original_top_k  # 恢复原值
 
         srag_examples_nums += len(examples)
 
@@ -274,7 +386,7 @@ def build_prompt(
         pbar.update(1)
     
     if len(datas) > 0:
-        print(f"SRAG avg examples nums: {srag_examples_nums / len(datas)}")
+        print(f"Avg examples nums: {srag_examples_nums / len(datas)}")
 
     return messages
 
@@ -295,155 +407,181 @@ def make_data(config: Config):
     build_cache_dir = getattr(config, 'build_cache_dir', './cache_build_data')
     build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
 
-    if config.use_srag:
-        if config.clustered:
-            srag_retriever = ClusteredRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                n_clusters=config.n_clusters,
-                random_state=config.random_state
+    # Global fixed demos (optional): bypass SRAG and reuse the same demos for every sample
+    global_examples: Optional[List[str]] = None
+    global_examples_sig: Optional[str] = None
+    use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(getattr(config, "global_demos_path", None))
+    if use_global_demos:
+        try:
+            global_examples, global_examples_sig = load_global_demo_examples(
+                demos_path=config.global_demos_path,
+                example_template=config.example_template,
+                top_k=getattr(config, "global_demos_top_k", -1),
+                shuffle=getattr(config, "global_demos_shuffle", False),
+                seed=getattr(config, "global_demos_seed", 42),
             )
+            logger.info(f"[GlobalDemos] Loaded {len(global_examples)} demos from {config.global_demos_path}")
+        except Exception as e:
+            logger.warning(f"[GlobalDemos] Failed to load demos from {getattr(config, 'global_demos_path', None)}: {e}")
+            global_examples, global_examples_sig = [], None
+            use_global_demos = False
 
-            srag_retriever._load_datas(data_list=raw_datas[:split_idx])
-            srag_retriever._build_global_retriever()
-            srag_retriever._build_clusters()
-            srag_retriever._build_cluster_retrievers()
 
-        elif config.stratified:
-            srag_retriever = MultiClassRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                ramdom_strategy=config.ramdom_strategy,
-                random_state=config.random_state
-            )
-            srag_retriever.load_datas(data_list=raw_datas[:split_idx])
-            srag_retriever.build_retrievers()
-        elif config.mmr:
-            srag_retriever = MMRReterever(
-                data_path=config.raw_data_path,
-                model_path="models/base/bge-large-zh-v1.5",
-                index_path="./cache_retrieval/faiss_hnsw.index",
-                docs_path="./cache_retrieval/doc_store.json",
-                params=RETRIEVAL_PARAMS,
+        if config.use_srag and not use_global_demos:
+            if config.clustered:
+                srag_retriever = ClusteredRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    n_clusters=config.n_clusters,
+                    random_state=config.random_state
+                )
+
+                srag_retriever._load_datas(data_list=raw_datas[:split_idx])
+                srag_retriever._build_global_retriever()
+                srag_retriever._build_clusters()
+                srag_retriever._build_cluster_retrievers()
+
+            elif config.stratified:
+                srag_retriever = MultiClassRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    ramdom_strategy=config.ramdom_strategy,
+                    random_state=config.random_state
+                )
+                srag_retriever.load_datas(data_list=raw_datas[:split_idx])
+                srag_retriever.build_retrievers()
+            elif config.mmr:
+                srag_retriever = MMRReterever(
+                    data_path=config.raw_data_path,
+                    model_path="models/base/bge-large-zh-v1.5",
+                    index_path="./cache_retrieval/faiss_hnsw.index",
+                    docs_path="./cache_retrieval/doc_store.json",
+                    params=RETRIEVAL_PARAMS,
+                )
+            else:
+                if config.ramdom_strategy != "none":
+                    srag_retriever = StochasticWeightedRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    random_state=config.random_state
+                )
+                else:
+                    srag_retriever = Retriever(
+                        model_path=config.srag_model_path, 
+                        model_name="bge-large-zh-v1.5"
+                    )
+                srag_retriever.load_datas(data_list=raw_datas[:split_idx])
+                srag_retriever.create_embeddings(raw_datas[:split_idx])
+        else:
+            srag_retriever = None
+
+        if config.use_lex:
+            lex_retriever = LexiconRetriever(
+                model_path=config.lexicon_model_path, 
+                model_name="bge-large-zh-v1.5", 
+                data_path=config.lexicon_data_path
             )
         else:
-            if config.ramdom_strategy != "none":
-                srag_retriever = StochasticWeightedRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                random_state=config.random_state
-            )
-            else:
-                srag_retriever = Retriever(
-                    model_path=config.srag_model_path, 
-                    model_name="bge-large-zh-v1.5"
-                )
-            srag_retriever.load_datas(data_list=raw_datas[:split_idx])
-            srag_retriever.create_embeddings(raw_datas[:split_idx])
-    else:
-        srag_retriever = None
+            lex_retriever = None
 
-    if config.use_lex:
-        lex_retriever = LexiconRetriever(
-            model_path=config.lexicon_model_path, 
-            model_name="bge-large-zh-v1.5", 
-            data_path=config.lexicon_data_path
+        # 处理训练数据
+        messages = build_prompt(
+            datas=raw_datas[:split_idx],
+            config=config,
+            srag_retriever=srag_retriever,
+            lex_retriever=lex_retriever,
+            tokenizer=tokenizer,
+            build_cache=build_cache,
+            global_examples=global_examples,
+            global_examples_sig=global_examples_sig
         )
-    else:
-        lex_retriever = None
 
-    # 处理训练数据
-    messages = build_prompt(
-        datas=raw_datas[:split_idx],
-        config=config,
-        srag_retriever=srag_retriever,
-        lex_retriever=lex_retriever,
-        tokenizer=tokenizer,
-        build_cache=build_cache
-    )
-
-    with open(config.train_output_path, "w", encoding="utf-8") as file:
-        for message in messages:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
-    
-    # 更新检索器用于验证数据
-    if config.use_srag and srag_retriever is not None:
-        if config.clustered:
-            srag_retriever = ClusteredRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                n_clusters=config.n_clusters,
-                random_state=config.random_state
-            )
-            srag_retriever._load_datas(data_list=raw_datas)
-            srag_retriever._build_global_retriever()
-            srag_retriever._build_clusters()
-            srag_retriever._build_cluster_retrievers()
-        elif config.stratified:
-            srag_retriever = MultiClassRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                ramdom_strategy=config.ramdom_strategy,
-                random_state=config.random_state
-            )
-            srag_retriever.load_datas(data_list=raw_datas)
-            srag_retriever.build_retrievers()
-        elif config.mmr:
-            srag_retriever = srag_retriever
-        else:
-            if config.ramdom_strategy != "none":
-                srag_retriever = StochasticWeightedRetriever(
-                model_path=config.srag_model_path, 
-                model_name="bge-large-zh-v1.5",
-                random_state=config.random_state
-            )
-            else:
-                srag_retriever = Retriever(
-                    model_path=config.srag_model_path, 
-                    model_name="bge-large-zh-v1.5"
-                )
-            srag_retriever.load_datas(data_list=raw_datas)
-            srag_retriever.create_embeddings(raw_datas)
+        with open(config.train_output_path, "w", encoding="utf-8") as file:
+            for message in messages:
+                file.write(json.dumps(message, ensure_ascii=False) + "\n")
         
+        # 更新检索器用于验证数据
+        if config.use_srag and srag_retriever is not None:
+            if config.clustered:
+                srag_retriever = ClusteredRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    n_clusters=config.n_clusters,
+                    random_state=config.random_state
+                )
+                srag_retriever._load_datas(data_list=raw_datas)
+                srag_retriever._build_global_retriever()
+                srag_retriever._build_clusters()
+                srag_retriever._build_cluster_retrievers()
+            elif config.stratified:
+                srag_retriever = MultiClassRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    ramdom_strategy=config.ramdom_strategy,
+                    random_state=config.random_state
+                )
+                srag_retriever.load_datas(data_list=raw_datas)
+                srag_retriever.build_retrievers()
+            elif config.mmr:
+                srag_retriever = srag_retriever
+            else:
+                if config.ramdom_strategy != "none":
+                    srag_retriever = StochasticWeightedRetriever(
+                    model_path=config.srag_model_path, 
+                    model_name="bge-large-zh-v1.5",
+                    random_state=config.random_state
+                )
+                else:
+                    srag_retriever = Retriever(
+                        model_path=config.srag_model_path, 
+                        model_name="bge-large-zh-v1.5"
+                    )
+                srag_retriever.load_datas(data_list=raw_datas)
+                srag_retriever.create_embeddings(raw_datas)
+            
 
-    # 处理验证数据
-    messages = build_prompt(
-        datas=raw_datas[split_idx:],
-        config=config,
-        srag_retriever=srag_retriever,
-        lex_retriever=lex_retriever,
-        tokenizer=tokenizer,
-        build_cache=build_cache
-    )
+        # 处理验证数据
+        messages = build_prompt(
+            datas=raw_datas[split_idx:],
+            config=config,
+            srag_retriever=srag_retriever,
+            lex_retriever=lex_retriever,
+            tokenizer=tokenizer,
+            build_cache=build_cache,
+            global_examples=global_examples,
+            global_examples_sig=global_examples_sig
+        )
 
-    with open(config.val_output_path, "w", encoding="utf-8") as file:
-        for message in messages:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
+        with open(config.val_output_path, "w", encoding="utf-8") as file:
+            for message in messages:
+                file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-    # 处理测试数据
-    with open(config.test_data_path, "r") as file:
-        test_datas = json.load(file)
+        # 处理测试数据
+        with open(config.test_data_path, "r") as file:
+            test_datas = json.load(file)
 
-    messages = build_prompt(
-        datas=test_datas,
-        config=config,
-        srag_retriever=srag_retriever,
-        lex_retriever=lex_retriever,
-        tokenizer=tokenizer,
-        is_test_data=True,
-        build_cache=build_cache
-    )
+        messages = build_prompt(
+            datas=test_datas,
+            config=config,
+            srag_retriever=srag_retriever,
+            lex_retriever=lex_retriever,
+            tokenizer=tokenizer,
+            is_test_data=True,
+            build_cache=build_cache,
+            global_examples=global_examples,
+            global_examples_sig=global_examples_sig
+        )
 
-    with open(config.test_output_path, "w", encoding="utf-8") as file:
-        json.dump([{
-                "id": message["id"], 
-                "content": message["content"], 
-                "gt_quadruples": message.get("gt_quadruples", []), 
-                "messages_list": [[
-                    {'content': config.system_prompt, 'role': 'system'}, 
-                    {'content': message["input"], 'role': 'user'}
-                ]],
-            } for message in messages], file, ensure_ascii=False, indent=4)
+        with open(config.test_output_path, "w", encoding="utf-8") as file:
+            json.dump([{
+                    "id": message["id"], 
+                    "content": message["content"], 
+                    "gt_quadruples": message.get("gt_quadruples", []), 
+                    "messages_list": [[
+                        {'content': config.system_prompt, 'role': 'system'}, 
+                        {'content': message["input"], 'role': 'user'}
+                    ]],
+                } for message in messages], file, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     import argparse
