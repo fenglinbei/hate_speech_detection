@@ -53,6 +53,14 @@ class Config:
 
         self.mmr = retrieval.get('mmr', False)
         self.mmr_lambda = retrieval.get('mmr_lambda', 0.75)
+
+        # 全局固定 demos（可选）：所有样本共享同一批示例（例如 demos_k10.json）
+        global_demos = config_data.get('global_demo_settings', {})
+        self.use_global_demos = global_demos.get('use_global_demos', False)
+        self.global_demos_path = global_demos.get('global_demos_path', None)
+        self.global_demos_top_k = global_demos.get('global_demos_top_k', -1)
+        self.global_demos_shuffle = global_demos.get('global_demos_shuffle', False)
+        self.global_demos_seed = global_demos.get('global_demos_seed', 42)
         
         # 训练设置
         training = config_data.get('training_settings', {})
