@@ -1,8 +1,9 @@
-import json
+﻿import json
 import hashlib
 import pickle
 import os
 import random
+from dataclasses import replace
 from tqdm import tqdm
 from typing import Optional, List, Tuple, Any
 from transformers import AutoTokenizer
@@ -12,7 +13,7 @@ from utils.log import init_logger
 logger = init_logger(level="DEBUG", show_console=True)
 from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
-from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS
+from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS, main_build_index
 from tools.convert import output2triple
 
 
@@ -137,14 +138,7 @@ def load_global_demo_examples(
 
 
 class BuildCacheManager:
-    """build_data.py 的 prompt 构建缓存。
-
-    缓存粒度：单条样本（raw_data）-> 最终 message 以及该条使用的 SRAG examples 数量。
-
-    说明：
-    - key 同时包含 config 签名、retriever 语料签名、tokenizer 关键信息，避免缓存污染
-    - 兼容 train/val/test 三种数据阶段（is_test_data 纳入 key）
-    """
+    """Prompt-build cache keyed by sample/config/retriever/tokenizer signatures."""
 
     def __init__(self, cache_dir: str = './cache_build_data', enabled: bool = True):
         self.cache_dir = cache_dir
@@ -180,7 +174,7 @@ class BuildCacheManager:
             return
 
 def get_tokenizer(model_path: str):
-    """获取tokenizer"""
+    """???tokenizer"""
     tokenizer = AutoTokenizer.from_pretrained(
         model_path, 
         use_fast=True, 
@@ -189,7 +183,7 @@ def get_tokenizer(model_path: str):
     return tokenizer
 
 def is_overlength(tokenizer, text, max_length):
-    """检查文本是否超过最大长度"""
+    """Return True when text exceeds max_length under tokenizer."""
     input_ids = tokenizer.encode(text, return_tensors="pt")[0]
     return len(input_ids) > max_length
 
@@ -204,7 +198,7 @@ def build_prompt(
         global_examples: Optional[List[str]] = None,
         global_examples_sig: Optional[str] = None
         ):
-    """构建相似词典检索的提示模板[3](@ref)"""
+    """Build prompts for normalized quadruple data."""
 
     def build_single_prompt(
             raw_data: dict, 
@@ -213,7 +207,7 @@ def build_prompt(
             global_examples: Optional[List[str]] = None,
             global_k: Optional[int] = None
         ):
-        """构建单个数据的提示"""
+        """Build one prompt for one normalized sample."""
         use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
         if use_global_demos:
             k = len(global_examples) if global_k is None else max(0, min(int(global_k), len(global_examples)))
@@ -236,13 +230,17 @@ def build_prompt(
                     similarity_alpha=config.similarity_alpha,
                     random_strategy=config.ramdom_strategy,
                     random_ratio=config.random_ratio,
-                    random_temperature=config.random_temperature,
+                    temperature=config.random_temperature,
                     candidate_multiplier=config.candidate_multiplier
                 )
             examples = []
             for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+                try:
+                    retrieve_output_text = output2triple(retrieve_output)
+                except Exception:
+                    retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
                 example_prompt = config.example_template.replace("{retrieve_content}", retrieve_content).\
-                                                    replace("{retrieve_output}", output2triple(retrieve_output))
+                                                    replace("{retrieve_output}", retrieve_output_text)
                 examples.append(example_prompt)
         else:
             examples = []
@@ -277,14 +275,14 @@ def build_prompt(
     messages = []
     srag_examples_nums = 0
 
-    # build_data 级缓存（单样本粒度）
+    # Per-sample prompt build cache.
     if build_cache is None:
         enable_build_cache = getattr(config, "enable_build_cache", True)
         build_cache_dir = getattr(config, "build_cache_dir", "./cache_build_data")
         build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
     
     for raw_data in datas:
-        # cache key（包含 config/retriever/tokenizer 签名，避免缓存污染）
+        # Cache key includes config, retriever, tokenizer, and sample signatures.
         if build_cache is not None and getattr(build_cache, 'enabled', False):
             payload = {
                 'id': raw_data.get('id'),
@@ -328,7 +326,7 @@ def build_prompt(
             global_k=global_k
         )
 
-        # 自动长度调整
+        # ?????????
         i = 1
         while config.auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, config.max_length):
             cur_len = len(tokenizer(prompt)['input_ids'])
@@ -360,7 +358,7 @@ def build_prompt(
                 if config.srag_top_k <= 0:
                     config.srag_top_k = original_top_k
                     break
-                config.srag_top_k = original_top_k  # 恢复原值
+                config.srag_top_k = original_top_k  # restore original top-k
             i += 1
 
         srag_examples_nums += len(examples)
@@ -376,7 +374,7 @@ def build_prompt(
             }
         messages.append(message)
 
-        # 写入缓存
+        # ??????
         if build_cache is not None and getattr(build_cache, "enabled", False):
             try:
                 build_cache.set(_key, (message, len(examples)))
@@ -390,8 +388,8 @@ def build_prompt(
 
     return messages
 
-def make_data(config: Config):
-    """转换训练/验证集数据格式[4](@ref)"""
+def _legacy_make_data(config: Config):
+    """Legacy data builder retained for reference."""
 
     messages = []
     with open(config.raw_data_path, "r") as file:
@@ -484,7 +482,7 @@ def make_data(config: Config):
         else:
             lex_retriever = None
 
-        # 处理训练数据
+        # Write training data.
         messages = build_prompt(
             datas=raw_datas[:split_idx],
             config=config,
@@ -500,7 +498,7 @@ def make_data(config: Config):
             for message in messages:
                 file.write(json.dumps(message, ensure_ascii=False) + "\n")
         
-        # 更新检索器用于验证数据
+        # Rebuild retriever for validation/test visibility.
         if config.use_srag and srag_retriever is not None:
             if config.clustered:
                 srag_retriever = ClusteredRetriever(
@@ -540,7 +538,7 @@ def make_data(config: Config):
                 srag_retriever.create_embeddings(raw_datas)
             
 
-        # 处理验证数据
+        # Write validation data.
         messages = build_prompt(
             datas=raw_datas[split_idx:],
             config=config,
@@ -556,7 +554,7 @@ def make_data(config: Config):
             for message in messages:
                 file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
-        # 处理测试数据
+        # Write test data.
         with open(config.test_data_path, "r") as file:
             test_datas = json.load(file)
 
@@ -583,6 +581,214 @@ def make_data(config: Config):
                     ]],
                 } for message in messages], file, ensure_ascii=False, indent=4)
 
+
+def _ensure_parent_dir(path: str) -> None:
+    parent = os.path.dirname(path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
+
+
+def _build_mmr_params(config: Config):
+    os.makedirs(config.mmr_cache_dir, exist_ok=True)
+    trace_path = os.path.join(config.mmr_cache_dir, "selection_trace.jsonl")
+    return replace(
+        RETRIEVAL_PARAMS,
+        cache_dir=config.mmr_cache_dir,
+        trace_jsonl_path=trace_path,
+        n_shot=config.srag_top_k,
+        mmr_lambda=config.mmr_lambda,
+        seed=config.random_state,
+    )
+
+
+def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[Any]:
+    if not config.use_srag or bool(getattr(config, "use_global_demos", False)):
+        return None
+
+    target_groups = getattr(config, "target_groups", None)
+    default_weights = getattr(config, "default_weights", None)
+
+    if config.clustered:
+        retriever = ClusteredRetriever(
+            model_path=config.srag_model_path,
+            model_name="bge-large-zh-v1.5",
+            n_clusters=config.n_clusters,
+            random_state=config.random_state,
+        )
+        retriever._load_datas(data_list=raw_datas)
+        retriever._build_global_retriever()
+        retriever._build_clusters()
+        retriever._build_cluster_retrievers()
+        return retriever
+
+    if config.stratified:
+        retriever = MultiClassRetriever(
+            model_path=config.srag_model_path,
+            model_name="bge-large-zh-v1.5",
+            ramdom_strategy=config.ramdom_strategy,
+            random_state=config.random_state,
+            target_groups=target_groups,
+            default_weights=default_weights,
+        )
+        retriever.load_datas(data_list=raw_datas)
+        retriever.build_retrievers()
+        return retriever
+
+    if config.mmr:
+        if not os.path.exists(config.mmr_index_path) or not os.path.exists(config.mmr_docs_path):
+            _ensure_parent_dir(config.mmr_index_path)
+            _ensure_parent_dir(config.mmr_docs_path)
+            main_build_index(
+                data_path=config.raw_data_path,
+                model_path=config.srag_model_path,
+                index_path=config.mmr_index_path,
+                docs_path=config.mmr_docs_path,
+                params=_build_mmr_params(config),
+            )
+        return MMRReterever(
+            data_path=config.raw_data_path,
+            model_path=config.srag_model_path,
+            index_path=config.mmr_index_path,
+            docs_path=config.mmr_docs_path,
+            params=_build_mmr_params(config),
+        )
+
+    if config.ramdom_strategy != "none":
+        retriever = StochasticWeightedRetriever(
+            model_path=config.srag_model_path,
+            model_name="bge-large-zh-v1.5",
+            random_state=config.random_state,
+        )
+    else:
+        retriever = Retriever(
+            model_path=config.srag_model_path,
+            model_name="bge-large-zh-v1.5",
+        )
+
+    retriever.load_datas(data_list=raw_datas)
+    retriever.create_embeddings(raw_datas)
+    return retriever
+
+
+def _create_lex_retriever(config: Config) -> Optional[LexiconRetriever]:
+    if not config.use_lex:
+        return None
+    return LexiconRetriever(
+        model_path=config.lexicon_model_path,
+        model_name="bge-large-zh-v1.5",
+        data_path=config.lexicon_data_path,
+    )
+
+
+def _write_jsonl(path: str, messages: list[dict]) -> None:
+    _ensure_parent_dir(path)
+    with open(path, "w", encoding="utf-8") as file:
+        for message in messages:
+            file.write(json.dumps(message, ensure_ascii=False) + "\n")
+
+
+def _write_runner_test_json(path: str, messages: list[dict], system_prompt: str) -> None:
+    _ensure_parent_dir(path)
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump([
+            {
+                "id": message["id"],
+                "content": message["content"],
+                "gt_quadruples": message.get("gt_quadruples", []),
+                "messages_list": [[
+                    {"content": system_prompt, "role": "system"},
+                    {"content": message["input"], "role": "user"},
+                ]],
+            }
+            for message in messages
+        ], file, ensure_ascii=False, indent=4)
+
+
+def make_data(config: Config):
+    with open(config.raw_data_path, "r", encoding="utf-8") as file:
+        raw_datas = json.load(file)
+
+    with open(config.test_data_path, "r", encoding="utf-8") as file:
+        test_datas = json.load(file)
+
+    if getattr(config, "val_data_path", None) and os.path.exists(config.val_data_path):
+        train_datas = raw_datas
+        with open(config.val_data_path, "r", encoding="utf-8") as file:
+            val_datas = json.load(file)
+    else:
+        split_idx = int(len(raw_datas) * config.split_ratio)
+        train_datas = raw_datas[:split_idx]
+        val_datas = raw_datas[split_idx:]
+
+    tokenizer = None
+    if config.auto_length and config.tokenizer_path is not None:
+        tokenizer = get_tokenizer(config.tokenizer_path)
+
+    build_cache = BuildCacheManager(
+        cache_dir=getattr(config, "build_cache_dir", "./cache_build_data"),
+        enabled=getattr(config, "enable_build_cache", True),
+    )
+
+    global_examples: Optional[List[str]] = None
+    global_examples_sig: Optional[str] = None
+    use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(getattr(config, "global_demos_path", None))
+    config.use_global_demos = use_global_demos
+    if use_global_demos:
+        try:
+            global_examples, global_examples_sig = load_global_demo_examples(
+                demos_path=config.global_demos_path,
+                example_template=config.example_template,
+                top_k=getattr(config, "global_demos_top_k", -1),
+                shuffle=getattr(config, "global_demos_shuffle", False),
+                seed=getattr(config, "global_demos_seed", 42),
+            )
+            logger.info(f"[GlobalDemos] Loaded {len(global_examples)} demos from {config.global_demos_path}")
+        except Exception as e:
+            logger.warning(f"[GlobalDemos] Failed to load demos from {getattr(config, 'global_demos_path', None)}: {e}")
+            global_examples, global_examples_sig = [], None
+            config.use_global_demos = False
+
+    lex_retriever = _create_lex_retriever(config)
+
+    train_retriever = _create_srag_retriever(config, train_datas)
+    train_messages = build_prompt(
+        datas=train_datas,
+        config=config,
+        srag_retriever=train_retriever,
+        lex_retriever=lex_retriever,
+        tokenizer=tokenizer,
+        build_cache=build_cache,
+        global_examples=global_examples,
+        global_examples_sig=global_examples_sig,
+    )
+    _write_jsonl(config.train_output_path, train_messages)
+
+    eval_retriever = _create_srag_retriever(config, raw_datas)
+    val_messages = build_prompt(
+        datas=val_datas,
+        config=config,
+        srag_retriever=eval_retriever,
+        lex_retriever=lex_retriever,
+        tokenizer=tokenizer,
+        build_cache=build_cache,
+        global_examples=global_examples,
+        global_examples_sig=global_examples_sig,
+    )
+    _write_jsonl(config.val_output_path, val_messages)
+
+    test_messages = build_prompt(
+        datas=test_datas,
+        config=config,
+        srag_retriever=eval_retriever,
+        lex_retriever=lex_retriever,
+        tokenizer=tokenizer,
+        is_test_data=True,
+        build_cache=build_cache,
+        global_examples=global_examples,
+        global_examples_sig=global_examples_sig,
+    )
+    _write_runner_test_json(config.test_output_path, test_messages, config.system_prompt)
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Build training and validation data')
@@ -591,3 +797,4 @@ if __name__ == "__main__":
 
     config = Config(args.config)
     make_data(config)
+

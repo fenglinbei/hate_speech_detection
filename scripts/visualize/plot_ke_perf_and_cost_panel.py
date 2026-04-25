@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 直接复用你现有脚本的函数（两者都在 if __name__ == "__main__" 保护下，import 不会自动跑 main）
-from plot_ke_multi_seed_paper import setup_paper_style, collect_points, plot_single
-from draw_k_ablation_graph import load_one_json, extract_ke_from_filename
+from scripts.visualize.plot_ke_multi_seed_paper import setup_paper_style, collect_points, plot_single
+from scripts.visualize.draw_k_ablation_graph import load_one_json, extract_ke_from_filename
 
 def plot_cost_on_ax(ax1, x, avg_k_used, trunc_ratio, cost_color="red", trunc_color="red"):
     # 左 y 轴：Avg K_used

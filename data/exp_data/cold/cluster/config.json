@@ -1,0 +1,40 @@
+{
+  "data_paths": {
+    "raw_data_path": "data/cold/std/train.json",
+    "val_data_path": "data/cold/std/val.json",
+    "test_data_path": "data/cold/std/test.json",
+    "train_output_path": "data/exp_data/cold/cluster/train.jsonl",
+    "val_output_path": "data/exp_data/cold/cluster/val.jsonl",
+    "test_output_path": "data/exp_data/cold/cluster/test.json",
+    "lexicon_data_path": "data/lexicon/annotated_lexicon.json",
+    "tokenizer_path": "./models/base/Qwen2.5-7B-Instruct"
+  },
+  "prompt_templates": {
+    "prompt_template": "RAG_PROMPT_USER_V4",
+    "example_template": "RAG_PROMPT_EXAMPLE_V2",
+    "system_prompt": "DEFAULT_SYSTEM_PTOMPT_EN"
+  },
+  "retrieval_settings": {
+    "use_srag": true,
+    "clustered": true,
+    "n_clusters": 5,
+    "stratified": false,
+    "srag_top_k": 11,
+    "srag_threshold": 0,
+    "use_lex": false,
+    "target_groups": ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"]
+  },
+  "training_settings": {
+    "auto_length": true,
+    "max_length": 1280,
+    "split_ratio": 0.9
+  },
+  "cache_settings": {
+    "enable_build_cache": true,
+    "build_cache_dir": "./cache_build_data/cold/cluster"
+  },
+  "model_settings": {
+    "srag_model_path": "./models/base/bge-large-zh-v1.5",
+    "lexicon_model_path": "./models/base/bge-large-zh-v1.5"
+  }
+}
