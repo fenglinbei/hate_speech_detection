@@ -182,8 +182,8 @@ def main():
     ap.add_argument("--metric", type=str, default="avg", choices=["avg", "hard", "soft"],
                     help="only for mode=single")
     ap.add_argument("--title", type=str, default=r"Impact of $K_e$")
-    ap.add_argument("--xlabel", type=str, default=r"$K_e$")
-    ap.add_argument("--ylabel", type=str, default="Avg F1 Score")
+    ap.add_argument("--xlabel", type=str, default=r"$k_e$")
+    ap.add_argument("--ylabel", type=str, default="Avg-F1")
     ap.add_argument("--percent", action="store_true",
                     help="multiply y by 100 (e.g., 0.35 -> 35)")
     ap.add_argument("--invert_x", action="store_true",

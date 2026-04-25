@@ -12,9 +12,9 @@ from draw_k_ablation_graph import load_one_json, extract_ke_from_filename
 
 def plot_cost_on_ax(ax1, x, avg_k_used, trunc_ratio, cost_color="red", trunc_color="red"):
     # 左 y 轴：Avg K_used
-    l1 = ax1.plot(x, avg_k_used, marker="o", label=r"Avg $K_{used}$", color=cost_color)
-    ax1.set_xlabel(r"$K_e$")
-    ax1.set_ylabel(r"$K_{used}$")
+    l1 = ax1.plot(x, avg_k_used, marker="o", label=r"Avg $k_b$", color=cost_color)
+    ax1.set_xlabel(r"$k_e$")
+    ax1.set_ylabel(r"$k_b$")
 
     step = 2 if len(x) >= 10 else 1
     ax1.set_xticks(x[::step])
@@ -98,9 +98,9 @@ def main():
     plot_single(
         axes[0],
         x_perf, y_perf, yerr_perf,
-        title=r"Impact of $K_e$",
-        xlabel=r"$K_e$",
-        ylabel="Avg F1 Score",
+        title=r"Impact of $k_e$",
+        xlabel=r"$k_e$",
+        ylabel="Avg-F1",
         invert_x=False,
         percent=args.percent,
     )
