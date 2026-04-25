@@ -9,41 +9,6 @@ def normalize_groups(groups_str: str):
     groups = [g.strip() for g in groups_str.split(",")]
     return ",".join(sorted(set(groups)))
 
-# def is_hard_match(pred, gold):
-#     """改进的硬匹配：处理多类别情况"""
-#     # 基础字段检查
-#     if pred['hateful'] != gold['hateful']:
-#         return False
-#     if pred['target'] != gold['target'] or pred['argument'] != gold['argument']:
-#         return False
-    
-#     # 特殊处理仇恨类别
-#     pred_groups = normalize_groups(pred['targeted_group'])
-#     gold_groups = normalize_groups(gold['targeted_group'])
-#     return pred_groups == gold_groups
-
-# def is_soft_match(pred, gold):
-#     """改进的软匹配：处理多类别情况"""
-#     # 基础字段检查
-#     if pred['hateful'] != gold['hateful']:
-#         return False
-    
-#     # 标准化群体类别
-#     pred_groups = set(normalize_groups(pred['targeted_group']).split(","))
-#     gold_groups = set(normalize_groups(gold['targeted_group']).split(","))
-    
-#     # 仇恨场景需要完全匹配群体类别
-#     if pred['hateful'] == 'hate' and pred_groups != gold_groups:
-#         return False
-#     # 非仇恨场景检查字符串
-#     if pred['hateful'] == 'non_hate' and pred['targeted_group'] != gold['targeted_group']:
-#         return False
-    
-#     # 文本相似度检查
-#     target_sim = string_similarity(pred['target'], gold['target'])
-#     arg_sim = string_similarity(pred['argument'], gold['argument'])
-#     return target_sim > 0.5 and arg_sim > 0.5
-
 def compute_metrics(preds, golds, match_func):
     """统计 TP/FP/FN"""
     tp = 0
