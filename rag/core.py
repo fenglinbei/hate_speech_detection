@@ -1,4 +1,4 @@
-import os
+﻿import os
 import math
 import pickle
 import hashlib
@@ -26,8 +26,48 @@ DEFAULT_WEIGHTS = {
     "others": 12.6
 }
 
+def normalize_target_groups(target_groups: Optional[List[str]] = None) -> List[str]:
+    groups = target_groups or TARGETED_GROUPS
+    normalized = []
+    for group in groups:
+        if group and group not in normalized:
+            normalized.append(str(group))
+    return normalized or list(TARGETED_GROUPS)
+
+def normalize_weights(
+        weights: Optional[Dict[str, float]],
+        target_groups: List[str]
+        ) -> Dict[str, float]:
+    if weights is None:
+        weights = DEFAULT_WEIGHTS
+
+    normalized = {}
+    for group in target_groups:
+        value = weights.get(group) if isinstance(weights, dict) else None
+        if value is None:
+            value = 100.0 / len(target_groups)
+        normalized[group] = float(value)
+
+    if sum(normalized.values()) <= 0:
+        return {group: 100.0 / len(target_groups) for group in target_groups}
+
+    return normalized
+
+def split_targeted_groups(raw_group: Any) -> List[str]:
+    if raw_group is None:
+        return []
+    if isinstance(raw_group, list):
+        parts = raw_group
+    else:
+        text = str(raw_group).replace(";", ",").replace("/", ",").replace("|", ",")
+        parts = text.split(",")
+    return [str(part).strip() for part in parts if str(part).strip()]
+
+def quad_has_group(quadruple: dict, targeted_group: str) -> bool:
+    return targeted_group in split_targeted_groups(quadruple.get("targeted_group"))
+
 def allocate_class_num(i, weights_dict, reverse: bool = False):
-    # 初始化字典用于存储初始分配值和小数部分
+    # ?????????????????????????????
     initial_allocation = {}
     fractions = []
     total_integer = 0
@@ -37,7 +77,7 @@ def allocate_class_num(i, weights_dict, reverse: bool = False):
         total_weight = sum(weights_dict.values())
         weights_dict = {k: (v / total_weight) * 100 for k, v in weights_dict.items()}
     
-    # 遍历权重字典，计算每个类别的理论值、整数部分和小数部分
+    # ?????????????????????????????????????????
     for key, weight in weights_dict.items():
         theory_value = i * weight / 100.0
         integer_part = math.floor(theory_value)
@@ -47,13 +87,12 @@ def allocate_class_num(i, weights_dict, reverse: bool = False):
         fractions.append((key, fraction))
         total_integer += integer_part
     
-    # 计算剩余量（需要分配的额外单位数）
+    # ??????????????????????????
     remaining = i - total_integer
     
-    # 根据小数部分降序排序（小数部分相同则按键名字母顺序升序）
+    # ??????????????????????????????????????????
     fractions.sort(key=lambda x: (-x[1], x[0]))
     
-    # 将剩余量分配给小数部分最大的前 remaining 个类别
     for idx in range(remaining):
         key = fractions[idx][0]
         initial_allocation[key] += 1
@@ -61,13 +100,7 @@ def allocate_class_num(i, weights_dict, reverse: bool = False):
     return initial_allocation
 
 class CacheManager:
-    """分阶段缓存管理器（embedding / retrieval / selection）。
-
-    设计目标：
-    - key 稳定：使用 json.dumps(sort_keys=True) 而不是 str(dict)
-    - 分阶段：selection 缓存可按需关闭，但 embedding / retrieval 仍可复用
-    - 自动建目录：{cache_dir}/{stage}/...
-    """
+    """Cache helper for selection, embedding, and retrieval results."""
 
     def __init__(self, cache_dir: str = "./cache", enabled: bool = True):
         self.cache_dir = cache_dir
@@ -80,7 +113,7 @@ class CacheManager:
     @staticmethod
     def _stable_dumps(obj: Any) -> str:
         def _default(o):
-            # 兜底：把无法 json 的对象转成 str
+            # ????????? json ????????str
             return str(o)
         return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=_default)
 
@@ -96,10 +129,9 @@ class CacheManager:
 
     @staticmethod
     def texts_signature(texts: List[str]) -> str:
-        """对语料做顺序敏感签名，用于 cache 失效。"""
+        """Build a stable signature for a corpus."""
         h = hashlib.sha1()
         for t in texts:
-            # 使用  分隔，避免拼接歧义
             h.update(t.encode("utf-8"))
             h.update(b"\0")
         return h.hexdigest()
@@ -224,7 +256,6 @@ class Retriever:
         if reranker_model_path:
             self.reranker = Reranker(model_path=reranker_model_path)
 
-        # 初始化缓存管理器（需早于 create_embeddings，便于复用 corpus embedding cache）
         self.cache_manager = CacheManager(cache_dir, enable_cache)
 
         if data_path:
@@ -243,7 +274,6 @@ class Retriever:
                 self.test2item[item['content']] = item
             texts = self.texts
 
-        # 语料签名（用于 cache 失效）
         self.corpus_sig = CacheManager.texts_signature(texts)
 
         # corpus embedding cache
@@ -294,7 +324,6 @@ class Retriever:
             **kwargs
             ) -> tuple[list[str], list[str]]:
 
-        # selection params（纳入 model + corpus_sig，避免跨模型/跨语料误命中）
         params = {
             "top_k": top_k,
             "deduplicate": deduplicate,
@@ -305,7 +334,6 @@ class Retriever:
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
-        # 1) selection cache（受 use_cache 控制）
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
@@ -314,7 +342,7 @@ class Retriever:
         if top_k == 0:
             return [], []
 
-        # rerank 时扩大候选池
+        # rerank ??????????
         if rerank and self.reranker:
             new_top_k = top_k * 5
             if new_top_k < 10:
@@ -324,7 +352,7 @@ class Retriever:
         else:
             new_top_k = top_k
 
-        # 2) query embedding cache（不受 use_cache 影响，只要开启 cache 就复用）
+        # 2) query embedding cache?????use_cache ???????????cache ??????
         q_sha1 = CacheManager.sha1_text(query)
         q_key = None
         query_embedding_np = None
@@ -349,13 +377,12 @@ class Retriever:
             if query_embedding_np.ndim == 1:
                 query_embedding_np = query_embedding_np.reshape(1, -1)
 
-        # 3) retrieval cache：缓存 topK indices + sims，避免重复 cosine
+        # 3) retrieval cache?????topK indices + sims????????cosine
         corpus_sig = getattr(self, "corpus_sig", None)
         if corpus_sig is None:
             corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
             self.corpus_sig = corpus_sig
 
-        # 这里的 retrieval_k 不直接等于 top_k，留出 dedup/threshold 的余量
         retrieval_k = int(max(2048, new_top_k * 10))
         retrieval_k = min(retrieval_k, len(self.texts))
 
@@ -381,7 +408,7 @@ class Retriever:
         else:
             sorted_indices, sorted_sims, _meta = cached_retr
 
-        # 4) selection：threshold + dedup + (optional) rerank + resort
+        # 4) selection??hreshold + dedup + (optional) rerank + resort
         unique_texts: List[str] = []
         unique_outputs: List[Any] = []
         seen_contents = set([query]) if deduplicate else set()
@@ -426,7 +453,6 @@ class Retriever:
 
         result = (unique_texts, unique_outputs)
 
-        # 5) selection cache（受 use_cache 控制）
         if use_cache:
             self.cache_manager.set(query, params, result)
 
@@ -448,7 +474,7 @@ class LexiconRetriever:
         self.model = SentenceTransformer(model_path).to(device)
         self.model_name = model_name
         
-        # 初始化缓存管理器
+        # ????????????
         self.cache_manager = CacheManager(cache_dir, enable_cache)
 
         if data_path:
@@ -505,7 +531,6 @@ class LexiconRetriever:
             use_cache: bool = True
             ) -> list[str]:
 
-        # selection params（纳入 model + corpus_sig）
         params = {
             "method": "similarity",
             "top_k": top_k,
@@ -599,7 +624,6 @@ class LexiconRetriever:
             use_cache: bool = True
             ) -> list[str]:
         
-        # 检查缓存
         params = {
             "method": "including",
             "top_k": top_k,
@@ -624,7 +648,6 @@ class LexiconRetriever:
         
         final_result = result if top_k == -1 else result[:top_k]
         
-        # 保存到缓存
         if use_cache:
             self.cache_manager.set(query, params, final_result)
             
@@ -680,32 +703,29 @@ class StepOneRetriever:
         
         similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
         
-        # 获取所有索引并按相似度排序
+        # ????????????????????
         sorted_indices = np.argsort(similarities)[::-1]
         
         unique_texts = []
         unique_outputs = []
-        seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
+        seen_contents = set() if not deduplicate else set([query])  # ???????????????
         
-        # 遍历所有排序后的索引
         for idx in sorted_indices:
             content = self.texts[idx]
-            sim_score = similarities[idx]  # 获取当前相似度分数
-            
-            # 阈值过滤：如果相似度低于阈值则跳过
+            sim_score = similarities[idx]  # ??????????????            
+            # ??????????????????????????
             if sim_score < threshold:
-                continue  # 跳过低于阈值的结果
+                continue  # ??????????????
                 
-            # 去重逻辑
+            # ??????
             if deduplicate:
                 if content in seen_contents:
-                    continue  # 已处理过相同内容，跳过
+                    continue
                 seen_contents.add(content)
             
             unique_texts.append(content)
             unique_outputs.append(self.test2item[content]['output'])
             
-            # 达到需要的 top_k 数量时停止
             if len(unique_texts) >= top_k:
                 break
 
@@ -723,7 +743,9 @@ class MultiClassRetriever:
             ramdom_strategy: Literal["none", "sample", "hybrid"] = "none",
             random_state: int = 42,
             cache_dir: str = "./cache",
-            enable_cache: bool = True):
+            enable_cache: bool = True,
+            target_groups: Optional[List[str]] = None,
+            default_weights: Optional[Dict[str, float]] = None):
 
         if model:
             self.model = model
@@ -739,8 +761,10 @@ class MultiClassRetriever:
 
         self.ramdom_strategy = ramdom_strategy
         self.random_state = random_state
+        self.target_groups = normalize_target_groups(target_groups)
+        self.default_weights = normalize_weights(default_weights, self.target_groups)
 
-        # 初始化缓存管理器
+        # ????????????
         self.cache_manager = CacheManager(cache_dir, enable_cache)
 
         self.reranker = None
@@ -760,20 +784,15 @@ class MultiClassRetriever:
         self.class_texts = {}
         self.class_test2item = {}
 
-        for targeted_group in TARGETED_GROUPS:
+        for targeted_group in self.target_groups:
             new_data_list = []
             for data in loaded_data_list:
-                if targeted_group in [quadruple["targeted_group"] for quadruple in data["quadruples"]]:
+                if any(quad_has_group(quadruple, targeted_group) for quadruple in data["quadruples"]):
                     new_data_list.append(data)
             self.class_data_dict[targeted_group] = new_data_list
     
     def build_retrievers(self):
-        """构建分层子检索器。
-
-        关键点：
-        - 子检索器**开启 cache**（embedding / retrieval 可复用）
-        - 父检索器统一管理 selection cache（调用子检索器时 use_cache=False）
-        """
+        """Build one retriever for each configured target group."""
         self.retrievers: dict[str, Retriever | StochasticWeightedRetriever] = {}
 
         common = dict(
@@ -785,6 +804,8 @@ class MultiClassRetriever:
         )
 
         for class_name in self.class_data_dict.keys():
+            if not self.class_data_dict[class_name]:
+                continue
             if self.ramdom_strategy == "none":
                 retriever = Retriever(**common)
             else:
@@ -813,13 +834,13 @@ class MultiClassRetriever:
             **kwargs
             ) -> tuple[list[str], list[str]]:
         
-        # 检查缓存
         params = {
             "top_k": top_k,
             "deduplicate": deduplicate,
             "threshold": threshold,
             "weights": weights,
             "weights_reverse": weights_reverse,
+            "target_groups": self.target_groups,
             "similarity_alpha": similarity_alpha,
             "random_strategy": random_strategy,
             "random_ratio": random_ratio,
@@ -827,7 +848,6 @@ class MultiClassRetriever:
             "candidate_multiplier": candidate_multiplier
         }
         
-        # 将子检索器的语料签名纳入 selection cache key，避免数据更新后误命中
         try:
             parts = []
             for _cls, _ret in getattr(self, 'retrievers', {}).items():
@@ -850,17 +870,19 @@ class MultiClassRetriever:
                 return cached_result
         
         if weights is None:
-            weights = DEFAULT_WEIGHTS
+            weights = self.default_weights
+        else:
+            weights = normalize_weights(weights, self.target_groups)
 
         allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
         # logger.debug(f"Allocated top_k per class: {allocated_class_top_k}")
         all_texts = []
         all_outputs = []
 
-        for class_name in TARGETED_GROUPS:
+        for class_name in self.target_groups:
             if class_name not in self.retrievers:
                 continue
-            class_top_k = allocated_class_top_k[class_name]
+            class_top_k = allocated_class_top_k.get(class_name, 0)
             if class_top_k == 0:
                 continue
             texts, outputs = self.retrievers[class_name].retrieve(
@@ -880,7 +902,6 @@ class MultiClassRetriever:
 
         result = (all_texts, all_outputs)
         
-        # 保存到缓存
         if use_cache:
             self.cache_manager.set(query, params, result)
             
@@ -951,34 +972,31 @@ class WrongExpRetriever:
         
         similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0]
         
-        # 获取所有索引并按相似度排序
+        # ????????????????????
         sorted_indices = np.argsort(similarities)[::-1]
         
         unique_texts = []
         unique_outputs = []
         unique_wrong_exps = []
-        seen_contents = set() if not deduplicate else set([query])  # 用于追踪已处理的内容
+        seen_contents = set() if not deduplicate else set([query])  # ???????????????
         
-        # 遍历所有排序后的索引
         for idx in sorted_indices:
             content = self.texts[idx]
-            sim_score = similarities[idx]  # 获取当前相似度分数
-            
-            # 阈值过滤：如果相似度低于阈值则跳过
+            sim_score = similarities[idx]  # ??????????????            
+            # ??????????????????????????
             if sim_score < threshold:
-                continue  # 跳过低于阈值的结果
+                continue  # ??????????????
                 
-            # 去重逻辑
+            # ??????
             if deduplicate:
                 if content in seen_contents:
-                    continue  # 已处理过相同内容，跳过
+                    continue
                 seen_contents.add(content)
             
             unique_texts.append(content)
             unique_outputs.append(self.text2item[content]['output'])
             unique_wrong_exps.append(self.text2wrong_exp.get(content, None))
             
-            # 达到需要的 top_k 数量时停止
             if len(unique_texts) >= top_k:
                 break
 
@@ -992,13 +1010,17 @@ class MultiClassWrongExpRetriever:
             model_name: str, 
             data_list: list[dict], 
             result_data_list: list[dict],
-            device: str = "cuda:0"):
+            device: str = "cuda:0",
+            target_groups: Optional[List[str]] = None,
+            default_weights: Optional[Dict[str, float]] = None):
 
         logger.info(f"Loading model from path: {model_path}")
         self.model = SentenceTransformer(model_path).to(device)
         self.model_name = model_name
         self.model_path = model_path
         self.device = device
+        self.target_groups = normalize_target_groups(target_groups)
+        self.default_weights = normalize_weights(default_weights, self.target_groups)
 
         self.reranker = None
         self.load_datas(data_list, result_data_list)
@@ -1009,21 +1031,23 @@ class MultiClassWrongExpRetriever:
         self.class_data_dict = {}
         self.class_result_data_dict = {}
 
-        for targeted_group in TARGETED_GROUPS:
+        for targeted_group in self.target_groups:
             new_data_list = []
             new_result_data_list = []
             for data in data_list:
-                if targeted_group in [quadruple["targeted_group"] for quadruple in data["quadruples"]]:
+                if any(quad_has_group(quadruple, targeted_group) for quadruple in data["quadruples"]):
                     new_data_list.append(data)
             for data in result_data_list:
-                if targeted_group in [quadruple["targeted_group"] for quadruple in data["gt_quadruples"]]:
-                    new_data_list.append(data)
+                if any(quad_has_group(quadruple, targeted_group) for quadruple in data["gt_quadruples"]):
+                    new_result_data_list.append(data)
             self.class_data_dict[targeted_group] = new_data_list
             self.class_result_data_dict[targeted_group] = new_result_data_list
     
     def build_retrievers(self):
         self.retrievers: dict[str, WrongExpRetriever] = {}
         for class_name in self.class_data_dict.keys():
+            if not self.class_data_dict[class_name]:
+                continue
             retriever = WrongExpRetriever(
                 model_path=self.model_path, 
                 model_name=self.model_name, 
@@ -1036,17 +1060,19 @@ class MultiClassWrongExpRetriever:
 
     def retrieve(self, query: str, top_k: int = 1, deduplicate: bool = True, threshold: float = 0, weights: Optional[dict[str, float]] = None, weights_reverse: bool = False) -> tuple[list[str], list[str], list[Optional[str]]]:
         if weights is None:
-            weights = DEFAULT_WEIGHTS
+            weights = self.default_weights
+        else:
+            weights = normalize_weights(weights, self.target_groups)
 
         allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
         all_texts = []
         all_outputs = []
         all_wrong_exps = []
 
-        for class_name in TARGETED_GROUPS:
+        for class_name in self.target_groups:
             if class_name not in self.retrievers:
                 continue
-            class_top_k = allocated_class_top_k[class_name]
+            class_top_k = allocated_class_top_k.get(class_name, 0)
             if class_top_k == 0:
                 continue
             texts, outputs, wrong_exps = self.retrievers[class_name].retrieve(query, class_top_k, deduplicate, threshold)
@@ -1059,12 +1085,7 @@ class MultiClassWrongExpRetriever:
 from sklearn.cluster import KMeans
 
 class ClusteredRetriever:
-    """
-    基于聚类的分层 Retriever：
-    - 先对全语料做聚类
-    - 每个 cluster 视为一层（类似 MultiClassRetriever 中的一个 class）
-    - 检索时可以通过 weights / weights_reverse 控制各 cluster 在最终 N-shot 中的比例
-    """
+    """Retriever that allocates demonstrations across learned clusters."""
 
     def __init__(
             self,
@@ -1080,15 +1101,8 @@ class ClusteredRetriever:
             enable_cache: bool = True,
             random_state: int = 42,
     ) -> None:
-        """
-        参数说明：
-        - model / model_path：与原 Retriever 一致
-        - data_path / data_list：数据来源，结构与原 Retriever.load_datas 一致
-        - n_clusters：聚类个数（如果外部传入 cluster_model，则优先使用外部模型）
-        - cluster_model：外部传入的已训练聚类模型（可选）
-        - weights / weights_reverse：检索时控制各 cluster 的配额（同 MultiClassRetriever）
-        """
-        # 复用你现有的编码模型
+        """Initialize a clustered retriever."""
+        # ???????????????
         if model:
             self.model = model
             self.model_name = model_name
@@ -1099,26 +1113,26 @@ class ClusteredRetriever:
             self.model_name = model_name
             self.device = device
 
-        # 缓存管理
+        # ??????
         self.cache_manager = CacheManager(cache_dir, enable_cache)
 
         
         self.n_clusters = n_clusters
         self.random_state = random_state
 
-        # 加载数据、构建主 retriever（全部数据）
+        # ???????????? retriever?????????
         if data_path:
             self._load_datas(data_path)
             self._build_global_retriever()
 
-            # 聚类 & 按 cluster 划分数据
+            # ??? & ??cluster ??????
             self._build_clusters(cluster_model)
 
-            # 构建每个 cluster 对应的子 Retriever
+            # ?????? cluster ?????? Retriever
             self._build_cluster_retrievers()
     
     def _load_datas(self, data_path: Optional[str] = None, data_list: Optional[list[dict]] = None) -> None:
-        """加载原始数据，结构与 Retriever.load_datas 保持一致"""
+        """Load corpus data."""
         if data_list is None:
             if data_path is None:
                 raise ValueError("Either data_path or data_list must be provided.")
@@ -1129,28 +1143,26 @@ class ClusteredRetriever:
         self.data = data
 
     def _build_global_retriever(self) -> None:
-        """构建包含所有数据的基础 Retriever，用于统一编码 & 聚类"""
+        """Build the shared corpus retriever."""
         self.global_retriever = Retriever(
             model=self.model,
             model_name=self.model_name,
             cache_dir=self.cache_manager.cache_dir,
             enable_cache=self.cache_manager.enabled,
         )
-        # 使用 Retriever.create_embeddings 的 datas 分支，保证结构与原项目一致
         self.global_retriever.create_embeddings(self.data)
         self.texts = self.global_retriever.texts
         self.test2item = self.global_retriever.test2item
         self.corpus_embeddings_np = self.global_retriever.corpus_embeddings_np
 
     def _build_clusters(self, cluster_model: Optional[KMeans] = None) -> None:
-        """对 embedding 做聚类，构建 cluster -> indices 映射"""
+        """Cluster corpus embeddings and map clusters to sample indices."""
 
         logger.info("Clustering corpus embeddings for ClusteredRetriever")
 
         if cluster_model is None:
-            # 默认使用 KMeans，你可以根据需要改成 MiniBatchKMeans 或 Agglomerative 等
             self.cluster_model = KMeans(
-                n_clusters=self.n_clusters,
+                n_clusters=min(self.n_clusters, max(1, len(self.data))),
                 random_state=self.random_state,
                 n_init="auto"
             )
@@ -1163,14 +1175,10 @@ class ClusteredRetriever:
         for idx, c in enumerate(labels):
             self.cluster2indices.setdefault(int(c), []).append(idx)
 
-        # 为后续权重分配准备 cluster 名称列表（类似 TARGETED_GROUPS）
         self.cluster_ids: List[int] = sorted(self.cluster2indices.keys())
 
     def _build_cluster_retrievers(self) -> None:
-        """
-        为每个 cluster 构建一个子 Retriever，接口与原 Retriever 完全一致，
-        方便你在其他地方无缝替换/复用。
-        """
+        """Build a retriever for each cluster."""
         self.cluster_retrievers: Dict[int, Retriever] = {}
 
         for c in self.cluster_ids:
@@ -1180,16 +1188,13 @@ class ClusteredRetriever:
             retriever = Retriever(
                 model=self.model,
                 model_name=self.model_name,
-                enable_cache=False  # 子 retriever 不再单独使用缓存，由上层统一控制
+                enable_cache=False  # ??retriever ????????????????????????
             )
             retriever.create_embeddings(cluster_data)
             self.cluster_retrievers[c] = retriever
 
     def _default_cluster_weights(self) -> Dict[int, float]:
-        """
-        默认权重：可以按 cluster 中样本数比例分配，也可以均匀分配。
-        这里演示：按样本数比例。
-        """
+        """Use cluster sizes as default quota weights."""
         counter = {c: len(self.cluster2indices[c]) for c in self.cluster_ids}
         total = sum(counter.values())
         return {c: (counter[c] / total * 100.0) for c in self.cluster_ids}
@@ -1205,13 +1210,8 @@ class ClusteredRetriever:
             use_cache: bool = True,
             **kwargs
     ) -> tuple[list[str], list[str]]:
-        """
-        分层检索：
-        - top_k：最终希望返回的样本总数
-        - weights：cluster_id -> 权重（总和约等于 100），可动态调整
-        - weights_reverse：如果为 True，则对权重取倒数后重新归一化（类似你在 MultiClassRetriever 里的少样本放大）
-        """
-        # 构造缓存 key
+        """Retrieve examples using cluster quota allocation."""
+        # ???????key
         params = {
             "top_k": top_k,
             "deduplicate": deduplicate,
@@ -1232,7 +1232,6 @@ class ClusteredRetriever:
         if weights is None:
             weights = self._default_cluster_weights()
 
-        # 利用你已有的 allocate_class_num 做“配额分配”
         allocated_cluster_top_k = allocate_class_num(top_k, weights, reverse=weights_reverse)
 
         all_texts: List[str] = []
@@ -1251,7 +1250,7 @@ class ClusteredRetriever:
                 top_k=cluster_top_k,
                 deduplicate=deduplicate,
                 threshold=threshold,
-                use_cache=False,   # 子层不再单独缓存
+                use_cache=False,   # ????????????
                 **kwargs
             )
             all_texts.extend(texts)
@@ -1265,11 +1264,7 @@ class ClusteredRetriever:
         return result
     
 class StochasticWeightedRetriever(Retriever):
-    """
-    在原 Retriever 基础上：
-    - 支持对相似度进行形状加权（similarity_alpha）
-    - 支持可控随机策略（random_strategy, random_ratio, temperature 等）
-    """
+    """Retriever with stochastic similarity-based selection."""
 
     def __init__(
             self,
@@ -1300,16 +1295,12 @@ class StochasticWeightedRetriever(Retriever):
             similarities: np.ndarray,
             similarity_alpha: float = 1.0,
     ) -> np.ndarray:
-        """
-        对相似度进行形状变换：
-        - alpha > 1.0：增强高相似度样本的优势（更尖锐）
-        - alpha < 1.0：平滑差距，提升低相似度样本的概率（更多样性）
-        """
+        """Transform similarities before sampling."""
         if similarity_alpha <= 0:
             raise ValueError("similarity_alpha must be > 0")
         if similarity_alpha == 1.0:
             return similarities
-        # 为防止出现负数，先做一个简单的平移（保证非负），再幂次变换
+        # ????????????????????????????????????????????
         min_sim = similarities.min()
         shifted = similarities - min_sim  # >=0
         transformed = np.power(shifted, similarity_alpha)
@@ -1324,10 +1315,7 @@ class StochasticWeightedRetriever(Retriever):
             random_ratio: float,
             temperature: float,
     ) -> List[int]:
-        """
-        根据策略从 candidate_indices 中挑选最终 top_k 的下标。
-        返回的是 candidate_indices 的下标（即在 candidate_indices 中的位置，不是语料原始索引）。
-        """
+        """Select candidate indices with deterministic or stochastic strategies."""
         if len(candidate_indices) == 0:
             return []
 
@@ -1335,9 +1323,8 @@ class StochasticWeightedRetriever(Retriever):
         random_ratio = min(max(random_ratio, 0.0), 1.0)
         temperature = max(temperature, 1e-6)
 
-        # 基础分布：softmax(scores / temperature)
+        # ????????oftmax(scores / temperature)
         scores = scores.astype(np.float64)
-        # 数值稳定
         max_score = np.max(scores)
         prob = np.exp((scores - max_score) / temperature)
         prob_sum = prob.sum()
@@ -1349,12 +1336,12 @@ class StochasticWeightedRetriever(Retriever):
         n = min(top_k, len(candidate_indices))
 
         if random_strategy == "none":
-            # 完全 deterministic：等价于普通 top-k
+            # ??? deterministic??????????top-k
             sorted_local_idx = np.argsort(scores)[::-1][:n]
             return sorted_local_idx.tolist()
 
         elif random_strategy == "random":
-            # 完全随机采样，不放回
+            # ???????????????
             chosen = self.random_state.choice(
                 len(candidate_indices),
                 size=n,
@@ -1363,7 +1350,7 @@ class StochasticWeightedRetriever(Retriever):
             return chosen.tolist()
 
         elif random_strategy == "sample":
-            # 完全基于概率采样，不放回
+            # ??????????????????
             chosen = self.random_state.choice(
                 len(candidate_indices),
                 size=n,
@@ -1373,7 +1360,6 @@ class StochasticWeightedRetriever(Retriever):
             return chosen.tolist()
 
         elif random_strategy == "hybrid":
-            # 前 deterministic_ratio 部分使用确定性 top-k，其余使用采样
             deterministic_k = int(round(n * (1.0 - random_ratio)))
             deterministic_k = max(0, min(deterministic_k, n))
             sampled_k = n - deterministic_k
@@ -1384,7 +1370,7 @@ class StochasticWeightedRetriever(Retriever):
             if sampled_k <= 0:
                 return deterministic_part
 
-            # 剩余部分中按概率采样
+            # ???????????????
             remaining_idx = sorted_local_idx[deterministic_k:]
             if len(remaining_idx) <= sampled_k:
                 sampled_part = remaining_idx.tolist()
@@ -1413,7 +1399,7 @@ class StochasticWeightedRetriever(Retriever):
             rerank: bool = False,
             resort: bool = False,
             use_cache: bool = True,
-            # 新增参数
+            # ??????
             similarity_alpha: float = 1.0,
             random_strategy: Literal["none", "sample", "hybrid"] = "none", 
             random_ratio: float = 0.3,
@@ -1421,16 +1407,8 @@ class StochasticWeightedRetriever(Retriever):
             candidate_multiplier: float = 3.0,
             **kwargs
     ) -> tuple[list[str], list[str]]:
-        """
-        新增参数说明：
-        - similarity_alpha：相似度形状控制，>1 更集中，<1 更平缓
-        - random_strategy："none"（默认，不引入随机）、"sample"、"hybrid"
-        - random_ratio：在 hybrid 下，随机部分比例（0~1）
-        - temperature：softmax 温度，越大分布越平滑,随机性越高
-        - candidate_multiplier：候选池大小 = top_k * candidate_multiplier
-        """
+        """Retrieve examples with optional stochastic candidate selection."""
 
-        # 需要把新增参数也纳入 cache key，否则缓存失真
         params = {
             "top_k": top_k,
             "deduplicate": deduplicate,
@@ -1446,7 +1424,7 @@ class StochasticWeightedRetriever(Retriever):
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
-        # selection cache（仅在 use_cache=True 时使用）
+        # selection cache?????use_cache=True ??????
         if use_cache:
             cached_result = self.cache_manager.get(query, params)
             if cached_result is not None:
@@ -1455,17 +1433,15 @@ class StochasticWeightedRetriever(Retriever):
         if top_k == 0:
             return [], []
 
-        # rerank 控制候选池大小
+        # rerank ???????????
         if rerank and self.reranker:
             base_candidate_k = max(10, min(100, top_k * 5))
         else:
             base_candidate_k = top_k
 
-        # 额外放大候选池，便于做“多样性采样”
         candidate_k = int(max(base_candidate_k, top_k * candidate_multiplier))
         candidate_k = min(candidate_k, len(self.texts))
 
-        # 1) query embedding（embedding cache）
         q_sha1 = CacheManager.sha1_text(query)
         q_key = None
         query_embedding_np = None
@@ -1486,7 +1462,7 @@ class StochasticWeightedRetriever(Retriever):
             if query_embedding_np.ndim == 1:
                 query_embedding_np = query_embedding_np.reshape(1, -1)
 
-        # 2) retrieval cache：缓存 top-k indices/sims + min_sim
+        # 2) retrieval cache?????top-k indices/sims + min_sim
         corpus_sig = getattr(self, "corpus_sig", None)
         if corpus_sig is None:
             corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
@@ -1521,8 +1497,7 @@ class StochasticWeightedRetriever(Retriever):
             else:
                 min_sim = float(min(sorted_sims.tolist())) if len(sorted_sims) else 0.0
 
-        # 3) selection：threshold + dedup + scoring（相似度 shape 变换）
-        unique_texts: List[str] = []
+        # 3) selection??hreshold + dedup + scoring?????? shape ?????        unique_texts: List[str] = []
         unique_outputs: List[Any] = []
         scores_after_transform: List[float] = []
 
@@ -1542,7 +1517,7 @@ class StochasticWeightedRetriever(Retriever):
             unique_texts.append(content)
             unique_outputs.append(self.test2item[content]['output'])
 
-            # transform(similarity) (等价于 _transform_similarities 的局部版本)
+            # transform(similarity) (?????_transform_similarities ????????
             val = sim_score - min_sim
             if val < 0:
                 val = 0.0
@@ -1557,14 +1532,14 @@ class StochasticWeightedRetriever(Retriever):
                 self.cache_manager.set(query, params, result)
             return result
 
-        # 4) rerank（可选）：在候选集合上重算 scores
+        # 4) rerank???????????????????? scores
         if rerank and self.reranker:
             scores = self.reranker.rerank(query, unique_texts)
             scores = np.array(scores, dtype=np.float64)
         else:
             scores = np.array(scores_after_transform, dtype=np.float64)
 
-        # 5) 根据 random_strategy，从候选集合中选择最终 top_k
+        # 5) ??? random_strategy??????????????????top_k
         local_indices = self._sample_indices(
             scores=scores,
             candidate_indices=np.arange(len(unique_texts)),
@@ -1577,7 +1552,7 @@ class StochasticWeightedRetriever(Retriever):
         unique_texts = [unique_texts[i] for i in local_indices]
         unique_outputs = [unique_outputs[i] for i in local_indices]
 
-        # 6) resort（可选）
+        # 6) resort??????
         if resort and len(unique_texts) > 1:
             resorted_indices = [0] * len(unique_texts)
             l, r = 0, len(unique_texts) - 1
@@ -1600,20 +1575,20 @@ class StochasticWeightedRetriever(Retriever):
 
 if __name__ == "__main__":
     lex_retriever = LexiconRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/lexicon/annotated_lexicon.json", enable_cache=False)
-    # print(retriever.including_retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=-1))
+    # print(retriever.including_retrieve("????????????????????????????????????????, top_k=-1))
     # retriever = StepOneRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
-    # print(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=5, threshold=0.5))
+    # print(retriever.retrieve("????????????????????????????????????????, top_k=5, threshold=0.5))
     import json
     retriever = MultiClassRetriever(model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_path="data/full/std/train.json")
     data_list = load_json("data/full/std/train.json")
     result_data_list = load_json("runner/output/simlex5_rag9_multi_class.json")["results"]
     # retriever = MultiClassWrongExpRetriever(model_path="./models/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5", data_list=data_list, result_data_list=result_data_list)
-    # print(json.dumps(retriever.retrieve("那些嫁给默的国女能自愿放弃中国国籍，绝对值得立牌坊。", top_k=9), ensure_ascii=False, indent=2))
+    # print(json.dumps(retriever.retrieve("????????????????????????????????????????, top_k=9), ensure_ascii=False, indent=2))
 
     # retriever = StochasticWeightedRetriever(random_state=42, model_path="./models/base/bge-large-zh-v1.5", model_name="bge-large-zh-v1.5")
     retriever.build_retrievers()
     texts, outputs = retriever.retrieve(
-        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
+        "debug query",
         top_k=5,
         similarity_alpha=0.5,
         random_strategy="hybrid",
@@ -1624,15 +1599,16 @@ if __name__ == "__main__":
     print(json.dumps({"texts": texts, "outputs": outputs}, ensure_ascii=False, indent=2))
 
     include_results = lex_retriever.including_retrieve(
-        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
+        "debug query",
         top_k=5,
         use_cache=False
     )
     print(json.dumps(include_results, ensure_ascii=False, indent=2))
 
     sim_results = lex_retriever.similarity_retrieve(
-        "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。",
+        "debug query",
         top_k=5,
         use_cache=False
     )
     print(json.dumps(sim_results, ensure_ascii=False, indent=2))
+

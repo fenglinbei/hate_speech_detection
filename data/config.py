@@ -16,6 +16,7 @@ class Config:
         # 路径配置
         paths = config_data.get('data_paths', {})
         self.raw_data_path = paths.get('raw_data_path')
+        self.val_data_path = paths.get('val_data_path', None)
         self.test_data_path = paths.get('test_data_path')
         self.train_output_path = paths.get('train_output_path')
         self.val_output_path = paths.get('val_output_path')
@@ -41,6 +42,8 @@ class Config:
         self.lex_sim_threshold = retrieval.get('lex_sim_threshold', 0)
         self.weights = retrieval.get('weights', None)
         self.weights_reverse = retrieval.get('weights_reverse', False)
+        self.target_groups = retrieval.get('target_groups', None)
+        self.default_weights = retrieval.get('default_weights', None)
         self.clustered = retrieval.get('clustered', False)
         self.n_clusters = retrieval.get('n_clusters', 8)
 
@@ -53,6 +56,9 @@ class Config:
 
         self.mmr = retrieval.get('mmr', False)
         self.mmr_lambda = retrieval.get('mmr_lambda', 0.75)
+        self.mmr_index_path = retrieval.get('mmr_index_path', './cache_retrieval/faiss_hnsw.index')
+        self.mmr_docs_path = retrieval.get('mmr_docs_path', './cache_retrieval/doc_store.json')
+        self.mmr_cache_dir = retrieval.get('mmr_cache_dir', './cache_retrieval')
 
         # 全局固定 demos（可选）：所有样本共享同一批示例（例如 demos_k10.json）
         global_demos = config_data.get('global_demo_settings', {})
@@ -67,6 +73,10 @@ class Config:
         self.auto_length = training.get('auto_length', False)
         self.max_length = training.get('max_length', 2048)
         self.split_ratio = training.get('split_ratio', 0.9)
+
+        cache = config_data.get('cache_settings', {})
+        self.enable_build_cache = cache.get('enable_build_cache', True)
+        self.build_cache_dir = cache.get('build_cache_dir', './cache_build_data')
         
         # 模型设置
         models = config_data.get('model_settings', {})
