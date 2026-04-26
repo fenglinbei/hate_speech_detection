@@ -111,7 +111,7 @@ uv pip install \
   fastapi "pydantic>=2,<3" uvicorn
 ```
 
-`finetune/train.py` 会用 `attn_implementation="flash_attention_2"` 加载模型，因此还需要安装
+`src/finetune/train.py` 会用 `attn_implementation="flash_attention_2"` 加载模型，因此还需要安装
 FlashAttention。如果环境里还没有 `nvcc`，先把 CUDA 12.8 编译组件安装到 conda 环境：
 
 ```bash
@@ -179,7 +179,7 @@ bash scripts/exps/run_all.sh
 该命令会依次执行：
 
 1. 使用 `src/data/build_data.py --config data/exp_data/k_ablation/k10/config.json` 构建数据
-2. 使用 `finetune/train.py --config finetune/config/k_ablation/k10.json` 微调模型
+2. 使用 `src/finetune/train.py --config finetune/config/k_ablation/k10.json` 微调模型
 3. 在端口 `35010` 启动 vLLM
 4. 使用 `runner/run.py --config runner/config/k_ablation/k10.json` 进行推理和评测
 
@@ -318,7 +318,7 @@ MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 `run_one_exp.sh` 会读取 `manifest.json`，按顺序执行：
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python finetune/train.py --config train_config.json`
+2. `python src/finetune/train.py --config train_config.json`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`
 
