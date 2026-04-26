@@ -344,7 +344,9 @@ checkpoint_has_hf_weights() {
   [[ -f "${ckpt}/pytorch_model.bin" \
     || -f "${ckpt}/pytorch_model.bin.index.json" \
     || -f "${ckpt}/model.safetensors" \
-    || -f "${ckpt}/model.safetensors.index.json" ]]
+    || -f "${ckpt}/model.safetensors.index.json" \
+    || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'pytorch_model-*.bin' -print -quit 2>/dev/null)" \
+    || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'model-*.safetensors' -print -quit 2>/dev/null)" ]]
 }
 
 VLLM_PID=""
