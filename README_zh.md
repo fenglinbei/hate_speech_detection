@@ -367,18 +367,6 @@ TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
-选定 profile 后的完整流水线示例：
-
-```bash
-MODE=full \
-TRAIN_BACKEND=deepspeed \
-TRAIN_PROFILE=ds_zero2_safe \
-TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
-VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
-TENSOR_PARALLEL_SIZE=4 \
-bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
-```
-
 训练阶段会在 `exp_*/logs/` 下写出复现实验所需文件：
 `train_runtime_config.json`、DeepSpeed profile 对应的 `ds_config_<profile>.json`、
 `train.<backend>.<profile>.log`，以及兼容旧路径的 `train.log`。
