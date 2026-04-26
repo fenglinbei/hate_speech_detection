@@ -315,7 +315,7 @@ for k in $(seq "$K_START" "$K_END"); do
       echo "[STEP] finetune for k=${k}"
       mkdir -p "$MODEL_DIR"
       CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
-        python finetune/train.py --config "$TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG"
+        python src/finetune/train.py --config "$TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG"
 
       CKPT_DIR="$(latest_checkpoint_dir "$MODEL_DIR")" || {
         echo "[ERROR] No checkpoint found after training under: ${MODEL_DIR}/checkpoint-*" >&2
