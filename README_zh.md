@@ -58,7 +58,7 @@
 
 需要的运行工具：
 
-- 已安装项目依赖的 Python 环境，包括 `torch`、`transformers`、`sentence-transformers`、`scikit-learn`、`numpy`、`tqdm`、`loguru`、`vllm`
+- 已安装项目依赖的 Python 环境，包括 `torch`、`transformers`、`accelerate`、`deepspeed`、`sentence-transformers`、`scikit-learn`、`numpy`、`tqdm`、`loguru`、`vllm`
 - `curl`
 - `nvidia-smi`
 - `jq`，供 `scripts/exps/run_all.sh` 使用
@@ -102,6 +102,7 @@ uv pip install \
   "transformers>=4.51,<5" \
   "datasets>=2.19" \
   "accelerate>=0.33" \
+  "deepspeed>=0.14" \
   "sentence-transformers>=3" \
   "modelscope>=1.18" \
   swanlab \
@@ -109,6 +110,12 @@ uv pip install \
   faiss-cpu \
   matplotlib matplotlib-venn \
   fastapi "pydantic>=2,<3" uvicorn
+```
+
+如果是在已有环境上更新，单独安装这次新增的分布式训练依赖即可：
+
+```bash
+uv pip install "deepspeed>=0.14"
 ```
 
 `src/finetune/train.py` 会用 `attn_implementation="flash_attention_2"` 加载模型，因此还需要安装
@@ -130,11 +137,13 @@ uv pip install --no-build-isolation "flash-attn==2.8.3"
 
 ```bash
 python - <<'PY'
-import torch, vllm, flash_attn, faiss
+import accelerate, deepspeed, torch, vllm, flash_attn, faiss
 print("torch", torch.__version__, "cuda", torch.version.cuda)
 print("gpu count", torch.cuda.device_count())
 for i in range(torch.cuda.device_count()):
     print(i, torch.cuda.get_device_name(i))
+print("accelerate ok")
+print("deepspeed ok")
 print("vllm ok")
 print("flash-attn ok")
 print("faiss ok")
@@ -145,6 +154,8 @@ PY
 
 ```bash
 MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
 TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 TENSOR_PARALLEL_SIZE=4 \
@@ -318,13 +329,59 @@ MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 `run_one_exp.sh` 会读取 `manifest.json`，按顺序执行：
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python src/finetune/train.py --config train_config.json`
+2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`
 
-runner 配置会先复制到临时文件，脚本再把 `model.params.api_base` patch 成实际端口。
+训练配置和 runner 配置都会先复制到临时文件。训练临时配置会按所选分布式
+profile patch，runner 临时配置会把 `model.params.api_base` patch 成实际端口。
 如果设置了 `reuse.data_dir`，训练和测试数据路径会指向复用目录。如果设置了
 `reuse.model_checkpoint`，训练会被跳过，除非显式设置 `FORCE_TRAIN=1`。
+
+full finetune 的分布式训练由这些变量控制：
+
+- `TRAIN_BACKEND=deepspeed|fsdp|single`，默认 `deepspeed`。
+- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`。
+- `TRAIN_NPROC_PER_NODE` 默认等于 `TRAIN_CUDA_VISIBLE_DEVICES` 里的 GPU 数量。
+- `TRAIN_MASTER_PORT` 默认等于 `PORT + 1000`。
+- `TRAIN_MAX_STEPS=2` 可用于短 smoke test；正式训练时不要设置。
+
+各 profile 的含义：
+
+- `ds_zero2_safe`：ZeRO-2，无 CPU offload，micro-batch 2，gradient accumulation 1。
+- `ds_zero2_bs1`：ZeRO-2，无 CPU offload，micro-batch 1，gradient accumulation 2。
+- `ds_zero3_safe`：ZeRO-3，无 CPU offload，micro-batch 2，gradient accumulation 1。
+- `ds_zero3_bs1`：ZeRO-3，无 CPU offload，micro-batch 1，gradient accumulation 2。
+- `ds_zero3_offload`：ZeRO-3 + CPU offload，作为能跑通但较慢的显存兜底方案。
+- `fsdp_safe`：PyTorch FSDP full-shard，并按 Qwen2 decoder layer 自动 wrap。
+- `single`：旧的单进程调试路径，会保留 `device_map`。
+
+2-step 分布式 smoke test 示例：
+
+```bash
+MODE=train \
+TRAIN_MAX_STEPS=2 \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+选定 profile 后的完整流水线示例：
+
+```bash
+MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+训练阶段会在 `exp_*/logs/` 下写出复现实验所需文件：
+`train_runtime_config.json`、DeepSpeed profile 对应的 `ds_config_<profile>.json`、
+`train.<backend>.<profile>.log`，以及兼容旧路径的 `train.log`。
 
 常用运行时覆盖：
 
@@ -338,7 +395,8 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
 常用变量包括 `TRAIN_CUDA_VISIBLE_DEVICES`、`VLLM_CUDA_VISIBLE_DEVICES`、
-`TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
+`TRAIN_BACKEND`、`TRAIN_PROFILE`、`TRAIN_NPROC_PER_NODE`、`TRAIN_MASTER_PORT`、
+`TRAIN_MAX_STEPS`、`TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
 `DYNAMIC_GPU_MEM_UTIL`、`DEFAULT_GPU_MEM_UTIL`。
 
 ### 4. 运行某个根目录下的全部实验

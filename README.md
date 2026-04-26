@@ -58,7 +58,7 @@ Run from the repository root. The one-click scripts are Bash scripts, so use Lin
 
 Required runtime tools:
 
-- Python environment with the project dependencies installed, including `torch`, `transformers`, `sentence-transformers`, `scikit-learn`, `numpy`, `tqdm`, `loguru`, and `vllm`
+- Python environment with the project dependencies installed, including `torch`, `transformers`, `accelerate`, `deepspeed`, `sentence-transformers`, `scikit-learn`, `numpy`, `tqdm`, `loguru`, and `vllm`
 - `curl`
 - `nvidia-smi`
 - `jq` for `scripts/exps/run_all.sh`
@@ -104,6 +104,7 @@ uv pip install \
   "transformers>=4.51,<5" \
   "datasets>=2.19" \
   "accelerate>=0.33" \
+  "deepspeed>=0.14" \
   "sentence-transformers>=3" \
   "modelscope>=1.18" \
   swanlab \
@@ -111,6 +112,13 @@ uv pip install \
   faiss-cpu \
   matplotlib matplotlib-venn \
   fastapi "pydantic>=2,<3" uvicorn
+```
+
+If you are updating an existing environment, install the newly required
+distributed training dependency explicitly:
+
+```bash
+uv pip install "deepspeed>=0.14"
 ```
 
 `src/finetune/train.py` loads the model with `attn_implementation="flash_attention_2"`,
@@ -133,11 +141,13 @@ Sanity check:
 
 ```bash
 python - <<'PY'
-import torch, vllm, flash_attn, faiss
+import accelerate, deepspeed, torch, vllm, flash_attn, faiss
 print("torch", torch.__version__, "cuda", torch.version.cuda)
 print("gpu count", torch.cuda.device_count())
 for i in range(torch.cuda.device_count()):
     print(i, torch.cuda.get_device_name(i))
+print("accelerate ok")
+print("deepspeed ok")
 print("vllm ok")
 print("flash-attn ok")
 print("faiss ok")
@@ -148,6 +158,8 @@ Recommended runtime settings for this 4x RTX 4090 server:
 
 ```bash
 MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
 TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 TENSOR_PARALLEL_SIZE=4 \
@@ -329,14 +341,60 @@ Supported modes:
 `run_one_exp.sh` reads `manifest.json` and runs the stages in order:
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python src/finetune/train.py --config train_config.json`
+2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`
 
-The runner config is copied to a temporary file before execution so the script
-can patch `model.params.api_base` to the selected port. If `reuse.data_dir` is
-set, train/val/test paths are patched to that reused data. If
-`reuse.model_checkpoint` is set, training is skipped unless `FORCE_TRAIN=1`.
+The train and runner configs are copied to temporary files before execution.
+The training copy is patched with the selected distributed profile, and the
+runner copy patches `model.params.api_base` to the selected port. If
+`reuse.data_dir` is set, train/val/test paths are patched to that reused data.
+If `reuse.model_checkpoint` is set, training is skipped unless `FORCE_TRAIN=1`.
+
+Distributed full fine-tuning is controlled by these variables:
+
+- `TRAIN_BACKEND=deepspeed|fsdp|single`, default `deepspeed`.
+- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`.
+- `TRAIN_NPROC_PER_NODE` defaults to the number of IDs in `TRAIN_CUDA_VISIBLE_DEVICES`.
+- `TRAIN_MASTER_PORT` defaults to `PORT + 1000`.
+- `TRAIN_MAX_STEPS=2` is useful for a short smoke test; omit it for real runs.
+
+Profile intent:
+
+- `ds_zero2_safe`: ZeRO-2, no CPU offload, micro-batch 2, gradient accumulation 1.
+- `ds_zero2_bs1`: ZeRO-2, no CPU offload, micro-batch 1, gradient accumulation 2.
+- `ds_zero3_safe`: ZeRO-3, no CPU offload, micro-batch 2, gradient accumulation 1.
+- `ds_zero3_bs1`: ZeRO-3, no CPU offload, micro-batch 1, gradient accumulation 2.
+- `ds_zero3_offload`: ZeRO-3 with CPU offload, slow fallback for fitting memory.
+- `fsdp_safe`: PyTorch FSDP full-shard with Qwen2 decoder-layer auto-wrap.
+- `single`: old single-process debug path that keeps `device_map`.
+
+Example 2-step distributed smoke test:
+
+```bash
+MODE=train \
+TRAIN_MAX_STEPS=2 \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+Example full run after selecting a profile:
+
+```bash
+MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+Training writes reproducibility artifacts under `exp_*/logs/`:
+`train_runtime_config.json`, `ds_config_<profile>.json` for DeepSpeed profiles,
+`train.<backend>.<profile>.log`, and the compatibility alias `train.log`.
 
 Useful runtime overrides:
 
@@ -350,8 +408,10 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
 Common variables include `TRAIN_CUDA_VISIBLE_DEVICES`,
-`VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`, `MAX_MODEL_LEN`,
-`SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and `DEFAULT_GPU_MEM_UTIL`.
+`TRAIN_BACKEND`, `TRAIN_PROFILE`, `TRAIN_NPROC_PER_NODE`, `TRAIN_MASTER_PORT`,
+`TRAIN_MAX_STEPS`, `VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`,
+`MAX_MODEL_LEN`, `SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and
+`DEFAULT_GPU_MEM_UTIL`.
 
 ### 4. Run all experiments under a root
 
