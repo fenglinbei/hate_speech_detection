@@ -184,8 +184,12 @@ def get_tokenizer(model_path: str):
 
 def is_overlength(tokenizer, text, max_length):
     """Return True when text exceeds max_length under tokenizer."""
-    input_ids = tokenizer.encode(text, return_tensors="pt")[0]
-    return len(input_ids) > max_length
+    return token_length(tokenizer, text) > max_length
+
+
+def token_length(tokenizer, text) -> int:
+    """Return token count without materializing a torch tensor."""
+    return len(tokenizer.encode(text, add_special_tokens=True))
 
 def build_prompt(
         datas: list,
@@ -199,9 +203,15 @@ def build_prompt(
         global_examples_sig: Optional[str] = None
         ):
     """Build prompts for normalized quadruple data."""
+    retrieval_cache_enabled = bool(getattr(config, "enable_retrieval_cache", True))
+
+    def render_prompt(raw_data: dict, examples: List[str], lex_contents: List[str]) -> str:
+        return config.prompt_template.replace("{examples}", "\n".join(examples)).\
+                                      replace("{lexicons}", "\n".join(lex_contents)).\
+                                      replace("{text}", raw_data["content"])
 
     def build_single_prompt(
-            raw_data: dict, 
+            raw_data: dict,
             srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever], 
             lex_retriever: Optional[LexiconRetriever],
             global_examples: Optional[List[str]] = None,
@@ -231,7 +241,8 @@ def build_prompt(
                     random_strategy=config.ramdom_strategy,
                     random_ratio=config.random_ratio,
                     temperature=config.random_temperature,
-                    candidate_multiplier=config.candidate_multiplier
+                    candidate_multiplier=config.candidate_multiplier,
+                    use_cache=retrieval_cache_enabled
                 )
             examples = []
             for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
@@ -244,25 +255,28 @@ def build_prompt(
                 examples.append(example_prompt)
         else:
             examples = []
-        
+
         if config.use_lex and lex_retriever is not None:
-            lex_contents = lex_retriever.including_retrieve(raw_data['content'], config.lex_top_k)
+            lex_contents = lex_retriever.including_retrieve(
+                raw_data['content'],
+                config.lex_top_k,
+                use_cache=retrieval_cache_enabled,
+            )
             simlex_contents = lex_retriever.similarity_retrieve(
-                raw_data['content'], 
-                config.lex_sim_top_k, 
-                deduplicate=True, 
-                threshold=config.lex_sim_threshold
+                raw_data['content'],
+                config.lex_sim_top_k,
+                deduplicate=True,
+                threshold=config.lex_sim_threshold,
+                use_cache=retrieval_cache_enabled,
             )
             for simlex_content in simlex_contents:
                 if simlex_content not in lex_contents:
                     lex_contents.append(simlex_content)
         else:
             lex_contents = []
-        
-        prompt = config.prompt_template.replace("{examples}", "\n".join(examples)).\
-                                      replace("{lexicons}", "\n".join(lex_contents)).\
-                                      replace("{text}", raw_data["content"])
-        
+
+        prompt = render_prompt(raw_data, examples, lex_contents)
+
         return prompt, examples, lex_contents
 
     pbar = tqdm(
@@ -280,24 +294,37 @@ def build_prompt(
         enable_build_cache = getattr(config, "enable_build_cache", True)
         build_cache_dir = getattr(config, "build_cache_dir", "./cache_build_data")
         build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
-    
+
+    cache_enabled = build_cache is not None and getattr(build_cache, 'enabled', False)
+    cache_static_payload = {}
+    if cache_enabled:
+        cache_static_payload = {
+            'config_sig': _config_signature(config),
+            'use_global_demos': bool(getattr(config, 'use_global_demos', False)),
+            'global_demos_sig': global_examples_sig,
+            'global_demos_top_k': getattr(config, 'global_demos_top_k', None),
+            'tokenizer': getattr(tokenizer, 'name_or_path', None) if tokenizer is not None else None,
+            'max_length': getattr(config, 'max_length', None),
+            'srag_sig': _retriever_signature(srag_retriever),
+            'lex_sig': _retriever_signature(lex_retriever),
+            'retriever_type': type(srag_retriever).__name__ if srag_retriever is not None else None,
+        }
+
+    use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
+    default_global_k = None
+    if use_global_demos:
+        top_k = int(getattr(config, "global_demos_top_k", -1) or -1)
+        default_global_k = min(top_k, len(global_examples)) if top_k > 0 else len(global_examples)
+
     for raw_data in datas:
         # Cache key includes config, retriever, tokenizer, and sample signatures.
-        if build_cache is not None and getattr(build_cache, 'enabled', False):
+        if cache_enabled:
             payload = {
                 'id': raw_data.get('id'),
                 'content_sha1': _sha1_text(raw_data.get('content', '')),
                 'quadruples_sha1': _sha1_text(_stable_dumps(raw_data.get('quadruples', []))),
                 'is_test_data': bool(is_test_data),
-                'config_sig': _config_signature(config),
-                'use_global_demos': bool(getattr(config, 'use_global_demos', False)),
-                'global_demos_sig': global_examples_sig,
-                'global_demos_top_k': getattr(config, 'global_demos_top_k', None),
-                'tokenizer': getattr(tokenizer, 'name_or_path', None) if tokenizer is not None else None,
-                'max_length': getattr(config, 'max_length', None),
-                'srag_sig': _retriever_signature(srag_retriever),
-                'lex_sig': _retriever_signature(lex_retriever),
-                'retriever_type': type(srag_retriever).__name__ if srag_retriever is not None else None,
+                **cache_static_payload,
             }
             _key = build_cache.make_key(payload)
             cached = build_cache.get(_key)
@@ -313,10 +340,7 @@ def build_prompt(
             label = quadruple["targeted_group"]
             triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
         # global demos (fixed demos for all samples)
-        global_k = None
-        if bool(getattr(config, "use_global_demos", False)) and global_examples:
-            top_k = int(getattr(config, "global_demos_top_k", -1) or -1)
-            global_k = min(top_k, len(global_examples)) if top_k > 0 else len(global_examples)
+        global_k = default_global_k
 
         prompt, examples, lex_contents = build_single_prompt(
             raw_data=raw_data,
@@ -325,41 +349,29 @@ def build_prompt(
             global_examples=global_examples,
             global_k=global_k
         )
+        original_examples = examples
 
         # ?????????
         i = 1
-        while config.auto_length and tokenizer is not None and is_overlength(tokenizer, prompt, config.max_length):
-            cur_len = len(tokenizer(prompt)['input_ids'])
-            use_global = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
+        cur_len = token_length(tokenizer, prompt) if config.auto_length and tokenizer is not None else 0
+        while config.auto_length and tokenizer is not None and cur_len > config.max_length:
             if use_global:
                 new_k = max(0, int(global_k or 0) - i)
                 print(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
-                prompt, examples, lex_contents = build_single_prompt(
-                    raw_data=raw_data,
-                    srag_retriever=srag_retriever,
-                    lex_retriever=lex_retriever,
-                    global_examples=global_examples,
-                    global_k=new_k
-                )
+                examples = global_examples[:new_k]
+                prompt = render_prompt(raw_data, examples, lex_contents)
                 global_k = new_k
                 if new_k <= 0:
                     break
             else:
                 print(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
-                original_top_k = config.srag_top_k
-                config.srag_top_k = max(0, original_top_k - i)
-                prompt, examples, lex_contents = build_single_prompt(
-                    raw_data=raw_data,
-                    srag_retriever=srag_retriever,
-                    lex_retriever=lex_retriever,
-                    global_examples=global_examples,
-                    global_k=global_k
-                )
-                if config.srag_top_k <= 0:
-                    config.srag_top_k = original_top_k
+                new_k = max(0, min(len(original_examples), int(config.srag_top_k) - i))
+                examples = original_examples[:new_k]
+                prompt = render_prompt(raw_data, examples, lex_contents)
+                if new_k <= 0:
                     break
-                config.srag_top_k = original_top_k  # restore original top-k
             i += 1
+            cur_len = token_length(tokenizer, prompt)
 
         srag_examples_nums += len(examples)
 
@@ -375,7 +387,7 @@ def build_prompt(
         messages.append(message)
 
         # ??????
-        if build_cache is not None and getattr(build_cache, "enabled", False):
+        if cache_enabled:
             try:
                 build_cache.set(_key, (message, len(examples)))
             except Exception:
