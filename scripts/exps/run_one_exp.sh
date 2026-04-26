@@ -253,7 +253,7 @@ if [[ "$DO_TRAIN" == "1" ]]; then
     fi
 
     CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
-      python finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG"
+      python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG"
     rm -f "$TMP_TRAIN_CFG"
   fi
 fi

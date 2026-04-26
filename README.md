@@ -9,7 +9,7 @@ This repository contains data construction, fine-tuning, inference, and evaluati
 - `src/data/build_data.py`: builds `train.jsonl`, `val.jsonl`, and runner-ready `test.json` from normalized quadruple data.
 - `data/cold_adapter.py`: converts COLD-style raw files into the project standard format.
 - `data/exp_data/*/config.json`: data construction configs.
-- `finetune/train.py`: fine-tuning entry point.
+- `src/finetune/train.py`: fine-tuning entry point.
 - `finetune/config/*/*.json`: fine-tuning configs.
 - `runner/run.py`: LLM inference and metric computation entry point.
 - `runner/config/*/*.json`: runner configs.
@@ -113,7 +113,7 @@ uv pip install \
   fastapi "pydantic>=2,<3" uvicorn
 ```
 
-`finetune/train.py` loads the model with `attn_implementation="flash_attention_2"`,
+`src/finetune/train.py` loads the model with `attn_implementation="flash_attention_2"`,
 so install FlashAttention as well. If `nvcc` is not already available, install
 the CUDA 12.8 build components into the conda environment first:
 
@@ -182,7 +182,7 @@ bash scripts/exps/run_all.sh
 This performs:
 
 1. Data construction with `src/data/build_data.py --config data/exp_data/k_ablation/k10/config.json`
-2. Fine-tuning with `finetune/train.py --config finetune/config/k_ablation/k10.json`
+2. Fine-tuning with `src/finetune/train.py --config finetune/config/k_ablation/k10.json`
 3. vLLM startup on port `35010`
 4. Runner evaluation with `runner/run.py --config runner/config/k_ablation/k10.json`
 
@@ -329,7 +329,7 @@ Supported modes:
 `run_one_exp.sh` reads `manifest.json` and runs the stages in order:
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python finetune/train.py --config train_config.json`
+2. `python src/finetune/train.py --config train_config.json`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`
 
