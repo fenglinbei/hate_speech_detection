@@ -355,7 +355,7 @@ def build_prompt(
         i = 1
         cur_len = token_length(tokenizer, prompt) if config.auto_length and tokenizer is not None else 0
         while config.auto_length and tokenizer is not None and cur_len > config.max_length:
-            if use_global:
+            if use_global_demos:
                 new_k = max(0, int(global_k or 0) - i)
                 print(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
                 examples = global_examples[:new_k]
