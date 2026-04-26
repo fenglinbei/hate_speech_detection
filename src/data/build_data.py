@@ -1,4 +1,6 @@
-﻿import json
+﻿from __future__ import annotations
+
+import json
 import hashlib
 import pickle
 import os
@@ -15,6 +17,7 @@ from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
 from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS, main_build_index
 from tools.convert import output2triple
+from utils.sqlite_kv_cache import SQLiteKVCache
 
 
 def _stable_dumps(obj):
@@ -140,13 +143,17 @@ def load_global_demo_examples(
 class BuildCacheManager:
     """Prompt-build cache keyed by sample/config/retriever/tokenizer signatures."""
 
-    def __init__(self, cache_dir: str = './cache_build_data', enabled: bool = True):
+    def __init__(
+            self,
+            cache_dir: str = './cache_build_data',
+            enabled: bool = True,
+            cache_backend: str = "sqlite"):
         self.cache_dir = cache_dir
         self.enabled = enabled
+        self.cache_backend = cache_backend
+        self.stage = "prompt"
         os.makedirs(cache_dir, exist_ok=True)
-
-    def _path(self, key: str) -> str:
-        return os.path.join(self.cache_dir, f"{key}.pkl")
+        self.kv = SQLiteKVCache(os.path.join(cache_dir, "build_cache.sqlite3"), enabled=enabled)
 
     def make_key(self, payload: dict) -> str:
         return hashlib.md5(_stable_dumps(payload).encode('utf-8')).hexdigest()
@@ -154,24 +161,48 @@ class BuildCacheManager:
     def get(self, key: str):
         if not self.enabled:
             return None
-        p = self._path(key)
-        if not os.path.exists(p):
-            return None
         try:
-            with open(p, 'rb') as f:
-                return pickle.load(f)
+            value = self.kv.get(self.stage, key)
+            return pickle.loads(value) if value is not None else None
         except Exception:
             return None
+
+    def get_many(self, keys: list[str]) -> dict[str, Any]:
+        if not self.enabled:
+            return {key: None for key in keys}
+        raw_values = self.kv.get_many(self.stage, keys)
+        result = {}
+        for key, value in raw_values.items():
+            if value is None:
+                result[key] = None
+                continue
+            try:
+                result[key] = pickle.loads(value)
+            except Exception:
+                result[key] = None
+        return result
 
     def set(self, key: str, value):
         if not self.enabled:
             return
-        p = self._path(key)
         try:
-            with open(p, 'wb') as f:
-                pickle.dump(value, f)
+            self.kv.set(self.stage, key, pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL))
         except Exception:
             return
+
+    def set_many(self, values: dict[str, Any]) -> None:
+        if not self.enabled:
+            return
+        encoded = {}
+        for key, value in values.items():
+            try:
+                encoded[key] = pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL)
+            except Exception:
+                continue
+        self.kv.set_many(self.stage, encoded)
+
+    def close(self) -> None:
+        self.kv.close()
 
 def get_tokenizer(model_path: str):
     """???tokenizer"""
@@ -204,80 +235,127 @@ def build_prompt(
         ):
     """Build prompts for normalized quadruple data."""
     retrieval_cache_enabled = bool(getattr(config, "enable_retrieval_cache", True))
+    retrieval_batch_size = int(getattr(config, "retrieval_batch_size", 256) or 256)
 
     def render_prompt(raw_data: dict, examples: List[str], lex_contents: List[str]) -> str:
         return config.prompt_template.replace("{examples}", "\n".join(examples)).\
                                       replace("{lexicons}", "\n".join(lex_contents)).\
                                       replace("{text}", raw_data["content"])
 
-    def build_single_prompt(
-            raw_data: dict,
-            srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever], 
-            lex_retriever: Optional[LexiconRetriever],
-            global_examples: Optional[List[str]] = None,
-            global_k: Optional[int] = None
-        ):
-        """Build one prompt for one normalized sample."""
-        use_global_demos = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
-        if use_global_demos:
+    def render_examples(retrieve_contents: list[str], retrieve_outputs: list[Any]) -> list[str]:
+        examples = []
+        for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
+            try:
+                retrieve_output_text = output2triple(retrieve_output)
+            except Exception:
+                retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
+            example_prompt = config.example_template.replace("{retrieve_content}", retrieve_content).\
+                                                replace("{retrieve_output}", retrieve_output_text)
+            examples.append(example_prompt)
+        return examples
+
+    def retrieve_srag_examples_batch(raw_items: list[dict], global_k: Optional[int]) -> list[list[str]]:
+        use_global = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
+        if use_global:
             k = len(global_examples) if global_k is None else max(0, min(int(global_k), len(global_examples)))
-            examples = global_examples[:k]
-        elif config.use_srag and srag_retriever is not None and config.example_template is not None:
-            if config.mmr and isinstance(srag_retriever, MMRReterever):
+            return [global_examples[:k] for _ in raw_items]
+
+        if not (config.use_srag and srag_retriever is not None and config.example_template is not None):
+            return [[] for _ in raw_items]
+
+        if config.mmr and isinstance(srag_retriever, MMRReterever):
+            all_examples = []
+            for raw_data in raw_items:
                 retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
                     query_id=raw_data['id'],
                     query_text=raw_data['content'],
                     n_shot=config.srag_top_k,
                     mmr_lambda=config.mmr_lambda
                 )
-            else:
-                retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
-                    raw_data['content'], 
-                    config.srag_top_k, 
-                    threshold=config.srag_threshold, 
-                    weights=config.weights, 
-                    weights_reverse=config.weights_reverse,
-                    similarity_alpha=config.similarity_alpha,
-                    random_strategy=config.ramdom_strategy,
-                    random_ratio=config.random_ratio,
-                    temperature=config.random_temperature,
-                    candidate_multiplier=config.candidate_multiplier,
-                    use_cache=retrieval_cache_enabled
-                )
-            examples = []
-            for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
-                try:
-                    retrieve_output_text = output2triple(retrieve_output)
-                except Exception:
-                    retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
-                example_prompt = config.example_template.replace("{retrieve_content}", retrieve_content).\
-                                                    replace("{retrieve_output}", retrieve_output_text)
-                examples.append(example_prompt)
-        else:
-            examples = []
+                all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
+            return all_examples
 
-        if config.use_lex and lex_retriever is not None:
-            lex_contents = lex_retriever.including_retrieve(
+        if hasattr(srag_retriever, "retrieve_batch"):
+            retrieval_results = srag_retriever.retrieve_batch(
+                queries=[item["content"] for item in raw_items],
+                top_k=config.srag_top_k,
+                threshold=config.srag_threshold,
+                weights=config.weights,
+                weights_reverse=config.weights_reverse,
+                similarity_alpha=config.similarity_alpha,
+                random_strategy=config.ramdom_strategy,
+                random_ratio=config.random_ratio,
+                temperature=config.random_temperature,
+                candidate_multiplier=config.candidate_multiplier,
+                use_cache=retrieval_cache_enabled,
+                batch_size=retrieval_batch_size,
+            )
+            return [render_examples(contents, outputs) for contents, outputs in retrieval_results]
+
+        all_examples = []
+        for raw_data in raw_items:
+            retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
                 raw_data['content'],
-                config.lex_top_k,
+                config.srag_top_k,
+                threshold=config.srag_threshold,
+                weights=config.weights,
+                weights_reverse=config.weights_reverse,
+                similarity_alpha=config.similarity_alpha,
+                random_strategy=config.ramdom_strategy,
+                random_ratio=config.random_ratio,
+                temperature=config.random_temperature,
+                candidate_multiplier=config.candidate_multiplier,
                 use_cache=retrieval_cache_enabled,
             )
-            simlex_contents = lex_retriever.similarity_retrieve(
-                raw_data['content'],
-                config.lex_sim_top_k,
+            all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
+        return all_examples
+
+    def retrieve_lex_batch(raw_items: list[dict]) -> list[list[str]]:
+        if not (config.use_lex and lex_retriever is not None):
+            return [[] for _ in raw_items]
+
+        queries = [item["content"] for item in raw_items]
+        if hasattr(lex_retriever, "including_retrieve_batch"):
+            including_results = lex_retriever.including_retrieve_batch(
+                queries=queries,
+                top_k=config.lex_top_k,
+                use_cache=retrieval_cache_enabled,
+            )
+        else:
+            including_results = [
+                lex_retriever.including_retrieve(query, config.lex_top_k, use_cache=retrieval_cache_enabled)
+                for query in queries
+            ]
+
+        if hasattr(lex_retriever, "similarity_retrieve_batch"):
+            similarity_results = lex_retriever.similarity_retrieve_batch(
+                queries=queries,
+                top_k=config.lex_sim_top_k,
                 deduplicate=True,
                 threshold=config.lex_sim_threshold,
                 use_cache=retrieval_cache_enabled,
+                batch_size=retrieval_batch_size,
             )
-            for simlex_content in simlex_contents:
-                if simlex_content not in lex_contents:
-                    lex_contents.append(simlex_content)
         else:
-            lex_contents = []
+            similarity_results = [
+                lex_retriever.similarity_retrieve(
+                    query,
+                    config.lex_sim_top_k,
+                    deduplicate=True,
+                    threshold=config.lex_sim_threshold,
+                    use_cache=retrieval_cache_enabled,
+                )
+                for query in queries
+            ]
 
-        prompt = render_prompt(raw_data, examples, lex_contents)
-
-        return prompt, examples, lex_contents
+        all_lexicons = []
+        for lex_contents, simlex_contents in zip(including_results, similarity_results):
+            merged = list(lex_contents)
+            for simlex_content in simlex_contents:
+                if simlex_content not in merged:
+                    merged.append(simlex_content)
+            all_lexicons.append(merged)
+        return all_lexicons
 
     pbar = tqdm(
             total=len(datas),
@@ -293,7 +371,11 @@ def build_prompt(
     if build_cache is None:
         enable_build_cache = getattr(config, "enable_build_cache", True)
         build_cache_dir = getattr(config, "build_cache_dir", "./cache_build_data")
-        build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
+        build_cache = BuildCacheManager(
+            cache_dir=build_cache_dir,
+            enabled=enable_build_cache,
+            cache_backend=getattr(config, "cache_backend", "sqlite"),
+        )
 
     cache_enabled = build_cache is not None and getattr(build_cache, 'enabled', False)
     cache_static_payload = {}
@@ -316,8 +398,11 @@ def build_prompt(
         top_k = int(getattr(config, "global_demos_top_k", -1) or -1)
         default_global_k = min(top_k, len(global_examples)) if top_k > 0 else len(global_examples)
 
-    for raw_data in datas:
-        # Cache key includes config, retriever, tokenizer, and sample signatures.
+    messages: list[dict | None] = [None] * len(datas)
+    cache_keys: list[str | None] = [None] * len(datas)
+    missing_indices: list[int] = []
+
+    for idx, raw_data in enumerate(datas):
         if cache_enabled:
             payload = {
                 'id': raw_data.get('id'),
@@ -327,28 +412,38 @@ def build_prompt(
                 **cache_static_payload,
             }
             _key = build_cache.make_key(payload)
-            cached = build_cache.get(_key)
-            if cached is not None:
+            cache_keys[idx] = _key
+        else:
+            missing_indices.append(idx)
+
+    if cache_enabled:
+        keyed_indices = [idx for idx, key in enumerate(cache_keys) if key is not None]
+        cached_values = build_cache.get_many([cache_keys[idx] for idx in keyed_indices])
+        for idx in keyed_indices:
+            cached = cached_values.get(cache_keys[idx])
+            if cached is None:
+                missing_indices.append(idx)
+            else:
                 message, ex_len = cached
-                messages.append(message)
+                messages[idx] = message
                 srag_examples_nums += int(ex_len or 0)
                 pbar.update(1)
-                continue
 
-        triples = []
-        for quadruple in raw_data["quadruples"]:
-            label = quadruple["targeted_group"]
-            triples.append(f"{quadruple['target']} | {quadruple['argument']} | {label}")
-        # global demos (fixed demos for all samples)
+    missing_datas = [datas[idx] for idx in missing_indices]
+    batch_examples = retrieve_srag_examples_batch(missing_datas, default_global_k)
+    batch_lexicons = retrieve_lex_batch(missing_datas)
+    cache_updates = {}
+
+    for local_idx, raw_data in enumerate(missing_datas):
+        original_idx = missing_indices[local_idx]
+        triples = [
+            f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
+            for quadruple in raw_data["quadruples"]
+        ]
         global_k = default_global_k
-
-        prompt, examples, lex_contents = build_single_prompt(
-            raw_data=raw_data,
-            srag_retriever=srag_retriever,
-            lex_retriever=lex_retriever,
-            global_examples=global_examples,
-            global_k=global_k
-        )
+        examples = batch_examples[local_idx]
+        lex_contents = batch_lexicons[local_idx]
+        prompt = render_prompt(raw_data, examples, lex_contents)
         original_examples = examples
 
         # ?????????
@@ -357,14 +452,14 @@ def build_prompt(
         while config.auto_length and tokenizer is not None and cur_len > config.max_length:
             if use_global_demos:
                 new_k = max(0, int(global_k or 0) - i)
-                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
+                print(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
                 examples = global_examples[:new_k]
                 prompt = render_prompt(raw_data, examples, lex_contents)
                 global_k = new_k
                 if new_k <= 0:
                     break
             else:
-                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
+                print(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
                 new_k = max(0, min(len(original_examples), int(config.srag_top_k) - i))
                 examples = original_examples[:new_k]
                 prompt = render_prompt(raw_data, examples, lex_contents)
@@ -384,21 +479,21 @@ def build_prompt(
             "content": raw_data["content"],
             "gt_quadruples": raw_data["quadruples"] if is_test_data else ""
             }
-        messages.append(message)
+        messages[original_idx] = message
 
         # ??????
-        if cache_enabled:
-            try:
-                build_cache.set(_key, (message, len(examples)))
-            except Exception:
-                pass
+        if cache_enabled and cache_keys[original_idx] is not None:
+            cache_updates[cache_keys[original_idx]] = (message, len(examples))
 
         pbar.update(1)
-    
+
+    if cache_enabled and cache_updates:
+        build_cache.set_many(cache_updates)
+
     if len(datas) > 0:
         print(f"Avg examples nums: {srag_examples_nums / len(datas)}")
 
-    return messages
+    return [message for message in messages if message is not None]
 
 def _legacy_make_data(config: Config):
     """Legacy data builder retained for reference."""
@@ -415,7 +510,11 @@ def _legacy_make_data(config: Config):
 
     enable_build_cache = getattr(config, 'enable_build_cache', True)
     build_cache_dir = getattr(config, 'build_cache_dir', './cache_build_data')
-    build_cache = BuildCacheManager(cache_dir=build_cache_dir, enabled=enable_build_cache)
+    build_cache = BuildCacheManager(
+        cache_dir=build_cache_dir,
+        enabled=enable_build_cache,
+        cache_backend=getattr(config, "cache_backend", "sqlite"),
+    )
 
     # Global fixed demos (optional): bypass SRAG and reuse the same demos for every sample
     global_examples: Optional[List[str]] = None
@@ -739,6 +838,7 @@ def make_data(config: Config):
     build_cache = BuildCacheManager(
         cache_dir=getattr(config, "build_cache_dir", "./cache_build_data"),
         enabled=getattr(config, "enable_build_cache", True),
+        cache_backend=getattr(config, "cache_backend", "sqlite"),
     )
 
     global_examples: Optional[List[str]] = None

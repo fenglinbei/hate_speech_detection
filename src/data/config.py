@@ -78,6 +78,8 @@ class Config:
         self.enable_build_cache = cache.get('enable_build_cache', True)
         self.build_cache_dir = cache.get('build_cache_dir', './cache_build_data')
         self.enable_retrieval_cache = cache.get('enable_retrieval_cache', True)
+        self.cache_backend = cache.get('cache_backend', 'sqlite')
+        self.retrieval_batch_size = cache.get('retrieval_batch_size', 256)
         
         # 模型设置
         models = config_data.get('model_settings', {})
