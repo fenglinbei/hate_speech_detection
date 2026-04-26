@@ -230,7 +230,7 @@ if [[ "$DO_BUILD" == "1" ]]; then
       echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
     else
       echo "[STEP] build_data"
-      python data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
+      python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
     fi
   fi
 fi
