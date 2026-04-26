@@ -1,0 +1,31 @@
+{
+  "project": "cold",
+  "exp_id": "f5b7865ab6",
+  "exp_dir": "exps/cold/main/exp_f5b7865ab6",
+  "created_at": "2026-04-26 20:01:03",
+  "index": 0,
+  "port": 35000,
+  "overrides": {},
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/cold/main/exp_f5b7865ab6/build_config.json",
+    "train_config": "exps/cold/main/exp_f5b7865ab6/train_config.json",
+    "runner_config": "exps/cold/main/exp_f5b7865ab6/runner_config.json",
+    "data_dir": "exps/cold/main/exp_f5b7865ab6/data",
+    "model_dir": "exps/cold/main/exp_f5b7865ab6/model",
+    "runner_output_dir": "exps/cold/main/exp_f5b7865ab6/runner_output",
+    "logs_dir": "exps/cold/main/exp_f5b7865ab6/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
