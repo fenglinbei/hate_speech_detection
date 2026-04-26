@@ -1,51 +1,73 @@
-import os, torch
-print("CUDA_VISIBLE_DEVICES =", os.environ.get("CUDA_VISIBLE_DEVICES"))
-print("torch.cuda.device_count() =", torch.cuda.device_count())
-for i in range(torch.cuda.device_count()):
-    print(i, torch.cuda.get_device_name(i))
-import re
-import json
-import torch
-import random
-import swanlab
+from __future__ import annotations
+
 import argparse
-import datetime
-import pandas as pd
-
-from tqdm import tqdm
+import json
+import os
+import random
 from pathlib import Path
-from datasets import Dataset
-from typing import Optional
-from modelscope import snapshot_download, AutoTokenizer
-from swanlab.integration.transformers import SwanLabCallback
-from transformers import AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq # type: ignore
+from typing import Optional, Union
 
+import pandas as pd
+import swanlab
+import torch
+from datasets import Dataset
+from modelscope import AutoTokenizer
+from swanlab.integration.transformers import SwanLabCallback
+from transformers import AutoModelForCausalLM, DataCollatorForSeq2Seq, Trainer, TrainingArguments  # type: ignore
+
+from metrics.metric_llm import LLMmetrics
 from prompt import *
 from utils.log import init_logger
-from metrics.metric_llm import LLMmetrics
-from utils.parser import parse_llm_output_trip, validate_quadruples
+
 logger = init_logger(level="INFO", show_console=True)
 
+
+HF_WEIGHT_FILES = (
+    "pytorch_model.bin",
+    "pytorch_model.bin.index.json",
+    "model.safetensors",
+    "model.safetensors.index.json",
+)
+
+
 def load_config(config_path):
-    """从指定路径加载JSON配置文件"""
-    with open(config_path, 'r', encoding='utf-8') as f:
+    with open(config_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
+def get_rank() -> int:
+    return int(os.environ.get("RANK", "0"))
+
+
+def get_local_rank() -> int:
+    return int(os.environ.get("LOCAL_RANK", "-1"))
+
+
+def get_world_size() -> int:
+    return int(os.environ.get("WORLD_SIZE", "1"))
+
+
+def is_main_process() -> bool:
+    return get_rank() == 0
+
+
+def get_train_backend() -> str:
+    return os.environ.get("TRAIN_BACKEND", "single").strip().lower()
+
+
 def build_device_map(config):
-    """从配置中构建设备映射，如未提供则返回None使用自动分配"""
-    return config.get('device_map', "auto")
+    return config.get("device_map", "auto")
+
 
 def prompt_to_text(prompt: str, prompt_template: str) -> str:
-    """从提示模板中提取原始文本"""
     placeholder = "{text}"
     return prompt.split(placeholder)[0] if placeholder in prompt else prompt
+
 
 def to_str(x):
     if x is None:
         return ""
-    # pandas NaN
     try:
-        import pandas as pd
         if isinstance(x, float) and pd.isna(x):
             return ""
     except Exception:
@@ -57,6 +79,7 @@ def to_str(x):
         return json.dumps(x, ensure_ascii=False)
     return str(x)
 
+
 def build_messages(example) -> list[dict]:
     inst = to_str(example.get("instruction"))
     inp = to_str(example.get("input"))
@@ -66,23 +89,51 @@ def build_messages(example) -> list[dict]:
             {"role": "system", "content": inst},
             {"role": "user", "content": inp},
         ]
-    else:
-        return [{"role": "user", "content": inp}]
-       
+    return [{"role": "user", "content": inp}]
+
+
+def latest_checkpoint_dir(model_root: Union[str, Path]) -> Optional[Path]:
+    root = Path(model_root)
+    if not root.exists():
+        return None
+    checkpoints = [p for p in root.glob("checkpoint-*") if p.is_dir()]
+    if not checkpoints:
+        return None
+
+    def checkpoint_sort_key(path: Path):
+        prefix = "checkpoint-"
+        suffix = path.name[len(prefix) :] if path.name.startswith(prefix) else path.name
+        try:
+            return (0, int(suffix))
+        except ValueError:
+            return (1, suffix)
+
+    return sorted(checkpoints, key=checkpoint_sort_key)[-1]
+
+
+def checkpoint_has_hf_weights(checkpoint_dir: Union[str, Path]) -> bool:
+    path = Path(checkpoint_dir)
+    return any((path / filename).exists() for filename in HF_WEIGHT_FILES)
+
+
+def barrier_if_needed() -> None:
+    if torch.distributed.is_available() and torch.distributed.is_initialized():
+        torch.distributed.barrier()
+
 
 class CustomTrainer(Trainer):
-    """自定义Trainer类增加评估指标"""
-    def __init__(self, 
-                 *args, 
-                 eval_tokenizer,
-                 eval_config: dict,
-                 llm_metrics: LLMmetrics, 
-                 eval_raw_dataset=None, 
-                 max_retries: int = 0,
-                 eval_num: int = 100,
-                 prompt_template: str = "",
-                 **kwargs):
-        
+    def __init__(
+        self,
+        *args,
+        eval_tokenizer,
+        eval_config: dict,
+        llm_metrics: LLMmetrics,
+        eval_raw_dataset=None,
+        max_retries: int = 0,
+        eval_num: int = 100,
+        prompt_template: str = "",
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self.eval_config = eval_config
         self.eval_raw_dataset = eval_raw_dataset
@@ -91,12 +142,10 @@ class CustomTrainer(Trainer):
         self.max_retries = max_retries
         self.eval_num = eval_num
         self.prompt_template = prompt_template
-        
-    def evaluate(self, **kwargs): # type: ignore
-        """自定义评估逻辑"""
+
+    def evaluate(self, **kwargs):  # type: ignore
         metrics = super().evaluate(**kwargs)
         self.log(metrics)
-        # swanlab.log(metrics)
         return metrics
 
 
@@ -106,10 +155,10 @@ def predict(messages, model, tokenizer, config):
         messages,
         tokenize=False,
         add_generation_prompt=True,
-        enable_thinking=False
+        enable_thinking=False,
     )
     model_inputs = tokenizer([text], return_tensors="pt").to(device)
-    attention_mask = model_inputs['attention_mask']
+    attention_mask = model_inputs["attention_mask"]
 
     generated_ids = model.generate(
         model_inputs.input_ids,
@@ -120,53 +169,64 @@ def predict(messages, model, tokenizer, config):
         top_p=config.get("top_p"),
         top_k=config.get("top_k"),
         min_p=config.get("min_p"),
-        pad_token_id=tokenizer.eos_token_id
+        pad_token_id=tokenizer.eos_token_id,
     )
     generated_ids = [
-        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+        output_ids[len(input_ids) :] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
     ]
+    return tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-    return response
+def build_training_args(config: dict) -> TrainingArguments:
+    return TrainingArguments(
+        **config["training"],
+        group_by_length=True,
+    )
 
-def run(config: dict):
-    MAX_LENGTH = config.get('max_length', 512)
-    os.environ["SWANLAB_PROJECT"] = config.get("project_name", "qwen3-8b-sft-hsd")
-    # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, config.get('cuda_devices', [0,1,2,3])))
 
-    swanlab.config.update({ # type: ignore
-        "model": config['model_name'],
-        "system_prompt": get_prompt(config["system_prompt"]),
-        "prompt": get_prompt(config['prompt_template']),
-        "data_max_length": MAX_LENGTH,
-        "use_bf16": config['training'].get('bf16', False)
-    })
+def load_model(config: dict, training_args: TrainingArguments):
+    train_backend = get_train_backend()
+    distributed = get_world_size() > 1
+    torch_dtype = torch.bfloat16 if config["training"].get("bf16", False) else torch.float32
 
-    try:
-        tokenizer = AutoTokenizer.from_pretrained(
-            config['model_path'], 
-            use_fast=False, 
-            trust_remote_code=True
+    model_kwargs = {
+        "torch_dtype": torch_dtype,
+        "attn_implementation": "flash_attention_2",
+        "trust_remote_code": True,
+        "low_cpu_mem_usage": True,
+    }
+
+    if train_backend == "single" or not distributed:
+        model_kwargs["device_map"] = build_device_map(config)
+    elif is_main_process():
+        print(
+            f"[INFO] distributed backend={train_backend}; loading without device_map "
+            "so Trainer/DeepSpeed/FSDP owns placement"
         )
-        tokenizer.pad_token = tokenizer.eos_token if tokenizer.pad_token is None else tokenizer.pad_token
-        torch_dtype = torch.bfloat16 if config['training'].get('bf16', False) else torch.float32
-        device_map = build_device_map(config)
 
-        model = AutoModelForCausalLM.from_pretrained(
-            config['model_path'], 
-            torch_dtype=torch_dtype,
-            device_map=device_map,
-            attn_implementation="flash_attention_2",
-            trust_remote_code=True
+    model = AutoModelForCausalLM.from_pretrained(config["model_path"], **model_kwargs)
+    model.config.use_cache = False
+
+    if is_main_process():
+        print(
+            "[INFO] TrainingArguments:",
+            {
+                "output_dir": training_args.output_dir,
+                "deepspeed": training_args.deepspeed,
+                "fsdp": str(training_args.fsdp),
+                "per_device_train_batch_size": training_args.per_device_train_batch_size,
+                "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
+                "gradient_checkpointing": training_args.gradient_checkpointing,
+            },
         )
-        model.config.use_cache = False
 
-    except Exception as err:
-        logger.exception(err)
-        exit()
+    return model
 
-    llm_metrics = LLMmetrics()
+
+def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
+    max_length = config.get("max_length", 512)
+    data_config = config["data"]
+    preprocessing_num_proc = int(config.get("preprocessing_num_proc", 8))
 
     def process_func(batch):
         input_ids_list, attention_list, labels_list = [], [], []
@@ -186,10 +246,10 @@ def run(config: dict):
             attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]
             labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.eos_token_id]
 
-            if len(input_ids) > MAX_LENGTH:
-                input_ids = input_ids[:MAX_LENGTH]
-                attention_mask = attention_mask[:MAX_LENGTH]
-                labels = labels[:MAX_LENGTH]
+            if len(input_ids) > max_length:
+                input_ids = input_ids[:max_length]
+                attention_mask = attention_mask[:max_length]
+                labels = labels[:max_length]
 
             input_ids_list.append(input_ids)
             attention_list.append(attention_mask)
@@ -200,39 +260,29 @@ def run(config: dict):
             "attention_mask": attention_list,
             "labels": labels_list,
         }
-    
-    # 数据准备
-    data_config = config['data']
 
-    # 加载数据集
-    train_df = pd.read_json(data_config['train_data_path'], lines=True)
-    train_ds = Dataset.from_pandas(train_df)
-    train_dataset = train_ds.map(
-        process_func,
-        remove_columns=train_ds.column_names,
-        batched=True,
-        num_proc=8
-    )
-
-    eval_df = pd.read_json(data_config['val_data_path'], lines=True)
+    train_df = pd.read_json(data_config["train_data_path"], lines=True)
+    eval_df = pd.read_json(data_config["val_data_path"], lines=True)
     eval_raw = [row for _, row in eval_df.iterrows()]
+
+    train_ds = Dataset.from_pandas(train_df)
     eval_ds = Dataset.from_pandas(eval_df)
-    eval_dataset = eval_ds.map(
-        process_func, 
-        remove_columns=eval_ds.column_names,
-        batched=True,
-        num_proc=8
-    )
 
-    # 训练参数配置
-    training_args = TrainingArguments(
-        **config['training'],
-        # deepspeed="finetune/ds_config.json",
-        group_by_length=True,
-    )
+    with training_args.main_process_first(desc="tokenize datasets"):
+        train_dataset = train_ds.map(
+            process_func,
+            remove_columns=train_ds.column_names,
+            batched=True,
+            num_proc=preprocessing_num_proc,
+        )
+        eval_dataset = eval_ds.map(
+            process_func,
+            remove_columns=eval_ds.column_names,
+            batched=True,
+            num_proc=preprocessing_num_proc,
+        )
 
-    local_rank = int(os.environ.get("LOCAL_RANK", "-1"))
-    if local_rank in (-1, 0):
+    if is_main_process():
         print("features:", train_dataset.features)
         ex0 = train_dataset[0]["input_ids"]
         print("type(input_ids[0]):", type(ex0), "sample:", ex0 if isinstance(ex0, int) else ex0[:10])
@@ -246,51 +296,125 @@ def run(config: dict):
                     print("bad idx:", i, "value:", x)
         print("bad count:", len(bad))
 
-    # 训练器初始化
+    return train_dataset, eval_dataset, eval_raw
+
+
+def ensure_loadable_checkpoint(trainer: Trainer, tokenizer) -> None:
+    output_dir = Path(trainer.args.output_dir)
+    latest = latest_checkpoint_dir(output_dir)
+
+    if latest is None:
+        latest = output_dir / "checkpoint-final"
+        trainer.save_model(str(latest))
+        barrier_if_needed()
+
+    if trainer.is_world_process_zero():
+        tokenizer.save_pretrained(str(latest))
+
+    barrier_if_needed()
+
+    if trainer.is_world_process_zero() and not checkpoint_has_hf_weights(latest):
+        raise RuntimeError(
+            f"No HuggingFace model weights found in {latest}. "
+            "For DeepSpeed ZeRO-3, ensure stage3_gather_16bit_weights_on_model_save=true."
+        )
+
+
+def run(config: dict):
+    local_rank = get_local_rank()
+    if local_rank >= 0 and torch.cuda.is_available():
+        torch.cuda.set_device(local_rank)
+
+    if is_main_process():
+        print("CUDA_VISIBLE_DEVICES =", os.environ.get("CUDA_VISIBLE_DEVICES"))
+        print("TRAIN_BACKEND =", get_train_backend())
+        print("TRAIN_PROFILE =", os.environ.get("TRAIN_PROFILE", ""))
+        print("WORLD_SIZE =", get_world_size())
+        print("torch.cuda.device_count() =", torch.cuda.device_count())
+        for i in range(torch.cuda.device_count()):
+            print(i, torch.cuda.get_device_name(i))
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        config["model_path"],
+        use_fast=False,
+        trust_remote_code=True,
+    )
+    tokenizer.pad_token = tokenizer.eos_token if tokenizer.pad_token is None else tokenizer.pad_token
+
+    training_args = build_training_args(config)
+
+    if is_main_process():
+        os.environ["SWANLAB_PROJECT"] = config.get("project_name", "qwen3-8b-sft-hsd")
+        swanlab.config.update(  # type: ignore
+            {
+                "model": config["model_name"],
+                "system_prompt": get_prompt(config["system_prompt"]),
+                "prompt": get_prompt(config["prompt_template"]),
+                "data_max_length": config.get("max_length", 512),
+                "use_bf16": config["training"].get("bf16", False),
+                "train_backend": get_train_backend(),
+                "train_profile": os.environ.get("TRAIN_PROFILE", ""),
+            }
+        )
+
+    train_dataset, eval_dataset, eval_raw = build_datasets(config, tokenizer, training_args)
+    model = load_model(config, training_args)
+    llm_metrics = LLMmetrics()
+
+    callbacks = []
+    if is_main_process():
+        callbacks.append(
+            SwanLabCallback(
+                project=os.environ["SWANLAB_PROJECT"],
+                experiment_name=config["exp_name"],
+            )
+        )
+
     trainer = CustomTrainer(
         model=model,
         eval_tokenizer=tokenizer,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        data_collator = DataCollatorForSeq2Seq(
+        data_collator=DataCollatorForSeq2Seq(
             tokenizer=tokenizer,
             padding=True,
-            pad_to_multiple_of=8
+            pad_to_multiple_of=8,
         ),
         eval_raw_dataset=eval_raw,
         llm_metrics=llm_metrics,
-        max_retries=config['eval'].get('max_retries', 0),
-        eval_num=config['eval'].get('eval_num', 100),
+        max_retries=config["eval"].get("max_retries", 0),
+        eval_num=config["eval"].get("eval_num", 100),
         eval_config=config["eval"],
-        prompt_template=get_prompt(config['prompt_template']),
-        callbacks=[SwanLabCallback(
-            project=os.environ["SWANLAB_PROJECT"],
-            experiment_name=config['exp_name'],
-        )]
+        prompt_template=get_prompt(config["prompt_template"]),
+        callbacks=callbacks,
     )
 
     trainer.train()
-    swanlab.finish()
+    ensure_loadable_checkpoint(trainer, tokenizer)
+
+    if is_main_process():
+        swanlab.finish()
+
 
 def get_prompt(prompt_name_or_prompt: str):
     try:
         return eval(prompt_name_or_prompt)
-    except:
+    except Exception:
         return prompt_name_or_prompt
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='LLM Fine-tuning Script')
-    parser.add_argument('--config', type=str, default='config.json', help='Path to config file')
+    parser = argparse.ArgumentParser(description="LLM Fine-tuning Script")
+    parser.add_argument("--config", type=str, default="config.json", help="Path to config file")
     args = parser.parse_args()
 
     config = load_config(args.config)
-    config.setdefault('transfer_data', True)
-    config.setdefault('exp_name', 'default-exp')
+    config.setdefault("transfer_data", True)
+    config.setdefault("exp_name", "default-exp")
 
-    # 设置随机种子
-    if 'random_seed' in config:
-        random.seed(config['random_seed'])
-        torch.manual_seed(config['random_seed'])
+    if "random_seed" in config:
+        random.seed(config["random_seed"])
+        torch.manual_seed(config["random_seed"])
 
     run(config)

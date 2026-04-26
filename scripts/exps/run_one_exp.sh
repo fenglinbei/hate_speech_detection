@@ -45,6 +45,18 @@ GPU_MEM_UTIL_MAX="${GPU_MEM_UTIL_MAX:-0.95}"
 
 parse_csv_list() { local s="${1// /}"; IFS=',' read -r -a arr <<< "$s"; echo "${arr[@]}"; }
 
+count_csv_items() {
+  local s="${1// /}"
+  if [[ -z "$s" ]]; then echo "0"; return; fi
+  local -a items
+  IFS=',' read -r -a items <<< "$s"
+  local n=0 item
+  for item in "${items[@]}"; do
+    [[ -n "$item" ]] && n=$((n+1))
+  done
+  echo "$n"
+}
+
 gpu_mem_total_free_mb() {
   local gpu_id="$1"
   local line
@@ -112,10 +124,27 @@ MAX_MODEL_LEN="${MAX_MODEL_LEN:-$(read_manifest_field runtime_defaults.vllm.max_
 SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-$(read_manifest_field runtime_defaults.vllm.served_model_name)}"
 VLLM_WAIT_SECONDS="${VLLM_WAIT_SECONDS:-180}"
 
+TRAIN_BACKEND="${TRAIN_BACKEND:-deepspeed}"  # deepspeed | fsdp | single
+case "$TRAIN_BACKEND" in
+  single) TRAIN_PROFILE="${TRAIN_PROFILE:-single}" ;;
+  fsdp) TRAIN_PROFILE="${TRAIN_PROFILE:-fsdp_safe}" ;;
+  *) TRAIN_PROFILE="${TRAIN_PROFILE:-ds_zero2_safe}" ;;
+esac
+TRAIN_NPROC_PER_NODE="${TRAIN_NPROC_PER_NODE:-$(count_csv_items "$TRAIN_CUDA_VISIBLE_DEVICES")}"
+if [[ -n "$PORT" ]]; then
+  TRAIN_MASTER_PORT="${TRAIN_MASTER_PORT:-$((PORT + 1000))}"
+else
+  TRAIN_MASTER_PORT="${TRAIN_MASTER_PORT:-29500}"
+fi
+TRAIN_MAX_STEPS="${TRAIN_MAX_STEPS:-}"
+
 LOG_DIR="${LOG_DIR:-${EXP_DIR}/logs}"
 mkdir -p "$LOG_DIR"
 BUILD_LOG="${LOG_DIR}/build.log"
-TRAIN_LOG="${LOG_DIR}/train.log"
+TRAIN_LOG="${LOG_DIR}/train.${TRAIN_BACKEND}.${TRAIN_PROFILE}.log"
+TRAIN_LATEST_LOG="${LOG_DIR}/train.log"
+TRAIN_RUNTIME_CFG="${LOG_DIR}/train_runtime_config.json"
+TRAIN_DS_CFG="${LOG_DIR}/ds_config_${TRAIN_PROFILE}.json"
 VLLM_LOG="${LOG_DIR}/vllm_port${PORT}.log"
 RUN_LOG="${LOG_DIR}/runner.log"
 
@@ -175,9 +204,156 @@ json.dump(obj, open(dst,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
 PY
 }
 
+write_train_runtime_config() {
+  local src="$1" dst="$2" runtime_cfg="$3" ds_cfg="$4"
+  python - "$src" "$dst" "$runtime_cfg" "$ds_cfg" \
+    "$TRAIN_BACKEND" "$TRAIN_PROFILE" "$TRAIN_NPROC_PER_NODE" "$TRAIN_MASTER_PORT" \
+    "$TRAIN_CUDA_VISIBLE_DEVICES" "$TRAIN_MAX_STEPS" <<'PY'
+import json
+import os
+import sys
+from pathlib import Path
+
+src, dst, runtime_cfg, ds_cfg = sys.argv[1:5]
+backend, profile = sys.argv[5], sys.argv[6]
+nproc, master_port, cuda_devices, max_steps = sys.argv[7:11]
+
+cfg = json.load(open(src, "r", encoding="utf-8"))
+training = cfg.setdefault("training", {})
+
+for key in (
+    "deepspeed",
+    "fsdp",
+    "fsdp_config",
+    "fsdp_min_num_params",
+    "fsdp_transformer_layer_cls_to_wrap",
+):
+    training.pop(key, None)
+
+def apply_common(micro_batch: int, grad_accum: int) -> None:
+    training["per_device_train_batch_size"] = micro_batch
+    training["per_device_eval_batch_size"] = micro_batch
+    training["gradient_accumulation_steps"] = grad_accum
+    training["gradient_checkpointing"] = True
+    training.setdefault("bf16", True)
+
+def deepspeed_config(stage: int, offload: bool = False) -> dict:
+    zero = {
+        "stage": stage,
+        "overlap_comm": True,
+        "contiguous_gradients": True,
+        "reduce_bucket_size": "auto",
+    }
+    if stage == 2:
+        zero.update({
+            "allgather_partitions": True,
+            "allgather_bucket_size": "auto",
+            "reduce_scatter": True,
+            "round_robin_gradients": True,
+        })
+    else:
+        zero.update({
+            "stage3_prefetch_bucket_size": "auto",
+            "stage3_param_persistence_threshold": "auto",
+            "stage3_max_live_parameters": 1_000_000_000,
+            "stage3_max_reuse_distance": 1_000_000_000,
+            "stage3_gather_16bit_weights_on_model_save": True,
+            "sub_group_size": 1_000_000_000,
+        })
+    if offload:
+        zero["offload_optimizer"] = {"device": "cpu", "pin_memory": True}
+        zero["offload_param"] = {"device": "cpu", "pin_memory": True}
+
+    return {
+        "bf16": {"enabled": "auto"},
+        "zero_optimization": zero,
+        "gradient_accumulation_steps": "auto",
+        "gradient_clipping": "auto",
+        "train_batch_size": "auto",
+        "train_micro_batch_size_per_gpu": "auto",
+        "steps_per_print": 100,
+        "wall_clock_breakdown": False,
+    }
+
+profiles = {
+    "ds_zero2_safe": {"backend": "deepspeed", "stage": 2, "micro": 2, "accum": 1, "offload": False},
+    "ds_zero2_bs1": {"backend": "deepspeed", "stage": 2, "micro": 1, "accum": 2, "offload": False},
+    "ds_zero3_safe": {"backend": "deepspeed", "stage": 3, "micro": 2, "accum": 1, "offload": False},
+    "ds_zero3_bs1": {"backend": "deepspeed", "stage": 3, "micro": 1, "accum": 2, "offload": False},
+    "ds_zero3_offload": {"backend": "deepspeed", "stage": 3, "micro": 1, "accum": 2, "offload": True},
+    "fsdp_safe": {"backend": "fsdp", "micro": 2, "accum": 1},
+}
+
+runtime = {
+    "backend": backend,
+    "profile": profile,
+    "nproc_per_node": int(nproc),
+    "master_port": int(master_port),
+    "cuda_visible_devices": cuda_devices,
+    "max_steps_override": int(max_steps) if max_steps else None,
+}
+
+if backend == "single":
+    if profile != "single":
+        raise SystemExit(f"TRAIN_BACKEND=single requires TRAIN_PROFILE=single, got {profile}")
+elif profile not in profiles:
+    raise SystemExit(f"Unknown TRAIN_PROFILE={profile}")
+else:
+    spec = profiles[profile]
+    if spec["backend"] != backend:
+        raise SystemExit(f"TRAIN_PROFILE={profile} belongs to backend={spec['backend']}, got TRAIN_BACKEND={backend}")
+    apply_common(spec["micro"], spec["accum"])
+    runtime["effective_micro_batch"] = spec["micro"]
+    runtime["effective_gradient_accumulation"] = spec["accum"]
+
+    if backend == "deepspeed":
+        ds = deepspeed_config(spec["stage"], spec.get("offload", False))
+        Path(ds_cfg).parent.mkdir(parents=True, exist_ok=True)
+        json.dump(ds, open(ds_cfg, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        training["deepspeed"] = ds_cfg
+        runtime["deepspeed_config"] = ds_cfg
+        runtime["zero_stage"] = spec["stage"]
+        runtime["offload"] = spec.get("offload", False)
+    elif backend == "fsdp":
+        training["fsdp"] = "full_shard auto_wrap"
+        training["fsdp_transformer_layer_cls_to_wrap"] = "Qwen2DecoderLayer"
+        training["fsdp_config"] = {
+            "transformer_layer_cls_to_wrap": ["Qwen2DecoderLayer"],
+            "fsdp_state_dict_type": "FULL_STATE_DICT",
+            "limit_all_gathers": True,
+            "use_orig_params": False,
+        }
+        runtime["fsdp"] = training["fsdp"]
+        runtime["fsdp_transformer_layer_cls_to_wrap"] = "Qwen2DecoderLayer"
+        runtime["fsdp_state_dict_type"] = "FULL_STATE_DICT"
+
+if max_steps:
+    steps = int(max_steps)
+    training["max_steps"] = steps
+    training["save_strategy"] = "steps"
+    training["save_steps"] = steps
+    training["eval_strategy"] = "no"
+
+runtime["training"] = training
+
+Path(dst).parent.mkdir(parents=True, exist_ok=True)
+Path(runtime_cfg).parent.mkdir(parents=True, exist_ok=True)
+json.dump(cfg, open(dst, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+json.dump(runtime, open(runtime_cfg, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+PY
+}
+
 latest_checkpoint_dir() {
   local model_root="$1"
   ls -d "${model_root}"/checkpoint-* 2>/dev/null | sort -V | tail -n 1 || true
+}
+
+checkpoint_has_hf_weights() {
+  local ckpt="$1"
+  [[ -f "${ckpt}/pytorch_model.bin" \
+    || -f "${ckpt}/pytorch_model.bin.index.json" \
+    || -f "${ckpt}/model.safetensors" \
+    || -f "${ckpt}/model.safetensors.index.json" ]]
 }
 
 # vLLM lifecycle
@@ -207,6 +383,8 @@ wait_vllm_ready() {
 echo "[INFO] EXP_DIR=$EXP_DIR"
 echo "[INFO] MODE=$MODE  PORT=$PORT"
 echo "[INFO] TRAIN_CUDA_VISIBLE_DEVICES=$TRAIN_CUDA_VISIBLE_DEVICES"
+echo "[INFO] TRAIN_BACKEND=$TRAIN_BACKEND  TRAIN_PROFILE=$TRAIN_PROFILE"
+echo "[INFO] TRAIN_NPROC_PER_NODE=$TRAIN_NPROC_PER_NODE  TRAIN_MASTER_PORT=$TRAIN_MASTER_PORT"
 echo "[INFO] VLLM_CUDA_VISIBLE_DEVICES=$VLLM_CUDA_VISIBLE_DEVICES"
 echo "[INFO] REUSE_DATA_DIR=${REUSE_DATA_DIR:-<none>}"
 echo "[INFO] REUSE_MODEL_CKPT=${REUSE_MODEL_CKPT:-<none>}"
@@ -242,19 +420,41 @@ if [[ "$DO_TRAIN" == "1" ]]; then
     echo "[SKIP] train because REUSE_MODEL_CKPT is set (set FORCE_TRAIN=1 to override)"
   else
     echo "[STEP] train"
+    TMP_BASE_TRAIN_CFG="$(mktemp)"
     TMP_TRAIN_CFG="$(mktemp)"
     if [[ -n "${REUSE_DATA_DIR}" ]]; then
       # patch train/val paths to reuse data
-      json_patch "$TRAIN_CFG" "$TMP_TRAIN_CFG" \
+      json_patch "$TRAIN_CFG" "$TMP_BASE_TRAIN_CFG" \
         data.train_data_path "${REUSE_DATA_DIR}/train.jsonl" \
         data.val_data_path "${REUSE_DATA_DIR}/val.jsonl"
     else
-      cp "$TRAIN_CFG" "$TMP_TRAIN_CFG"
+      cp "$TRAIN_CFG" "$TMP_BASE_TRAIN_CFG"
     fi
 
-    CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
-      python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG"
-    rm -f "$TMP_TRAIN_CFG"
+    write_train_runtime_config "$TMP_BASE_TRAIN_CFG" "$TMP_TRAIN_CFG" "$TRAIN_RUNTIME_CFG" "$TRAIN_DS_CFG"
+    echo "[INFO] train runtime config: $TRAIN_RUNTIME_CFG"
+    [[ "$TRAIN_BACKEND" == "deepspeed" ]] && echo "[INFO] DeepSpeed config: $TRAIN_DS_CFG"
+    echo "[INFO] train log: $TRAIN_LOG"
+
+    if [[ "$TRAIN_BACKEND" == "single" ]]; then
+      CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
+        TRAIN_BACKEND="$TRAIN_BACKEND" \
+        TRAIN_PROFILE="$TRAIN_PROFILE" \
+        python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
+    else
+      if [[ "${TRAIN_NPROC_PER_NODE}" -lt 1 ]]; then
+        echo "[ERROR] TRAIN_NPROC_PER_NODE must be >= 1 (got ${TRAIN_NPROC_PER_NODE})" >&2
+        exit 1
+      fi
+      CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
+        TRAIN_BACKEND="$TRAIN_BACKEND" \
+        TRAIN_PROFILE="$TRAIN_PROFILE" \
+        python -m torch.distributed.run \
+          --nproc_per_node "$TRAIN_NPROC_PER_NODE" \
+          --master_port "$TRAIN_MASTER_PORT" \
+          src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
+    fi
+    rm -f "$TMP_BASE_TRAIN_CFG" "$TMP_TRAIN_CFG"
   fi
 fi
 
@@ -268,6 +468,11 @@ if [[ "$DO_INFER" == "1" ]]; then
 
   if [[ -z "$CKPT_DIR" || ! -e "$CKPT_DIR" ]]; then
     echo "[ERROR] No valid checkpoint found for inference. EXP_MODEL_DIR=$EXP_MODEL_DIR  REUSE_MODEL_CKPT=$REUSE_MODEL_CKPT" >&2
+    exit 1
+  fi
+  if ! checkpoint_has_hf_weights "$CKPT_DIR"; then
+    echo "[ERROR] Latest checkpoint is not vLLM-loadable; missing HuggingFace weight files in $CKPT_DIR" >&2
+    echo "[ERROR] Check $TRAIN_LOG and profile config. For ZeRO-3, stage3_gather_16bit_weights_on_model_save must be true." >&2
     exit 1
   fi
 fi
