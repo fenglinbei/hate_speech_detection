@@ -77,6 +77,7 @@ class Config:
         cache = config_data.get('cache_settings', {})
         self.enable_build_cache = cache.get('enable_build_cache', True)
         self.build_cache_dir = cache.get('build_cache_dir', './cache_build_data')
+        self.enable_retrieval_cache = cache.get('enable_retrieval_cache', True)
         
         # 模型设置
         models = config_data.get('model_settings', {})

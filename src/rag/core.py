@@ -96,8 +96,23 @@ def allocate_class_num(i, weights_dict, reverse: bool = False):
     for idx in range(remaining):
         key = fractions[idx][0]
         initial_allocation[key] += 1
-    
+
     return initial_allocation
+
+
+def _top_k_sorted_indices(scores: np.ndarray, k: int) -> np.ndarray:
+    """Return indices of the largest k scores, sorted descending."""
+    if scores.size == 0 or k <= 0:
+        return np.array([], dtype=np.int32)
+
+    k = min(int(k), scores.size)
+    if k >= scores.size:
+        candidate_indices = np.arange(scores.size)
+    else:
+        candidate_indices = np.argpartition(scores, -k)[-k:]
+
+    order = np.argsort(scores[candidate_indices])[::-1]
+    return candidate_indices[order].astype(np.int32)
 
 class CacheManager:
     """Cache helper for selection, embedding, and retrieval results."""
@@ -266,12 +281,18 @@ class Retriever:
         logger.info("Processing embedding")
         if not datas:
             texts = self.texts
+            if not hasattr(self, "text2idx"):
+                self.text2idx = {}
+                for idx, text in enumerate(texts):
+                    self.text2idx.setdefault(text, idx)
         else:
             self.texts = [item['content'] for item in datas]
             self.test2item = {}
-            for item in datas:
+            self.text2idx = {}
+            for idx, item in enumerate(datas):
                 item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
                 self.test2item[item['content']] = item
+                self.text2idx.setdefault(item['content'], idx)
             texts = self.texts
 
         self.corpus_sig = CacheManager.texts_signature(texts)
@@ -308,9 +329,11 @@ class Retriever:
 
         self.texts = [item['content'] for item in data]
         self.test2item = {}
-        for item in data:
+        self.text2idx = {}
+        for idx, item in enumerate(data):
             item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
             self.test2item[item['content']] = item
+            self.text2idx.setdefault(item['content'], idx)
     
     def retrieve(
             self, 
@@ -356,7 +379,10 @@ class Retriever:
         q_sha1 = CacheManager.sha1_text(query)
         q_key = None
         query_embedding_np = None
-        if self.cache_manager.enabled:
+        query_idx = getattr(self, "text2idx", {}).get(query)
+        if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+            query_embedding_np = self.corpus_embeddings_np[int(query_idx):int(query_idx) + 1]
+        elif use_cache and self.cache_manager.enabled:
             q_key = self.cache_manager.make_key({
                 "stage": "query_embedding",
                 "model": self.model_name,
@@ -371,7 +397,7 @@ class Retriever:
             query_embedding_np = query_embedding.numpy().astype(np.float32)
             if query_embedding_np.ndim == 1:
                 query_embedding_np = query_embedding_np.reshape(1, -1)
-            if self.cache_manager.enabled and q_key is not None:
+            if use_cache and self.cache_manager.enabled and q_key is not None:
                 self.cache_manager.set_embedding(q_key, query_embedding_np)
         else:
             if query_embedding_np.ndim == 1:
@@ -388,7 +414,7 @@ class Retriever:
 
         r_key = None
         cached_retr = None
-        if self.cache_manager.enabled:
+        if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "retrieval",
                 "model": self.model_name,
@@ -401,9 +427,9 @@ class Retriever:
         if cached_retr is None:
             similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
             min_sim = float(similarities.min())
-            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_indices = _top_k_sorted_indices(similarities, retrieval_k)
             sorted_sims = similarities[sorted_indices].astype(np.float32)
-            if self.cache_manager.enabled and r_key is not None:
+            if use_cache and self.cache_manager.enabled and r_key is not None:
                 self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta={"min_sim": min_sim})
         else:
             sorted_indices, sorted_sims, _meta = cached_retr
@@ -488,9 +514,11 @@ class LexiconRetriever:
         else:
             self.texts = [item['content'] for item in datas]
             self.test2item = {}
-            for item in datas:
+            self.text2idx = {}
+            for idx, item in enumerate(datas):
                 item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
                 self.test2item[item['content']] = item
+                self.text2idx.setdefault(item['content'], idx)
             texts = self.texts
 
         self.corpus_sig = CacheManager.texts_signature(texts)
@@ -551,7 +579,7 @@ class LexiconRetriever:
         q_sha1 = CacheManager.sha1_text(query)
         q_key = None
         query_embedding_np = None
-        if self.cache_manager.enabled:
+        if use_cache and self.cache_manager.enabled:
             q_key = self.cache_manager.make_key({"stage": "lex_query_embedding", "model": self.model_name, "q_sha1": q_sha1})
             query_embedding_np = self.cache_manager.get_embedding(q_key)
 
@@ -562,7 +590,7 @@ class LexiconRetriever:
             query_embedding_np = query_embedding.numpy().astype(np.float32)
             if query_embedding_np.ndim == 1:
                 query_embedding_np = query_embedding_np.reshape(1, -1)
-            if self.cache_manager.enabled and q_key is not None:
+            if use_cache and self.cache_manager.enabled and q_key is not None:
                 self.cache_manager.set_embedding(q_key, query_embedding_np)
         else:
             if query_embedding_np.ndim == 1:
@@ -578,7 +606,7 @@ class LexiconRetriever:
 
         r_key = None
         cached_retr = None
-        if self.cache_manager.enabled:
+        if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "lex_retrieval",
                 "model": self.model_name,
@@ -590,9 +618,9 @@ class LexiconRetriever:
 
         if cached_retr is None:
             similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
-            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_indices = _top_k_sorted_indices(similarities, retrieval_k)
             sorted_sims = similarities[sorted_indices].astype(np.float32)
-            if self.cache_manager.enabled and r_key is not None:
+            if use_cache and self.cache_manager.enabled and r_key is not None:
                 self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims)
         else:
             sorted_indices, sorted_sims, _meta = cached_retr
@@ -1445,7 +1473,10 @@ class StochasticWeightedRetriever(Retriever):
         q_sha1 = CacheManager.sha1_text(query)
         q_key = None
         query_embedding_np = None
-        if self.cache_manager.enabled:
+        query_idx = getattr(self, "text2idx", {}).get(query)
+        if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+            query_embedding_np = self.corpus_embeddings_np[int(query_idx):int(query_idx) + 1]
+        elif use_cache and self.cache_manager.enabled:
             q_key = self.cache_manager.make_key({"stage": "query_embedding", "model": self.model_name, "q_sha1": q_sha1})
             query_embedding_np = self.cache_manager.get_embedding(q_key)
 
@@ -1456,7 +1487,7 @@ class StochasticWeightedRetriever(Retriever):
             query_embedding_np = query_embedding.numpy().astype(np.float32)
             if query_embedding_np.ndim == 1:
                 query_embedding_np = query_embedding_np.reshape(1, -1)
-            if self.cache_manager.enabled and q_key is not None:
+            if use_cache and self.cache_manager.enabled and q_key is not None:
                 self.cache_manager.set_embedding(q_key, query_embedding_np)
         else:
             if query_embedding_np.ndim == 1:
@@ -1473,7 +1504,7 @@ class StochasticWeightedRetriever(Retriever):
 
         r_key = None
         cached_retr = None
-        if self.cache_manager.enabled:
+        if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "retrieval",
                 "model": self.model_name,
@@ -1486,9 +1517,9 @@ class StochasticWeightedRetriever(Retriever):
         if cached_retr is None:
             similarities = cosine_similarity(query_embedding_np, self.corpus_embeddings_np)[0].astype(np.float32)
             min_sim = float(similarities.min())
-            sorted_indices = np.argsort(similarities)[::-1][:retrieval_k].astype(np.int32)
+            sorted_indices = _top_k_sorted_indices(similarities, retrieval_k)
             sorted_sims = similarities[sorted_indices].astype(np.float32)
-            if self.cache_manager.enabled and r_key is not None:
+            if use_cache and self.cache_manager.enabled and r_key is not None:
                 self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta={"min_sim": min_sim})
         else:
             sorted_indices, sorted_sims, meta = cached_retr
@@ -1497,7 +1528,8 @@ class StochasticWeightedRetriever(Retriever):
             else:
                 min_sim = float(min(sorted_sims.tolist())) if len(sorted_sims) else 0.0
 
-        # 3) selection??hreshold + dedup + scoring?????? shape ?????        unique_texts: List[str] = []
+        # 3) selection??hreshold + dedup + scoring?????? shape ?????
+        unique_texts: List[str] = []
         unique_outputs: List[Any] = []
         scores_after_transform: List[float] = []
 
