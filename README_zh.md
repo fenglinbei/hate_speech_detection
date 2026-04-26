@@ -70,6 +70,88 @@
 - 标准数据集：`data/full/std/train.json` 和 `data/full/std/test.json`
 - 词典数据：`data/lexicon/annotated_lexicon.json`
 
+### 推荐 Conda 环境
+
+对于 4x RTX 4090、NVIDIA 580.x 驱动的 Linux 服务器，建议使用全新的 conda
+环境，并通过 `uv pip` 安装 PyTorch/vLLM 栈。这个环境里不要用 conda 安装
+PyTorch；vLLM 对 PyTorch、CUDA、NCCL 的二进制组合比较敏感。
+
+即使 `nvidia-smi` 显示 CUDA 13.0，这里也推荐安装 CUDA 12.8 wheel 栈。580.x
+驱动可以运行 CUDA 12.8 runtime，而且 CUDA 12.8 是 vLLM 预编译 wheel 的默认目标。
+
+创建环境：
+
+```bash
+conda create -n hsd-cu128 python=3.12 -y
+conda activate hsd-cu128
+
+conda install -y -c conda-forge git git-lfs curl jq cmake ninja packaging
+python -m pip install -U pip uv setuptools wheel
+```
+
+安装 vLLM 以及匹配的 PyTorch CUDA 12.8 依赖：
+
+```bash
+uv pip install "vllm==0.11.1" --torch-backend=cu128
+```
+
+安装项目运行依赖：
+
+```bash
+uv pip install \
+  "transformers>=4.51,<5" \
+  "datasets>=2.19" \
+  "accelerate>=0.33" \
+  "sentence-transformers>=3" \
+  "modelscope>=1.18" \
+  swanlab \
+  pandas scikit-learn "numpy<3" tqdm loguru requests \
+  faiss-cpu \
+  matplotlib matplotlib-venn \
+  fastapi "pydantic>=2,<3" uvicorn
+```
+
+`finetune/train.py` 会用 `attn_implementation="flash_attention_2"` 加载模型，因此还需要安装
+FlashAttention。如果环境里还没有 `nvcc`，先把 CUDA 12.8 编译组件安装到 conda 环境：
+
+```bash
+conda install -y -c nvidia/label/cuda-12.8.1 \
+  cuda-nvcc cuda-libraries-dev cuda-nvtx cuda-cupti
+
+export CUDA_HOME="$CONDA_PREFIX"
+export PATH="$CUDA_HOME/bin:$PATH"
+export TORCH_CUDA_ARCH_LIST="8.9"
+export MAX_JOBS=8
+
+uv pip install --no-build-isolation "flash-attn==2.8.3"
+```
+
+验证环境：
+
+```bash
+python - <<'PY'
+import torch, vllm, flash_attn, faiss
+print("torch", torch.__version__, "cuda", torch.version.cuda)
+print("gpu count", torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(i, torch.cuda.get_device_name(i))
+print("vllm ok")
+print("flash-attn ok")
+print("faiss ok")
+PY
+```
+
+这台 4x RTX 4090 服务器推荐使用如下运行参数：
+
+```bash
+MODE=full \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+MAX_MODEL_LEN=8192 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
 ### 端到端运行 k=10
 
 在 Bash 中运行：
