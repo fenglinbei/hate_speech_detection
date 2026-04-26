@@ -6,13 +6,13 @@
 
 ## 目录结构
 
-- `data/build_data.py`：从标准四元组数据构建 `train.jsonl`、`val.jsonl` 和 runner 可直接读取的 `test.json`。
-- `data/cold_adapter.py`：将 COLD 风格原始数据转换为本项目标准格式。
+- `src/data/build_data.py`：从标准四元组数据构建 `train.jsonl`、`val.jsonl` 和 runner 可直接读取的 `test.json`。
+- `src/data/cold_adapter.py`：将 COLD 风格原始数据转换为本项目标准格式。
 - `data/exp_data/*/config.json`：数据构建配置。
-- `finetune/train.py`：微调入口。
-- `finetune/config/*/*.json`：微调配置。
-- `runner/run.py`：LLM 推理与指标计算入口。
-- `runner/config/*/*.json`：runner 配置。
+- `src/finetune/train.py`：微调入口。
+- `config/finetune/*/*.json`：微调配置。
+- `src/runner/run.py`：LLM 推理与指标计算入口。
+- `config/runner/*/*.json`：runner 配置。
 - `scripts/exps/run_all.sh`：k-ablation 风格实验的一键式循环脚本。
 - `scripts/exps/run_one_exp.sh`：运行由 `expctl.py` 生成的单个 `exp_*` 实验目录。
 - `scripts/exps/expctl.py`：从 JSON spec 生成自包含实验目录。
@@ -36,7 +36,7 @@
 }
 ```
 
-`data/build_data.py` 会把这个格式转换成：
+`src/data/build_data.py` 会把这个格式转换成：
 
 - `train.jsonl`
 - `val.jsonl`
@@ -178,7 +178,7 @@ bash scripts/exps/run_all.sh
 
 该命令会依次执行：
 
-1. 使用 `data/build_data.py --config data/exp_data/k_ablation/k10/config.json` 构建数据
+1. 使用 `src/data/build_data.py --config data/exp_data/k_ablation/k10/config.json` 构建数据
 2. 使用 `finetune/train.py --config finetune/config/k_ablation/k10.json` 微调模型
 3. 在端口 `35010` 启动 vLLM
 4. 使用 `runner/run.py --config runner/config/k_ablation/k10.json` 进行推理和评测
@@ -317,7 +317,7 @@ MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 
 `run_one_exp.sh` 会读取 `manifest.json`，按顺序执行：
 
-1. `python data/build_data.py --config build_config.json`
+1. `python src/data/build_data.py --config build_config.json`
 2. `python finetune/train.py --config train_config.json`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`

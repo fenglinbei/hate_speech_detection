@@ -6,7 +6,7 @@ This repository contains data construction, fine-tuning, inference, and evaluati
 
 ## Repository Layout
 
-- `data/build_data.py`: builds `train.jsonl`, `val.jsonl`, and runner-ready `test.json` from normalized quadruple data.
+- `src/data/build_data.py`: builds `train.jsonl`, `val.jsonl`, and runner-ready `test.json` from normalized quadruple data.
 - `data/cold_adapter.py`: converts COLD-style raw files into the project standard format.
 - `data/exp_data/*/config.json`: data construction configs.
 - `finetune/train.py`: fine-tuning entry point.
@@ -36,7 +36,7 @@ The normalized training and test data use:
 }
 ```
 
-`data/build_data.py` turns this format into:
+`src/data/build_data.py` turns this format into:
 
 - `train.jsonl`
 - `val.jsonl`
@@ -181,7 +181,7 @@ bash scripts/exps/run_all.sh
 
 This performs:
 
-1. Data construction with `data/build_data.py --config data/exp_data/k_ablation/k10/config.json`
+1. Data construction with `src/data/build_data.py --config data/exp_data/k_ablation/k10/config.json`
 2. Fine-tuning with `finetune/train.py --config finetune/config/k_ablation/k10.json`
 3. vLLM startup on port `35010`
 4. Runner evaluation with `runner/run.py --config runner/config/k_ablation/k10.json`
@@ -328,7 +328,7 @@ Supported modes:
 
 `run_one_exp.sh` reads `manifest.json` and runs the stages in order:
 
-1. `python data/build_data.py --config build_config.json`
+1. `python src/data/build_data.py --config build_config.json`
 2. `python finetune/train.py --config train_config.json`
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python runner/run.py --config <temporary_runner_config>`

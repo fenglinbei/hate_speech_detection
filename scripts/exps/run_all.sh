@@ -294,7 +294,7 @@ for k in $(seq "$K_START" "$K_END"); do
     else
       echo "[STEP] build_data for k=${k}"
       mkdir -p "$TRAIN_DATA_DIR"
-      python data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
+      python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
     fi
   else
     echo "[SKIP] build_data (MODE=$MODE)"
