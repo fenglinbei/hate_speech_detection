@@ -32,6 +32,11 @@ def dump_json(obj: dict, path: str) -> None:
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
 
+def config_path(path: Any) -> str:
+    """Serialize paths with '/' so bash/Unix Python do not treat backslashes as filename characters."""
+    return Path(path).as_posix()
+
+
 def set_by_dotpath(d: dict, dotpath: str, value: Any) -> None:
     """在 dict 中按 'a.b.c' 形式写入 value。"""
     parts = dotpath.split(".")
@@ -171,39 +176,39 @@ def main():
         # 规范化：如果传了相对路径，按 repo cwd 解释；这里写入 manifest 为原样，run 脚本会 resolve
         # 如果复用数据，则 build 阶段可以跳过；但我们仍然生成 build_config 供记录
         if reuse_data_dir:
-            train_path = str(Path(reuse_data_dir) / "train.jsonl")
-            val_path = str(Path(reuse_data_dir) / "val.jsonl")
-            test_path = str(Path(reuse_data_dir) / "test.json")
+            train_path = config_path(Path(reuse_data_dir) / "train.jsonl")
+            val_path = config_path(Path(reuse_data_dir) / "val.jsonl")
+            test_path = config_path(Path(reuse_data_dir) / "test.json")
         else:
-            train_path = str(exp_data_dir / "train.jsonl")
-            val_path = str(exp_data_dir / "val.jsonl")
-            test_path = str(exp_data_dir / "test.json")
+            train_path = config_path(exp_data_dir / "train.jsonl")
+            val_path = config_path(exp_data_dir / "val.jsonl")
+            test_path = config_path(exp_data_dir / "test.json")
 
         # ===== patch build_config 输出路径（固定写到 exp/data） =====
         # 即使 reuse_data_dir 存在，也让 build 输出写 exp/data（不影响），run 脚本会跳过 build
         build_cfg.setdefault("data_paths", {})
-        build_cfg["data_paths"]["train_output_path"] = str(exp_data_dir / "train.jsonl")
-        build_cfg["data_paths"]["val_output_path"] = str(exp_data_dir / "val.jsonl")
-        build_cfg["data_paths"]["test_output_path"] = str(exp_data_dir / "test.json")
+        build_cfg["data_paths"]["train_output_path"] = config_path(exp_data_dir / "train.jsonl")
+        build_cfg["data_paths"]["val_output_path"] = config_path(exp_data_dir / "val.jsonl")
+        build_cfg["data_paths"]["test_output_path"] = config_path(exp_data_dir / "test.json")
 
         # ===== patch train_config 输出路径与数据路径 =====
         train_cfg.setdefault("training", {})
-        train_cfg["training"]["output_dir"] = str(exp_model_dir)
+        train_cfg["training"]["output_dir"] = config_path(exp_model_dir)
         # 让 exp_name/run_name 更直观
         train_cfg["exp_name"] = f"exp_{exp_id}"
         train_cfg.setdefault("project_name", project)
 
         train_cfg.setdefault("data", {})
-        train_cfg["data"]["config_path"] = str(exp_dir / "build_config.json")
+        train_cfg["data"]["config_path"] = config_path(exp_dir / "build_config.json")
         train_cfg["data"]["train_data_path"] = train_path
         train_cfg["data"]["val_data_path"] = val_path
 
         # ===== patch runner_config 输出路径、缓存/进度路径、test 路径 =====
         runner_cfg.setdefault("tester", {})
-        runner_cfg["tester"]["output_dir"] = str(exp_out_dir)
-        runner_cfg["tester"]["progress_dir"] = str(exp_progress_dir)
-        runner_cfg["tester"]["prompts_save_dir"] = str(exp_prompts_dir)
-        runner_cfg["tester"]["cache_dir"] = str(exp_cache_dir)
+        runner_cfg["tester"]["output_dir"] = config_path(exp_out_dir)
+        runner_cfg["tester"]["progress_dir"] = config_path(exp_progress_dir)
+        runner_cfg["tester"]["prompts_save_dir"] = config_path(exp_prompts_dir)
+        runner_cfg["tester"]["cache_dir"] = config_path(exp_cache_dir)
         runner_cfg["tester"]["test_data_file"] = test_path
 
         # api_base 不写死端口，run 脚本会动态 patch
@@ -217,7 +222,7 @@ def main():
         manifest = {
             "project": project,
             "exp_id": exp_id,
-            "exp_dir": str(exp_dir),
+            "exp_dir": config_path(exp_dir),
             "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
             "index": index,
             "port": port_base + index,
@@ -227,13 +232,13 @@ def main():
                 "model_checkpoint": reuse_meta.get("model_checkpoint", None),
             },
             "paths": {
-                "build_config": str(exp_dir / "build_config.json"),
-                "train_config": str(exp_dir / "train_config.json"),
-                "runner_config": str(exp_dir / "runner_config.json"),
-                "data_dir": str(exp_data_dir),
-                "model_dir": str(exp_model_dir),
-                "runner_output_dir": str(exp_out_dir),
-                "logs_dir": str(exp_logs_dir),
+                "build_config": config_path(exp_dir / "build_config.json"),
+                "train_config": config_path(exp_dir / "train_config.json"),
+                "runner_config": config_path(exp_dir / "runner_config.json"),
+                "data_dir": config_path(exp_data_dir),
+                "model_dir": config_path(exp_model_dir),
+                "runner_output_dir": config_path(exp_out_dir),
+                "logs_dir": config_path(exp_logs_dir),
             },
             "runtime_defaults": {
                 "train_cuda_visible_devices": train_cuda,
