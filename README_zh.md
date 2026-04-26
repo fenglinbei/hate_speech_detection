@@ -168,13 +168,43 @@ K_START=10 K_END=10 BASE_K=1 bash scripts/exps/make_config.sh
 
 ## 自包含实验目录
 
-`scripts/exps/expctl.py` 可以从 spec 生成独立的 `exp_*` 实验目录：
+通用实验流程是：
 
-```bash
-python scripts/exps/expctl.py gen --spec path/to/spec.json
+```text
+spec.json -> scripts/exps/expctl.py -> output_root/exp_<id>/ -> run_one_exp.sh -> build/train/vLLM/runner
 ```
 
-每个生成的实验目录都包含：
+这是现在推荐用于新 sweep 和 ablation 的流程。较早的
+`scripts/exps/make_config.sh` 和 `scripts/exps/run_all.sh` 是 k-ablation
+专用脚本，会把配置分散写到 `data/exp_data/`、`finetune/config/` 和
+`runner/config/` 下。
+
+### 1. 编写或复用 spec
+
+spec 示例在 `exps/specs/` 下。一个 spec 会描述模板配置、参数网格和运行时默认值：
+
+- `project`：实验组名称。
+- `output_root`：生成的 `exp_*` 目录所在根目录。
+- `base.build`、`base.train`、`base.runner`：要复制并修改的三个模板配置。
+- `grid`：用 dot-path 覆盖配置字段，并做笛卡尔积展开。支持前缀
+  `build.`、`train.`、`runner.`、`reuse.`。
+- `port_base`：每个生成实验的端口是 `port_base + index`。
+- `train_cuda_visible_devices`：训练阶段默认 GPU。
+- `vllm`：vLLM 默认运行参数，例如可见 GPU、tensor parallel size、最大模型长度和 served model name。
+- `reuse.data_dir`、`reuse.model_checkpoint`：可选的复用数据目录或 checkpoint。
+
+示例：
+
+```bash
+python scripts/exps/expctl.py gen --spec exps/specs/example.json
+```
+
+`expctl.py` 会读取三份 base 配置，对每个 grid 组合应用覆盖项，然后为每个组合写出一个确定性的
+`exp_<hash>` 目录。hash 来自 `project` 和 `overrides`，所以同一个 spec 通常会生成稳定的目录名。
+
+### 2. 查看生成目录
+
+每个生成的实验目录都是自包含的：
 
 - `build_config.json`
 - `train_config.json`
@@ -182,19 +212,61 @@ python scripts/exps/expctl.py gen --spec path/to/spec.json
 - `manifest.json`
 - 局部 `data/`、`model/`、`runner_output/`、`logs/`、`progress/`、`prompts/`、`cache/` 目录
 
-运行单个生成的实验：
+`expctl.py` 还会自动 patch 路径，让每个实验写到自己的目录下：
+
+- build 输出写到 `exp_*/data/train.jsonl`、`val.jsonl`、`test.json`。
+- finetune checkpoint 写到 `exp_*/model/`。
+- runner output、progress、prompts、cache 都写到同一个 `exp_*` 目录下。
+- `runner_config.json` 里的 `api_base` 先保留占位端口，真正端口由 `run_one_exp.sh` 运行时 patch。
+- `manifest.json` 记录 overrides、端口、复用路径、生成路径和默认运行参数。
+
+### 3. 运行单个实验
 
 ```bash
 MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
-运行某个根目录下的全部生成实验：
+支持的模式：
+
+- `MODE=data`：只构建数据；如果复用数据或数据已经存在，会跳过。
+- `MODE=train`：构建数据，然后微调。
+- `MODE=full`：构建数据、微调、启动 vLLM，然后运行 runner 评测。
+- `MODE=infer`：只启动 vLLM 并运行 runner，需要已有 checkpoint。
+
+`run_one_exp.sh` 会读取 `manifest.json`，按顺序执行：
+
+1. `python data/build_data.py --config build_config.json`
+2. `python finetune/train.py --config train_config.json`
+3. `python -m vllm.entrypoints.openai.api_server ...`
+4. `python runner/run.py --config <temporary_runner_config>`
+
+runner 配置会先复制到临时文件，脚本再把 `model.params.api_base` patch 成实际端口。
+如果设置了 `reuse.data_dir`，训练和测试数据路径会指向复用目录。如果设置了
+`reuse.model_checkpoint`，训练会被跳过，除非显式设置 `FORCE_TRAIN=1`。
+
+常用运行时覆盖：
+
+```bash
+MODE=infer \
+MODEL_CKPT_OVERRIDE=models/some_run/checkpoint-100 \
+DATA_DIR_OVERRIDE=exps/some_project/exp_xxxxxxxxxx/data \
+PORT=35010 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+常用变量包括 `TRAIN_CUDA_VISIBLE_DEVICES`、`VLLM_CUDA_VISIBLE_DEVICES`、
+`TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
+`DYNAMIC_GPU_MEM_UTIL`、`DEFAULT_GPU_MEM_UTIL`。
+
+### 4. 运行某个根目录下的全部实验
 
 ```bash
 MODE=full bash scripts/exps/run_all_exps.sh exps/some_project
 ```
 
-当 checkpoint 已经存在时，`run_one_exp.sh` 还支持 `MODE=infer`。
+`run_all_exps.sh` 会找到给定根目录下第一层的所有 `exp_*` 子目录，并用相同
+`MODE` 顺序调用 `run_one_exp.sh`。
 
 ## COLD 固定切分转换
 

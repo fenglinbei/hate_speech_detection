@@ -168,13 +168,48 @@ K_START=10 K_END=10 BASE_K=1 bash scripts/exps/make_config.sh
 
 ## Self-Contained Experiment Directories
 
-`scripts/exps/expctl.py` can generate independent `exp_*` directories from a spec:
+The generic experiment workflow is:
 
-```bash
-python scripts/exps/expctl.py gen --spec path/to/spec.json
+```text
+spec.json -> scripts/exps/expctl.py -> output_root/exp_<id>/ -> run_one_exp.sh -> build/train/vLLM/runner
 ```
 
-Each generated experiment directory contains:
+This is the preferred flow for new sweeps and ablations. The older
+`scripts/exps/make_config.sh` and `scripts/exps/run_all.sh` scripts are
+k-ablation-specific helpers that write scattered config files under
+`data/exp_data/`, `finetune/config/`, and `runner/config/`.
+
+### 1. Write or reuse a spec
+
+Specs live under `exps/specs/`. A spec defines the template configs, the sweep
+grid, and runtime defaults:
+
+- `project`: logical experiment group name.
+- `output_root`: directory that will contain generated `exp_*` folders.
+- `base.build`, `base.train`, `base.runner`: template config files to clone.
+- `grid`: dot-path overrides expanded as a Cartesian product. Supported
+  prefixes are `build.`, `train.`, `runner.`, and `reuse.`.
+- `port_base`: each generated experiment uses `port_base + index`.
+- `train_cuda_visible_devices`: default GPUs for fine-tuning.
+- `vllm`: default vLLM runtime settings such as visible GPUs, tensor parallel
+  size, max model length, and served model name.
+- `reuse.data_dir` and `reuse.model_checkpoint`: optional default paths for
+  reusing existing data or checkpoints.
+
+Example:
+
+```bash
+python scripts/exps/expctl.py gen --spec exps/specs/example.json
+```
+
+`expctl.py` loads the three base configs, applies each grid combination, and
+writes one deterministic `exp_<hash>` directory per combination. The hash is
+computed from the project name and overrides, so the same spec usually produces
+the same experiment directory names.
+
+### 2. Inspect the generated directory
+
+Each generated experiment directory is self-contained:
 
 - `build_config.json`
 - `train_config.json`
@@ -182,19 +217,65 @@ Each generated experiment directory contains:
 - `manifest.json`
 - local `data/`, `model/`, `runner_output/`, `logs/`, `progress/`, `prompts/`, and `cache/` folders
 
-Run one generated experiment:
+`expctl.py` also patches paths so each experiment writes into its own directory:
+
+- build outputs go to `exp_*/data/train.jsonl`, `val.jsonl`, and `test.json`.
+- fine-tuning outputs checkpoints under `exp_*/model/`.
+- runner output, progress, prompts, and cache go under the same `exp_*` folder.
+- `runner_config.json` keeps a placeholder `api_base`; `run_one_exp.sh` patches
+  the actual port at runtime.
+- `manifest.json` records the overrides, port, reuse paths, generated paths,
+  and default runtime settings.
+
+### 3. Run one experiment
 
 ```bash
 MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
-Run all generated experiments under a root:
+Supported modes:
+
+- `MODE=data`: build data only, unless data is reused or already present.
+- `MODE=train`: build data, then fine-tune.
+- `MODE=full`: build data, fine-tune, start vLLM, then run evaluation.
+- `MODE=infer`: start vLLM and run evaluation only. This requires an existing
+  checkpoint.
+
+`run_one_exp.sh` reads `manifest.json` and runs the stages in order:
+
+1. `python data/build_data.py --config build_config.json`
+2. `python finetune/train.py --config train_config.json`
+3. `python -m vllm.entrypoints.openai.api_server ...`
+4. `python runner/run.py --config <temporary_runner_config>`
+
+The runner config is copied to a temporary file before execution so the script
+can patch `model.params.api_base` to the selected port. If `reuse.data_dir` is
+set, train/val/test paths are patched to that reused data. If
+`reuse.model_checkpoint` is set, training is skipped unless `FORCE_TRAIN=1`.
+
+Useful runtime overrides:
+
+```bash
+MODE=infer \
+MODEL_CKPT_OVERRIDE=models/some_run/checkpoint-100 \
+DATA_DIR_OVERRIDE=exps/some_project/exp_xxxxxxxxxx/data \
+PORT=35010 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+Common variables include `TRAIN_CUDA_VISIBLE_DEVICES`,
+`VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`, `MAX_MODEL_LEN`,
+`SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and `DEFAULT_GPU_MEM_UTIL`.
+
+### 4. Run all experiments under a root
 
 ```bash
 MODE=full bash scripts/exps/run_all_exps.sh exps/some_project
 ```
 
-`run_one_exp.sh` also supports `MODE=infer` when a checkpoint is already available.
+`run_all_exps.sh` finds every `exp_*` directory directly under the given root
+and invokes `run_one_exp.sh` sequentially with the same `MODE`.
 
 ## COLD Fixed-Split Conversion
 
