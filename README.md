@@ -70,6 +70,91 @@ Required local assets:
 - Standard dataset: `data/full/std/train.json` and `data/full/std/test.json`
 - Lexicon data: `data/lexicon/annotated_lexicon.json`
 
+### Recommended Conda Environment
+
+For a Linux server with 4x RTX 4090 GPUs and NVIDIA driver 580.x, use a fresh
+conda environment and install the PyTorch/vLLM stack through `uv pip`. Do not
+install PyTorch from conda in this environment; vLLM is sensitive to the exact
+PyTorch, CUDA, and NCCL binary combination.
+
+The driver may report CUDA 13.0 in `nvidia-smi`, but the recommended user-space
+stack here is CUDA 12.8 wheels, which are supported by the driver and are the
+default prebuilt vLLM target.
+
+Create the environment:
+
+```bash
+conda create -n hsd-cu128 python=3.12 -y
+conda activate hsd-cu128
+
+conda install -y -c conda-forge git git-lfs curl jq cmake ninja packaging
+python -m pip install -U pip uv setuptools wheel
+```
+
+Install vLLM and its matching PyTorch CUDA 12.8 dependencies:
+
+```bash
+uv pip install "vllm==0.11.1" --torch-backend=cu128
+```
+
+Install the project runtime dependencies:
+
+```bash
+uv pip install \
+  "transformers>=4.51,<5" \
+  "datasets>=2.19" \
+  "accelerate>=0.33" \
+  "sentence-transformers>=3" \
+  "modelscope>=1.18" \
+  swanlab \
+  pandas scikit-learn "numpy<3" tqdm loguru requests \
+  faiss-cpu \
+  matplotlib matplotlib-venn \
+  fastapi "pydantic>=2,<3" uvicorn
+```
+
+`finetune/train.py` loads the model with `attn_implementation="flash_attention_2"`,
+so install FlashAttention as well. If `nvcc` is not already available, install
+the CUDA 12.8 build components into the conda environment first:
+
+```bash
+conda install -y -c nvidia/label/cuda-12.8.1 \
+  cuda-nvcc cuda-libraries-dev cuda-nvtx cuda-cupti
+
+export CUDA_HOME="$CONDA_PREFIX"
+export PATH="$CUDA_HOME/bin:$PATH"
+export TORCH_CUDA_ARCH_LIST="8.9"
+export MAX_JOBS=8
+
+uv pip install --no-build-isolation "flash-attn==2.8.3"
+```
+
+Sanity check:
+
+```bash
+python - <<'PY'
+import torch, vllm, flash_attn, faiss
+print("torch", torch.__version__, "cuda", torch.version.cuda)
+print("gpu count", torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(i, torch.cuda.get_device_name(i))
+print("vllm ok")
+print("flash-attn ok")
+print("faiss ok")
+PY
+```
+
+Recommended runtime settings for this 4x RTX 4090 server:
+
+```bash
+MODE=full \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+MAX_MODEL_LEN=8192 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
 ### Run k=10 End to End
 
 In Bash:
