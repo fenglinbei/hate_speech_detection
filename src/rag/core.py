@@ -1,8 +1,11 @@
-﻿import os
+﻿from __future__ import annotations
+
+import os
 import math
 import pickle
 import hashlib
 import json
+import io
 from loguru import logger
 from typing import Optional, Dict, Any, List, Literal
 from tools.json_tools import load_json
@@ -15,6 +18,7 @@ from collections import Counter
 from prompt import *
 from rag.reranker import Reranker
 from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg, parsed_quad_to_trip
+from utils.sqlite_kv_cache import SQLiteKVCache
 
 TARGETED_GROUPS = ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"]
 DEFAULT_WEIGHTS = {
@@ -114,15 +118,21 @@ def _top_k_sorted_indices(scores: np.ndarray, k: int) -> np.ndarray:
     order = np.argsort(scores[candidate_indices])[::-1]
     return candidate_indices[order].astype(np.int32)
 
+
+def _l2_normalize_matrix(arr: np.ndarray) -> np.ndarray:
+    denom = np.linalg.norm(arr, axis=1, keepdims=True)
+    denom[denom == 0] = 1.0
+    return (arr / denom).astype(np.float32)
+
 class CacheManager:
     """Cache helper for selection, embedding, and retrieval results."""
 
-    def __init__(self, cache_dir: str = "./cache", enabled: bool = True):
+    def __init__(self, cache_dir: str = "./cache", enabled: bool = True, cache_backend: str = "sqlite"):
         self.cache_dir = cache_dir
         self.enabled = enabled
+        self.cache_backend = cache_backend
         os.makedirs(cache_dir, exist_ok=True)
-        for stage in ("selection", "embedding", "retrieval"):
-            os.makedirs(os.path.join(cache_dir, stage), exist_ok=True)
+        self.kv = SQLiteKVCache(os.path.join(cache_dir, "retrieval_cache.sqlite3"), enabled=enabled)
 
     # --------- helpers
     @staticmethod
@@ -154,19 +164,13 @@ class CacheManager:
     def make_key(self, payload: Dict[str, Any]) -> str:
         return self._md5(self._stable_dumps(payload))
 
-    def _path(self, stage: str, key: str, ext: str) -> str:
-        return os.path.join(self.cache_dir, stage, f"{key}.{ext}")
-
     # --------- selection (pickle)
     def get_selection(self, key: str):
         if not self.enabled:
             return None
-        p = self._path("selection", key, "pkl")
-        if not os.path.exists(p):
-            return None
         try:
-            with open(p, "rb") as f:
-                return pickle.load(f)
+            value = self.kv.get("selection", key)
+            return pickle.loads(value) if value is not None else None
         except Exception as e:
             logger.warning(f"Failed to load selection cache: {e}")
             return None
@@ -174,10 +178,8 @@ class CacheManager:
     def set_selection(self, key: str, value: Any):
         if not self.enabled:
             return
-        p = self._path("selection", key, "pkl")
         try:
-            with open(p, "wb") as f:
-                pickle.dump(value, f)
+            self.kv.set("selection", key, pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL))
         except Exception as e:
             logger.warning(f"Failed to save selection cache: {e}")
 
@@ -185,11 +187,12 @@ class CacheManager:
     def get_embedding(self, key: str):
         if not self.enabled:
             return None
-        p = self._path("embedding", key, "npy")
-        if not os.path.exists(p):
-            return None
         try:
-            return np.load(p, allow_pickle=False)
+            value = self.kv.get("embedding", key)
+            if value is None:
+                return None
+            with io.BytesIO(value) as bio:
+                return np.load(bio, allow_pickle=False)
         except Exception as e:
             logger.warning(f"Failed to load embedding cache: {e}")
             return None
@@ -197,9 +200,10 @@ class CacheManager:
     def set_embedding(self, key: str, arr: np.ndarray):
         if not self.enabled:
             return
-        p = self._path("embedding", key, "npy")
         try:
-            np.save(p, arr)
+            with io.BytesIO() as bio:
+                np.save(bio, arr, allow_pickle=False)
+                self.kv.set("embedding", key, bio.getvalue())
         except Exception as e:
             logger.warning(f"Failed to save embedding cache: {e}")
 
@@ -207,14 +211,15 @@ class CacheManager:
     def get_retrieval(self, key: str):
         if not self.enabled:
             return None
-        p = self._path("retrieval", key, "npz")
-        if not os.path.exists(p):
-            return None
         try:
-            z = np.load(p, allow_pickle=True)
-            indices = z["indices"]
-            sims = z["sims"]
-            meta = dict(z["meta"].item()) if "meta" in z.files else {}
+            value = self.kv.get("retrieval", key)
+            if value is None:
+                return None
+            with io.BytesIO(value) as bio:
+                z = np.load(bio, allow_pickle=True)
+                indices = z["indices"]
+                sims = z["sims"]
+                meta = dict(z["meta"].item()) if "meta" in z.files else {}
             return indices, sims, meta
         except Exception as e:
             logger.warning(f"Failed to load retrieval cache: {e}")
@@ -223,12 +228,13 @@ class CacheManager:
     def set_retrieval(self, key: str, indices: np.ndarray, sims: np.ndarray, meta: Optional[Dict[str, Any]] = None):
         if not self.enabled:
             return
-        p = self._path("retrieval", key, "npz")
         try:
-            if meta is None:
-                np.savez_compressed(p, indices=indices, sims=sims)
-            else:
-                np.savez_compressed(p, indices=indices, sims=sims, meta=np.array(meta, dtype=object))
+            with io.BytesIO() as bio:
+                if meta is None:
+                    np.savez_compressed(bio, indices=indices, sims=sims)
+                else:
+                    np.savez_compressed(bio, indices=indices, sims=sims, meta=np.array(meta, dtype=object))
+                self.kv.set("retrieval", key, bio.getvalue())
         except Exception as e:
             logger.warning(f"Failed to save retrieval cache: {e}")
 
@@ -244,6 +250,9 @@ class CacheManager:
             return
         key = self.make_key({"query": query, "params": params})
         self.set_selection(key, result)
+
+    def close(self) -> None:
+        self.kv.close()
 
 
 class Retriever:
@@ -308,12 +317,16 @@ class Retriever:
             cached = self.cache_manager.get_embedding(emb_key)
             if cached is not None:
                 self.corpus_embeddings_np = cached
+                if hasattr(self, "_corpus_embeddings_norm_np"):
+                    delattr(self, "_corpus_embeddings_norm_np")
                 return
 
         corpus_embeddings = self.model.encode(texts, convert_to_tensor=True, show_progress_bar=True)
         if hasattr(corpus_embeddings, 'is_cuda') and corpus_embeddings.is_cuda:
             corpus_embeddings = corpus_embeddings.cpu()
         self.corpus_embeddings_np = corpus_embeddings.numpy().astype(np.float32)
+        if hasattr(self, "_corpus_embeddings_norm_np"):
+            delattr(self, "_corpus_embeddings_norm_np")
 
         if self.cache_manager.enabled and emb_key is not None:
             self.cache_manager.set_embedding(emb_key, self.corpus_embeddings_np)
@@ -334,12 +347,149 @@ class Retriever:
             item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
             self.test2item[item['content']] = item
             self.text2idx.setdefault(item['content'], idx)
+
+    def _get_normalized_corpus_embeddings(self) -> np.ndarray:
+        if not hasattr(self, "_corpus_embeddings_norm_np"):
+            self._corpus_embeddings_norm_np = _l2_normalize_matrix(self.corpus_embeddings_np.astype(np.float32))
+        return self._corpus_embeddings_norm_np
+
+    def _encode_query_batch(
+            self,
+            queries: List[str],
+            use_cache: bool = True,
+            batch_size: int = 256,
+            cache_stage: str = "query_embedding",
+    ) -> np.ndarray:
+        vectors: list[np.ndarray | None] = [None] * len(queries)
+        missing_indices: list[int] = []
+        missing_texts: list[str] = []
+        missing_keys: list[str | None] = []
+
+        for i, query in enumerate(queries):
+            query_idx = getattr(self, "text2idx", {}).get(query)
+            if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+                vectors[i] = self.corpus_embeddings_np[int(query_idx)]
+                continue
+
+            q_key = None
+            if use_cache and self.cache_manager.enabled:
+                q_key = self.cache_manager.make_key({
+                    "stage": cache_stage,
+                    "model": self.model_name,
+                    "q_sha1": CacheManager.sha1_text(query),
+                })
+                cached = self.cache_manager.get_embedding(q_key)
+                if cached is not None:
+                    vectors[i] = cached.reshape(-1)
+                    continue
+
+            missing_indices.append(i)
+            missing_texts.append(query)
+            missing_keys.append(q_key)
+
+        if missing_texts:
+            query_embeddings = self.model.encode(
+                missing_texts,
+                batch_size=batch_size,
+                convert_to_tensor=True,
+                show_progress_bar=False,
+            )
+            if hasattr(query_embeddings, 'is_cuda') and query_embeddings.is_cuda:
+                query_embeddings = query_embeddings.cpu()
+            query_embeddings_np = query_embeddings.numpy().astype(np.float32)
+            if query_embeddings_np.ndim == 1:
+                query_embeddings_np = query_embeddings_np.reshape(1, -1)
+
+            for j, i in enumerate(missing_indices):
+                vec = query_embeddings_np[j].reshape(-1)
+                vectors[i] = vec
+                q_key = missing_keys[j]
+                if use_cache and self.cache_manager.enabled and q_key is not None:
+                    self.cache_manager.set_embedding(q_key, vec.reshape(1, -1))
+
+        return np.vstack([vec for vec in vectors if vec is not None]).astype(np.float32)
+
+    def _compute_similarity_topk_batch(
+            self,
+            query_embeddings_np: np.ndarray,
+            retrieval_k: int,
+            batch_size: int = 256,
+    ) -> list[tuple[np.ndarray, np.ndarray, float]]:
+        corpus = self._get_normalized_corpus_embeddings()
+        query_embeddings_np = _l2_normalize_matrix(query_embeddings_np.astype(np.float32))
+        results: list[tuple[np.ndarray, np.ndarray, float]] = []
+
+        for start in range(0, len(query_embeddings_np), batch_size):
+            q_batch = query_embeddings_np[start:start + batch_size]
+            similarities_batch = np.matmul(q_batch, corpus.T).astype(np.float32)
+            for similarities in similarities_batch:
+                min_sim = float(similarities.min()) if similarities.size else 0.0
+                sorted_indices = _top_k_sorted_indices(similarities, retrieval_k)
+                sorted_sims = similarities[sorted_indices].astype(np.float32)
+                results.append((sorted_indices, sorted_sims, min_sim))
+        return results
+
+    def _select_retrieved(
+            self,
+            query: str,
+            sorted_indices: np.ndarray,
+            sorted_sims: np.ndarray,
+            top_k: int,
+            candidate_k: int,
+            threshold: float,
+            deduplicate: bool,
+            rerank: bool = False,
+            resort: bool = False,
+    ) -> tuple[list[str], list[str]]:
+        unique_texts: List[str] = []
+        unique_outputs: List[Any] = []
+        seen_contents = set([query]) if deduplicate else set()
+
+        for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
+            if sim_score < threshold:
+                continue
+            content = self.texts[int(idx)]
+            if deduplicate and content in seen_contents:
+                continue
+            if deduplicate:
+                seen_contents.add(content)
+
+            unique_texts.append(content)
+            unique_outputs.append(self.test2item[content]['output'])
+
+            if len(unique_texts) >= candidate_k:
+                break
+
+        if rerank and self.reranker and len(unique_texts) > 0:
+            scores = self.reranker.rerank(query, unique_texts)
+            rr_idx = np.argsort(scores)[::-1][:top_k]
+            unique_texts = [unique_texts[i] for i in rr_idx]
+            unique_outputs = [unique_outputs[i] for i in rr_idx]
+        else:
+            unique_texts = unique_texts[:top_k]
+            unique_outputs = unique_outputs[:top_k]
+
+        if resort and len(unique_texts) > 1:
+            resorted_indices = [0] * len(unique_texts)
+            l = 0
+            r = len(unique_texts) - 1
+            for i in range(len(unique_texts)):
+                if i % 2 == 0:
+                    resorted_indices[l] = i
+                    l += 1
+                else:
+                    resorted_indices[r] = i
+                    r -= 1
+            unique_texts = [unique_texts[i] for i in resorted_indices]
+            unique_outputs = [unique_outputs[i] for i in resorted_indices]
+
+        return unique_texts, unique_outputs
     
     def retrieve(
-            self, 
-            query: str, 
-            top_k: int = 1, 
-            deduplicate: bool = True, 
+            self,
+            query: str,
+            top_k: int = 1,
+            deduplicate: bool = True,
             threshold: float = 0,
             rerank: bool = False,
             resort: bool = False,
@@ -484,6 +634,135 @@ class Retriever:
 
         return result
 
+    def retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            deduplicate: bool = True,
+            threshold: float = 0,
+            rerank: bool = False,
+            resort: bool = False,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            **kwargs
+            ) -> list[tuple[list[str], list[str]]]:
+        queries = list(queries)
+        if not queries:
+            return []
+
+        params = {
+            "top_k": top_k,
+            "deduplicate": deduplicate,
+            "threshold": threshold,
+            "rerank": rerank,
+            "resort": resort,
+            "model": self.model_name,
+            "corpus_sig": getattr(self, "corpus_sig", None),
+        }
+
+        results: list[tuple[list[str], list[str]] | None] = [None] * len(queries)
+        miss_indices: list[int] = []
+        if use_cache:
+            for i, query in enumerate(queries):
+                cached_result = self.cache_manager.get(query, params)
+                if cached_result is not None:
+                    results[i] = cached_result
+                else:
+                    miss_indices.append(i)
+        else:
+            miss_indices = list(range(len(queries)))
+
+        if top_k == 0:
+            for i in miss_indices:
+                results[i] = ([], [])
+            return [result if result is not None else ([], []) for result in results]
+
+        if not miss_indices:
+            return [result if result is not None else ([], []) for result in results]
+
+        if rerank and self.reranker:
+            candidate_k = top_k * 5
+            if candidate_k < 10:
+                candidate_k = 10
+            elif candidate_k > 100:
+                candidate_k = 100
+        else:
+            candidate_k = top_k
+
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
+
+        retrieval_k = min(int(max(2048, candidate_k * 10)), len(self.texts))
+        retrieval_data: dict[int, tuple[np.ndarray, np.ndarray, dict]] = {}
+        retrieval_miss_indices: list[int] = []
+
+        for i in miss_indices:
+            query = queries[i]
+            q_sha1 = CacheManager.sha1_text(query)
+            cached_retr = None
+            if use_cache and self.cache_manager.enabled:
+                r_key = self.cache_manager.make_key({
+                    "stage": "retrieval",
+                    "model": self.model_name,
+                    "corpus_sig": corpus_sig,
+                    "q_sha1": q_sha1,
+                    "k": retrieval_k,
+                })
+                cached_retr = self.cache_manager.get_retrieval(r_key)
+
+            if cached_retr is None:
+                retrieval_miss_indices.append(i)
+            else:
+                sorted_indices, sorted_sims, meta = cached_retr
+                retrieval_data[i] = (sorted_indices, sorted_sims, meta)
+
+        if retrieval_miss_indices:
+            retrieval_queries = [queries[i] for i in retrieval_miss_indices]
+            query_embeddings = self._encode_query_batch(
+                retrieval_queries,
+                use_cache=use_cache,
+                batch_size=batch_size,
+            )
+            computed = self._compute_similarity_topk_batch(
+                query_embeddings,
+                retrieval_k=retrieval_k,
+                batch_size=batch_size,
+            )
+            for i, (sorted_indices, sorted_sims, min_sim) in zip(retrieval_miss_indices, computed):
+                meta = {"min_sim": min_sim}
+                retrieval_data[i] = (sorted_indices, sorted_sims, meta)
+                if use_cache and self.cache_manager.enabled:
+                    q_sha1 = CacheManager.sha1_text(queries[i])
+                    r_key = self.cache_manager.make_key({
+                        "stage": "retrieval",
+                        "model": self.model_name,
+                        "corpus_sig": corpus_sig,
+                        "q_sha1": q_sha1,
+                        "k": retrieval_k,
+                    })
+                    self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta=meta)
+
+        for i in miss_indices:
+            sorted_indices, sorted_sims, _meta = retrieval_data[i]
+            result = self._select_retrieved(
+                query=queries[i],
+                sorted_indices=sorted_indices,
+                sorted_sims=sorted_sims,
+                top_k=top_k,
+                candidate_k=candidate_k,
+                threshold=threshold,
+                deduplicate=deduplicate,
+                rerank=rerank,
+                resort=resort,
+            )
+            results[i] = result
+            if use_cache:
+                self.cache_manager.set(queries[i], params, result)
+
+        return [result if result is not None else ([], []) for result in results]
+
 
 class LexiconRetriever:
 
@@ -548,13 +827,12 @@ class LexiconRetriever:
                                         replace("{definition}", data["definition"])
             self.texts.append(prompt)
             self.word2item[data["term"]] = prompt
-        
-    
+
     def similarity_retrieve(
-            self, 
-            query: str, 
-            top_k: int = 1, 
-            deduplicate: bool = True, 
+            self,
+            query: str,
+            top_k: int = 1,
+            deduplicate: bool = True,
             threshold: float = 0,
             use_cache: bool = True
             ) -> list[str]:
@@ -643,11 +921,170 @@ class LexiconRetriever:
             self.cache_manager.set(query, params, unique_texts)
 
         return unique_texts
+
+    def similarity_retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            deduplicate: bool = True,
+            threshold: float = 0,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            ) -> list[list[str]]:
+        queries = list(queries)
+        if not queries:
+            return []
+
+        params = {
+            "method": "similarity",
+            "top_k": top_k,
+            "deduplicate": deduplicate,
+            "threshold": threshold,
+            "model": self.model_name,
+            "corpus_sig": getattr(self, "corpus_sig", None),
+        }
+
+        results: list[list[str] | None] = [None] * len(queries)
+        miss_indices: list[int] = []
+        if use_cache:
+            for i, query in enumerate(queries):
+                cached_result = self.cache_manager.get(query, params)
+                if cached_result is not None:
+                    results[i] = cached_result
+                else:
+                    miss_indices.append(i)
+        else:
+            miss_indices = list(range(len(queries)))
+
+        if top_k == 0:
+            for i in miss_indices:
+                results[i] = []
+            return [result if result is not None else [] for result in results]
+
+        if not miss_indices:
+            return [result if result is not None else [] for result in results]
+
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
+
+        retrieval_k = min(int(max(1024, top_k * 20)), len(self.texts))
+        retrieval_data: dict[int, tuple[np.ndarray, np.ndarray]] = {}
+        retrieval_miss_indices: list[int] = []
+
+        for i in miss_indices:
+            query = queries[i]
+            q_sha1 = CacheManager.sha1_text(query)
+            cached_retr = None
+            if use_cache and self.cache_manager.enabled:
+                r_key = self.cache_manager.make_key({
+                    "stage": "lex_retrieval",
+                    "model": self.model_name,
+                    "corpus_sig": corpus_sig,
+                    "q_sha1": q_sha1,
+                    "k": retrieval_k,
+                })
+                cached_retr = self.cache_manager.get_retrieval(r_key)
+            if cached_retr is None:
+                retrieval_miss_indices.append(i)
+            else:
+                sorted_indices, sorted_sims, _meta = cached_retr
+                retrieval_data[i] = (sorted_indices, sorted_sims)
+
+        if retrieval_miss_indices:
+            query_embeddings = []
+            missing_encode_indices = []
+            missing_texts = []
+            missing_keys = []
+            for i in retrieval_miss_indices:
+                query = queries[i]
+                q_key = None
+                cached = None
+                if use_cache and self.cache_manager.enabled:
+                    q_key = self.cache_manager.make_key({
+                        "stage": "lex_query_embedding",
+                        "model": self.model_name,
+                        "q_sha1": CacheManager.sha1_text(query),
+                    })
+                    cached = self.cache_manager.get_embedding(q_key)
+                if cached is not None:
+                    query_embeddings.append(cached.reshape(-1))
+                else:
+                    query_embeddings.append(None)
+                    missing_encode_indices.append(len(query_embeddings) - 1)
+                    missing_texts.append(query)
+                    missing_keys.append(q_key)
+
+            if missing_texts:
+                encoded = self.model.encode(
+                    missing_texts,
+                    batch_size=batch_size,
+                    convert_to_tensor=True,
+                    show_progress_bar=False,
+                )
+                if hasattr(encoded, 'is_cuda') and encoded.is_cuda:
+                    encoded = encoded.cpu()
+                encoded_np = encoded.numpy().astype(np.float32)
+                if encoded_np.ndim == 1:
+                    encoded_np = encoded_np.reshape(1, -1)
+                for j, local_idx in enumerate(missing_encode_indices):
+                    vec = encoded_np[j].reshape(-1)
+                    query_embeddings[local_idx] = vec
+                    q_key = missing_keys[j]
+                    if use_cache and self.cache_manager.enabled and q_key is not None:
+                        self.cache_manager.set_embedding(q_key, vec.reshape(1, -1))
+
+            q_mat = np.vstack([vec for vec in query_embeddings if vec is not None]).astype(np.float32)
+            corpus = _l2_normalize_matrix(self.corpus_embeddings_np.astype(np.float32))
+            q_mat = _l2_normalize_matrix(q_mat)
+            computed = []
+            for start in range(0, len(q_mat), batch_size):
+                similarities_batch = np.matmul(q_mat[start:start + batch_size], corpus.T).astype(np.float32)
+                for similarities in similarities_batch:
+                    sorted_indices = _top_k_sorted_indices(similarities, retrieval_k)
+                    sorted_sims = similarities[sorted_indices].astype(np.float32)
+                    computed.append((sorted_indices, sorted_sims))
+
+            for i, (sorted_indices, sorted_sims) in zip(retrieval_miss_indices, computed):
+                retrieval_data[i] = (sorted_indices, sorted_sims)
+                if use_cache and self.cache_manager.enabled:
+                    q_sha1 = CacheManager.sha1_text(queries[i])
+                    r_key = self.cache_manager.make_key({
+                        "stage": "lex_retrieval",
+                        "model": self.model_name,
+                        "corpus_sig": corpus_sig,
+                        "q_sha1": q_sha1,
+                        "k": retrieval_k,
+                    })
+                    self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims)
+
+        for i in miss_indices:
+            sorted_indices, sorted_sims = retrieval_data[i]
+            unique_texts = []
+            seen_contents = set([queries[i]]) if deduplicate else set()
+            for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
+                if sim_score < threshold:
+                    continue
+                content = self.texts[int(idx)]
+                if deduplicate and content in seen_contents:
+                    continue
+                if deduplicate:
+                    seen_contents.add(content)
+                unique_texts.append(content)
+                if len(unique_texts) >= top_k:
+                    break
+
+            results[i] = unique_texts
+            if use_cache:
+                self.cache_manager.set(queries[i], params, unique_texts)
+
+        return [result if result is not None else [] for result in results]
     
     def including_retrieve(
-            self, 
-            query: str, 
-            top_k: int = -1, 
+            self,
+            query: str,
+            top_k: int = -1,
             deduplicate: bool = True,
             use_cache: bool = True
             ) -> list[str]:
@@ -678,8 +1115,25 @@ class LexiconRetriever:
         
         if use_cache:
             self.cache_manager.set(query, params, final_result)
-            
+
         return final_result
+
+    def including_retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = -1,
+            deduplicate: bool = True,
+            use_cache: bool = True,
+            ) -> list[list[str]]:
+        return [
+            self.including_retrieve(
+                query=query,
+                top_k=top_k,
+                deduplicate=deduplicate,
+                use_cache=use_cache,
+            )
+            for query in queries
+        ]
     
 
 class StepOneRetriever:
@@ -929,11 +1383,124 @@ class MultiClassRetriever:
             all_outputs.extend(outputs)
 
         result = (all_texts, all_outputs)
-        
+
         if use_cache:
             self.cache_manager.set(query, params, result)
-            
+
         return result
+
+    def retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            deduplicate: bool = True,
+            threshold: float = 0,
+            weights: Optional[dict[str, float]] = None,
+            weights_reverse: bool = False,
+            similarity_alpha: float = 1.0,
+            random_strategy: Literal["none", "sample", "hybrid"] = "none",
+            random_ratio: float = 0.3,
+            temperature: float = 1.0,
+            candidate_multiplier: float = 3.0,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            **kwargs
+            ) -> list[tuple[list[str], list[str]]]:
+        queries = list(queries)
+        if not queries:
+            return []
+
+        params = {
+            "top_k": top_k,
+            "deduplicate": deduplicate,
+            "threshold": threshold,
+            "weights": weights,
+            "weights_reverse": weights_reverse,
+            "target_groups": self.target_groups,
+            "similarity_alpha": similarity_alpha,
+            "random_strategy": random_strategy,
+            "random_ratio": random_ratio,
+            "temperature": temperature,
+            "candidate_multiplier": candidate_multiplier
+        }
+
+        try:
+            parts = []
+            for _cls, _ret in getattr(self, 'retrievers', {}).items():
+                _sig = getattr(_ret, 'corpus_sig', None)
+                if _sig is not None:
+                    parts.append(f'{_cls}:{_sig}')
+            composite_sig = CacheManager.sha1_text('|'.join(sorted(parts))) if parts else None
+        except Exception:
+            composite_sig = None
+
+        params.update({
+            'model': getattr(self, 'model_name', None),
+            'corpus_sig': composite_sig,
+        })
+
+        results: list[tuple[list[str], list[str]] | None] = [None] * len(queries)
+        miss_indices: list[int] = []
+        if use_cache:
+            for i, query in enumerate(queries):
+                cached_result = self.cache_manager.get(query, params)
+                if cached_result is not None:
+                    results[i] = cached_result
+                else:
+                    miss_indices.append(i)
+        else:
+            miss_indices = list(range(len(queries)))
+
+        if top_k == 0:
+            for i in miss_indices:
+                results[i] = ([], [])
+            return [result if result is not None else ([], []) for result in results]
+
+        if not miss_indices:
+            return [result if result is not None else ([], []) for result in results]
+
+        if weights is None:
+            weights = self.default_weights
+        else:
+            weights = normalize_weights(weights, self.target_groups)
+
+        allocated_class_top_k = allocate_class_num(top_k, weights, weights_reverse)
+        miss_queries = [queries[i] for i in miss_indices]
+        aggregate_texts: list[list[str]] = [[] for _ in miss_indices]
+        aggregate_outputs: list[list[str]] = [[] for _ in miss_indices]
+
+        for class_name in self.target_groups:
+            if class_name not in self.retrievers:
+                continue
+            class_top_k = allocated_class_top_k.get(class_name, 0)
+            if class_top_k == 0:
+                continue
+
+            child_results = self.retrievers[class_name].retrieve_batch(
+                queries=miss_queries,
+                top_k=class_top_k,
+                deduplicate=deduplicate,
+                threshold=threshold,
+                use_cache=False,
+                similarity_alpha=similarity_alpha,
+                random_strategy=random_strategy,
+                random_ratio=random_ratio,
+                temperature=temperature,
+                candidate_multiplier=candidate_multiplier,
+                batch_size=batch_size,
+            )
+
+            for local_idx, (texts, outputs) in enumerate(child_results):
+                aggregate_texts[local_idx].extend(texts)
+                aggregate_outputs[local_idx].extend(outputs)
+
+        for local_idx, original_idx in enumerate(miss_indices):
+            result = (aggregate_texts[local_idx], aggregate_outputs[local_idx])
+            results[original_idx] = result
+            if use_cache:
+                self.cache_manager.set(queries[original_idx], params, result)
+
+        return [result if result is not None else ([], []) for result in results]
 
 class WrongExpRetriever:
 
@@ -1290,7 +1857,89 @@ class ClusteredRetriever:
             self.cache_manager.set(query, params, result)
 
         return result
-    
+
+    def retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            deduplicate: bool = True,
+            threshold: float = 0,
+            weights: Optional[Dict[int, float]] = None,
+            weights_reverse: bool = False,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            **kwargs
+    ) -> list[tuple[list[str], list[str]]]:
+        queries = list(queries)
+        if not queries:
+            return []
+
+        params = {
+            "top_k": top_k,
+            "deduplicate": deduplicate,
+            "threshold": threshold,
+            "weights": weights,
+            "weights_reverse": weights_reverse,
+            "n_clusters": self.n_clusters
+        }
+
+        results: list[tuple[list[str], list[str]] | None] = [None] * len(queries)
+        miss_indices: list[int] = []
+        if use_cache:
+            for i, query in enumerate(queries):
+                cached_result = self.cache_manager.get(query, params)
+                if cached_result is not None:
+                    results[i] = cached_result
+                else:
+                    miss_indices.append(i)
+        else:
+            miss_indices = list(range(len(queries)))
+
+        if top_k == 0:
+            for i in miss_indices:
+                results[i] = ([], [])
+            return [result if result is not None else ([], []) for result in results]
+
+        if not miss_indices:
+            return [result if result is not None else ([], []) for result in results]
+
+        if weights is None:
+            weights = self._default_cluster_weights()
+
+        allocated_cluster_top_k = allocate_class_num(top_k, weights, reverse=weights_reverse)
+        miss_queries = [queries[i] for i in miss_indices]
+        aggregate_texts: list[list[str]] = [[] for _ in miss_indices]
+        aggregate_outputs: list[list[str]] = [[] for _ in miss_indices]
+
+        for c in self.cluster_ids:
+            if c not in self.cluster_retrievers:
+                continue
+
+            cluster_top_k = allocated_cluster_top_k.get(c, 0)
+            if cluster_top_k <= 0:
+                continue
+
+            child_results = self.cluster_retrievers[c].retrieve_batch(
+                queries=miss_queries,
+                top_k=cluster_top_k,
+                deduplicate=deduplicate,
+                threshold=threshold,
+                use_cache=False,
+                batch_size=batch_size,
+                **kwargs
+            )
+            for local_idx, (texts, outputs) in enumerate(child_results):
+                aggregate_texts[local_idx].extend(texts)
+                aggregate_outputs[local_idx].extend(outputs)
+
+        for local_idx, original_idx in enumerate(miss_indices):
+            result = (aggregate_texts[local_idx], aggregate_outputs[local_idx])
+            results[original_idx] = result
+            if use_cache:
+                self.cache_manager.set(queries[original_idx], params, result)
+
+        return [result if result is not None else ([], []) for result in results]
+
 class StochasticWeightedRetriever(Retriever):
     """Retriever with stochastic similarity-based selection."""
 
@@ -1602,6 +2251,199 @@ class StochasticWeightedRetriever(Retriever):
         if use_cache:
             self.cache_manager.set(query, params, result)
         return result
+
+    def retrieve_batch(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            deduplicate: bool = True,
+            threshold: float = 0,
+            rerank: bool = False,
+            resort: bool = False,
+            use_cache: bool = True,
+            similarity_alpha: float = 1.0,
+            random_strategy: Literal["none", "sample", "hybrid"] = "none",
+            random_ratio: float = 0.3,
+            temperature: float = 1.0,
+            candidate_multiplier: float = 3.0,
+            batch_size: int = 256,
+            **kwargs
+    ) -> list[tuple[list[str], list[str]]]:
+        queries = list(queries)
+        if not queries:
+            return []
+
+        params = {
+            "top_k": top_k,
+            "deduplicate": deduplicate,
+            "threshold": threshold,
+            "rerank": rerank,
+            "resort": resort,
+            "similarity_alpha": similarity_alpha,
+            "random_strategy": random_strategy,
+            "random_ratio": random_ratio,
+            "temperature": temperature,
+            "candidate_multiplier": candidate_multiplier,
+            "model": getattr(self, "model_name", None),
+            "corpus_sig": getattr(self, "corpus_sig", None),
+        }
+
+        results: list[tuple[list[str], list[str]] | None] = [None] * len(queries)
+        miss_indices: list[int] = []
+        if use_cache:
+            for i, query in enumerate(queries):
+                cached_result = self.cache_manager.get(query, params)
+                if cached_result is not None:
+                    results[i] = cached_result
+                else:
+                    miss_indices.append(i)
+        else:
+            miss_indices = list(range(len(queries)))
+
+        if top_k == 0:
+            for i in miss_indices:
+                results[i] = ([], [])
+            return [result if result is not None else ([], []) for result in results]
+
+        if not miss_indices:
+            return [result if result is not None else ([], []) for result in results]
+
+        if rerank and self.reranker:
+            base_candidate_k = max(10, min(100, top_k * 5))
+        else:
+            base_candidate_k = top_k
+
+        candidate_k = int(max(base_candidate_k, top_k * candidate_multiplier))
+        candidate_k = min(candidate_k, len(self.texts))
+
+        corpus_sig = getattr(self, "corpus_sig", None)
+        if corpus_sig is None:
+            corpus_sig = CacheManager.texts_signature(getattr(self, "texts", []))
+            self.corpus_sig = corpus_sig
+
+        retrieval_k = int(max(2048, candidate_k * 10))
+        retrieval_k = min(retrieval_k, len(self.texts))
+        retrieval_data: dict[int, tuple[np.ndarray, np.ndarray, dict]] = {}
+        retrieval_miss_indices: list[int] = []
+
+        for i in miss_indices:
+            query = queries[i]
+            cached_retr = None
+            if use_cache and self.cache_manager.enabled:
+                q_sha1 = CacheManager.sha1_text(query)
+                r_key = self.cache_manager.make_key({
+                    "stage": "retrieval",
+                    "model": self.model_name,
+                    "corpus_sig": corpus_sig,
+                    "q_sha1": q_sha1,
+                    "k": retrieval_k,
+                })
+                cached_retr = self.cache_manager.get_retrieval(r_key)
+            if cached_retr is None:
+                retrieval_miss_indices.append(i)
+            else:
+                sorted_indices, sorted_sims, meta = cached_retr
+                retrieval_data[i] = (sorted_indices, sorted_sims, meta)
+
+        if retrieval_miss_indices:
+            retrieval_queries = [queries[i] for i in retrieval_miss_indices]
+            query_embeddings = self._encode_query_batch(
+                retrieval_queries,
+                use_cache=use_cache,
+                batch_size=batch_size,
+            )
+            computed = self._compute_similarity_topk_batch(
+                query_embeddings,
+                retrieval_k=retrieval_k,
+                batch_size=batch_size,
+            )
+            for i, (sorted_indices, sorted_sims, min_sim) in zip(retrieval_miss_indices, computed):
+                meta = {"min_sim": min_sim}
+                retrieval_data[i] = (sorted_indices, sorted_sims, meta)
+                if use_cache and self.cache_manager.enabled:
+                    q_sha1 = CacheManager.sha1_text(queries[i])
+                    r_key = self.cache_manager.make_key({
+                        "stage": "retrieval",
+                        "model": self.model_name,
+                        "corpus_sig": corpus_sig,
+                        "q_sha1": q_sha1,
+                        "k": retrieval_k,
+                    })
+                    self.cache_manager.set_retrieval(r_key, sorted_indices, sorted_sims, meta=meta)
+
+        for i in miss_indices:
+            sorted_indices, sorted_sims, meta = retrieval_data[i]
+            min_sim = float(meta.get("min_sim", float(min(sorted_sims.tolist())) if len(sorted_sims) else 0.0))
+            unique_texts: List[str] = []
+            unique_outputs: List[Any] = []
+            scores_after_transform: List[float] = []
+            seen_contents = set([queries[i]]) if deduplicate else set()
+
+            for idx, sim_score in zip(sorted_indices.tolist(), sorted_sims.tolist()):
+                if sim_score < threshold:
+                    continue
+
+                content = self.texts[int(idx)]
+                if deduplicate and content in seen_contents:
+                    continue
+
+                if deduplicate:
+                    seen_contents.add(content)
+
+                unique_texts.append(content)
+                unique_outputs.append(self.test2item[content]['output'])
+
+                val = sim_score - min_sim
+                if val < 0:
+                    val = 0.0
+                scores_after_transform.append(float(val ** similarity_alpha))
+
+                if len(unique_texts) >= candidate_k:
+                    break
+
+            if len(unique_texts) == 0:
+                result = ([], [])
+                results[i] = result
+                if use_cache:
+                    self.cache_manager.set(queries[i], params, result)
+                continue
+
+            if rerank and self.reranker:
+                scores = np.array(self.reranker.rerank(queries[i], unique_texts), dtype=np.float64)
+            else:
+                scores = np.array(scores_after_transform, dtype=np.float64)
+
+            local_indices = self._sample_indices(
+                scores=scores,
+                candidate_indices=np.arange(len(unique_texts)),
+                top_k=top_k,
+                random_strategy=random_strategy,
+                random_ratio=random_ratio,
+                temperature=temperature,
+            )
+
+            unique_texts = [unique_texts[j] for j in local_indices]
+            unique_outputs = [unique_outputs[j] for j in local_indices]
+
+            if resort and len(unique_texts) > 1:
+                resorted_indices = [0] * len(unique_texts)
+                l, r = 0, len(unique_texts) - 1
+                for j in range(len(unique_texts)):
+                    if j % 2 == 0:
+                        resorted_indices[l] = j
+                        l += 1
+                    else:
+                        resorted_indices[r] = j
+                        r -= 1
+                unique_texts = [unique_texts[j] for j in resorted_indices]
+                unique_outputs = [unique_outputs[j] for j in resorted_indices]
+
+            result = (unique_texts, unique_outputs)
+            results[i] = result
+            if use_cache:
+                self.cache_manager.set(queries[i], params, result)
+
+        return [result if result is not None else ([], []) for result in results]
 
 
 
