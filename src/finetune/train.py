@@ -59,6 +59,7 @@ def build_device_map(config):
     return config.get("device_map", "auto")
 
 
+
 def to_str(x):
     if x is None:
         return ""

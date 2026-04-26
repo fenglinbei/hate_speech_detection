@@ -12,7 +12,7 @@ from transformers import AutoTokenizer
 
 from prompt import *
 from utils.log import init_logger
-logger = init_logger(level="DEBUG", show_console=True)
+logger = init_logger(level="INFO", show_console=True)
 from data.config import Config
 from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
 from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS, main_build_index
@@ -452,14 +452,14 @@ def build_prompt(
         while config.auto_length and tokenizer is not None and cur_len > config.max_length:
             if use_global_demos:
                 new_k = max(0, int(global_k or 0) - i)
-                print(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
+                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
                 examples = global_examples[:new_k]
                 prompt = render_prompt(raw_data, examples, lex_contents)
                 global_k = new_k
                 if new_k <= 0:
                     break
             else:
-                print(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
+                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
                 new_k = max(0, min(len(original_examples), int(config.srag_top_k) - i))
                 examples = original_examples[:new_k]
                 prompt = render_prompt(raw_data, examples, lex_contents)
