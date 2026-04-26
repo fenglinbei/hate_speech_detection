@@ -380,18 +380,6 @@ TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
-Example full run after selecting a profile:
-
-```bash
-MODE=full \
-TRAIN_BACKEND=deepspeed \
-TRAIN_PROFILE=ds_zero2_safe \
-TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
-VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
-TENSOR_PARALLEL_SIZE=4 \
-bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
-```
-
 Training writes reproducibility artifacts under `exp_*/logs/`:
 `train_runtime_config.json`, `ds_config_<profile>.json` for DeepSpeed profiles,
 `train.<backend>.<profile>.log`, and the compatibility alias `train.log`.

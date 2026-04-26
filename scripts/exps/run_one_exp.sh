@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Usage:
-#   MODE=full bash scripts/run_one_exp.sh /abs/or/rel/path/to/exp_dir
+#   MODE=full bash scripts/exps/run_one_exp.sh /abs/or/rel/path/to/exp_dir
 #
 # Modes:
 #   data  : build_data only (unless reuse data)
@@ -13,11 +13,10 @@ MODE="${MODE:-full}"
 
 EXP_DIR="${1:-${EXP_DIR:-}}"
 if [[ -z "$EXP_DIR" ]]; then
-  echo "[ERROR] Missing EXP_DIR. Usage: bash scripts/run_one_exp.sh <exp_dir>" >&2
+  echo "[ERROR] Missing EXP_DIR. Usage: bash scripts/exps/run_one_exp.sh <exp_dir>" >&2
   exit 1
 fi
 EXP_DIR="$(python -c 'import os,sys; print(os.path.abspath(sys.argv[1]))' "$EXP_DIR")"
-
 
 MANIFEST="${EXP_DIR}/manifest.json"
 BUILD_CFG="${EXP_DIR}/build_config.json"
@@ -78,7 +77,7 @@ compute_vllm_gpu_mem_util() {
     pairs+=("${total}:${free}:${gid}")
   done
   python - "$headroom_mb" "$margin" "$umin" "$umax" "${pairs[@]}" <<'PY'
-import sys, statistics
+import sys
 headroom=float(sys.argv[1]); margin=float(sys.argv[2]); umin=float(sys.argv[3]); umax=float(sys.argv[4])
 pairs=sys.argv[5:]
 utils=[]
@@ -96,10 +95,9 @@ print(f"{u:.3f}")
 PY
 }
 
-# Read manifest runtime defaults
 read_manifest_field() {
   local key="$1"
-  python -c '
+  PYTHONPATH=src python -c '
 import json,sys
 manifest_path=sys.argv[1]
 key=sys.argv[2]
@@ -114,7 +112,6 @@ for p in key.split("."):
 print("" if cur is None else cur)
 ' "$MANIFEST" "$key"
 }
-
 
 PORT="${PORT:-$(read_manifest_field port)}"
 TRAIN_CUDA_VISIBLE_DEVICES="${TRAIN_CUDA_VISIBLE_DEVICES:-$(read_manifest_field runtime_defaults.train_cuda_visible_devices)}"
@@ -148,30 +145,24 @@ TRAIN_DS_CFG="${LOG_DIR}/ds_config_${TRAIN_PROFILE}.json"
 VLLM_LOG="${LOG_DIR}/vllm_port${PORT}.log"
 RUN_LOG="${LOG_DIR}/runner.log"
 
-# Overrides for reusing existing data/model (runtime)
 DATA_DIR_OVERRIDE="${DATA_DIR_OVERRIDE:-}"
 MODEL_CKPT_OVERRIDE="${MODEL_CKPT_OVERRIDE:-}"
-FORCE_TRAIN="${FORCE_TRAIN:-0}"  # 若 MODEL_CKPT_OVERRIDE 存在但你仍想训练，设 FORCE_TRAIN=1
+FORCE_TRAIN="${FORCE_TRAIN:-0}"
 
-# Manifest reuse
 MANIFEST_REUSE_DATA="$(read_manifest_field reuse.data_dir)"
 MANIFEST_REUSE_MODEL="$(read_manifest_field reuse.model_checkpoint)"
 
-# Resolve reuse choices (runtime override > manifest)
 REUSE_DATA_DIR="${DATA_DIR_OVERRIDE:-$MANIFEST_REUSE_DATA}"
 REUSE_MODEL_CKPT="${MODEL_CKPT_OVERRIDE:-$MANIFEST_REUSE_MODEL}"
 
-# Some convenient derived paths
 EXP_DATA_DIR="$(read_manifest_field paths.data_dir)"
 EXP_MODEL_DIR="$(read_manifest_field paths.model_dir)"
-RUNNER_OUT_DIR="$(read_manifest_field paths.runner_output_dir)"
 
-# helper: patch JSON via python (avoid jq)
 json_patch() {
   local src="$1"
   local dst="$2"
   shift 2
-  python - "$src" "$dst" "$@" <<'PY'
+  PYTHONPATH=src python - "$src" "$dst" "$@" <<'PY'
 import json,sys,os
 src=sys.argv[1]; dst=sys.argv[2]
 pairs=sys.argv[3:]
@@ -188,14 +179,13 @@ def set_path(o, path, val):
 
 it=iter(pairs)
 for k,v in zip(it,it):
-    # simple type inference
     if v.lower()=="true": vv=True
     elif v.lower()=="false": vv=False
     else:
         try:
             if "." in v: vv=float(v)
             else: vv=int(v)
-        except:
+        except Exception:
             vv=v
     set_path(obj,k,vv)
 
@@ -206,11 +196,10 @@ PY
 
 write_train_runtime_config() {
   local src="$1" dst="$2" runtime_cfg="$3" ds_cfg="$4"
-  python - "$src" "$dst" "$runtime_cfg" "$ds_cfg" \
+  PYTHONPATH=src python - "$src" "$dst" "$runtime_cfg" "$ds_cfg" \
     "$TRAIN_BACKEND" "$TRAIN_PROFILE" "$TRAIN_NPROC_PER_NODE" "$TRAIN_MASTER_PORT" \
     "$TRAIN_CUDA_VISIBLE_DEVICES" "$TRAIN_MAX_STEPS" <<'PY'
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -238,23 +227,25 @@ def apply_common(micro_batch: int, grad_accum: int) -> None:
     training.setdefault("bf16", True)
 
 def deepspeed_config(stage: int, offload: bool = False) -> dict:
+    # Keep bucket values concrete. Some accelerate/deepspeed versions cannot
+    # fill these fields when they are set to "auto".
     zero = {
         "stage": stage,
         "overlap_comm": True,
         "contiguous_gradients": True,
-        "reduce_bucket_size": "auto",
+        "reduce_bucket_size": 200_000_000,
     }
     if stage == 2:
         zero.update({
             "allgather_partitions": True,
-            "allgather_bucket_size": "auto",
+            "allgather_bucket_size": 200_000_000,
             "reduce_scatter": True,
             "round_robin_gradients": True,
         })
     else:
         zero.update({
-            "stage3_prefetch_bucket_size": "auto",
-            "stage3_param_persistence_threshold": "auto",
+            "stage3_prefetch_bucket_size": 20_000_000,
+            "stage3_param_persistence_threshold": 100_000,
             "stage3_max_live_parameters": 1_000_000_000,
             "stage3_max_reuse_distance": 1_000_000_000,
             "stage3_gather_16bit_weights_on_model_save": True,
@@ -356,7 +347,6 @@ checkpoint_has_hf_weights() {
     || -f "${ckpt}/model.safetensors.index.json" ]]
 }
 
-# vLLM lifecycle
 VLLM_PID=""
 cleanup() {
   if [[ -n "${VLLM_PID}" ]]; then
@@ -389,7 +379,6 @@ echo "[INFO] VLLM_CUDA_VISIBLE_DEVICES=$VLLM_CUDA_VISIBLE_DEVICES"
 echo "[INFO] REUSE_DATA_DIR=${REUSE_DATA_DIR:-<none>}"
 echo "[INFO] REUSE_MODEL_CKPT=${REUSE_MODEL_CKPT:-<none>}"
 
-# ===== Stage selection =====
 case "$MODE" in
   data)  DO_BUILD=1; DO_TRAIN=0; DO_INFER=0 ;;
   train) DO_BUILD=1; DO_TRAIN=1; DO_INFER=0 ;;
@@ -398,22 +387,17 @@ case "$MODE" in
   *) echo "[ERROR] unknown MODE=$MODE (data/train/full/infer)"; exit 1 ;;
 esac
 
-# ===== 1) build_data =====
 if [[ "$DO_BUILD" == "1" ]]; then
   if [[ -n "${REUSE_DATA_DIR}" ]]; then
     echo "[SKIP] build_data because REUSE_DATA_DIR is set: $REUSE_DATA_DIR"
+  elif [[ -f "${EXP_DATA_DIR}/train.jsonl" && -f "${EXP_DATA_DIR}/val.jsonl" && -f "${EXP_DATA_DIR}/test.json" ]]; then
+    echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
   else
-    # 如果已有产物则可跳过
-    if [[ -f "${EXP_DATA_DIR}/train.jsonl" && -f "${EXP_DATA_DIR}/val.jsonl" && -f "${EXP_DATA_DIR}/test.json" ]]; then
-      echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
-    else
-      echo "[STEP] build_data"
-      python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
-    fi
+    echo "[STEP] build_data"
+    PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
   fi
 fi
 
-# ===== 2) train =====
 CKPT_DIR=""
 if [[ "$DO_TRAIN" == "1" ]]; then
   if [[ -n "${REUSE_MODEL_CKPT}" && "$FORCE_TRAIN" != "1" ]]; then
@@ -423,7 +407,6 @@ if [[ "$DO_TRAIN" == "1" ]]; then
     TMP_BASE_TRAIN_CFG="$(mktemp)"
     TMP_TRAIN_CFG="$(mktemp)"
     if [[ -n "${REUSE_DATA_DIR}" ]]; then
-      # patch train/val paths to reuse data
       json_patch "$TRAIN_CFG" "$TMP_BASE_TRAIN_CFG" \
         data.train_data_path "${REUSE_DATA_DIR}/train.jsonl" \
         data.val_data_path "${REUSE_DATA_DIR}/val.jsonl"
@@ -440,7 +423,7 @@ if [[ "$DO_TRAIN" == "1" ]]; then
       CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
         TRAIN_BACKEND="$TRAIN_BACKEND" \
         TRAIN_PROFILE="$TRAIN_PROFILE" \
-        python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
+        PYTHONPATH=src python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
     else
       if [[ "${TRAIN_NPROC_PER_NODE}" -lt 1 ]]; then
         echo "[ERROR] TRAIN_NPROC_PER_NODE must be >= 1 (got ${TRAIN_NPROC_PER_NODE})" >&2
@@ -449,7 +432,7 @@ if [[ "$DO_TRAIN" == "1" ]]; then
       CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
         TRAIN_BACKEND="$TRAIN_BACKEND" \
         TRAIN_PROFILE="$TRAIN_PROFILE" \
-        python -m torch.distributed.run \
+        PYTHONPATH=src python -m torch.distributed.run \
           --nproc_per_node "$TRAIN_NPROC_PER_NODE" \
           --master_port "$TRAIN_MASTER_PORT" \
           src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
@@ -458,7 +441,6 @@ if [[ "$DO_TRAIN" == "1" ]]; then
   fi
 fi
 
-# Decide checkpoint for inference
 if [[ "$DO_INFER" == "1" ]]; then
   if [[ -n "${REUSE_MODEL_CKPT}" && "$FORCE_TRAIN" != "1" ]]; then
     CKPT_DIR="$REUSE_MODEL_CKPT"
@@ -477,7 +459,6 @@ if [[ "$DO_INFER" == "1" ]]; then
   fi
 fi
 
-# ===== 3) vLLM + runner =====
 if [[ "$DO_INFER" == "1" ]]; then
   echo "[STEP] start vLLM"
   GPU_MEM_UTIL="$DEFAULT_GPU_MEM_UTIL"
@@ -514,7 +495,6 @@ if [[ "$DO_INFER" == "1" ]]; then
 
   echo "[STEP] runner"
   TMP_RUN_CFG="$(mktemp)"
-  # patch api_base + (optional) reuse test_data_file
   if [[ -n "${REUSE_DATA_DIR}" ]]; then
     json_patch "$RUNNER_CFG" "$TMP_RUN_CFG" \
       model.params.api_base "http://127.0.0.1:${PORT}/v1/" \
@@ -524,7 +504,7 @@ if [[ "$DO_INFER" == "1" ]]; then
       model.params.api_base "http://127.0.0.1:${PORT}/v1/"
   fi
 
-  python runner/run.py --config "$TMP_RUN_CFG" 2>&1 | tee "$RUN_LOG"
+  PYTHONPATH=src python src/runner/run.py --config "$TMP_RUN_CFG" 2>&1 | tee "$RUN_LOG"
   rm -f "$TMP_RUN_CFG"
 
   echo "[STEP] stop vLLM"

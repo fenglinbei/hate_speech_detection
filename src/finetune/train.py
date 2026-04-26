@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import random
@@ -20,7 +21,6 @@ from prompt import *
 from utils.log import init_logger
 
 logger = init_logger(level="INFO", show_console=True)
-
 
 HF_WEIGHT_FILES = (
     "pytorch_model.bin",
@@ -58,10 +58,6 @@ def get_train_backend() -> str:
 def build_device_map(config):
     return config.get("device_map", "auto")
 
-
-def prompt_to_text(prompt: str, prompt_template: str) -> str:
-    placeholder = "{text}"
-    return prompt.split(placeholder)[0] if placeholder in prompt else prompt
 
 
 def to_str(x):
@@ -119,6 +115,11 @@ def checkpoint_has_hf_weights(checkpoint_dir: Union[str, Path]) -> bool:
 def barrier_if_needed() -> None:
     if torch.distributed.is_available() and torch.distributed.is_initialized():
         torch.distributed.barrier()
+
+
+def cleanup_distributed() -> None:
+    if torch.distributed.is_available() and torch.distributed.is_initialized():
+        torch.distributed.destroy_process_group()
 
 
 class CustomTrainer(Trainer):
@@ -187,10 +188,10 @@ def build_training_args(config: dict) -> TrainingArguments:
 def load_model(config: dict, training_args: TrainingArguments):
     train_backend = get_train_backend()
     distributed = get_world_size() > 1
-    torch_dtype = torch.bfloat16 if config["training"].get("bf16", False) else torch.float32
+    dtype = torch.bfloat16 if config["training"].get("bf16", False) else torch.float32
 
     model_kwargs = {
-        "torch_dtype": torch_dtype,
+        "torch_dtype": dtype,
         "attn_implementation": "flash_attention_2",
         "trust_remote_code": True,
         "low_cpu_mem_usage": True,
@@ -223,10 +224,27 @@ def load_model(config: dict, training_args: TrainingArguments):
     return model
 
 
+def tokenized_cache_paths(config: dict, training_args: TrainingArguments) -> tuple[Path, Path]:
+    data_config = config["data"]
+    cache_payload = {
+        "train_data_path": data_config["train_data_path"],
+        "val_data_path": data_config["val_data_path"],
+        "model_path": config["model_path"],
+        "max_length": config.get("max_length", 512),
+        "prompt_template": config.get("prompt_template", ""),
+        "system_prompt": config.get("system_prompt", ""),
+    }
+    digest = hashlib.sha1(json.dumps(cache_payload, sort_keys=True).encode("utf-8")).hexdigest()[:12]
+    cache_dir = Path(config.get("tokenized_cache_dir") or Path(training_args.output_dir).parent / "cache" / "tokenized")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    return cache_dir / f"train_{digest}.arrow", cache_dir / f"eval_{digest}.arrow"
+
+
 def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
     max_length = config.get("max_length", 512)
     data_config = config["data"]
     preprocessing_num_proc = int(config.get("preprocessing_num_proc", 8))
+    train_cache_file, eval_cache_file = tokenized_cache_paths(config, training_args)
 
     def process_func(batch):
         input_ids_list, attention_list, labels_list = [], [], []
@@ -274,12 +292,18 @@ def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
             remove_columns=train_ds.column_names,
             batched=True,
             num_proc=preprocessing_num_proc,
+            cache_file_name=str(train_cache_file),
+            load_from_cache_file=True,
+            new_fingerprint=f"train-{train_cache_file.stem}",
         )
         eval_dataset = eval_ds.map(
             process_func,
             remove_columns=eval_ds.column_names,
             batched=True,
             num_proc=preprocessing_num_proc,
+            cache_file_name=str(eval_cache_file),
+            load_from_cache_file=True,
+            new_fingerprint=f"eval-{eval_cache_file.stem}",
         )
 
     if is_main_process():
@@ -295,6 +319,8 @@ def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
                 if len(bad) <= 5:
                     print("bad idx:", i, "value:", x)
         print("bad count:", len(bad))
+        print("tokenized train cache:", train_cache_file)
+        print("tokenized eval cache:", eval_cache_file)
 
     return train_dataset, eval_dataset, eval_raw
 
@@ -417,4 +443,7 @@ if __name__ == "__main__":
         random.seed(config["random_seed"])
         torch.manual_seed(config["random_seed"])
 
-    run(config)
+    try:
+        run(config)
+    finally:
+        cleanup_distributed()
