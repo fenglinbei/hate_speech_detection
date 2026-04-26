@@ -1,64 +1,74 @@
-# rag_retrieval_pipeline.py
 from __future__ import annotations
 
+import io
 import os
-import json
-import numpy as np
+import pickle
 from typing import Any, Dict, Optional
 
+import numpy as np
+
 from rag.tool import ensure_dir
+from utils.sqlite_kv_cache import SQLiteKVCache
+
 
 class CacheManager:
     """
-    Simple disk cache:
-      - embedding cache: hash(text)->np.float32 vector
-      - retrieval cache: query_key->topK ids + sims
-      - selection cache: (query_key, params_sig)->selected ids
-    """
-    def __init__(self, cache_dir: str):
-        self.cache_dir = cache_dir
-        ensure_dir(cache_dir)
-        self.emb_dir = os.path.join(cache_dir, "emb")
-        self.ret_dir = os.path.join(cache_dir, "retrieval")
-        self.sel_dir = os.path.join(cache_dir, "selection")
-        ensure_dir(self.emb_dir)
-        ensure_dir(self.ret_dir)
-        ensure_dir(self.sel_dir)
+    SQLite-backed cache for the MMR retrieval pipeline.
 
-    def _path(self, subdir: str, key: str) -> str:
-        return os.path.join(subdir, f"{key}.npz")
+    Stages:
+      - embedding: hash(text) -> np.float32 vector
+      - retrieval: query_key -> JSON-serializable retrieval object
+      - selection: selection key -> JSON-serializable selected shots
+    """
+
+    def __init__(self, cache_dir: str, enabled: bool = True):
+        self.cache_dir = cache_dir
+        self.enabled = enabled
+        ensure_dir(cache_dir)
+        self.kv = SQLiteKVCache(os.path.join(cache_dir, "retrieval_cache.sqlite3"), enabled=enabled)
 
     def get_embedding(self, text_hash: str) -> Optional[np.ndarray]:
-        p = self._path(self.emb_dir, text_hash)
-        if not os.path.exists(p):
+        if not self.enabled:
             return None
-        data = np.load(p)
-        return data["vec"].astype(np.float32)
+        value = self.kv.get("embedding", text_hash)
+        if value is None:
+            return None
+        with io.BytesIO(value) as bio:
+            data = np.load(bio, allow_pickle=False)
+            return data["vec"].astype(np.float32)
 
     def set_embedding(self, text_hash: str, vec: np.ndarray):
-        p = self._path(self.emb_dir, text_hash)
-        np.savez_compressed(p, vec=vec.astype(np.float32))
+        if not self.enabled:
+            return
+        with io.BytesIO() as bio:
+            np.savez_compressed(bio, vec=vec.astype(np.float32))
+            self.kv.set("embedding", text_hash, bio.getvalue())
 
     def get_retrieval(self, query_key: str) -> Optional[Dict[str, Any]]:
-        p = os.path.join(self.ret_dir, f"{query_key}.json")
-        if not os.path.exists(p):
+        if not self.enabled:
             return None
-        with open(p, "r", encoding="utf-8") as f:
-            return json.load(f)
+        value = self.kv.get("retrieval", query_key)
+        if value is None:
+            return None
+        return pickle.loads(value)
 
     def set_retrieval(self, query_key: str, obj: Dict[str, Any]):
-        p = os.path.join(self.ret_dir, f"{query_key}.json")
-        with open(p, "w", encoding="utf-8") as f:
-            json.dump(obj, f, ensure_ascii=False)
+        if not self.enabled:
+            return
+        self.kv.set("retrieval", query_key, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
 
     def get_selection(self, sel_key: str) -> Optional[Dict[str, Any]]:
-        p = os.path.join(self.sel_dir, f"{sel_key}.json")
-        if not os.path.exists(p):
+        if not self.enabled:
             return None
-        with open(p, "r", encoding="utf-8") as f:
-            return json.load(f)
+        value = self.kv.get("selection", sel_key)
+        if value is None:
+            return None
+        return pickle.loads(value)
 
     def set_selection(self, sel_key: str, obj: Dict[str, Any]):
-        p = os.path.join(self.sel_dir, f"{sel_key}.json")
-        with open(p, "w", encoding="utf-8") as f:
-            json.dump(obj, f, ensure_ascii=False)
+        if not self.enabled:
+            return
+        self.kv.set("selection", sel_key, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
+
+    def close(self) -> None:
+        self.kv.close()
