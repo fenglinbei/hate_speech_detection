@@ -363,10 +363,10 @@ trap cleanup EXIT INT TERM
 
 wait_vllm_ready() {
   local port="$1" deadline="$2"
-  local url="http://127.0.0.1:${port}/v1/models"
+  local url="http://127.0.0.1:${port}/health"
   local i=0
   while [[ $i -lt $deadline ]]; do
-    if curl -sS "$url" >/dev/null 2>&1; then return 0; fi
+    if curl -fsS "$url" >/dev/null 2>&1; then return 0; fi
     sleep 1; i=$((i+1))
   done
   return 1
