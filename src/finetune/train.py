@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import random
+import shutil
 from pathlib import Path
 from typing import Optional, Union
 
@@ -14,7 +15,7 @@ import torch
 from datasets import Dataset
 from modelscope import AutoTokenizer
 from swanlab.integration.transformers import SwanLabCallback
-from transformers import AutoModelForCausalLM, DataCollatorForSeq2Seq, Trainer, TrainingArguments  # type: ignore
+from transformers import AutoModelForCausalLM, DataCollatorForSeq2Seq, Trainer, TrainerCallback, TrainingArguments  # type: ignore
 
 from metrics.metric_llm import LLMmetrics
 from prompt import *
@@ -27,6 +28,30 @@ HF_WEIGHT_FILES = (
     "pytorch_model.bin.index.json",
     "model.safetensors",
     "model.safetensors.index.json",
+)
+
+HF_WEIGHT_GLOBS = (
+    "pytorch_model-*.bin",
+    "model-*.safetensors",
+)
+
+TRAINING_STATE_DIR_PATTERNS = (
+    "global_step*",
+)
+
+TRAINING_STATE_FILE_PATTERNS = (
+    "latest",
+    "optimizer.pt",
+    "scheduler.pt",
+    "scaler.pt",
+    "rng_state*.pth",
+    "trainer_state.json",
+    "training_args.bin",
+    "zero_to_fp32.py",
+)
+
+CUSTOM_TRAINING_KEYS = (
+    "save_inference_only",
 )
 
 
@@ -109,7 +134,53 @@ def latest_checkpoint_dir(model_root: Union[str, Path]) -> Optional[Path]:
 
 def checkpoint_has_hf_weights(checkpoint_dir: Union[str, Path]) -> bool:
     path = Path(checkpoint_dir)
-    return any((path / filename).exists() for filename in HF_WEIGHT_FILES)
+    return any((path / filename).exists() for filename in HF_WEIGHT_FILES) or any(
+        next(path.glob(pattern), None) is not None for pattern in HF_WEIGHT_GLOBS
+    )
+
+
+def get_save_inference_only(config: dict) -> bool:
+    checkpointing = config.get("checkpointing", {})
+    training = config.get("training", {})
+    return bool(
+        training.get(
+            "save_inference_only",
+            checkpointing.get("save_inference_only", False),
+        )
+    )
+
+
+def remove_training_state_from_checkpoint(checkpoint_dir: Union[str, Path]) -> list[str]:
+    checkpoint = Path(checkpoint_dir)
+    if not checkpoint.exists():
+        return []
+    if not checkpoint_has_hf_weights(checkpoint):
+        logger.warning(
+            "Skip inference-only cleanup for {} because no HuggingFace weight file was found.",
+            checkpoint,
+        )
+        return []
+
+    removed: list[str] = []
+
+    for pattern in TRAINING_STATE_DIR_PATTERNS:
+        for path in checkpoint.glob(pattern):
+            if not path.exists():
+                continue
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
+            removed.append(path.name)
+
+    for pattern in TRAINING_STATE_FILE_PATTERNS:
+        for path in checkpoint.glob(pattern):
+            if not path.exists() or path.is_dir():
+                continue
+            path.unlink()
+            removed.append(path.name)
+
+    return sorted(set(removed))
 
 
 def barrier_if_needed() -> None:
@@ -150,6 +221,22 @@ class CustomTrainer(Trainer):
         return metrics
 
 
+class InferenceOnlyCheckpointCallback(TrainerCallback):
+    def on_save(self, args, state, control, **kwargs):  # type: ignore
+        barrier_if_needed()
+        if is_main_process():
+            checkpoint_dir = Path(args.output_dir) / f"checkpoint-{state.global_step}"
+            removed = remove_training_state_from_checkpoint(checkpoint_dir)
+            if removed:
+                logger.info(
+                    "Inference-only checkpoint cleanup removed {} entries from {}",
+                    len(removed),
+                    checkpoint_dir,
+                )
+        barrier_if_needed()
+        return control
+
+
 def predict(messages, model, tokenizer, config):
     device = "cuda"
     text = tokenizer.apply_chat_template(
@@ -179,8 +266,31 @@ def predict(messages, model, tokenizer, config):
 
 
 def build_training_args(config: dict) -> TrainingArguments:
+    training_config = dict(config["training"])
+    save_inference_only = get_save_inference_only(config)
+    for key in CUSTOM_TRAINING_KEYS:
+        training_config.pop(key, None)
+
+    training_arg_fields = getattr(TrainingArguments, "__dataclass_fields__", {})
+    if "save_only_model" in training_config and "save_only_model" not in training_arg_fields:
+        logger.warning("Ignoring unsupported TrainingArguments field: save_only_model")
+        training_config.pop("save_only_model", None)
+
+    if save_inference_only:
+        if "save_safetensors" in training_arg_fields:
+            training_config["save_safetensors"] = True
+        else:
+            logger.warning("TrainingArguments.save_safetensors is unavailable; using the default checkpoint format.")
+        if "save_only_model" in training_arg_fields:
+            training_config["save_only_model"] = True
+        else:
+            logger.warning(
+                "TrainingArguments.save_only_model is unavailable; "
+                "DeepSpeed/Trainer state will be removed after each checkpoint save."
+            )
+
     return TrainingArguments(
-        **config["training"],
+        **training_config,
         group_by_length=True,
     )
 
@@ -218,6 +328,8 @@ def load_model(config: dict, training_args: TrainingArguments):
                 "per_device_train_batch_size": training_args.per_device_train_batch_size,
                 "gradient_accumulation_steps": training_args.gradient_accumulation_steps,
                 "gradient_checkpointing": training_args.gradient_checkpointing,
+                "save_safetensors": getattr(training_args, "save_safetensors", None),
+                "save_only_model": getattr(training_args, "save_only_model", None),
             },
         )
 
@@ -325,7 +437,7 @@ def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
     return train_dataset, eval_dataset, eval_raw
 
 
-def ensure_loadable_checkpoint(trainer: Trainer, tokenizer) -> None:
+def ensure_loadable_checkpoint(trainer: Trainer, tokenizer, save_inference_only: bool = False) -> None:
     output_dir = Path(trainer.args.output_dir)
     latest = latest_checkpoint_dir(output_dir)
 
@@ -338,6 +450,17 @@ def ensure_loadable_checkpoint(trainer: Trainer, tokenizer) -> None:
         tokenizer.save_pretrained(str(latest))
 
     barrier_if_needed()
+
+    if save_inference_only:
+        if trainer.is_world_process_zero():
+            removed = remove_training_state_from_checkpoint(latest)
+            if removed:
+                logger.info(
+                    "Inference-only checkpoint cleanup removed {} entries from {}",
+                    len(removed),
+                    latest,
+                )
+        barrier_if_needed()
 
     if trainer.is_world_process_zero() and not checkpoint_has_hf_weights(latest):
         raise RuntimeError(
@@ -367,6 +490,7 @@ def run(config: dict):
     )
     tokenizer.pad_token = tokenizer.eos_token if tokenizer.pad_token is None else tokenizer.pad_token
 
+    save_inference_only = get_save_inference_only(config)
     training_args = build_training_args(config)
 
     if is_main_process():
@@ -380,6 +504,7 @@ def run(config: dict):
                 "use_bf16": config["training"].get("bf16", False),
                 "train_backend": get_train_backend(),
                 "train_profile": os.environ.get("TRAIN_PROFILE", ""),
+                "save_inference_only": save_inference_only,
             }
         )
 
@@ -388,6 +513,8 @@ def run(config: dict):
     llm_metrics = LLMmetrics()
 
     callbacks = []
+    if save_inference_only:
+        callbacks.append(InferenceOnlyCheckpointCallback())
     if is_main_process():
         callbacks.append(
             SwanLabCallback(
@@ -417,7 +544,7 @@ def run(config: dict):
     )
 
     trainer.train()
-    ensure_loadable_checkpoint(trainer, tokenizer)
+    ensure_loadable_checkpoint(trainer, tokenizer, save_inference_only=save_inference_only)
 
     if is_main_process():
         swanlab.finish()
