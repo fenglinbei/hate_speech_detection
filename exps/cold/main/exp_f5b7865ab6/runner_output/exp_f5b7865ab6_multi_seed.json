@@ -1,0 +1,261 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "shot_num": 0,
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_f5b7865ab6.json",
+    "generated_at": "20260427_111826",
+    "llm_params_base": {
+      "max_new_tokens": 2048,
+      "n": 1,
+      "top_p": 0.5,
+      "top_k": 20,
+      "min_p": 0,
+      "temperature": 0.7,
+      "enable_thinking": false
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_f5b7865ab6_s42.json",
+      "metric": {
+        "f1_hard": 0,
+        "f1_soft": 0,
+        "f1_avg": 0.0,
+        "success": 5322,
+        "total": 5323,
+        "success_rate": 0.9998,
+        "hard_precision": 0.0,
+        "hard_recall": 0.0,
+        "soft_precision": 0.0,
+        "soft_recall": 0.0,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.25,
+            "argument_avg_sim": 0.9995
+          },
+          "targeted_group": {
+            "tp": 4269,
+            "fp": 1053,
+            "fn": 1054,
+            "precision": 0.8021,
+            "recall": 0.802,
+            "f1": 0.8021
+          },
+          "hateful": {
+            "tp": 4339,
+            "fp": 983,
+            "fn": 984,
+            "precision": 0.8153,
+            "recall": 0.8151,
+            "f1": 0.8152
+          },
+          "matched_pairs": 5322
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "completion_tokens": 231646,
+          "prompt_tokens": 5560937,
+          "total_tokens": 5792583
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42,
+          "prompts_save_dir": "exps/cold/main/exp_f5b7865ab6/prompts/exp_f5b7865ab6_s42",
+          "output_dir": "exps/cold/main/exp_f5b7865ab6/runner_output",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "exps/cold/main/exp_f5b7865ab6/progress/exp_f5b7865ab6_s42",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42
+            },
+            "seeds_list": [
+              42
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "exps/cold/main/exp_f5b7865ab6/data/test.json",
+          "cache_dir": "exps/cold/main/exp_f5b7865ab6/cache/exp_f5b7865ab6_s42",
+          "output_name": "exp_f5b7865ab6_s42.json"
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "f1_hard": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_soft": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_avg": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "success": {
+      "mean": 5322.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "total": {
+      "mean": 5323.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "success_rate": {
+      "mean": 0.9998,
+      "std": 0.0,
+      "n": 1
+    },
+    "hard_precision": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "hard_recall": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "soft_precision": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "soft_recall": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "field_metrics": {
+      "text_similarity": {
+        "target_avg_sim": {
+          "mean": 0.25,
+          "std": 0.0,
+          "n": 1
+        },
+        "argument_avg_sim": {
+          "mean": 0.9995,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "targeted_group": {
+        "tp": {
+          "mean": 4269.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 1053.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 1054.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.8021,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.802,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.8021,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "hateful": {
+        "tp": {
+          "mean": 4339.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 983.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 984.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.8153,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.8151,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.8152,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "matched_pairs": {
+        "mean": 5322.0,
+        "std": 0.0,
+        "n": 1
+      }
+    }
+  }
+}
