@@ -1,0 +1,53 @@
+{
+  "project": "cold_binary_tune",
+  "exp_id": "781fc137fa",
+  "exp_dir": "exps/cold/main_binary_tune/exp_781fc137fa",
+  "created_at": "2026-04-27 18:07:18",
+  "index": 5,
+  "port": 35205,
+  "overrides": {
+    "name": "v2_binary_balanced_srag6",
+    "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+    "build.retrieval_settings.srag_top_k": 6,
+    "build.retrieval_settings.target_groups": [
+      "non-hate",
+      "Region",
+      "Racism",
+      "Sexism"
+    ],
+    "build.retrieval_settings.weights": {
+      "non-hate": 50,
+      "Region": 17,
+      "Racism": 17,
+      "Sexism": 16
+    },
+    "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+    "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+  },
+  "meta": {
+    "name": "v2_binary_balanced_srag6"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/cold/main_binary_tune/exp_781fc137fa/build_config.json",
+    "train_config": "exps/cold/main_binary_tune/exp_781fc137fa/train_config.json",
+    "runner_config": "exps/cold/main_binary_tune/exp_781fc137fa/runner_config.json",
+    "data_dir": "exps/cold/main_binary_tune/exp_781fc137fa/data",
+    "val_runner_file": "exps/cold/main_binary_tune/exp_781fc137fa/data/val_runner.json",
+    "model_dir": "exps/cold/main_binary_tune/exp_781fc137fa/model",
+    "runner_output_dir": "exps/cold/main_binary_tune/exp_781fc137fa/runner_output",
+    "logs_dir": "exps/cold/main_binary_tune/exp_781fc137fa/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "project": "cold_binary_tune",
+  "exp_id": "95b50e0381",
+  "exp_dir": "exps/cold/main_binary_tune/exp_95b50e0381",
+  "created_at": "2026-04-27 18:07:18",
+  "index": 0,
+  "port": 35200,
+  "overrides": {
+    "name": "v2_current_retrieval",
+    "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+    "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+    "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+  },
+  "meta": {
+    "name": "v2_current_retrieval"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/cold/main_binary_tune/exp_95b50e0381/build_config.json",
+    "train_config": "exps/cold/main_binary_tune/exp_95b50e0381/train_config.json",
+    "runner_config": "exps/cold/main_binary_tune/exp_95b50e0381/runner_config.json",
+    "data_dir": "exps/cold/main_binary_tune/exp_95b50e0381/data",
+    "val_runner_file": "exps/cold/main_binary_tune/exp_95b50e0381/data/val_runner.json",
+    "model_dir": "exps/cold/main_binary_tune/exp_95b50e0381/model",
+    "runner_output_dir": "exps/cold/main_binary_tune/exp_95b50e0381/runner_output",
+    "logs_dir": "exps/cold/main_binary_tune/exp_95b50e0381/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}

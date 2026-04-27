@@ -1,0 +1,331 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "shot_num": 0,
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_3e285fd805.json",
+    "generated_at": "20260427_193755",
+    "llm_params_base": {
+      "max_new_tokens": 8,
+      "n": 1,
+      "top_p": 1,
+      "top_k": 20,
+      "min_p": 0,
+      "temperature": 0,
+      "enable_thinking": false
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_3e285fd805_s42.json",
+      "metric": {
+        "task_type": "cold_binary",
+        "accuracy": 0.8165,
+        "macro_precision": 0.8094,
+        "macro_recall": 0.8207,
+        "macro_f1": 0.8122,
+        "f1_macro": 0.8122,
+        "hate_precision": 0.7341,
+        "hate_recall": 0.841,
+        "hate_f1": 0.7839,
+        "non_hate_precision": 0.8848,
+        "non_hate_recall": 0.8004,
+        "non_hate_f1": 0.8405,
+        "success": 5323,
+        "total": 5323,
+        "success_rate": 1.0,
+        "invalid": 0,
+        "per_label": {
+          "hate": {
+            "tp": 1772,
+            "fp": 642,
+            "fn": 335,
+            "precision": 0.7341,
+            "recall": 0.841,
+            "f1": 0.7839,
+            "support": 2107
+          },
+          "non-hate": {
+            "tp": 2574,
+            "fp": 335,
+            "fn": 642,
+            "precision": 0.8848,
+            "recall": 0.8004,
+            "f1": 0.8405,
+            "support": 3216
+          }
+        },
+        "confusion_matrix": {
+          "hate": {
+            "hate": 1772,
+            "non-hate": 335,
+            "invalid": 0
+          },
+          "non-hate": {
+            "hate": 642,
+            "non-hate": 2574,
+            "invalid": 0
+          }
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "completion_tokens": 18878,
+          "prompt_tokens": 4262822,
+          "total_tokens": 4281700
+        },
+        "llm_params": {
+          "max_new_tokens": 8,
+          "n": 1,
+          "top_p": 1,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42,
+          "prompts_save_dir": "exps/cold/main_binary_tune/exp_3e285fd805/prompts/exp_3e285fd805_s42",
+          "output_dir": "exps/cold/main_binary_tune/exp_3e285fd805/runner_output",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "exps/cold/main_binary_tune/exp_3e285fd805/progress/exp_3e285fd805_s42",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。\n\n标签定义：\n- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。\n- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。\n\n边界规则：\n- 单纯提到身份、地域、种族、性别、性取向等词，不等于 hate。\n- 反歧视讨论、引用或反驳歧视、事实描述，默认判为 non-hate。\n- 只针对个人行为或个人品质的负面评价，默认判为 non-hate；只有上升到群体身份攻击时才判 hate。\n- 对群体进行恶意泛化、污名化、排斥、驱逐、贬低或煽动敌意，即使表达委婉、反讽或使用谐音，也判为 hate。\n\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n\n输出要求：\n只输出一个标签：hate 或 non-hate。不要输出解释或标点。\n\n文本：{text}\n标签：",
+            "shot": "",
+            "system": "你是一位中文内容安全审核专家，请严格按要求完成 COLD 仇恨言论二分类。",
+            "example": "文本：{retrieve_content}\n标签：{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 8,
+              "n": 1,
+              "top_p": 1,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0,
+              "enable_thinking": false,
+              "seed": 42
+            },
+            "seeds_list": [
+              42
+            ]
+          },
+          "task_type": "cold_binary",
+          "use_cache": false,
+          "test_data_file": "exps/cold/main_binary_tune/exp_3e285fd805/data/test.json",
+          "cache_dir": "exps/cold/main_binary_tune/exp_3e285fd805/cache/exp_3e285fd805_s42",
+          "output_name": "exp_3e285fd805_s42.json"
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "accuracy": {
+      "mean": 0.8165,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_precision": {
+      "mean": 0.8094,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_recall": {
+      "mean": 0.8207,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_f1": {
+      "mean": 0.8122,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_macro": {
+      "mean": 0.8122,
+      "std": 0.0,
+      "n": 1
+    },
+    "hate_precision": {
+      "mean": 0.7341,
+      "std": 0.0,
+      "n": 1
+    },
+    "hate_recall": {
+      "mean": 0.841,
+      "std": 0.0,
+      "n": 1
+    },
+    "hate_f1": {
+      "mean": 0.7839,
+      "std": 0.0,
+      "n": 1
+    },
+    "non_hate_precision": {
+      "mean": 0.8848,
+      "std": 0.0,
+      "n": 1
+    },
+    "non_hate_recall": {
+      "mean": 0.8004,
+      "std": 0.0,
+      "n": 1
+    },
+    "non_hate_f1": {
+      "mean": 0.8405,
+      "std": 0.0,
+      "n": 1
+    },
+    "success": {
+      "mean": 5323.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "total": {
+      "mean": 5323.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "success_rate": {
+      "mean": 1.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "invalid": {
+      "mean": 0.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "per_label": {
+      "hate": {
+        "tp": {
+          "mean": 1772.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 642.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 335.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.7341,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.841,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.7839,
+          "std": 0.0,
+          "n": 1
+        },
+        "support": {
+          "mean": 2107.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "non-hate": {
+        "tp": {
+          "mean": 2574.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 335.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 642.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.8848,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.8004,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.8405,
+          "std": 0.0,
+          "n": 1
+        },
+        "support": {
+          "mean": 3216.0,
+          "std": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "confusion_matrix": {
+      "hate": {
+        "hate": {
+          "mean": 1772.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "non-hate": {
+          "mean": 335.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "invalid": {
+          "mean": 0.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "non-hate": {
+        "hate": {
+          "mean": 642.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "non-hate": {
+          "mean": 2574.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "invalid": {
+          "mean": 0.0,
+          "std": 0.0,
+          "n": 1
+        }
+      }
+    }
+  }
+}
