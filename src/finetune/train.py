@@ -7,7 +7,7 @@ import os
 import random
 import shutil
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import pandas as pd
 import swanlab
@@ -35,6 +35,20 @@ HF_WEIGHT_GLOBS = (
     "model-*.safetensors",
 )
 
+LORA_ADAPTER_CONFIG_FILE = "adapter_config.json"
+
+LORA_ADAPTER_WEIGHT_FILES = (
+    "adapter_model.bin",
+    "adapter_model.bin.index.json",
+    "adapter_model.safetensors",
+    "adapter_model.safetensors.index.json",
+)
+
+LORA_ADAPTER_WEIGHT_GLOBS = (
+    "adapter_model-*.bin",
+    "adapter_model-*.safetensors",
+)
+
 TRAINING_STATE_DIR_PATTERNS = (
     "global_step*",
 )
@@ -52,6 +66,11 @@ TRAINING_STATE_FILE_PATTERNS = (
 
 CUSTOM_TRAINING_KEYS = (
     "save_inference_only",
+)
+
+DEFAULT_LORA_TARGET_MODULES = (
+    "q_proj",
+    "v_proj",
 )
 
 
@@ -83,6 +102,49 @@ def get_train_backend() -> str:
 def build_device_map(config):
     return config.get("device_map", "auto")
 
+
+def str_to_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (int, float)):
+        return bool(value)
+    return str(value).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def csv_or_list(value: Any, default: tuple[str, ...]) -> list[str]:
+    if value is None:
+        return list(default)
+    if isinstance(value, str):
+        return [item.strip() for item in value.split(",") if item.strip()]
+    if isinstance(value, (list, tuple)):
+        return [str(item).strip() for item in value if str(item).strip()]
+    raise TypeError(f"Expected string or list for LoRA target_modules, got {type(value).__name__}")
+
+
+def get_lora_settings(config: dict) -> dict:
+    raw = config.get("lora", False)
+    if isinstance(raw, dict):
+        enabled = str_to_bool(raw.get("enabled", True))
+        payload = dict(raw)
+    else:
+        enabled = str_to_bool(raw)
+        payload = {}
+
+    return {
+        "enabled": enabled,
+        "r": int(payload.get("r", 8)),
+        "alpha": int(payload.get("alpha", payload.get("lora_alpha", 32))),
+        "dropout": float(payload.get("dropout", payload.get("lora_dropout", 0.1))),
+        "target_modules": csv_or_list(payload.get("target_modules"), DEFAULT_LORA_TARGET_MODULES),
+        "bias": payload.get("bias", "none"),
+        "merge_on_save": str_to_bool(payload.get("merge_on_save", True)),
+    }
+
+
+def is_lora_enabled(config: dict) -> bool:
+    return bool(get_lora_settings(config)["enabled"])
 
 
 def to_str(x):
@@ -139,6 +201,19 @@ def checkpoint_has_hf_weights(checkpoint_dir: Union[str, Path]) -> bool:
     )
 
 
+def checkpoint_has_lora_adapter(checkpoint_dir: Union[str, Path]) -> bool:
+    path = Path(checkpoint_dir)
+    has_config = (path / LORA_ADAPTER_CONFIG_FILE).exists()
+    has_weights = any((path / filename).exists() for filename in LORA_ADAPTER_WEIGHT_FILES) or any(
+        next(path.glob(pattern), None) is not None for pattern in LORA_ADAPTER_WEIGHT_GLOBS
+    )
+    return has_config and has_weights
+
+
+def checkpoint_has_inference_weights(checkpoint_dir: Union[str, Path]) -> bool:
+    return checkpoint_has_hf_weights(checkpoint_dir) or checkpoint_has_lora_adapter(checkpoint_dir)
+
+
 def get_save_inference_only(config: dict) -> bool:
     checkpointing = config.get("checkpointing", {})
     training = config.get("training", {})
@@ -154,9 +229,9 @@ def remove_training_state_from_checkpoint(checkpoint_dir: Union[str, Path]) -> l
     checkpoint = Path(checkpoint_dir)
     if not checkpoint.exists():
         return []
-    if not checkpoint_has_hf_weights(checkpoint):
+    if not checkpoint_has_inference_weights(checkpoint):
         logger.warning(
-            "Skip inference-only cleanup for {} because no HuggingFace weight file was found.",
+            "Skip inference-only cleanup for {} because no HuggingFace or LoRA adapter weights were found.",
             checkpoint,
         )
         return []
@@ -295,6 +370,67 @@ def build_training_args(config: dict) -> TrainingArguments:
     )
 
 
+def enable_input_require_grads(model) -> None:
+    if hasattr(model, "enable_input_require_grads"):
+        model.enable_input_require_grads()
+        return
+
+    input_embeddings = model.get_input_embeddings()
+
+    def make_inputs_require_grad(_module, _input, output):
+        output.requires_grad_(True)
+
+    input_embeddings.register_forward_hook(make_inputs_require_grad)
+
+
+def apply_lora_if_enabled(model, config: dict, training_args: TrainingArguments):
+    lora = get_lora_settings(config)
+    if not lora["enabled"]:
+        return model
+
+    if lora["r"] <= 0:
+        raise ValueError(f"LoRA rank must be positive, got {lora['r']}")
+    if not lora["target_modules"]:
+        raise ValueError("LoRA target_modules cannot be empty")
+
+    try:
+        from peft import LoraConfig, get_peft_model
+    except ImportError as exc:
+        raise ImportError(
+            "LoRA training requires the 'peft' package. "
+            "Install project dependencies again, or run: pip install 'peft>=0.14.0'"
+        ) from exc
+
+    if training_args.gradient_checkpointing:
+        enable_input_require_grads(model)
+
+    peft_config = LoraConfig(
+        r=lora["r"],
+        lora_alpha=lora["alpha"],
+        lora_dropout=lora["dropout"],
+        target_modules=lora["target_modules"],
+        bias=lora["bias"],
+        task_type="CAUSAL_LM",
+    )
+    model = get_peft_model(model, peft_config)
+
+    if is_main_process():
+        print(
+            "[INFO] LoRA enabled:",
+            {
+                "r": lora["r"],
+                "alpha": lora["alpha"],
+                "dropout": lora["dropout"],
+                "target_modules": lora["target_modules"],
+                "bias": lora["bias"],
+                "merge_on_save": lora["merge_on_save"],
+            },
+        )
+        model.print_trainable_parameters()
+
+    return model
+
+
 def load_model(config: dict, training_args: TrainingArguments):
     train_backend = get_train_backend()
     distributed = get_world_size() > 1
@@ -317,6 +453,7 @@ def load_model(config: dict, training_args: TrainingArguments):
 
     model = AutoModelForCausalLM.from_pretrained(config["model_path"], **model_kwargs)
     model.config.use_cache = False
+    model = apply_lora_if_enabled(model, config, training_args)
 
     if is_main_process():
         print(
@@ -330,6 +467,7 @@ def load_model(config: dict, training_args: TrainingArguments):
                 "gradient_checkpointing": training_args.gradient_checkpointing,
                 "save_safetensors": getattr(training_args, "save_safetensors", None),
                 "save_only_model": getattr(training_args, "save_only_model", None),
+                "lora_enabled": is_lora_enabled(config),
             },
         )
 
@@ -437,7 +575,12 @@ def build_datasets(config: dict, tokenizer, training_args: TrainingArguments):
     return train_dataset, eval_dataset, eval_raw
 
 
-def ensure_loadable_checkpoint(trainer: Trainer, tokenizer, save_inference_only: bool = False) -> None:
+def ensure_loadable_checkpoint(
+    trainer: Trainer,
+    tokenizer,
+    save_inference_only: bool = False,
+    lora_enabled: bool = False,
+) -> None:
     output_dir = Path(trainer.args.output_dir)
     latest = latest_checkpoint_dir(output_dir)
 
@@ -462,11 +605,18 @@ def ensure_loadable_checkpoint(trainer: Trainer, tokenizer, save_inference_only:
                 )
         barrier_if_needed()
 
-    if trainer.is_world_process_zero() and not checkpoint_has_hf_weights(latest):
-        raise RuntimeError(
-            f"No HuggingFace model weights found in {latest}. "
-            "For DeepSpeed ZeRO-3, ensure stage3_gather_16bit_weights_on_model_save=true."
-        )
+    if trainer.is_world_process_zero():
+        if lora_enabled:
+            if not checkpoint_has_lora_adapter(latest):
+                raise RuntimeError(
+                    f"No LoRA adapter weights found in {latest}. "
+                    "Expected adapter_config.json plus adapter_model weights."
+                )
+        elif not checkpoint_has_hf_weights(latest):
+            raise RuntimeError(
+                f"No HuggingFace model weights found in {latest}. "
+                "For DeepSpeed ZeRO-3, ensure stage3_gather_16bit_weights_on_model_save=true."
+            )
 
 
 def run(config: dict):
@@ -491,6 +641,7 @@ def run(config: dict):
     tokenizer.pad_token = tokenizer.eos_token if tokenizer.pad_token is None else tokenizer.pad_token
 
     save_inference_only = get_save_inference_only(config)
+    lora_settings = get_lora_settings(config)
     training_args = build_training_args(config)
 
     if is_main_process():
@@ -505,6 +656,10 @@ def run(config: dict):
                 "train_backend": get_train_backend(),
                 "train_profile": os.environ.get("TRAIN_PROFILE", ""),
                 "save_inference_only": save_inference_only,
+                "lora_enabled": lora_settings["enabled"],
+                "lora_r": lora_settings["r"] if lora_settings["enabled"] else None,
+                "lora_alpha": lora_settings["alpha"] if lora_settings["enabled"] else None,
+                "lora_target_modules": ",".join(lora_settings["target_modules"]) if lora_settings["enabled"] else None,
             }
         )
 
@@ -544,7 +699,12 @@ def run(config: dict):
     )
 
     trainer.train()
-    ensure_loadable_checkpoint(trainer, tokenizer, save_inference_only=save_inference_only)
+    ensure_loadable_checkpoint(
+        trainer,
+        tokenizer,
+        save_inference_only=save_inference_only,
+        lora_enabled=lora_settings["enabled"],
+    )
 
     if is_main_process():
         swanlab.finish()
