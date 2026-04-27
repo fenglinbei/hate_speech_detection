@@ -25,9 +25,9 @@ from statistics import mean, pstdev
 from typing import Callable, Iterable, Optional, Sequence
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+# REPO_ROOT = Path(__file__).resolve().parents[1]
+# if str(REPO_ROOT) not in sys.path:
+#     sys.path.insert(0, str(REPO_ROOT))
 
 from metrics.core import (
     align_elements,

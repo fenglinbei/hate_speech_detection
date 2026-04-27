@@ -10,7 +10,7 @@ from typing import Iterable
 
 
 DEFAULT_GROUPS = ("non-hate", "Region", "Racism", "Sexism")
-DEFAULT_SPLIT_SIZES = {"train": 2500, "val": 250, "test": 250}
+DEFAULT_SPLIT_SIZES = {"train": 10, "val": 10, "test": 10}
 
 
 def load_json(path: Path) -> list[dict]:
