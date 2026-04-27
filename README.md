@@ -105,6 +105,7 @@ uv pip install \
   "datasets>=2.19" \
   "accelerate>=0.33" \
   "deepspeed>=0.14" \
+  "peft>=0.14" \
   "sentence-transformers>=3" \
   "modelscope>=1.18" \
   swanlab \
@@ -115,10 +116,10 @@ uv pip install \
 ```
 
 If you are updating an existing environment, install the newly required
-distributed training dependency explicitly:
+distributed and LoRA training dependencies explicitly:
 
 ```bash
-uv pip install "deepspeed>=0.14"
+uv pip install "deepspeed>=0.14" "peft>=0.14"
 ```
 
 `src/finetune/train.py` loads the model with `attn_implementation="flash_attention_2"`,
@@ -141,13 +142,14 @@ Sanity check:
 
 ```bash
 python - <<'PY'
-import accelerate, deepspeed, torch, vllm, flash_attn, faiss
+import accelerate, deepspeed, peft, torch, vllm, flash_attn, faiss
 print("torch", torch.__version__, "cuda", torch.version.cuda)
 print("gpu count", torch.cuda.device_count())
 for i in range(torch.cuda.device_count()):
     print(i, torch.cuda.get_device_name(i))
 print("accelerate ok")
 print("deepspeed ok")
+print("peft ok")
 print("vllm ok")
 print("flash-attn ok")
 print("faiss ok")
@@ -358,6 +360,14 @@ Distributed full fine-tuning is controlled by these variables:
 - `TRAIN_NPROC_PER_NODE` defaults to the number of IDs in `TRAIN_CUDA_VISIBLE_DEVICES`.
 - `TRAIN_MASTER_PORT` defaults to `PORT + 1000`.
 - `TRAIN_MAX_STEPS=2` is useful for a short smoke test; omit it for real runs.
+- `TRAIN_LORA=1` enables PEFT LoRA training on top of the selected backend.
+- `TRAIN_LORA_R`, `TRAIN_LORA_ALPHA`, and `TRAIN_LORA_DROPOUT` override the
+  LoRA rank, alpha, and dropout. Defaults are `8`, `32`, and `0.1`.
+- `TRAIN_LORA_TARGET_MODULES` is a comma-separated list of LoRA target modules.
+  The default is `q_proj,v_proj`.
+- `TRAIN_LORA_MERGE=1` merges the adapter into a standalone HuggingFace
+  checkpoint after training. This is the default for LoRA runs and lets the
+  existing vLLM stage keep loading `--model <checkpoint_dir>`.
 
 Profile intent:
 
@@ -380,9 +390,41 @@ TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
+Example LoRA smoke test:
+
+```bash
+MODE=train \
+TRAIN_MAX_STEPS=2 \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero3_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TRAIN_LORA=1 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+Example LoRA full run:
+
+```bash
+MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero3_safe \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+TRAIN_LORA=1 \
+TRAIN_LORA_R=8 \
+TRAIN_LORA_ALPHA=32 \
+TRAIN_LORA_TARGET_MODULES=q_proj,v_proj \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
 Training writes reproducibility artifacts under `exp_*/logs/`:
 `train_runtime_config.json`, `ds_config_<profile>.json` for DeepSpeed profiles,
 `train.<backend>.<profile>.log`, and the compatibility alias `train.log`.
+For LoRA runs with merge enabled, training first writes adapter checkpoints
+under `checkpoint-*`, then writes a vLLM-loadable merged checkpoint under
+`merged-checkpoint-*`. The inference stage prefers the merged checkpoint when
+one is present.
 
 Useful runtime overrides:
 
@@ -397,9 +439,10 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 
 Common variables include `TRAIN_CUDA_VISIBLE_DEVICES`,
 `TRAIN_BACKEND`, `TRAIN_PROFILE`, `TRAIN_NPROC_PER_NODE`, `TRAIN_MASTER_PORT`,
-`TRAIN_MAX_STEPS`, `VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`,
-`MAX_MODEL_LEN`, `SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and
-`DEFAULT_GPU_MEM_UTIL`.
+`TRAIN_MAX_STEPS`, `TRAIN_LORA`, `TRAIN_LORA_R`, `TRAIN_LORA_ALPHA`,
+`TRAIN_LORA_DROPOUT`, `TRAIN_LORA_TARGET_MODULES`, `TRAIN_LORA_MERGE`,
+`VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`, `MAX_MODEL_LEN`,
+`SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and `DEFAULT_GPU_MEM_UTIL`.
 
 ### 4. Run all experiments under a root
 

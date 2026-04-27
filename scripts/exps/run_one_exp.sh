@@ -134,6 +134,13 @@ else
   TRAIN_MASTER_PORT="${TRAIN_MASTER_PORT:-29500}"
 fi
 TRAIN_MAX_STEPS="${TRAIN_MAX_STEPS:-}"
+TRAIN_LORA="${TRAIN_LORA:-}"
+TRAIN_LORA_R="${TRAIN_LORA_R:-}"
+TRAIN_LORA_ALPHA="${TRAIN_LORA_ALPHA:-}"
+TRAIN_LORA_DROPOUT="${TRAIN_LORA_DROPOUT:-}"
+TRAIN_LORA_TARGET_MODULES="${TRAIN_LORA_TARGET_MODULES:-}"
+TRAIN_LORA_MERGE="${TRAIN_LORA_MERGE:-}"
+TRAIN_LORA_MERGE_MAX_SHARD_SIZE="${TRAIN_LORA_MERGE_MAX_SHARD_SIZE:-5GB}"
 
 LOG_DIR="${LOG_DIR:-${EXP_DIR}/logs}"
 mkdir -p "$LOG_DIR"
@@ -259,11 +266,47 @@ json.dump(obj, open(dst,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
 PY
 }
 
+train_config_lora_field() {
+  local cfg="$1" field="$2"
+  PYTHONPATH=src python - "$cfg" "$field" <<'PY'
+import json
+import sys
+
+cfg_path, field = sys.argv[1], sys.argv[2]
+cfg = json.load(open(cfg_path, "r", encoding="utf-8"))
+raw = cfg.get("lora", False)
+
+def to_bool(value):
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (int, float)):
+        return bool(value)
+    return str(value).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+if isinstance(raw, dict):
+    enabled = to_bool(raw.get("enabled", True))
+    merge_on_save = to_bool(raw.get("merge_on_save", True))
+else:
+    enabled = to_bool(raw)
+    merge_on_save = True
+
+values = {
+    "enabled": enabled,
+    "merge_on_save": merge_on_save,
+}
+print("1" if values[field] else "0")
+PY
+}
+
 write_train_runtime_config() {
   local src="$1" dst="$2" runtime_cfg="$3" ds_cfg="$4"
   PYTHONPATH=src python - "$src" "$dst" "$runtime_cfg" "$ds_cfg" \
     "$TRAIN_BACKEND" "$TRAIN_PROFILE" "$TRAIN_NPROC_PER_NODE" "$TRAIN_MASTER_PORT" \
-    "$TRAIN_CUDA_VISIBLE_DEVICES" "$TRAIN_MAX_STEPS" <<'PY'
+    "$TRAIN_CUDA_VISIBLE_DEVICES" "$TRAIN_MAX_STEPS" \
+    "$TRAIN_LORA" "$TRAIN_LORA_R" "$TRAIN_LORA_ALPHA" "$TRAIN_LORA_DROPOUT" \
+    "$TRAIN_LORA_TARGET_MODULES" "$TRAIN_LORA_MERGE" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -271,9 +314,65 @@ from pathlib import Path
 src, dst, runtime_cfg, ds_cfg = sys.argv[1:5]
 backend, profile = sys.argv[5], sys.argv[6]
 nproc, master_port, cuda_devices, max_steps = sys.argv[7:11]
+lora_env, lora_r, lora_alpha, lora_dropout, lora_targets, lora_merge = sys.argv[11:17]
 
 cfg = json.load(open(src, "r", encoding="utf-8"))
 training = cfg.setdefault("training", {})
+
+DEFAULT_LORA_TARGET_MODULES = ["q_proj", "v_proj"]
+
+def str_to_bool(value) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (int, float)):
+        return bool(value)
+    return str(value).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+def csv_list(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+def normalize_lora(raw) -> dict:
+    if isinstance(raw, dict):
+        payload = dict(raw)
+        payload["enabled"] = str_to_bool(payload.get("enabled", True))
+    else:
+        payload = {"enabled": str_to_bool(raw)}
+    if payload["enabled"]:
+        payload.setdefault("r", 8)
+        payload.setdefault("alpha", payload.pop("lora_alpha", 32))
+        payload.setdefault("dropout", payload.pop("lora_dropout", 0.1))
+        payload.setdefault("target_modules", DEFAULT_LORA_TARGET_MODULES)
+        payload.setdefault("bias", "none")
+        payload.setdefault("merge_on_save", True)
+    return payload
+
+def apply_lora_overrides() -> dict:
+    lora = normalize_lora(cfg.get("lora", False))
+    if lora_env:
+        lora["enabled"] = str_to_bool(lora_env)
+    if lora["enabled"]:
+        lora.setdefault("r", 8)
+        lora.setdefault("alpha", 32)
+        lora.setdefault("dropout", 0.1)
+        lora.setdefault("target_modules", DEFAULT_LORA_TARGET_MODULES)
+        lora.setdefault("bias", "none")
+        lora.setdefault("merge_on_save", True)
+    if lora_r:
+        lora["r"] = int(lora_r)
+    if lora_alpha:
+        lora["alpha"] = int(lora_alpha)
+    if lora_dropout:
+        lora["dropout"] = float(lora_dropout)
+    if lora_targets:
+        lora["target_modules"] = csv_list(lora_targets)
+    if lora_merge:
+        lora["merge_on_save"] = str_to_bool(lora_merge)
+    cfg["lora"] = lora if lora.get("enabled", False) else False
+    return cfg["lora"] if isinstance(cfg["lora"], dict) else {"enabled": False}
+
+lora_runtime = apply_lora_overrides()
 
 for key in (
     "deepspeed",
@@ -391,6 +490,7 @@ if max_steps:
     training["eval_strategy"] = "no"
 
 runtime["training"] = training
+runtime["lora"] = lora_runtime
 
 Path(dst).parent.mkdir(parents=True, exist_ok=True)
 Path(runtime_cfg).parent.mkdir(parents=True, exist_ok=True)
@@ -404,6 +504,11 @@ latest_checkpoint_dir() {
   ls -d "${model_root}"/checkpoint-* 2>/dev/null | sort -V | tail -n 1 || true
 }
 
+latest_merged_checkpoint_dir() {
+  local model_root="$1"
+  ls -d "${model_root}"/merged-checkpoint-* 2>/dev/null | sort -V | tail -n 1 || true
+}
+
 checkpoint_has_hf_weights() {
   local ckpt="$1"
   [[ -f "${ckpt}/pytorch_model.bin" \
@@ -412,6 +517,17 @@ checkpoint_has_hf_weights() {
     || -f "${ckpt}/model.safetensors.index.json" \
     || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'pytorch_model-*.bin' -print -quit 2>/dev/null)" \
     || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'model-*.safetensors' -print -quit 2>/dev/null)" ]]
+}
+
+checkpoint_has_lora_adapter() {
+  local ckpt="$1"
+  [[ -f "${ckpt}/adapter_config.json" \
+    && ( -f "${ckpt}/adapter_model.bin" \
+      || -f "${ckpt}/adapter_model.bin.index.json" \
+      || -f "${ckpt}/adapter_model.safetensors" \
+      || -f "${ckpt}/adapter_model.safetensors.index.json" \
+      || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'adapter_model-*.bin' -print -quit 2>/dev/null)" \
+      || -n "$(find "$ckpt" -maxdepth 1 -type f -name 'adapter_model-*.safetensors' -print -quit 2>/dev/null)" ) ]]
 }
 
 VLLM_PID=""
@@ -442,6 +558,9 @@ echo "[INFO] MODE=$MODE  PORT=$PORT"
 echo "[INFO] TRAIN_CUDA_VISIBLE_DEVICES=$TRAIN_CUDA_VISIBLE_DEVICES"
 echo "[INFO] TRAIN_BACKEND=$TRAIN_BACKEND  TRAIN_PROFILE=$TRAIN_PROFILE"
 echo "[INFO] TRAIN_NPROC_PER_NODE=$TRAIN_NPROC_PER_NODE  TRAIN_MASTER_PORT=$TRAIN_MASTER_PORT"
+if [[ -n "$TRAIN_LORA" ]]; then
+  echo "[INFO] TRAIN_LORA=$TRAIN_LORA  R=${TRAIN_LORA_R:-<default>}  ALPHA=${TRAIN_LORA_ALPHA:-<default>}  DROPOUT=${TRAIN_LORA_DROPOUT:-<default>}  TARGETS=${TRAIN_LORA_TARGET_MODULES:-<default>}  MERGE=${TRAIN_LORA_MERGE:-<default>}"
+fi
 echo "[INFO] VLLM_CUDA_VISIBLE_DEVICES=$VLLM_CUDA_VISIBLE_DEVICES"
 echo "[INFO] REUSE_DATA_DIR=${REUSE_DATA_DIR:-<none>}"
 echo "[INFO] REUSE_MODEL_CKPT=${REUSE_MODEL_CKPT:-<none>}"
@@ -511,6 +630,33 @@ if [[ "$DO_TRAIN" == "1" ]]; then
           --master_port "$TRAIN_MASTER_PORT" \
           src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
     fi
+
+    if [[ "$(train_config_lora_field "$TMP_TRAIN_CFG" enabled)" == "1" && "$(train_config_lora_field "$TMP_TRAIN_CFG" merge_on_save)" == "1" ]]; then
+      ADAPTER_CKPT="$(latest_checkpoint_dir "$EXP_MODEL_DIR")"
+      if [[ -z "$ADAPTER_CKPT" || ! -e "$ADAPTER_CKPT" ]]; then
+        echo "[ERROR] No LoRA adapter checkpoint found under $EXP_MODEL_DIR" >&2
+        exit 1
+      fi
+      if ! checkpoint_has_lora_adapter "$ADAPTER_CKPT"; then
+        echo "[ERROR] Latest checkpoint is not a valid LoRA adapter checkpoint: $ADAPTER_CKPT" >&2
+        exit 1
+      fi
+
+      ADAPTER_NAME="$(basename "$ADAPTER_CKPT")"
+      MERGED_CKPT="${EXP_MODEL_DIR}/merged-${ADAPTER_NAME}"
+      echo "[STEP] merge LoRA adapter -> ${MERGED_CKPT}"
+      CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
+        PYTHONPATH=src python src/finetune/merge_lora.py \
+          --config "$TMP_TRAIN_CFG" \
+          --adapter "$ADAPTER_CKPT" \
+          --output "$MERGED_CKPT" \
+          --max-shard-size "$TRAIN_LORA_MERGE_MAX_SHARD_SIZE" \
+          --overwrite 2>&1 | tee -a "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
+      if ! checkpoint_has_hf_weights "$MERGED_CKPT"; then
+        echo "[ERROR] Merged checkpoint is not vLLM-loadable; missing HuggingFace weight files in $MERGED_CKPT" >&2
+        exit 1
+      fi
+    fi
     rm -f "$TMP_BASE_TRAIN_CFG" "$TMP_TRAIN_CFG"
   fi
 fi
@@ -519,7 +665,10 @@ if [[ "$DO_INFER" == "1" ]]; then
   if [[ -n "${REUSE_MODEL_CKPT}" && "$FORCE_TRAIN" != "1" ]]; then
     CKPT_DIR="$REUSE_MODEL_CKPT"
   else
-    CKPT_DIR="$(latest_checkpoint_dir "$EXP_MODEL_DIR")"
+    CKPT_DIR="$(latest_merged_checkpoint_dir "$EXP_MODEL_DIR")"
+    if [[ -z "$CKPT_DIR" ]]; then
+      CKPT_DIR="$(latest_checkpoint_dir "$EXP_MODEL_DIR")"
+    fi
   fi
 
   if [[ -z "$CKPT_DIR" || ! -e "$CKPT_DIR" ]]; then
