@@ -1,0 +1,23 @@
+{
+  "project": "cold_binary",
+  "output_root": "exps/cold/main_binary",
+  "base": {
+    "build": "exps/cold/base_config_binary/data_config.json",
+    "train": "exps/cold/base_config_binary/train_config.json",
+    "runner": "exps/cold/base_config_binary/eval_config.json"
+  },
+  "port_base": 35100,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": {
+  }
+}

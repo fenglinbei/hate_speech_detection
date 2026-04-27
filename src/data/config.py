@@ -12,6 +12,8 @@ class Config:
         """从JSON文件加载配置[1,4](@ref)"""
         with open(self.config_path, 'r', encoding='utf-8') as f:
             config_data = json.load(f)
+
+        self.task_type = config_data.get('task_type', 'structured')
         
         # 路径配置
         paths = config_data.get('data_paths', {})

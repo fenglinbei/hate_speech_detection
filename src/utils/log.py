@@ -3,8 +3,58 @@ import sys
 import logging
 from datetime import datetime
 from pprint import pformat
-from loguru import logger
+from types import SimpleNamespace
 import inspect
+
+try:
+    from loguru import logger
+    HAS_LOGURU = True
+except ModuleNotFoundError:
+    HAS_LOGURU = False
+    class _StdLogger:
+        def __init__(self):
+            self._logger = logging.getLogger("hateSpeechDetection")
+
+        def remove(self):
+            return None
+
+        def add(self, *args, **kwargs):
+            return None
+
+        def level(self, level_name):
+            return SimpleNamespace(name=level_name)
+
+        def opt(self, *args, **kwargs):
+            return self
+
+        def log(self, level, message, *args, **kwargs):
+            self._logger.log(getattr(logging, str(level), logging.INFO), self._format(message, *args))
+
+        def debug(self, message, *args, **kwargs):
+            self._logger.debug(self._format(message, *args))
+
+        def info(self, message, *args, **kwargs):
+            self._logger.info(self._format(message, *args))
+
+        def warning(self, message, *args, **kwargs):
+            self._logger.warning(self._format(message, *args))
+
+        def error(self, message, *args, **kwargs):
+            self._logger.error(self._format(message, *args))
+
+        def exception(self, message, *args, **kwargs):
+            self._logger.exception(self._format(message, *args))
+
+        @staticmethod
+        def _format(message, *args):
+            if not args:
+                return str(message)
+            try:
+                return str(message).format(*args)
+            except Exception:
+                return " ".join([str(message), *map(str, args)])
+
+    logger = _StdLogger()
 
 LOG_PATH = os.getenv("LOG_PATH", "logs/")
 LOG_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -27,6 +77,14 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
 def init_logger(level: str = "INFO", log_path: str = LOG_PATH, show_console: bool = True, record_levels: list = LOG_LEVELS):
+    if not HAS_LOGURU:
+        logging.basicConfig(
+            level=getattr(logging, str(level).upper(), logging.INFO),
+            format="%(levelname)-8s %(asctime)s - %(name)s:%(funcName)s - %(message)s",
+            force=True,
+        )
+        logger.info("Logger initialized with stdlib fallback")
+        return logger
 
     logger.remove()  # 移除Loguru的默认处理器
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

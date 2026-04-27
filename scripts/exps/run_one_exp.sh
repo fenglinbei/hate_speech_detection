@@ -157,6 +157,71 @@ REUSE_MODEL_CKPT="${MODEL_CKPT_OVERRIDE:-$MANIFEST_REUSE_MODEL}"
 
 EXP_DATA_DIR="$(read_manifest_field paths.data_dir)"
 EXP_MODEL_DIR="$(read_manifest_field paths.model_dir)"
+BUILD_SIGNATURE_FILE="${EXP_DATA_DIR}/build_signature.json"
+
+build_config_signature() {
+  PYTHONPATH=src python - "$BUILD_CFG" <<'PY'
+import hashlib
+import json
+import sys
+
+path = sys.argv[1]
+payload = json.load(open(path, "r", encoding="utf-8"))
+text = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+print(hashlib.sha1(text.encode("utf-8")).hexdigest())
+PY
+}
+
+build_signature_matches() {
+  local current_sig
+  current_sig="$(build_config_signature)"
+  PYTHONPATH=src python - "$BUILD_SIGNATURE_FILE" "$current_sig" <<'PY'
+import json
+import os
+import sys
+
+path, current = sys.argv[1], sys.argv[2]
+if not os.path.exists(path):
+    raise SystemExit(1)
+payload = json.load(open(path, "r", encoding="utf-8"))
+raise SystemExit(0 if payload.get("build_config_sha1") == current else 1)
+PY
+}
+
+build_requires_signature() {
+  PYTHONPATH=src python - "$BUILD_CFG" <<'PY'
+import json
+import sys
+
+payload = json.load(open(sys.argv[1], "r", encoding="utf-8"))
+required = bool(payload.get("require_build_signature", False))
+required = required or str(payload.get("task_type", "")).strip().lower() == "cold_binary"
+print("1" if required else "0")
+PY
+}
+
+write_build_signature() {
+  local current_sig
+  current_sig="$(build_config_signature)"
+  PYTHONPATH=src python - "$BUILD_SIGNATURE_FILE" "$current_sig" <<'PY'
+import json
+import os
+import sys
+import time
+
+path, current = sys.argv[1], sys.argv[2]
+os.makedirs(os.path.dirname(path), exist_ok=True)
+json.dump(
+    {
+        "build_config_sha1": current,
+        "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+    },
+    open(path, "w", encoding="utf-8"),
+    ensure_ascii=False,
+    indent=2,
+)
+PY
+}
 
 json_patch() {
   local src="$1"
@@ -393,10 +458,17 @@ if [[ "$DO_BUILD" == "1" ]]; then
   if [[ -n "${REUSE_DATA_DIR}" ]]; then
     echo "[SKIP] build_data because REUSE_DATA_DIR is set: $REUSE_DATA_DIR"
   elif [[ -f "${EXP_DATA_DIR}/train.jsonl" && -f "${EXP_DATA_DIR}/val.jsonl" && -f "${EXP_DATA_DIR}/test.json" ]]; then
-    echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
+    if [[ "$(build_requires_signature)" != "1" ]] || build_signature_matches; then
+      echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
+    else
+      echo "[STEP] build_data (existing data signature missing or stale)"
+      PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
+      write_build_signature
+    fi
   else
     echo "[STEP] build_data"
     PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
+    write_build_signature
   fi
 fi
 

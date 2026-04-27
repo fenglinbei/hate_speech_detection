@@ -25,9 +25,9 @@ from utils.log import init_logger
 from utils.protocol import UsageInfo
 from config import ConfigManager
 from tools.build_prompt import get_shots
-from metrics.metric_llm import LLMmetrics
+from metrics.metric_llm import BinaryClassificationMetrics, LLMmetrics
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM, OpenAIApiLLMModel
-from utils.parser import parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
+from utils.parser import parse_binary_label, parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
 from tools.convert import output2triple
 
 
@@ -62,6 +62,17 @@ def build_shot_prompt(
         text = "{text}",
         shots="\n\n".join(examples)
     )
+
+
+def _record_binary_label(record: dict) -> str:
+    label = parse_binary_label(str(record.get("gt_label", "")))
+    if label:
+        return label
+    for quad in record.get("quadruples", record.get("gt_quadruples", [])) or []:
+        label = parse_binary_label(str(quad.get("hateful", "")))
+        if label == "hate":
+            return "hate"
+    return "non-hate"
 
 def _is_number(x: Any) -> bool:    # bool 是 int 子类，这里排除
     return isinstance(x, (int, float)) and not isinstance(x, bool)
@@ -152,6 +163,7 @@ class LLMTester:
         self.config = config.get('tester', {})
         self.global_config = config
         self.metric = metric
+        self.task_type = str(self.config.get("task_type", config.get("task_type", "structured"))).lower()
         
         # 确保目录存在
         os.makedirs(self.config.get('progress_dir', './progress'), exist_ok=True)
@@ -381,12 +393,15 @@ class LLMTester:
                     messages = [{'content': system_prompt, 'role': 'system'}, {'content': user_prompt, 'role': 'user'}]
                     messages_list.append(messages)
 
-            all_datas.append({
+            record = {
                 "id": data["id"], 
                 "content": data["content"], 
                 "gt_quadruples": data.get("quadruples", []), 
                 "messages_list": messages_list
-            })
+            }
+            if self.task_type == "cold_binary":
+                record["gt_label"] = _record_binary_label(data)
+            all_datas.append(record)
             pbar.update(1)
         
         if save_cache:
@@ -413,8 +428,139 @@ class LLMTester:
                 except Exception as e:
                     logger.warning(f"Failed to clean file {filepath}: {str(e)}")
 
+    def _process_binary_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
+        if self._shutdown_flag:
+            return None
+
+        item_id = item["id"]
+        try:
+            max_new_tokens = llm_params["max_new_tokens"]
+            n = llm_params["n"]
+            top_p = llm_params["top_p"]
+            top_k = llm_params["top_k"]
+            temperature = llm_params["temperature"]
+            enable_thinking = llm_params["enable_thinking"]
+            seed = llm_params.get("seed", None)
+        except KeyError:
+            raise ValueError("Invaild llm_params keys.")
+
+        max_retries = self.config.get("max_retries", 3)
+        per_parallel_attempts_num = self.config.get("per_parallel_attempts_num", 1)
+        base_wait = self.config.get("base_retry_wait_time", 0)
+        backoff = 0
+        status_code = 500
+        final_status = "failed"
+        last_error = ""
+        total_attemps = 0
+        parsed_labels = []
+        label_to_answer = {}
+
+        pbar = tqdm(
+            total=len(item["messages_list"]) * per_parallel_attempts_num,
+            desc=f'Processing parallel total: {len(item["messages_list"])}',
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+
+        for messages in item["messages_list"]:
+            logger.debug(f"Processing messages: {messages}")
+            for _ in range(per_parallel_attempts_num):
+                accepted = False
+                for attempt in range(max_retries + 1):
+                    if self._shutdown_flag:
+                        logger.debug(f"Shutdown signal received, aborting ID: {item_id}")
+                        return None
+                    try:
+                        response, usage, status_code = self.llm.chat(
+                            messages=messages,
+                            max_new_tokens=max_new_tokens,
+                            n=n,
+                            top_p=top_p,
+                            top_k=top_k,
+                            temperature=temperature,
+                            enable_thinking=enable_thinking,
+                            seed=seed
+                        )
+                        logger.debug(f"LLM Output: {response}")
+                        total_attemps += 1
+                        if isinstance(response, list):
+                            answer = response[0][0]
+                            with self.lock:
+                                if usage:
+                                    self.total_usage.prompt_tokens += usage.prompt_tokens
+                                    self.total_usage.completion_tokens += usage.completion_tokens
+                                    self.total_usage.total_tokens += usage.total_tokens
+
+                            if status_code == 200 and isinstance(answer, str):
+                                label = parse_binary_label(answer)
+                                if label:
+                                    parsed_labels.append(label)
+                                    label_to_answer.setdefault(label, answer)
+                                    final_status = "success"
+                                    accepted = True
+                                    break
+                                last_error = "Binary label validation failed"
+                                final_status = "invalid"
+                                logger.warning(f"Binary output validation failed (ID:{item_id} attempt:{attempt+1})")
+                                backoff = 0
+                            else:
+                                last_error = f"API error: status code {status_code}" if status_code != 200 else "Invalid Output"
+                                final_status = "failed"
+                                logger.warning(f"API/response error (ID:{item_id} attempt:{attempt+1}) code: {status_code}")
+                                backoff = 2 ** (attempt + base_wait)
+                                if status_code == 429:
+                                    backoff = 2 ** (attempt + base_wait + 4)
+                        else:
+                            last_error = "Invalid Output"
+                            final_status = "failed"
+                            logger.warning(f"Empty LLM output (ID:{item_id} attempt:{attempt+1})")
+                            backoff = 2 ** (attempt + base_wait)
+                    except requests.exceptions.Timeout:
+                        last_error = "Request timeout"
+                        logger.warning(f"Request timeout (ID:{item_id} attempt:{attempt+1})")
+                        backoff = 2 ** (attempt + base_wait)
+                    except Exception as e:
+                        logger.exception(e)
+                        logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
+                        backoff = 2 ** (attempt + base_wait)
+                        self._shutdown_flag = True
+
+                    if accepted:
+                        break
+                    if attempt < max_retries:
+                        logger.debug(f"Retrying after {backoff}s")
+                        time.sleep(backoff)
+
+                pbar.update(1)
+
+        if not parsed_labels:
+            return {
+                **item,
+                "llm_output": None,
+                "pred_label": None,
+                "pred_quadruples": [],
+                "status": final_status,
+                "attempts": total_attemps,
+                "error": last_error,
+            }
+
+        label, frequency = Counter(parsed_labels).most_common(1)[0]
+        return {
+            **item,
+            "llm_output": label_to_answer.get(label, label),
+            "frequency": frequency,
+            "pred_label": label,
+            "pred_quadruples": [],
+            "status": "success",
+            "attempts": total_attemps,
+        }
+
     def _process_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
         """处理单个项目（带重试机制）"""
+        if self.task_type == "cold_binary":
+            return self._process_binary_item(item, llm_params)
+
         if self._shutdown_flag:
             return None
 
@@ -674,16 +820,26 @@ class LLMTester:
                             
                             if len(self.results) % 100 == 0:
                                 step_metric = self.metric.run(datas_list=self.results)
-                                self.f1_hard = step_metric["f1_hard"]
-                                self.f1_soft = step_metric["f1_soft"]
-                                self.f1_avg = step_metric["f1_avg"]
-                            pbar.set_postfix({
-                                "f1_hard": self.f1_hard,
-                                "f1_soft": self.f1_soft,
-                                "f1_avg": self.f1_avg,
-                                "success": f"{success_count}/{len(self.results)}",
-                                "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
-                            })
+                                if self.task_type == "cold_binary":
+                                    self.f1_avg = step_metric["macro_f1"]
+                                else:
+                                    self.f1_hard = step_metric["f1_hard"]
+                                    self.f1_soft = step_metric["f1_soft"]
+                                    self.f1_avg = step_metric["f1_avg"]
+                            if self.task_type == "cold_binary":
+                                pbar.set_postfix({
+                                    "macro_f1": self.f1_avg,
+                                    "success": f"{success_count}/{len(self.results)}",
+                                    "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
+                                })
+                            else:
+                                pbar.set_postfix({
+                                    "f1_hard": self.f1_hard,
+                                    "f1_soft": self.f1_soft,
+                                    "f1_avg": self.f1_avg,
+                                    "success": f"{success_count}/{len(self.results)}",
+                                    "rate": f"{success_count/len(self.results):.1%}" if len(self.results) else "0%"
+                                })
 
                     # 提交新任务
                     if not self._shutdown_flag:
@@ -821,7 +977,11 @@ if __name__ == "__main__" :
     model = create_model_from_config(config['model'])
     
     # 可选地创建metric
-    metric = LLMmetrics() if config['tester'].get('compute_metric', True) else None
+    if config['tester'].get('compute_metric', True):
+        task_type = str(config.get("tester", {}).get("task_type", config.get("task_type", "structured"))).lower()
+        metric = BinaryClassificationMetrics() if task_type == "cold_binary" else LLMmetrics()
+    else:
+        metric = None
     
     # 运行测试
     run_config = config['tester']['run']

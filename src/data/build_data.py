@@ -5,17 +5,15 @@ import hashlib
 import pickle
 import os
 import random
+import re
 from dataclasses import replace
 from tqdm import tqdm
 from typing import Optional, List, Tuple, Any
-from transformers import AutoTokenizer
 
 from prompt import *
 from utils.log import init_logger
 logger = init_logger(level="INFO", show_console=True)
 from data.config import Config
-from rag.core import Retriever, LexiconRetriever, MultiClassRetriever, MultiClassWrongExpRetriever, ClusteredRetriever, StochasticWeightedRetriever
-from rag.rag_retrieval_pipeline import MMRReterever, RETRIEVAL_PARAMS, main_build_index
 from tools.convert import output2triple
 from utils.sqlite_kv_cache import SQLiteKVCache
 
@@ -96,12 +94,87 @@ def _quadruples_to_triples_fallback(quadruples: Any) -> str:
     return (" [SEP] ".join(triples) + " [END]") if triples else "[END]"
 
 
+def _is_cold_binary_task(config: Any) -> bool:
+    return str(getattr(config, "task_type", "")).strip().lower() == "cold_binary"
+
+
+def _normalize_binary_label(value: Any) -> str | None:
+    if isinstance(value, bool):
+        return "hate" if value else "non-hate"
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return "hate" if int(value) == 1 else "non-hate"
+
+    text = str(value or "").strip().lower().replace("_", "-")
+    if text in {"1", "hate", "hateful", "toxic", "offensive", "abusive"}:
+        return "hate"
+    if text in {"0", "non-hate", "nonhate", "not-hate", "normal", "clean"}:
+        return "non-hate"
+    return None
+
+
+def _binary_label_from_quadruples(quadruples: Any) -> str:
+    if isinstance(quadruples, dict):
+        quadruples = [quadruples]
+    if not isinstance(quadruples, list):
+        return _binary_label_from_text(quadruples)
+
+    for quad in quadruples:
+        if not isinstance(quad, dict):
+            continue
+        label = _normalize_binary_label(quad.get("hateful"))
+        if label == "hate":
+            return "hate"
+        group = str(quad.get("targeted_group", "")).strip().lower().replace("_", "-")
+        if group and group != "non-hate":
+            return "hate"
+    return "non-hate"
+
+
+def _binary_label_from_text(value: Any) -> str:
+    text = str(value or "").strip().lower().replace("_", "-")
+    label = _normalize_binary_label(text)
+    if label:
+        return label
+    if re.search(r"\b(?:non|not)\s*-?\s*hate(?:ful)?\b", text):
+        return "non-hate"
+
+    parts = [part.strip() for part in text.replace("[end]", "").split("|")]
+    if len(parts) >= 4:
+        label = _normalize_binary_label(parts[3])
+        if label:
+            return label
+    if len(parts) >= 3 and parts[2] and parts[2] != "non-hate":
+        return "hate"
+    return "non-hate" if "non-hate" in text else "hate"
+
+
+def _binary_label_from_record(record: dict) -> str:
+    if "hateful" in record:
+        label = _normalize_binary_label(record.get("hateful"))
+        if label:
+            return label
+    if "label" in record:
+        label = _normalize_binary_label(record.get("label"))
+        if label:
+            return label
+    return _binary_label_from_quadruples(record.get("quadruples", record.get("gt_quadruples", [])))
+
+
+def _binary_label_from_retrieval_output(output: Any) -> str:
+    if isinstance(output, list):
+        return _binary_label_from_quadruples(output)
+    if isinstance(output, dict):
+        return _binary_label_from_quadruples(output)
+    return _binary_label_from_text(output)
+
+
 def load_global_demo_examples(
     demos_path: str,
     example_template: str,
     top_k: int = -1,
     shuffle: bool = False,
     seed: int = 42,
+    task_type: str = "structured",
 ) -> tuple[list[str], str | None]:
     """Load a fixed demo file (e.g., demos_k10.json) and build example prompts.
 
@@ -124,11 +197,14 @@ def load_global_demo_examples(
     examples: list[str] = []
     for d in demos:
         retrieve_content = d.get("content", "")
-        retrieve_output = d.get("quadruples", d.get("output", []))
-        try:
-            retrieve_output_text = output2triple(retrieve_output)
-        except Exception:
-            retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
+        if task_type == "cold_binary":
+            retrieve_output_text = _binary_label_from_record(d)
+        else:
+            retrieve_output = d.get("quadruples", d.get("output", []))
+            try:
+                retrieve_output_text = output2triple(retrieve_output)
+            except Exception:
+                retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
 
         ex = (
             example_template.replace("{retrieve_content}", retrieve_content)
@@ -206,6 +282,8 @@ class BuildCacheManager:
 
 def get_tokenizer(model_path: str):
     """???tokenizer"""
+    from transformers import AutoTokenizer
+
     tokenizer = AutoTokenizer.from_pretrained(
         model_path, 
         use_fast=True, 
@@ -225,9 +303,9 @@ def token_length(tokenizer, text) -> int:
 def build_prompt(
         datas: list,
         config: Config,
-        srag_retriever: Optional[MultiClassRetriever | Retriever | StochasticWeightedRetriever | MMRReterever] = None,
-        lex_retriever: Optional[LexiconRetriever] = None,
-        tokenizer: Optional[AutoTokenizer] = None,
+        srag_retriever: Optional[Any] = None,
+        lex_retriever: Optional[Any] = None,
+        tokenizer: Optional[Any] = None,
         is_test_data: bool = False,
         build_cache: Optional[BuildCacheManager] = None,
         global_examples: Optional[List[str]] = None,
@@ -236,6 +314,7 @@ def build_prompt(
     """Build prompts for normalized quadruple data."""
     retrieval_cache_enabled = bool(getattr(config, "enable_retrieval_cache", True))
     retrieval_batch_size = int(getattr(config, "retrieval_batch_size", 256) or 256)
+    cold_binary = _is_cold_binary_task(config)
 
     def render_prompt(raw_data: dict, examples: List[str], lex_contents: List[str]) -> str:
         return config.prompt_template.replace("{examples}", "\n".join(examples)).\
@@ -245,10 +324,13 @@ def build_prompt(
     def render_examples(retrieve_contents: list[str], retrieve_outputs: list[Any]) -> list[str]:
         examples = []
         for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
-            try:
-                retrieve_output_text = output2triple(retrieve_output)
-            except Exception:
-                retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
+            if cold_binary:
+                retrieve_output_text = _binary_label_from_retrieval_output(retrieve_output)
+            else:
+                try:
+                    retrieve_output_text = output2triple(retrieve_output)
+                except Exception:
+                    retrieve_output_text = _quadruples_to_triples_fallback(retrieve_output)
             example_prompt = config.example_template.replace("{retrieve_content}", retrieve_content).\
                                                 replace("{retrieve_output}", retrieve_output_text)
             examples.append(example_prompt)
@@ -263,7 +345,7 @@ def build_prompt(
         if not (config.use_srag and srag_retriever is not None and config.example_template is not None):
             return [[] for _ in raw_items]
 
-        if config.mmr and isinstance(srag_retriever, MMRReterever):
+        if config.mmr and type(srag_retriever).__name__ == "MMRReterever":
             all_examples = []
             for raw_data in raw_items:
                 retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
@@ -439,7 +521,7 @@ def build_prompt(
         triples = [
             f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
             for quadruple in raw_data["quadruples"]
-        ]
+        ] if not cold_binary else []
         global_k = default_global_k
         examples = batch_examples[local_idx]
         lex_contents = batch_lexicons[local_idx]
@@ -470,15 +552,17 @@ def build_prompt(
 
         srag_examples_nums += len(examples)
 
-        answer = " [SEP] ".join(triples) + " [END]"
+        answer = _binary_label_from_record(raw_data) if cold_binary else " [SEP] ".join(triples) + " [END]"
         message = {
             "id": raw_data["id"],
             "instruction": config.system_prompt if config.system_prompt else "", 
             "input": f"{prompt}", 
             "output": answer, 
             "content": raw_data["content"],
-            "gt_quadruples": raw_data["quadruples"] if is_test_data else ""
+            "gt_quadruples": raw_data["quadruples"] if is_test_data else "",
             }
+        if cold_binary and is_test_data:
+            message["gt_label"] = answer
         messages[original_idx] = message
 
         # ??????
@@ -528,6 +612,7 @@ def _legacy_make_data(config: Config):
                 top_k=getattr(config, "global_demos_top_k", -1),
                 shuffle=getattr(config, "global_demos_shuffle", False),
                 seed=getattr(config, "global_demos_seed", 42),
+                task_type=getattr(config, "task_type", "structured"),
             )
             logger.info(f"[GlobalDemos] Loaded {len(global_examples)} demos from {config.global_demos_path}")
         except Exception as e:
@@ -700,6 +785,8 @@ def _ensure_parent_dir(path: str) -> None:
 
 
 def _build_mmr_params(config: Config):
+    from rag.rag_retrieval_pipeline import RETRIEVAL_PARAMS
+
     os.makedirs(config.mmr_cache_dir, exist_ok=True)
     trace_path = os.path.join(config.mmr_cache_dir, "selection_trace.jsonl")
     return replace(
@@ -715,6 +802,8 @@ def _build_mmr_params(config: Config):
 def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[Any]:
     if not config.use_srag or bool(getattr(config, "use_global_demos", False)):
         return None
+
+    from rag.core import ClusteredRetriever, MultiClassRetriever, Retriever, StochasticWeightedRetriever
 
     target_groups = getattr(config, "target_groups", None)
     default_weights = getattr(config, "default_weights", None)
@@ -746,6 +835,8 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
         return retriever
 
     if config.mmr:
+        from rag.rag_retrieval_pipeline import MMRReterever, main_build_index
+
         if not os.path.exists(config.mmr_index_path) or not os.path.exists(config.mmr_docs_path):
             _ensure_parent_dir(config.mmr_index_path)
             _ensure_parent_dir(config.mmr_docs_path)
@@ -781,9 +872,11 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
     return retriever
 
 
-def _create_lex_retriever(config: Config) -> Optional[LexiconRetriever]:
+def _create_lex_retriever(config: Config) -> Optional[Any]:
     if not config.use_lex:
         return None
+    from rag.core import LexiconRetriever
+
     return LexiconRetriever(
         model_path=config.lexicon_model_path,
         model_name="bge-large-zh-v1.5",
@@ -798,21 +891,31 @@ def _write_jsonl(path: str, messages: list[dict]) -> None:
             file.write(json.dumps(message, ensure_ascii=False) + "\n")
 
 
-def _write_runner_test_json(path: str, messages: list[dict], system_prompt: str) -> None:
+def _write_runner_test_json(
+        path: str,
+        messages: list[dict],
+        system_prompt: str,
+        task_type: str = "structured",
+        ) -> None:
     _ensure_parent_dir(path)
+    cold_binary = task_type == "cold_binary"
+    records = []
+    for message in messages:
+        record = {
+            "id": message["id"],
+            "content": message["content"],
+            "gt_quadruples": message.get("gt_quadruples", []),
+            "messages_list": [[
+                {"content": system_prompt, "role": "system"},
+                {"content": message["input"], "role": "user"},
+            ]],
+        }
+        if cold_binary:
+            record["gt_label"] = message.get("gt_label") or _binary_label_from_record(message)
+        records.append(record)
+
     with open(path, "w", encoding="utf-8") as file:
-        json.dump([
-            {
-                "id": message["id"],
-                "content": message["content"],
-                "gt_quadruples": message.get("gt_quadruples", []),
-                "messages_list": [[
-                    {"content": system_prompt, "role": "system"},
-                    {"content": message["input"], "role": "user"},
-                ]],
-            }
-            for message in messages
-        ], file, ensure_ascii=False, indent=4)
+        json.dump(records, file, ensure_ascii=False, indent=4)
 
 
 def make_data(config: Config):
@@ -853,6 +956,7 @@ def make_data(config: Config):
                 top_k=getattr(config, "global_demos_top_k", -1),
                 shuffle=getattr(config, "global_demos_shuffle", False),
                 seed=getattr(config, "global_demos_seed", 42),
+                task_type=getattr(config, "task_type", "structured"),
             )
             logger.info(f"[GlobalDemos] Loaded {len(global_examples)} demos from {config.global_demos_path}")
         except Exception as e:
@@ -899,7 +1003,12 @@ def make_data(config: Config):
         global_examples=global_examples,
         global_examples_sig=global_examples_sig,
     )
-    _write_runner_test_json(config.test_output_path, test_messages, config.system_prompt)
+    _write_runner_test_json(
+        config.test_output_path,
+        test_messages,
+        config.system_prompt,
+        task_type=getattr(config, "task_type", "structured"),
+    )
 
 if __name__ == "__main__":
     import argparse
