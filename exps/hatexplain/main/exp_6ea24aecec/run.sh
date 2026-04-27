@@ -1,4 +1,4 @@
-MODE=data \
+MODE=full \
 TRAIN_LORA=1 \
 TRAIN_BACKEND=deepspeed \
 TRAIN_PROFILE=ds_zero2_safe \
