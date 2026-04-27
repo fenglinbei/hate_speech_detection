@@ -3,6 +3,42 @@ CHATGLM3_DEFAULT_SYSTEM_PROMPT = "You are ChatGLM3, a large language model train
 DEFAULT_SYSTEM_PTOMPT_ZH = "你是一名专业的语言学者以及仇恨言论分析人员，请你严格且正确地遵从用户给出的指令。"
 DEFAULT_SYSTEM_PTOMPT_EN = "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions."
 
+COLD_BINARY_SYSTEM_PROMPT = "你是一位中文内容安全审核专家，请严格按要求完成 COLD 仇恨言论二分类。"
+
+COLD_BINARY_PROMPT_USER = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+输出要求：
+只输出一个标签：hate 或 non-hate。不要输出解释或标点。
+
+文本：{text}
+标签："""
+
+COLD_BINARY_RAG_PROMPT_USER = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+背景知识：
+{lexicons}
+
+示例：
+{examples}
+
+输出要求：
+只输出一个标签：hate 或 non-hate。不要输出解释或标点。
+
+文本：{text}
+标签："""
+
+COLD_BINARY_EXAMPLE_PROMPT = """文本：{retrieve_content}
+标签：{retrieve_output}
+"""
+
 TRAIN_PROMPT_FEW_SHOT_V1 = """请分析以下文本，识别其中的评论对象、论点、是否仇恨和仇恨类别。
 
 其中仇恨类别包含以下标签：

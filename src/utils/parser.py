@@ -1,6 +1,33 @@
 import re
 from typing import List, Dict
 
+
+def parse_binary_label(llm_output: str) -> str | None:
+    """Parse a binary hate-speech label from an LLM response."""
+
+    if llm_output is None:
+        return None
+
+    text = str(llm_output).strip().lower()
+    if not text:
+        return None
+
+    normalized = text.replace("_", "-")
+    if re.search(r"\b(?:non|not)\s*-?\s*hate(?:ful)?\b", normalized):
+        return "non-hate"
+    tokens = re.findall(r"[a-z]+(?:-[a-z]+)?|\d+", normalized)
+    for token in tokens:
+        if token in {"non-hate", "nonhate", "0"}:
+            return "non-hate"
+        if token in {"hate", "hateful", "1"}:
+            return "hate"
+
+    if "non-hate" in normalized or "nonhate" in normalized:
+        return "non-hate"
+    if re.search(r"\bhate(?:ful)?\b", normalized):
+        return "hate"
+    return None
+
 def extract_triplets(text):
     # 查找三元组开始标记
     triplets_start = re.search(r'(?:###\s*)?三元组：\s*', text)

@@ -3,12 +3,14 @@ import json
 import time
 
 from tqdm import tqdm
-from loguru import logger
 from difflib import SequenceMatcher
 from typing import Optional, Tuple
 from collections import defaultdict
 
 from metrics.core import *
+from utils.log import init_logger
+
+logger = init_logger(level="INFO", show_console=True)
 
 class LLMmetrics:
 
@@ -253,6 +255,133 @@ class LLMmetrics:
         else:
             return metric_dict
         
+
+class BinaryClassificationMetrics:
+    LABELS = ("hate", "non-hate")
+
+    def __init__(self, output_dir: str = "./metrics/llm/"):
+        self.output_dir = output_dir
+
+    @staticmethod
+    def normalize_label(value) -> Optional[str]:
+        if isinstance(value, bool):
+            return "hate" if value else "non-hate"
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return "hate" if int(value) == 1 else "non-hate"
+        text = str(value or "").strip().lower().replace("_", "-")
+        if text in {"1", "hate", "hateful"}:
+            return "hate"
+        if text in {"0", "non-hate", "nonhate", "not-hate"}:
+            return "non-hate"
+        return None
+
+    def _extract_gt_label(self, row: dict) -> Optional[str]:
+        label = self.normalize_label(row.get("gt_label"))
+        if label:
+            return label
+        for quad in row.get("gt_quadruples", []) or []:
+            label = self.normalize_label(quad.get("hateful"))
+            if label == "hate":
+                return "hate"
+        return "non-hate" if row.get("gt_quadruples") else None
+
+    def _load_pairs(self, datas: list[dict]) -> list[tuple[Optional[str], Optional[str], str]]:
+        pairs = []
+        for row in datas:
+            gt = self._extract_gt_label(row)
+            pred = self.normalize_label(row.get("pred_label"))
+            status = str(row.get("status", ""))
+            pairs.append((gt, pred, status))
+        return pairs
+
+    @staticmethod
+    def _safe_div(num: int, den: int) -> float:
+        return num / den if den else 0.0
+
+    def run(
+            self,
+            datas_list: Optional[list[dict]] = None,
+            data_path: Optional[str] = None,
+            info_data: Optional[dict] = None,
+            save_data: bool = False,
+            **_,
+            ) -> dict:
+        if isinstance(datas_list, list):
+            datas = datas_list
+        elif isinstance(data_path, str):
+            with open(data_path, "r", encoding="utf-8") as file:
+                payload = json.load(file)
+            datas = payload.get("results", []) if isinstance(payload, dict) else payload
+        else:
+            raise ValueError("BinaryClassificationMetrics requires datas_list or data_path.")
+
+        pairs = self._load_pairs(datas)
+        total = len(pairs)
+        success = sum(1 for _, pred, status in pairs if status == "success" and pred in self.LABELS)
+        correct = sum(1 for gt, pred, _ in pairs if gt in self.LABELS and gt == pred)
+        invalid = sum(1 for _, pred, _ in pairs if pred not in self.LABELS)
+
+        per_label = {}
+        for label in self.LABELS:
+            tp = sum(1 for gt, pred, _ in pairs if gt == label and pred == label)
+            fp = sum(1 for gt, pred, _ in pairs if gt != label and pred == label)
+            fn = sum(1 for gt, pred, _ in pairs if gt == label and pred != label)
+            precision = self._safe_div(tp, tp + fp)
+            recall = self._safe_div(tp, tp + fn)
+            f1 = self._safe_div(2 * precision * recall, precision + recall)
+            per_label[label] = {
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
+                "precision": round(precision, 4),
+                "recall": round(recall, 4),
+                "f1": round(f1, 4),
+                "support": sum(1 for gt, _, _ in pairs if gt == label),
+            }
+
+        confusion_labels = ["hate", "non-hate", "invalid"]
+        confusion = {gt_label: {pred_label: 0 for pred_label in confusion_labels} for gt_label in self.LABELS}
+        for gt, pred, _ in pairs:
+            if gt not in self.LABELS:
+                continue
+            pred_key = pred if pred in self.LABELS else "invalid"
+            confusion[gt][pred_key] += 1
+
+        macro_f1 = sum(per_label[label]["f1"] for label in self.LABELS) / len(self.LABELS)
+        metric_dict = {
+            "task_type": "cold_binary",
+            "accuracy": round(self._safe_div(correct, total), 4),
+            "macro_f1": round(macro_f1, 4),
+            "f1_macro": round(macro_f1, 4),
+            "hate_precision": per_label["hate"]["precision"],
+            "hate_recall": per_label["hate"]["recall"],
+            "hate_f1": per_label["hate"]["f1"],
+            "non_hate_precision": per_label["non-hate"]["precision"],
+            "non_hate_recall": per_label["non-hate"]["recall"],
+            "non_hate_f1": per_label["non-hate"]["f1"],
+            "success": success,
+            "total": total,
+            "success_rate": round(self._safe_div(success, total), 4),
+            "invalid": invalid,
+            "per_label": per_label,
+            "confusion_matrix": confusion,
+        }
+
+        if save_data:
+            self._save_result(info_data or {}, metric_dict)
+        return metric_dict
+
+    def _save_result(self, info_data: dict, score_dict: dict):
+        os.makedirs(self.output_dir, exist_ok=True)
+        model_name = info_data.get("model", "model")
+        shot_num = info_data.get("shot_num", 0)
+        seed = info_data.get("seed", 0)
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        file_path = os.path.join(self.output_dir, f"metric_{model_name}_{shot_num}_{seed}_{timestamp}.json")
+        with open(file_path, "w", encoding="utf-8") as file:
+            json.dump({"info": info_data, "metrics": score_dict}, file, ensure_ascii=False, indent=2)
+
+
 class StepOneMetrics:
 
     def __init__(self, output_dir: str = "./metrics/llm/"):
