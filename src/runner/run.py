@@ -25,9 +25,9 @@ from utils.log import init_logger
 from utils.protocol import UsageInfo
 from config import ConfigManager
 from tools.build_prompt import get_shots
-from metrics.metric_llm import BinaryClassificationMetrics, LLMmetrics
+from metrics.metric_llm import BinaryClassificationMetrics, HateXplainMetrics, LLMmetrics
 from engine import AliyunApiLLMModel, ApiLLMModel, VLLM, LLM, OpenAIApiLLMModel
-from utils.parser import parse_binary_label, parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
+from utils.parser import parse_binary_label, parse_hatexplain_output, parse_llm_output_quad, validate_quadruples, parse_llm_output_trip, extract_triplets
 from tools.convert import output2triple
 
 
@@ -401,6 +401,8 @@ class LLMTester:
             }
             if self.task_type == "cold_binary":
                 record["gt_label"] = _record_binary_label(data)
+            if self.task_type == "hatexplain":
+                record["gt_annotation"] = data.get("annotation", data.get("gt_annotation", {}))
             all_datas.append(record)
             pbar.update(1)
         
@@ -556,10 +558,127 @@ class LLMTester:
             "attempts": total_attemps,
         }
 
+    def _process_hatexplain_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
+        if self._shutdown_flag:
+            return None
+
+        item_id = item["id"]
+        try:
+            max_new_tokens = llm_params["max_new_tokens"]
+            n = llm_params["n"]
+            top_p = llm_params["top_p"]
+            top_k = llm_params["top_k"]
+            temperature = llm_params["temperature"]
+            enable_thinking = llm_params["enable_thinking"]
+            seed = llm_params.get("seed", None)
+        except KeyError:
+            raise ValueError("Invaild llm_params keys.")
+
+        max_retries = self.config.get("max_retries", 3)
+        per_parallel_attempts_num = self.config.get("per_parallel_attempts_num", 1)
+        base_wait = self.config.get("base_retry_wait_time", 0)
+        final_status = "failed"
+        last_error = ""
+        total_attemps = 0
+        parsed_outputs: list[str] = []
+        output_to_answer: dict[str, str] = {}
+        output_to_annotation: dict[str, dict] = {}
+
+        pbar = tqdm(
+            total=len(item["messages_list"]) * per_parallel_attempts_num,
+            desc=f'Processing parallel total: {len(item["messages_list"])}',
+            unit="item",
+            dynamic_ncols=True,
+            leave=True
+        )
+
+        for messages in item["messages_list"]:
+            for _ in range(per_parallel_attempts_num):
+                accepted = False
+                for attempt in range(max_retries + 1):
+                    if self._shutdown_flag:
+                        return None
+                    try:
+                        response, usage, status_code = self.llm.chat(
+                            messages=messages,
+                            max_new_tokens=max_new_tokens,
+                            n=n,
+                            top_p=top_p,
+                            top_k=top_k,
+                            temperature=temperature,
+                            enable_thinking=enable_thinking,
+                            seed=seed
+                        )
+                        total_attemps += 1
+                        if isinstance(response, list):
+                            answer = response[0][0]
+                            with self.lock:
+                                if usage:
+                                    self.total_usage.prompt_tokens += usage.prompt_tokens
+                                    self.total_usage.completion_tokens += usage.completion_tokens
+                                    self.total_usage.total_tokens += usage.total_tokens
+
+                            if status_code == 200 and isinstance(answer, str):
+                                annotation = parse_hatexplain_output(answer)
+                                if annotation:
+                                    key = json.dumps(annotation, ensure_ascii=False, sort_keys=True)
+                                    parsed_outputs.append(key)
+                                    output_to_answer.setdefault(key, answer)
+                                    output_to_annotation.setdefault(key, annotation)
+                                    final_status = "success"
+                                    accepted = True
+                                    break
+                                last_error = "HateXplain JSON validation failed"
+                                final_status = "invalid"
+                                logger.warning(f"HateXplain output validation failed (ID:{item_id} attempt:{attempt+1})")
+                            else:
+                                last_error = f"API error: status code {status_code}" if status_code != 200 else "Invalid Output"
+                                final_status = "failed"
+                        else:
+                            last_error = "Invalid Output"
+                            final_status = "failed"
+                    except requests.exceptions.Timeout:
+                        last_error = "Request timeout"
+                    except Exception as e:
+                        logger.exception(e)
+                        logger.error(f"Processing error (ID:{item_id}): {str(e)}", exc_info=True)
+                        self._shutdown_flag = True
+
+                    if accepted:
+                        break
+                    if attempt < max_retries:
+                        time.sleep(2 ** (attempt + base_wait))
+
+                pbar.update(1)
+
+        if not parsed_outputs:
+            return {
+                **item,
+                "llm_output": None,
+                "pred_annotation": None,
+                "pred_quadruples": [],
+                "status": final_status,
+                "attempts": total_attemps,
+                "error": last_error,
+            }
+
+        key, frequency = Counter(parsed_outputs).most_common(1)[0]
+        return {
+            **item,
+            "llm_output": output_to_answer.get(key, key),
+            "frequency": frequency,
+            "pred_annotation": output_to_annotation[key],
+            "pred_quadruples": [],
+            "status": "success",
+            "attempts": total_attemps,
+        }
+
     def _process_item(self, item: dict, llm_params: dict) -> Optional[Dict[str, Any]]:
         """处理单个项目（带重试机制）"""
         if self.task_type == "cold_binary":
             return self._process_binary_item(item, llm_params)
+        if self.task_type == "hatexplain":
+            return self._process_hatexplain_item(item, llm_params)
 
         if self._shutdown_flag:
             return None
@@ -820,13 +939,13 @@ class LLMTester:
                             
                             if len(self.results) % 100 == 0:
                                 step_metric = self.metric.run(datas_list=self.results)
-                                if self.task_type == "cold_binary":
+                                if self.task_type in {"cold_binary", "hatexplain"}:
                                     self.f1_avg = step_metric["macro_f1"]
                                 else:
                                     self.f1_hard = step_metric["f1_hard"]
                                     self.f1_soft = step_metric["f1_soft"]
                                     self.f1_avg = step_metric["f1_avg"]
-                            if self.task_type == "cold_binary":
+                            if self.task_type in {"cold_binary", "hatexplain"}:
                                 pbar.set_postfix({
                                     "macro_f1": self.f1_avg,
                                     "success": f"{success_count}/{len(self.results)}",
@@ -947,14 +1066,22 @@ def create_retriever_from_config(retriever_config: dict):
             model_path=params.get("model_path"),
             model_name=params.get("model_name"),
             data_path=params.get("data_path"),
-            device=params.get("device", "cuda:0")
+            device=params.get("device", "cuda:0"),
+            task_type=params.get("task_type", "structured"),
+            stratify_field=params.get("stratify_field", "targeted_group"),
+            query_instruction=params.get("query_instruction", ""),
         )
     elif retriever_type == "LexiconRetriever":
         return LexiconRetriever(
             model_path=params.get("model_path"),
             model_name=params.get("model_name"),
             data_path=params.get("data_path"),
-            device=params.get("device", "cuda:0")
+            device=params.get("device", "cuda:0"),
+            lexicon_schema=params.get("lexicon_schema", "cold"),
+            match_mode=params.get("match_mode", "substring"),
+            case_sensitive=params.get("case_sensitive", True),
+            include_variants=params.get("include_variants", False),
+            query_instruction=params.get("query_instruction", ""),
         )
 
 
@@ -979,7 +1106,12 @@ if __name__ == "__main__" :
     # 可选地创建metric
     if config['tester'].get('compute_metric', True):
         task_type = str(config.get("tester", {}).get("task_type", config.get("task_type", "structured"))).lower()
-        metric = BinaryClassificationMetrics() if task_type == "cold_binary" else LLMmetrics()
+        if task_type == "cold_binary":
+            metric = BinaryClassificationMetrics()
+        elif task_type == "hatexplain":
+            metric = HateXplainMetrics()
+        else:
+            metric = LLMmetrics()
     else:
         metric = None
     

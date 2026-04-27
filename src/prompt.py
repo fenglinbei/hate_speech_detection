@@ -63,6 +63,40 @@ COLD_BINARY_EXAMPLE_PROMPT = """文本：{retrieve_content}
 标签：{retrieve_output}
 """
 
+HATEXPLAIN_SYSTEM_PROMPT = "You are a professional hate speech analyst. Return only valid JSON that follows the requested schema."
+
+HATEXPLAIN_RAG_PROMPT_USER = """Classify the text for the HateXplain task and identify target groups and rationales.
+
+Labels:
+- hatespeech: hateful content targeting a protected or identity-based group.
+- offensive: insulting, abusive, or profane content that is not clearly hate speech.
+- normal: content that is neither hate speech nor offensive.
+
+Background lexicon:
+{lexicons}
+
+Examples:
+{examples}
+
+Rules:
+- The output must be one valid JSON object and nothing else.
+- Use exactly these keys: "label", "target_groups", "rationales".
+- "label" must be one of: "hatespeech", "offensive", "normal".
+- "target_groups" must be a list of target communities. Use [] when there is no target group.
+- "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
+- A lexicon match is only background knowledge; do not classify as hate or offensive solely because a listed term appears.
+
+Text:
+{text}
+
+JSON:"""
+
+HATEXPLAIN_EXAMPLE_PROMPT = """Text:
+{retrieve_content}
+JSON:
+{retrieve_output}
+"""
+
 TRAIN_PROMPT_FEW_SHOT_V1 = """请分析以下文本，识别其中的评论对象、论点、是否仇恨和仇恨类别。
 
 其中仇恨类别包含以下标签：
@@ -266,6 +300,15 @@ LEXICON_RAG_PROMPT = """###
 关键词：{word}
 类别：{category}
 定义：{definition}
+"""
+
+HATEBASE_LEXICON_RAG_PROMPT = """###
+Term: {word}
+Category: {category}
+Target type(s): {categories}
+Hateful meaning: {definition}
+Non-hateful meaning: {nonhateful_meaning}
+Offensiveness: {average_offensiveness}
 """
 
 

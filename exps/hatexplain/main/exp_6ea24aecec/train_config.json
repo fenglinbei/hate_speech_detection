@@ -1,0 +1,47 @@
+{
+  "model_name": "Qwen/Qwen2.5-7B-Instruct",
+  "model_path": "models/base/Qwen2.5-7B-Instruct",
+  "prompt_template": "HATEXPLAIN_RAG_PROMPT_USER",
+  "example_template": "HATEXPLAIN_EXAMPLE_PROMPT",
+  "system_prompt": "HATEXPLAIN_SYSTEM_PROMPT",
+  "max_length": 1280,
+  "lora": false,
+  "random_seed": 23333333,
+  "exp_name": "exp_6ea24aecec",
+  "project_name": "hatexplain",
+  "data": {
+    "config_path": "exps/hatexplain/main/exp_6ea24aecec/build_config.json",
+    "train_data_path": "exps/hatexplain/main/exp_6ea24aecec/data/train.jsonl",
+    "val_data_path": "exps/hatexplain/main/exp_6ea24aecec/data/val.jsonl"
+  },
+  "training": {
+    "output_dir": "exps/hatexplain/main/exp_6ea24aecec/model",
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 2,
+    "gradient_accumulation_steps": 4,
+    "eval_strategy": "epoch",
+    "logging_steps": 10,
+    "num_train_epochs": 2,
+    "save_strategy": "epoch",
+    "learning_rate": 1e-05,
+    "save_on_each_node": true,
+    "save_inference_only": true,
+    "gradient_checkpointing": true,
+    "report_to": "none",
+    "run_name": "hatexplain",
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0,
+    "bf16": true
+  },
+  "eval": {
+    "max_retries": 0,
+    "eval_num": 100,
+    "max_length": 1280
+  },
+  "cuda_devices": [
+    0,
+    1,
+    2,
+    3
+  ]
+}
