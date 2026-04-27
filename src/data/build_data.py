@@ -490,6 +490,7 @@ def build_prompt(
                 'id': raw_data.get('id'),
                 'content_sha1': _sha1_text(raw_data.get('content', '')),
                 'quadruples_sha1': _sha1_text(_stable_dumps(raw_data.get('quadruples', []))),
+                'metadata_sha1': _sha1_text(_stable_dumps(raw_data.get('metadata', {}))),
                 'is_test_data': bool(is_test_data),
                 **cache_static_payload,
             }
@@ -557,11 +558,12 @@ def build_prompt(
             "id": raw_data["id"],
             "instruction": config.system_prompt if config.system_prompt else "", 
             "input": f"{prompt}", 
-            "output": answer, 
+            "output": answer,
             "content": raw_data["content"],
+            "metadata": raw_data.get("metadata", {}),
             "gt_quadruples": raw_data["quadruples"] if is_test_data else "",
             }
-        if cold_binary and is_test_data:
+        if cold_binary:
             message["gt_label"] = answer
         messages[original_idx] = message
 
@@ -904,6 +906,7 @@ def _write_runner_test_json(
         record = {
             "id": message["id"],
             "content": message["content"],
+            "metadata": message.get("metadata", {}),
             "gt_quadruples": message.get("gt_quadruples", []),
             "messages_list": [[
                 {"content": system_prompt, "role": "system"},
@@ -991,6 +994,15 @@ def make_data(config: Config):
         global_examples_sig=global_examples_sig,
     )
     _write_jsonl(config.val_output_path, val_messages)
+
+    val_runner_output_path = getattr(config, "val_runner_output_path", None)
+    if val_runner_output_path:
+        _write_runner_test_json(
+            val_runner_output_path,
+            val_messages,
+            config.system_prompt,
+            task_type=getattr(config, "task_type", "structured"),
+        )
 
     test_messages = build_prompt(
         datas=test_datas,

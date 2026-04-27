@@ -40,16 +40,19 @@ class ColdBinaryMetricsTest(unittest.TestCase):
         metrics = BinaryClassificationMetrics().run(datas_list=rows)
 
         self.assertEqual(metrics["accuracy"], 0.5)
+        self.assertEqual(metrics["macro_precision"], 0.75)
+        self.assertEqual(metrics["macro_recall"], 0.5)
         self.assertEqual(metrics["hate_f1"], 0.6667)
         self.assertEqual(metrics["non_hate_f1"], 0.5)
         self.assertEqual(metrics["macro_f1"], 0.5834)
         self.assertEqual(metrics["confusion_matrix"]["non-hate"]["invalid"], 1)
 
 
-def make_record(sample_id, content, label):
+def make_record(sample_id, content, label, metadata=None):
     return {
         "id": sample_id,
         "content": content,
+        "metadata": metadata or {},
         "quadruples": [
             {
                 "target": "NULL",
@@ -79,11 +82,25 @@ class ColdBinaryBuildTest(unittest.TestCase):
                 encoding="utf-8",
             )
             val_path.write_text(
-                json.dumps([make_record("val_1", "友好讨论", "non-hate")], ensure_ascii=False),
+                json.dumps([
+                    make_record(
+                        "val_1",
+                        "友好讨论",
+                        "non-hate",
+                        {"topic": "race", "fine_grained_label": "0"},
+                    )
+                ], ensure_ascii=False),
                 encoding="utf-8",
             )
             test_path.write_text(
-                json.dumps([make_record("test_1", "恶意泛化某群体", "hate")], ensure_ascii=False),
+                json.dumps([
+                    make_record(
+                        "test_1",
+                        "恶意泛化某群体",
+                        "hate",
+                        {"topic": "race", "fine_grained_label": "2"},
+                    )
+                ], ensure_ascii=False),
                 encoding="utf-8",
             )
 
@@ -97,6 +114,7 @@ class ColdBinaryBuildTest(unittest.TestCase):
                         "test_data_path": str(test_path),
                         "train_output_path": str(out_dir / "train.jsonl"),
                         "val_output_path": str(out_dir / "val.jsonl"),
+                        "val_runner_output_path": str(out_dir / "val_runner.json"),
                         "test_output_path": str(out_dir / "test.json"),
                         "lexicon_data_path": "",
                         "tokenizer_path": None,
@@ -134,7 +152,14 @@ class ColdBinaryBuildTest(unittest.TestCase):
 
             test_rows = json.loads((out_dir / "test.json").read_text(encoding="utf-8"))
             self.assertEqual(test_rows[0]["gt_label"], "hate")
+            self.assertEqual(test_rows[0]["metadata"]["topic"], "race")
+            self.assertIn("messages_list", test_rows[0])
             self.assertEqual(test_rows[0]["gt_quadruples"][0]["hateful"], "hate")
+
+            val_runner_rows = json.loads((out_dir / "val_runner.json").read_text(encoding="utf-8"))
+            self.assertEqual(val_runner_rows[0]["gt_label"], "non-hate")
+            self.assertEqual(val_runner_rows[0]["metadata"]["fine_grained_label"], "0")
+            self.assertIn("messages_list", val_runner_rows[0])
 
 
 if __name__ == "__main__":

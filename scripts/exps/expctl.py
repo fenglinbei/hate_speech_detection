@@ -54,14 +54,30 @@ def canonical_hash(payload: dict, length: int = 10) -> str:
     return h[:length]
 
 
-def cartesian_grid(grid: Dict[str, List[Any]]) -> List[Dict[str, Any]]:
-    """把 grid: {k:[v1,v2], ...} 展开成 overrides 列表"""
+def cartesian_grid(grid: Dict[str, List[Any]] | List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Expand either a Cartesian grid dict or an explicit list of override dicts."""
+    if isinstance(grid, list):
+        return [dict(item) for item in grid]
+
     keys = list(grid.keys())
     values_list = [grid[k] for k in keys]
     combos = []
     for vals in itertools.product(*values_list):
         combos.append({k: v for k, v in zip(keys, vals)})
     return combos
+
+
+def split_meta_overrides(overrides: dict) -> tuple[dict, dict]:
+    config_overrides = {}
+    meta = {}
+    for key, value in overrides.items():
+        if key in {"name", "variant"}:
+            meta[key] = value
+        elif key.startswith("meta."):
+            meta[key[len("meta."):]] = value
+        else:
+            config_overrides[key] = value
+    return config_overrides, meta
 
 
 def apply_overrides(base_build: dict, base_train: dict, base_runner: dict, overrides: dict) -> Tuple[dict, dict, dict, dict]:
@@ -155,8 +171,9 @@ def main():
         exp_dir.mkdir(parents=True, exist_ok=True)
 
 
+        config_overrides, meta = split_meta_overrides(merged_overrides)
         build_cfg, train_cfg, runner_cfg, reuse_meta = apply_overrides(
-            base_build, base_train, base_runner, merged_overrides
+            base_build, base_train, base_runner, config_overrides
         )
 
         # 统一实验内部目录
@@ -189,6 +206,7 @@ def main():
         build_cfg.setdefault("data_paths", {})
         build_cfg["data_paths"]["train_output_path"] = config_path(exp_data_dir / "train.jsonl")
         build_cfg["data_paths"]["val_output_path"] = config_path(exp_data_dir / "val.jsonl")
+        build_cfg["data_paths"]["val_runner_output_path"] = config_path(exp_data_dir / "val_runner.json")
         build_cfg["data_paths"]["test_output_path"] = config_path(exp_data_dir / "test.json")
 
         # ===== patch train_config 输出路径与数据路径 =====
@@ -227,6 +245,7 @@ def main():
             "index": index,
             "port": port_base + index,
             "overrides": merged_overrides,
+            "meta": meta,
             "reuse": {
                 "data_dir": reuse_data_dir,
                 "model_checkpoint": reuse_meta.get("model_checkpoint", None),
@@ -236,6 +255,7 @@ def main():
                 "train_config": config_path(exp_dir / "train_config.json"),
                 "runner_config": config_path(exp_dir / "runner_config.json"),
                 "data_dir": config_path(exp_data_dir),
+                "val_runner_file": config_path(exp_data_dir / "val_runner.json"),
                 "model_dir": config_path(exp_model_dir),
                 "runner_output_dir": config_path(exp_out_dir),
                 "logs_dir": config_path(exp_logs_dir),

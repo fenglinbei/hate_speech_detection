@@ -347,10 +347,20 @@ class BinaryClassificationMetrics:
             pred_key = pred if pred in self.LABELS else "invalid"
             confusion[gt][pred_key] += 1
 
+        macro_precision = sum(
+            self._safe_div(per_label[label]["tp"], per_label[label]["tp"] + per_label[label]["fp"])
+            for label in self.LABELS
+        ) / len(self.LABELS)
+        macro_recall = sum(
+            self._safe_div(per_label[label]["tp"], per_label[label]["tp"] + per_label[label]["fn"])
+            for label in self.LABELS
+        ) / len(self.LABELS)
         macro_f1 = sum(per_label[label]["f1"] for label in self.LABELS) / len(self.LABELS)
         metric_dict = {
             "task_type": "cold_binary",
             "accuracy": round(self._safe_div(correct, total), 4),
+            "macro_precision": round(macro_precision, 4),
+            "macro_recall": round(macro_recall, 4),
             "macro_f1": round(macro_f1, 4),
             "f1_macro": round(macro_f1, 4),
             "hate_precision": per_label["hate"]["precision"],
