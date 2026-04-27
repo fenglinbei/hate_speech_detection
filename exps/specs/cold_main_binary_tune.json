@@ -1,0 +1,101 @@
+{
+  "project": "cold_binary_tune",
+  "output_root": "exps/cold/main_binary_tune",
+  "base": {
+    "build": "exps/cold/base_config_binary/data_config.json",
+    "train": "exps/cold/base_config_binary/train_config.json",
+    "runner": "exps/cold/base_config_binary/eval_config.json"
+  },
+  "port_base": 35200,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": [
+    {
+      "name": "v2_current_retrieval",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    },
+    {
+      "name": "v2_no_lex",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "build.retrieval_settings.use_lex": false,
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    },
+    {
+      "name": "v2_lex_exact",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "build.retrieval_settings.lex_top_k": 3,
+      "build.retrieval_settings.lex_sim_top_k": 0,
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    },
+    {
+      "name": "v2_binary_balanced_srag8",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "build.retrieval_settings.srag_top_k": 8,
+      "build.retrieval_settings.target_groups": [
+        "non-hate",
+        "Region",
+        "Racism",
+        "Sexism"
+      ],
+      "build.retrieval_settings.weights": {
+        "non-hate": 50,
+        "Region": 17,
+        "Racism": 17,
+        "Sexism": 16
+      },
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    },
+    {
+      "name": "v2_precision_srag8",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "build.retrieval_settings.srag_top_k": 8,
+      "build.retrieval_settings.target_groups": [
+        "non-hate",
+        "Region",
+        "Racism",
+        "Sexism"
+      ],
+      "build.retrieval_settings.weights": {
+        "non-hate": 60,
+        "Region": 14,
+        "Racism": 14,
+        "Sexism": 12
+      },
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    },
+    {
+      "name": "v2_binary_balanced_srag6",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "build.retrieval_settings.srag_top_k": 6,
+      "build.retrieval_settings.target_groups": [
+        "non-hate",
+        "Region",
+        "Racism",
+        "Sexism"
+      ],
+      "build.retrieval_settings.weights": {
+        "non-hate": 50,
+        "Region": 17,
+        "Racism": 17,
+        "Sexism": 16
+      },
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2"
+    }
+  ]
+}

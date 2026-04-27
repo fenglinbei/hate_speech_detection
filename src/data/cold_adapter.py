@@ -23,6 +23,7 @@ GROUP_FIELDS = ("targeted_group", "target_group", "group", "category", "topic", 
 TARGET_FIELDS = ("target", "target_span", "target_text", "targeted", "object", "entity")
 ARGUMENT_FIELDS = ("argument", "argument_span", "opinion", "rationale", "span", "evidence")
 SPLIT_FIELDS = ("split", "set", "subset", "partition")
+FINE_GRAINED_LABEL_FIELDS = ("fine-grained-label", "fine_grained_label", "fine_label", "sub_label")
 
 HATE_VALUES = {
     "1",
@@ -99,6 +100,21 @@ def _first_value(record: dict[str, Any], fields: Iterable[str]) -> Optional[Any]
             continue
         return value
     return None
+
+
+def _metadata_from_record(record: dict[str, Any]) -> dict[str, str]:
+    metadata = {}
+    topic = _first_value(record, GROUP_FIELDS)
+    fine_grained_label = _first_value(record, FINE_GRAINED_LABEL_FIELDS)
+    split = _first_value(record, SPLIT_FIELDS)
+
+    if topic is not None:
+        metadata["topic"] = _as_text(topic)
+    if fine_grained_label is not None:
+        metadata["fine_grained_label"] = _as_text(fine_grained_label)
+    if split is not None:
+        metadata["split"] = _as_text(split)
+    return metadata
 
 
 def _as_text(value: Any) -> str:
@@ -218,6 +234,7 @@ def normalize_record(record: dict[str, Any], index: int, id_prefix: str = "cold"
     return {
         "id": sample_id,
         "content": content,
+        "metadata": _metadata_from_record(record),
         "quadruples": [
             {
                 "target": target,

@@ -23,6 +23,7 @@ class Config:
         self.train_output_path = paths.get('train_output_path')
         self.val_output_path = paths.get('val_output_path')
         self.test_output_path = paths.get('test_output_path')
+        self.val_runner_output_path = paths.get('val_runner_output_path')
         self.lexicon_data_path = paths.get('lexicon_data_path')
         self.tokenizer_path = paths.get('tokenizer_path', None)
         

@@ -17,7 +17,14 @@ class ColdAdapterTest(unittest.TestCase):
     def test_normalize_records_maps_binary_cold_rows_to_quadruples(self):
         records = [
             {"id": "a1", "text": "plain comment", "label": "0"},
-            {"id": "a2", "text": "hostile gender comment", "label": "1", "category": "gender"},
+            {
+                "id": "a2",
+                "text": "hostile gender comment",
+                "label": "1",
+                "category": "gender",
+                "fine-grained-label": "2",
+                "split": "dev",
+            },
             {"id": "a3", "text": "racial category comment", "label": "Racism"},
         ]
 
@@ -35,6 +42,9 @@ class ColdAdapterTest(unittest.TestCase):
         )
         self.assertEqual(normalized[1]["quadruples"][0]["targeted_group"], "Sexism")
         self.assertEqual(normalized[1]["quadruples"][0]["hateful"], "hate")
+        self.assertEqual(normalized[1]["metadata"]["topic"], "gender")
+        self.assertEqual(normalized[1]["metadata"]["fine_grained_label"], "2")
+        self.assertEqual(normalized[1]["metadata"]["split"], "dev")
         self.assertEqual(normalized[2]["quadruples"][0]["targeted_group"], "Racism")
         self.assertEqual(normalized[2]["quadruples"][0]["hateful"], "hate")
 
