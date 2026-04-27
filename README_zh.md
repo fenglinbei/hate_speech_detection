@@ -42,6 +42,48 @@
 - `val.jsonl`
 - 带有 `id`、`content`、`gt_quadruples`、`messages_list` 的 `test.json`
 
+HateXplain 使用原生 JSON 标注格式接入，不映射到 COLD 三元组。预处理后的样本包含
+`annotation.label`、`annotation.target_groups` 和 `annotation.rationales`；runner 输出使用
+`gt_annotation` / `pred_annotation` 并通过 `HateXplainMetrics` 评测。
+
+## HateXplain + HateBase
+
+本地原始资源路径：
+
+- HateXplain：`data/hateXplain/raw/dataset.json`
+- HateXplain split 脚本：`data/hateXplain/raw/hatexplain.py`
+- HateBase 分页词典：`data/lexicon/hateBase/page_*.json`
+
+先转换 HateBase 词典：
+
+```bash
+python src/data/hatebase_adapter.py \
+  --input-dir data/lexicon/hateBase \
+  --output data/lexicon/hateBase/processed/hatebase_en.json
+```
+
+再转换 HateXplain。转换器会优先读取 `post_id_divisions.json`；若本地缺失，会按
+`hatexplain.py` 中的官方 URL 尝试下载该 split 文件：
+
+```bash
+python src/data/hatexplain_adapter.py \
+  --input data/hateXplain/raw/dataset.json \
+  --split-path data/hateXplain/raw/post_id_divisions.json \
+  --script-path data/hateXplain/raw/hatexplain.py \
+  --output-dir data/hateXplain/std \
+  --tie-policy drop
+```
+
+生成自包含实验目录：
+
+```bash
+python scripts/exps/expctl.py gen --spec exps/specs/hatexplain_main.json
+```
+
+HateXplain 的检索和 HateBase semantic lexicon 默认使用英文 BGE：
+`./models/base/bge-large-en-v1.5`。query 编码会加上 BGE 推荐的 instruction：
+`Represent this sentence for searching relevant passages: `；corpus/passages 不加 instruction。
+
 ## 快速启动：主实验
 
 主实验对应 k=10 的 class-quota 设置：

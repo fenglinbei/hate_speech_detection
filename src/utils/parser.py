@@ -1,5 +1,6 @@
+import json
 import re
-from typing import List, Dict
+from typing import Any, List, Dict
 
 
 def parse_binary_label(llm_output: str) -> str | None:
@@ -27,6 +28,52 @@ def parse_binary_label(llm_output: str) -> str | None:
     if re.search(r"\bhate(?:ful)?\b", normalized):
         return "hate"
     return None
+
+
+def _strip_json_fence(text: str) -> str:
+    text = str(text or "").strip()
+    match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, flags=re.IGNORECASE | re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start >= 0 and end > start:
+        return text[start:end + 1]
+    return text
+
+
+def parse_hatexplain_output(llm_output: str) -> dict[str, Any] | None:
+    """Parse HateXplain JSON output into a validated annotation."""
+
+    if llm_output is None:
+        return None
+
+    try:
+        payload = json.loads(_strip_json_fence(llm_output))
+    except Exception:
+        return None
+
+    if not isinstance(payload, dict):
+        return None
+
+    label = str(payload.get("label", "")).strip().lower()
+    if label not in {"hatespeech", "offensive", "normal"}:
+        return None
+
+    target_groups = payload.get("target_groups", [])
+    rationales = payload.get("rationales", [])
+    if target_groups is None:
+        target_groups = []
+    if rationales is None:
+        rationales = []
+    if not isinstance(target_groups, list) or not isinstance(rationales, list):
+        return None
+
+    return {
+        "label": label,
+        "target_groups": [str(group).strip() for group in target_groups if str(group).strip()],
+        "rationales": [str(rationale).strip() for rationale in rationales if str(rationale).strip()],
+    }
 
 def extract_triplets(text):
     # 查找三元组开始标记

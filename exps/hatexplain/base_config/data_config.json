@@ -1,0 +1,71 @@
+{
+  "task_type": "hatexplain",
+  "data_paths": {
+    "raw_data_path": "data/hateXplain/std/train.json",
+    "val_data_path": "data/hateXplain/std/val.json",
+    "test_data_path": "data/hateXplain/std/test.json",
+    "train_output_path": "data/hateXplain/main/train.jsonl",
+    "val_output_path": "data/hateXplain/main/val.jsonl",
+    "val_runner_output_path": "data/hateXplain/main/val_runner.json",
+    "test_output_path": "data/hateXplain/main/test.json",
+    "lexicon_data_path": "data/lexicon/hateBase/processed/hatebase_en.json",
+    "tokenizer_path": "./models/base/Qwen2.5-7B-Instruct"
+  },
+  "prompt_templates": {
+    "prompt_template": "HATEXPLAIN_RAG_PROMPT_USER",
+    "example_template": "HATEXPLAIN_EXAMPLE_PROMPT",
+    "system_prompt": "HATEXPLAIN_SYSTEM_PROMPT"
+  },
+  "retrieval_settings": {
+    "use_srag": true,
+    "stratified": true,
+    "stratify_field": "label",
+    "srag_top_k": 10,
+    "srag_threshold": 0,
+    "use_lex": true,
+    "lex_top_k": 5,
+    "lex_sim_top_k": 5,
+    "lex_sim_threshold": 0,
+    "target_groups": [
+      "hatespeech",
+      "offensive",
+      "normal"
+    ],
+    "default_weights": {
+      "hatespeech": 33.34,
+      "offensive": 33.33,
+      "normal": 33.33
+    },
+    "weights": null,
+    "weights_reverse": false
+  },
+  "lexicon_settings": {
+    "lexicon_schema": "hatebase",
+    "languages": [
+      "en"
+    ],
+    "match_mode": "word_boundary",
+    "case_sensitive": false,
+    "include_variants": true
+  },
+  "training_settings": {
+    "auto_length": true,
+    "max_length": 1280,
+    "split_ratio": 0.9
+  },
+  "cache_settings": {
+    "enable_build_cache": true,
+    "build_cache_dir": "./cache_build_data/hatexplain",
+    "enable_retrieval_cache": true,
+    "cache_backend": "sqlite",
+    "retrieval_batch_size": 256
+  },
+  "model_settings": {
+    "srag_model_path": "./models/base/bge-large-en-v1.5",
+    "srag_model_name": "bge-large-en-v1.5",
+    "srag_query_instruction": "Represent this sentence for searching relevant passages: ",
+    "lexicon_model_path": "./models/base/bge-large-en-v1.5",
+    "lexicon_model_name": "bge-large-en-v1.5",
+    "lexicon_query_instruction": "Represent this sentence for searching relevant passages: "
+  }
+}
