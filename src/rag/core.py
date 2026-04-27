@@ -6,6 +6,7 @@ import pickle
 import hashlib
 import json
 import io
+import re
 from loguru import logger
 from typing import Optional, Dict, Any, List, Literal
 from tools.json_tools import load_json
@@ -69,6 +70,70 @@ def split_targeted_groups(raw_group: Any) -> List[str]:
 
 def quad_has_group(quadruple: dict, targeted_group: str) -> bool:
     return targeted_group in split_targeted_groups(quadruple.get("targeted_group"))
+
+
+def task_name(task_type: Optional[str]) -> str:
+    return str(task_type or "structured").strip().lower()
+
+
+def format_hatexplain_annotation(record: dict) -> str:
+    annotation = record.get("annotation") or record.get("gt_annotation") or {}
+    rationales = []
+    for item in annotation.get("rationales", []) or []:
+        if isinstance(item, dict):
+            text = str(item.get("text", "")).strip()
+        else:
+            text = str(item).strip()
+        if text:
+            rationales.append(text)
+    payload = {
+        "label": str(annotation.get("label", "")).strip().lower(),
+        "target_groups": [
+            str(group).strip()
+            for group in annotation.get("target_groups", []) or []
+            if str(group).strip()
+        ],
+        "rationales": rationales,
+    }
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+
+
+def format_record_output(record: dict, task_type: str = "structured") -> str:
+    if task_name(task_type) == "hatexplain":
+        return format_hatexplain_annotation(record)
+    if "output" in record and isinstance(record["output"], str):
+        return record["output"]
+    return parsed_quad_to_raw_quad(record["quadruples"])
+
+
+def record_classes(record: dict, task_type: str = "structured", stratify_field: str = "targeted_group") -> list[str]:
+    if task_name(task_type) == "hatexplain":
+        annotation = record.get("annotation") or record.get("gt_annotation") or {}
+        field = str(stratify_field or "label").lower()
+        if field in {"target_group", "target_groups"}:
+            groups = [
+                str(group).strip()
+                for group in annotation.get("target_groups", []) or []
+                if str(group).strip()
+            ]
+            return groups or ["normal"]
+        label = str(annotation.get("label", "")).strip().lower()
+        return [label] if label else []
+
+    classes: list[str] = []
+    for quadruple in record.get("quadruples", record.get("gt_quadruples", [])) or []:
+        for group in split_targeted_groups(quadruple.get("targeted_group")):
+            if group not in classes:
+                classes.append(group)
+    return classes
+
+
+def record_has_class(record: dict, class_name: str, task_type: str = "structured", stratify_field: str = "targeted_group") -> bool:
+    return class_name in record_classes(record, task_type=task_type, stratify_field=stratify_field)
+
+
+def add_instruction(text: str, instruction: str = "") -> str:
+    return f"{instruction}{text}" if instruction else text
 
 def allocate_class_num(i, weights_dict, reverse: bool = False):
     # ?????????????????????????????
@@ -266,7 +331,11 @@ class Retriever:
             reranker_model_path: Optional[str] = None,
             device: str = "cuda:0",
             cache_dir: str = "./cache",
-            enable_cache: bool = True):
+            enable_cache: bool = True,
+            task_type: str = "structured",
+            stratify_field: str = "targeted_group",
+            query_instruction: str = "",
+            corpus_instruction: str = ""):
 
         logger.info(f"Loading model from path: {model_path}")
         if model:
@@ -274,7 +343,11 @@ class Retriever:
             self.model_name = model_name or (os.path.basename(model_path) if model_path else 'sentence-transformer')
         else:
             self.model = SentenceTransformer(model_path).to(device)
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
+        self.task_type = task_type
+        self.stratify_field = stratify_field
+        self.query_instruction = query_instruction or ""
+        self.corpus_instruction = corpus_instruction or ""
 
         self.reranker = None
         if reranker_model_path:
@@ -285,6 +358,30 @@ class Retriever:
         if data_path:
             self.load_datas(data_path)
             self.create_embeddings()
+
+    def _cache_common(self) -> dict[str, Any]:
+        return {
+            "model": self.model_name,
+            "query_instruction": self.query_instruction,
+            "corpus_instruction": self.corpus_instruction,
+        }
+
+    def _encode_texts(
+            self,
+            texts: list[str],
+            instruction: str = "",
+            convert_to_tensor: bool = True,
+            show_progress_bar: bool = False,
+            batch_size: Optional[int] = None,
+            ):
+        encoded_texts = [add_instruction(text, instruction) for text in texts]
+        kwargs = {
+            "convert_to_tensor": convert_to_tensor,
+            "show_progress_bar": show_progress_bar,
+        }
+        if batch_size is not None:
+            kwargs["batch_size"] = batch_size
+        return self.model.encode(encoded_texts, **kwargs)
 
     def create_embeddings(self, datas: Optional[list[dict]] = None):
         logger.info("Processing embedding")
@@ -299,7 +396,7 @@ class Retriever:
             self.test2item = {}
             self.text2idx = {}
             for idx, item in enumerate(datas):
-                item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
+                item['output'] = format_record_output(item, self.task_type)
                 self.test2item[item['content']] = item
                 self.text2idx.setdefault(item['content'], idx)
             texts = self.texts
@@ -311,7 +408,7 @@ class Retriever:
         if self.cache_manager.enabled:
             emb_key = self.cache_manager.make_key({
                 "stage": "corpus_embedding",
-                "model": self.model_name,
+                **self._cache_common(),
                 "corpus_sig": self.corpus_sig,
             })
             cached = self.cache_manager.get_embedding(emb_key)
@@ -321,7 +418,12 @@ class Retriever:
                     delattr(self, "_corpus_embeddings_norm_np")
                 return
 
-        corpus_embeddings = self.model.encode(texts, convert_to_tensor=True, show_progress_bar=True)
+        corpus_embeddings = self._encode_texts(
+            texts,
+            instruction=self.corpus_instruction,
+            convert_to_tensor=True,
+            show_progress_bar=True,
+        )
         if hasattr(corpus_embeddings, 'is_cuda') and corpus_embeddings.is_cuda:
             corpus_embeddings = corpus_embeddings.cpu()
         self.corpus_embeddings_np = corpus_embeddings.numpy().astype(np.float32)
@@ -344,7 +446,7 @@ class Retriever:
         self.test2item = {}
         self.text2idx = {}
         for idx, item in enumerate(data):
-            item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
+            item['output'] = format_record_output(item, self.task_type)
             self.test2item[item['content']] = item
             self.text2idx.setdefault(item['content'], idx)
 
@@ -367,7 +469,7 @@ class Retriever:
 
         for i, query in enumerate(queries):
             query_idx = getattr(self, "text2idx", {}).get(query)
-            if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+            if not self.query_instruction and query_idx is not None and hasattr(self, "corpus_embeddings_np"):
                 vectors[i] = self.corpus_embeddings_np[int(query_idx)]
                 continue
 
@@ -375,7 +477,7 @@ class Retriever:
             if use_cache and self.cache_manager.enabled:
                 q_key = self.cache_manager.make_key({
                     "stage": cache_stage,
-                    "model": self.model_name,
+                    **self._cache_common(),
                     "q_sha1": CacheManager.sha1_text(query),
                 })
                 cached = self.cache_manager.get_embedding(q_key)
@@ -388,8 +490,9 @@ class Retriever:
             missing_keys.append(q_key)
 
         if missing_texts:
-            query_embeddings = self.model.encode(
+            query_embeddings = self._encode_texts(
                 missing_texts,
+                instruction=self.query_instruction,
                 batch_size=batch_size,
                 convert_to_tensor=True,
                 show_progress_bar=False,
@@ -503,7 +606,7 @@ class Retriever:
             "threshold": threshold,
             "rerank": rerank,
             "resort": resort,
-            "model": self.model_name,
+            **self._cache_common(),
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
@@ -530,18 +633,23 @@ class Retriever:
         q_key = None
         query_embedding_np = None
         query_idx = getattr(self, "text2idx", {}).get(query)
-        if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+        if not self.query_instruction and query_idx is not None and hasattr(self, "corpus_embeddings_np"):
             query_embedding_np = self.corpus_embeddings_np[int(query_idx):int(query_idx) + 1]
         elif use_cache and self.cache_manager.enabled:
             q_key = self.cache_manager.make_key({
                 "stage": "query_embedding",
-                "model": self.model_name,
+                **self._cache_common(),
                 "q_sha1": q_sha1,
             })
             query_embedding_np = self.cache_manager.get_embedding(q_key)
 
         if query_embedding_np is None:
-            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            query_embedding = self._encode_texts(
+                [query],
+                instruction=self.query_instruction,
+                convert_to_tensor=True,
+                show_progress_bar=False,
+            )
             if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
                 query_embedding = query_embedding.cpu()
             query_embedding_np = query_embedding.numpy().astype(np.float32)
@@ -567,7 +675,7 @@ class Retriever:
         if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "retrieval",
-                "model": self.model_name,
+                **self._cache_common(),
                 "corpus_sig": corpus_sig,
                 "q_sha1": q_sha1,
                 "k": retrieval_k,
@@ -656,7 +764,7 @@ class Retriever:
             "threshold": threshold,
             "rerank": rerank,
             "resort": resort,
-            "model": self.model_name,
+            **self._cache_common(),
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
@@ -705,7 +813,7 @@ class Retriever:
             if use_cache and self.cache_manager.enabled:
                 r_key = self.cache_manager.make_key({
                     "stage": "retrieval",
-                    "model": self.model_name,
+                    **self._cache_common(),
                     "corpus_sig": corpus_sig,
                     "q_sha1": q_sha1,
                     "k": retrieval_k,
@@ -737,7 +845,7 @@ class Retriever:
                     q_sha1 = CacheManager.sha1_text(queries[i])
                     r_key = self.cache_manager.make_key({
                         "stage": "retrieval",
-                        "model": self.model_name,
+                        **self._cache_common(),
                         "corpus_sig": corpus_sig,
                         "q_sha1": q_sha1,
                         "k": retrieval_k,
@@ -773,11 +881,23 @@ class LexiconRetriever:
             data_path: str | None = None, 
             device: str = "cuda:0",
             cache_dir: str = "./cache",
-            enable_cache: bool = True):
+            enable_cache: bool = True,
+            lexicon_schema: str = "cold",
+            match_mode: str = "substring",
+            case_sensitive: bool = True,
+            include_variants: bool = False,
+            query_instruction: str = "",
+            corpus_instruction: str = ""):
         
         logger.info(f"Loading model from path: {model_path}")
         self.model = SentenceTransformer(model_path).to(device)
-        self.model_name = model_name
+        self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
+        self.lexicon_schema = str(lexicon_schema or "cold").lower()
+        self.match_mode = str(match_mode or "substring").lower()
+        self.case_sensitive = bool(case_sensitive)
+        self.include_variants = bool(include_variants)
+        self.query_instruction = query_instruction or ""
+        self.corpus_instruction = corpus_instruction or ""
         
         # ????????????
         self.cache_manager = CacheManager(cache_dir, enable_cache)
@@ -785,6 +905,31 @@ class LexiconRetriever:
         if data_path:
             self.load_datas(data_path)
             self.create_embeddings()
+
+    def _cache_common(self) -> dict[str, Any]:
+        return {
+            "model": self.model_name,
+            "query_instruction": self.query_instruction,
+            "corpus_instruction": self.corpus_instruction,
+            "lexicon_schema": self.lexicon_schema,
+        }
+
+    def _encode_texts(
+            self,
+            texts: list[str],
+            instruction: str = "",
+            convert_to_tensor: bool = True,
+            show_progress_bar: bool = False,
+            batch_size: Optional[int] = None,
+            ):
+        encoded_texts = [add_instruction(text, instruction) for text in texts]
+        kwargs = {
+            "convert_to_tensor": convert_to_tensor,
+            "show_progress_bar": show_progress_bar,
+        }
+        if batch_size is not None:
+            kwargs["batch_size"] = batch_size
+        return self.model.encode(encoded_texts, **kwargs)
 
     def create_embeddings(self, datas: Optional[list[dict]] = None):
         logger.info("Processing embedding")
@@ -795,7 +940,7 @@ class LexiconRetriever:
             self.test2item = {}
             self.text2idx = {}
             for idx, item in enumerate(datas):
-                item['output'] = parsed_quad_to_raw_quad(item['quadruples'])
+                item['output'] = item.get("output", item.get("content", ""))
                 self.test2item[item['content']] = item
                 self.text2idx.setdefault(item['content'], idx)
             texts = self.texts
@@ -803,13 +948,22 @@ class LexiconRetriever:
         self.corpus_sig = CacheManager.texts_signature(texts)
         emb_key = None
         if self.cache_manager.enabled:
-            emb_key = self.cache_manager.make_key({"stage":"lex_corpus_embedding","model": self.model_name,"corpus_sig": self.corpus_sig})
+            emb_key = self.cache_manager.make_key({
+                "stage": "lex_corpus_embedding",
+                **self._cache_common(),
+                "corpus_sig": self.corpus_sig,
+            })
             cached = self.cache_manager.get_embedding(emb_key)
             if cached is not None:
                 self.corpus_embeddings_np = cached
                 return
 
-        corpus_embeddings = self.model.encode(texts, convert_to_tensor=True, show_progress_bar=True)
+        corpus_embeddings = self._encode_texts(
+            texts,
+            instruction=self.corpus_instruction,
+            convert_to_tensor=True,
+            show_progress_bar=True,
+        )
         if hasattr(corpus_embeddings, 'is_cuda') and corpus_embeddings.is_cuda:
             corpus_embeddings = corpus_embeddings.cpu()
         self.corpus_embeddings_np = corpus_embeddings.numpy().astype(np.float32)
@@ -822,11 +976,23 @@ class LexiconRetriever:
         self.texts = []
         self.word2item = {}
         for data in datas:
-            prompt = LEXICON_RAG_PROMPT.replace("{word}", data["term"]).\
-                                        replace("{category}", data["category"]).\
-                                        replace("{definition}", data["definition"])
+            if self.lexicon_schema == "hatebase":
+                prompt = HATEBASE_LEXICON_RAG_PROMPT.replace("{word}", data["term"]).\
+                                            replace("{category}", str(data.get("category", ""))).\
+                                            replace("{categories}", ", ".join(data.get("categories", []) or [])).\
+                                            replace("{definition}", str(data.get("definition", ""))).\
+                                            replace("{nonhateful_meaning}", str(data.get("nonhateful_meaning", ""))).\
+                                            replace("{average_offensiveness}", str(data.get("average_offensiveness", "")))
+            else:
+                prompt = LEXICON_RAG_PROMPT.replace("{word}", data["term"]).\
+                                            replace("{category}", data["category"]).\
+                                            replace("{definition}", data["definition"])
             self.texts.append(prompt)
             self.word2item[data["term"]] = prompt
+            if self.lexicon_schema == "hatebase" and self.include_variants:
+                for variant in data.get("variants", []) or []:
+                    if variant and variant not in self.word2item:
+                        self.word2item[str(variant)] = prompt
 
     def similarity_retrieve(
             self,
@@ -842,7 +1008,7 @@ class LexiconRetriever:
             "top_k": top_k,
             "deduplicate": deduplicate,
             "threshold": threshold,
-            "model": self.model_name,
+            **self._cache_common(),
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
@@ -858,11 +1024,20 @@ class LexiconRetriever:
         q_key = None
         query_embedding_np = None
         if use_cache and self.cache_manager.enabled:
-            q_key = self.cache_manager.make_key({"stage": "lex_query_embedding", "model": self.model_name, "q_sha1": q_sha1})
+            q_key = self.cache_manager.make_key({
+                "stage": "lex_query_embedding",
+                **self._cache_common(),
+                "q_sha1": q_sha1,
+            })
             query_embedding_np = self.cache_manager.get_embedding(q_key)
 
         if query_embedding_np is None:
-            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            query_embedding = self._encode_texts(
+                [query],
+                instruction=self.query_instruction,
+                convert_to_tensor=True,
+                show_progress_bar=False,
+            )
             if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
                 query_embedding = query_embedding.cpu()
             query_embedding_np = query_embedding.numpy().astype(np.float32)
@@ -887,7 +1062,7 @@ class LexiconRetriever:
         if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "lex_retrieval",
-                "model": self.model_name,
+                **self._cache_common(),
                 "corpus_sig": corpus_sig,
                 "q_sha1": q_sha1,
                 "k": retrieval_k,
@@ -940,7 +1115,7 @@ class LexiconRetriever:
             "top_k": top_k,
             "deduplicate": deduplicate,
             "threshold": threshold,
-            "model": self.model_name,
+            **self._cache_common(),
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
@@ -980,7 +1155,7 @@ class LexiconRetriever:
             if use_cache and self.cache_manager.enabled:
                 r_key = self.cache_manager.make_key({
                     "stage": "lex_retrieval",
-                    "model": self.model_name,
+                    **self._cache_common(),
                     "corpus_sig": corpus_sig,
                     "q_sha1": q_sha1,
                     "k": retrieval_k,
@@ -1004,7 +1179,7 @@ class LexiconRetriever:
                 if use_cache and self.cache_manager.enabled:
                     q_key = self.cache_manager.make_key({
                         "stage": "lex_query_embedding",
-                        "model": self.model_name,
+                        **self._cache_common(),
                         "q_sha1": CacheManager.sha1_text(query),
                     })
                     cached = self.cache_manager.get_embedding(q_key)
@@ -1017,8 +1192,9 @@ class LexiconRetriever:
                     missing_keys.append(q_key)
 
             if missing_texts:
-                encoded = self.model.encode(
+                encoded = self._encode_texts(
                     missing_texts,
+                    instruction=self.query_instruction,
                     batch_size=batch_size,
                     convert_to_tensor=True,
                     show_progress_bar=False,
@@ -1052,7 +1228,7 @@ class LexiconRetriever:
                     q_sha1 = CacheManager.sha1_text(queries[i])
                     r_key = self.cache_manager.make_key({
                         "stage": "lex_retrieval",
-                        "model": self.model_name,
+                        **self._cache_common(),
                         "corpus_sig": corpus_sig,
                         "q_sha1": q_sha1,
                         "k": retrieval_k,
@@ -1092,7 +1268,10 @@ class LexiconRetriever:
         params = {
             "method": "including",
             "top_k": top_k,
-            "deduplicate": deduplicate
+            "deduplicate": deduplicate,
+            "lexicon_schema": self.lexicon_schema,
+            "match_mode": self.match_mode,
+            "case_sensitive": self.case_sensitive,
         }
         
         if use_cache:
@@ -1104,8 +1283,16 @@ class LexiconRetriever:
         result = []
         seen_words = set()
         
+        query_text = query if self.case_sensitive else query.lower()
         for word in self.word2item.keys():
-            if word in query:
+            word_text = word if self.case_sensitive else word.lower()
+            if self.lexicon_schema == "hatebase" and self.match_mode == "word_boundary":
+                pattern = r"(?<![A-Za-z0-9_])" + re.escape(word_text) + r"(?![A-Za-z0-9_])"
+                matched = re.search(pattern, query_text) is not None
+            else:
+                matched = word_text in query_text
+
+            if matched:
                 if deduplicate and word in seen_words:
                     continue
                 result.append(self.word2item[word])
@@ -1227,17 +1414,21 @@ class MultiClassRetriever:
             cache_dir: str = "./cache",
             enable_cache: bool = True,
             target_groups: Optional[List[str]] = None,
-            default_weights: Optional[Dict[str, float]] = None):
+            default_weights: Optional[Dict[str, float]] = None,
+            task_type: str = "structured",
+            stratify_field: str = "targeted_group",
+            query_instruction: str = "",
+            corpus_instruction: str = ""):
 
         if model:
             self.model = model
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
             self.model_path = model_path
             self.device = device
         else:
             logger.info(f"Loading model from path: {model_path}")
             self.model = SentenceTransformer(model_path).to(device)
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
             self.model_path = model_path
             self.device = device
 
@@ -1245,6 +1436,10 @@ class MultiClassRetriever:
         self.random_state = random_state
         self.target_groups = normalize_target_groups(target_groups)
         self.default_weights = normalize_weights(default_weights, self.target_groups)
+        self.task_type = task_type
+        self.stratify_field = stratify_field
+        self.query_instruction = query_instruction or ""
+        self.corpus_instruction = corpus_instruction or ""
 
         # ????????????
         self.cache_manager = CacheManager(cache_dir, enable_cache)
@@ -1269,7 +1464,7 @@ class MultiClassRetriever:
         for targeted_group in self.target_groups:
             new_data_list = []
             for data in loaded_data_list:
-                if any(quad_has_group(quadruple, targeted_group) for quadruple in data["quadruples"]):
+                if record_has_class(data, targeted_group, self.task_type, self.stratify_field):
                     new_data_list.append(data)
             self.class_data_dict[targeted_group] = new_data_list
     
@@ -1283,6 +1478,10 @@ class MultiClassRetriever:
             device=self.device,
             cache_dir=self.cache_manager.cache_dir,
             enable_cache=self.cache_manager.enabled,
+            task_type=self.task_type,
+            stratify_field=self.stratify_field,
+            query_instruction=self.query_instruction,
+            corpus_instruction=self.corpus_instruction,
         )
 
         for class_name in self.class_data_dict.keys():
@@ -1342,6 +1541,10 @@ class MultiClassRetriever:
 
         params.update({
             'model': getattr(self, 'model_name', None),
+            'query_instruction': self.query_instruction,
+            'corpus_instruction': self.corpus_instruction,
+            'task_type': self.task_type,
+            'stratify_field': self.stratify_field,
             'corpus_sig': composite_sig,
         })
 
@@ -1436,6 +1639,10 @@ class MultiClassRetriever:
 
         params.update({
             'model': getattr(self, 'model_name', None),
+            'query_instruction': self.query_instruction,
+            'corpus_instruction': self.corpus_instruction,
+            'task_type': self.task_type,
+            'stratify_field': self.stratify_field,
             'corpus_sig': composite_sig,
         })
 
@@ -1695,17 +1902,21 @@ class ClusteredRetriever:
             cache_dir: str = "./cache",
             enable_cache: bool = True,
             random_state: int = 42,
+            task_type: str = "structured",
+            stratify_field: str = "targeted_group",
+            query_instruction: str = "",
+            corpus_instruction: str = "",
     ) -> None:
         """Initialize a clustered retriever."""
         # ???????????????
         if model:
             self.model = model
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
             self.device = device
         else:
             logger.info(f"Loading model from path: {model_path}")
             self.model = SentenceTransformer(model_path).to(device)
-            self.model_name = model_name
+            self.model_name = model_name or (os.path.basename(os.path.normpath(model_path)) if model_path else "sentence-transformer")
             self.device = device
 
         # ??????
@@ -1714,6 +1925,10 @@ class ClusteredRetriever:
         
         self.n_clusters = n_clusters
         self.random_state = random_state
+        self.task_type = task_type
+        self.stratify_field = stratify_field
+        self.query_instruction = query_instruction or ""
+        self.corpus_instruction = corpus_instruction or ""
 
         # ???????????? retriever?????????
         if data_path:
@@ -1744,6 +1959,10 @@ class ClusteredRetriever:
             model_name=self.model_name,
             cache_dir=self.cache_manager.cache_dir,
             enable_cache=self.cache_manager.enabled,
+            task_type=self.task_type,
+            stratify_field=self.stratify_field,
+            query_instruction=self.query_instruction,
+            corpus_instruction=self.corpus_instruction,
         )
         self.global_retriever.create_embeddings(self.data)
         self.texts = self.global_retriever.texts
@@ -1783,6 +2002,10 @@ class ClusteredRetriever:
             retriever = Retriever(
                 model=self.model,
                 model_name=self.model_name,
+                task_type=self.task_type,
+                stratify_field=self.stratify_field,
+                query_instruction=self.query_instruction,
+                corpus_instruction=self.corpus_instruction,
                 enable_cache=False  # ??retriever ????????????????????????
             )
             retriever.create_embeddings(cluster_data)
@@ -1954,6 +2177,10 @@ class StochasticWeightedRetriever(Retriever):
             device: str = "cuda:0",
             cache_dir: str = "./cache",
             enable_cache: bool = True,
+            task_type: str = "structured",
+            stratify_field: str = "targeted_group",
+            query_instruction: str = "",
+            corpus_instruction: str = "",
     ):
         super().__init__(
             model_path=model_path, 
@@ -1963,7 +2190,11 @@ class StochasticWeightedRetriever(Retriever):
             reranker_model_path=reranker_model_path,
             device=device,
             cache_dir=cache_dir,
-            enable_cache=enable_cache
+            enable_cache=enable_cache,
+            task_type=task_type,
+            stratify_field=stratify_field,
+            query_instruction=query_instruction,
+            corpus_instruction=corpus_instruction,
         )
         self.random_state = np.random.RandomState(random_state) if random_state is not None else np.random
 
@@ -2123,14 +2354,23 @@ class StochasticWeightedRetriever(Retriever):
         q_key = None
         query_embedding_np = None
         query_idx = getattr(self, "text2idx", {}).get(query)
-        if query_idx is not None and hasattr(self, "corpus_embeddings_np"):
+        if not self.query_instruction and query_idx is not None and hasattr(self, "corpus_embeddings_np"):
             query_embedding_np = self.corpus_embeddings_np[int(query_idx):int(query_idx) + 1]
         elif use_cache and self.cache_manager.enabled:
-            q_key = self.cache_manager.make_key({"stage": "query_embedding", "model": self.model_name, "q_sha1": q_sha1})
+            q_key = self.cache_manager.make_key({
+                "stage": "query_embedding",
+                **self._cache_common(),
+                "q_sha1": q_sha1,
+            })
             query_embedding_np = self.cache_manager.get_embedding(q_key)
 
         if query_embedding_np is None:
-            query_embedding = self.model.encode(query, convert_to_tensor=True, show_progress_bar=False)
+            query_embedding = self._encode_texts(
+                [query],
+                instruction=self.query_instruction,
+                convert_to_tensor=True,
+                show_progress_bar=False,
+            )
             if hasattr(query_embedding, 'is_cuda') and query_embedding.is_cuda:
                 query_embedding = query_embedding.cpu()
             query_embedding_np = query_embedding.numpy().astype(np.float32)
@@ -2156,7 +2396,7 @@ class StochasticWeightedRetriever(Retriever):
         if use_cache and self.cache_manager.enabled:
             r_key = self.cache_manager.make_key({
                 "stage": "retrieval",
-                "model": self.model_name,
+                **self._cache_common(),
                 "corpus_sig": corpus_sig,
                 "q_sha1": q_sha1,
                 "k": retrieval_k,
@@ -2284,7 +2524,7 @@ class StochasticWeightedRetriever(Retriever):
             "random_ratio": random_ratio,
             "temperature": temperature,
             "candidate_multiplier": candidate_multiplier,
-            "model": getattr(self, "model_name", None),
+            **self._cache_common(),
             "corpus_sig": getattr(self, "corpus_sig", None),
         }
 
@@ -2333,7 +2573,7 @@ class StochasticWeightedRetriever(Retriever):
                 q_sha1 = CacheManager.sha1_text(query)
                 r_key = self.cache_manager.make_key({
                     "stage": "retrieval",
-                    "model": self.model_name,
+                    **self._cache_common(),
                     "corpus_sig": corpus_sig,
                     "q_sha1": q_sha1,
                     "k": retrieval_k,
@@ -2364,7 +2604,7 @@ class StochasticWeightedRetriever(Retriever):
                     q_sha1 = CacheManager.sha1_text(queries[i])
                     r_key = self.cache_manager.make_key({
                         "stage": "retrieval",
-                        "model": self.model_name,
+                        **self._cache_common(),
                         "corpus_sig": corpus_sig,
                         "q_sha1": q_sha1,
                         "k": retrieval_k,

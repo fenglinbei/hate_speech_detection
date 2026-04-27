@@ -5,7 +5,7 @@ import time
 from tqdm import tqdm
 from difflib import SequenceMatcher
 from typing import Optional, Tuple
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 from metrics.core import *
 from utils.log import init_logger
@@ -369,6 +369,167 @@ class BinaryClassificationMetrics:
             "non_hate_precision": per_label["non-hate"]["precision"],
             "non_hate_recall": per_label["non-hate"]["recall"],
             "non_hate_f1": per_label["non-hate"]["f1"],
+            "success": success,
+            "total": total,
+            "success_rate": round(self._safe_div(success, total), 4),
+            "invalid": invalid,
+            "per_label": per_label,
+            "confusion_matrix": confusion,
+        }
+
+        if save_data:
+            self._save_result(info_data or {}, metric_dict)
+        return metric_dict
+
+    def _save_result(self, info_data: dict, score_dict: dict):
+        os.makedirs(self.output_dir, exist_ok=True)
+        model_name = info_data.get("model", "model")
+        shot_num = info_data.get("shot_num", 0)
+        seed = info_data.get("seed", 0)
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        file_path = os.path.join(self.output_dir, f"metric_{model_name}_{shot_num}_{seed}_{timestamp}.json")
+        with open(file_path, "w", encoding="utf-8") as file:
+            json.dump({"info": info_data, "metrics": score_dict}, file, ensure_ascii=False, indent=2)
+
+
+class HateXplainMetrics:
+    LABELS = ("hatespeech", "offensive", "normal")
+
+    def __init__(self, output_dir: str = "./metrics/llm/"):
+        self.output_dir = output_dir
+
+    @staticmethod
+    def _safe_div(num: float, den: float) -> float:
+        return num / den if den else 0.0
+
+    @staticmethod
+    def _normalize_annotation(annotation: Optional[dict]) -> dict:
+        annotation = annotation or {}
+        label = str(annotation.get("label", "")).strip().lower()
+        target_groups = annotation.get("target_groups", []) or []
+        rationales = annotation.get("rationales", []) or []
+        rationale_texts = []
+        for rationale in rationales:
+            if isinstance(rationale, dict):
+                text = str(rationale.get("text", "")).strip()
+            else:
+                text = str(rationale).strip()
+            if text:
+                rationale_texts.append(text)
+        return {
+            "label": label,
+            "target_groups": {str(group).strip().lower() for group in target_groups if str(group).strip()},
+            "rationales": rationale_texts,
+        }
+
+    @staticmethod
+    def _text_tokens(texts: list[str]) -> set[str]:
+        import re
+
+        tokens: set[str] = set()
+        for text in texts:
+            tokens.update(re.findall(r"[a-z0-9]+", str(text).lower()))
+        return tokens
+
+    def _set_scores(self, pred_sets: list[set[str]], gt_sets: list[set[str]]) -> dict:
+        tp = fp = fn = 0
+        macro_f1_values = []
+        for pred, gt in zip(pred_sets, gt_sets):
+            tp_i = len(pred & gt)
+            fp_i = len(pred - gt)
+            fn_i = len(gt - pred)
+            tp += tp_i
+            fp += fp_i
+            fn += fn_i
+            precision_i = self._safe_div(tp_i, tp_i + fp_i)
+            recall_i = self._safe_div(tp_i, tp_i + fn_i)
+            macro_f1_values.append(self._safe_div(2 * precision_i * recall_i, precision_i + recall_i))
+
+        precision = self._safe_div(tp, tp + fp)
+        recall = self._safe_div(tp, tp + fn)
+        return {
+            "micro_precision": round(precision, 4),
+            "micro_recall": round(recall, 4),
+            "micro_f1": round(self._safe_div(2 * precision * recall, precision + recall), 4),
+            "macro_f1": round(sum(macro_f1_values) / len(macro_f1_values), 4) if macro_f1_values else 0.0,
+        }
+
+    def run(
+            self,
+            datas_list: Optional[list[dict]] = None,
+            data_path: Optional[str] = None,
+            info_data: Optional[dict] = None,
+            save_data: bool = False,
+            **_,
+            ) -> dict:
+        if isinstance(datas_list, list):
+            datas = datas_list
+        elif isinstance(data_path, str):
+            with open(data_path, "r", encoding="utf-8") as file:
+                payload = json.load(file)
+            datas = payload.get("results", []) if isinstance(payload, dict) else payload
+        else:
+            raise ValueError("HateXplainMetrics requires datas_list or data_path.")
+
+        total = len(datas)
+        success = sum(1 for row in datas if row.get("status") == "success")
+        invalid = 0
+        correct = 0
+        per_label = {}
+        pairs = []
+        pred_target_sets = []
+        gt_target_sets = []
+        pred_rationale_sets = []
+        gt_rationale_sets = []
+
+        for row in datas:
+            gt = self._normalize_annotation(row.get("gt_annotation"))
+            pred = self._normalize_annotation(row.get("pred_annotation"))
+            if pred["label"] not in self.LABELS:
+                invalid += 1
+            if gt["label"] == pred["label"] and gt["label"] in self.LABELS:
+                correct += 1
+            pairs.append((gt["label"], pred["label"]))
+            pred_target_sets.append(pred["target_groups"])
+            gt_target_sets.append(gt["target_groups"])
+            pred_rationale_sets.append(self._text_tokens(pred["rationales"]))
+            gt_rationale_sets.append(self._text_tokens(gt["rationales"]))
+
+        for label in self.LABELS:
+            tp = sum(1 for gt, pred in pairs if gt == label and pred == label)
+            fp = sum(1 for gt, pred in pairs if gt != label and pred == label)
+            fn = sum(1 for gt, pred in pairs if gt == label and pred != label)
+            precision = self._safe_div(tp, tp + fp)
+            recall = self._safe_div(tp, tp + fn)
+            per_label[label] = {
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
+                "precision": round(precision, 4),
+                "recall": round(recall, 4),
+                "f1": round(self._safe_div(2 * precision * recall, precision + recall), 4),
+                "support": sum(1 for gt, _ in pairs if gt == label),
+            }
+
+        macro_precision = sum(per_label[label]["precision"] for label in self.LABELS) / len(self.LABELS)
+        macro_recall = sum(per_label[label]["recall"] for label in self.LABELS) / len(self.LABELS)
+        macro_f1 = sum(per_label[label]["f1"] for label in self.LABELS) / len(self.LABELS)
+
+        confusion = {gt: {pred: 0 for pred in [*self.LABELS, "invalid"]} for gt in self.LABELS}
+        for gt, pred in pairs:
+            if gt not in self.LABELS:
+                continue
+            confusion[gt][pred if pred in self.LABELS else "invalid"] += 1
+
+        metric_dict = {
+            "task_type": "hatexplain",
+            "accuracy": round(self._safe_div(correct, total), 4),
+            "macro_precision": round(macro_precision, 4),
+            "macro_recall": round(macro_recall, 4),
+            "macro_f1": round(macro_f1, 4),
+            "f1_macro": round(macro_f1, 4),
+            "target_group": self._set_scores(pred_target_sets, gt_target_sets),
+            "rationale": self._set_scores(pred_rationale_sets, gt_rationale_sets),
             "success": success,
             "total": total,
             "success_rate": round(self._safe_div(success, total), 4),

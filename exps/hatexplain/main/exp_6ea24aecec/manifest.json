@@ -1,0 +1,33 @@
+{
+  "project": "hatexplain",
+  "exp_id": "6ea24aecec",
+  "exp_dir": "exps/hatexplain/main/exp_6ea24aecec",
+  "created_at": "2026-04-27 20:03:49",
+  "index": 0,
+  "port": 35200,
+  "overrides": {},
+  "meta": {},
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/hatexplain/main/exp_6ea24aecec/build_config.json",
+    "train_config": "exps/hatexplain/main/exp_6ea24aecec/train_config.json",
+    "runner_config": "exps/hatexplain/main/exp_6ea24aecec/runner_config.json",
+    "data_dir": "exps/hatexplain/main/exp_6ea24aecec/data",
+    "val_runner_file": "exps/hatexplain/main/exp_6ea24aecec/data/val_runner.json",
+    "model_dir": "exps/hatexplain/main/exp_6ea24aecec/model",
+    "runner_output_dir": "exps/hatexplain/main/exp_6ea24aecec/runner_output",
+    "logs_dir": "exps/hatexplain/main/exp_6ea24aecec/logs"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}

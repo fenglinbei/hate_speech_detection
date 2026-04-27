@@ -1,0 +1,51 @@
+{
+  "output_name": "hatexplain_main.json",
+  "log": {
+    "level": "INFO",
+    "show_console": true
+  },
+  "model": {
+    "type": "ApiLLMModel",
+    "params": {
+      "model_name": "qwen2.5",
+      "api_base": "http://127.0.0.1:35006/v1/",
+      "api_key": "EMPTY",
+      "temperature": 0,
+      "top_p": 1
+    }
+  },
+  "tester": {
+    "task_type": "hatexplain",
+    "output_dir": "exps/hatexplain/main/output",
+    "use_cache": false,
+    "test_data_file": "data/hateXplain/main/test.json",
+    "shot_num": 0,
+    "max_retries": 50,
+    "concurrency": 1,
+    "compute_metric": true,
+    "prompt_templates": {
+      "system": "HATEXPLAIN_SYSTEM_PROMPT",
+      "train": "HATEXPLAIN_RAG_PROMPT_USER",
+      "shot": "",
+      "example": "HATEXPLAIN_EXAMPLE_PROMPT"
+    },
+    "run": {
+      "shots_list": [
+        0
+      ],
+      "seeds_list": [
+        42
+      ],
+      "llm_params": {
+        "max_new_tokens": 512,
+        "n": 1,
+        "top_p": 1,
+        "top_k": 20,
+        "min_p": 0,
+        "temperature": 0,
+        "enable_thinking": false,
+        "seed": 42
+      }
+    }
+  }
+}

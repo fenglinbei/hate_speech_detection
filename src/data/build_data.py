@@ -98,6 +98,40 @@ def _is_cold_binary_task(config: Any) -> bool:
     return str(getattr(config, "task_type", "")).strip().lower() == "cold_binary"
 
 
+def _is_hatexplain_task(config: Any) -> bool:
+    return str(getattr(config, "task_type", "")).strip().lower() == "hatexplain"
+
+
+def _hatexplain_annotation_from_record(record: dict) -> dict:
+    annotation = record.get("annotation") or record.get("gt_annotation") or {}
+    label = str(annotation.get("label", "")).strip().lower()
+    target_groups = annotation.get("target_groups", [])
+    rationales = annotation.get("rationales", [])
+
+    if not isinstance(target_groups, list):
+        target_groups = [target_groups] if target_groups else []
+
+    rationale_texts: list[str] = []
+    if isinstance(rationales, list):
+        for rationale in rationales:
+            if isinstance(rationale, dict):
+                text = str(rationale.get("text", "")).strip()
+            else:
+                text = str(rationale).strip()
+            if text:
+                rationale_texts.append(text)
+
+    return {
+        "label": label,
+        "target_groups": [str(group).strip() for group in target_groups if str(group).strip()],
+        "rationales": rationale_texts,
+    }
+
+
+def _format_hatexplain_output(record: dict) -> str:
+    return json.dumps(_hatexplain_annotation_from_record(record), ensure_ascii=False, separators=(",", ":"))
+
+
 def _normalize_binary_label(value: Any) -> str | None:
     if isinstance(value, bool):
         return "hate" if value else "non-hate"
@@ -199,6 +233,8 @@ def load_global_demo_examples(
         retrieve_content = d.get("content", "")
         if task_type == "cold_binary":
             retrieve_output_text = _binary_label_from_record(d)
+        elif task_type == "hatexplain":
+            retrieve_output_text = _format_hatexplain_output(d)
         else:
             retrieve_output = d.get("quadruples", d.get("output", []))
             try:
@@ -315,6 +351,7 @@ def build_prompt(
     retrieval_cache_enabled = bool(getattr(config, "enable_retrieval_cache", True))
     retrieval_batch_size = int(getattr(config, "retrieval_batch_size", 256) or 256)
     cold_binary = _is_cold_binary_task(config)
+    hatexplain = _is_hatexplain_task(config)
 
     def render_prompt(raw_data: dict, examples: List[str], lex_contents: List[str]) -> str:
         return config.prompt_template.replace("{examples}", "\n".join(examples)).\
@@ -326,6 +363,13 @@ def build_prompt(
         for retrieve_content, retrieve_output in zip(retrieve_contents, retrieve_outputs):
             if cold_binary:
                 retrieve_output_text = _binary_label_from_retrieval_output(retrieve_output)
+            elif hatexplain:
+                if isinstance(retrieve_output, str):
+                    retrieve_output_text = retrieve_output
+                elif isinstance(retrieve_output, dict):
+                    retrieve_output_text = json.dumps(retrieve_output, ensure_ascii=False, separators=(",", ":"))
+                else:
+                    retrieve_output_text = str(retrieve_output)
             else:
                 try:
                     retrieve_output_text = output2triple(retrieve_output)
@@ -490,6 +534,7 @@ def build_prompt(
                 'id': raw_data.get('id'),
                 'content_sha1': _sha1_text(raw_data.get('content', '')),
                 'quadruples_sha1': _sha1_text(_stable_dumps(raw_data.get('quadruples', []))),
+                'annotation_sha1': _sha1_text(_stable_dumps(raw_data.get('annotation', {}))),
                 'metadata_sha1': _sha1_text(_stable_dumps(raw_data.get('metadata', {}))),
                 'is_test_data': bool(is_test_data),
                 **cache_static_payload,
@@ -519,10 +564,12 @@ def build_prompt(
 
     for local_idx, raw_data in enumerate(missing_datas):
         original_idx = missing_indices[local_idx]
-        triples = [
-            f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
-            for quadruple in raw_data["quadruples"]
-        ] if not cold_binary else []
+        triples = []
+        if not cold_binary and not hatexplain:
+            triples = [
+                f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
+                for quadruple in raw_data["quadruples"]
+            ]
         global_k = default_global_k
         examples = batch_examples[local_idx]
         lex_contents = batch_lexicons[local_idx]
@@ -553,7 +600,13 @@ def build_prompt(
 
         srag_examples_nums += len(examples)
 
-        answer = _binary_label_from_record(raw_data) if cold_binary else " [SEP] ".join(triples) + " [END]"
+        if cold_binary:
+            answer = _binary_label_from_record(raw_data)
+        elif hatexplain:
+            answer = _format_hatexplain_output(raw_data)
+        else:
+            answer = " [SEP] ".join(triples) + " [END]"
+
         message = {
             "id": raw_data["id"],
             "instruction": config.system_prompt if config.system_prompt else "", 
@@ -561,10 +614,12 @@ def build_prompt(
             "output": answer,
             "content": raw_data["content"],
             "metadata": raw_data.get("metadata", {}),
-            "gt_quadruples": raw_data["quadruples"] if is_test_data else "",
+            "gt_quadruples": raw_data.get("quadruples", []) if is_test_data else "",
             }
         if cold_binary:
             message["gt_label"] = answer
+        if hatexplain:
+            message["gt_annotation"] = raw_data.get("annotation", {}) if is_test_data else ""
         messages[original_idx] = message
 
         # ??????
@@ -801,6 +856,25 @@ def _build_mmr_params(config: Config):
     )
 
 
+def _model_name_from_path(model_name: Optional[str], model_path: Optional[str]) -> str:
+    if model_name:
+        return model_name
+    if model_path:
+        return os.path.basename(os.path.normpath(model_path))
+    return "sentence-transformer"
+
+
+def _ensure_local_model_path(model_path: Optional[str]) -> None:
+    if not model_path:
+        return
+    is_local = model_path.startswith(".") or model_path.startswith("/") or os.path.sep in model_path
+    if is_local and not os.path.exists(model_path):
+        raise FileNotFoundError(
+            f"Embedding model path does not exist: {model_path}. "
+            "Prepare the model locally or override the config path."
+        )
+
+
 def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[Any]:
     if not config.use_srag or bool(getattr(config, "use_global_demos", False)):
         return None
@@ -809,13 +883,21 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
 
     target_groups = getattr(config, "target_groups", None)
     default_weights = getattr(config, "default_weights", None)
+    model_name = _model_name_from_path(getattr(config, "srag_model_name", None), getattr(config, "srag_model_path", None))
+    _ensure_local_model_path(getattr(config, "srag_model_path", None))
+    common_task = {
+        "task_type": getattr(config, "task_type", "structured"),
+        "stratify_field": getattr(config, "stratify_field", "targeted_group"),
+        "query_instruction": getattr(config, "srag_query_instruction", ""),
+    }
 
     if config.clustered:
         retriever = ClusteredRetriever(
             model_path=config.srag_model_path,
-            model_name="bge-large-zh-v1.5",
+            model_name=model_name,
             n_clusters=config.n_clusters,
             random_state=config.random_state,
+            **common_task,
         )
         retriever._load_datas(data_list=raw_datas)
         retriever._build_global_retriever()
@@ -826,11 +908,12 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
     if config.stratified:
         retriever = MultiClassRetriever(
             model_path=config.srag_model_path,
-            model_name="bge-large-zh-v1.5",
+            model_name=model_name,
             ramdom_strategy=config.ramdom_strategy,
             random_state=config.random_state,
             target_groups=target_groups,
             default_weights=default_weights,
+            **common_task,
         )
         retriever.load_datas(data_list=raw_datas)
         retriever.build_retrievers()
@@ -860,13 +943,15 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
     if config.ramdom_strategy != "none":
         retriever = StochasticWeightedRetriever(
             model_path=config.srag_model_path,
-            model_name="bge-large-zh-v1.5",
+            model_name=model_name,
             random_state=config.random_state,
+            **common_task,
         )
     else:
         retriever = Retriever(
             model_path=config.srag_model_path,
-            model_name="bge-large-zh-v1.5",
+            model_name=model_name,
+            **common_task,
         )
 
     retriever.load_datas(data_list=raw_datas)
@@ -879,10 +964,16 @@ def _create_lex_retriever(config: Config) -> Optional[Any]:
         return None
     from rag.core import LexiconRetriever
 
+    _ensure_local_model_path(getattr(config, "lexicon_model_path", None))
     return LexiconRetriever(
         model_path=config.lexicon_model_path,
-        model_name="bge-large-zh-v1.5",
+        model_name=_model_name_from_path(getattr(config, "lexicon_model_name", None), getattr(config, "lexicon_model_path", None)),
         data_path=config.lexicon_data_path,
+        lexicon_schema=getattr(config, "lexicon_schema", "cold"),
+        match_mode=getattr(config, "lexicon_match_mode", "substring"),
+        case_sensitive=getattr(config, "lexicon_case_sensitive", True),
+        include_variants=getattr(config, "lexicon_include_variants", False),
+        query_instruction=getattr(config, "lexicon_query_instruction", ""),
     )
 
 
@@ -901,6 +992,7 @@ def _write_runner_test_json(
         ) -> None:
     _ensure_parent_dir(path)
     cold_binary = task_type == "cold_binary"
+    hatexplain = task_type == "hatexplain"
     records = []
     for message in messages:
         record = {
@@ -915,6 +1007,8 @@ def _write_runner_test_json(
         }
         if cold_binary:
             record["gt_label"] = message.get("gt_label") or _binary_label_from_record(message)
+        if hatexplain:
+            record["gt_annotation"] = message.get("gt_annotation") or {}
         records.append(record)
 
     with open(path, "w", encoding="utf-8") as file:

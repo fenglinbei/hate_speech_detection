@@ -47,6 +47,7 @@ class Config:
         self.weights_reverse = retrieval.get('weights_reverse', False)
         self.target_groups = retrieval.get('target_groups', None)
         self.default_weights = retrieval.get('default_weights', None)
+        self.stratify_field = retrieval.get('stratify_field', 'targeted_group')
         self.clustered = retrieval.get('clustered', False)
         self.n_clusters = retrieval.get('n_clusters', 8)
 
@@ -83,8 +84,19 @@ class Config:
         self.enable_retrieval_cache = cache.get('enable_retrieval_cache', True)
         self.cache_backend = cache.get('cache_backend', 'sqlite')
         self.retrieval_batch_size = cache.get('retrieval_batch_size', 256)
+
+        lexicon = config_data.get('lexicon_settings', {})
+        self.lexicon_schema = lexicon.get('lexicon_schema', 'cold')
+        self.lexicon_languages = lexicon.get('languages', None)
+        self.lexicon_match_mode = lexicon.get('match_mode', 'substring')
+        self.lexicon_case_sensitive = lexicon.get('case_sensitive', True)
+        self.lexicon_include_variants = lexicon.get('include_variants', False)
         
         # 模型设置
         models = config_data.get('model_settings', {})
         self.srag_model_path = models.get('srag_model_path', './models/base/bge-large-zh-v1.5')
         self.lexicon_model_path = models.get('lexicon_model_path', './models/base/bge-large-zh-v1.5')
+        self.srag_model_name = models.get('srag_model_name', None)
+        self.lexicon_model_name = models.get('lexicon_model_name', None)
+        self.srag_query_instruction = models.get('srag_query_instruction', '')
+        self.lexicon_query_instruction = models.get('lexicon_query_instruction', '')

@@ -1,0 +1,22 @@
+{
+  "project": "hatexplain",
+  "output_root": "exps/hatexplain/main",
+  "base": {
+    "build": "exps/hatexplain/base_config/data_config.json",
+    "train": "exps/hatexplain/base_config/train_config.json",
+    "runner": "exps/hatexplain/base_config/eval_config.json"
+  },
+  "port_base": 35200,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": {}
+}
