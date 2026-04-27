@@ -1,14 +1,14 @@
 {
   "backend": "deepspeed",
-  "profile": "ds_zero3_safe",
+  "profile": "ds_zero2_safe",
   "nproc_per_node": 4,
   "master_port": 36100,
   "cuda_visible_devices": "0,1,2,3",
   "max_steps_override": null,
   "effective_micro_batch": 2,
   "effective_gradient_accumulation": 1,
-  "deepspeed_config": "/root/autodl-tmp/hate_speech_detection/exps/cold/main_binary/exp_3ec2630dd5/logs/ds_config_ds_zero3_safe.json",
-  "zero_stage": 3,
+  "deepspeed_config": "/root/autodl-tmp/hate_speech_detection/exps/cold/main_binary/exp_3ec2630dd5/logs/ds_config_ds_zero2_safe.json",
+  "zero_stage": 2,
   "offload": false,
   "training": {
     "output_dir": "exps/cold/main_binary/exp_3ec2630dd5/model",
@@ -28,6 +28,18 @@
     "lr_scheduler_type": "cosine",
     "warmup_ratio": 0,
     "bf16": true,
-    "deepspeed": "/root/autodl-tmp/hate_speech_detection/exps/cold/main_binary/exp_3ec2630dd5/logs/ds_config_ds_zero3_safe.json"
+    "deepspeed": "/root/autodl-tmp/hate_speech_detection/exps/cold/main_binary/exp_3ec2630dd5/logs/ds_config_ds_zero2_safe.json"
+  },
+  "lora": {
+    "enabled": true,
+    "r": 8,
+    "alpha": 32,
+    "dropout": 0.1,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "bias": "none",
+    "merge_on_save": true
   }
 }
