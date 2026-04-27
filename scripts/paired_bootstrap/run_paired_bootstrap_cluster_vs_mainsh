@@ -3,14 +3,14 @@ set -euo pipefail
 
 PYTHONPATH=src
 PYTHON_BIN="${PYTHON_BIN:-python}"
-SYSTEM_A="${SYSTEM_A:-exps/emonstration_selection/uniform/exp_c44a603058/runner_output/exp_c44a603058_s42.json}"
+SYSTEM_A="${SYSTEM_A:-exps/emonstration_selection/cluster/exp_bd8221b10b/runner_output/exp_bd8221b10b_s42.json}"
 SYSTEM_B="${SYSTEM_B:-runner/output/k_ablation/k10_s42.json}"
 METRIC="${METRIC:-all}"
 N_BOOTSTRAP="${N_BOOTSTRAP:-10000}"
 SEED="${SEED:-42}"
 CI="${CI:-95.0}"
 SIMILARITY_THRESHOLD="${SIMILARITY_THRESHOLD:-0.5}"
-OUTPUT="${OUTPUT:-output/paired_bootstrap/uniform_vs_main.json}"
+OUTPUT="${OUTPUT:-output/paired_bootstrap/cluster_vs_main.json}"
 INDENT="${INDENT:-2}"
 
 "$PYTHON_BIN" scripts/paired_bootstrap/paired_bootstrap_llm.py \
