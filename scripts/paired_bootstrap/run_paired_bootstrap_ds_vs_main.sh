@@ -4,7 +4,7 @@ set -euo pipefail
 PYTHON_BIN="${PYTHON_BIN:-python}"
 export PYTHONPATH="${PYTHONPATH:-src}"
 
-SYSTEM_B="${SYSTEM_B:-runner/output/k_ablation/k10_s42.json}"
+SYSTEM_B="${SYSTEM_B:-output/runner/k_ablation/k10_s42.json}"
 SYSTEM_B_LABEL="${SYSTEM_B_LABEL:-main}"
 METRIC="${METRIC:-all}"
 N_BOOTSTRAP="${N_BOOTSTRAP:-10000}"
@@ -15,15 +15,19 @@ OUTPUT_DIR="${OUTPUT_DIR:-output/paired_bootstrap}"
 INDENT="${INDENT:-2}"
 
 SYSTEM_A_NAMES=(
-  "uniform"
-  "cluster"
-  "wo_semantic"
+  "Ours(uniform)"
+  "Cluster"
+  "Global"
+  "MMR"
+  "Random"
 )
 
 SYSTEM_A_FILES=(
   "exps/emonstration_selection/uniform/exp_c44a603058/runner_output/exp_c44a603058_s42.json"
   "exps/emonstration_selection/cluster/exp_bd8221b10b/runner_output/exp_bd8221b10b_s42.json"
-  "exps/ablation/wo_semantic_match/exp_3992dbfb11/runner_output/exp_3992dbfb11_s42.json"
+  "exps/emonstration_selection/global/exp_744c07ab8e/runner_output/exp_744c07ab8e_s424242.json"
+  "exps/emonstration_selection/mmr/exp_22101d2758/runner_output/exp_22101d2758_s42.json"
+  "exps/emonstration_selection/random/exp_c3700e5fe8/runner_output/exp_c3700e5fe8_s42424242.json"
 )
 
 if [[ "${#SYSTEM_A_NAMES[@]}" -ne "${#SYSTEM_A_FILES[@]}" ]]; then
