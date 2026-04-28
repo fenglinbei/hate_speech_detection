@@ -334,8 +334,9 @@ spec 示例在 `exps/specs/` 下。一个 spec 会描述模板配置、参数网
 python scripts/exps/expctl.py gen --spec exps/specs/example.json
 ```
 
-`expctl.py` 会读取三份 base 配置，对每个 grid 组合应用覆盖项，然后为每个组合写出一个确定性的
-`exp_<hash>` 目录。hash 来自 `project` 和 `overrides`，所以同一个 spec 通常会生成稳定的目录名。
+`expctl.py` 会读取三份 base 配置，对每个 grid 组合应用覆盖项，然后为每个组合写出一个确定性的实验目录。
+带 `name` 的 grid 项使用 `exp_<name>_<hash>`，不带 `name` 时保持默认的 `exp_<hash>`。
+hash 来自 `project` 和 `overrides`，所以同一个 spec 通常会生成稳定的目录名。
 
 ### 2. 查看生成目录
 

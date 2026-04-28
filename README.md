@@ -302,9 +302,10 @@ python scripts/exps/expctl.py gen --spec exps/specs/example.json
 ```
 
 `expctl.py` loads the three base configs, applies each grid combination, and
-writes one deterministic `exp_<hash>` directory per combination. The hash is
-computed from the project name and overrides, so the same spec usually produces
-the same experiment directory names.
+writes one deterministic experiment directory per combination. Grid entries
+with `name` use `exp_<name>_<hash>`; entries without `name` keep the default
+`exp_<hash>` form. The hash is computed from the project name and overrides, so
+the same spec usually produces the same experiment directory names.
 
 ### 2. Inspect the generated directory
 
