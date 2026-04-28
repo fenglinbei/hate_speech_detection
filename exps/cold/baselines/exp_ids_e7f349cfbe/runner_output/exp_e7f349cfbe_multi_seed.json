@@ -1,0 +1,142 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_e7f349cfbe.json",
+    "generated_at": "20260428_215757",
+    "baseline": {
+      "method": "ids",
+      "task_type": "cold_binary",
+      "ids": {
+        "q": 3,
+        "top_k": 10,
+        "max_reason_chars": 512,
+        "cache_dir": "exps/cold/baselines/exp_ids_e7f349cfbe/cache/ids"
+      }
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_e7f349cfbe_s42.json",
+      "metric": {
+        "task_type": "cold_binary",
+        "accuracy": 0.8007,
+        "macro_precision": 0.7921,
+        "macro_recall": 0.8004,
+        "macro_f1": 0.7949,
+        "f1_macro": 0.7949,
+        "hate_precision": 0.7252,
+        "hate_recall": 0.7992,
+        "hate_f1": 0.7604,
+        "non_hate_precision": 0.859,
+        "non_hate_recall": 0.8016,
+        "non_hate_f1": 0.8293,
+        "success": 5323,
+        "total": 5323,
+        "success_rate": 1.0,
+        "invalid": 0,
+        "per_label": {
+          "hate": {
+            "tp": 1684,
+            "fp": 638,
+            "fn": 423,
+            "precision": 0.7252,
+            "recall": 0.7992,
+            "f1": 0.7604,
+            "support": 2107
+          },
+          "non-hate": {
+            "tp": 2578,
+            "fp": 423,
+            "fn": 638,
+            "precision": 0.859,
+            "recall": 0.8016,
+            "f1": 0.8293,
+            "support": 3216
+          }
+        },
+        "confusion_matrix": {
+          "hate": {
+            "hate": 1684,
+            "non-hate": 423,
+            "invalid": 0
+          },
+          "non-hate": {
+            "hate": 638,
+            "non-hate": 2578,
+            "invalid": 0
+          }
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "prompt_tokens": 9328526,
+          "completion_tokens": 749047,
+          "total_tokens": 10077573
+        },
+        "llm_params": {
+          "max_new_tokens": 512,
+          "n": 1,
+          "top_p": 1,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "task_type": "cold_binary",
+          "output_dir": "exps/cold/baselines/exp_ids_e7f349cfbe/runner_output",
+          "use_cache": false,
+          "test_data_file": "exps/cold/baselines/exp_ids_e7f349cfbe/data/test.json",
+          "shot_num": 0,
+          "max_retries": 50,
+          "concurrency": 1,
+          "compute_metric": true,
+          "prompt_templates": {
+            "system": "COLD_BINARY_SYSTEM_PROMPT",
+            "train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
+            "shot": "",
+            "example": "COLD_BINARY_EXAMPLE_PROMPT"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "seeds_list": [
+              42
+            ],
+            "llm_params": {
+              "max_new_tokens": 512,
+              "n": 1,
+              "top_p": 1,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0,
+              "enable_thinking": false,
+              "seed": 42
+            }
+          },
+          "progress_dir": "exps/cold/baselines/exp_ids_e7f349cfbe/progress",
+          "prompts_save_dir": "exps/cold/baselines/exp_ids_e7f349cfbe/prompts",
+          "cache_dir": "exps/cold/baselines/exp_ids_e7f349cfbe/cache",
+          "baseline": {
+            "method": "ids",
+            "task_type": "cold_binary",
+            "ids": {
+              "q": 3,
+              "top_k": 10,
+              "max_reason_chars": 512
+            }
+          }
+        }
+      }
+    }
+  ]
+}

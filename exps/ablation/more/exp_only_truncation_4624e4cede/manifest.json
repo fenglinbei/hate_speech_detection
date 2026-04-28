@@ -1,0 +1,47 @@
+{
+  "project": "ablation",
+  "exp_id": "4624e4cede",
+  "exp_dir": "exps/ablation/more/exp_only_truncation_4624e4cede",
+  "created_at": "2026-04-28 19:08:09",
+  "index": 2,
+  "port": 35002,
+  "overrides": {
+    "name": "only_truncation",
+    "runner.baseline.task_type": "structured",
+    "build.retrieval_settings.use_lex": false,
+    "build.retrieval_settings.stratified": false,
+    "build.retrieval_settings.srag_top_k": 10,
+    "build.training_settings.auto_length": true
+  },
+  "meta": {
+    "name": "only_truncation"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/ablation/more/exp_only_truncation_4624e4cede/build_config.json",
+    "train_config": "exps/ablation/more/exp_only_truncation_4624e4cede/train_config.json",
+    "runner_config": "exps/ablation/more/exp_only_truncation_4624e4cede/runner_config.json",
+    "data_dir": "exps/ablation/more/exp_only_truncation_4624e4cede/data",
+    "val_runner_file": "exps/ablation/more/exp_only_truncation_4624e4cede/data/val_runner.json",
+    "model_dir": "exps/ablation/more/exp_only_truncation_4624e4cede/model",
+    "runner_output_dir": "exps/ablation/more/exp_only_truncation_4624e4cede/runner_output",
+    "logs_dir": "exps/ablation/more/exp_only_truncation_4624e4cede/logs",
+    "artifacts_dir": "exps/ablation/more/exp_only_truncation_4624e4cede/artifacts"
+  },
+  "baseline": {
+    "task_type": "structured",
+    "method": "standard"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
