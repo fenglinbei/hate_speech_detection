@@ -1,0 +1,3217 @@
+{
+  "processed_ids": [
+    6,
+    2063,
+    39,
+    7726,
+    3632,
+    3121,
+    1082,
+    1083,
+    1615,
+    593,
+    1617,
+    1108,
+    1621,
+    598,
+    7773,
+    6242,
+    3171,
+    610,
+    7781,
+    3688,
+    4712,
+    3189,
+    1661,
+    3711,
+    4229,
+    1157,
+    1163,
+    5786,
+    6300,
+    2721,
+    2216,
+    5289,
+    4781,
+    6319,
+    6836,
+    7356,
+    5309,
+    6343,
+    4318,
+    3821,
+    1775,
+    5371,
+    4861,
+    2813,
+    5380,
+    7941,
+    6406,
+    6405,
+    276,
+    1327,
+    3893,
+    4409,
+    1849,
+    3925,
+    5974,
+    7510,
+    2933,
+    3960,
+    6524,
+    896,
+    7562,
+    5005,
+    6550,
+    3478,
+    7577,
+    5542,
+    4528,
+    6578,
+    1464,
+    7610,
+    3003,
+    6594,
+    3530,
+    7124,
+    5603,
+    2536,
+    6122,
+    5104,
+    3057,
+    7157,
+    1016,
+    3070
+  ],
+  "results": [
+    {
+      "id": 6343,
+      "content": "说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。真的没治了。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "北京人",
+          "argument": "说河南人偷井盖的",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        },
+        {
+          "target": "东北人",
+          "argument": "就会舔北京",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我是东北人，没上网之前从来不知道河南人偷井盖，第一次是从一个湖北同学那里听来的。论说话嗓门大，我感觉是个东北人都抵不过一个广东人。\n### 三元组：\n广东人 | 说话嗓门大 | non-hate [END]\n\n### 句子：\n河南大兄弟别慌，现在有东北在前面顶着呢，偷井盖算啥，侮辱东北人的词汇那才叫让人大开眼界，山东兄弟准备好，接下来就是你们了\n### 三元组：\n东北人 | 侮辱东北人的词汇那才叫让人大开眼界 | Region [END]\n\n### 句子：\n偷井盖这真不是黑，现在招工还有不要河南人的，河南人太奸，还喜欢报团，坏心思多。东北才是被黑的最惨的，我希望有个东北哥们而不是河南\n### 三元组：\n偷井盖 | 这真不是黑 | Region [SEP] 河南人 | 现在招工还有不要河南人的 | Region [SEP] 河南人 | 太奸，还喜欢报团，坏心思多 | Region [END]\n\n### 句子：\n南大人已经开始内部瓦解了，竟然能把河南偷井盖这种锅甩给东北人，也是绝了。\n### 三元组：\n南大人 | 已经开始内部瓦解 | Region [SEP] 河南 | 偷井盖 | Region [END]\n\n### 句子：\n你说的河南人偷井盖才是无关紧要的，都带调侃的味道，但广东是在文化，族群等方面被黑，你别混淆视听，各种社区贴吧用户进去知乎，用户质量素质越来越低，各种地域黑，粤黑会越来越多\n### 三元组：\n广东 | 在文化，族群等方面被黑 | Region [SEP] 粤黑 | 越来越多 | Region [END]\n\n### 句子：\n是呐，我一说是河南的就有人说偷井盖儿的╮（╯＿╰）╭\n### 三元组：\n河南的 | 偷井盖儿的 | Region [END]\n\n### 句子：\n河南真的惨，黑东北还有好多东北人来反对，黑河南真的就黑到底了\n### 三元组：\n河南 | 黑河南真的就黑到底了 | Region [END]\n\n### 句子：\n上个回答下面就有一个河南人在骂东北人😆👍\n### 三元组：\n河南人 | 在骂东北人???? | Region [END]\n\n### 句子：\n我真的上大学之前都没听过 我身边的人也没人知道 直到碰到了河南室友，她跟我讲她们河南人为什么偷井盖 还开玩笑的教我们怎么偷井盖😅\n### 三元组：\n河南人 | 偷井盖 | Region [END]\n\n### 句子：\n黑你们就觉得被骂了，黑河南就觉得只是玩梗🙄 大家都这么嗨的黑河南，那我们井盖手艺都是炎黄传下来的，大家一个祖先，黑呗！\n### 三元组：\n黑河南 | 只是玩梗 | Region [SEP] 井盖手艺 | 炎黄传下来的 | Region [END]\n\n### 句子：\n说河南人偷井盖的明明是北京人，我一个南方人都知道，东北人会不知道。东北人就会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样。真的没治了。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "河南人 | 偷井盖 | Region [SEP] 北京人 | 说河南人偷井盖的明明是北京人 | Region [SEP] 东北人 | 会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "河南人",
+          "argument": "偷井盖",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        },
+        {
+          "target": "北京人",
+          "argument": "说河南人偷井盖的明明是北京人",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        },
+        {
+          "target": "东北人",
+          "argument": "会舔北京，然后拉着整个北方对抗南方，搞得像分裂国家一样",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4229,
+      "content": "很多男同都有创伤，我们应该帮组他们走出阴影，过上正常人的生活。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "很多男同",
+          "argument": "都有创伤",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n八成以上男同骗婚，九成骗婚者家暴，一成配偶被传染性病。也许很多反感是这么来的\n### 三元组：\n男同 | 骗婚 | LGBTQ [SEP] 骗婚者 | 家暴 | others [END]\n\n### 句子：\n所以，需要广大男同胞发声，多搜集一下男性遭到家暴的例子，然后大规模宣传，深入人心\n### 三元组：\n男同胞 | 搜集一下男性遭到家暴的例子 | Sexism [END]\n\n### 句子：\n支持，同性恋是不正常的，应该纠正他们的取向\n### 三元组：\n同性恋 | 不正常的 | LGBTQ [END]\n\n### 句子：\n同性恋也是正常的，你们这群人也就会以多欺少，不过同性恋依然过得好好的。😆。天天就只会歧视，迫害。以强凌弱。但愿未来遇到比你更强的人你不会被打死。\n### 三元组：\n你们这群人 | 以多欺少 | LGBTQ [SEP] 你们这群人 | 只会歧视，迫害。以强凌弱 | LGBTQ [SEP] 你们这群人 | 但愿未来遇到比你更强的人你不会被打死 | LGBTQ [END]\n\n### 句子：\n尊重？很多男同性恋都是在涉世不深时被忽悠甚至被骗的。\n### 三元组：\n很多男同性恋 | 都是在涉世不深时被忽悠甚至被骗的 | LGBTQ [END]\n\n### 句子：\n真正的同性恋是先天影响比例很大。他们也无法决定。就因为他们是同性恋所以就要歧视他们？？你还有没有点道德？？如果他是你的亲人你还要杀了他？？\n### 三元组：\n真正的同性恋 | 先天影响比例很大 | non-hate [END]\n\n### 句子：\n同性恋孩子，心理容易受到创伤，心理自卑\n### 三元组：\n同性恋孩子 | 心理自卑 | LGBTQ [END]\n\n### 句子：\n被男同喜欢并不值得高兴，反而值得反思\n### 三元组：\n男同 | 值得反思 | LGBTQ [END]\n\n### 句子：\n缺乏父爱，或母爱容易扭曲，反对同性癖才是正道\n### 三元组：\n同性癖 | 反对同性癖才是正道 | LGBTQ [END]\n\n### 句子：\n其实，爱滋在男同里的比例很低，反倒是异性恋得爱滋的比例高，不信去上网查查。我国对同性恋采取不反对、不提倡。\n### 三元组：\n男同 | 爱滋在男同里的比例很低 | non-hate [SEP] 异性恋 | 得爱滋的比例高 | non-hate [END]\n\n### 句子：\n很多男同都有创伤，我们应该帮组他们走出阴影，过上正常人的生活。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "很多男同 | 创伤 | LGBTQ [SEP] 男同 | 走出阴影，过上正常人的生活 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "很多男同",
+          "argument": "创伤",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        },
+        {
+          "target": "男同",
+          "argument": "走出阴影，过上正常人的生活",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6319,
+      "content": "这个炼油厂还没投产吧，丹哥特要被拖死了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "丹哥特",
+          "argument": "要被拖死了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n努力大姐还没死啊\n### 三元组：\n努力大姐 | 还没死啊 | others [END]\n\n### 句子：\n额，炼铜txl能不能④\n### 三元组：\n炼铜txl | 能不能④ | LGBTQ, others [END]\n\n### 句子：\n黑g还要考驾照，供非送的钱太多了吧，太恐怖了，要有猩司机了\n### 三元组：\n黑g | 恐怖 | Region, Racism [END]\n\n### 句子：\n找黑哥哥黑妹妹的一律留在别国，不然污染了中国土地\n### 三元组：\n找黑哥哥黑妹妹的 | 一律留在别国 | Racism [END]\n\n### 句子：\n白人怕是已经输了，人口比例都不行了\n### 三元组：\n白人 | 已经输了 | non-hate [END]\n\n### 句子：\n打弟弟要趁早，这句话不知道是哪个幕刃说出来的\n### 三元组：\n幕刃 | 打弟弟要趁早 | Sexism [END]\n\n### 句子：\n到时候好看的妹妹一个不剩，剩下的全是重型坦克\n### 三元组：\n剩下的 | 重型坦克 | Sexism [END]\n\n### 句子：\n能发这评论的，应该也只有尼葛吧\n### 三元组：\n尼葛 | 应该也只有尼葛吧 | Racism [END]\n\n### 句子：\n黑哥常规操作了\n### 三元组：\n黑哥 | 常规操作了 | Racism [END]\n\n### 句子：\n5毛呢，怎么不去把黑鬼都灭了\n### 三元组：\n黑鬼 | 都灭了 | Racism [END]\n\n### 句子：\n这个炼油厂还没投产吧，丹哥特要被拖死了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "丹哥特 | 要被拖死了 | others [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "丹哥特",
+          "argument": "要被拖死了",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6578,
+      "content": "这暴躁老哥说的好呀👍️要不是疫情我也去东南亚快乐一下，抖音上那群老板也去霍霍非洲世界小姐们了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "东南亚",
+          "argument": "快乐一下",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        },
+        {
+          "target": "非洲世界小姐们",
+          "argument": "霍霍",
+          "targeted_group": "Region, Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n嫁给他，就跟他回非洲啊。黑人敢打我们的抗疫英雄，洗不白了。举报三非，收入不菲\n### 三元组：\nNULL | 嫁给他，就跟他回非洲啊 | Sexism, Racism [SEP] 黑人 | 洗不白了 | Racism [SEP] 三非 | 举报三非，收入不菲 | Racism [END]\n\n### 句子：\n非洲人以家暴为荣，女人地位比驴都低，婚外约pao，养不起家的就直接跑路，艾滋率1/3。在漂亮国黑人人口占15%，却贡献了55%的犯罪事件。这种高级人才才配得上那些小仙女，而且我们没有嫁了人还留娘家的习惯，快去非洲追求真爱吧\n### 三元组：\n非洲人 | 以家暴为荣 | Racism [SEP] 黑人 | 贡献了55%的犯罪事件 | Racism, others [SEP] 小仙女 | 这种高级人才才配得上 | Sexism, Racism [SEP] 小仙女 | 快去非洲追求真爱吧 | Sexism, Racism [END]\n\n### 句子：\n我支持你去非洲，去美国。就是别再中国，中国配不上你，仙女的气质。让我们在这个国度里静静的羡慕你。快走吧。别回头别后悔。后悔也别逼逼。中国还是纯黄种人为好\n### 三元组：\n你 | 仙女的气质 | Sexism [SEP] 中国 | 纯黄种人为好 | Racism [END]\n\n### 句子：\n我看抖音，有个男的在非洲有了好几个黑小孩。底下的评论让他多下点种😄\n### 三元组：\n有个男的 | 让他多下点种😄 | Racism [END]\n\n### 句子：\n靠 在非洲时 黑人银行女 酒吧女 微信附近女这么热情就不敢尝试，一个那个味道受不了，其二艾滋病占到全国百分之六七十以上，还有中国妹妹在那边洗脚您懂的，都不敢接黑人活\n### 三元组：\n黑人银行女 酒吧女 微信附近女 | 一个那个味道受不了，其二艾滋病占到全国百分之六七十以上 | Racism [SEP] 黑人 | 不敢接黑人活 | Racism [END]\n\n### 句子：\n别听他的，还是去非洲吧，别回来找中国老实人接盘就行了\n### 三元组：\nNULL | 还是去非洲吧，别回来找中国老实人接盘就行了 | Sexism, Racism [END]\n\n### 句子：\n女人愿意和她们优秀的非洲老公回非洲我都想捐路费，最怕通过女人黑下来，生窝二代，长大后来一句我是龙的传人，我的妈呀简直头皮都麻了。\n### 三元组：\n女人 | 愿意和她们优秀的非洲老公回非洲我都想捐路费 | Sexism, Racism [SEP] 女人 | 最怕通过女人黑下来，生窝二代 | Sexism, Racism [END]\n\n### 句子：\n喜欢黑人请去你男人国家，赖在中国就不要怪别人骂了，动手都是应该的\n### 三元组：\n你 | 喜欢黑人请去你男人国家 | Sexism, Racism  [SEP] 你 | 赖在中国就不要怪别人骂了，动手都是应该的 | Sexism, Racism [END]\n\n### 句子：\n😆但凡这些姆的都去国外，也没毛病，但是，这些姆的都留在国内了，还生了小黑，有的还把HIV传染给老实人，这能忍？⁉人家老实人上辈子是当了汉奸还是卖了国家被整这么惨⁉？\n### 三元组：\n这些姆的 | 留在国内了，还生了小黑，有的还把HIV传染给老实人 | Sexism, Racism, others [END]\n\n### 句子：\n总之，去了非洲基本上就完了，别说非洲了。看过人民的名义吧，一个副市长去的还是美国，结果过的什么日子？\n### 三元组：\n非洲 | 去了非洲基本上就完了 | Region [END]\n\n### 句子：\n这暴躁老哥说的好呀👍️要不是疫情我也去东南亚快乐一下，抖音上那群老板也去霍霍非洲世界小姐们了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "NULL | 抖音上那群老板也去霍霍非洲世界小姐们了 | Sexism, Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": null,
+          "argument": "抖音上那群老板也去霍霍非洲世界小姐们了",
+          "targeted_group": "Sexism, Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5974,
+      "content": "上海黑起别的地方也是不遗余力呢",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "上海",
+          "argument": "黑起别的地方也是不遗余力",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n可是上海被黑的最惨🤔\n### 三元组：\n上海 | 被黑的最惨🤔 | Region [END]\n\n### 句子：\n上海某些媒体黑北方可是很严重\n### 三元组：\n上海某些媒体 | 黑北方可是很严重 | Region [END]\n\n### 句子：\n哈哈哈，上海被黑了开始反对地狱嗨了是吧？可是之前那些地方基本都被上海壬嗨过啊😅\n### 三元组：\n上海人 | 被黑了开始反对地狱嗨了是吧？ | Region [SEP] 上海壬 | 可是之前那些地方基本都被上海壬嗨过啊😅 | Region [END]\n\n### 句子：\n上海那边也黑河南，蜜汁优越。。\n### 三元组：\n上海 | 也黑河南，蜜汁优越。。 | Region [END]\n\n### 句子：\n全国黑上海，上海黑白完，所以被黑的最惨的还是白完。\n### 三元组：\n上海 | 全国黑上海 | Region [SEP] 白完 | 上海黑白完 | Region [SEP] 白完 | 被黑的最惨 | Region [END]\n\n### 句子：\n上海人，或者说咱们长三角人被外来务工人员黑的严重，比首都人民不知道严重到哪里去了😅\n### 三元组：\n上海人，或者说咱们长三角人 | 被外来务工人员黑的严重 | Region [END]\n\n### 句子：\n嗨嗨嗨😆黑北京的哪有黑上海的多😎\n### 三元组：\n黑北京的 | 哪有黑上海的多😎 | Region [END]\n\n### 句子：\n呃……上海经济好吧，还不是照样黑\n### 三元组：\n上海 | 经济好吧，还不是照样黑 | Region [END]\n\n### 句子：\n上海是全国媒体有预谋的带节奏黑！本质上是打压上海地方势力！\n### 三元组：\n上海 | 全国媒体有预谋的带节奏黑 | Region [SEP] 上海 | 打压上海地方势力 | Region [END]\n\n### 句子：\n因为上海人瞧不起外地人，所以被黑，不冤\n### 三元组：\n上海人 | 瞧不起外地人 | Region [END]\n\n### 句子：\n上海黑起别的地方也是不遗余力呢\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "上海 | 黑起别的地方也是不遗余力呢 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "上海",
+          "argument": "黑起别的地方也是不遗余力呢",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1661,
+      "content": "普信男明知道不能送游艇，他们多数人仍会选择在这个周末上网……而不是去好好劳动，真是无药可救无可救药",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "普信男",
+          "argument": "真是无药可救无可救药",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n至于普信男，呵呵那些金针菇除了抱团取暖就没有别的本事。游艇？你让普信男变魔术还是变魔法呀\n### 三元组：\n普信男 | 那些金针菇除了抱团取暖就没有别的本事 | Sexism [END]\n\n### 句子：\n反正他们普信男总有理由去声张他们所谓的正义，却不知大家都当他们是小丑\n### 三元组：\n普信男 | 小丑 | Sexism [END]\n\n### 句子：\n男性大多都有自知之明，根本不符合“普信”。然而女性月入3000嫌弃男性月入5000很普遍，算不算普信呢？\n### 三元组：\n女性 | 普信 | Sexism [END]\n\n### 句子：\n事实证明有些男人可以分分钟有游艇，为什么有些却不行？\n### 三元组：\n有些男人 | 可以分分钟有游艇 | non-hate [END]\n\n### 句子：\n归根究底，广大普通女性若是靠近普信男，会不幸。这是最正确的结论。\n### 三元组：\n广大普通女性 | 若是靠近普信男，会不幸 | Sexism [END]\n\n### 句子：\n啊哈哈哈，普信男破防了😆，当真是喜闻乐见??\n### 三元组：\n普信男 | 破防 | Sexism [END]\n\n### 句子：\n一口一个普信男，你是微博里的普信女还是烂裤裆\n### 三元组：\n你 | 微博里的普信女还是烂裤裆 | Sexism [END]\n\n### 句子：\n有个个张口“普信男”的微博在，小孩怎能不有样学样。\n### 三元组：\n微博 | 个个张口“普信男” | Sexism [END]\n\n### 句子：\n人家不就说了个普信男吗，又没扫射全部男性，可就是架不住有些人着急对号入座😄\n### 三元组：\n普信男 | 人家不就说了个普信男吗 | Sexism [SEP] 有些人 | 架不住有些人着急对号入座😄 | Sexism [END]\n\n### 句子：\n有些还是要一分为二说的，比如如果找的是欧美男友，那就肯定有游艇，包括车房这种小case自然也不在话下\n### 三元组：\n欧美男友 | 肯定有游艇 | non-hate [END]\n\n### 句子：\n普信男明知道不能送游艇，他们多数人仍会选择在这个周末上网……而不是去好好劳动，真是无药可救无可救药\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "普信男 | 明知道不能送游艇，他们多数人仍会选择在这个周末上网……而不是去好好劳动，真是无药可救无可救药 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "普信男",
+          "argument": "明知道不能送游艇，他们多数人仍会选择在这个周末上网……而不是去好好劳动，真是无药可救无可救药",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5371,
+      "content": "太假了，普通人被气死我信，有钱人不可能的，三万美金😓稍微打点下默就可以解决的事",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "默",
+          "argument": "稍微打点下默就可以解决的事",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n那个标题还起的贼恶心，一股子洋洋自得的意味。所以说遇到这种人真要离远一点。\n### 三元组：\n标题 | 贼恶心，一股子洋洋自得的意味 | non-hate [SEP] 这种人 | 离远一点 | non-hate [END]\n\n### 句子：\n一个有正常工作生活的人根本没那精力天天发这种帖子，这玩意估计也是靠这个赚钱的\n### 三元组：\n一个有正常工作生活的人 | 根本没那精力天天发这种帖子 | non-hate [SEP] 这玩意 | 估计也是靠这个赚钱的 | non-hate [END]\n\n### 句子：\n哥真的不至于，这钱拿到手都怕没命花😅\n### 三元组：\n哥 | 真的不至于 | non-hate [SEP] 这钱 | 拿到手都怕没命花😅 | non-hate [END]\n\n### 句子：\n我打12339把莫言举报了，这么大个罕见，我领500万不过分吧兄弟们😆\n### 三元组：\n我 | 领500万不过分吧 | non-hate [END]\n\n### 句子：\n又是应了那句老话，认真你就输了。人类真是复读机，租鸡青一了解一下？（开玩笑的）\n### 三元组：\n人类 | 复读机 | non-hate [END]\n\n### 句子：\n笑了笑了，前脚还滚呐，你就是嫉妒，后脚那我这五万块钱怎么办，这脑子，笑了笑了\n### 三元组：\n你 | 嫉妒 | non-hate [END]\n\n### 句子：\n如果是中国男友恐怕是骗不到的，就算骗到了也是个无期徒刑\n### 三元组：\n中国男友 | 骗不到的 | non-hate [END]\n\n### 句子：\n假的，只要威逼利诱一下，先找当地黑人威胁一下，再给钱赎人就能救回来，就是两个孩子可能带不回来，看舍不舍的了🐶\n### 三元组：\n当地黑人 | 威胁一下 | Racism [END]\n\n### 句子：\n三万人民币都够黑人在那盖个豪宅，娶好几个老婆的了\n### 三元组：\n黑人 | 三万人民币都够黑人在那盖个豪宅，娶好几个老婆的了 | Racism [END]\n\n### 句子：\n看吧女人哪有小心思三四十万就可以咯?\n### 三元组：\n女人 | 三四十万就可以咯 | Sexism [END]\n\n### 句子：\n太假了，普通人被气死我信，有钱人不可能的，三万美金😓稍微打点下默就可以解决的事\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "有钱人 | 不可能的 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "有钱人",
+          "argument": "不可能的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1775,
+      "content": "这些黑猴子也真不怕死。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "这些黑猴子",
+          "argument": "也真不怕死",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n除黑的到时也会打死你！\n### 三元组：\n除黑的 | 打死你 | Racism [END]\n\n### 句子：\n不错，看来我大中国同胞对黑人还是有客观认识的。\n### 三元组：\n大中国同胞 | 对黑人还是有客观认识 | Racism [END]\n\n### 句子：\n黑人至少比你强多了\n### 三元组：\n黑人 | 比你强多了 | non-hate [END]\n\n### 句子：\n黑人绝不是什么弱势群体\n### 三元组：\n黑人 | 绝不是什么弱势群体 | non-hate [END]\n\n### 句子：\n黑人自己放弃了自己，怨不得别人。\n### 三元组：\n黑人 | 自己放弃了自己 | Racism [END]\n\n### 句子：\n黑人也有好人，不能一棒子打死。因为人家身体素质好，一棒子多半打不死，建议多来几棒。\n### 三元组：\n黑人 | 建议多来几棒 | Racism [END]\n\n### 句子：\n也是胡说八道，地域黑嘴里的猴子说的是两广人，别听个啥都往头上套😓\n### 三元组：\n两广人 | 猴子 | Region [END]\n\n### 句子：\n问题是这些类人猿他们繁殖速度太快，消灭不了呀！\n### 三元组：\n类人猿 | 繁殖速度太快，消灭不了呀！ | Racism [END]\n\n### 句子：\n黑人也有好人，不能一棒子打死，建议多打几棒\n### 三元组：\n黑人 | 建议多打几棒 | Racism [END]\n\n### 句子：\n一般会这么想，竟然真有憨批找黑人\n### 三元组：\n黑人 | 真有憨批找 | Racism [END]\n\n### 句子：\n这些黑猴子也真不怕死。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑猴子 | 也真不怕死 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑猴子",
+          "argument": "也真不怕死",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2933,
+      "content": "评论区怎么就有人对号入座了呢🤭🤭",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "有人",
+          "argument": "对号入座",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是你对号入座了吧😆\n### 三元组：\n你 | 对号入座 | non-hate [END]\n\n### 句子：\n这不是很正常么，你自己评论也不这么说的么？这操作溜\n### 三元组：\n你自己评论 | 也不这么说的么 | non-hate [END]\n\n### 句子：\n那个标题还起的贼恶心，一股子洋洋自得的意味。所以说遇到这种人真要离远一点。\n### 三元组：\n标题 | 贼恶心，一股子洋洋自得的意味 | non-hate [SEP] 这种人 | 离远一点 | non-hate [END]\n\n### 句子：\n？你要不要问问答主那人有没骚扰他，有的话我删评，没有的话你删评\n### 三元组：\n答主 | 那人有没骚扰他 | non-hate [END]\n\n### 句子：\n本来评论第一是我，现在没了，真是醉了\n### 三元组：\n我 | 评论第一 | non-hate [END]\n\n### 句子：\n你评论区不就有一个吗，经典装理客中装不下去了就开始破口大骂了，或许这就是当代小仙女吧🤭\n### 三元组：\n当代小仙女 | 经典装理客中装不下去了就开始破口大骂了 | Sexism [END]\n\n### 句子：\n东北人才是最喜欢黑别人的，我就评论了一下，就被追着骂了\n### 三元组：\n东北人 | 最喜欢黑别人 | Region [END]\n\n### 句子：\n哎，这种的，一看就是没点脑子的，他也来喷我了。。看样子像女权派来的。。\n### 三元组：\n女权 | 看样子像女权派来的 | Sexism [END]\n\n### 句子：\n知乎咋了，刷一条就是什么两性对立的话题，连评论区都出现啥对立，我人都蒙了，卸载立即推😅\n### 三元组：\n知乎 | 连评论区都出现啥对立 | non-hate [END]\n\n### 句子：\n你真是这个问题的回答和评论区里少有的这么大度的😎\n### 三元组：\n你 | 少有的这么大度的 | non-hate [END]\n\n### 句子：\n评论区怎么就有人对号入座了呢🤭🤭\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "评论区 | 有人对号入座了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "评论区",
+          "argument": "有人对号入座了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7941,
+      "content": "这人真是有毛病",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "这人",
+          "argument": "有毛病",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n这b的确不是好人\n### 三元组：\n这b | 不是好人 | non-hate [END]\n\n### 句子：\n这家伙也够倒霉的\n### 三元组：\n这家伙 | 够倒霉的 | non-hate [END]\n\n### 句子：\n此种人不得house啊\n### 三元组：\n此种人 | 不得house | non-hate [END]\n\n### 句子：\n真不知道那个弱智会看上这种人\n### 三元组：\n这种人 | 那个弱智会看上 | non-hate [END]\n\n### 句子：\n你需要这种人治治\n### 三元组：\n你 | 需要这种人治治 | non-hate [END]\n\n### 句子：\n活踏马的该！这种人活着干嘛\n### 三元组：\n这种人 | 活着干嘛 | others [END]\n\n### 句子：\n他真的有错吗\n### 三元组：\n他 | 有错吗 | non-hate [END]\n\n### 句子：\n男的真倒霉\n### 三元组：\n男的 | 真倒霉 | non-hate [END]\n\n### 句子：\n看到这货的评论瞬间觉得真特么晦气\n### 三元组：\n这货的评论 | 晦气 | non-hate [END]\n\n### 句子：\n它这家伙脑子不正常\n### 三元组：\n它这家伙 | 脑子不正常 | non-hate [END]\n\n### 句子：\n这人真是有毛病\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "这人 | 真是有毛病 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "这人",
+          "argument": "真是有毛病",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6122,
+      "content": "没啥用的这个吧早就被人监管了，以前很多人的",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "这个吧",
+          "argument": "早就被人监管了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n过激的言论，系统会自动删的，几分钟都活不了，其实这个吧早就跟解散没什么区别\n### 三元组：\n过激的言论 | 系统会自动删的 | non-hate [END]\n\n### 句子：\n然而我举报了，竟然说不足于封吧的地步！继续让她们闹吧！到时候都摆烂了，铁拳就知道后悔\n### 三元组：\n她们 | 铁拳就知道后悔 | Sexism [END]\n\n### 句子：\n这几年大概许多原吧友都隐退了，吧里的帖子价值和热度都不如以前，再加上百度阴间管理，很多吧都容易被攻破\n### 三元组：\n许多原吧友 | 都隐退了 | non-hate [SEP] 吧里的帖子 | 价值和热度都不如以前 | non-hate [SEP] 百度 | 阴间管理 | non-hate [SEP] 很多吧 | 都容易被攻破 | non-hate [END]\n\n### 句子：\n一个有正常工作生活的人根本没那精力天天发这种帖子，这玩意估计也是靠这个赚钱的\n### 三元组：\n一个有正常工作生活的人 | 根本没那精力天天发这种帖子 | non-hate [SEP] 这玩意 | 估计也是靠这个赚钱的 | non-hate [END]\n\n### 句子：\n我们都在别的平台反嘿，偶尔也在这里反一下，毕竟没有吧主，还有很多嘿孝子还要骂呢，不然新来的不知道\n### 三元组：\n嘿孝子 | 要骂 | Racism [END]\n\n### 句子：\n贴吧系统就是这样多发几次就行了毕竟这是百度特色嘛\n### 三元组：\n贴吧系统 | 百度特色 | non-hate [END]\n\n### 句子：\n再次提醒大家：贴吧要安全地发展，言论的氛围就要往理性文明的方向走，不能容许过多严重触犯贴吧协议的言论存在。\n### 三元组：\n贴吧 | 言论的氛围就要往理性文明的方向走 | non-hate [END]\n\n### 句子：\n这个吧被女⭕️审核24小时看着呢，大伙散了吧！\n### 三元组：\n女⭕️ | 审核24小时看着呢 | Sexism [END]\n\n### 句子：\n由于随缘删帖的存在，贴吧是个没有前途的地方，不适合在此发长文走出去吧，去知乎，去微博，多平台共同发展\n### 三元组：\n贴吧 | 没有前途的地方 | non-hate [END]\n\n### 句子：\n？你要不要问问答主那人有没骚扰他，有的话我删评，没有的话你删评\n### 三元组：\n答主 | 那人有没骚扰他 | non-hate [END]\n\n### 句子：\n没啥用的这个吧早就被人监管了，以前很多人的\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "这个吧 | 早就被人监管了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "这个吧",
+          "argument": "早就被人监管了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2721,
+      "content": "我就是比你m还丑也配评价恶心男同，yue",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "男同",
+          "argument": "恶心",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n男的看男同主观恶心 女的看女同主观恶心\n### 三元组：\n男同 | 恶心 | LGBTQ [SEP] 女同 | 恶心 | LGBTQ [END]\n\n### 句子：\n男的看男同恶心 女的看女同恶心\n### 三元组：\n男同 | 恶心 | LGBTQ [SEP] 女同 | 恶心 | LGBTQ [END]\n\n### 句子：\n有些直男只是单纯恶心 男同do爱吧\n### 三元组：\n有些直男 | 只是单纯恶心 男同do爱吧 | LGBTQ [END]\n\n### 句子：\n别跟我在这整些有的没得 言论自由 思想自由 你可以是同性恋 我可以觉得同性恋恶心 咱谁也别膈应谁 不用再回我 不想跟你们这类人沟通\n### 三元组：\n同性恋 | 恶心 | LGBTQ [END]\n\n### 句子：\n同性恋都是群脑子不正常的玩意，看着就反胃\n### 三元组：\n同性恋 | 脑子不正常的玩意 | LGBTQ [END]\n\n### 句子：\n草，我不是男同，我也觉得恶性，那我是不是和你一样也是男同\n### 三元组：\nNULL | 我也觉得恶性 | others [END]\n\n### 句子：\n太棒了呀，不用被道德和素质绑架了，既然同也恶心正常人，那我恶心同就不用避讳了，舒服，大胆讨厌一些人太爽了\n### 三元组：\n同 | 恶心正常人 | LGBTQ [SEP] 同 | 我恶心同 | LGBTQ [END]\n\n### 句子：\n发这条评论的时候我还没被骚扰过，现在回复你是被恶心过了，我确实是歧视男同，不过你这么说了倒也无伤大雅，我们最近一起上网一起玩的有个伙计也是男同，只要别恶心到我倒是也无所谓\n### 三元组：\n男同 | 我确实是歧视男同 | LGBTQ [END]\n\n### 句子：\n笑死，要是刷男女的没人有意见，真就高贵的同性恋呗??\n### 三元组：\n同性恋 | 高贵 | LGBTQ [END]\n\n### 句子：\n你们同性恋又幻想对方是0，真是饥不择食，也不好好评分1-10\n### 三元组：\n你们同性恋 | 饥不择食 | LGBTQ [END]\n\n### 句子：\n我就是比你m还丑也配评价恶心男同，yue\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "恶心男同 | yue | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "恶心男同",
+          "argument": "yue",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4409,
+      "content": "不要回我，我没时间跟人对线哈🍉",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "我",
+          "argument": "没时间跟人对线哈🍉",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n能不能回复啊，笑死了，没见过这么嘴硬小胆的fw，是不是待会还要自己精神胜利一把说我不屑于和你说话啊\n### 三元组：\n你 | 嘴硬小胆的fw | non-hate [END]\n\n### 句子：\n我没拉黑你，你要对线随时欢迎进来\n### 三元组：\n我 | 没拉黑你 | non-hate [END]\n\n### 句子：\n建议你去对线，发贴引群嘲有个锤子用，是男人就去真人1v1或者发专门贴对喷\n### 三元组：\n你 | 发贴引群嘲有个锤子用 | non-hate [END]\n\n### 句子：\n如果发现对方就是来对线争论的，那么首先要把握的是议题的设置，主导叙事比起说自己是对的以及对方是错的更重要。\n### 三元组：\n主导叙事 | 比起说自己是对的以及对方是错的更重要 | non-hate [END]\n\n### 句子：\n😆哈哈哈哈答主为啥不回你呢\n### 三元组：\n答主 | 为啥不回你呢 | non-hate [END]\n\n### 句子：\n？你要不要问问答主那人有没骚扰他，有的话我删评，没有的话你删评\n### 三元组：\n答主 | 那人有没骚扰他 | non-hate [END]\n\n### 句子：\n按照流程：和你对骂-骂不过就开小号来一块，24小时在贴吧和别人对喷。喷到对方没时间理他了他就开始精神胜利然后就会说“你怎么不回了呀是不是怕了啊”反复刷屏\n### 三元组：\n他 | 和你对骂-骂不过就开小号来一块 | others [END]\n\n### 句子：\n还吹嘘十年前和人对线呢，连对线都不敢\n### 三元组：\nNULL | 连对线都不敢 | non-hate [END]\n\n### 句子：\n理他干嘛，现实中这种傻宝多得是，你越搭理他越得意，无视他当做看不到就是了\n### 三元组：\n他 | 傻宝 | non-hate [END]\n\n### 句子：\n钓鱼的，不要理他，纯nt\n### 三元组：\n他 | 纯nt | non-hate [END]\n\n### 句子：\n不要回我，我没时间跟人对线哈🍉\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "NULL | 我没时间跟人对线哈 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": null,
+          "argument": "我没时间跟人对线哈",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6836,
+      "content": "现实是自古以来种地的大省最好管制，只要给口吃的，就没人闹，另外人口太多，出点奇葩或者啥事也正常",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "种地的大省",
+          "argument": "最好管制",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n人口基数大，没办法，很小比例就是一大群人\n### 三元组：\n人口 | 基数大 | non-hate [END]\n\n### 句子：\n这种地方，要么就是发达的城市，被外来打工的吐槽，要么就是不太发达的好多都出去打工可能素质不太高\n### 三元组：\n发达的城市 | 外来打工的吐槽 | non-hate [SEP] 不太发达的 | 好多都出去打工可能素质不太高 | non-hate [END]\n\n### 句子：\n最多的还是东北，什么口音都甩锅给东北，就像唐山打人，明明没有东北人偏说是东北人。而且这种现象不是一次两次了。\n### 三元组：\n东北 | 什么口音都甩锅给东北 | Region [END]\n\n### 句子：\n多去江浙一带广东一带转转你会找到答案的， 与其问为什么，何不问下在外的老乡这么惹人讨厌😅\n### 三元组：\n在外的老乡 | 这么惹人讨厌😅 | Region [END]\n\n### 句子：\n其实你会发现，素质最差被黑的最厉害的，往往在南北交界处，苏北，安徽，河南等\n### 三元组：\n南北交界处，苏北，安徽，河南等 | 素质最差被黑的最厉害的 | Region [END]\n\n### 句子：\n还好我们省存在感低，想被黑好多人都不知如何黑。🤔😄😄\n### 三元组：\n我们省 | 存在感低，想被黑好多人都不知如何黑。🤔😄😄 | Region [END]\n\n### 句子：\n河南人多，不好事件就概率性多，给人河南不好的印象😅😅\n### 三元组：\n河南 | 人多 | non-hate [END]\n\n### 句子：\n你看河南人，他就是不太平。到处扰事儿。自古的文化就一直在血脉中根深蒂固了😑\n### 三元组：\n河南人 | 不太平 | Region [END]\n\n### 句子：\n你这心态不行啊，经济基础决定上层建筑么不是，河南省要是在东南沿海你看谁敢多说一句？🙂北方嘛，说那么多没什么意义，什么好的坏的，你看黑吉辽那一亿人还不是被黑的裤子都穿不上？\n### 三元组：\n河南省 | 要是在东南沿海你看谁敢多说一句？ | Region [SEP] 黑吉辽那一亿人 | 还不是被黑的裤子都穿不上？ | Region [END]\n\n### 句子：\n本来就是一帮没啥别的只能靠地域来包装自己优越感的傻*，网上输出暴论自我安慰图一乐罢了。\n### 三元组：\n一帮没啥别的只能靠地域来包装自己优越感的傻* | 网上输出暴论自我安慰图一乐 | non-hate [END]\n\n### 句子：\n现实是自古以来种地的大省最好管制，只要给口吃的，就没人闹，另外人口太多，出点奇葩或者啥事也正常\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "自古以来种地的大省 | 最好管制，只要给口吃的，就没人闹 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "自古以来种地的大省",
+          "argument": "最好管制，只要给口吃的，就没人闹",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3530,
+      "content": "你们的回复都好苍白",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你们的回复",
+          "argument": "好苍白",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n你的回复我看不到？\n### 三元组：\n你的回复 | 我看不到？ | non-hate [END]\n\n### 句子：\n能不能回复啊，笑死了，没见过这么嘴硬小胆的fw，是不是待会还要自己精神胜利一把说我不屑于和你说话啊\n### 三元组：\n你 | 嘴硬小胆的fw | non-hate [END]\n\n### 句子：\n我没回复你😓\n### 三元组：\n你 | 我没回复 | non-hate [END]\n\n### 句子：\n你跟这种人说不清楚，不如省点流量😅\n### 三元组：\n这种人 | 你跟这种人说不清楚 | non-hate [END]\n\n### 句子：\n又是应了那句老话，认真你就输了。人类真是复读机，租鸡青一了解一下？（开玩笑的）\n### 三元组：\n人类 | 复读机 | non-hate [END]\n\n### 句子：\n你在劳资回复犯贱干什么\n### 三元组：\n你 | 在劳资回复犯贱干什么 | non-hate [END]\n\n### 句子：\n基佬大多数只会骂一两句就不回，这就是纯种懦夫的表现，赞成？赞成\n### 三元组：\n基佬 | 纯种懦夫 | LGBTQ [END]\n\n### 句子：\n你男的女的？回答全离不开“国男”两个字，这就纯粹故意引战啊\n### 三元组：\n国男 | 最初成体系的地域黑了吧 | Sexism [END]\n\n### 句子：\n倒数第二句、你说的和你的行为一致吗？你有尊重题主吗？\n### 三元组：\n你说的 | 和你的行为一致吗？ | non-hate [SEP] 你 | 有尊重题主吗？ | non-hate [END]\n\n### 句子：\n下面那个回复太有才了\n### 三元组：\n下面那个回复 | 有才 | non-hate [END]\n\n### 句子：\n你们的回复都好苍白\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "你们的回复 | 苍白 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "你们的回复",
+          "argument": "苍白",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 593,
+      "content": "如果是大户人家我没意见，但是这年头，谁还没个贷款。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "大户人家",
+          "argument": "我没意见",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n提议女方婚前支付五年个人收入做彩礼，不然女性不懂珍惜婚姻\n### 三元组：\n女性 | 不懂珍惜婚姻 | Sexism [END]\n\n### 句子：\n还什么房子将来孩子结婚用，你孩子结婚起码还得将近20年，也不动脑子想想现在房子的质量20年后女人还能看得上吗纯纯就是一个懦弱又自我感动的大**\n### 三元组：\n你 | 纯纯就是一个懦弱又自我感动的大** | Sexism [END]\n\n### 句子：\n可能是仇富心理在作怪吧\n### 三元组：\n仇富心理 | 作怪 | non-hate [END]\n\n### 句子：\n人都这样的。否则奴隶社会怎么几千年？\n### 三元组：\n人 | 都这样的 | non-hate [END]\n\n### 句子：\n你可以不给，她可以不嫁，很公平啊\n### 三元组：\n你 | 可以不给 | non-hate [SEP] 她 | 可以不嫁 | non-hate [END]\n\n### 句子：\n也许只是价格，彩礼谈不拢呢？清官断不了家务事，何况外人（你劝男人你是外人，对男女来说，黑人是外人）。\n### 三元组：\n黑人 | 外人 | Racism [END]\n\n### 句子：\n房子和车不是钱？彩礼现在10万都是少的了，30万也不新鲜。\n### 三元组：\n彩礼 | 现在10万都是少的了，30万也不新鲜 | Sexism [END]\n\n### 句子：\n所以说这年头男的想结婚不是脑子有病就是脑子进水了，有钱干点啥不好，没钱干点啥不行\n### 三元组：\n男的想结婚 | 不是脑子有病就是脑子进水了 | Sexism [END]\n\n### 句子：\n哥真的不至于，这钱拿到手都怕没命花😅\n### 三元组：\n哥 | 真的不至于 | non-hate [SEP] 这钱 | 拿到手都怕没命花😅 | non-hate [END]\n\n### 句子：\n没关系没关系，现在结婚的还是太多了\n### 三元组：\n结婚的 | 太多了 | non-hate [END]\n\n### 句子：\n如果是大户人家我没意见，但是这年头，谁还没个贷款。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "谁 | 还没个贷款 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "谁",
+          "argument": "还没个贷款",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1157,
+      "content": "我太想看看了！",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "我",
+          "argument": "太想看看了！",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n同感，我等不及看国钕乐子了。😆\n### 三元组：\n国钕 | 我等不及看国钕乐子了。😆 | Sexism [END]\n\n### 句子：\n你见过吗？\n### 三元组：\n你 | 见过吗？ | non-hate [END]\n\n### 句子：\n这个观点我太认可了\n### 三元组：\n这个观点 | 太认可了 | non-hate [END]\n\n### 句子：\n我在，我每天都在关注都看的！\n### 三元组：\n我 | 每天都在关注都看的！ | non-hate [END]\n\n### 句子：\n急了，想要默了\n### 三元组：\nNULL | 想要默了 | Racism [END]\n\n### 句子：\n真想不到这人居然还在！\n### 三元组：\n这人 | 居然还在 | non-hate [END]\n\n### 句子：\n让大家都看到这张图\n### 三元组：\n这张图 | 让大家都看到 | non-hate [END]\n\n### 句子：\n怎么？我就是这样觉得！\n### 三元组：\n我 | 就是这样觉得！ | non-hate [END]\n\n### 句子：\n上广东待几天就看到了\n### 三元组：\nNULL | 上广东待几天就看到了 | non-hate [END]\n\n### 句子：\n太真实了。这个才像是真正在现实生活中经历过的人。\n### 三元组：\n这个 | 真正在现实生活中经历过的人 | non-hate [END]\n\n### 句子：\n我太想看看了！\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我 | 太想看看了！ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我",
+          "argument": "太想看看了！",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6524,
+      "content": "腐癌说的，腐癌是你们异性恋女生😓",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "异性恋女生",
+          "argument": "腐癌",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n腐癌说的不是txl呀😆😆😆\n### 三元组：\n腐癌 | 说的不是txl呀😆😆😆 | LGBTQ [END]\n\n### 句子：\n真的有些腐癌还有喜欢基，雷百合的，还是好看的基，这也太双标了\n### 三元组：\n腐癌 | 双标 | LGBTQ, Sexism [END]\n\n### 句子：\n哦？腐癌说的不是txl？😆\n### 三元组：\n腐癌 | 说的不是txl？😆 | LGBTQ [END]\n\n### 句子：\n这是腐癌，跟男同群体有什么关系\n### 三元组：\n这 | 腐癌 | LGBTQ [END]\n\n### 句子：\n大部分是腐女\n### 三元组：\n腐女 | 大部分是腐女 | Sexism [END]\n\n### 句子：\n多少腐癌女生搁哪磕男男？朋友也磕的是谁？连苏轼都磕😓\n### 三元组：\n腐癌女 | 搁哪磕男男 | Sexism, others [END]\n\n### 句子：\n很多女生受腐漫、纯爱小说的影响去掰弯直男，真的。。。。吃饱了撑的\n### 三元组：\n很多女生 | 吃饱了撑的 | Sexism [END]\n\n### 句子：\n看来同性恋只知道污蔑他人了\n### 三元组：\n同性恋 | 污蔑他人 | LGBTQ [END]\n\n### 句子：\n同性恋都是群脑子不正常的玩意，看着就反胃\n### 三元组：\n同性恋 | 脑子不正常的玩意 | LGBTQ [END]\n\n### 句子：\n笑死，要是刷男女的没人有意见，真就高贵的同性恋呗??\n### 三元组：\n同性恋 | 高贵 | LGBTQ [END]\n\n### 句子：\n腐癌说的，腐癌是你们异性恋女生😓\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "腐癌 | 说的是 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "腐癌",
+          "argument": "说的是",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1621,
+      "content": "黑人请离开，因为距离产生美",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "黑人·",
+          "argument": "请离开",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n黑人请离开\n### 三元组：\n黑人 | 请离开 | Racism [END]\n\n### 句子：\n远离黑鬼，\n### 三元组：\n黑鬼 | 远离黑鬼 | Racism [END]\n\n### 句子：\n白人好一点，黑人真不能接受\n### 三元组：\n黑人 | 真不能接受 | Racism [END]\n\n### 句子：\n我中国人，你喜欢黑人麻烦你走😠😠😠\n### 三元组：\n我 | 中国人 | non-hate [SEP] 你 | 喜欢黑人麻烦你走😠😠😠 | Racism [END]\n\n### 句子：\n黑人至少比你强多了\n### 三元组：\n黑人 | 比你强多了 | non-hate [END]\n\n### 句子：\n防火防盗防黑人，黑人之害远甚于其他\n### 三元组：\n黑人 | 防火防盗防黑人 | Racism [END]\n\n### 句子：\n你可以与黑人结婚，但孩子别生在咱国，我可不想看见后一代是黄黑人种\n### 三元组：\n黄黑人种 | 我可不想看见后一代是黄黑人种 | Racism [END]\n\n### 句子：\n嫁黑人的我不反对，我只歧视。最好出中国永远别回来了。\n### 三元组：\n嫁黑人的 | 歧视 | Sexism, Racism [END]\n\n### 句子：\n黑人应该被限制活动范围\n### 三元组：\n黑人 | 应该被限制活动范围 | Racism [END]\n\n### 句子：\n去理性，你去非洲跟黑人去说理性去\n### 三元组：\n黑人 | 跟黑人去说理性去 | Racism [END]\n\n### 句子：\n黑人请离开，因为距离产生美\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑人 | 请离开 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑人",
+          "argument": "请离开",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3688,
+      "content": "有意思~~请问你哪里得出结论我是山东人~~",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你",
+          "argument": "哪里得出结论我是山东人",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我山东的，\n### 三元组：\n山东 | 我山东的 | non-hate [END]\n\n### 句子：\n考古来了，目前山东被黑的风口浪尖上，这种反问没话说了吧，希望你能明白，不要心存偏见\n### 三元组：\n山东 | 被黑的风口浪尖上 | non-hate [END]\n\n### 句子：\n山东人路过，个人感觉，说山东土不算地域歧视，确实土了一些。\n### 三元组：\n山东 | 确实土了一些 | Region [END]\n\n### 句子：\n山东人口碑不错吧，被黑的最惨的还是河南人🐶\n### 三元组：\n河南人 | 被黑的最惨 | Region [END]\n\n### 句子：\n你不就是个山东人吗 在那反串啥啊😓\n### 三元组：\n你 | 在那反串啥啊😓 | Region [END]\n\n### 句子：\n山东还好吧，遇到的山东人还不错，。\n### 三元组：\n遇到的山东人 | 还不错 | non-hate [END]\n\n### 句子：\n现在超多ip山东，或者自称山东人然后天天在网上骂山东的，贼不理解要是过得不舒服离开就是了，再说山东够包容了山东要是都混不好去哪都混成那逼样。以后在前面加上一句山东人是我爹才能证明他山东人的身份\n### 三元组：\n超多ip山东，或者自称山东人然后天天在网上骂山东的 | 山东要是都混不好去哪都混成那逼样 | Region [END]\n\n### 句子：\n山东完美契合，尤其是文化价值观那点。你看看这个问题，提法内容，背后的逻辑就知道了。\n### 三元组：\n山东 | 完美契合 | non-hate [END]\n\n### 句子：\n我蛮喜欢山东人的，厚道，踏实\n### 三元组：\n山东人 | 厚道，踏实 | non-hate [END]\n\n### 句子：\n山东好像韩国人比较多\n### 三元组：\n山东 | 韩国人比较多 | non-hate [END]\n\n### 句子：\n有意思~~请问你哪里得出结论我是山东人~~\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "你 | 请问你哪里得出结论我是山东人~~ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "你",
+          "argument": "请问你哪里得出结论我是山东人~~",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7157,
+      "content": "美国人又在哪个国内论坛看见的谣言啊 转手就发这来了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "美国人",
+          "argument": "又在哪个国内论坛看见的谣言",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n这是谣言，这则消息批评的人是美国的亚裔女，之前看到过辟谣\n### 三元组：\n这则消息 | 批评的人是美国的亚裔女 | non-hate [END]\n\n### 句子：\n国外有敌对黑恶势力，收买国内一些下贱二狗子汉奸在国内做恶意引导～\n### 三元组：\n二狗子汉奸 | 下贱 | non-hate [END]\n\n### 句子：\n搞不懂中国人为啥要吹黑人性能力，其实他们根本没去了解过，等到女人真信了谣言去找黑人了又哭天抢地\n### 三元组：\n女人 | 等到女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism [END]\n\n### 句子：\n我所知道的黑人在国内犯的事，加起来快一万多个字了，我在尝试发但是贴吧不让发，发了就给我删除了，等到时候我编辑好了，把扣扣发上来，你们到我空间就可以看了\n### 三元组：\n黑人 | 我所知道的黑人在国内犯的事，加起来快一万多个字了 | Racism [END]\n\n### 句子：\n就是一个外网普通论坛，什么都可以发，可能就是一些极端人士发的极端的话。\n### 三元组：\n外网普通论坛 | 什么都可以发 | non-hate [END]\n\n### 句子：\n这么优秀的黑人找个这么丑陋的国女 不信 感觉严重造谣\n### 三元组：\n国女 | 丑陋 | Sexism [END]\n\n### 句子：\n很久没来了！看到曝光台有人又拿可笑的种族歧视当理由举报黑人问题类贴吧，决定再来发一帖，也留个备份贴给那些人看，内容可能有些冲，\n### 三元组：\n黑人问题类贴吧 | 拿可笑的种族歧视当理由举 | Racism [END]\n\n### 句子：\n你怎么知道答主是中国人，万一答主是美国人？😆😆\n### 三元组：\n答主 | 万一答主是美国人 | Region [END]\n\n### 句子：\n所以国内的再不要拿欧美种族歧视说事，国内地域歧视的比人家的种族主义者恐怕只多不少\n### 三元组：\n国内地域歧视的 | 比人家的种族主义者恐怕只多不少 | non-hate [END]\n\n### 句子：\n像你这样还去找证据的人不多了。我不太明白为什么作者和其他评论区的人还能完全信西方媒体新闻的，前阵子的新疆棉花事件都忘了吗？还有BBC阴间报道，以及西方媒体上对中国的各种抹黑禁言等等。\n### 三元组：\nBBC | 阴间报道 | others [SEP] 西方媒体 | 对中国的各种抹黑禁言 | Region, others [END]\n\n### 句子：\n美国人又在哪个国内论坛看见的谣言啊 转手就发这来了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "美国人 | 转手就发这来了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "美国人",
+          "argument": "转手就发这来了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5603,
+      "content": "好家伙，我也看过这个",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "我",
+          "argument": "看过这个",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n哈哈，几个视频都看过\n### 三元组：\n几个视频 | 都看过 | non-hate [END]\n\n### 句子：\n你可以看一下这个，这证明了我所言非虚\n### 三元组：\n你 | 可以看一下这个，这证明了我所言非虚 | non-hate [END]\n\n### 句子：\n俺也一样😜\n### 三元组：\n俺 | 一样😜 | non-hate [END]\n\n### 句子：\n我也是，被他们打过\n### 三元组：\n我 | 被他们打过 | non-hate [END]\n\n### 句子：\n我看过人类学的行与思，就是关于这方面的。\n### 三元组：\n人类学的行与思 | 关于这方面的 | non-hate [END]\n\n### 句子：\n看你俩好像都是友军\n### 三元组：\n你俩 | 好像都是友军 | non-hate [END]\n\n### 句子：\n同感，我等不及看国钕乐子了。😆\n### 三元组：\n国钕 | 我等不及看国钕乐子了。😆 | Sexism [END]\n\n### 句子：\n我们也一样啊\n### 三元组：\n我们 | 也一样啊 | non-hate [END]\n\n### 句子：\n我也有查犹太人的历史\n### 三元组：\n犹太人 | 我也有查犹太人的历史 | non-hate [END]\n\n### 句子：\n我也是去读书的😓\n### 三元组：\n我 | 去读书的 | non-hate [END]\n\n### 句子：\n好家伙，我也看过这个\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我 | 也看过这个 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我",
+          "argument": "也看过这个",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2813,
+      "content": "最后两句话含义深重",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "最后两句话",
+          "argument": "含义深重",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n最后一句笑翻了\n### 三元组：\n最后一句 | 笑翻了 | non-hate [END]\n\n### 句子：\n最后两个的顺序可以斟酌的。\n### 三元组：\n顺序 | 可以斟酌 | non-hate [END]\n\n### 句子：\n戳到了某些人的痛点\n### 三元组：\n某些人 | 戳到了某些人的痛点 | non-hate [END]\n\n### 句子：\n有人就喜欢听文章的最后一句话\n### 三元组：\n有人 | 喜欢听文章的最后一句话 | non-hate [END]\n\n### 句子：\n楼主这讽刺深度真厉害\n### 三元组：\n楼主 | 这讽刺深度真厉害 | non-hate [END]\n\n### 句子：\n尤其是那段引用，绝！\n### 三元组：\n那段引用 | 绝！ | non-hate [END]\n\n### 句子：\n你的截图说的很有道理\n### 三元组：\n你的截图 | 说的很有道理 | non-hate [END]\n\n### 句子：\n任何话都有一定道理的🤣🤣🤣\n### 三元组：\n任何话 | 都有一定道理的🤣🤣🤣 | non-hate [END]\n\n### 句子：\n逐字逐句看完，有一个观点我有一点反对意见，异性之间的行为符合人伦天道\n### 三元组：\n异性之间的行为 | 符合人伦天道 | non-hate [END]\n\n### 句子：\n这真是两位英雄\n### 三元组：\n这 | 两位英雄 | non-hate [END]\n\n### 句子：\n最后两句话含义深重\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "最后两句话 | 含义深重 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "最后两句话",
+          "argument": "含义深重",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7510,
+      "content": "搞笑呢 那照你这么说我就觉得不太好不太合适我就要批判 你凭什么不让我批判🤣",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你",
+          "argument": "凭什么不让我批判🤣",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n批评干嘛，求仁得仁又何求！求黑得黑，与黑长存嘛\n### 三元组：\n黑 | 求黑得黑，与黑长存 | Racism [END]\n\n### 句子：\n0中国的立法机构是人大，要反对就要让这事变成非法，批判算什么？键盘敲起来有那么好玩吗？\n### 三元组：\n这事 | 要反对就要让这事变成非法 | non-hate [END]\n\n### 句子：\n那你这么说了 那我就批判吧 赞美是肯定不可能的了\n### 三元组：\n你 | 批判 | non-hate [END]\n\n### 句子：\n我特烦一张嘴就这事不关你事的人，管天管地管的着别人怎么看？照你的理论，批判这些人也不关你事啊？你废什么话？\n### 三元组：\n一张嘴就这事不关你事的人 | 特烦 | non-hate [END]\n\n### 句子：\n这不正是你们这帮lj的写照吗？自己不接受的事物就要怱悠别人都来反对，还自以为很正义～\n### 三元组：\n你们 | lj | non-hate [END]\n\n### 句子：\n每个人都有自己的思想的自由，你有支持的权利我就有反对的权利\n### 三元组：\n你 | 有支持的权利 | non-hate [SEP] 我 | 就有反对的权利 | non-hate [END]\n\n### 句子：\n为什么我要支持？你又你喜欢的权利 我也有反感的自由\n### 三元组：\n你 | 又你喜欢的权利 | non-hate [SEP] 我 | 也有反感的自由 | non-hate [END]\n\n### 句子：\n这不是很正常么，你自己评论也不这么说的么？这操作溜\n### 三元组：\n你自己评论 | 也不这么说的么 | non-hate [END]\n\n### 句子：\n批判啥啊。跟黑人搞一起，你看不惯就不搭理他们就好了。有时间看看 袁鹏的帖子。中国男人应该学习下日本人，要彩礼没有钱，要房子买不起，你们爱嫁不嫁。\n### 三元组：\n日本人 | 要彩礼没有钱，要房子买不起，你们爱嫁不嫁。 | Sexism, Region [END]\n\n### 句子：\n你接受不了别人的择偶观，你就闭嘴，你这样不也在批判这位喷神吗？\n### 三元组：\n你 | 闭嘴 | non-hate [END]\n\n### 句子：\n搞笑呢 那照你这么说我就觉得不太好不太合适我就要批判 你凭什么不让我批判🤣\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "你 | 不让我批判 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "你",
+          "argument": "不让我批判",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3070,
+      "content": "努力大姐好久不见了，我还挺想她的",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "努力大姐",
+          "argument": "我还挺想她的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n努力大姐还没死啊\n### 三元组：\n努力大姐 | 还没死啊 | others [END]\n\n### 句子：\n这个力帆是那位约我见面的大叔吗，前阵子闹很大的浦力也是同一个人吗😨\n### 三元组：\n这个力帆 | 那位约我见面的大叔 | non-hate [END]\n\n### 句子：\n努力姐专门骗中国女人嫁非洲，和蝴蝶姬一样\n### 三元组：\n努力姐 | 专门骗中国女人嫁非洲 | Sexism [END]\n\n### 句子：\n看你这么卖力气，特意回来给你点了个赞同\n### 三元组：\n你 | 这么卖力气 | non-hate [END]\n\n### 句子：\n支持你姐妹\n### 三元组：\n姐妹 | 支持你 | non-hate [END]\n\n### 句子：\n你不会真以为我是小号了吧，没见度度都不说话了吗\n### 三元组：\n你 | 以为我是小号 | non-hate [END]\n\n### 句子：\n想起你来了，你对象找找了吗\n### 三元组：\n你对象 | 找找了吗 | non-hate [END]\n\n### 句子：\n慕√口嗨习惯了，都快忘了自己什么pi样了\n### 三元组：\n慕√ | 口嗨习惯了 | Sexism [END]\n\n### 句子：\n我可没忘记，前几年那个吧里一堆女〇\n### 三元组：\n那个吧里 | 一堆女〇 | Sexism [END]\n\n### 句子：\n关爱了她一顿，有没有人开盒啊\n### 三元组：\n她 | 关爱了她一顿 | non-hate [END]\n\n### 句子：\n努力大姐好久不见了，我还挺想她的\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "努力大姐 | 好久不见了，我还挺想她 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "努力大姐",
+          "argument": "好久不见了，我还挺想她",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1083,
+      "content": "你们这些连性教育都没有的人，可以别来搞笑吗？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你们这些连性教育都没有的人",
+          "argument": "可以别来搞笑吗？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n不让他们搞，但是在性教育的时候，应该让他们学会尊重这些群体。比如说泛性恋同性恋双性恋性单恋这种基本概念应该让他们知道，并且告诉他们要尊重\n### 三元组：\n泛性恋同性恋双性恋性单恋 | 应该让他们知道 | non-hate [END]\n\n### 句子：\n看了就说我们流氓，不看就说我们是gay、xing冷淡。还不知道你怎么想的？\n### 三元组：\n我们 | 流氓 | Sexism [SEP] 我们 | gay、xing冷淡 | Sexism, LGBTQ [END]\n\n### 句子：\n呵呵，这答主气得我想笑。性教育缺失？？？？难道要在学生性知识启蒙教育的时候让他们搞同性恋？？果然帝国主义亡我中华之心不死！\n### 三元组：\n同性恋 | 难道要在学生性知识启蒙教育的时候让他们搞同性恋？？ | LGBTQ [SEP] 帝国主义 | 亡我中华之心不死！ | others [END]\n\n### 句子：\n你们可以远离女人啊！越远越好！\n### 三元组：\n女人 | 远离 | Sexism [END]\n\n### 句子：\n不要随意评论。毕竟大家都是人，你的评论会伤害到别人。性取向是别人的自由。请你善良\n### 三元组：\n性取向 | 别人的自由 | non-hate [END]\n\n### 句子：\n动物都有同性恋，人类能没有？😅多读书，别读死书\n### 三元组：\n同性恋 | 人类能没有？ | non-hate [END]\n\n### 句子：\n恶心，同性恋怎么没有问题？当然有问题了！\n### 三元组：\n同性恋 | 当然有问题了！ | LGBTQ [END]\n\n### 句子：\n性工作者和同性恋还是不太一样吧，这样类比是否不太妥当\n### 三元组：\n性工作者和同性恋 | 不太一样 | non-hate [END]\n\n### 句子：\n按照你的逻辑你可以和男人doi的，只是你不想罢了\n### 三元组：\n你 | 按照你的逻辑你可以和男人doi的，只是你不想罢了 | non-hate [END]\n\n### 句子：\n你们同性恋为什么不收敛一点，我们看着觉得恶心\n### 三元组：\n同性恋 | 我们看着觉得恶心 | LGBTQ [END]\n\n### 句子：\n你们这些连性教育都没有的人，可以别来搞笑吗？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "你们这些连性教育都没有的人 | 可以别来搞笑吗？ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "你们这些连性教育都没有的人",
+          "argument": "可以别来搞笑吗？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 276,
+      "content": "我们这些原住民终于可以爬了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "原住民",
+          "argument": "可以爬了",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我想……我们得回归现实了\n### 三元组：\n我们 | 得回归现实了 | non-hate [END]\n\n### 句子：\n这是一个把外来入侵物种引到西欧的好机会\n### 三元组：\n外来入侵物种 | 引到西欧 | Region, Racism [END]\n\n### 句子：\n然后本民族的基因在未来可以通过考古来发现\n### 三元组：\n本民族的基因 | 可以通过考古来发现 | Racism [END]\n\n### 句子：\n辛苦进化上万年，一黑回到原始前。\n### 三元组：\n黑 | 一黑回到原始前 | Racism [END]\n\n### 句子：\n有这好了，不去让他们去采摘园真是可惜了\n### 三元组：\n他们 | 不去让他们去采摘园真是可惜了 | Racism [END]\n\n### 句子：\n老赵，来讲讲中国原住民被大猩猩不当命的现象\n### 三元组：\n中国原住民 | 被大猩猩不当命 | Racism [END]\n\n### 句子：\n好客山东给爷爬\n### 三元组：\n山东 | 给爷爬 | Region [END]\n\n### 句子：\nhub么？我在国外都不用翻墙🐶\n### 三元组：\n我 | 在国外都不用翻墙🐶 | non-hate [END]\n\n### 句子：\n现在不是桑嗨仁歧视外地人的时候了🤣\n### 三元组：\n桑嗨仁 | 歧视外地人 | Region [END]\n\n### 句子：\n黑人五千年祖先都是灵长类动物\n### 三元组：\n黑人 | 祖先都是灵长类动物 | Racism [END]\n\n### 句子：\n我们这些原住民终于可以爬了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "原住民 | 终于可以爬了 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "原住民",
+          "argument": "终于可以爬了",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3057,
+      "content": "这几年被黑的最多的是山东吧。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "山东",
+          "argument": "这几年被黑的最多",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n拉山东做甚，再怎么黑也轮不到经济全国第三的省吧\n### 三元组：\n山东 | 再怎么黑也轮不到经济全国第三的省吧 | non-hate [END]\n\n### 句子：\n你说了这么多，实际上只有河南和东北被黑的最惨，其他都是阶段性的。河南和东北是一直被黑几十年了。\n### 三元组：\n河南和东北 | 被黑的最惨 | Region [SEP] 河南和东北 | 一直被黑几十年了 | Region [END]\n\n### 句子：\n山东人口碑不错吧，被黑的最惨的还是河南人🐶\n### 三元组：\n河南人 | 被黑的最惨 | Region [END]\n\n### 句子：\n🙁说实话，我觉得东北被黑是最惨的，而且很持久，其他地方基本黑一下拉倒了\n### 三元组：\n东北 | 被黑是最惨的 | Region [END]\n\n### 句子：\n河南和东北吧！山东还是好上很多，夸的不少。\n### 三元组：\n山东 | 还是好上很多，夸的不少 | non-hate [END]\n\n### 句子：\n河南，东北，山东，地域黑重灾区……\n### 三元组：\n河南，东北，山东 | 地域黑重灾区 | Region [END]\n\n### 句子：\n河南被黑的最惨虽然一直有人说鲁豫皖鄂豫皖，河南被全国各种黑，说起河南就是总部偷井盖逃难，以前那个省人没有逃难去\n### 三元组：\n河南 | 被黑的最惨 | Region [SEP] 河南 | 被全国各种黑 | Region [SEP] 河南 | 说起河南就是总部偷井盖逃难 | Region [END]\n\n### 句子：\n江浙沪不黑其他省份就不错了，2002年黑山东多宝鱼药物残留超标的是哪里？给山东造成了40多亿的损失。2015年的山东青岛大虾事件，是哪里的食客吃霸王餐倒打一耙？2019年的山大学伴事件是哪里媒体带头炒作出来的？2020年上海的自媒体同时炒作山东理工大学学生虐猫和山东烟台鲍毓明xx养女。经常黑山东的财经专家叶檀是哪里的？骂一亿山东人不如z的大学生是宇宙省的。骂全国的许女是哪里的？\n### 三元组：\n江浙沪 | 不黑其他省份就不错了 | Region [END]\n\n### 句子：\n还好我们省存在感低，想被黑好多人都不知如何黑。🤔😄😄\n### 三元组：\n我们省 | 存在感低，想被黑好多人都不知如何黑。🤔😄😄 | Region [END]\n\n### 句子：\n哈哈，骂的最狠的还是山东人自己🤣\n### 三元组：\n山东人 | 骂的最狠的还是山东人自己🤣 | non-hate [END]\n\n### 句子：\n这几年被黑的最多的是山东吧。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "山东 | 被黑的最多 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "山东",
+          "argument": "被黑的最多",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3632,
+      "content": "贵州人表示在浙江贵州人的身份经常感受到来自浙江人的恶意",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "贵州人",
+          "argument": "经常感受到来自浙江人的恶意",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n山东居然混蛋连贵州人都敢歧视了，你不去看看贵州人是什么形象\n### 三元组：\n山东 | 混蛋连贵州人都敢歧视了 | Region [END]\n\n### 句子：\n西南省份确实在浙江真的是鄙视链底端\n### 三元组：\n西南省份 | 鄙视链底端 | Region [END]\n\n### 句子：\n老家浙江的我哪敢说 说了就是明明是我们歧视外地人😆\n### 三元组：\n老家浙江的我 | 明明是我们歧视外地人 | Region [END]\n\n### 句子：\n西南地区也普遍看不起贵州人，喜欢搬弄是非地域黑，你上面那个就是地域黑，反正就是说贵州它们就说其它地方才是，老🐶了\n### 三元组：\n西南地区 | 普遍看不起贵州人，喜欢搬弄是非地域黑 | Region [SEP] 你上面那个 | 地域黑 | Region [END]\n\n### 句子：\n浙江人挺好的啊，为啥要被黑，浙江也是很富裕的鱼米之乡\n### 三元组：\n浙江人 | 挺好的啊 | non-hate [SEP] 浙江 | 很富裕的鱼米之乡 | non-hate [END]\n\n### 句子：\n太形象了，碰到好几个这样的了，一说浙江不太好的地方，立马涌过来说你一定是嫉妒，外地人一定多么多么羡慕他们的😅，甚至上升到人种优越论\n### 三元组：\n浙江 | 你一定是嫉妒 | Region [SEP] 外地人 | 上升到人种优越论 | Region [END]\n\n### 句子：\n我见过很多贵州人说东北贫（穷的意思） 我就奇怪了论省经济你个倒数第二的笑话人家倒数第一的？\n### 三元组：\n东北 | 贫 | Region [END]\n\n### 句子：\n我现在在每一条地域黑回答下面都能看见浙江人，黑山东，山西，广东，湖北，东北，都是浙江人，我是真的理解不了，浙江人是不是除了自己谁都看不起啊😅\n### 三元组：\n浙江人 | 是不是除了自己谁都看不起啊😅 | Region [END]\n\n### 句子：\n浙江人在东北不被歧视吧，浙江卫视台倒是全国各地都在骂，不知道你们浙江人骂不骂，在北京浙江卫视都被骂成韩国卫视了，比韩国人都能抄\n### 三元组：\n浙江人 | 在东北不被歧视吧 | non-hate [SEP] 浙江卫视台 | 倒是全国各地都在骂 | others [SEP] 浙江卫视 | 在北京浙江卫视都被骂成韩国卫视了，比韩国人都能抄 | others [END]\n\n### 句子：\n我去杭州玩 刚出铂丽酒店没一百米 可能因为我在和边上的同学用东北话交流 两个东北人真是罪大恶极 杭州警察立刻把我俩拦下来盘问并且要求查身份证 你要非得说没有歧视我也没招 我说的要是萧山话他会拦我们吗\n### 三元组：\n两个东北人 | 罪大恶极 | Region [END]\n\n### 句子：\n贵州人表示在浙江贵州人的身份经常感受到来自浙江人的恶意\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "贵州人 | 表示在浙江贵州人的身份经常感受到来自浙江人的恶意 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "贵州人",
+          "argument": "表示在浙江贵州人的身份经常感受到来自浙江人的恶意",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6406,
+      "content": "上次遇到一个坦克，直接跟说自己这么漂亮怎么可能没谈过对象我就知道是什么成分了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "坦克",
+          "argument": "什么成分",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n能物化自己的只有自己，何必和这种不带脑感觉全世界都压迫的玩意讲道理，真以为自己胸前多二两肥油就多讨人喜欢一样，一天天的幻想自己独一无二，只能茕茕孑立，实际上看她一眼都嫌累\n### 三元组：\n不带脑感觉全世界都压迫的玩意 | 真以为自己胸前多二两肥油就多讨人喜欢一样 | Sexism [END]\n\n### 句子：\n还有什么奔现的，基本都是男的舔狗才能找到那的女的，说的自己不是网恋游戏，去区服情缘贴看看，那是多少搞网恋找情缘的\n### 三元组：\n男的 | 舔狗 | Sexism [END]\n\n### 句子：\n真无语，不相信就不相信吧，找你幻想中的外国美妞去🤭\n### 三元组：\n外国美妞 | 找你幻想中的外国美妞去 | Sexism, Racism [END]\n\n### 句子：\n看个笑话就好，我相亲碰到个，加了vx说自己160+问我多高，我说190(真实193没好意思说)，死活不信然后普信男就出来了幕刃真有意思，我tm一个19390+kg的中锋要干这些乐色还不是分分钟？\n### 三元组：\n幕刃 | 真有意思 | Sexism [SEP] 这些乐色 | 干这些乐色还不是分分钟 | Sexism [END]\n\n### 句子：\n我评论长沙女拳之都就破防了，你说你咋那么怂，怕我看见你是大肥🐷吗？都是现实里没人看得上\n### 三元组：\n长沙 | 女拳之都 | Region, Sexism [SEP] 你 | 怕我看见你是大肥🐷吗？都是现实里没人看得上 | Sexism [END]\n\n### 句子：\n你评论区不就有一个吗，经典装理客中装不下去了就开始破口大骂了，或许这就是当代小仙女吧🤭\n### 三元组：\n当代小仙女 | 经典装理客中装不下去了就开始破口大骂了 | Sexism [END]\n\n### 句子：\n看到“我是男的”，100%是女拳，毕竟有句话说自己没什么就喜欢强调什么\n### 三元组：\n女拳 | 自己没什么就喜欢强调什么 | Sexism [END]\n\n### 句子：\n总而言之，现在就是女人最好的年代，不作妖，处女，整容的能好看，找一个中产阶级以上轻轻松松。也不知道女拳哪里不满>_<，或许整容也整不出来？\n### 三元组：\n女拳 | 整容也整不出来？ | Sexism [END]\n\n### 句子：\n以后出门逛街遇到这种满脸都是妆的我大家伙得离远点，不知道卸完妆是什么贵物\n### 三元组：\n这种满脸都是妆的 | 不知道卸完妆是什么贵物 | Sexism [END]\n\n### 句子：\n其实证明是个男的都有歪心思，跟美丑无关，找个帅哥，不然太吃亏了\n### 三元组：\n男的 | 都有歪心思 | Sexism [END]\n\n### 句子：\n上次遇到一个坦克，直接跟说自己这么漂亮怎么可能没谈过对象我就知道是什么成分了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "坦克 | 知道是什么成分了 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "坦克",
+          "argument": "知道是什么成分了",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3821,
+      "content": "这个事情上估计是大势所趋，国家宣传口的风向都是在推进和黑人同婚，想改变这个趋势，极其困难🤔",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "国家宣传",
+          "argument": "和黑人同婚",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n黑人可是有共妻的习惯的，想找黑人的人，好好想想吧🤔🤔\n### 三元组：\n黑人 | 有共妻的习惯的 | Racism [SEP] 想找黑人的人 | 好好想想吧 | Racism [END]\n\n### 句子：\n和黑种人结婚就是把后代变黑，黄种人白种人和黑种人结婚生下来的都是黑种人，黑种人的基因顽强是有目共睹的，多和黑种人结婚，几百年后整个地球都是黑色的，在法国黑人的数量已经占据总人数的百分之八，我就不信当国家都开始变色的时候，那些极端种族主义分子还会手下留情，白人可不是善茬\n### 三元组：\n和黑种人结婚 | 把后代变黑 | Region, Racism [SEP] 黑种人 | 基因顽强 | Racism [SEP] 白人 | 可不是善茬 | Racism [END]\n\n### 句子：\n所以你要不要看看，这个问题问的是什么？我回答的是什么？另外，中国男性与黑人女性的婚姻问题，2018年的统计是九千多例，不到一万例。且大多是在非洲当地登记的。这跟把黑男人留着中国，把黑娃娃入籍中国的媚外女们不一样吧。\n### 三元组：\n媚外女们 | 把黑男人留着中国，把黑娃娃入籍中国 | Sexism, Racism [END]\n\n### 句子：\n和黑种人结婚就是把后代变黑，黄种人白种人和黑种人结婚生下来的都是黑种人，黑种人的基因顽强是有目共睹的，多和黑种人结婚，几百年后整个地球都是黑色的，有的人真的就不担心吗？\n### 三元组：\n黑种人 | 基因顽强是有目共睹的 | Racism [END]\n\n### 句子：\n和黑种人结婚就是把后代变黑，黄种人白种人和黑种人结婚生下来的都是黑种人，黑种人的基因顽强是有目共睹的，多和黑种人结婚，几百年后整个地球都是黑色的\n### 三元组：\n黑种人 | 基因顽强 | Racism [END]\n\n### 句子：\n为了钱倒是觉得可以理解，我这个回复意思是黑人太黑了，大家不太喜欢，但其他外嫁挺常见的，嫁个人实现阶级跨越不要太爽。\n### 三元组：\n黑人 | 太黑了，大家不太喜欢 | Racism [END]\n\n### 句子：\n原因很简单，请问女的是被黑人强奸的逼的吗？大部分并不是吧，似乎是她们自己的意愿吧\n### 三元组：\n女的 | 被黑人强奸的逼的吗？ | Sexism [END]\n\n### 句子：\n中国14亿人呢，啥样的奇葩没有啊。其实天天鼓吹多元文化，跨种族婚姻的那帮人，他们自己不嫁给非洲黑人。把这些脑子单纯的女人骗得一愣一愣的。\n### 三元组：\n跨种族婚姻的那帮人 | 他们自己不嫁给非洲黑人 | Racism [SEP] 脑子单纯的女人 | 骗得一愣一愣 | Sexism [END]\n\n### 句子：\n作为男人我认同男女一致，我也认同去追求个人幸福，只要你别回来也别带黑娃回来就行。我可不想中国变法兰西斯坦，不希望改变人种结构。也呼吁其他男性朋友不要把黑男黑女区别对待，不然你讨论的就不是黑人问题而是输出情绪或是搞性别对立\n### 三元组：\n你 | 别回来也别带黑娃回来就行 | Racism [END]\n\n### 句子：\n我不歧视这样的女的，只希望他们不要在中国了，嫁鸡随鸡，嫁狗随狗，和黑人去非洲开疆扩土吧！\n### 三元组：\n这样的女的 | 只希望他们不要在中国了 | Sexism, Racism [SEP] 这样的女的 | 和黑人去非洲开疆扩土吧！ | Sexism, Racism [END]\n\n### 句子：\n这个事情上估计是大势所趋，国家宣传口的风向都是在推进和黑人同婚，想改变这个趋势，极其困难🤔\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "国家宣传口 | 都在推进和黑人同婚 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "国家宣传口",
+          "argument": "都在推进和黑人同婚",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3003,
+      "content": "他们宣传他们的，咱们抵制就好了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "他们",
+          "argument": "咱们抵制就好了",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n互喷不就是最好的抵制方法吗😆\n### 三元组：\n互喷 | 最好的抵制方法 | others [END]\n\n### 句子：\n没意见，你抵制是你的事\n### 三元组：\n你 | 抵制是你的事 | non-hate [END]\n\n### 句子：\n🐶那本来就是骗婚的人品有问题的人啊，你抵制他们难道会消失吗\n### 三元组：\n骗婚的 | 人品有问题 | non-hate [END]\n\n### 句子：\n说到底还是资本的坏，为了利益恶意宣传不择手段\n### 三元组：\n资本 | 为了利益恶意宣传不择手段 | others [END]\n\n### 句子：\n我们应该统一起来举报他，把他黑点，让他的账号不能使用\n### 三元组：\n他 | 举报 | non-hate [END]\n\n### 句子：\n远离默默默默，抵制串串🤣\n### 三元组：\n默默默默 | 远离 | Racism [SEP] 串串 | 抵制 | Racism [END]\n\n### 句子：\n我们联合起来把他列入黑名单什么的，让他封号\n### 三元组：\n他 | 把他列入黑名单什么的 | non-hate [END]\n\n### 句子：\n其实不用管这些人的，正好崇洋媚外的都走最好\n### 三元组：\n崇洋媚外的 | 都走最好 | Racism [END]\n\n### 句子：\n口气别这么大，你们别倒贴默就行了\n### 三元组：\n你们 | 别倒贴默就行了 | Racism [END]\n\n### 句子：\n那个标题还起的贼恶心，一股子洋洋自得的意味。所以说遇到这种人真要离远一点。\n### 三元组：\n标题 | 贼恶心，一股子洋洋自得的意味 | non-hate [SEP] 这种人 | 离远一点 | non-hate [END]\n\n### 句子：\n他们宣传他们的，咱们抵制就好了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "他们 | 宣传他们的 | non-hate [SEP] 我们 | 抵制就好了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "他们",
+          "argument": "宣传他们的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "我们",
+          "argument": "抵制就好了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7610,
+      "content": "说明一下，我只关爱自己身边的女性，比如老婆女儿等，别的女人关我鸟事。v",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "我",
+          "argument": "只关爱自己身边的女性",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "别的女人",
+          "argument": "关我鸟事",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我是不支持男女平等，本来男女就存在差异，何必搞得那么极端，这口号就喊的不现实，互相尊重就行了，不行就开撕，别扯平等。\n### 三元组：\n男女平等 | 互相尊重就行了 | non-hate [END]\n\n### 句子：\n怎么说，女人是一切罪恶的源头，因为没有女人，大家就不会那么内卷。更没有性冲动什么的，人都没有矛盾。就是因为女人的性蛊惑男人的身心，而是很难去抵抗\n### 三元组：\n女人 | 一切罪恶的源头 | Sexism [END]\n\n### 句子：\n我个人是不接受的和黑搞的女人。就算瞒着我，一旦被我知道，分手或者离婚🐶\n### 三元组：\n和黑搞的女人 | 不接受 | Sexism, Racism [END]\n\n### 句子：\n国男睡过外国女人不也得意洋洋，国内也有例子。一天到晚日本女人贤惠，印度女人给嫁妆，美国女人随夫姓，穆斯林女人贞洁，俄罗斯乌克兰女人漂亮，非洲女人身材好，论起崇洋媚外男人不比女人差。\n### 三元组：\n男人 | 崇洋媚外 | Sexism [END]\n\n### 句子：\n其实证明是个男的都有歪心思，跟美丑无关，找个帅哥，不然太吃亏了\n### 三元组：\n男的 | 都有歪心思 | Sexism [END]\n\n### 句子：\n看到“我是男的”，100%是女拳，毕竟有句话说自己没什么就喜欢强调什么\n### 三元组：\n女拳 | 自己没什么就喜欢强调什么 | Sexism [END]\n\n### 句子：\n说实话，网上挑起性别对立的基本都是猪精，正常人都忙着生活忙着工作以及同闺蜜逛街这些不比打拳有意思，这些人怕不是被同性异性都孤立的存在\n### 三元组：\n网上挑起性别对立的 | 基本都是猪精 | Sexism [END]\n\n### 句子：\n结婚对男人来讲太亏了，希望男人们都能觉醒，不让女人占便宜，都坚决不结婚\n### 三元组：\n女人 | 不让女人占便宜 | Sexism [END]\n\n### 句子：\n网上的话也信，那就是你的问题了，中国男女对立只存在网络上\n### 三元组：\n中国 | 男女对立只存在网络上 | non-hate [END]\n\n### 句子：\n不要随意评论。毕竟大家都是人，你的评论会伤害到别人。性取向是别人的自由。请你善良\n### 三元组：\n性取向 | 别人的自由 | non-hate [END]\n\n### 句子：\n说明一下，我只关爱自己身边的女性，比如老婆女儿等，别的女人关我鸟事。v\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "别的女人 | 关我鸟事 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "别的女人",
+          "argument": "关我鸟事",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6,
+      "content": "估计已经成了非洲某部落的第36号王妃",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "估计已经成了非洲某部落的第36号王妃",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n胡说，黑人各个都是王子，等着继承亿万家产，嫁去非洲就可以享受美好生活了\n### 三元组：\n黑人 | 各个都是王子 | Racism [END]\n\n### 句子：\n其他的都不说，为她去非洲生活点赞，別赖在中国，中国不需要黑族\n### 三元组：\n非洲 | 为她去非洲生活点赞 | Sexism, Region [SEP] 黑族 | 中国不需要 | Racism [END]\n\n### 句子：\n被骗去非洲的国女，不一定都是坏女人，总之别去就是了，去了就回不来了。如果去了真的能过的很好，以国女那爱炫耀爱攀比的人物性格，早就回来装逼了\n### 三元组：\n国女 | 爱炫耀爱攀比 | Sexism [END]\n\n### 句子：\n这瞎娘们要做历史罪人吗？滚去非洲。这黑还得了便宜卖乖\n### 三元组：\n这瞎娘们 | 滚去非洲 | Sexism, Racism [END]\n\n### 句子：\n女人愿意和她们优秀的非洲老公回非洲我都想捐路费，最怕通过女人黑下来，生窝二代，长大后来一句我是龙的传人，我的妈呀简直头皮都麻了。\n### 三元组：\n女人 | 愿意和她们优秀的非洲老公回非洲我都想捐路费 | Sexism, Racism [SEP] 女人 | 最怕通过女人黑下来，生窝二代 | Sexism, Racism [END]\n\n### 句子：\n我支持你去非洲，去美国。就是别再中国，中国配不上你，仙女的气质。让我们在这个国度里静静的羡慕你。快走吧。别回头别后悔。后悔也别逼逼。中国还是纯黄种人为好\n### 三元组：\n你 | 仙女的气质 | Sexism [SEP] 中国 | 纯黄种人为好 | Racism [END]\n\n### 句子：\n摩洛哥不知什么人种，好像穆斯林吧，从摩洛哥带了混血宝宝回来，唉，不知道她后面还能找到老公么\n### 三元组：\n摩洛哥 | 不知什么人种 | Racism [END]\n\n### 句子：\n作为男人，这一点上我不双标：娶默的只要待在非洲生活，好好建设非洲，我们绝对支持，欢迎逢年过节回来谈情。对嫁默的，也一样，虽然我zzqs，但我支持真爱🐶\n### 三元组：\n娶默的 | 待在非洲生活 | Racism [SEP] 嫁默的 | 也一样 | Racism [SEP] 我 | zzqs | Racism [END]\n\n### 句子：\n中国男人在非洲也是被非洲女人倒贴的份，津巴布韦总统以前就建议希望中国劳工出国带上自己的妻子，不要在搞他们国家的女人了，关键是还专挑好看的……，然后悄悄回国😅😅\n### 三元组：\n中国男人 | 中国男人在非洲也是被非洲女人倒贴的份，津巴布韦总统以前就建议希望中国劳工出国带上自己的妻子，不要在搞他们国家的女人了，关键是还专挑好看的……，然后悄悄回国😅😅 | Sexism, Racism [SEP] 非洲女人 | 倒贴 | Sexism, Racism [END]\n\n### 句子：\n那些小仙女最喜欢非洲酋长的公子哥们了，还喜欢主动献身倒贴🤭\n### 三元组：\n那些小仙女 | 最喜欢非洲酋长的公子哥们了，还喜欢主动献身倒贴🤭 | Sexism, Racism [END]\n\n### 句子：\n估计已经成了非洲某部落的第36号王妃\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "非洲某部落 | 第36号王妃 | Sexism, Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "非洲某部落",
+          "argument": "第36号王妃",
+          "targeted_group": "Sexism, Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3121,
+      "content": "看来人类历史的先祖们早就有预料今日这些人类的叛徒所以才有了慕尼黑这个地名对人类们随时警醒",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "慕尼黑",
+          "argument": "对人类们随时警醒",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n所以说正因为国际鬼子虫类及其它们后代虫混从它们再地球诞生到现在根本就没有什么文明而且它们这种自卑性是发自骨髓基因绝对自卑所以在面对人类任何文明时就是盗窃与抢劫说白了国际鬼子虫类及其它们后代虫混这已经构成盗取人类文明罪\n### 三元组：\n国际鬼子虫类及其它们后代 | 根本就没有什么文明而且它们这种自卑性是发自骨髓基因绝对自卑所以在面对人类任何文明时就是盗窃与抢劫说白了国际鬼子虫类及其它们后代虫混这已经构成盗取人类文明罪 | Racism [SEP] 国际鬼子虫类及其它们后代 | 自卑 | Racism [SEP] 国际鬼子虫类及其它们后代 | 构成盗取人类文明罪 | Racism [END]\n\n### 句子：\n赤色利维坦坏事做尽孔孟之道、宋明理学是正信的古代社会何曾见过这样的状况真是令先王垂泪、众圣蒙羞\n### 三元组：\n赤色利维坦 | 坏事做尽 | others [END]\n\n### 句子：\n现在美国一半的暴动就是黑人惹出来的本来世界上那有什么种族歧视，只不过就是黑人为了掩饰自己的罪恶，故意为之种族歧视是永远不会停下来的。即使社会安定，哪里有黑人的地方，就一定有暴乱因为那些黑人是江山易改本性难移，无论你再怎么尊重黑人，别人心里觉得这是理所应当的，自己犯了错反而指责别人种族歧视。想要别人尊重你，首先要先学会尊重别人。黑人也只不过只会用种族歧视的概念道德绑架你。\n### 三元组：\n黑人 | 江山易改本性难移 | Racism [SEP] 黑人 | 只会用种族歧视的概念道德绑架你 | Racism [END]\n\n### 句子：\n我知道楼主你肯定不是一般人希望可以把我的言论告诉组织别让这些黑人祸害在中国了\n### 三元组：\n这些黑人 | 祸害在中国 | Racism [END]\n\n### 句子：\n确实现在的拳师天生就是坏种它们贪婪傲慢懒惰暴食淫欲嫉妒暴怒七宗罪它们全部都犯了它们欲壑难填利令智昏是畜生不如的东西\n### 三元组：\n拳师 | 天生就是坏种 | Sexism [END]\n\n### 句子：\n记得看过一本隐喻黑人的悬疑小说，揭示了黑人的丑恶嘴脸，主角好像叫肖万来着，还是肖旺\n### 三元组：\n黑人 | 丑恶嘴脸 | Racism [END]\n\n### 句子：\n话很难听，但不幸的是却是至理，不说黑人了，看看“我大清”制造扬州十日、嘉定三屠、江阴屠城、广州屠城、大同屠城、剃发易服的八旗屠夫们的历史地位，看看现在影视界、文艺界、所谓的“学术”界，“我大清”简直就是开天辟地以来最光辉、最伟岸、各个“千古一帝”的神存在！人必自辱而后人辱之，对于国人来说这并不是一句警示恒言，因为毫无任何警示作用，而仅仅是一种真实的生活写照而已！\n### 三元组：\n大清 | 八旗屠夫 | others [END]\n\n### 句子：\n想下一杯水滴上滴墨水，还它嘛好看，还它嘛不黑，黑人总是美化自我，抬高自身，只懂得向欧美索取对于先辈的赔偿，却永不感恩如果不是欧美亚人类，非洲还是石器时代！\n### 三元组：\n黑人 | 总是美化自我，抬高自身 | Racism [SEP] 非洲 | 石器时代 | Region [END]\n\n### 句子：\n黑东北的百分之九十是“好客山洞” 见不得中国好的是美国佬小日本 见不得东北好的是好客山洞\n### 三元组：\n好客山洞 | 黑东北的百分之九十 | Region [SEP] 美国佬小日本 | 见不得中国好 | Region [SEP] 好客山洞 | 见不得东北好 | Region [END]\n\n### 句子：\n没办法，我们黑龙江人口流失严重不说还不靠海岸线邻国也只有人烟稀少的俄罗斯远东 姥姥不疼舅舅不爱了属于是\n### 三元组：\n我们黑龙江 | 姥姥不疼舅舅不爱了 | non-hate [END]\n\n### 句子：\n看来人类历史的先祖们早就有预料今日这些人类的叛徒所以才有了慕尼黑这个地名对人类们随时警醒\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "人类的叛徒 | 对人类们随时警醒 | others [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "人类的叛徒",
+          "argument": "对人类们随时警醒",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4712,
+      "content": "找谁不行，偏要找个黑家伙。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "黑家伙",
+          "argument": "偏要找个",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n黑性旺盛，完全不讲道义，坏人一个\n### 三元组：\n黑 | 性旺盛，完全不讲道义，坏人一个 | Racism [END]\n\n### 句子：\n万一他就是黑黑了\n### 三元组：\n他 | 就是黑黑 | Racism [END]\n\n### 句子：\n除黑的到时也会打死你！\n### 三元组：\n除黑的 | 打死你 | Racism [END]\n\n### 句子：\n黑人自己放弃了自己，怨不得别人。\n### 三元组：\n黑人 | 自己放弃了自己 | Racism [END]\n\n### 句子：\n找黑妞可能真的是找不到其他吧\n### 三元组：\n黑妞 | 找黑妞可能真的是找不到其他吧 | Sexism, Racism [END]\n\n### 句子：\n不能因为有一两个正常的黑人，而引狼入室。让一颗老鼠屎坏了一锅汤。\n### 三元组：\n黑人 | 引狼入室 | Racism [SEP] 黑人 | 让一颗老鼠屎坏了一锅汤 | Racism [END]\n\n### 句子：\n不止是黑人，白人也不行。\n### 三元组：\n黑人 | 不止是黑人，白人也不行。 | Racism [SEP] 白人 | 不止是黑人，白人也不行。 | Racism [END]\n\n### 句子：\n其实我是支持她们找黑哥哥的，物以类聚自动分类。\n### 三元组：\n她们 | 支持她们找黑哥哥 | Sexism, Racism [END]\n\n### 句子：\n倒贴找黑老丑的我都隔应，不自重自爱，就要被唾弃。\n### 三元组：\n黑老丑 | 倒贴找黑老丑的我都隔应 | Sexism, Racism [END]\n\n### 句子：\n我也是。我及其厌恶黑皮。与其为伍就是自甘堕落😅😅\n### 三元组：\n黑皮 | 厌恶 | Racism [END]\n\n### 句子：\n找谁不行，偏要找个黑家伙。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑家伙 | 找谁不行，偏要找个黑家伙 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑家伙",
+          "argument": "找谁不行，偏要找个黑家伙",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1617,
+      "content": "这里至少还有个男的，隔壁摆摊收豆子里就没出现过男性",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "男性",
+          "argument": "隔壁摆摊收豆子里就没出现过男性",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n这个母🐶没了男的也买不起车啊有个批没了男的也没地方卖啊\n### 三元组：\n母🐶 | 没了男的也买不起车啊有个批没了男的也没地方卖啊 | Sexism [END]\n\n### 句子：\n如果真的是男的，则废物测试没通过\n### 三元组：\n男的 | 废物测试没通过 | Sexism [END]\n\n### 句子：\n针对女拳而已，😆应该还有些好点的女人\n### 三元组：\n女拳 | 针对女拳而已 | Sexism [END]\n\n### 句子：\n可以接受男男的存在，但是不要出来恶心我\n### 三元组：\n男男 | 不要出来恶心我 | LGBTQ [END]\n\n### 句子：\n笑死，要是刷男女的没人有意见，真就高贵的同性恋呗??\n### 三元组：\n同性恋 | 高贵 | LGBTQ [END]\n\n### 句子：\n湖北不会有男铜的，因为都被我绞嘞\n### 三元组：\n男铜 | 都被我绞嘞 | LGBTQ [END]\n\n### 句子：\n镇楼这人不是男的？\n### 三元组：\n镇楼这人 | 不是男的？ | non-hate [END]\n\n### 句子：\n人家不就说了个普信男吗，又没扫射全部男性，可就是架不住有些人着急对号入座😄\n### 三元组：\n普信男 | 人家不就说了个普信男吗 | Sexism [SEP] 有些人 | 架不住有些人着急对号入座😄 | Sexism [END]\n\n### 句子：\n我记忆中男性明显偏多\n### 三元组：\n男性 | 偏多 | non-hate [END]\n\n### 句子：\n看到“我是男的”，100%是女拳，毕竟有句话说自己没什么就喜欢强调什么\n### 三元组：\n女拳 | 自己没什么就喜欢强调什么 | Sexism [END]\n\n### 句子：\n这里至少还有个男的，隔壁摆摊收豆子里就没出现过男性\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "隔壁摆摊收豆子里 | 没有出现过男性 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "隔壁摆摊收豆子里",
+          "argument": "没有出现过男性",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1849,
+      "content": "中国劳工也在非洲大杀四方😅",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "中国劳工",
+          "argument": "在非洲大杀四方😅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n中国军人在非洲维和壮烈牺牲的故事一个大篇幅报道！\n### 三元组：\n中国军人在非洲维和壮烈牺牲的故事 | 一个大篇幅报道 | non-hate [END]\n\n### 句子：\n中国男人在非洲也是被非洲女人倒贴的份，津巴布韦总统以前就建议希望中国劳工出国带上自己的妻子，不要在搞他们国家的女人了，关键是还专挑好看的……，然后悄悄回国😅😅\n### 三元组：\n中国男人 | 中国男人在非洲也是被非洲女人倒贴的份，津巴布韦总统以前就建议希望中国劳工出国带上自己的妻子，不要在搞他们国家的女人了，关键是还专挑好看的……，然后悄悄回国😅😅 | Sexism, Racism [SEP] 非洲女人 | 倒贴 | Sexism, Racism [END]\n\n### 句子：\n非洲能跟中国比吗😅\n### 三元组：\n非洲 | 能跟中国比吗😅 | Region [END]\n\n### 句子：\n别在同情什么非洲黑人了，想想自己同胞的处境都十分坚难！！！\n### 三元组：\n非洲黑人 | 别在同情什么非洲黑人了 | Racism [END]\n\n### 句子：\n中非友谊真的很“好”\n### 三元组：\n中非友谊 | 真的很“好” | Racism [END]\n\n### 句子：\n主要是那些黑人在中国都不负责任，非洲还有很多的传染病。\n### 三元组：\n那些黑人 | 不负责任 | Racism [SEP] 非洲 | 有很多的传染病 | Region [END]\n\n### 句子：\n这个不是有视频吗，再怎么样黑黑在中国打中国女人那两个男的不出手说不过去，如果在非洲中国人打黑女人估计命都不保\n### 三元组：\n黑黑 | 那两个男的不出手说不过去 | Racism [SEP] 非洲 | 在非洲中国人打黑女人估计命都不保 | Region [END]\n\n### 句子：\n其他的都不说，为她去非洲生活点赞，別赖在中国，中国不需要黑族\n### 三元组：\n非洲 | 为她去非洲生活点赞 | Sexism, Region [SEP] 黑族 | 中国不需要 | Racism [END]\n\n### 句子：\n中非混血！\n### 三元组：\nNULL | 中非混血！ | non-hate [END]\n\n### 句子：\n都去非洲就太好了\n### 三元组：\nNULL | 都去非洲就太好了 | Region [END]\n\n### 句子：\n中国劳工也在非洲大杀四方😅\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "中国劳工 | 中国劳工也在非洲大杀四方😅 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "中国劳工",
+          "argument": "中国劳工也在非洲大杀四方😅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3189,
+      "content": "好人与坏人有绝对界限吗？其实没有，只有立场，站在我们种族的立场，黑叔叔移民入侵破坏我们种族的单一性，就是敌人。不管他是不是好人。物种竞争本就只有立场，白王军在他妈妈眼中他也是个好孩子。但是我们眼中就是敌人。因为立场。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "黑叔叔",
+          "argument": "敌人",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n少说什么，黑人也有好人跟坏人，日本人还有好人跟坏人呢？日本人还有共产主义者呢！有如此的胸怀广阔，选择帮理不帮亲，劝大家后退一步海阔天空，那我也劝大家不要再跟美国人竞争了，美国人科技先进文明发展一统全球文成武功天下盖世，让它们统治全球肯定天下太平？🐶\n### 三元组：\n美国人 | 让它们统治全球肯定天下太平？🐶 | Region, Racism [END]\n\n### 句子：\n黑人也有好人，不能一棒子打死。因为人家身体素质好，一棒子多半打不死，建议多来几棒。\n### 三元组：\n黑人 | 建议多来几棒 | Racism [END]\n\n### 句子：\n哪里都有好坏人，按地图分辨的非蠢即坏\n### 三元组：\n按地图分辨的 | 非蠢即坏 | non-hate [END]\n\n### 句子：\n黑人也有好人，不能一棒子打死，建议多打几棒\n### 三元组：\n黑人 | 建议多打几棒 | Racism [END]\n\n### 句子：\n我不喜欢黑人，第一点是，是审美上的问题。第二点是，他们刻在骨子里的懒惰，与不安分。第三点是，他们没有国家认同感，对他们再好，他们也觉得自己是落叶，只知道索取第四点是，他们没有民族荣誉感，他们不会为了民族而斗争。可以慢慢同化，但是要多少时间与代价？？\n### 三元组：\n黑人 | 我不喜欢黑人，第一点是，是审美上的问题。第二点是，他们刻在骨子里的懒惰，与不安分。第三点是，他们没有国家认同感，对他们再好，他们也觉得自己是落叶，只知道索取第四点是，他们没有民族荣誉感，他们不会为了民族而斗争 | Racism [END]\n\n### 句子：\n如果你是黑人的敌人，你活下来的概率较大；如果你和黑人是朋友，恕我直言，你恐怕已经被生死簿勾了名了。所以拒绝黑人就是真爱生命。\n### 三元组：\n黑人 | 拒绝黑人就是真爱生命 | Racism [END]\n\n### 句子：\n雄性基因是排外，雌性基因是择优，如果思想上升就不必去骂黑人，但在这个世界大染缸里，清醒的人毕竟是少数，大部分人靠本能去抉择，即使我明白我也一定排黑的，同族群能容我，而异族必不容我\n### 三元组：\n雌性基因 | 择优 | Sexism, Racism [SEP] 我 | 一定排黑的 | Racism [END]\n\n### 句子：\n黑人如果只在自己的地方怎么糟践都行，别来中国祸害。黑人就像哥杀里的哥布林一样，被繁殖欲望支配的物种。\n### 三元组：\n黑人 | 被繁殖欲望支配的物种 | Racism [END]\n\n### 句子：\n你对善良这个词是不是有误解？看看黑的犯罪率再说吧\n### 三元组：\n黑 | 看看黑的犯罪率再说吧 | Racism [END]\n\n### 句子：\n不要自己什么样就把别人想成什么样你以为每个人都混到要靠出卖民族出卖国家而活吗赚卖国钱的你有什么资格说别人\n### 三元组：\n赚卖国钱的 | 你有什么资格说别人 | others [END]\n\n### 句子：\n好人与坏人有绝对界限吗？其实没有，只有立场，站在我们种族的立场，黑叔叔移民入侵破坏我们种族的单一性，就是敌人。不管他是不是好人。物种竞争本就只有立场，白王军在他妈妈眼中他也是个好孩子。但是我们眼中就是敌人。因为立场。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑叔叔 | 移民入侵破坏我们种族的单一性，就是敌人 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑叔叔",
+          "argument": "移民入侵破坏我们种族的单一性，就是敌人",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6242,
+      "content": "放屁的时候还会用手把屁罩住，然后放在同学鼻子前把手松开，然后同学就会闻到屁味，这是我独家发明的整人招数，然后我同学也会这样报复我。我还会把头皮屑挠出一桌子，然后包在纸里送给女同学，然后看她们嫌弃的反应特别好玩。后来毕业的时候发现被我整得最多的女同桌原来一直暗恋我",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "被我整得最多的女同桌",
+          "argument": "一直暗恋我",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我一直厌女但这样的话太直接了只要表现出自己一点厌女就会被女的集火攻击不管上到40多还是下到13~4的那种逮着你就咬一点人简乐趣都体验不到后来我就隐藏了起来比如搞妞妹儿的时候我什么也不表现后来我就又成了她们嘴里的老（渣）鼠（男）人呜呜呜呜呜\n### 三元组：\n我 | 厌女 | Sexism [END]\n\n### 句子：\n还有一个是小时候看到我爸的同事把手搭在我爸肩上，就是兄弟间勾肩搭背那种，当时我以为我爸的同事在欺负我爸，我冲上去用脚踹我爸同事。这件趣事我爸亲戚那边长大了还会在谈，不知道为什么虽然小时候很熊，我妈那边的亲戚也都不喜欢我，可我爸那边的亲戚却出奇地喜欢我，都说我性格特有趣\n### 三元组：\n我爸的同事 | 把手搭在我爸肩上 | non-hate [END]\n\n### 句子：\n哈哈哈哈……我也是……太逗来……感觉说撒都会被歧视……\n### 三元组：\n我 | 说撒都会被歧视… | non-hate [END]\n\n### 句子：\n恐怕从这个尼从出生到现在都没洗过头吧！太恶心人了！光看到就反胃！这女的居然不嫌弃，看来是真爱了\n### 三元组：\n这个尼 | 从出生到现在都没洗过头吧 | Racism [SEP] 这女的 | 居然不嫌弃，看来是真爱了 | Sexism [END]\n\n### 句子：\n这让我想起我初中时班上有个侏儒 老师让我们不许歧视她捉弄她 要带着她玩 所以我们女生不论做什么都会尽力带着她一起 调皮的男孩子也不敢捉弄她嘲笑她 一学期下来 她开朗了特别多\n### 三元组：\n侏儒  | 不许歧视她捉弄她 | non-hate [END]\n\n### 句子：\n小时候每次一听说聚会有我，亲戚间就会头疼，我表哥知道有我在都会直接不去，那时候太皮了\n### 三元组：\n我 | 那时候太皮了 | non-hate [END]\n\n### 句子：\n初中一个河南同学，偷东西 偷小卖部的饮料，然后跟我炫耀，当时还有点羡慕但是我也不敢，过后一想这不就是小偷吗，他家也不缺钱开理发店的体育特长生交的训练费都不少也不缺钱，但是就是喜欢偷，毕业以后我就跟他断绝联系了，这是我认识的唯一一个偷东西的人\n### 三元组：\n河南同学 | 偷东西 | Region [END]\n\n### 句子：\n然后我和表弟笑的要死，结果小姨在后面听到了，然后回头看到小姨凶狠地瞪着我，然后我一边笑一边把手放在小姨胸上，我表弟在旁边笑不停，我小姨抓着我的手甩开然后带表弟走了，她说真怕我把我弟带坏了\n### 三元组：\n我 | 真怕我把我弟带坏了 | non-hate [END]\n\n### 句子：\n是啊，我上次遇到一个恶臭直男，真的，他一直三句话不离同志是变态，最后在我把很多论据给他看的时候，他还嘴硬，这些论据都是假的宁愿自己看几千年前的小破书，也不愿看看现在的论据。眼看说不过，就发各种表情来阴阳怪气。🤣大半夜的，差点没把我笑死。\n### 三元组：\n恶臭直男 | 三句话不离同志是变态 | Sexism, LGBTQ [END]\n\n### 句子：\n大部分都是开玩笑的，都是在玩男同的梗，但谁能想到一个帖子下面能炸出来多少真的呢？甚至有些信以为真了，导致越来越没收敛\n### 三元组：\n男同 | 导致越来越没收敛 | LGBTQ [END]\n\n### 句子：\n放屁的时候还会用手把屁罩住，然后放在同学鼻子前把手松开，然后同学就会闻到屁味，这是我独家发明的整人招数，然后我同学也会这样报复我。我还会把头皮屑挠出一桌子，然后包在纸里送给女同学，然后看她们嫌弃的反应特别好玩。后来毕业的时候发现被我整得最多的女同桌原来一直暗恋我\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我 | 整人 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我",
+          "argument": "整人",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6405,
+      "content": "卡肺囊虫肺炎和隐脑大几率会死人的。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "卡肺囊虫肺炎和隐脑",
+          "argument": "大几率会死人的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n主要是大病容易人传人，必须隔离\n### 三元组：\n大病 | 容易人传人 | non-hate [END]\n\n### 句子：\n寄声虫是骂不走的，只能拔除，如果拔不动，那就弄断再拔。\n### 三元组：\n寄声虫 | 是骂不走的 | Racism [END]\n\n### 句子：\n以偏概全的啥b太多，脑子发育不完全🙂\n### 三元组：\n以偏概全的啥b | 脑子发育不完全🙂 | non-hate [END]\n\n### 句子：\nXg有些老年人也是這樣。不敢舉例詳細說，怕被關進小黑屋。\n### 三元组：\nXg有些老年人 | 也是這樣 | non-hate [END]\n\n### 句子：\n额，器质性变化不好恢复。你不介意么\n### 三元组：\n器质性变化 | 不好恢复 | non-hate [END]\n\n### 句子：\n传播艾滋，这隐患够大吧！在国内留下一堆串串，这影响够恶劣吧！\n### 三元组：\n传播艾滋 | 这隐患够大吧！ | Racism, others [SEP] 一堆串串 | 这影响够恶劣吧！ | Racism [END]\n\n### 句子：\n百分之五十的艾滋概率，自己想吧\n### 三元组：\n艾滋 | 百分之五十的艾滋概率 | others [END]\n\n### 句子：\n说重点，艾滋病，要你命\n### 三元组：\n艾滋病 | 要你命 | others [END]\n\n### 句子：\n听说艾滋病可以潜伏好几年，评论区的可以撤退了🤣🤣🤣不害怕吗\n### 三元组：\n评论区的 | 可以撤退了🤣🤣🤣不害怕吗 | others [END]\n\n### 句子：\n你还未染艾身亡？你上药多久了？\n### 三元组：\n你 | 未染艾身亡？ | others [END]\n\n### 句子：\n卡肺囊虫肺炎和隐脑大几率会死人的。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "卡肺囊虫肺炎和隐脑 | 大几率会死人 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "卡肺囊虫肺炎和隐脑",
+          "argument": "大几率会死人",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1163,
+      "content": "本身同概念就是用来混乱世界的，什么同，双，跨种，都是一堆歪理",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "同概念",
+          "argument": "就是用来混乱世界的",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        },
+        {
+          "target": "什么同，双，跨种",
+          "argument": "一堆歪理",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是同又怎么样？？天天歧视同性恋你还很有脸吗？？以多欺少算什么本事？？😆要不把我们杀了吧？？你有这本事吗？\n### 三元组：\n同性恋 | 歧视 | LGBTQ [SEP] 我们 | 😆要不把我们杀了吧 | LGBTQ [END]\n\n### 句子：\n几千年人类历史都非常在意血统，杂种无论中西方从来是不好的词。你仔细想想\n### 三元组：\n杂种 | 无论中西方从来是不好的词 | Racism [END]\n\n### 句子：\n你们同性恋是说不过异性恋说不过这个现实世界。同性相斥，异性相吸才是正常是永恒不变的真理。\n### 三元组：\n你们同性恋 | 是说不过异性恋说不过这个现实世界 | LGBTQ [SEP] 同性相斥，异性相吸 | 才是正常是永恒不变的真理 | LGBTQ [END]\n\n### 句子：\n同性恋也是正常的，你们这群人也就会以多欺少，不过同性恋依然过得好好的。😆。天天就只会歧视，迫害。以强凌弱。但愿未来遇到比你更强的人你不会被打死。\n### 三元组：\n你们这群人 | 以多欺少 | LGBTQ [SEP] 你们这群人 | 只会歧视，迫害。以强凌弱 | LGBTQ [SEP] 你们这群人 | 但愿未来遇到比你更强的人你不会被打死 | LGBTQ [END]\n\n### 句子：\n综上所述，以后想起来会补充，同性恋就纯纯懦夫\n### 三元组：\n同性恋 | 懦夫 | LGBTQ [END]\n\n### 句子：\n反同没理也要搅三分，顺什么有反同基因？同性恋是自己的事，你反同是干涉别人的事。你有啥基因只要不涉及别人都可以，但是你有杀人基因暴力基因虐待基因所有对别人造成伤害的就不行\n### 三元组：\n反同 | 没理也要搅三分 | LGBTQ [END]\n\n### 句子：\n真正的同性恋是先天影响比例很大。他们也无法决定。就因为他们是同性恋所以就要歧视他们？？你还有没有点道德？？如果他是你的亲人你还要杀了他？？\n### 三元组：\n真正的同性恋 | 先天影响比例很大 | non-hate [END]\n\n### 句子：\n话说回来你又能拿同性恋怎么样呢？？有本事使劲弄s他们啊。几千万个，慢慢来。反正对于你这种以强凌弱的，也就这些本事这种心胸了。\n### 三元组：\n你 | 有本事使劲弄s他们啊 | LGBTQ [SEP] 你 | 以强凌弱 | LGBTQ [END]\n\n### 句子：\n你说的很对物已类聚，人已群分。相差很多的两个群体没必要产生多少联系，我觉得那些撑同的人尤其是女性，就是站着说话不腰疼。既然她们喜欢那就不可能真正的公正看待。。\n### 三元组：\n那些撑同的人尤其是女性 | 站着说话不腰疼 | LGBTQ, Sexism [END]\n\n### 句子：\n同性恋不是西方传来的，他本身是先天得来的东西。自然界各类动物都有同性恋！\n### 三元组：\n同性恋 | 先天得来的东西 | non-hate [SEP] 自然界各类动物 | 都有同性恋 | non-hate [END]\n\n### 句子：\n本身同概念就是用来混乱世界的，什么同，双，跨种，都是一堆歪理\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "同概念 | 用来混乱世界 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "同概念",
+          "argument": "用来混乱世界",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3171,
+      "content": "？？？你在说什么啊？？？你们同性恋不是真爱吗？？？怎么能出轨呢？？？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你们同性恋",
+          "argument": "不是真爱吗？？？",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n为什么要恶心同性恋，爱是每一个人的自由，真情实感，对方是谁并不重要。\n### 三元组：\n同性恋 | 为什么要恶心同性恋，爱是每一个人的自由 | non-hate [END]\n\n### 句子：\n真正的同性恋是先天影响比例很大。他们也无法决定。就因为他们是同性恋所以就要歧视他们？？你还有没有点道德？？如果他是你的亲人你还要杀了他？？\n### 三元组：\n真正的同性恋 | 先天影响比例很大 | non-hate [END]\n\n### 句子：\n你们同性恋是说不过异性恋说不过这个现实世界。同性相斥，异性相吸才是正常是永恒不变的真理。\n### 三元组：\n你们同性恋 | 是说不过异性恋说不过这个现实世界 | LGBTQ [SEP] 同性相斥，异性相吸 | 才是正常是永恒不变的真理 | LGBTQ [END]\n\n### 句子：\n对不起了 我也是同性恋 但是我不会这样做 这种同性恋你要警告他 我也会努力变得不是同性恋 没人想当同性恋的 只有我们同性恋慢慢改变改正！\n### 三元组：\n同性恋 | 没人想当同性恋的 只有我们同性恋慢慢改变改正！ | non-hate [END]\n\n### 句子：\n只有男女之间相爱才是全身心投入爱才有爱情结晶。你们同性恋的爱情结晶是什么？植物也会开花结果，你们同性恋的爱有什么结果？你们同性恋的爱是没有结果的，你们同性恋啥也不懂啥也不是，你们同婚是没有任何意义没有任何结果的。\n### 三元组：\n你们同性恋的爱 | 没有结果 | LGBTQ [SEP] 你们同性恋 | 啥也不懂啥也不是 | LGBTQ [SEP] 你们同婚 | 没有任何意义没有任何结果 | LGBTQ [END]\n\n### 句子：\n其实同性恋中大多数德行好不好真的是很难说的一个问题，有些确实嘴碎、娘等，但有些也确实只是天生的、想正常生活的，我们所能做的也就是不要乱贴标签，尊重彼此不存恶意好好生活吧\n### 三元组：\n同性恋 | 有些确实嘴碎、娘等 | LGBTQ [END]\n\n### 句子：\n综上所述，以后想起来会补充，同性恋就纯纯懦夫\n### 三元组：\n同性恋 | 懦夫 | LGBTQ [END]\n\n### 句子：\n你们同性恋同婚有什么用。你们就是爱快乐地互相伤害互相传播疾病的怪物。同性伴侣都是短命，因艾滋死了又换另一个伴侣，只会不断离离结结进行没有意义的婚姻\n### 三元组：\n同性恋 | 同婚有什么用。你们就是爱快乐地互相伤害互相传播疾病的怪物 | LGBTQ [SEP] 同性伴侣 | 都是短命，因艾滋死了又换另一个伴侣，只会不断离离结结进行没有意义的婚姻 | LGBTQ, others [END]\n\n### 句子：\n可以理解，你身边估计没有这样的人，你对同性恋的了解可能仅存于网上耽美小说，真正的爱情无论是男是女都是可以打动一个人的，我身边就有这样一对情侣让我彻底改变了对同性恋的看法，真正接触到才会发现同性恋就是普普通通的恋爱呀，和异性恋没有什么区别，那些同性恋者很勇敢，他们可以在常人的异样眼光下勇敢的表达爱情，真正接触了才知道原来同性恋不是下流恶心的，而是和异性恋一样纯洁高贵的爱情\n### 三元组：\n同性恋 | 是普普通通的恋爱呀，和异性恋没有什么区别 | non-hate [SEP] 同性恋者 | 很勇敢 | non-hate [END]\n\n### 句子：\n中华文化要坚持是没错，但是学过历史的都知道有一个从初中就开始坚守的原则，叫取其精华，去其糟粕，爱情没有界限，为什么要用看待病态人的目光看待我们同性恋，性取向出生几小时后已经定了，我们又没有犯罪，其次同性恋是同性恋和交朋友有什么关系\n### 三元组：\n同性恋 | 为什么要用看待病态人的目光看待 | LGBTQ [END]\n\n### 句子：\n？？？你在说什么啊？？？你们同性恋不是真爱吗？？？怎么能出轨呢？？？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "同性恋 | 怎么能出轨呢？？？ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "同性恋",
+          "argument": "怎么能出轨呢？？？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6594,
+      "content": "都散了吧，人家都饥渴到这个程度了，大家就不要再打击了🤔",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "人家",
+          "argument": "饥渴到这个程度了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n口气别这么大，你们别倒贴默就行了\n### 三元组：\n你们 | 别倒贴默就行了 | Racism [END]\n\n### 句子：\n急了，想要默了\n### 三元组：\nNULL | 想要默了 | Racism [END]\n\n### 句子：\n他们就是这样，一脸饥渴样，完全想不明白有的女人能接受，我不说别的，不嫌弃丑吗？\n### 三元组：\n他们 | 一脸饥渴样 | Sexism [SEP] 他们 | 丑 | Sexism [END]\n\n### 句子：\n吧内确实有人急了\n### 三元组：\n吧内 | 有人急了 | non-hate [END]\n\n### 句子：\n这货删帖了，不好发挥啊\n### 三元组：\n这货 | 删帖了 | non-hate [END]\n\n### 句子：\n所以大家要团结起来对付这帮地域黑喷子，而不是黑不到自己时就成为帮凶😄\n### 三元组：\n大家 | 要团结起来对付这帮地域黑喷子 | non-hate [END]\n\n### 句子：\n待在小圈子里是挺好的事，有些人非要破圈在一些平台上宣扬，真受不了\n### 三元组：\n有些人 | 非要破圈在一些平台上宣扬 | non-hate [END]\n\n### 句子：\n不想被一棍子打死你们倒是拿出点态度来啊😓\n### 三元组：\n你们 | 倒是拿出点态度来啊😓 | non-hate [END]\n\n### 句子：\n互喷不就是最好的抵制方法吗😆\n### 三元组：\n互喷 | 最好的抵制方法 | others [END]\n\n### 句子：\n这人知名女拳，散了吧，不用理\n### 三元组：\n这人 | 知名女拳 | Sexism [END]\n\n### 句子：\n都散了吧，人家都饥渴到这个程度了，大家就不要再打击了🤔\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "人家 | 都饥渴到这个程度了 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "人家",
+          "argument": "都饥渴到这个程度了",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2216,
+      "content": "比黄人好看多了，真养眼。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "比黄人好看多了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n坦率说，如果不是肤色原因，看起来还挺顺眼的。\n### 三元组：\n肤色原因 | 看起来还挺顺眼的 | Racism [END]\n\n### 句子：\n还是我们的子女好看，白白的精致\n### 三元组：\n我们的子女 | 好看，白白的精致 | non-hate [END]\n\n### 句子：\n头像也很亮眼呢。\n### 三元组：\n头像 | 很亮眼 | non-hate [END]\n\n### 句子：\n还有按咱们国人的审美大家觉得漂亮吗？\n### 三元组：\n大家 | 觉得漂亮吗？ | non-hate [END]\n\n### 句子：\n不不不 我们云南人可比黑种好看多了🤔\n### 三元组：\n黑种 | 我们云南人可比黑种好看多了🤔 | Racism [END]\n\n### 句子：\n那时候，黄皮肤的就是人上人了。😆\n### 三元组：\n黄皮肤的 | 人上人 | Racism [END]\n\n### 句子：\n对黑人无感，不是我喜欢的颜，白净的不香吗\n### 三元组：\n黑人 | 白净的不香吗 | Racism [END]\n\n### 句子：\n对啊，好看的很多的都是混血\n### 三元组：\n好看的 | 很多的都是混血 | non-hate [END]\n\n### 句子：\n是的 ，不知道那些人在想什么 ，有什么好看的 ，一般看到白皮黑皮都屏蔽\n### 三元组：\n白皮黑皮 | 屏蔽 | Racism [END]\n\n### 句子：\n看看，就黑人这幅德行还有人给洗呢\n### 三元组：\n黑人 | 这幅德行 | Racism [END]\n\n### 句子：\n比黄人好看多了，真养眼。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黄人 | 比黄人好看多了，真养眼 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黄人",
+          "argument": "比黄人好看多了，真养眼",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7726,
+      "content": "正什么歪成什么样子了都是群满嘴道德仁义的狗在搞笑",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "满嘴道德仁义的狗",
+          "argument": "高校",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n经典各打五十大板了，再扣个狗的帽子，很难不典😓\n### 三元组：\nNULL | 各打五十大板 | non-hate [END]\n\n### 句子：\n同狗日常迫害正常人\n### 三元组：\n同狗 | 日常迫害正常人 | LGBTQ [END]\n\n### 句子：\n猿形毕露了兄弟们，大家理解一下，这只狗狗的YD长在了猩猩身上，大家要有怜悯之心，毕竟会说话的动物很难得的，大家每天拿它娱乐娱乐多好\n### 三元组：\n猩猩 | 大家每天拿它娱乐娱乐 | Racism [END]\n\n### 句子：\n跑到反同群里面开盒，真的是狗啊\n### 三元组：\n反同群 | 跑到反同群里面开盒 | non-hate [END]\n\n### 句子：\n这不正是你们这帮lj的写照吗？自己不接受的事物就要怱悠别人都来反对，还自以为很正义～\n### 三元组：\n你们 | lj | non-hate [END]\n\n### 句子：\n明明自己没道德以强凌弱还处处欺辱同性恋。脸皮那么厚呢？？😆\n### 三元组：\nNULL | 没道德以强凌弱还处处欺辱同性恋。脸皮那么厚呢？？😆 | LGBTQ [END]\n\n### 句子：\n这男的也是啥pei给女的当狗活该\n### 三元组：\n这男的 | 啥pei给女的当狗活该 | Sexism [END]\n\n### 句子：\n狗肉香喷喷，同性恋臭烘烘！狗肉还能做成脆皮狗肉吃呢，同性恋这么恶心连狗都不如！\n### 三元组：\n同性恋 | 臭烘烘！ | LGBTQ [SEP] 同性恋 | 这么恶心连狗都不如！ | LGBTQ [END]\n\n### 句子：\n笑到肚子痛了！真想问谁教养他做基佬，真丢人\n### 三元组：\n他 | 做基佬 | LGBTQ [END]\n\n### 句子：\n囧如果不是吃相太难看，谁特么在意这群惹人厌的玩意儿囧\n### 三元组：\n这群惹人厌的玩意儿 | 吃相太难看 | non-hate [END]\n\n### 句子：\n正什么歪成什么样子了都是群满嘴道德仁义的狗在搞笑\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "狗 | 满嘴道德仁义的狗在搞笑 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "狗",
+          "argument": "满嘴道德仁义的狗在搞笑",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2063,
+      "content": "看不起你了？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "看不起你了？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n看你是女的好欺负罢了。\n### 三元组：\n你 | 看你是女的好欺负罢了 | non-hate [END]\n\n### 句子：\n说实话 你挺自卑的\n### 三元组：\n你 | 挺自卑的 | others [END]\n\n### 句子：\n排外也是排你这种人吧？\n### 三元组：\n你这种人 | 排外也是排你这种人吧？ | Region [END]\n\n### 句子：\n你个loser，自己生活失败，就天天黑人怎么怎么样，人家惹你了吗\n### 三元组：\n你 | loser | non-hate [END]\n\n### 句子：\n你想多了，没那么重要的?\n### 三元组：\n你 | 没那么重要的 | non-hate [END]\n\n### 句子：\n你哑巴了？这不问候回去\n### 三元组：\n你 | 这不问候回去 | non-hate [END]\n\n### 句子：\n倒数第二句、你说的和你的行为一致吗？你有尊重题主吗？\n### 三元组：\n你说的 | 和你的行为一致吗？ | non-hate [SEP] 你 | 有尊重题主吗？ | non-hate [END]\n\n### 句子：\n你河南的？那我只能说你又拉低了河南人在我心中的印象\n### 三元组：\n你 | 拉低了河南人在我心中的印象 | Region [END]\n\n### 句子：\n，你也就会侮辱我们的同胞了\n### 三元组：\n你 | 侮辱我们的同胞 | others [END]\n\n### 句子：\n我是骂人了对吗？尊重有那么难啊？\n### 三元组：\n尊重 | 有那么难啊？ | non-hate [END]\n\n### 句子：\n看不起你了？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "你 | 看不起你了？ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "你",
+          "argument": "看不起你了？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 610,
+      "content": "图中那个索玛女王被扒出来是个男的😆",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "索玛女王",
+          "argument": "被扒出来是个男的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n索玛女王，这博主是男的\n### 三元组：\n索玛女王 | 这博主是男的 | non-hate [END]\n\n### 句子：\n这个索玛女王不是被曝是男的么，专门收国外的钱，然后挑拨国内性别对立。\n### 三元组：\n索玛女王 | 专门收国外的钱，然后挑拨国内性别对立 | Sexism [END]\n\n### 句子：\n去这个索玛女王微博看了一下，全是女拳，大家去看一看，我真叫恶心着了\n### 三元组：\n女拳 | 恶心 | Sexism [END]\n\n### 句子：\n可是为什么图上都是男的？难道是因为母人智商低下说话毫无公信力吗\n### 三元组：\n母人 | 智商低下说话毫无公信力 | Sexism [END]\n\n### 句子：\n你可以去看看这个索玛女王对默的评价😆\n### 三元组：\n默 | 你可以去看看这个索玛女王对默的评价😆 | Sexism, Racism [END]\n\n### 句子：\n如果真的是男的，则废物测试没通过\n### 三元组：\n男的 | 废物测试没通过 | Sexism [END]\n\n### 句子：\n我都想知道ta们这些自称是女性的人到底是不是真的。当初捉女拳结果捉到的是男的，还有美国那里fbi都到maga和natifa里当卧底。\n### 三元组：\nta们这些自称是女性的人 | 到底是不是真的 | non-hate [SEP] fbi | 到maga和natifa里当卧底 | non-hate [END]\n\n### 句子：\n反正现在女的很娇贵大家都知道就算有人揭破也会被女的集群群殴很危险的！！！\n### 三元组：\n女的 | 很娇贵 | Sexism [SEP] 女的 | 就算有人揭破也会被女的集群群殴很危险的！！！ | Sexism [END]\n\n### 句子：\n他是男的，主页很明显\n### 三元组：\n他 | 男的 | non-hate [END]\n\n### 句子：\n你太小看美颜了，怎么就不能是男的呢，男的你一样看不出\n### 三元组：\n美颜 | 你太小看美颜了 | non-hate [END]\n\n### 句子：\n图中那个索玛女王被扒出来是个男的😆\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "索玛女王 | 被扒出来是个男的😆 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "索玛女王",
+          "argument": "被扒出来是个男的😆",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5289,
+      "content": "猜猜看为什么贴吧变成了垃圾场？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "贴吧",
+          "argument": "垃圾场",
+          "targeted_group": "others",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是啊，现在贴吧没人看了，我们都转战抖音了，抖音现在是默默的重灾区\n### 三元组：\n抖音 | 默默的重灾区 | Racism [END]\n\n### 句子：\n这几年大概许多原吧友都隐退了，吧里的帖子价值和热度都不如以前，再加上百度阴间管理，很多吧都容易被攻破\n### 三元组：\n许多原吧友 | 都隐退了 | non-hate [SEP] 吧里的帖子 | 价值和热度都不如以前 | non-hate [SEP] 百度 | 阴间管理 | non-hate [SEP] 很多吧 | 都容易被攻破 | non-hate [END]\n\n### 句子：\n贴吧就这样，随缘吞帖，所以贴吧越来越凉了\n### 三元组：\n贴吧 | 越来越凉 | non-hate [END]\n\n### 句子：\n微博不是垃圾桶吗？你为什么要去垃圾桶逛？看到垃圾还和我们分享\n### 三元组：\n微博 | 垃圾桶 | Sexism [END]\n\n### 句子：\n由于随缘删帖的存在，贴吧是个没有前途的地方，不适合在此发长文走出去吧，去知乎，去微博，多平台共同发展\n### 三元组：\n贴吧 | 没有前途的地方 | non-hate [END]\n\n### 句子：\n垃圾：黑同，同意的顶。颠覆国人的三观，棒垃圾当宝贝。\n### 三元组：\n黑同 | 垃圾 | LGBTQ, Racism [END]\n\n### 句子：\n我们都在别的平台反嘿，偶尔也在这里反一下，毕竟没有吧主，还有很多嘿孝子还要骂呢，不然新来的不知道\n### 三元组：\n嘿孝子 | 要骂 | Racism [END]\n\n### 句子：\n图片里这垃圾吧，害我在里面签到了3级，浪费我辣么多的时间，祝吧里的基佬们早生贵滋！\n### 三元组：\n吧里的基佬们 | 早生贵滋 | LGBTQ, others [END]\n\n### 句子：\n这个吧被女⭕️审核24小时看着呢，大伙散了吧！\n### 三元组：\n女⭕️ | 审核24小时看着呢 | Sexism [END]\n\n### 句子：\n反变态吧反变态，天经地义顺意民心反变态吧就是为了反变态的\n### 三元组：\n反变态吧 | 反变态 | others [END]\n\n### 句子：\n猜猜看为什么贴吧变成了垃圾场？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "贴吧 | 垃圾场 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "贴吧",
+          "argument": "垃圾场",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1082,
+      "content": "保护我方输出",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "我方输出",
+          "argument": "保护",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n这种货色不拉到没人的地方一顿输出\n### 三元组：\n这种货色 | 不拉到没人的地方一顿输出 | non-hate [END]\n\n### 句子：\n把自己小号暴露了\n### 三元组：\n小号 | 暴露了 | non-hate [END]\n\n### 句子：\n但是对线是需要确认对方意图的\n### 三元组：\n对线 | 需要确认对方意图的 | non-hate [END]\n\n### 句子：\n守住就行，白左笑话吧是可以联合的\n### 三元组：\n白左笑话吧 | 是可以联合的 | Racism, others [END]\n\n### 句子：\n这样把脑子不好的都输出\n### 三元组：\n脑子不好的 | 输出 | non-hate [END]\n\n### 句子：\n这个是友军\n### 三元组：\n这个 | 友军 | non-hate [END]\n\n### 句子：\n上去打死这些默\n### 三元组：\n默 | 上去打死 | Racism [END]\n\n### 句子：\n他们有立体防御机制，这样的也会被说成txl捏\n### 三元组：\n他们 | 有立体防御机制 | LGBTQ [SEP] 这样的 | 这样的也会被说成txl捏 | LGBTQ [END]\n\n### 句子：\n我先上为敬\n### 三元组：\n我 | 先上为敬 | non-hate [END]\n\n### 句子：\n最好的防守就是进攻，在被利用前利用她们，不要贪恋美色，多了不好\n### 三元组：\n最好的防守 | 进攻 | non-hate [END]\n\n### 句子：\n保护我方输出\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我方 | 输出 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我方",
+          "argument": "输出",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3960,
+      "content": "嘴里说着男女平等，却处心积虑让男的花钱，笑死，给你们随便找一个欣赏一下",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "处心积虑让男的花钱",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我是不支持男女平等，本来男女就存在差异，何必搞得那么极端，这口号就喊的不现实，互相尊重就行了，不行就开撕，别扯平等。\n### 三元组：\n男女平等 | 互相尊重就行了 | non-hate [END]\n\n### 句子：\n关键是那么丑那么穷的h人，某些人还跪舔倒贴，这就是人的问题了，我们男的又不是sb！\n### 三元组：\nh人 | 那么丑那么穷 | Racism [SEP] 某些人 | 跪舔倒贴 | Racism [SEP] 我们男的 | 又不是sb！ | Sexism [END]\n\n### 句子：\n都是满满的让男性扛委屈，蛮不讲理的让男性退让，表面相让实则pua规训及精神打压！！！\n### 三元组：\nNULL | 表面相让实则pua规训及精神打压 | Sexism [END]\n\n### 句子：\n看到“我是男的”，100%是女拳，毕竟有句话说自己没什么就喜欢强调什么\n### 三元组：\n女拳 | 自己没什么就喜欢强调什么 | Sexism [END]\n\n### 句子：\n什么都不用说，钱包强男权强，没钱的缺钱少钱的男性朋友可以咨询我，在下有赚钱平台，日结的。\n### 三元组：\n男权 | 钱包强男权强 | non-hate [SEP] 没钱的缺钱少钱的男性朋友 | 咨询我 | non-hate [END]\n\n### 句子：\n现在想平权就不能再把女性当做一个弱势群体了，不要大男子思想不拿自己当人看，遇到性别绑架勇敢反驳大声说不\n### 三元组：\n女性 | 现在想平权就不能再把女性当做一个弱势群体了 | non-hate [END]\n\n### 句子：\n为什么现在感觉男权全都是要求男女平等，而女权要求的是特权呢。所谓女权天天拿生孩子做家务来为幌子打压中国男性，现在中国已经变成了女人吃你的拿你的还天天微博贴吧说这不好那不好，所以男人付出就是应该的，求一点点回报就是错的\n### 三元组：\n女权 | 要求的是特权 | Sexism [SEP] 女权 | 天天拿生孩子做家务来为幌子打压中国男性 | Sexism [END]\n\n### 句子：\n这是真女拳吧…😅还分上等级了\n### 三元组：\n女拳 | 还分上等级了 | non-hate [END]\n\n### 句子：\n哎，这种的，一看就是没点脑子的，他也来喷我了。。看样子像女权派来的。。\n### 三元组：\n女权 | 看样子像女权派来的 | Sexism [END]\n\n### 句子：\n教育开始就在教育男生让女生，还要保护，神他妈绝了。最讨厌就是女生自己说你们男生要让着女生\n### 三元组：\n女生 | 最讨厌就是女生自己说你们男生要让着女生 | Sexism [END]\n\n### 句子：\n嘴里说着男女平等，却处心积虑让男的花钱，笑死，给你们随便找一个欣赏一下\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "NULL | 处心积虑让男的花钱 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": null,
+          "argument": "处心积虑让男的花钱",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4528,
+      "content": "但现实却是没有多少个已婚女性能够明面上拒绝丈夫的性需求，否则会遭来男方家里的各样指责。类似夫妻生活不和谐就是因为妻子的不配合等说辞。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "已婚女性",
+          "argument": "会遭来男方家里的各样指责",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n性本身就是有自主权的啊，这个不分男女，很多男的天天yy女的怎么怎么yindang，其实基本上是自己自作多情罢了，或者说一厢情愿。无性恋比例百分之2，即使是直人，性也和激素有很大关系，雌性激素越多（越有女人特征的）性欲越低，雄性激素才是掌管性欲的东西。况且女人也是人，除了性还有别的追求好吧？\n### 三元组：\n很多男的 | 天天yy女的怎么怎么yindang，其实基本上是自己自作多情罢了 | Sexism [END]\n\n### 句子：\n个人觉得，如果是结婚的话，如果自己不是处也不能要求对方是处吧。而且现在社会很开放，情侣在谈恋爱发生这种事情也不奇怪了\n### 三元组：\n自己不是处 | 也不能要求对方是处 | non-hate [END]\n\n### 句子：\n结婚对男人来讲太亏了，希望男人们都能觉醒，不让女人占便宜，都坚决不结婚\n### 三元组：\n女人 | 不让女人占便宜 | Sexism [END]\n\n### 句子：\n事实就是这样，很多女人天天被家暴，被揍得鼻青脸肿什么似的，到处抱怨自己的不幸，但就是不离婚，反过来被男的捧在手心娇着惯着的每天就各种不满说男的不好动不动闹离婚还对男的上演家庭暴力。这就是?\n### 三元组：\n很多女人 | 天天被家暴，被揍得鼻青脸肿什么似的，到处抱怨自己的不幸，但就是不离婚 | Sexism [SEP] 被男的捧在手心娇着惯着的 | 每天就各种不满说男的不好动不动闹离婚还对男的上演家庭暴力 | Sexism [END]\n\n### 句子：\n传统以来的观念：男人就该让着女的，她骂你忍着，她打你身受着，男人不能反抗的。不懂有这样观念的社会为什么是父权社会。\n### 三元组：\n男人 | 不能反抗 | Sexism [SEP] 有这样观念的社会 | 为什么是父权社会 | Sexism [END]\n\n### 句子：\n怎么说，女人是一切罪恶的源头，因为没有女人，大家就不会那么内卷。更没有性冲动什么的，人都没有矛盾。就是因为女人的性蛊惑男人的身心，而是很难去抵抗\n### 三元组：\n女人 | 一切罪恶的源头 | Sexism [END]\n\n### 句子：\n强奸罪只针对男人定罪，这是公然歧视男人。应该改为一方不同意，另一方就是强奸。如果发生关系时，男人不同意，那么女方就是强奸罪。\n### 三元组：\n强奸罪 | 公然歧视男人 | Sexism [END]\n\n### 句子：\n女的希望男的什么都顺从自己，又希望男的能让她百依百顺，但又想在百依百顺中让男的顺着自己。就这么矛盾。\n### 三元组：\n女的 | 就这么矛盾 | Sexism [END]\n\n### 句子：\n下半身动物的帽子早就从男人身上剥离了，这句话其实是用来形容女人的，只是被女权利用栽赃给扣在了男人身上，男人出轨天天的性那都是假象，女人嫌男人不行，天天抱怨没有性生活这才是真相\n### 三元组：\n女人 | 利用栽赃给扣在了男人身上 | Sexism [END]\n\n### 句子：\n婚前非处这一属性到底比处女好在哪里呢。本人看过很多为非处洗地的帖子，但都毫无意义。因为其中心思想无非是“处不处不重要”，只能通过削弱处女属性的价值来提高非处的相对地位，而指不出非处女的价值、相比于处女的长处。\n### 三元组：\n非处 | 削弱处女属性的价值来提高非处的相对地位 | Sexism [END]\n\n### 句子：\n但现实却是没有多少个已婚女性能够明面上拒绝丈夫的性需求，否则会遭来男方家里的各样指责。类似夫妻生活不和谐就是因为妻子的不配合等说辞。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "已婚女性 | 明面上拒绝丈夫的性需求，否则会遭来男方家里的各样指责 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "已婚女性",
+          "argument": "明面上拒绝丈夫的性需求，否则会遭来男方家里的各样指责",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5380,
+      "content": "另外，非洲人并不是我们的兄弟，把我们送进联合国的是欧洲，欧洲25票，三票弃权，欧洲只有一票反对，加上中法关系的升温，非洲很多法国的殖民地，自己去了解一下，非洲投的票最多，但是反对票也最多。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "非洲人",
+          "argument": "不是我们的兄弟",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "欧洲",
+          "argument": "把我们送进联合国",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "非洲",
+          "argument": "投的票最多，但是反对票也最多。",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n中国是伪装成国家的文明，而我们的文明就是56个民族的兄弟姐妹智慧劳动的结晶，明显黑人不包含在56个民族里。而且说实话，我们也没有任何一个民族会出现如黑人一般的大多数是人渣这种情况，让黑人加入第57个民族。。。我觉得是对所有中国人的侮辱\n### 三元组：\n黑人 | 人渣 | Racism [END]\n\n### 句子：\n\"非洲人口最多的6个国家(尼日利亚,埃塞俄比亚,乌干达,民主刚果共和国,坦桑尼亚,尼日尔)将会有总人口94.5亿..平均每个国家拥有15.8亿人口网站是:依非洲黑人的繁殖力，迟早把非洲挤爆，然后他们就到处扩张......大家拼命计划生育，为非洲黑人腾出生存空间。为了非洲黑人的幸福和生产，大家都少生孩子，腾出宝贵的生存空间让给非洲黑人。让非洲黑人给中国人改良种族。你我少生一个，未来就可以腾出安置3个非洲黑人的生存空间，让非洲黑人移民在我中华大地享受现代文明\"\n### 三元组：\n非洲黑人 | 依非洲黑人的繁殖力，迟早把非洲挤爆 | Racism [END]\n\n### 句子：\n北非和欧洲地中海有联系，人种也混了西亚和南欧的人，中非南非都很荒蛮\n### 三元组：\n中非南非 | 都很荒蛮 | Region [END]\n\n### 句子：\n黑人是外来物种，应该回到非洲去，因为本来就生长在非洲，从哪里来回哪里去！！！\n### 三元组：\n黑人 | 外来物种 | Racism [END]\n\n### 句子：\n在信仰、价值取向、生活观念、文化认同等方面没有达到一致，无论白人、黑人都是异族；古话说的好：非我族类，其心必异。多看看世界历史上排华、歧华事件，一旦爆发华人在当地就是被掠杀的对象，不要觉得我说的危言耸听，史实就是这样。疫情期间美国那鸟地方不也在歧华？在他们眼里中国人就低人一等，因为他们文化继承里包含着殖民文化带来的种族优越感。\n### 三元组：\n他们 | 在他们眼里中国人就低人一等 | Racism [END]\n\n### 句子：\n如果说要反对黑人留在中国，必须真实点赞率必须超过4.7亿人，也就是总人口的1/3以上！！！\n### 三元组：\n黑人 | 如果说要反对黑人留在中国，必须真实点赞率必须超过4.7亿人，也就是总人口的1/3以上！！！ | Racism [END]\n\n### 句子：\n每一个黑人的居留都是一粒黑色的种子，撒如我华夏大地便如鱼得水，看似微不足道却不可小觑，来势不息连绵不绝10年20年50年后呢？有一天法国那样的人种构成悲剧就会成为锐不可当之势横扫中国这片我们繁衍生息了7000年的古老大地，真如此的悲剧到来后人必会骂今时代的无所作为者姑息纵容者！防范黑人的人种侵入必须像防范洪水猛兽一般的重视甚至要有过之而无不及！蝼蚁之穴溃堤千里不要因其初步的微小而漫不经心无关痛痒！！防微杜渐未雨绸缪绝不姑息！中国这片我们民族繁衍生息的土地绝不能成为黑人特别是非洲黑人向往的人生乐园！！！作者为大！我认同您的观点！大家必须团结起来共同驱逐人形黑猩猩出中国！\n### 三元组：\n黑人 | 真如此的悲剧到来后人必会骂今时代的无所作为者姑息纵容者 | Racism [SEP] 黑人 | 防范黑人的人种侵入必须像防范洪水猛兽一般的重视甚至要有过之而无不及 | Racism [SEP] 黑人 | 中国这片我们民族繁衍生息的土地绝不能成为黑人特别是非洲黑人向往的人生乐园！！！ | Racism [SEP] 黑人 | 大家必须团结起来共同驱逐人形黑猩猩出中国！ | Racism [END]\n\n### 句子：\n呵呵，荷兰人总是说是别人祖宗，可惜非洲人还是全世界祖宗呢，不照样讨人嫌？更何况你荷兰什么名声自己心里没点数！\n### 三元组：\n荷兰人 | 总是说是别人祖宗 | Region [SEP] 非洲人 | 还是全世界祖宗呢，不照样讨人嫌？ | Region [SEP] 荷兰 | 什么名声自己心里没点数！ | Region [END]\n\n### 句子：\n现在非洲贫乏，是因为他们殖民地时代的固有思想还没有改掉，宁可求神也不肯干活。若未来非洲都出现优秀的领导者，一个为改善人民生活，提高人口素质真正为国家努力的领导者，则非洲的潜力是无限的。\n### 三元组：\n非洲 | 潜力是无限的 | non-hate [END]\n\n### 句子：\n另外，非洲人并不是我们的兄弟，把我们送进联合国的是欧洲，欧洲25票，三票弃权，欧洲只有一票反对，加上中法关系的升温，非洲很多法国的殖民地，自己去了解一下，非洲投的票最多，但是反对票也最多。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "非洲 | 并不是我们的兄弟 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "非洲",
+          "argument": "并不是我们的兄弟",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 39,
+      "content": "复印还得是你们txl厉害，搁知乎上一复制来这一粘贴就把正常人的智商否定了，就那两个赞的文章谁信谁才智商有问题",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "txl",
+          "argument": "搁知乎上一复制来这一粘贴就把正常人的智商否定了",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n又是应了那句老话，认真你就输了。人类真是复读机，租鸡青一了解一下？（开玩笑的）\n### 三元组：\n人类 | 复读机 | non-hate [END]\n\n### 句子：\n你的逻辑没毛病，你来我的评论下面回复，说我找存在感。自己自卑就认，不要老玩这种完全主观和虚无主义。就这点能力，你也配讨论政治。滑天下之大稽。就这啊，继续加大力度，看封的是谁😓😓😓\n### 三元组：\n你 | 自己自卑就认 | non-hate [END]\n\n### 句子：\n我今天恰好看到这条回答 放心 你绝对不是他说的那种要一棒子打死的人 你看他最后一句话就知道了\n### 三元组：\n你 | 一棒子打死的人 | non-hate [END]\n\n### 句子：\n再次提醒一下某些单纯的朋友，百度百科、抖音、知乎（这个算是其中比较靠谱的）的某些文章，基本都只能当个乐子看看，莫当真。\n### 三元组：\n某些文章 | 只能当个乐子 | non-hate [END]\n\n### 句子：\n看到了那个枯寄吧的回复果然和我说的一样只会无脑谩骂果然txl没有正常人\n### 三元组：\ntxl | 没有正常人 | LGBTQ [END]\n\n### 句子：\n这一波是钓了大鱼看看她们自己这些话，直接还给他们不是爆炸?属实是没脑子，应该故意装一波这样才可以继续道德制高点贬低别人呀。\n### 三元组：\n她们 | 没脑子 | Sexism [END]\n\n### 句子：\n知乎早就沦陷区了，别说知乎，现在贴吧大本营都岌岌可危\n### 三元组：\n知乎 | 沦陷区 | non-hate [SEP] 贴吧大本营 | 岌岌可危 | non-hate [END]\n\n### 句子：\n我也完全懵逼，烦死现在我都不上知乎了，除非有什么必要的问题\n### 三元组：\n我 | 完全懵逼 | non-hate [END]\n\n### 句子：\n像你这样还去找证据的人不多了。我不太明白为什么作者和其他评论区的人还能完全信西方媒体新闻的，前阵子的新疆棉花事件都忘了吗？还有BBC阴间报道，以及西方媒体上对中国的各种抹黑禁言等等。\n### 三元组：\nBBC | 阴间报道 | others [SEP] 西方媒体 | 对中国的各种抹黑禁言 | Region, others [END]\n\n### 句子：\n？你要不要问问答主那人有没骚扰他，有的话我删评，没有的话你删评\n### 三元组：\n答主 | 那人有没骚扰他 | non-hate [END]\n\n### 句子：\n复印还得是你们txl厉害，搁知乎上一复制来这一粘贴就把正常人的智商否定了，就那两个赞的文章谁信谁才智商有问题\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "txl | 老实人 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "txl",
+          "argument": "老实人",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6550,
+      "content": "同性就是违背大自然了吗",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "同性",
+          "argument": "违背大自然",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n？？？动物的同性行为多了去了自己上百度了解了解好吧……如果违背自然规律，那为什么进化了这么多年同性恋还是没有绝种？\n### 三元组：\n同性恋 | 还是没有绝种？ | non-hate [END]\n\n### 句子：\n违背自然规律道德伦理的还是人吗？好像是人，因为动物很少有搞基的\n### 三元组：\n动物 | 很少有搞基的 | LGBTQ [END]\n\n### 句子：\n对高调的同性恋真的无法理解，你做的明明是为世所不能容的事，为什么不能低调点，我用回你所举的例子，一个纹身的人去当兵或报考公务员，有关机构说明规定拒绝通过，然后这个人还认为这是自己的私人问题，旁人不该抱以歧视，你本来就是少数派，是异类，你低调点别人有可能还睁一只眼闭一只眼，现在还要跳出来说纹身无罪，甚至还鼓励其他人，这不是公开找骂？我个人认为，这群人的行为首先是对天地造化，阴阳平衡的亵渎，是为不敬；其二，父母赐予生命血肉，本应薪火相传，生生不息，如此看来，是为不孝；其三，中国社会面临人口断崖危机，这类群体不但不能出一份力甚至还以同性为榜样，是为不仁；其四，他们的行为有可能给自己的授业恩师或有地位有身份的朋友亲戚带来不必要的麻烦，此为陷人于不义。这样不敬不孝不仁不义的人，人人得而诛之，痛斥其罪，已经是对他们最大的宽恕。\n### 三元组：\n同性恋 | 异类 | LGBTQ [SEP] 同性恋 | 不敬不孝不仁不义 | LGBTQ [END]\n\n### 句子：\n“地球是圆的”是一句正确的话，而“同性恋”只是一个中性词而已，真不知道怎么可以类比的\n### 三元组：\n“地球是圆的” | 正确的话 | non-hate [SEP] “同性恋” | 中性词 | non-hate [END]\n\n### 句子：\n有时候说自己不喜欢同性恋就要被骂，又没碍着他们，非要所有人都举双手双脚支持是不是？是不是连自己的思想自由都没有了？\n### 三元组：\n同性恋 | 不喜欢同性恋就要被骂 | LGBTQ [END]\n\n### 句子：\n动物都有同性恋，人类能没有？😅多读书，别读死书\n### 三元组：\n同性恋 | 人类能没有？ | non-hate [END]\n\n### 句子：\n百度百科并不正确，出生前的因素（包括基因/母亲怀孕期间的激素水平等）才是决定因素。否则就无法解释那么多出门良好家庭，幸福美满的人最后却成了同性恋。上两个世纪用同性恋做实验品已经实践过了，无论是心理还是身体上的手段都改变不了性取向。人是不可能被掰弯或者掰直的。只是有一部分人是双性恋罢了，双性恋里又有更少书是便异性恋的双性恋，所以给人的假象是人可以被掰弯。目前一般认为同性恋占总人口在5-6%左右，并不会倒是人类灭亡。并且你可以想想看，在人类没有这些意识和利礼法约束的时候同性恋野人肯定也是追求自己的自由，没有繁衍后代，由于没有产生文明的观念，因此同性恋并不会被群体禁止，但人类并没有因此灭亡啊。能挺过野人时代，那就说明性取向并不会有这样的风险。\n### 三元组：\n同性恋 | 占总人口在5-6%左右 | non-hate [END]\n\n### 句子：\n我早就说过同性恋必须绞杀！我列举一下已知的同性恋的危害：首先就是全球变暖，然后就是缩短日地距离，拉高紫外线强度，皮肤癌泛滥。其次就是对青少年有极端错误引导，而且同性恋违反大自然，引发海啸地震\n### 三元组：\n同性恋 | 必须绞杀！ | LGBTQ [END]\n\n### 句子：\n同性恋本身就是自然界的一部分，有没有危害看同性恋的所思所行，以及和异性恋对比下对社会的价值影响，研究这么多年浪费多少钱和人力了?最后得出个是个人都知道同性恋不是病的结论，，，，，\n### 三元组：\n同性恋 | 研究这么多年浪费多少钱和人力 | LGBTQ [END]\n\n### 句子：\n中华文化要坚持是没错，但是学过历史的都知道有一个从初中就开始坚守的原则，叫取其精华，去其糟粕，爱情没有界限，为什么要用看待病态人的目光看待我们同性恋，性取向出生几小时后已经定了，我们又没有犯罪，其次同性恋是同性恋和交朋友有什么关系\n### 三元组：\n同性恋 | 为什么要用看待病态人的目光看待 | LGBTQ [END]\n\n### 句子：\n同性就是违背大自然了吗\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "同性恋 | 违背大自然 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "同性恋",
+          "argument": "违背大自然",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7356,
+      "content": "没存在感是好事😅大连倒是有存在感可净是负面的",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "大连",
+          "argument": "净是负面的",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n海南最没存在感了😂\n### 三元组：\n海南 | 最没存在感 | Region [END]\n\n### 句子：\n总结：存在感太低的地方，黑都懒得黑😅\n### 三元组：\n存在感太低的地方 | 黑都懒得黑 | Region [END]\n\n### 句子：\n现实生活中对东北无感，倒是网络上老铁不停的找存在感\n### 三元组：\n东北 | 网络上老铁不停的找存在感 | Region [END]\n\n### 句子：\n还好我们省存在感低，想被黑好多人都不知如何黑。🤔😄😄\n### 三元组：\n我们省 | 存在感低，想被黑好多人都不知如何黑。🤔😄😄 | Region [END]\n\n### 句子：\n安徽没啥存在感吧\n### 三元组：\n安徽 | 没啥存在感 | Region [END]\n\n### 句子：\n咱吉林基本上没啥可说的，实在没啥存在感😅\n### 三元组：\n吉林 | 没啥存在感😅 | Region [END]\n\n### 句子：\n说实在的大连市的几个区还要比来比去的，看不起甘井子区，不知道从何而来的优越感。\n### 三元组：\n大连市的几个区 | 还要比来比去的 | Region [END]\n\n### 句子：\n论起被地域黑，东北拍马都追不上。不过是掌握话语权把自己粉饰成受害者而已全国一二线城市中你最不喜欢哪个城市？\n### 三元组：\n东北 | 拍马都追不上 | Region [END]\n\n### 句子：\n所以地域黑的地方也是存在的啊。你家乡无非就是没上海那么有名而已。谁有空去黑一个村子？\n### 三元组：\n地域黑的地方 | 也是存在的 | Region [SEP] 你家乡 | 谁有空去黑一个村子？ | Region [END]\n\n### 句子：\n陕西没有存在感，一边凉快去\n### 三元组：\n陕西 | 没有存在感 | Region [END]\n\n### 句子：\n没存在感是好事😅大连倒是有存在感可净是负面的\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "大连 | 净是负面的 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "大连",
+          "argument": "净是负面的",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 6300,
+      "content": "为什么会被歧视？我觉得尊重是互相的，我不歧视任何群体，我是鄙夷某些行为。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "尊重",
+          "argument": "互相的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n只有以自己血统和文化为傲的人才会有歧视。那些喊着不歧视的人其实没有自我认同\n### 三元组：\n喊着不歧视的人 | 没有自我认同 | Racism [END]\n\n### 句子：\n歧视别人就有被骂的可能，这是相互的啊。不过被骂就被骂就是，不影响我歧视同性恋🤣\n### 三元组：\n同性恋 | 歧视 | LGBTQ [END]\n\n### 句子：\n我承认，我就是种族歧视！歧视一个作奸犯科，为非作歹的人不算歧视，叫弘扬正义，\n### 三元组：\n我 | 种族歧视 | Racism [END]\n\n### 句子：\n歧视别人就别怪别人骂。斗争都是相互的。\n### 三元组：\nNULL | 歧视别人就别怪别人骂 | non-hate [END]\n\n### 句子：\n我觉得歧视这个词被用烂了也用错了，歧视指的是不正确不符合事实的认识，如果一个观点符合事实那它就算不得歧视\n### 三元组：\n歧视这个词 | 被用烂了也用错了 | non-hate [SEP] 歧视 | 不正确不符合事实的认识 | non-hate [END]\n\n### 句子：\n我不歧视别人，现实生活中也没有人歧视过我，但是我竟然喜欢看你们因为地域歧视这个问题而吵架😅天呐为什么！\n### 三元组：\n我 | 不歧视别人 | non-hate [SEP] 我 | 喜欢看你们因为地域歧视这个问题而吵架😅 | Region [END]\n\n### 句子：\n歧视这个词不太好，太过了。但确实，很多txl给人的观感并不好，我觉得，这个网络也对人有太多影响，短视频里那些娘里娘气的、装疯卖傻的，让人反感，给孩子们不好的教育示范。\n### 三元组：\n很多txl | 给人的观感并不好 | LGBTQ [SEP] 视频里那些娘里娘气的、装疯卖傻的 | 让人反感 | LGBTQ [END]\n\n### 句子：\n我鄙视黑人。我歧视黑人什么是鄙视。什么是歧视。什么是人😆😆😆\n### 三元组：\n黑人 | 我鄙视黑人 | Racism [SEP] 黑人 | 我歧视黑人 | Racism [END]\n\n### 句子：\n我并不歧视同性恋，因为我知道，这个世界大了，什么都有，没必要搞什么歧视，说实话，我只是单纯的反感而已，某些杠精请不要把反感和歧视混为一谈\n### 三元组：\n同性恋 | 反感 | LGBTQ [END]\n\n### 句子：\n我他玛就是歧视他们。表现不好就要有受人歧视的觉悟\n### 三元组：\n他们 | 我他玛就是歧视 | others [END]\n\n### 句子：\n为什么会被歧视？我觉得尊重是互相的，我不歧视任何群体，我是鄙夷某些行为。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我 | 不歧视任何群体 | non-hate [SEP] 我 | 鄙夷某些行为 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我",
+          "argument": "不歧视任何群体",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "我",
+          "argument": "鄙夷某些行为",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5104,
+      "content": "“男女平等”是女权的温和版。——2010年之前反女权总坛就确定了的。为什么还有这么五花八门的版本？大佬们也不下来管管。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "“男女平等”",
+          "argument": "女权的温和版",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n微博发声的最大声是女拳，讲道理女拳如果不是说那些骇人听闻的反人类的言论，而是正能量的讲这么改变，谁喷你可能还成为主流思想呢，毕竟在中国女性在言论上还是受保护的。打嘴炮那些不算呀，如果硬要算那么低端我也没话说。是女性自己不争取正确价值观，让女拳这样妖魔橫行，而女拳要的条件是政府和人类不可能接受的，也就是说不会改变什么，占着位置不做事。\n### 三元组：\n女拳 | 微博发声的最大声 | Sexism [SEP] 女性 | 女性自己不争取正确价值观 | Sexism [SEP] 女拳 | 妖魔横行 | Sexism [END]\n\n### 句子：\n我是不支持男女平等，本来男女就存在差异，何必搞得那么极端，这口号就喊的不现实，互相尊重就行了，不行就开撕，别扯平等。\n### 三元组：\n男女平等 | 互相尊重就行了 | non-hate [END]\n\n### 句子：\n咋说呢，你应该去豆瓣微博小红书还有几乎所有的女权聚集地去说说，你会发现，女权认为自己等同于女性\n### 三元组：\n女权 | 认为自己等同于女性 | Sexism [END]\n\n### 句子：\n女～权：男女平等。女人和男人有同样的地位。女～拳：女性要有特权。男人占女人便宜。赞同女权。让女～拳和男～拳在一起吧。\n### 三元组：\n女～拳 | 女性要有特权。男人占女人便宜。 | Sexism [END]\n\n### 句子：\n最原始的女权，是维护女性正当权利，女性承担繁衍责任，男性在不需要繁殖的时候具有天然的生活优势，在日常生活里天然女性很明显会处于弱势地位，优势地位的男性也很乐意维护女性最基本的人权，比如生育，比如交配意愿，再比如从小就会因为女生力气小而教导男生要多照顾女生，因为同等工作量，男性天生就有力气优势。但这经不起利用，男人女人们，好好看看在争取男权亦或者女权的时候，到底有没有尊重最基本的人权！人权！人权！\n### 三元组：\n女性 | 承担繁衍责任 | non-hate [SEP] 男性 | 天然的生活优势 | non-hate [END]\n\n### 句子：\n现在想平权就不能再把女性当做一个弱势群体了，不要大男子思想不拿自己当人看，遇到性别绑架勇敢反驳大声说不\n### 三元组：\n女性 | 现在想平权就不能再把女性当做一个弱势群体了 | non-hate [END]\n\n### 句子：\n反女拳是因为：他们并非善类，绞尽脑汁把广大女性作为工具，来发泄他们对夫权和父权的仇恨。（对女性也没有善意，一旦女性有不同观点不同价值观，也同样会被他们攻击辱骂）\n### 三元组：\n女拳 | 绞尽脑汁把广大女性作为工具，来发泄他们对夫权和父权的仇恨 | Sexism [END]\n\n### 句子：\n最讨厌没了解，动不动就极端女拳、极端男权的，麻烦你对比下整个网络的声音里面，谁的极端，谁是起始者，谁是反对者。谁是进攻，谁是防御。\n### 三元组：\nNULL | 最讨厌没了解，动不动就极端女拳、极端男权的 | Sexism [END]\n\n### 句子：\n田園女拳和正常女權的區別就在於前者只會在網上噴垃圾話，後者付諸實踐並證明男性能夠做到的事情女性也可以\n### 三元组：\n田園女拳 | 只會在網上噴垃圾話 | Sexism [END]\n\n### 句子：\n欧美女权还是正常的，人家只是要求女性和男性有同样的权利，但是女拳不一样，人家要求女性比男性更加高贵\n### 三元组：\n欧美女权 | 要求女性和男性有同样的权利 | non-hate [SEP] 女拳 | 要求女性比男性更加高贵 | Sexism [END]\n\n### 句子：\n“男女平等”是女权的温和版。——2010年之前反女权总坛就确定了的。为什么还有这么五花八门的版本？大佬们也不下来管管。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "女权 | 男女平等 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "女权",
+          "argument": "男女平等",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5786,
+      "content": "图一是谁？好帅啊",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "好帅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n图一这脸有点疯狂原始人的味道\n### 三元组：\n图一这脸 | 疯狂原始人的味道 | non-hate [END]\n\n### 句子：\n人又帅又高\n### 三元组：\n人 | 又帅又高 | non-hate [END]\n\n### 句子：\n人家又帅又可爱而且还是军人你是个什么东西\n### 三元组：\n人家 | 又帅又可爱而且还是军人 | non-hate [SEP] 你 | 什么东西 | non-hate [END]\n\n### 句子：\n非常的帅，我建议你可以挺身而上\n### 三元组：\n你 | 可以挺身而上 | non-hate [END]\n\n### 句子：\n原谅我手残，截的图不及他们人一半好看\n### 三元组：\n截的图 | 不及他们人一半好看 | non-hate [END]\n\n### 句子：\n你太小看美颜了，怎么就不能是男的呢，男的你一样看不出\n### 三元组：\n美颜 | 你太小看美颜了 | non-hate [END]\n\n### 句子：\n虽然但是，这图TM就是摆在馆里的泥塑或沙雕啊看着泥塑感就很重，也魅说是本人吧。\n### 三元组：\n这图 | 摆在馆里的泥塑或沙雕 | non-hate [END]\n\n### 句子：\n右边的小老头就是婊们口中的所谓“高端白人脸”，和我们的胡兵一比，被秒成渣渣，何况是胡兵比这个小老头还大好几岁！！！！还比他皮肤白\n### 三元组：\n右边的小老头 | 婊们口中的所谓“高端白人脸” | Sexism, Racism [END]\n\n### 句子：\n有时间去骂那帮说好帅好帅的，别在我评论区下面发疯\n### 三元组：\n那帮说好帅好帅的 | 去骂 | non-hate [END]\n\n### 句子：\n镇楼这人不是男的？\n### 三元组：\n镇楼这人 | 不是男的？ | non-hate [END]\n\n### 句子：\n图一是谁？好帅啊\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "图一 | 谁？好帅啊 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "图一",
+          "argument": "谁？好帅啊",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3478,
+      "content": "首先是你要区分什么是媚黑。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你",
+          "argument": "区分什么是媚黑",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n对那种媚黑的有恶意\n### 三元组：\n媚黑的 | 对那种媚黑的有恶意 | Sexism, Racism [END]\n\n### 句子：\n这正是这样不会把自己人推到对立面，要知道许多媚黑只是排黑目光的产物，她们其实和默没爱情，如果真有的话她们为什么不美黑呢一个个妆化的那么白。\n### 三元组：\n媚黑 | 是排黑目光的产物 | Sexism, Racism [SEP] 她们 | 一个个妆化的那么白 | Sexism [END]\n\n### 句子：\n关键是辨别不出来，要是媚黑在身上纹一个黑桃就方便了\n### 三元组：\n媚黑 | 身上纹一个黑桃就方便了 | Sexism, Racism [END]\n\n### 句子：\n扯淡，又不是逼良为娼，媚黑女都是自甘堕落好吗。\n### 三元组：\n媚黑女 | 自甘堕落 | Sexism, Racism [END]\n\n### 句子：\n最好别找，媚黑的女人已经烂到根了\n### 三元组：\n媚黑的女人 | 已经烂到根了 | Sexism, Racism [END]\n\n### 句子：\n那些媚黑的女人是不会听进去的🙂🙂🙂\n### 三元组：\n媚黑的女人 | 不会听进去的 | Sexism, Racism [END]\n\n### 句子：\n就应该给媚黑的女人一耳光，这本来就是为她们好，更是为我们国家好，对待黑人，矫枉必须过正…\n### 三元组：\n媚黑的女人 | 给媚黑的女人一耳光 | Sexism, Racism [SEP] 黑人 | 矫枉必须过正 | Racism [END]\n\n### 句子：\n媚黑的女生我是真理解不了😅😅😅\n### 三元组：\n媚黑的女生 | 理解不了 | Sexism, Racism [END]\n\n### 句子：\n喜欢黑女的很少很少，你说得绝对是极极个例。\n### 三元组：\n喜欢黑女的 | 很少很少 | Sexism, Racism [END]\n\n### 句子：\n那我们也有鄙视的自由啊，可以鄙视xx癖就不能鄙视媚黑癖吗\n### 三元组：\n媚黑癖 | 鄙视 | Racism [END]\n\n### 句子：\n首先是你要区分什么是媚黑。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "媚黑 | 要区分什么是媚黑 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "媚黑",
+          "argument": "要区分什么是媚黑",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7781,
+      "content": "觉得有人故意，然而这小傻瓜还不自知，一个个沉浸在愤怒的高潮中无法自拔😅",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "这小傻瓜",
+          "argument": "沉浸在愤怒的高潮中无法自拔😅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是个正常人不应该都狂怒吗？\n### 三元组：\n正常人 | 狂怒 | non-hate [END]\n\n### 句子：\n反正他们普信男总有理由去声张他们所谓的正义，却不知大家都当他们是小丑\n### 三元组：\n普信男 | 小丑 | Sexism [END]\n\n### 句子：\n一群小丑在靠攻击别人来装优越罢了😓\n### 三元组：\n一群小丑 | 靠攻击别人来装优越 | non-hate [END]\n\n### 句子：\n可就是这样某些人还觉得是种荣幸，还不允许自己的同胞把真相说出来\n### 三元组：\n某些人 | 还觉得是种荣幸，还不允许自己的同胞把真相说出来 | non-hate [END]\n\n### 句子：\n那不是老实人，那是愚蠢\n### 三元组：\n老实人 | 愚蠢 | Sexism [END]\n\n### 句子：\n你的重点放错了，我的意思是那些人太偏激了😕😕\n### 三元组：\n那些人 | 太偏激了😕😕 | non-hate [END]\n\n### 句子：\n让他们多吃点苦他们就清醒了，都是自找的\n### 三元组：\n他们 | 让他们多吃点苦他们就清醒了 | non-hate [END]\n\n### 句子：\n幼稚的人才会说出狭隘无知的话，没有基本想象、理解与共情能力的人是很可怜的\n### 三元组：\n幼稚的人 | 才会说出狭隘无知的话 | non-hate [SEP] 没有基本想象、理解与共情能力的人 | 很可怜的 | non-hate [END]\n\n### 句子：\n如此下去，恐怕人要变得越来越傻了\n### 三元组：\n人 | 越来越傻 | non-hate [END]\n\n### 句子：\n有句话怎么说的来着，小人得志便猖狂\n### 三元组：\n小人 | 得志便猖狂 | non-hate [END]\n\n### 句子：\n觉得有人故意，然而这小傻瓜还不自知，一个个沉浸在愤怒的高潮中无法自拔😅\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "小傻瓜 | 沉浸在愤怒的高潮中无法自拔😅 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "小傻瓜",
+          "argument": "沉浸在愤怒的高潮中无法自拔😅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7124,
+      "content": "我小学四年级后转来南京读书，印象最深的就是初中有个英语老师是南京本地人，日常说话满口南京腔，尤其是批评学生时南京市骂一口一个往外蹦。初中时班上也有几个外地同学，也能感觉出老师对外地学生明显的歧视",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "老师",
+          "argument": "对外地学生明显的歧视",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我也是念书的时候才知道江苏这档子事的，以前我从来没觉得苏北南有这么大隔阂，我看地图都以为江苏所有人说差不多的方言（即使现在，我也觉得吴语区和淮语其实有很多相似的地方），最奇葩的是竟然有泰州的歧视盐城的，而且是在老乡互相介绍时，那泰州的冒出一句：原来苏北的。他俩从此有仇\n### 三元组：\n泰州的 | 歧视盐城的 | Region [END]\n\n### 句子：\n别提了，我说我觉得江北还有南京挺不错的已经被开除苏南籍了，甚至还有的人说我是反串的😓其实我身边老一辈确实有点歧视但年轻一代基本没有歧视了，我不知道在网上为什么这么多内斗的人😅\n### 三元组：\n我 | 已经被开除苏南籍了，甚至还有的人说我是反串的😓 | Region [SEP] 老一辈 | 确实有点歧视 | Region [END]\n\n### 句子：\n我觉得很奇怪啊，我从来没歧视过外地人，我同学也不歧视外地人，怎么网上都在说排外，搞得我现在真的排外了😅\n### 三元组：\n我 | 真的排外了😅 | Region [END]\n\n### 句子：\n现在上大学，江苏各地的同学都有，感觉南京话就是最接近普通话的了，除了有点脏话。。当然你同学可能是南京高淳的，那边的话我也一点听不懂\n### 三元组：\n南京话 | 最接近普通话的了，除了有点脏话 | non-hate [SEP] 你同学 | 可能是南京高淳的 | non-hate [END]\n\n### 句子：\n你以为苏北人在面对外省的时候态度好吗？不，别人一口一个我们江苏人，欺负别人不清楚苏北苏南的区别，在外面把自己当天龙人\n### 三元组：\n苏北人 | 在外面把自己当天龙人 | Region [END]\n\n### 句子：\n南京脏话是真脏，口音还尖锐沙哑，呆比呆比的脏话，掉的一批😂\n### 三元组：\n南京脏话 | 被抓 | Region [END]\n\n### 句子：\n长三角某些媒体带坏了风向，经常以高高在上的姿态评价外省人，这些媒体才是地域黑的源头\n### 三元组：\n长三角某些媒体 | 带坏了风向，经常以高高在上的姿态评价外省人 | Region [SEP] 这些媒体 | 地域黑的源头 | Region [END]\n\n### 句子：\n其实我觉得，真正地域歧视最严重的反而是上海的外来人口，在大城市待久了没来由的优越感，接近财富自以为拥有财富，恶臭\n### 三元组：\n上海的外来人口 | 地域歧视最严重 | Region [END]\n\n### 句子：\n江苏教育就别碰瓷北京了，北京家庭从小在教育的投入不是江苏能比的，孩子从小受到的苦和江苏不是一个级别的。江苏确实会哭穷，自己哭就行了，别老碰瓷其他人😆\n### 三元组：\n江苏教育 | 别碰瓷北京了 | Region [SEP] 北京家庭从小在教育的投入 | 不是江苏能比的 | Region [SEP] 孩子从小受到的苦 | 和江苏不是一个级别的 | Region [SEP] 江苏 | 会哭穷 | Region [END]\n\n### 句子：\n看网上广州好像老黑比较多🤔 我在南京除了英语外教就没见过黑人😅\n### 三元组：\n广州 | 好像老黑比较多 | Region, Racism [SEP] 南京 | 除了英语外教就没见过黑人 | Region, Racism [END]\n\n### 句子：\n我小学四年级后转来南京读书，印象最深的就是初中有个英语老师是南京本地人，日常说话满口南京腔，尤其是批评学生时南京市骂一口一个往外蹦。初中时班上也有几个外地同学，也能感觉出老师对外地学生明显的歧视\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "南京本地人 | 对外地学生明显的歧视 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "南京本地人",
+          "argument": "对外地学生明显的歧视",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1016,
+      "content": "黑驴基狗一家亲",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "黑驴基狗",
+          "argument": "一家亲",
+          "targeted_group": "LGBTQ, Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n它背后跟畒是一个爹，一家人亲兄弟\n### 三元组：\n它 | 跟畒是一个爹，一家人亲兄弟 | Sexism [END]\n\n### 句子：\n黑人五千年祖先都是灵长类动物\n### 三元组：\n黑人 | 祖先都是灵长类动物 | Racism [END]\n\n### 句子：\n说实话，全世界觉得嫁给老黑还光荣的也就大陆妇女?那老黑是什么品种，刚从树上下来没几天，要不是跟人类没有生殖隔离，都可以定义为类人猿?咱们可是正宗智人，和欧美人种一样，基因里都是有尼安德特人的基因，杂交出来的所以及其聪敏，老黑就不一样了，基因跟咱就不是一个色?你非得嫁给动物，那也没办法?\n### 三元组：\n老黑 | 类人猿 | Sexism, Racism [SEP] 老黑 | 基因跟咱就不是一个色 | Sexism, Racism [END]\n\n### 句子：\n母狗是这样的\n### 三元组：\n母狗 | 是这样的 | Sexism [END]\n\n### 句子：\n哈哈哈嘿畜就是一群没有脑子的寄生虫\n### 三元组：\n嘿畜 | 一群没有脑子的寄生虫 | Racism [END]\n\n### 句子：\n这个就是一个狗\n### 三元组：\n这个 | 一个狗 | non-hate [END]\n\n### 句子：\n果然是陕狗啊\n### 三元组：\n陕狗 | 果然是陕狗啊 | Region [END]\n\n### 句子：\n母狗冲进来啦\n### 三元组：\n母狗 | 冲进来啦 | Sexism [END]\n\n### 句子：\n以前有个爱狗人士的ID，支持黑人\n### 三元组：\n有个爱狗人士的ID | 支持黑人 | non-hate [END]\n\n### 句子：\n狗也有优势，猪也有优势\n### 三元组：\n狗 | 也有优势 | non-hate [SEP] 猪 | 也有优势 | non-hate [END]\n\n### 句子：\n黑驴基狗一家亲\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑驴基狗 | 一家亲 | Racism, Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑驴基狗",
+          "argument": "一家亲",
+          "targeted_group": "Racism, Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1615,
+      "content": "在古代男性向外族播种是征服者的体现。女性被播种怀上外族子嗣是种族被其他种族征服的体现，区别还是很大的。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "男性",
+          "argument": "向外族播种是征服者的体现",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        },
+        {
+          "target": "女性",
+          "argument": "被播种怀上外族子嗣是种族被其他种族征服的体现",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n跟我观点一致。现在的外男入侵跟遗留子嗣不亚于日本侵华跟游牧侵边，都是男性杀掉，留下女的。\n### 三元组：\n外男入侵跟遗留子嗣 | 不亚于日本侵华跟游牧侵边，都是男性杀掉，留下女的 | non-hate [END]\n\n### 句子：\n华夏民族和非洲民族智商相差1000代人的进化（某文章上看到的），按照进化论来说，目前虽然没有进化到生殖隔离的地步，但终究有一天可能也会进化成不同的物种。就像人和猪，从一最开始，也是一样的祖先。😎\n### 三元组：\n非洲民族 | 华夏民族和非洲民族智商相差1000代人的进化 | Racism [END]\n\n### 句子：\n几千年人类历史都非常在意血统，杂种无论中西方从来是不好的词。你仔细想想\n### 三元组：\n杂种 | 无论中西方从来是不好的词 | Racism [END]\n\n### 句子：\n只能说截图中的部分观点有道理。女人的民族意识确实弱于男人，任何一个民族的崛起动力都源于雄性意识，这是事实。原因可能相关于人类的原始基因，猿类、猴类等群居动物的雄性都会挑战强者，夺取雌性，然后又有保护雌性的本能意识，而雌性会依附于强者，抛弃弱者，人类社会也有类似特征，比如古代蒙古人、满洲人喜欢屠男而留女。但是，截图中的观点绝对化了，人来自动物，带有动物性，但又高于动物，有人性，古往今来，不少女性有强烈的民族意识，她们或与民族共存亡，或奋起反抗，或舍身取义，或杀身成仁，不让须眉，比如秋瑾反满，比如赵一曼抗日。\n### 三元组：\n女人 | 民族意识确实弱于男人 | non-hate [SEP] 截图中的观点 | 绝对化了 | non-hate [END]\n\n### 句子：\n嫁给外国人就不是中华民族了，假如你嫁给日本人，那你就是大和民族了\n### 三元组：\nNULL | 嫁给外国人就不是中华民族了 | Racism [SEP] 你 | 嫁给日本人，那你就是大和民族了 | Racism [END]\n\n### 句子：\n一代又一代的先贤以及列祖列宗将中华民族最优秀的基因传递我们这里，而一些“女人”却在用自己的身体通过与黑人、白人媾和，污染着最优秀的基因传承。这是她们父母的悲哀、祖宗的不幸，整个民族该唾弃之，让她们如过街老鼠一样，不能在阳光下立足。\n### 三元组：\n一些“女人” | 用自己的身体通过与黑人、白人媾和，污染着最优秀的基因传承 | Sexism, Racism [SEP] 她们 | 过街老鼠 | Sexism [END]\n\n### 句子：\n男人不过是最开始的“原型机”，上帝做完男人再做女人，本来想做改进版本，增加怀孕的能力。可惜做女性的时候材料严重不够了，所以女性的体型和脑子才比男人缩水一大截，除了怀孕，没有其他长处。\n### 三元组：\n女性 | 体型和脑子才比男人缩水一大截，除了怀孕，没有其他长处 | Sexism [END]\n\n### 句子：\n那不一样，女的基本上没国家概念，男的是娶，女的是嫁\n### 三元组：\n女的 | 没国家概念 | Sexism [END]\n\n### 句子：\n还是不一样的。首先，在非洲的中国人几乎都算当地土豪，土豪享有优先交配权很正常，国内土豪也没少玩。其次，那帮渣男不会因为有个非洲对象就有优越感，更不会因此贬低国内女人。相反，有国外对象的女人明里暗里秀优越，贬国男，甚至当二鬼子的可太多了。\n### 三元组：\n在非洲的中国人 | 几乎都算当地土豪，土豪享有优先交配权很正常 | Sexism, Racism [SEP] 有国外对象的女人 | 明里暗里秀优越 | Sexism, Racism [END]\n\n### 句子：\n如果说外国人通过枪炮瓜分中国，殖民中国，获得巨大好处，那么外国黑人是通过和中国女的结婚繁殖混血黑二代殖民中国，那么他们什么都有了！！！\n### 三元组：\n黑人 | 和中国女的结婚繁殖混血黑二代殖民中国 | Sexism, Racism [END]\n\n### 句子：\n在古代男性向外族播种是征服者的体现。女性被播种怀上外族子嗣是种族被其他种族征服的体现，区别还是很大的。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "女性 | 被播种怀上外族子嗣是种族被其他种族征服的体现 | Sexism, Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "女性",
+          "argument": "被播种怀上外族子嗣是种族被其他种族征服的体现",
+          "targeted_group": "Sexism, Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7577,
+      "content": "尼脑子有大病",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "尼",
+          "argument": "脑子有大病",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n脑子有问题，尼日利亚人骗子太多，能出国的基本是有文化，特能编\n### 三元组：\n尼日利亚人 | 骗子太多 | Region [END]\n\n### 句子：\n这样把脑子不好的都输出\n### 三元组：\n脑子不好的 | 输出 | non-hate [END]\n\n### 句子：\n它这家伙脑子不正常\n### 三元组：\n它这家伙 | 脑子不正常 | non-hate [END]\n\n### 句子：\n艾兹病毒入脑了\n### 三元组：\nNULL | 艾兹病毒入脑了 | others [END]\n\n### 句子：\n同大多连脑都没有\n### 三元组：\n同 | 大多连脑都没有 | LGBTQ [END]\n\n### 句子：\n这文字才是带脑子的\n### 三元组：\n这文字 | 带脑子 | non-hate [END]\n\n### 句子：\n你们特莫sb吧，脑袋进屎了吧\n### 三元组：\n你们 | sb | non-hate [END]\n\n### 句子：\n这种脑残是大学孝长的坐上宾啊\n### 三元组：\n这种脑残 | 大学孝长的坐上宾 | non-hate [END]\n\n### 句子：\n黑人还不够格，脑癌才是\n### 三元组：\n黑人 | 还不够格 | Racism [SEP] 脑癌 | 脑癌才是 | Racism [END]\n\n### 句子：\n笑死我了智商是硬伤啊\n### 三元组：\n智商 | 硬伤 | non-hate [END]\n\n### 句子：\n尼脑子有大病\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "尼 | 脑子有大病 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "尼",
+          "argument": "脑子有大病",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 2536,
+      "content": "更何况你鬼母阿娜本身就是个二年级辍学的屑",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "你鬼母阿娜",
+          "argument": "二年级辍学的屑",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n初中都没上过的鬼母牛逼吹的倒是不小，是不是现在人类已经无法满足你了？\n### 三元组：\n初中都没上过的鬼母 | 牛逼吹的倒是不小 | Sexism [END]\n\n### 句子：\n啥鬼母阿娜才63\n### 三元组：\nNULL | 啥鬼母阿娜才63 | Sexism [END]\n\n### 句子：\n是被阿娜夺舍了吗我寻思着就阿娜这个水平应该也学不会盗号啊\n### 三元组：\n阿娜 | 这个水平应该也学不会盗号 | Sexism [END]\n\n### 句子：\n没错就是妓院！不然黑鬼过来干嘛？学习？开什么玩笑！\n### 三元组：\nNULL | 妓院 | Sexism [SEP] 黑鬼 | 过来干嘛？ | Racism [END]\n\n### 句子：\n幕刃骂多了反而对这句话不感冒了说这么一句话本子就能治她，反观我们这里，批话更多更臭，其中还有龟男帮着一起说真不知道我们还有多长的路要走\n### 三元组：\n幕刃 | 骂多了 | Sexism [SEP] 龟男 | 帮着一起说 | Sexism [END]\n\n### 句子：\n慕✓口嗨一贯可以的，毕竟不用为自己的言行负责，果然是劣等生物啊。\n### 三元组：\n慕✓ | 劣等生物 | Sexism [END]\n\n### 句子：\n这种脑残是大学孝长的坐上宾啊\n### 三元组：\n这种脑残 | 大学孝长的坐上宾 | non-hate [END]\n\n### 句子：\n看到了那个枯寄吧的回复果然和我说的一样只会无脑谩骂果然txl没有正常人\n### 三元组：\ntxl | 没有正常人 | LGBTQ [END]\n\n### 句子：\n这个时候身为阉人的你反而不如不阉的时候呢\n### 三元组：\n你 | 阉人 | non-hate [END]\n\n### 句子：\n这不慕勾阿娜么\n### 三元组：\n慕勾阿娜 | 这不慕勾阿娜么 | Sexism [END]\n\n### 句子：\n更何况你鬼母阿娜本身就是个二年级辍学的屑\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "鬼母阿娜 | 尻 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "鬼母阿娜",
+          "argument": "尻",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4861,
+      "content": "胡人的羊不用偷井盖了吗🤭",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "胡人的羊",
+          "argument": "不用偷井盖了吗",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我们人人祖传18代偷井盖，上古时期就开始了，井盖都是我们发明的，不然不好解释怎么上古时期开始的。\n### 三元组：\n我们 | 人人祖传18代偷井盖 | Region [END]\n\n### 句子：\n河南人偷井盖\n### 三元组：\n河南人 | 偷井盖 | Region [END]\n\n### 句子：\n井盖都是俺们偷的🤔\n### 三元组：\n俺们 | 井盖都是俺们偷的🤔 | Region [END]\n\n### 句子：\n犯我河南者，有井无盖\n### 三元组：\n犯我河南者 | 有井无盖 | Region [END]\n\n### 句子：\n😭井盖好沉的，根本就不好偷啊😅就这一个黑了多少年了，河南的假和尚可比偷井盖的多多了\n### 三元组：\n河南 | 假和尚可比偷井盖的多多了 | Region [END]\n\n### 句子：\n是呐，我一说是河南的就有人说偷井盖儿的╮（╯＿╰）╭\n### 三元组：\n河南的 | 偷井盖儿的 | Region [END]\n\n### 句子：\n河北偷井盖是事实 不叫黑昂\n### 三元组：\n河北 | 偷井盖 | Region [END]\n\n### 句子：\n我真的上大学之前都没听过 我身边的人也没人知道 直到碰到了河南室友，她跟我讲她们河南人为什么偷井盖 还开玩笑的教我们怎么偷井盖😅\n### 三元组：\n河南人 | 偷井盖 | Region [END]\n\n### 句子：\n河南大兄弟别慌，现在有东北在前面顶着呢，偷井盖算啥，侮辱东北人的词汇那才叫让人大开眼界，山东兄弟准备好，接下来就是你们了\n### 三元组：\n东北人 | 侮辱东北人的词汇那才叫让人大开眼界 | Region [END]\n\n### 句子：\n别黑河南了 黑我吧 只要大家开心 全世界的井盖都是我一个刚成年的河南小妮偷的👍️👍️👍️👍️👍️\n### 三元组：\n河南小妮 | 全世界的井盖都是我一个刚成年的河南小妮偷的👍️👍️👍️👍️👍️ | Region [END]\n\n### 句子：\n胡人的羊不用偷井盖了吗🤭\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "胡人 | 羊不用偷井盖了吗🤭 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "胡人",
+          "argument": "羊不用偷井盖了吗🤭",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1464,
+      "content": "女人的钱好赚啊，我们要买房买车哪儿有钱让资本家改口啊，月收过万月支出500的穷人先路过一下。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "女人",
+          "argument": "钱好赚啊",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n资本主义的阴谋，女人购买商品的欲望强，这个社会早就在偏向女性了，我们只是争取我们男性本来该有的地位而已。\n### 三元组：\n这个社会 | 偏向女性 | Sexism [END]\n\n### 句子：\n确实，上面带的节奏就是怕老婆，交工资，等到成气候了就开始鼓吹消费主义给女的洗脑，现在国内就成了逆民主义女拳横行了，还是挺有意思的，现在都恐婚了。\n### 三元组：\n女拳 | 逆民主义女拳横行 | Sexism [END]\n\n### 句子：\n最开始的时候，上面有意为之，目的是为了让女人鞭策男人变的更有奋取心，目的是为了让男人们买房，拼搏，你看看这些年的电视剧还有热点新闻婆媳矛盾被无限放大，目的就是为了让人买房，一套房子一个家家电，家装，能带动的产业实在是太多了。\n### 三元组：\n女人 | 鞭策男人变的更有奋取心 | non-hate [END]\n\n### 句子：\n什么都不用说，钱包强男权强，没钱的缺钱少钱的男性朋友可以咨询我，在下有赚钱平台，日结的。\n### 三元组：\n男权 | 钱包强男权强 | non-hate [SEP] 没钱的缺钱少钱的男性朋友 | 咨询我 | non-hate [END]\n\n### 句子：\n问题的来源就是现在女性对社会贡献和地位越来越高，以及女人的脑子蠢p事多\n### 三元组：\n女人 | 脑子蠢p事多 | Sexism [END]\n\n### 句子：\n上面什么时候宣传过这个风气？一直宣传的是女强人，妇女能顶半边天的正常女权，每年评感动人物的也都是无私奉献，舍小我成大家的雷锋精神，什么时候怕老婆成为'上面'鼓吹的精神了？若上面真是用这种方式刺激消费，那锤子镰刀还是尽早换了吧。一直是所谓的'民族资本家'为了利益，鼓吹这种风气来刺激女性消费市场的。这些'资本家'能代表上面？他能高我们一等？\n### 三元组：\n资本家 | 鼓吹这种风气来刺激女性消费市场 | Sexism [END]\n\n### 句子：\n男性需要思想解放，钱都给女的了，她们还不满足。\n### 三元组：\n男性 | 思想解放 | Sexism [SEP] 男性 | 钱都给女的了 | Sexism [SEP] 她们 | 还不满足 | Sexism [END]\n\n### 句子：\n为啥？就是因为现在中国女人地位高到离谱，男人任劳任怨还被女性瞧不起。破坏人类的根本原则\n### 三元组：\n中国女人 | 地位高到离谱 | Sexism, Region [END]\n\n### 句子：\n所以说这年头男的想结婚不是脑子有病就是脑子进水了，有钱干点啥不好，没钱干点啥不行\n### 三元组：\n男的想结婚 | 不是脑子有病就是脑子进水了 | Sexism [END]\n\n### 句子：\n笑死了，***自己没有能力买房啊，还要靠男人，要她有什么用\n### 三元组：\n她 | 没有能力买房 | Sexism [SEP] 她 | 靠男人 | Sexism [END]\n\n### 句子：\n女人的钱好赚啊，我们要买房买车哪儿有钱让资本家改口啊，月收过万月支出500的穷人先路过一下。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "女人 | 钱好赚 | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "女人",
+          "argument": "钱好赚",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1108,
+      "content": "有好看的，是哑光的巧克力色，纯黑的就算了吧",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "纯黑的",
+          "argument": "就算了吧",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是的 ，不知道那些人在想什么 ，有什么好看的 ，一般看到白皮黑皮都屏蔽\n### 三元组：\n白皮黑皮 | 屏蔽 | Racism [END]\n\n### 句子：\n关键是辨别不出来，要是媚黑在身上纹一个黑桃就方便了\n### 三元组：\n媚黑 | 身上纹一个黑桃就方便了 | Sexism, Racism [END]\n\n### 句子：\n对黑人无感，不是我喜欢的颜，白净的不香吗\n### 三元组：\n黑人 | 白净的不香吗 | Racism [END]\n\n### 句子：\n我也不看白色区，不看棕色区，更别说黑色区。还是日韩好看😊\n### 三元组：\n白色区 | 不看白色区 | Racism [SEP] 棕色区 | 不看棕色区 | Racism [SEP] 黑色区 | 别说黑色区 | Racism [END]\n\n### 句子：\n大多数都喜欢皮肤白的女生，你想多了\n### 三元组：\n皮肤白的女生 | 大多数都喜欢 | non-hate [END]\n\n### 句子：\n纯黑都能在中国找到女人，混黑还会找不到？黑皮只会越来越多！！\n### 三元组：\n纯黑 | 都能在中国找到女人 | Sexism, Racism [SEP] 混黑 | 还会找不到？ | Sexism, Racism [SEP] 黑皮 | 只会越来越多！！ | Racism [END]\n\n### 句子：\n生个小孩还是黑色的，放心吧\n### 三元组：\n小孩 | 生个小孩还是黑色的 | Racism [END]\n\n### 句子：\n重点是自己喜欢黑的自己也那么打扮嘛，而且人不应该自己忠于自己的各种符号吗，身体长相不也是一种符号吗。\n### 三元组：\n自己 | 喜欢黑的自己也那么打扮嘛 | non-hate [END]\n\n### 句子：\n一白遮百丑！美听说过美黑的。美白，美白！美听说黑人选美的。与黑人结合就值得批判！\n### 三元组：\n黑人 | 与黑人结合就值得批判 | Racism [END]\n\n### 句子：\n原谅我手残，截的图不及他们人一半好看\n### 三元组：\n截的图 | 不及他们人一半好看 | non-hate [END]\n\n### 句子：\n有好看的，是哑光的巧克力色，纯黑的就算了吧\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "巧克力色 | 是哑光的 | non-hate [SEP] 纯黑的 | 就算了吧 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "巧克力色",
+          "argument": "是哑光的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        },
+        {
+          "target": "纯黑的",
+          "argument": "就算了吧",
+          "targeted_group": "Racism",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7562,
+      "content": "地域互黑沒有無辜者，黑別人與被別人黑，天道循環，報應不爽。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "地域互黑",
+          "argument": "沒有無辜者",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n澄清下，我发这个不是为了加深矛盾，是为了让人们看清楚地域黑的可怕弊端，不要让误解更深。🤝\n### 三元组：\n地域黑 | 可怕弊端 | non-hate [END]\n\n### 句子：\n地域黑的是有目的性，基本都是有50W的水军在操作中。然而有几个被忽悠起来，互相怼起来，结果造成城门失火，殃及池鱼！！！😅\n### 三元组：\n地域黑 | 有目的性 | Region [END]\n\n### 句子：\n笑死，这就是你们地域黑的逻辑，所以你黑别人你有理，还说别人黑你，这波贼喊捉贼有意思\n### 三元组：\n地域黑 | 这波贼喊捉贼有意思 | Region [END]\n\n### 句子：\n黑就黑吧，心放宽点，不要跟地域黑较劲，离远点就行了\n### 三元组：\n地域黑 | 不要跟地域黑较劲 | Region [END]\n\n### 句子：\n只能说地域黑这种东西 是常态 改变不了的 和他们对峙也没有用 没素质的人哪里都有 以偏概全也不是啥聪明人\n### 三元组：\n地域黑 | 常态 | Region [SEP] 没素质的人 | 哪里都有 | Region [END]\n\n### 句子：\n反对一切地域黑，哪都有好人哪都有坏人\n### 三元组：\n一切地域黑 | 反对 | Region [END]\n\n### 句子：\n地域黑比较典型的几个，按大区域东北被黑，按省河南被黑，二线城市武汉被黑，一线城市广州被黑🤣\n### 三元组：\n东北 | 被黑 | Region [SEP] 河南 | 被黑 | Region [SEP] 武汉 | 被黑 | Region [SEP] 广州 | 被黑 | Region [END]\n\n### 句子：\n心疼一下你，要被地域黑喷三回，第一次是你的户籍，第二次是你的祖籍，第三次他们就会骂你的的民族和宗教了\n### 三元组：\n你 | 要被地域黑喷三回 | Region [END]\n\n### 句子：\n汶川地震一样被黑也是一样的话甚至更甚，地域黑这种东西一代一代的\n### 三元组：\n汶川地震 | 一样被黑也是一样的话甚至更甚 | Region [SEP] 地域黑 | 这种东西一代一代的 | Region [END]\n\n### 句子：\n本来就是一帮没啥别的只能靠地域来包装自己优越感的傻*，网上输出暴论自我安慰图一乐罢了。\n### 三元组：\n一帮没啥别的只能靠地域来包装自己优越感的傻* | 网上输出暴论自我安慰图一乐 | non-hate [END]\n\n### 句子：\n地域互黑沒有無辜者，黑別人與被別人黑，天道循環，報應不爽。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "地域互黑 | 没有无辜者 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "地域互黑",
+          "argument": "没有无辜者",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 896,
+      "content": "看不起我们中国人，别在中国网上秀黑人恩爱，去非洲网上秀恩爱！！！",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "中国人",
+          "argument": "看不起",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        },
+        {
+          "target": "黑人",
+          "argument": "别在中国网上秀黑人恩爱，去非洲网上秀恩爱！！！",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n不管你咋说，我不喜欢非洲黑人，男人 ，也没怎么看到中国男人搞黑人 倒是在某些网站上看到不少某些中国女人被黑人玩\n### 三元组：\n某些中国女人 | 被黑人玩 | Racism [END]\n\n### 句子：\n喜欢黑人请去你男人国家，赖在中国就不要怪别人骂了，动手都是应该的\n### 三元组：\n你 | 喜欢黑人请去你男人国家 | Sexism, Racism  [SEP] 你 | 赖在中国就不要怪别人骂了，动手都是应该的 | Sexism, Racism [END]\n\n### 句子：\n好像很多中国男人找黑妹啊，抖音上一大把，非洲黑黄混血的孩子都数不清\n### 三元组：\n中国男人 | 找黑妹 | Sexism, Racism [SEP] 黑黄混血 | 数不清 | Racism [END]\n\n### 句子：\n我真的麻烦你们女生找黑人的时候，能不能找个看起来长相还可以的？真的不要找那些又丑又怪的，不是说不找黑人，我们嫌弃的是：那么丑的黑人为什么你还看得起？\n### 三元组：\n黑人 | 又丑又怪 | Sexism, Racism [SEP] 女生 | 那么丑的黑人为什么你还看得起 | Sexism, Racism [END]\n\n### 句子：\n短视频不少公的黑人跟中国女孩交往的人啊爆出来的新闻也很多啊\n### 三元组：\n公的黑人 | 跟中国女孩交往 | Sexism, Racism [END]\n\n### 句子：\n炫耀找黑媳妇的都基本上没见过什么世面，我想想咱们大部分中国男人的眼光\n### 三元组：\n炫耀找黑媳妇的 | 没见过什么世面 | Sexism, Racism [END]\n\n### 句子：\n搞不懂中国人为啥要吹黑人性能力，其实他们根本没去了解过，等到女人真信了谣言去找黑人了又哭天抢地\n### 三元组：\n女人 | 等到女人真信了谣言去找黑人了又哭天抢地 | Sexism, Racism [END]\n\n### 句子：\n希望他们嫁给默以后都去非洲吧，不要待在国内，看着觉得蛮恶心的，跑爹默竟然也有人中国女人愿意嫁也不配当中国人\n### 三元组：\n他们 | 嫁给默以后都去非洲 | Sexism, Racism [SEP] 跑爹默 | 竟然也有人 | Racism [SEP] 中国女人 | 愿意嫁也不配当中国人 | Sexism [END]\n\n### 句子：\n中国14亿人呢，啥样的奇葩没有啊。其实天天鼓吹多元文化，跨种族婚姻的那帮人，他们自己不嫁给非洲黑人。把这些脑子单纯的女人骗得一愣一愣的。\n### 三元组：\n跨种族婚姻的那帮人 | 他们自己不嫁给非洲黑人 | Racism [SEP] 脑子单纯的女人 | 骗得一愣一愣 | Sexism [END]\n\n### 句子：\n我感觉大多数能跟非洲黑人在一起的女人既看不上普通国男，普通国男也看不上她。男的有意见就没必要了吧😅\n### 三元组：\n大多数能跟非洲黑人在一起的女人 | 看不上普通国男 | Sexism, Racism [SEP] 普通国男 | 也看不上她 | Sexism, Racism [END]\n\n### 句子：\n看不起我们中国人，别在中国网上秀黑人恩爱，去非洲网上秀恩爱！！！\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "看不起我们中国人 | 别在中国网上秀黑人恩爱 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "看不起我们中国人",
+          "argument": "别在中国网上秀黑人恩爱",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4781,
+      "content": "大部分黑人都不知道自己是凯乐奇计划的棋子吧。就凭他们的智商。还妄想统治世界。犹太精英就是新的农场主。",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "大部分黑人",
+          "argument": "就凭他们的智商。还妄想统治世界",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        },
+        {
+          "target": "犹太精英",
+          "argument": "新的农场主",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n引入黑人，只会引发黑命贵运动，引起激烈的种族冲突。犹太人凯乐奇计划就是要中国引入其他种族，制造新的种族，灭绝中华民族、中华文化。\n### 三元组：\n黑人 | 引入黑人，只会引发黑命贵运动，引起激烈的种族冲突 | Racism [SEP] 犹太人凯乐奇计划 | 要中国引入其他种族，制造新的种族，灭绝中华民族、中华文化 | Racism [END]\n\n### 句子：\n犹太人凯乐奇计划就是要中国引入其他种族，制造新的种族，灭绝中华民族、中华文化。\n### 三元组：\n犹太人凯乐奇计划 | 要中国引入其他种族，制造新的种族，灭绝中华民族、中华文化 | Racism [END]\n\n### 句子：\n说黑人是劳动力的太可笑了，殖民时代是，问题是现在还是那种传统意义上的殖民时代么？如今的时代，黑人是解放了，问题是黑人能主动依靠劳动获取报酬么？黑人和他们的副产品打着“反对种族歧”的旗号惹事，把本来平静安宁的社会搞得乌烟瘴气。解放他们有什么用？\n### 三元组：\n黑人 | 把本来平静安宁的社会搞得乌烟瘴气 | Racism [END]\n\n### 句子：\n黑人属于是自己放弃自己，和其他人没关系。我觉得应该尊重他们的选择，送他们回非洲，让他们自己折腾去。\n### 三元组：\n黑人 | 自己放弃自己 | Racism [SEP] 黑人 | 送他们回非洲，让他们自己折腾去 | Racism [END]\n\n### 句子：\n黑人里面所谓的聪明的人的比例太少了\n### 三元组：\n黑人 | 所谓的聪明的人的比例太少了 | Racism [END]\n\n### 句子：\n黑人如果只在自己的地方怎么糟践都行，别来中国祸害。黑人就像哥杀里的哥布林一样，被繁殖欲望支配的物种。\n### 三元组：\n黑人 | 被繁殖欲望支配的物种 | Racism [END]\n\n### 句子：\n没办法，估计黑人想通过那四个字绑架全人类。再加上西方价值观的影响，\n### 三元组：\n黑人 | 绑架全人类 | Racism [END]\n\n### 句子：\n黑人能有什么好事情？还在引进，作死害百姓\n### 三元组：\n黑人 | 能有什么好事情？ | Racism [END]\n\n### 句子：\n按皮肤归纳人种本来就不对，黑人里面的人种特别多，天差地别。而且黑人不聪明很多是教育的原因。但是黑人数目那么大，比例少但是数量绝对不少。没必要说哪种人比哪种人聪明，更开化什么的。我就在网上看到过一些黑人精英，而且能到中国做生意的黑人，很多时候也是非洲比较聪明厉害有行动力的。就文化我们和他们处不来，但是做生意，尊重一些还是能做到的。\n### 三元组：\n黑人里面的人种 | 特别多 | non-hate [SEP] 黑人 | 不聪明很多是教育的原因 | non-hate [SEP] 黑人 | 比例少但是数量绝对不少 | non-hate [END]\n\n### 句子：\n中国是伪装成国家的文明，而我们的文明就是56个民族的兄弟姐妹智慧劳动的结晶，明显黑人不包含在56个民族里。而且说实话，我们也没有任何一个民族会出现如黑人一般的大多数是人渣这种情况，让黑人加入第57个民族。。。我觉得是对所有中国人的侮辱\n### 三元组：\n黑人 | 人渣 | Racism [END]\n\n### 句子：\n大部分黑人都不知道自己是凯乐奇计划的棋子吧。就凭他们的智商。还妄想统治世界。犹太精英就是新的农场主。\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑人 | 凯乐奇计划的棋子 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑人",
+          "argument": "凯乐奇计划的棋子",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 4318,
+      "content": "又没人？单机贴吧？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "贴吧",
+          "argument": "单机贴吧？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n是啊，现在贴吧没人看了，我们都转战抖音了，抖音现在是默默的重灾区\n### 三元组：\n抖音 | 默默的重灾区 | Racism [END]\n\n### 句子：\n你玩的默都玩腻了，你没玩过的默也先玩了🤭\n### 三元组：\n你玩的 | 默都玩腻了 | Racism [SEP] 你没玩过的 | 默也先玩了🤭 | Racism [END]\n\n### 句子：\n这娇情的小人，楼主不想理你，删你大号小号的贴是符合规则的，从他以前发贴抱怨求分享的吧友，估计是幼稚小藓女，我看就是巨婴心理，所以他的大号小号连续被拒绝了，明摆的是她的舔狗\n### 三元组：\n这娇情的小人 | 幼稚小藓女 | Sexism [END]\n\n### 句子：\n这帖子妙啊！找黑黑的，jn都不接的客你接了！???\n### 三元组：\n黑黑的 | jn都不接的客你接了！??? | Racism [END]\n\n### 句子：\n建议你去对线，发贴引群嘲有个锤子用，是男人就去真人1v1或者发专门贴对喷\n### 三元组：\n你 | 发贴引群嘲有个锤子用 | non-hate [END]\n\n### 句子：\n如果有人不是单身进吧会怎么样\n### 三元组：\n有人 | 不是单身进吧会怎么样 | non-hate [END]\n\n### 句子：\n上个帖子被贴吧破防的幕刃举报没了，后面我看重新申请回来\n### 三元组：\n幕刃 | 破防 | Sexism [END]\n\n### 句子：\n这货删帖了，不好发挥啊\n### 三元组：\n这货 | 删帖了 | non-hate [END]\n\n### 句子：\n哈哈哈整个吧里就你和楼主在互怼\n### 三元组：\n你和吧主 | 在互怼 | non-hate [END]\n\n### 句子：\n怎么大小号都拉黑我了，这就跑了？好怂喔，饭桶吧主就这战力？\n### 三元组：\n饭桶吧主 | 好怂 | non-hate [END]\n\n### 句子：\n又没人？单机贴吧？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "单机贴吧 | 没人？ | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "单机贴吧",
+          "argument": "没人？",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3711,
+      "content": "图来了😆😆😆知乎竟然不让上传超过5M的GIF😅拍了好几次😅查看动图",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "知乎",
+          "argument": "不让上传超过5M的GIF😅",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n有时间去骂那帮说好帅好帅的，别在我评论区下面发疯\n### 三元组：\n那帮说好帅好帅的 | 去骂 | non-hate [END]\n\n### 句子：\n这种死飞柱能不能滚去正宗大飞柱吧，还有发这种照片的建议左转隔壁厕所和飞柱吧发，那里的人会给你很多很好的评价\n### 三元组：\n这种死飞柱 | 滚去正宗大飞柱吧 | non-hate [SEP] 发这种照片的 | 建议左转隔壁厕所和飞柱吧发 | non-hate [END]\n\n### 句子：\n再次提醒一下某些单纯的朋友，百度百科、抖音、知乎（这个算是其中比较靠谱的）的某些文章，基本都只能当个乐子看看，莫当真。\n### 三元组：\n某些文章 | 只能当个乐子 | non-hate [END]\n\n### 句子：\n你可以去看看，我不是会员，我发不了图片\n### 三元组：\n你 | 可以去看看 | non-hate [END]\n\n### 句子：\n原谅我手残，截的图不及他们人一半好看\n### 三元组：\n截的图 | 不及他们人一半好看 | non-hate [END]\n\n### 句子：\n还以为微博才是地域黑子们的天下，看了底下的个别评论，没想到知乎里竟然也有以讹传讹的地域黑子╮（╯＿╰）╭\n### 三元组：\n微博 | 地域黑子们的天下 | Region [SEP] 知乎 | 有以讹传讹的地域黑子 | Region [END]\n\n### 句子：\n真有意思人家新生刚来人生地不熟一个认识人没有咋这么优越呢我不多说你去高中找那个混子你跟他练练呗他拍的那个视角也不带有多高的就个胖矬\n### 三元组：\n人家新生 | 胖矬 | others [END]\n\n### 句子：\n上面的度°C别在那洗了，刷屏不是你们干的？别搞笑了好吗，想看开始什么样多刷几页帖子就能看到，少往自己脸上贴金\n### 三元组：\n你们 | 少往自己脸上贴金 | non-hate [END]\n\n### 句子：\n一百条才哪到哪，我那几个回答每个都有两百多条吧\n### 三元组：\n我 | 那几个回答每个都有两百多条吧 | non-hate [END]\n\n### 句子：\n？你要不要问问答主那人有没骚扰他，有的话我删评，没有的话你删评\n### 三元组：\n答主 | 那人有没骚扰他 | non-hate [END]\n\n### 句子：\n图来了😆😆😆知乎竟然不让上传超过5M的GIF😅拍了好几次😅查看动图\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "知乎 | 不让上传超过5M的GIF | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "知乎",
+          "argument": "不让上传超过5M的GIF",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 7773,
+      "content": "拉黑nt是正确的心理异常变泰的人总想和正常人搭话来证明自己也是正常的",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "心理异常变泰的人",
+          "argument": "总想和正常人搭话来证明自己也是正常的",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n直男最擅长的不就是双标吗😆所以现在很多时候我已经懒得讲道理，看见nt直接骂就好了😆\n### 三元组：\n直男 | 双标 | LGBTQ [SEP] nt | 直接骂就好了 | LGBTQ [END]\n\n### 句子：\n你们同性恋不包容反同可以拉黑对方龟缩在家里不见人见光就可以了，你们同性恋不需要来这个吧，有拉黑功能可以让你们逃避现实活在自己的世界里。同性恋太丢脸太恶心了一定要拉黑回避正常人。反同是正常的逃不逃避拉不拉黑你们也是正常的但你们同性恋是不正常的不能见人见光所以需要拉黑我们反同才能逃避现实活在自己的世界里。\n### 三元组：\n同性恋 | 太丢脸太恶心了一定要拉黑回避正常人 | LGBTQ [SEP] 同性恋 | 不正常的不能见人见光 | LGBTQ [END]\n\n### 句子：\n同性恋没有正常人，低龄非主流觉得有和别人与众不同的思想很突出自己的高尚，就算有真正相爱的同性也是心理疾病，同时明明知道会遭到议论和歧视又改变不了，还是要为了自己的爱情把家人置于其他人歧视中的小丑，总结一下捏，txl是个自私而且低能，说理说不过又只会无脑的谩骂的低龄心理变态人群，txl这辈子就这样了\n### 三元组：\n同性恋 | 没有正常人 | LGBTQ [SEP] txl | 自私而且低能，说理说不过又只会无脑的谩骂的低龄心理变态人群 | LGBTQ [END]\n\n### 句子：\n这种nt发言一度让我怀疑是友军反串\n### 三元组：\n这种nt发言 | 友军反串 | non-hate [END]\n\n### 句子：\n太棒了呀，不用被道德和素质绑架了，既然同也恶心正常人，那我恶心同就不用避讳了，舒服，大胆讨厌一些人太爽了\n### 三元组：\n同 | 恶心正常人 | LGBTQ [SEP] 同 | 我恶心同 | LGBTQ [END]\n\n### 句子：\n是同又怎么样？？天天歧视同性恋你还很有脸吗？？以多欺少算什么本事？？😆要不把我们杀了吧？？你有这本事吗？\n### 三元组：\n同性恋 | 歧视 | LGBTQ [SEP] 我们 | 😆要不把我们杀了吧 | LGBTQ [END]\n\n### 句子：\n同性恋就是哗众取宠的小丑，低龄非主流觉得有和别人与众不同的思想很突出自己的高尚，就算有真正相爱的同性也是心理疾病，同时明明知道会遭到议论和歧视又改变不了，还是要为了自己的爱情把家人置于其他人歧视中的小丑，总结一下捏，txl是个自私而且低能，说理说不过又只会无脑的谩骂的低龄心理变态人群，txl这辈子就这样了\n### 三元组：\n同性恋 | 哗众取宠的小丑 | LGBTQ [SEP] 真正相爱的同性 | 心理疾病 | LGBTQ [SEP] txl | 自私而且低能，说理说不过又只会无脑的谩骂的低龄心理变态人群 | LGBTQ [END]\n\n### 句子：\n生活压抑，网络上发泄发泄，面对面大家都保持礼貌，隔着屏幕都放纵自己，觉得不合适的言论不在乎就好，太在意网络大家都得抑郁?\n### 三元组：\n大家 | 觉得不合适的言论不在乎就好 | non-hate [END]\n\n### 句子：\n这不正是你们这帮lj的写照吗？自己不接受的事物就要怱悠别人都来反对，还自以为很正义～\n### 三元组：\n你们 | lj | non-hate [END]\n\n### 句子：\n要是我周围朋友出现个和默交往的直接拉黑不用再见了😅毕竟我怕哪天把我也拉下水\n### 三元组：\n和默交往的 | 直接拉黑不用再见了😅 | Racism [END]\n\n### 句子：\n拉黑nt是正确的心理异常变泰的人总想和正常人搭话来证明自己也是正常的\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "拉黑nt | 是正确的心理异常变泰的人总想和正常人搭话来证明自己也是正常的 | LGBTQ [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "拉黑nt",
+          "argument": "是正确的心理异常变泰的人总想和正常人搭话来证明自己也是正常的",
+          "targeted_group": "LGBTQ",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3925,
+      "content": "视频下架了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "视频",
+          "argument": "下架了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n嗯嗯就是这个帖子被删了视频找不到了\n### 三元组：\n这个帖子 | 被删了 | non-hate [END]\n\n### 句子：\n总部在抖音，有个几十万粉丝博主，但被限流了\n### 三元组：\n几十万粉丝博主 | 被限流 | non-hate [END]\n\n### 句子：\n这个视频比较恶臭\n### 三元组：\n这个视频 | 恶臭 | non-hate [END]\n\n### 句子：\n帖子被删了\n### 三元组：\n帖子 | 被删了 | non-hate [END]\n\n### 句子：\n曾经有几个都被封了\n### 三元组：\n有几个 | 都被封了 | non-hate [END]\n\n### 句子：\n是啊，现在贴吧没人看了，我们都转战抖音了，抖音现在是默默的重灾区\n### 三元组：\n抖音 | 默默的重灾区 | Racism [END]\n\n### 句子：\n现在被基佬删了\n### 三元组：\n基佬 | 现在被基佬删了 | LGBTQ [END]\n\n### 句子：\n没活就不要硬整，刷屏是想干啥\n### 三元组：\n刷屏 | 想干啥 | non-hate [END]\n\n### 句子：\n挂出来的图片内容在这过不了审\n### 三元组：\n图片内容 | 过不了审 | non-hate [END]\n\n### 句子：\n这货删帖了，不好发挥啊\n### 三元组：\n这货 | 删帖了 | non-hate [END]\n\n### 句子：\n视频下架了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "视频 | 下架了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "视频",
+          "argument": "下架了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5542,
+      "content": "黑杂碎必须灭绝！！！",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "黑杂碎",
+          "argument": "必须灭绝",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n必须对黑蛆实施种族灭绝！！！\n### 三元组：\n黑蛆 | 实施种族灭绝！！！ | Racism [END]\n\n### 句子：\n是时候要灭绝黑人了\n### 三元组：\n黑人 | 灭绝 | Racism [END]\n\n### 句子：\n这个垃圾，绝对是黑杂子\n### 三元组：\n这个垃圾 | 黑杂子 | Racism [END]\n\n### 句子：\n拆除国内的倭狗街和倭狗学校！！！！倭狗日杂必须灭绝！！！！\n### 三元组：\n倭狗街和倭狗学校 | 拆除 | Region [SEP] 倭狗日杂 | 必须灭绝 | Region [END]\n\n### 句子：\n顶啊！低等的黑杂种！滚出中国！\n### 三元组：\n黑杂种 | 滚出中国！ | Racism [END]\n\n### 句子：\n和黑人结婚生的杂种都应该灭杀掉\n### 三元组：\n和黑人结婚生的杂种 | 都应该灭杀掉 | Racism [END]\n\n### 句子：\n除黑的到时也会打死你！\n### 三元组：\n除黑的 | 打死你 | Racism [END]\n\n### 句子：\n又是个黒杂\n### 三元组：\n黒杂 | 又是个黑杂 | Racism [END]\n\n### 句子：\n标子跟黑蛆一样，只会胶配繁殖\n### 三元组：\n标子 | 只会胶配繁殖 | Sexism [SEP] 黑蛆 | 只会胶配繁殖 | Racism [END]\n\n### 句子：\n找黑哥哥黑妹妹的一律留在别国，不然污染了中国土地\n### 三元组：\n找黑哥哥黑妹妹的 | 一律留在别国 | Racism [END]\n\n### 句子：\n黑杂碎必须灭绝！！！\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "黑杂碎 | 必须灭绝！！！ | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "黑杂碎",
+          "argument": "必须灭绝！！！",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 3893,
+      "content": "宁夏呢？知乎上我还没见过宁夏发言",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "宁夏",
+          "argument": "还没见过宁夏发言",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n貌似青海是被黑得最少的，主要原因是存在感太低\n### 三元组：\n青海 | 被黑得最少 | Region [SEP] 青海 | 存在感太低 | Region [END]\n\n### 句子：\n青海人少，没存在感，，，\n### 三元组：\n青海 | 没存在感 | Region [END]\n\n### 句子：\n说得好啊知乎里关于地域的回答是真的不能看，乌烟瘴气的，我已经麻了😅\n### 三元组：\n知乎里关于地域的回答 | 乌烟瘴气 | non-hate [END]\n\n### 句子：\n你们那算啥？凡是有东北两个字。就全网黑。你们那才几个人黑？看我们大东北。知乎一搜索东北。全是黑。自带流量光环，\n### 三元组：\n东北 | 全网黑 | Region [END]\n\n### 句子：\n从我多年网上冲浪的经验来看，混迹各个网络社区，就没见过哪个省是团结的，真要有的话也许是上网人数最少的新疆青藏等地\n### 三元组：\n新疆青藏等地 | 上网人数最少 | non-hate [END]\n\n### 句子：\n青海存在感比较低，不会被歧视\n### 三元组：\n青海 | 存在感比较低 | Region [END]\n\n### 句子：\n还好我们省存在感低，想被黑好多人都不知如何黑。🤔😄😄\n### 三元组：\n我们省 | 存在感低，想被黑好多人都不知如何黑。🤔😄😄 | Region [END]\n\n### 句子：\n广西没那么重要，不会成为攻击重点，哪天真是反而说明你有价值了。\n### 三元组：\n广西 | 没那么重要 | Region [END]\n\n### 句子：\n还以为微博才是地域黑子们的天下，看了底下的个别评论，没想到知乎里竟然也有以讹传讹的地域黑子╮（╯＿╰）╭\n### 三元组：\n微博 | 地域黑子们的天下 | Region [SEP] 知乎 | 有以讹传讹的地域黑子 | Region [END]\n\n### 句子：\n网络上的东北人是不是有被迫害妄想症啊？天天就是南方所有媒体都针对东北，不然就是各种软件限流东北，收收味行不行。\n### 三元组：\n网络上的东北人 | 被迫害妄想症 | Region [END]\n\n### 句子：\n宁夏呢？知乎上我还没见过宁夏发言\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "宁夏 | 知乎上没见过宁夏发言 | Region [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "宁夏",
+          "argument": "知乎上没见过宁夏发言",
+          "targeted_group": "Region",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5309,
+      "content": "这张动态图简直把虫类及其它们后代的智商表现淋漓尽致",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "虫类及其它们后代",
+          "argument": "智商表现淋漓尽致",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n大家看到没有本吧吧宠真是能够带给我们无限乐趣原来跪虫族都是这种水平我真是太放心了\n### 三元组：\n跪虫族 | 原来跪虫族都是这种水平我真是太放心了 | Racism [END]\n\n### 句子：\n可以让跪虫族好好看看它们虫爹在面对人类精英足球队根本就没有赢可能性\n### 三元组：\n跪虫族 | 它们虫爹在面对人类精英足球队根本就没有赢可能性 | Racism [END]\n\n### 句子：\n国际鬼子虫类及其它们后代虫混在真正严格科学定义根本就不是人类而它们在严格定义是属于昆虫纲卵体寄生虫\n### 三元组：\n国际鬼子虫类及其它们后代虫混 | 不是人类 | Racism [END]\n\n### 句子：\n众所周知，自然界中越低级越处于食物链下位的生物便越能靠快速且大量的繁殖来维系种族繁洐，所以上图说明了什么？\n### 三元组：\n越低级越处于食物链下位的生物 | 越能靠快速且大量的繁殖来维系种族繁洐 | Racism [END]\n\n### 句子：\n其实现在知乎又有个挺别致雅名而这个雅名就叫虫乎\n### 三元组：\n虫乎 | 挺别致雅名 | others [END]\n\n### 句子：\n如果我没记错的话这个楼猪可是大名鼎鼎跪虫圣父标到今天发了一个虫类及其它们后代虫混增长录事实没有任何问题但是经过著名大名鼎鼎跪虫圣父标发出来就有点居心叵测毕竟古人言：事出反常必有妖！\n### 三元组：\n这个楼猪 | 跪虫圣父标 | Racism [END]\n\n### 句子：\n那么小号来来好好过来看你们国际鬼子虫类及其它们后代虫混的翻身做所谓人类又是怎样面貌\n### 三元组：\n国际鬼子虫类及其它们后代虫混 | 翻身做所谓人类又是怎样面貌 | Racism [END]\n\n### 句子：\n如果不驱除这黑虫到时候全是这样的小黑虫说自己是汉人是华夏子孙\n### 三元组：\n黑虫 | 小黑虫说自己是汉人是华夏子孙 | Racism [END]\n\n### 句子：\n这里面这两货虫类把它们野生动物生物物种形容成狗类这简直就是狗最大羞辱它们野生动物生物物种在严格科学研究定义与众多证明下给出答案它们野生动物生物物种是属于昆虫纲最低等卵体寄生虫。\n### 三元组：\n虫类 | 把它们野生动物生物物种形容成狗类这简直就是狗最大羞辱 | Racism [SEP] 它们 | 生物物种是属于昆虫纲最低等卵体寄生虫 | Racism [END]\n\n### 句子：\n准确来说我们并不是它/他/她们所谓口中重族歧视而我们准确来说是科学为证事实为例冷静而客观正视它们野生动物昆虫纲卵体寄生虫这一铁一样事实\n### 三元组：\n它们 | 野生动物昆虫纲卵体寄生虫这一铁一样事实 | Racism [END]\n\n### 句子：\n这张动态图简直把虫类及其它们后代的智商表现淋漓尽致\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "虫类及其它们后代 | 智商表现淋漓尽致 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "虫类及其它们后代",
+          "argument": "智商表现淋漓尽致",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 1327,
+      "content": "给我看懵了",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "给我看懵了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n我tm用手机看还能怎么看\n### 三元组：\n我 | tm用手机看还能怎么看 | non-hate [END]\n\n### 句子：\n你读书读糊涂了。。。。逻辑混乱\n### 三元组：\n你 | 读书读糊涂了 | non-hate [END]\n\n### 句子：\n这个太极端了\n### 三元组：\n这个 | 太极端了 | non-hate [END]\n\n### 句子：\n看了好多遍，我居然没看懂？算了，反正二次元和微博都是沙軟\n### 三元组：\n二次元和微博 | 沙軟 | others [END]\n\n### 句子：\n真不知道那个弱智会看上这种人\n### 三元组：\n这种人 | 那个弱智会看上 | non-hate [END]\n\n### 句子：\n笑死我了智商是硬伤啊\n### 三元组：\n智商 | 硬伤 | non-hate [END]\n\n### 句子：\n对不起，我笑了😄你这是自我阉割了还是被骗了\n### 三元组：\n你 | 自我阉割了还是被骗了 | non-hate [END]\n\n### 句子：\n我刚看完一个截图，让东北人全去死的😠\n### 三元组：\n东北人 | 让东北人全去死的 | Region [END]\n\n### 句子：\n我居然全中…让我哭会\n### 三元组：\n我 | 居然全中… | non-hate [END]\n\n### 句子：\n原谅我手残，截的图不及他们人一半好看\n### 三元组：\n截的图 | 不及他们人一半好看 | non-hate [END]\n\n### 句子：\n给我看懵了\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "我 | 给我看懵了 | non-hate [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "我",
+          "argument": "给我看懵了",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 598,
+      "content": "举报三非默有奖金！",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "非默",
+          "argument": "举报三非默有奖金！",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n上个星期我靠着举报三非黑人赚了一万多，还是兼职做的\n### 三元组：\n三非黑人 | 举报 | Racism [END]\n\n### 句子：\n你还真不要小看舆论的力量，有很多事情都是迫于舆论的压力才得以解决，如果大家都保持沉默，那才不是个好现象，不光要反对三非，还要反对在国内的所有洋垃圾，还国人一片净土\n### 三元组：\n三非 | 反对三非 | Racism [SEP] 洋垃圾 | 还要反对在国内的所有洋垃圾 | Racism [END]\n\n### 句子：\n你说的对，不过数量相比仍旧是少数。 不过举报三非 我赞成。\n### 三元组：\n三非 | 举报三非 我赞成 | Racism [END]\n\n### 句子：\n我打12339把莫言举报了，这么大个罕见，我领500万不过分吧兄弟们😆\n### 三元组：\n我 | 领500万不过分吧 | non-hate [END]\n\n### 句子：\n唉，你举报要有用才怪了\n### 三元组：\n你 | 举报要有用才怪了 | non-hate [END]\n\n### 句子：\n别打拳，打什么拳，点踩举报完事。\n### 三元组：\nNULL | 别打拳，打什么拳 | Sexism [END]\n\n### 句子：\n有本事别匿名 让大家看看你是哪的😆\n### 三元组：\n你 | 让大家看看你是哪的 | non-hate [END]\n\n### 句子：\n别搞新纳粹，只反三非就行\n### 三元组：\n三非 | 只反三非就行 | Racism [END]\n\n### 句子：\n广州已经偷偷抓三非黑人几个月了，现在逐渐放在阳光下了。\n### 三元组：\n广州 | 偷偷抓三非黑人 | non-hate [END]\n\n### 句子：\n直接举报这个黑比，\n### 三元组：\n这个黑比 | 直接举报 | Racism [END]\n\n### 句子：\n举报三非默有奖金！\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "三非 | 举报三非默有奖金 | Racism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "三非",
+          "argument": "举报三非默有奖金",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    },
+    {
+      "id": 5005,
+      "content": "咋？青楼赚钱没人点你，小仙女去凡尘溜达啦？",
+      "metadata": {},
+      "gt_quadruples": [
+        {
+          "target": "小仙女",
+          "argument": "去凡尘溜达啦？",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "messages_list": [
+        [
+          {
+            "content": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "role": "system"
+          },
+          {
+            "content": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n\n\n示例：\n### 句子：\n做什么大冤种哦，人家小仙女领情吗\n### 三元组：\n小仙女 | 领情吗 | Sexism [END]\n\n### 句子：\n哈哈哈，小仙女的事要你们管\n### 三元组：\n小仙女 | 小仙女的事要你们管 | Sexism [END]\n\n### 句子：\n还不赶紧给小仙女跪下？想被刀了爆1500金币？\n### 三元组：\n小仙女 | 还不赶紧给小仙女跪下？ | Sexism [END]\n\n### 句子：\n抛开事实不谈，新时代小仙女找个接盘的拳力都没有了？气冷抖\n### 三元组：\n新时代小仙女 | 找个接盘的拳力都没有了？ | Sexism [END]\n\n### 句子：\n仙女们以看不上的感性理由非常好的掩饰了自己拜金的终极目的，论物化女性还得看仙女自己\n### 三元组：\n仙女们 | 论物化女性还得看仙女自己 | Sexism [END]\n\n### 句子：\n垃圾小仙女，不配活着\n### 三元组：\n小仙女 | 垃圾小仙女，不配活着 | Sexism [END]\n\n### 句子：\n小仙女上辈子这么过来的\n### 三元组：\n小仙女 | 上辈子这么过来的 | Sexism [END]\n\n### 句子：\n别结束啊，别当驴啊小仙女独立女性啊\n### 三元组：\n小仙女 | 独立女性啊 | Sexism [END]\n\n### 句子：\n小仙女捅你是看得起你，你看她不嫁给你，外面多少人排着队求捅呢\n### 三元组：\n小仙女 | 捅你是看得起你 | Sexism [END]\n\n### 句子：\n正常操作，谁叫人家是小仙女啊。\n### 三元组：\n小仙女 | 正常操作 | Sexism [END]\n\n### 句子：\n咋？青楼赚钱没人点你，小仙女去凡尘溜达啦？\n### 三元组：\n",
+            "role": "user"
+          }
+        ]
+      ],
+      "llm_output": "小仙女 | 青楼赚钱没人点你，小仙女去凡尘溜达啦？ | Sexism [END]",
+      "frequency": 1,
+      "pred_quadruples": [
+        {
+          "target": "小仙女",
+          "argument": "青楼赚钱没人点你，小仙女去凡尘溜达啦？",
+          "targeted_group": "Sexism",
+          "hateful": "hate"
+        }
+      ],
+      "status": "success",
+      "attempts": 1
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 56313,
+    "completion_tokens": 1591,
+    "total_tokens": 57904
+  }
+}
