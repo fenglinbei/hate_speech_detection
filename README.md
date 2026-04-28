@@ -283,12 +283,6 @@ For k=10, the expected outputs are:
 - Runner outputs: `runner/output/k_ablation/k10_s<seed>.json`
 - Multi-seed summary: `runner/output/k_ablation/k10_multi_seed.json`
 
-The runner config uses these seeds by default:
-
-```text
-42, 4242, 424242, 42424242, 4242424242
-```
-
 ## Regenerate k-Ablation Configs
 
 If the k-ablation configs are missing, regenerate them from the k=1 templates:
@@ -389,7 +383,7 @@ Supported modes:
 `run_one_exp.sh` reads `manifest.json` and runs the stages in order:
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`
+2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`; with `TRAIN_DS_AUTOTUNE=1`, `deepspeed --autotuning run ...` is used instead.
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python src/runner/run.py --config <temporary_runner_config>`
 
@@ -406,6 +400,16 @@ Distributed full fine-tuning is controlled by these variables:
 - `TRAIN_NPROC_PER_NODE` defaults to the number of IDs in `TRAIN_CUDA_VISIBLE_DEVICES`.
 - `TRAIN_MASTER_PORT` defaults to `PORT + 1000`.
 - `TRAIN_MAX_STEPS=2` is useful for a short smoke test; omit it for real runs.
+- `TRAIN_DS_AUTOTUNE=1` enables DeepSpeed Autotuner for `TRAIN_BACKEND=deepspeed`.
+  It runs `deepspeed --autotuning run`, first searches for a faster DeepSpeed
+  configuration, then continues training with the best config. Autotuning writes
+  `logs/autotuning_results/` and `logs/autotuning_exps/`.
+- Optional autotuning knobs include `TRAIN_DS_AUTOTUNE_FAST=1`,
+  `TRAIN_DS_AUTOTUNE_OVERWRITE=1`, `TRAIN_DS_AUTOTUNE_METRIC=throughput`,
+  `TRAIN_DS_AUTOTUNE_START_PROFILE_STEP=3`,
+  `TRAIN_DS_AUTOTUNE_END_PROFILE_STEP=5`,
+  `TRAIN_DS_AUTOTUNE_NUM_MBS=3`, and
+  `TRAIN_DS_AUTOTUNE_MAX_TRAIN_BATCH_SIZE`.
 - `TRAIN_LORA=1` enables PEFT LoRA training on top of the selected backend.
 - `TRAIN_LORA_R`, `TRAIN_LORA_ALPHA`, and `TRAIN_LORA_DROPOUT` override the
   LoRA rank, alpha, and dropout. Defaults are `8`, `32`, and `0.1`.
@@ -449,6 +453,18 @@ TRAIN_LORA=1 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
+Example DeepSpeed autotuning run:
+
+```bash
+MODE=train \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_bs4 \
+TRAIN_DS_AUTOTUNE=1 \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TRAIN_LORA=1 \
+bash scripts/exps/run_one_exp.sh exps/cold/baselines/exp_zero_shot_d55cfa6534
+```
+
 Example LoRA full run:
 
 ```bash
@@ -486,8 +502,9 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 
 Common variables include `TRAIN_CUDA_VISIBLE_DEVICES`,
 `TRAIN_BACKEND`, `TRAIN_PROFILE`, `TRAIN_NPROC_PER_NODE`, `TRAIN_MASTER_PORT`,
-`TRAIN_MAX_STEPS`, `TRAIN_LORA`, `TRAIN_LORA_R`, `TRAIN_LORA_ALPHA`,
-`TRAIN_LORA_DROPOUT`, `TRAIN_LORA_TARGET_MODULES`, `TRAIN_LORA_MERGE`,
+`TRAIN_MAX_STEPS`, `TRAIN_DS_AUTOTUNE`, `TRAIN_LORA`, `TRAIN_LORA_R`,
+`TRAIN_LORA_ALPHA`, `TRAIN_LORA_DROPOUT`, `TRAIN_LORA_TARGET_MODULES`,
+`TRAIN_LORA_MERGE`,
 `VLLM_CUDA_VISIBLE_DEVICES`, `TENSOR_PARALLEL_SIZE`, `MAX_MODEL_LEN`,
 `SERVED_MODEL_NAME`, `DYNAMIC_GPU_MEM_UTIL`, and `DEFAULT_GPU_MEM_UTIL`.
 

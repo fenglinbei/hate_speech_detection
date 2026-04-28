@@ -156,6 +156,14 @@ else
   TRAIN_MASTER_PORT="${TRAIN_MASTER_PORT:-29500}"
 fi
 TRAIN_MAX_STEPS="${TRAIN_MAX_STEPS:-}"
+TRAIN_DS_AUTOTUNE="${TRAIN_DS_AUTOTUNE:-0}"
+TRAIN_DS_AUTOTUNE_FAST="${TRAIN_DS_AUTOTUNE_FAST:-1}"
+TRAIN_DS_AUTOTUNE_OVERWRITE="${TRAIN_DS_AUTOTUNE_OVERWRITE:-1}"
+TRAIN_DS_AUTOTUNE_METRIC="${TRAIN_DS_AUTOTUNE_METRIC:-throughput}"
+TRAIN_DS_AUTOTUNE_START_PROFILE_STEP="${TRAIN_DS_AUTOTUNE_START_PROFILE_STEP:-3}"
+TRAIN_DS_AUTOTUNE_END_PROFILE_STEP="${TRAIN_DS_AUTOTUNE_END_PROFILE_STEP:-5}"
+TRAIN_DS_AUTOTUNE_NUM_MBS="${TRAIN_DS_AUTOTUNE_NUM_MBS:-3}"
+TRAIN_DS_AUTOTUNE_MAX_TRAIN_BATCH_SIZE="${TRAIN_DS_AUTOTUNE_MAX_TRAIN_BATCH_SIZE:-}"
 TRAIN_LORA="${TRAIN_LORA:-}"
 TRAIN_LORA_R="${TRAIN_LORA_R:-}"
 TRAIN_LORA_ALPHA="${TRAIN_LORA_ALPHA:-}"
@@ -171,6 +179,8 @@ TRAIN_LOG="${LOG_DIR}/train.${TRAIN_BACKEND}.${TRAIN_PROFILE}.log"
 TRAIN_LATEST_LOG="${LOG_DIR}/train.log"
 TRAIN_RUNTIME_CFG="${LOG_DIR}/train_runtime_config.json"
 TRAIN_DS_CFG="${LOG_DIR}/ds_config_${TRAIN_PROFILE}.json"
+TRAIN_DS_AUTOTUNE_RESULTS_DIR="${TRAIN_DS_AUTOTUNE_RESULTS_DIR:-${LOG_DIR}/autotuning_results}"
+TRAIN_DS_AUTOTUNE_EXPS_DIR="${TRAIN_DS_AUTOTUNE_EXPS_DIR:-${LOG_DIR}/autotuning_exps}"
 VLLM_LOG="${LOG_DIR}/vllm_port${PORT}.log"
 RUN_LOG="${LOG_DIR}/runner.log"
 
@@ -183,6 +193,14 @@ MANIFEST_REUSE_MODEL="$(read_manifest_field reuse.model_checkpoint)"
 
 REUSE_DATA_DIR="${DATA_DIR_OVERRIDE:-$MANIFEST_REUSE_DATA}"
 REUSE_MODEL_CKPT="${MODEL_CKPT_OVERRIDE:-$MANIFEST_REUSE_MODEL}"
+
+if [[ "$TRAIN_DS_AUTOTUNE" == "1" ]]; then
+  if [[ "$TRAIN_BACKEND" != "deepspeed" ]]; then
+    echo "[ERROR] TRAIN_DS_AUTOTUNE=1 requires TRAIN_BACKEND=deepspeed (got ${TRAIN_BACKEND})" >&2
+    exit 1
+  fi
+  require_cmd deepspeed
+fi
 
 EXP_DATA_DIR="$(read_manifest_field paths.data_dir)"
 EXP_MODEL_DIR="$(read_manifest_field paths.model_dir)"
@@ -347,7 +365,12 @@ write_train_runtime_config() {
     "$TRAIN_BACKEND" "$TRAIN_PROFILE" "$TRAIN_NPROC_PER_NODE" "$TRAIN_MASTER_PORT" \
     "$TRAIN_CUDA_VISIBLE_DEVICES" "$TRAIN_MAX_STEPS" \
     "$TRAIN_LORA" "$TRAIN_LORA_R" "$TRAIN_LORA_ALPHA" "$TRAIN_LORA_DROPOUT" \
-    "$TRAIN_LORA_TARGET_MODULES" "$TRAIN_LORA_MERGE" <<'PY'
+    "$TRAIN_LORA_TARGET_MODULES" "$TRAIN_LORA_MERGE" \
+    "$TRAIN_DS_AUTOTUNE" "$TRAIN_DS_AUTOTUNE_FAST" "$TRAIN_DS_AUTOTUNE_OVERWRITE" \
+    "$TRAIN_DS_AUTOTUNE_METRIC" "$TRAIN_DS_AUTOTUNE_START_PROFILE_STEP" \
+    "$TRAIN_DS_AUTOTUNE_END_PROFILE_STEP" "$TRAIN_DS_AUTOTUNE_NUM_MBS" \
+    "$TRAIN_DS_AUTOTUNE_MAX_TRAIN_BATCH_SIZE" "$TRAIN_DS_AUTOTUNE_RESULTS_DIR" \
+    "$TRAIN_DS_AUTOTUNE_EXPS_DIR" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -356,6 +379,18 @@ src, dst, runtime_cfg, ds_cfg = sys.argv[1:5]
 backend, profile = sys.argv[5], sys.argv[6]
 nproc, master_port, cuda_devices, max_steps = sys.argv[7:11]
 lora_env, lora_r, lora_alpha, lora_dropout, lora_targets, lora_merge = sys.argv[11:17]
+(
+    ds_autotune,
+    ds_autotune_fast,
+    ds_autotune_overwrite,
+    ds_autotune_metric,
+    ds_autotune_start_profile_step,
+    ds_autotune_end_profile_step,
+    ds_autotune_num_mbs,
+    ds_autotune_max_train_batch_size,
+    ds_autotune_results_dir,
+    ds_autotune_exps_dir,
+) = sys.argv[17:27]
 
 cfg = json.load(open(src, "r", encoding="utf-8"))
 training = cfg.setdefault("training", {})
@@ -431,6 +466,26 @@ def apply_common(micro_batch: int, grad_accum: int) -> None:
     training["gradient_checkpointing"] = True
     training.setdefault("bf16", True)
 
+def autotuning_config() -> dict:
+    payload = {
+        "enabled": True,
+        "results_dir": ds_autotune_results_dir,
+        "exps_dir": ds_autotune_exps_dir,
+        "overwrite": str_to_bool(ds_autotune_overwrite),
+        "metric": ds_autotune_metric,
+        "start_profile_step": int(ds_autotune_start_profile_step),
+        "end_profile_step": int(ds_autotune_end_profile_step),
+        "fast": str_to_bool(ds_autotune_fast),
+        "num_tuning_micro_batch_sizes": int(ds_autotune_num_mbs),
+        "arg_mappings": {
+            "train_micro_batch_size_per_gpu": "--per_device_train_batch_size",
+            "gradient_accumulation_steps": "--gradient_accumulation_steps",
+        },
+    }
+    if ds_autotune_max_train_batch_size:
+        payload["max_train_batch_size"] = int(ds_autotune_max_train_batch_size)
+    return payload
+
 def deepspeed_config(stage: int, offload: bool = False) -> dict:
     # Keep bucket values concrete. Some accelerate/deepspeed versions cannot
     # fill these fields when they are set to "auto".
@@ -460,7 +515,7 @@ def deepspeed_config(stage: int, offload: bool = False) -> dict:
         zero["offload_optimizer"] = {"device": "cpu", "pin_memory": True}
         zero["offload_param"] = {"device": "cpu", "pin_memory": True}
 
-    return {
+    config = {
         "bf16": {"enabled": "auto"},
         "zero_optimization": zero,
         "gradient_accumulation_steps": "auto",
@@ -470,6 +525,9 @@ def deepspeed_config(stage: int, offload: bool = False) -> dict:
         "steps_per_print": 100,
         "wall_clock_breakdown": False,
     }
+    if str_to_bool(ds_autotune):
+        config["autotuning"] = autotuning_config()
+    return config
 
 profiles = {
     "ds_zero2_safe": {"backend": "deepspeed", "stage": 2, "micro": 2, "accum": 1, "offload": False},
@@ -511,6 +569,20 @@ else:
         runtime["deepspeed_config"] = ds_cfg
         runtime["zero_stage"] = spec["stage"]
         runtime["offload"] = spec.get("offload", False)
+        runtime["autotuning"] = {
+            "enabled": str_to_bool(ds_autotune),
+            "initial_micro_batch": spec["micro"],
+            "initial_gradient_accumulation": spec["accum"],
+            "results_dir": ds_autotune_results_dir if str_to_bool(ds_autotune) else None,
+            "exps_dir": ds_autotune_exps_dir if str_to_bool(ds_autotune) else None,
+            "fast": str_to_bool(ds_autotune_fast),
+            "overwrite": str_to_bool(ds_autotune_overwrite),
+            "metric": ds_autotune_metric,
+            "start_profile_step": int(ds_autotune_start_profile_step),
+            "end_profile_step": int(ds_autotune_end_profile_step),
+            "num_tuning_micro_batch_sizes": int(ds_autotune_num_mbs),
+            "max_train_batch_size": int(ds_autotune_max_train_batch_size) if ds_autotune_max_train_batch_size else None,
+        }
     elif backend == "fsdp":
         training["fsdp"] = "full_shard auto_wrap"
         training["fsdp_transformer_layer_cls_to_wrap"] = "Qwen2DecoderLayer"
@@ -600,6 +672,10 @@ echo "[INFO] MODE=$MODE  PORT=$PORT"
 echo "[INFO] TRAIN_CUDA_VISIBLE_DEVICES=$TRAIN_CUDA_VISIBLE_DEVICES"
 echo "[INFO] TRAIN_BACKEND=$TRAIN_BACKEND  TRAIN_PROFILE=$TRAIN_PROFILE"
 echo "[INFO] TRAIN_NPROC_PER_NODE=$TRAIN_NPROC_PER_NODE  TRAIN_MASTER_PORT=$TRAIN_MASTER_PORT"
+if [[ "$TRAIN_DS_AUTOTUNE" == "1" ]]; then
+  echo "[INFO] TRAIN_DS_AUTOTUNE=1  FAST=$TRAIN_DS_AUTOTUNE_FAST  METRIC=$TRAIN_DS_AUTOTUNE_METRIC  PROFILE_STEPS=${TRAIN_DS_AUTOTUNE_START_PROFILE_STEP}-${TRAIN_DS_AUTOTUNE_END_PROFILE_STEP}  NUM_MBS=$TRAIN_DS_AUTOTUNE_NUM_MBS"
+  echo "[INFO] DeepSpeed autotuning dirs: results=$TRAIN_DS_AUTOTUNE_RESULTS_DIR exps=$TRAIN_DS_AUTOTUNE_EXPS_DIR"
+fi
 if [[ -n "$TRAIN_LORA" ]]; then
   echo "[INFO] TRAIN_LORA=$TRAIN_LORA  R=${TRAIN_LORA_R:-<default>}  ALPHA=${TRAIN_LORA_ALPHA:-<default>}  DROPOUT=${TRAIN_LORA_DROPOUT:-<default>}  TARGETS=${TRAIN_LORA_TARGET_MODULES:-<default>}  MERGE=${TRAIN_LORA_MERGE:-<default>}"
 fi
@@ -664,11 +740,38 @@ if [[ "$DO_TRAIN" == "1" ]]; then
     [[ "$TRAIN_BACKEND" == "deepspeed" ]] && echo "[INFO] DeepSpeed config: $TRAIN_DS_CFG"
     echo "[INFO] train log: $TRAIN_LOG"
 
+    PROFILE_MICRO_BATCH="$(read_json_field "$TRAIN_RUNTIME_CFG" effective_micro_batch)"
+    PROFILE_GRAD_ACCUM="$(read_json_field "$TRAIN_RUNTIME_CFG" effective_gradient_accumulation)"
+    if [[ "$TRAIN_DS_AUTOTUNE" == "1" && -n "$TRAIN_MAX_STEPS" ]]; then
+      MIN_AUTOTUNE_STEPS=$((TRAIN_DS_AUTOTUNE_END_PROFILE_STEP + 1))
+      if [[ "$TRAIN_MAX_STEPS" -lt "$MIN_AUTOTUNE_STEPS" ]]; then
+        echo "[ERROR] TRAIN_MAX_STEPS=${TRAIN_MAX_STEPS} is too small for DeepSpeed autotuning profile window; set it to at least ${MIN_AUTOTUNE_STEPS} or unset TRAIN_MAX_STEPS." >&2
+        exit 1
+      fi
+    fi
+
     if [[ "$TRAIN_BACKEND" == "single" ]]; then
       CUDA_VISIBLE_DEVICES="$TRAIN_CUDA_VISIBLE_DEVICES" \
         TRAIN_BACKEND="$TRAIN_BACKEND" \
         TRAIN_PROFILE="$TRAIN_PROFILE" \
         PYTHONPATH=src python src/finetune/train.py --config "$TMP_TRAIN_CFG" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
+    elif [[ "$TRAIN_DS_AUTOTUNE" == "1" ]]; then
+      if [[ -z "$TRAIN_CUDA_VISIBLE_DEVICES" ]]; then
+        echo "[ERROR] TRAIN_DS_AUTOTUNE=1 requires TRAIN_CUDA_VISIBLE_DEVICES to select local GPUs" >&2
+        exit 1
+      fi
+      DEEPSPEED_INCLUDE="localhost:${TRAIN_CUDA_VISIBLE_DEVICES// /}"
+      TRAIN_BACKEND="$TRAIN_BACKEND" \
+        TRAIN_PROFILE="$TRAIN_PROFILE" \
+        PYTHONPATH=src deepspeed \
+          --autotuning run \
+          --include "$DEEPSPEED_INCLUDE" \
+          --master_port "$TRAIN_MASTER_PORT" \
+          src/finetune/train.py \
+          --config "$TMP_TRAIN_CFG" \
+          --deepspeed "$TRAIN_DS_CFG" \
+          --per_device_train_batch_size "$PROFILE_MICRO_BATCH" \
+          --gradient_accumulation_steps "$PROFILE_GRAD_ACCUM" 2>&1 | tee "$TRAIN_LOG" "$TRAIN_LATEST_LOG"
     else
       if [[ "${TRAIN_NPROC_PER_NODE}" -lt 1 ]]; then
         echo "[ERROR] TRAIN_NPROC_PER_NODE must be >= 1 (got ${TRAIN_NPROC_PER_NODE})" >&2
