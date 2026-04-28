@@ -1,6 +1,6 @@
 {
   "project": "cold_baselines",
-  "output_root": "exps/cold/baseline",
+  "output_root": "exps/cold/baselines",
   "base": {
     "build": "exps/cold/base_config_binary/data_config.json",
     "train": "exps/cold/base_config_binary/train_config.json",
@@ -34,6 +34,29 @@
       "build.prompt_templates.prompt_template": "COLD_BINARY_PROMPT_USER_V2",
       "train.prompt_template": "COLD_BINARY_PROMPT_USER_V2",
       "runner.tester.prompt_templates.train": "COLD_BINARY_PROMPT_USER_V2"
+    },
+    {
+      "name": "ids",
+      "runner.baseline.method": "ids",
+      "runner.baseline.task_type": "cold_binary",
+      "runner.tester.run.llm_params.enable_thinking": false,
+      "runner.tester.run.llm_params.max_new_tokens": 512
+    },
+    {
+      "name": "dpp",
+      "runner.baseline.method": "dpp",
+      "runner.baseline.task_type": "cold_binary",
+      "runner.tester.run.llm_params.enable_thinking": false
+    },
+    {
+      "name": "explicit_cot",
+      "runner.baseline.method": "explicit_cot",
+      "runner.baseline.task_type": "cold_binary",
+      "build.prompt_templates.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+      "train.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.tester.run.llm_params.enable_thinking": false,
+      "runner.tester.run.llm_params.max_new_tokens": 512
     }
   ]
 }

@@ -1,0 +1,49 @@
+{
+  "project": "cold_baselines",
+  "exp_id": "e42c1debba",
+  "exp_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba",
+  "created_at": "2026-04-28 12:17:08",
+  "index": 4,
+  "port": 35104,
+  "overrides": {
+    "name": "explicit_cot",
+    "runner.baseline.method": "explicit_cot",
+    "runner.baseline.task_type": "cold_binary",
+    "build.prompt_templates.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+    "train.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+    "runner.tester.prompt_templates.train": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+    "runner.tester.run.llm_params.enable_thinking": false,
+    "runner.tester.run.llm_params.max_new_tokens": 512
+  },
+  "meta": {
+    "name": "explicit_cot"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/cold/baselines/exp_explicit_cot_e42c1debba/build_config.json",
+    "train_config": "exps/cold/baselines/exp_explicit_cot_e42c1debba/train_config.json",
+    "runner_config": "exps/cold/baselines/exp_explicit_cot_e42c1debba/runner_config.json",
+    "data_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba/data",
+    "val_runner_file": "exps/cold/baselines/exp_explicit_cot_e42c1debba/data/val_runner.json",
+    "model_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba/model",
+    "runner_output_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba/runner_output",
+    "logs_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba/logs",
+    "artifacts_dir": "exps/cold/baselines/exp_explicit_cot_e42c1debba/artifacts"
+  },
+  "baseline": {
+    "method": "explicit_cot",
+    "task_type": "cold_binary"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
