@@ -6,6 +6,7 @@ import pickle
 import os
 import random
 import re
+import time
 from dataclasses import replace
 from tqdm import tqdm
 from typing import Optional, List, Tuple, Any
@@ -352,6 +353,13 @@ def build_prompt(
     retrieval_batch_size = int(getattr(config, "retrieval_batch_size", 256) or 256)
     cold_binary = _is_cold_binary_task(config)
     hatexplain = _is_hatexplain_task(config)
+    phase = "test" if is_test_data else "train/val"
+    logger.info(
+        f"[BuildData] Prompt build start: phase={phase}, items={len(datas)}, "
+        f"srag={bool(config.use_srag and srag_retriever is not None)}, "
+        f"lexicon={bool(config.use_lex and lex_retriever is not None)}, "
+        f"retrieval_cache={retrieval_cache_enabled}"
+    )
 
     def render_prompt(raw_data: dict, examples: List[str], lex_contents: List[str]) -> str:
         return config.prompt_template.replace("{examples}", "\n".join(examples)).\
@@ -381,98 +389,157 @@ def build_prompt(
         return examples
 
     def retrieve_srag_examples_batch(raw_items: list[dict], global_k: Optional[int]) -> list[list[str]]:
+        if not raw_items:
+            return []
+
         use_global = bool(getattr(config, "use_global_demos", False)) and bool(global_examples)
         if use_global:
             k = len(global_examples) if global_k is None else max(0, min(int(global_k), len(global_examples)))
+            logger.info(f"[BuildData] SRAG batch retrieval skipped: using {k} global demos.")
             return [global_examples[:k] for _ in raw_items]
 
         if not (config.use_srag and srag_retriever is not None and config.example_template is not None):
+            logger.info("[BuildData] SRAG batch retrieval skipped: disabled or retriever unavailable.")
             return [[] for _ in raw_items]
+
+        start_time = time.perf_counter()
+        logger.info(
+            f"[BuildData] SRAG batch retrieval start: items={len(raw_items)}, "
+            f"top_k={config.srag_top_k}, retriever={type(srag_retriever).__name__}"
+        )
 
         if config.mmr and type(srag_retriever).__name__ == "MMRReterever":
             all_examples = []
-            for raw_data in raw_items:
-                retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
-                    query_id=raw_data['id'],
-                    query_text=raw_data['content'],
-                    n_shot=config.srag_top_k,
-                    mmr_lambda=config.mmr_lambda
+            with tqdm(
+                    raw_items,
+                    desc="SRAG batch retrieval",
+                    unit="item",
+                    dynamic_ncols=True,
+                    leave=True,
+                    ) as pbar:
+                for raw_data in pbar:
+                    retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
+                        query_id=raw_data['id'],
+                        query_text=raw_data['content'],
+                        n_shot=config.srag_top_k,
+                        mmr_lambda=config.mmr_lambda
+                    )
+                    all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
+                logger.info(
+                    f"[BuildData] SRAG batch retrieval done in {time.perf_counter() - start_time:.1f}s."
                 )
-                all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
             return all_examples
 
         if hasattr(srag_retriever, "retrieve_batch"):
-            retrieval_results = srag_retriever.retrieve_batch(
-                queries=[item["content"] for item in raw_items],
-                top_k=config.srag_top_k,
-                threshold=config.srag_threshold,
-                weights=config.weights,
-                weights_reverse=config.weights_reverse,
-                similarity_alpha=config.similarity_alpha,
-                random_strategy=config.ramdom_strategy,
-                random_ratio=config.random_ratio,
-                temperature=config.random_temperature,
-                candidate_multiplier=config.candidate_multiplier,
-                use_cache=retrieval_cache_enabled,
-                batch_size=retrieval_batch_size,
-            )
+            with tqdm(
+                total=1,
+                desc="SRAG batch retrieval",
+                unit="batch",
+                dynamic_ncols=True,
+                leave=True,
+            ) as pbar:
+                retrieval_results = srag_retriever.retrieve_batch(
+                    queries=[item["content"] for item in raw_items],
+                    top_k=config.srag_top_k,
+                    threshold=config.srag_threshold,
+                    weights=config.weights,
+                    weights_reverse=config.weights_reverse,
+                    similarity_alpha=config.similarity_alpha,
+                    random_strategy=config.ramdom_strategy,
+                    random_ratio=config.random_ratio,
+                    temperature=config.random_temperature,
+                    candidate_multiplier=config.candidate_multiplier,
+                    use_cache=retrieval_cache_enabled,
+                    batch_size=retrieval_batch_size,
+                )
+                pbar.update(1)
+            logger.info(f"[BuildData] SRAG batch retrieval done in {time.perf_counter() - start_time:.1f}s.")
             return [render_examples(contents, outputs) for contents, outputs in retrieval_results]
 
         all_examples = []
-        for raw_data in raw_items:
-            retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
-                raw_data['content'],
-                config.srag_top_k,
-                threshold=config.srag_threshold,
-                weights=config.weights,
-                weights_reverse=config.weights_reverse,
-                similarity_alpha=config.similarity_alpha,
-                random_strategy=config.ramdom_strategy,
-                random_ratio=config.random_ratio,
-                temperature=config.random_temperature,
-                candidate_multiplier=config.candidate_multiplier,
-                use_cache=retrieval_cache_enabled,
-            )
-            all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
+        with tqdm(
+                raw_items,
+                desc="SRAG batch retrieval",
+                unit="item",
+                dynamic_ncols=True,
+                leave=True,
+                ) as pbar:
+            for raw_data in pbar:
+                retrieve_contents, retrieve_outputs = srag_retriever.retrieve(
+                    raw_data['content'],
+                    config.srag_top_k,
+                    threshold=config.srag_threshold,
+                    weights=config.weights,
+                    weights_reverse=config.weights_reverse,
+                    similarity_alpha=config.similarity_alpha,
+                    random_strategy=config.ramdom_strategy,
+                    random_ratio=config.random_ratio,
+                    temperature=config.random_temperature,
+                    candidate_multiplier=config.candidate_multiplier,
+                    use_cache=retrieval_cache_enabled,
+                )
+                all_examples.append(render_examples(retrieve_contents, retrieve_outputs))
+        logger.info(f"[BuildData] SRAG batch retrieval done in {time.perf_counter() - start_time:.1f}s.")
         return all_examples
 
     def retrieve_lex_batch(raw_items: list[dict]) -> list[list[str]]:
+        if not raw_items:
+            return []
+
         if not (config.use_lex and lex_retriever is not None):
+            logger.info("[BuildData] Lexicon retrieval skipped: disabled or retriever unavailable.")
             return [[] for _ in raw_items]
 
         queries = [item["content"] for item in raw_items]
-        if hasattr(lex_retriever, "including_retrieve_batch"):
-            including_results = lex_retriever.including_retrieve_batch(
-                queries=queries,
-                top_k=config.lex_top_k,
-                use_cache=retrieval_cache_enabled,
-            )
-        else:
-            including_results = [
-                lex_retriever.including_retrieve(query, config.lex_top_k, use_cache=retrieval_cache_enabled)
-                for query in queries
-            ]
+        start_time = time.perf_counter()
+        logger.info(
+            f"[BuildData] Lexicon retrieval start: items={len(raw_items)}, "
+            f"include_top_k={config.lex_top_k}, similarity_top_k={config.lex_sim_top_k}"
+        )
 
-        if hasattr(lex_retriever, "similarity_retrieve_batch"):
-            similarity_results = lex_retriever.similarity_retrieve_batch(
-                queries=queries,
-                top_k=config.lex_sim_top_k,
-                deduplicate=True,
-                threshold=config.lex_sim_threshold,
-                use_cache=retrieval_cache_enabled,
-                batch_size=retrieval_batch_size,
-            )
-        else:
-            similarity_results = [
-                lex_retriever.similarity_retrieve(
-                    query,
-                    config.lex_sim_top_k,
+        with tqdm(
+            total=2,
+            desc="Lexicon retrieval",
+            unit="stage",
+            dynamic_ncols=True,
+            leave=True,
+        ) as pbar:
+            pbar.set_postfix_str("including")
+            if hasattr(lex_retriever, "including_retrieve_batch"):
+                including_results = lex_retriever.including_retrieve_batch(
+                    queries=queries,
+                    top_k=config.lex_top_k,
+                    use_cache=retrieval_cache_enabled,
+                )
+            else:
+                including_results = [
+                    lex_retriever.including_retrieve(query, config.lex_top_k, use_cache=retrieval_cache_enabled)
+                    for query in queries
+                ]
+            pbar.update(1)
+
+            pbar.set_postfix_str("similarity")
+            if hasattr(lex_retriever, "similarity_retrieve_batch"):
+                similarity_results = lex_retriever.similarity_retrieve_batch(
+                    queries=queries,
+                    top_k=config.lex_sim_top_k,
                     deduplicate=True,
                     threshold=config.lex_sim_threshold,
                     use_cache=retrieval_cache_enabled,
+                    batch_size=retrieval_batch_size,
                 )
-                for query in queries
-            ]
+            else:
+                similarity_results = [
+                    lex_retriever.similarity_retrieve(
+                        query,
+                        config.lex_sim_top_k,
+                        deduplicate=True,
+                        threshold=config.lex_sim_threshold,
+                        use_cache=retrieval_cache_enabled,
+                    )
+                    for query in queries
+                ]
+            pbar.update(1)
 
         all_lexicons = []
         for lex_contents, simlex_contents in zip(including_results, similarity_results):
@@ -481,16 +548,9 @@ def build_prompt(
                 if simlex_content not in merged:
                     merged.append(simlex_content)
             all_lexicons.append(merged)
+        logger.info(f"[BuildData] Lexicon retrieval done in {time.perf_counter() - start_time:.1f}s.")
         return all_lexicons
 
-    pbar = tqdm(
-            total=len(datas),
-            desc=f"Preprocessing datas",
-            unit="item",
-            dynamic_ncols=True,
-            leave=True
-        )
-    messages = []
     srag_examples_nums = 0
 
     # Per-sample prompt build cache.
@@ -528,6 +588,10 @@ def build_prompt(
     cache_keys: list[str | None] = [None] * len(datas)
     missing_indices: list[int] = []
 
+    cache_start_time = time.perf_counter()
+    if cache_enabled:
+        logger.info(f"[BuildData] Prompt cache lookup start: items={len(datas)}")
+
     for idx, raw_data in enumerate(datas):
         if cache_enabled:
             payload = {
@@ -555,84 +619,112 @@ def build_prompt(
                 message, ex_len = cached
                 messages[idx] = message
                 srag_examples_nums += int(ex_len or 0)
-                pbar.update(1)
 
     missing_datas = [datas[idx] for idx in missing_indices]
+    cache_hits = len(datas) - len(missing_datas)
+    if cache_enabled:
+        logger.info(
+            f"[BuildData] Prompt cache lookup done in {time.perf_counter() - cache_start_time:.1f}s: "
+            f"hits={cache_hits}, misses={len(missing_datas)}"
+        )
+
     batch_examples = retrieve_srag_examples_batch(missing_datas, default_global_k)
     batch_lexicons = retrieve_lex_batch(missing_datas)
     cache_updates = {}
 
-    for local_idx, raw_data in enumerate(missing_datas):
-        original_idx = missing_indices[local_idx]
-        triples = []
-        if not cold_binary and not hatexplain:
-            triples = [
-                f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
-                for quadruple in raw_data["quadruples"]
-            ]
-        global_k = default_global_k
-        examples = batch_examples[local_idx]
-        lex_contents = batch_lexicons[local_idx]
-        prompt = render_prompt(raw_data, examples, lex_contents)
-        original_examples = examples
+    if missing_datas:
+        render_start_time = time.perf_counter()
+        logger.info(f"[BuildData] Prompt rendering start: items={len(missing_datas)}")
 
-        # ?????????
-        i = 1
-        cur_len = token_length(tokenizer, prompt) if config.auto_length and tokenizer is not None else 0
-        while config.auto_length and tokenizer is not None and cur_len > config.max_length:
-            if use_global_demos:
-                new_k = max(0, int(global_k or 0) - i)
-                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce global demos and rebuild prompt.")
-                examples = global_examples[:new_k]
+        with tqdm(
+                enumerate(missing_datas),
+                total=len(missing_datas),
+                desc="Prompt rendering",
+                unit="item",
+                dynamic_ncols=True,
+                leave=True,
+                ) as render_pbar:
+            for local_idx, raw_data in render_pbar:
+                original_idx = missing_indices[local_idx]
+                triples = []
+                if not cold_binary and not hatexplain:
+                    triples = [
+                        f"{quadruple['target']} | {quadruple['argument']} | {quadruple['targeted_group']}"
+                        for quadruple in raw_data["quadruples"]
+                    ]
+                global_k = default_global_k
+                examples = batch_examples[local_idx]
+                lex_contents = batch_lexicons[local_idx]
                 prompt = render_prompt(raw_data, examples, lex_contents)
-                global_k = new_k
-                if new_k <= 0:
-                    break
-            else:
-                logger.debug(f"Over length: {cur_len} > {config.max_length}, reduce srag examples and rebuild prompt.")
-                new_k = max(0, min(len(original_examples), int(config.srag_top_k) - i))
-                examples = original_examples[:new_k]
-                prompt = render_prompt(raw_data, examples, lex_contents)
-                if new_k <= 0:
-                    break
-            i += 1
-            cur_len = token_length(tokenizer, prompt)
+                original_examples = examples
 
-        srag_examples_nums += len(examples)
+                # ?????????
+                i = 1
+                cur_len = token_length(tokenizer, prompt) if config.auto_length and tokenizer is not None else 0
+                while config.auto_length and tokenizer is not None and cur_len > config.max_length:
+                    if use_global_demos:
+                        new_k = max(0, int(global_k or 0) - i)
+                        logger.debug(
+                            f"Over length: {cur_len} > {config.max_length}, "
+                            "reduce global demos and rebuild prompt."
+                        )
+                        examples = global_examples[:new_k]
+                        prompt = render_prompt(raw_data, examples, lex_contents)
+                        global_k = new_k
+                        if new_k <= 0:
+                            break
+                    else:
+                        logger.debug(
+                            f"Over length: {cur_len} > {config.max_length}, "
+                            "reduce srag examples and rebuild prompt."
+                        )
+                        new_k = max(0, min(len(original_examples), int(config.srag_top_k) - i))
+                        examples = original_examples[:new_k]
+                        prompt = render_prompt(raw_data, examples, lex_contents)
+                        if new_k <= 0:
+                            break
+                    i += 1
+                    cur_len = token_length(tokenizer, prompt)
 
-        if cold_binary:
-            answer = _binary_label_from_record(raw_data)
-        elif hatexplain:
-            answer = _format_hatexplain_output(raw_data)
-        else:
-            answer = " [SEP] ".join(triples) + " [END]"
+                srag_examples_nums += len(examples)
 
-        message = {
-            "id": raw_data["id"],
-            "instruction": config.system_prompt if config.system_prompt else "", 
-            "input": f"{prompt}", 
-            "output": answer,
-            "content": raw_data["content"],
-            "metadata": raw_data.get("metadata", {}),
-            "gt_quadruples": raw_data.get("quadruples", []) if is_test_data else "",
-            }
-        if cold_binary:
-            message["gt_label"] = answer
-        if hatexplain:
-            message["gt_annotation"] = raw_data.get("annotation", {}) if is_test_data else ""
-        messages[original_idx] = message
+                if cold_binary:
+                    answer = _binary_label_from_record(raw_data)
+                elif hatexplain:
+                    answer = _format_hatexplain_output(raw_data)
+                else:
+                    answer = " [SEP] ".join(triples) + " [END]"
 
-        # ??????
-        if cache_enabled and cache_keys[original_idx] is not None:
-            cache_updates[cache_keys[original_idx]] = (message, len(examples))
+                message = {
+                    "id": raw_data["id"],
+                    "instruction": config.system_prompt if config.system_prompt else "",
+                    "input": f"{prompt}",
+                    "output": answer,
+                    "content": raw_data["content"],
+                    "metadata": raw_data.get("metadata", {}),
+                    "gt_quadruples": raw_data.get("quadruples", []) if is_test_data else "",
+                }
+                if cold_binary:
+                    message["gt_label"] = answer
+                if hatexplain:
+                    message["gt_annotation"] = raw_data.get("annotation", {}) if is_test_data else ""
+                messages[original_idx] = message
 
-        pbar.update(1)
+                # ??????
+                if cache_enabled and cache_keys[original_idx] is not None:
+                    cache_updates[cache_keys[original_idx]] = (message, len(examples))
+
+        logger.info(f"[BuildData] Prompt rendering done in {time.perf_counter() - render_start_time:.1f}s.")
 
     if cache_enabled and cache_updates:
+        cache_write_start_time = time.perf_counter()
+        logger.info(f"[BuildData] Prompt cache write start: items={len(cache_updates)}")
         build_cache.set_many(cache_updates)
+        logger.info(f"[BuildData] Prompt cache write done in {time.perf_counter() - cache_write_start_time:.1f}s.")
 
     if len(datas) > 0:
         print(f"Avg examples nums: {srag_examples_nums / len(datas)}")
+    logger.info(f"[BuildData] Prompt build done: items={len(datas)}, cache_hits={cache_hits}")
 
     return [message for message in messages if message is not None]
 
