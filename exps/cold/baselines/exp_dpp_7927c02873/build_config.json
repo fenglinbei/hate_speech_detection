@@ -1,0 +1,71 @@
+{
+  "task_type": "cold_binary",
+  "data_paths": {
+    "raw_data_path": "data/cold/std/train.json",
+    "val_data_path": "data/cold/std/val.json",
+    "test_data_path": "data/cold/std/test.json",
+    "train_output_path": "exps/cold/baselines/exp_dpp_7927c02873/data/train.jsonl",
+    "val_output_path": "exps/cold/baselines/exp_dpp_7927c02873/data/val.jsonl",
+    "val_runner_output_path": "exps/cold/baselines/exp_dpp_7927c02873/data/val_runner.json",
+    "test_output_path": "exps/cold/baselines/exp_dpp_7927c02873/data/test.json",
+    "lexicon_data_path": "data/lexicon/annotated_lexicon.json",
+    "tokenizer_path": "./models/base/Qwen2.5-7B-Instruct"
+  },
+  "prompt_templates": {
+    "prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
+    "example_template": "COLD_BINARY_EXAMPLE_PROMPT",
+    "system_prompt": "COLD_BINARY_SYSTEM_PROMPT"
+  },
+  "retrieval_settings": {
+    "use_srag": true,
+    "stratified": true,
+    "srag_top_k": 10,
+    "srag_threshold": 0,
+    "use_lex": false,
+    "lex_top_k": 5,
+    "lex_sim_top_k": 5,
+    "lex_sim_threshold": 0,
+    "weights": null,
+    "weights_reverse": false,
+    "mmr_cache_dir": "exps/cold/baselines/exp_dpp_7927c02873/cache/mmr",
+    "mmr_index_path": "exps/cold/baselines/exp_dpp_7927c02873/cache/mmr/faiss_hnsw.index",
+    "mmr_docs_path": "exps/cold/baselines/exp_dpp_7927c02873/cache/mmr/doc_store.json"
+  },
+  "training_settings": {
+    "auto_length": true,
+    "max_length": 1280,
+    "split_ratio": 0.9
+  },
+  "model_settings": {
+    "srag_model_path": "./models/base/bge-large-zh-v1.5",
+    "lexicon_model_path": "./models/base/bge-large-zh-v1.5"
+  },
+  "baseline": {
+    "method": "dpp",
+    "task_type": "cold_binary",
+    "dpp": {
+      "k": 10,
+      "n_sem": 200,
+      "T": 128,
+      "m_per_group": 3,
+      "tau": 1.5,
+      "artifact_dir": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp",
+      "cache_dir": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp/cache",
+      "demos_path": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp/demos_k10.json",
+      "prompt_path": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp/demos_k10_prompt.txt",
+      "signature_path": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp/selection_signature.json"
+    }
+  },
+  "cache_settings": {
+    "build_cache_dir": "exps/cold/baselines/exp_dpp_7927c02873/cache/build",
+    "retrieval_cache_dir": "exps/cold/baselines/exp_dpp_7927c02873/cache/retrieval",
+    "lexicon_cache_dir": "exps/cold/baselines/exp_dpp_7927c02873/cache/lexicon"
+  },
+  "global_demo_settings": {
+    "use_global_demos": true,
+    "global_demos_path": "exps/cold/baselines/exp_dpp_7927c02873/artifacts/dpp/demos_k10.json",
+    "global_demos_top_k": 10,
+    "global_demos_shuffle": false,
+    "global_demos_seed": 42
+  }
+}

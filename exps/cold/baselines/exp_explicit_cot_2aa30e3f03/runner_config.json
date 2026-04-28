@@ -1,0 +1,59 @@
+{
+  "output_name": "exp_2aa30e3f03.json",
+  "log": {
+    "level": "INFO",
+    "show_console": true
+  },
+  "model": {
+    "type": "ApiLLMModel",
+    "params": {
+      "model_name": "qwen2.5",
+      "api_base": "http://127.0.0.1:0/v1/",
+      "api_key": "EMPTY",
+      "temperature": 0,
+      "top_p": 1,
+      "enable_thinking": false
+    }
+  },
+  "tester": {
+    "task_type": "cold_binary",
+    "output_dir": "exps/cold/baselines/exp_explicit_cot_2aa30e3f03/runner_output",
+    "use_cache": false,
+    "test_data_file": "exps/cold/baselines/exp_explicit_cot_2aa30e3f03/data/test.json",
+    "shot_num": 0,
+    "max_retries": 50,
+    "concurrency": 1,
+    "compute_metric": true,
+    "prompt_templates": {
+      "system": "COLD_BINARY_SYSTEM_PROMPT",
+      "train": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+      "shot": "",
+      "example": "COLD_BINARY_EXAMPLE_PROMPT"
+    },
+    "run": {
+      "shots_list": [
+        0
+      ],
+      "seeds_list": [
+        42
+      ],
+      "llm_params": {
+        "max_new_tokens": 512,
+        "n": 1,
+        "top_p": 1,
+        "top_k": 20,
+        "min_p": 0,
+        "temperature": 0,
+        "enable_thinking": false,
+        "seed": 42
+      }
+    },
+    "progress_dir": "exps/cold/baselines/exp_explicit_cot_2aa30e3f03/progress",
+    "prompts_save_dir": "exps/cold/baselines/exp_explicit_cot_2aa30e3f03/prompts",
+    "cache_dir": "exps/cold/baselines/exp_explicit_cot_2aa30e3f03/cache"
+  },
+  "baseline": {
+    "method": "explicit_cot",
+    "task_type": "cold_binary"
+  }
+}

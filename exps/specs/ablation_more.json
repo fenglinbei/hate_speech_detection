@@ -1,0 +1,47 @@
+{
+  "project": "ablation",
+  "output_root": "exps/ablation/more",
+  "base": {
+    "build": "data/exp_data/k_ablation/k6/config.json",
+    "train": "config/finetune/k_ablation/k6.json",
+    "runner": "config/runner/k_ablation/k6.json"
+  },
+  "port_base": 35000,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": [
+    {
+      "name": "only_lex",
+      "runner.baseline.task_type": "structured",
+      "build.retrieval_settings.use_lex": true,
+      "build.retrieval_settings.stratified": false,
+      "build.retrieval_settings.srag_top_k": 10,
+      "build.training_settings.auto_length": false
+    },
+    {
+      "name": "only_class_quota",
+      "runner.baseline.task_type": "structured",
+      "build.retrieval_settings.use_lex": false,
+      "build.retrieval_settings.stratified": true,
+      "build.retrieval_settings.srag_top_k": 10,
+      "build.training_settings.auto_length": false
+    },
+    {
+      "name": "only_truncation",
+      "runner.baseline.task_type": "structured",
+      "build.retrieval_settings.use_lex": false,
+      "build.retrieval_settings.stratified": false,
+      "build.retrieval_settings.srag_top_k": 10,
+      "build.training_settings.auto_length": true
+    }
+  ]
+}
