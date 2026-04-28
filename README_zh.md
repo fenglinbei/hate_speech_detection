@@ -89,8 +89,8 @@ HateXplain 的检索和 HateBase semantic lexicon 默认使用英文 BGE：
 主实验对应 k=10 的 class-quota 设置：
 
 - 数据构建配置：`data/exp_data/k_ablation/k10/config.json`
-- 训练配置：`finetune/config/k_ablation/k10.json`
-- 推理配置：`runner/config/k_ablation/k10.json`
+- 训练配置：`config/finetune/k_ablation/k10.json`
+- 推理配置：`config/runner/k_ablation/k10.json`
 - 示例数：`srag_top_k = 10`
 - 选择策略：`stratified = true`，`weights = null`，即使用 `rag/core.py` 中默认的 class quota
 
@@ -100,7 +100,7 @@ HateXplain 的检索和 HateBase semantic lexicon 默认使用英文 BGE：
 
 需要的运行工具：
 
-- 已安装项目依赖的 Python 环境，包括 `torch`、`transformers`、`accelerate`、`deepspeed`、`sentence-transformers`、`scikit-learn`、`numpy`、`tqdm`、`loguru`、`vllm`
+- 已安装项目依赖的 Python 环境，包括 `torch`、`transformers`、`accelerate`、`deepspeed`、`peft`、`sentence-transformers`、`scikit-learn`、`numpy`、`tqdm`、`loguru`、`vllm`
 - `curl`
 - `nvidia-smi`
 - `jq`，供 `scripts/exps/run_all.sh` 使用
@@ -145,6 +145,7 @@ uv pip install \
   "datasets>=2.19" \
   "accelerate>=0.33" \
   "deepspeed>=0.14" \
+  "peft>=0.14" \
   "sentence-transformers>=3" \
   "modelscope>=1.18" \
   swanlab \
@@ -154,10 +155,10 @@ uv pip install \
   fastapi "pydantic>=2,<3" uvicorn
 ```
 
-如果是在已有环境上更新，单独安装这次新增的分布式训练依赖即可：
+如果是在已有环境上更新，单独安装这次新增的分布式和 LoRA 训练依赖即可：
 
 ```bash
-uv pip install "deepspeed>=0.14"
+uv pip install "deepspeed>=0.14" "peft>=0.14"
 ```
 
 `src/finetune/train.py` 会用 `attn_implementation="flash_attention_2"` 加载模型，因此还需要安装
@@ -179,13 +180,14 @@ uv pip install --no-build-isolation "flash-attn==2.8.3"
 
 ```bash
 python - <<'PY'
-import accelerate, deepspeed, torch, vllm, flash_attn, faiss
+import accelerate, deepspeed, peft, torch, vllm, flash_attn, faiss
 print("torch", torch.__version__, "cuda", torch.version.cuda)
 print("gpu count", torch.cuda.device_count())
 for i in range(torch.cuda.device_count()):
     print(i, torch.cuda.get_device_name(i))
 print("accelerate ok")
 print("deepspeed ok")
+print("peft ok")
 print("vllm ok")
 print("flash-attn ok")
 print("faiss ok")
@@ -232,9 +234,9 @@ bash scripts/exps/run_all.sh
 该命令会依次执行：
 
 1. 使用 `src/data/build_data.py --config data/exp_data/k_ablation/k10/config.json` 构建数据
-2. 使用 `src/finetune/train.py --config finetune/config/k_ablation/k10.json` 微调模型
+2. 使用 `src/finetune/train.py --config config/finetune/k_ablation/k10.json` 微调模型
 3. 在端口 `35010` 启动 vLLM
-4. 使用 `runner/run.py --config runner/config/k_ablation/k10.json` 进行推理和评测
+4. 使用 `src/runner/run.py --config config/runner/k_ablation/k10.json` 进行推理和评测
 
 ### 分阶段运行
 
@@ -297,8 +299,8 @@ K_START=10 K_END=10 BASE_K=1 bash scripts/exps/make_config.sh
 `make_config.sh` 会写出：
 
 - `data/exp_data/k_ablation/k{k}/config.json`
-- `finetune/config/k_ablation/k{k}.json`
-- `runner/config/k_ablation/k{k}.json`
+- `config/finetune/k_ablation/k{k}.json`
+- `config/runner/k_ablation/k{k}.json`
 - `runner/start_comand/k_ablation/k{k}.sh`
 
 ## 自包含实验目录
@@ -311,8 +313,8 @@ spec.json -> scripts/exps/expctl.py -> output_root/exp_<id>/ -> run_one_exp.sh -
 
 这是现在推荐用于新 sweep 和 ablation 的流程。较早的
 `scripts/exps/make_config.sh` 和 `scripts/exps/run_all.sh` 是 k-ablation
-专用脚本，会把配置分散写到 `data/exp_data/`、`finetune/config/` 和
-`runner/config/` 下。
+专用脚本，会把配置分散写到 `data/exp_data/`、`config/finetune/` 和
+`config/runner/` 下。
 
 ### 1. 编写或复用 spec
 
@@ -374,7 +376,7 @@ MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 1. `python src/data/build_data.py --config build_config.json`
 2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`
 3. `python -m vllm.entrypoints.openai.api_server ...`
-4. `python runner/run.py --config <temporary_runner_config>`
+4. `python src/runner/run.py --config <temporary_runner_config>`
 
 训练配置和 runner 配置都会先复制到临时文件。训练临时配置会按所选分布式
 profile patch，runner 临时配置会把 `model.params.api_base` patch 成实际端口。
@@ -384,14 +386,23 @@ profile patch，runner 临时配置会把 `model.params.api_base` patch 成实�
 full finetune 的分布式训练由这些变量控制：
 
 - `TRAIN_BACKEND=deepspeed|fsdp|single`，默认 `deepspeed`。
-- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`。
+- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs4|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`。
 - `TRAIN_NPROC_PER_NODE` 默认等于 `TRAIN_CUDA_VISIBLE_DEVICES` 里的 GPU 数量。
 - `TRAIN_MASTER_PORT` 默认等于 `PORT + 1000`。
 - `TRAIN_MAX_STEPS=2` 可用于短 smoke test；正式训练时不要设置。
+- `TRAIN_LORA=1` 会在所选 backend 上启用 PEFT LoRA 训练。
+- `TRAIN_LORA_R`、`TRAIN_LORA_ALPHA` 和 `TRAIN_LORA_DROPOUT` 可覆盖 LoRA
+  rank、alpha 和 dropout，默认分别为 `8`、`32`、`0.1`。
+- `TRAIN_LORA_TARGET_MODULES` 是逗号分隔的 LoRA target modules，默认是
+  `q_proj,v_proj`。
+- `TRAIN_LORA_MERGE=1` 会在训练后把 adapter 合并成独立 HuggingFace
+  checkpoint。这是 LoRA 运行的默认行为，可以让现有 vLLM 阶段继续用
+  `--model <checkpoint_dir>` 加载。
 
 各 profile 的含义：
 
 - `ds_zero2_safe`：ZeRO-2，无 CPU offload，micro-batch 2，gradient accumulation 1。
+- `ds_zero2_bs4`：ZeRO-2，无 CPU offload，micro-batch 4，gradient accumulation 1。适合 LoRA 使用 `ds_zero2_safe` 后显存仍有余量、希望提升吞吐的场景。
 - `ds_zero2_bs1`：ZeRO-2，无 CPU offload，micro-batch 1，gradient accumulation 2。
 - `ds_zero3_safe`：ZeRO-3，无 CPU offload，micro-batch 2，gradient accumulation 1。
 - `ds_zero3_bs1`：ZeRO-3，无 CPU offload，micro-batch 1，gradient accumulation 2。
@@ -410,9 +421,40 @@ TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
+LoRA 2-step smoke test 示例：
+
+```bash
+MODE=train \
+TRAIN_MAX_STEPS=2 \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_bs4 \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TRAIN_LORA=1 \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
+LoRA 完整运行示例：
+
+```bash
+MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_bs4 \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+VLLM_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TENSOR_PARALLEL_SIZE=4 \
+TRAIN_LORA=1 \
+TRAIN_LORA_R=8 \
+TRAIN_LORA_ALPHA=32 \
+TRAIN_LORA_TARGET_MODULES=q_proj,v_proj \
+bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
+```
+
 训练阶段会在 `exp_*/logs/` 下写出复现实验所需文件：
 `train_runtime_config.json`、DeepSpeed profile 对应的 `ds_config_<profile>.json`、
 `train.<backend>.<profile>.log`，以及兼容旧路径的 `train.log`。
+启用 LoRA merge 时，训练会先在 `checkpoint-*` 下写 adapter checkpoint，
+再在 `merged-checkpoint-*` 下写 vLLM 可加载的合并 checkpoint。推理阶段会优先使用
+存在的合并 checkpoint。
 
 常用运行时覆盖：
 
@@ -427,7 +469,9 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 
 常用变量包括 `TRAIN_CUDA_VISIBLE_DEVICES`、`VLLM_CUDA_VISIBLE_DEVICES`、
 `TRAIN_BACKEND`、`TRAIN_PROFILE`、`TRAIN_NPROC_PER_NODE`、`TRAIN_MASTER_PORT`、
-`TRAIN_MAX_STEPS`、`TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
+`TRAIN_MAX_STEPS`、`TRAIN_LORA`、`TRAIN_LORA_R`、`TRAIN_LORA_ALPHA`、
+`TRAIN_LORA_DROPOUT`、`TRAIN_LORA_TARGET_MODULES`、`TRAIN_LORA_MERGE`、
+`TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
 `DYNAMIC_GPU_MEM_UTIL`、`DEFAULT_GPU_MEM_UTIL`。
 
 ### 4. 运行某个根目录下的全部实验
@@ -444,7 +488,7 @@ MODE=full bash scripts/exps/run_all_exps.sh exps/some_project
 如果原始 COLD 文件已经下载到 `data/cold/raw`，并且包含 `train.csv`、`dev.csv` 或 `val.csv`、`test.csv`，可以直接转换固定 split，不会重新切分：
 
 ```bash
-python data/cold_adapter.py --raw-dir data/cold/raw --output-dir data/cold/std
+python src/data/cold_adapter.py --raw-dir data/cold/raw --output-dir data/cold/std
 ```
 
 该命令会写出：
@@ -456,7 +500,7 @@ python data/cold_adapter.py --raw-dir data/cold/raw --output-dir data/cold/std
 单文件转换仍然可用：
 
 ```bash
-python data/cold_adapter.py --input path/to/cold.csv --output-dir data/cold/std
+python src/data/cold_adapter.py --input path/to/cold.csv --output-dir data/cold/std
 ```
 
 单文件模式在没有 split 列时可能会重新切分输入；如果已有固定 train/dev/test 文件，优先使用 `--raw-dir`。
@@ -466,10 +510,10 @@ python data/cold_adapter.py --input path/to/cold.csv --output-dir data/cold/std
 如果已经有 vLLM 或 OpenAI-compatible 服务在运行，可以直接调用 runner：
 
 ```bash
-python runner/run.py --config runner/config/k_ablation/k10.json
+python src/runner/run.py --config config/runner/k_ablation/k10.json
 ```
 
-请确认 `runner/config/k_ablation/k10.json` 中这些路径/地址正确：
+请确认 `config/runner/k_ablation/k10.json` 中这些路径/地址正确：
 
 - `model.params.api_base`
 - `tester.test_data_file`

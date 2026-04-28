@@ -473,6 +473,7 @@ def deepspeed_config(stage: int, offload: bool = False) -> dict:
 
 profiles = {
     "ds_zero2_safe": {"backend": "deepspeed", "stage": 2, "micro": 2, "accum": 1, "offload": False},
+    "ds_zero2_bs4": {"backend": "deepspeed", "stage": 2, "micro": 4, "accum": 1, "offload": False},
     "ds_zero2_bs1": {"backend": "deepspeed", "stage": 2, "micro": 1, "accum": 2, "offload": False},
     "ds_zero3_safe": {"backend": "deepspeed", "stage": 3, "micro": 2, "accum": 1, "offload": False},
     "ds_zero3_bs1": {"backend": "deepspeed", "stage": 3, "micro": 1, "accum": 2, "offload": False},
