@@ -276,12 +276,6 @@ k=10 的主要输出路径如下：
 - 单 seed runner 输出：`runner/output/k_ablation/k10_s<seed>.json`
 - 多 seed 汇总：`runner/output/k_ablation/k10_multi_seed.json`
 
-runner 配置默认使用这些 seed：
-
-```text
-42, 4242, 424242, 42424242, 4242424242
-```
-
 ## 重新生成 k-ablation 配置
 
 如果 k-ablation 配置缺失，可以从 k=1 模板重新生成：
@@ -374,7 +368,7 @@ MODE=full bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 `run_one_exp.sh` 会读取 `manifest.json`，按顺序执行：
 
 1. `python src/data/build_data.py --config build_config.json`
-2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`
+2. `python -m torch.distributed.run ... src/finetune/train.py --config <temporary_train_config>`；启用 `TRAIN_DS_AUTOTUNE=1` 时会改用 `deepspeed --autotuning run ...`。
 3. `python -m vllm.entrypoints.openai.api_server ...`
 4. `python src/runner/run.py --config <temporary_runner_config>`
 
@@ -390,6 +384,16 @@ full finetune 的分布式训练由这些变量控制：
 - `TRAIN_NPROC_PER_NODE` 默认等于 `TRAIN_CUDA_VISIBLE_DEVICES` 里的 GPU 数量。
 - `TRAIN_MASTER_PORT` 默认等于 `PORT + 1000`。
 - `TRAIN_MAX_STEPS=2` 可用于短 smoke test；正式训练时不要设置。
+- `TRAIN_DS_AUTOTUNE=1` 会为 `TRAIN_BACKEND=deepspeed` 启用 DeepSpeed
+  Autotuner。脚本会使用 `deepspeed --autotuning run`，先搜索吞吐更好的
+  DeepSpeed 配置，再自动用最优配置继续训练。调优结果会写到
+  `logs/autotuning_results/`，调优实验描述会写到 `logs/autotuning_exps/`。
+- 可选 autotuning 变量包括 `TRAIN_DS_AUTOTUNE_FAST=1`、
+  `TRAIN_DS_AUTOTUNE_OVERWRITE=1`、`TRAIN_DS_AUTOTUNE_METRIC=throughput`、
+  `TRAIN_DS_AUTOTUNE_START_PROFILE_STEP=3`、
+  `TRAIN_DS_AUTOTUNE_END_PROFILE_STEP=5`、
+  `TRAIN_DS_AUTOTUNE_NUM_MBS=3` 和
+  `TRAIN_DS_AUTOTUNE_MAX_TRAIN_BATCH_SIZE`。
 - `TRAIN_LORA=1` 会在所选 backend 上启用 PEFT LoRA 训练。
 - `TRAIN_LORA_R`、`TRAIN_LORA_ALPHA` 和 `TRAIN_LORA_DROPOUT` 可覆盖 LoRA
   rank、alpha 和 dropout，默认分别为 `8`、`32`、`0.1`。
@@ -433,6 +437,18 @@ TRAIN_LORA=1 \
 bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 ```
 
+DeepSpeed autotuning 运行示例：
+
+```bash
+MODE=train \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_bs4 \
+TRAIN_DS_AUTOTUNE=1 \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TRAIN_LORA=1 \
+bash scripts/exps/run_one_exp.sh exps/cold/baselines/exp_zero_shot_d55cfa6534
+```
+
 LoRA 完整运行示例：
 
 ```bash
@@ -469,8 +485,9 @@ bash scripts/exps/run_one_exp.sh exps/some_project/exp_xxxxxxxxxx
 
 常用变量包括 `TRAIN_CUDA_VISIBLE_DEVICES`、`VLLM_CUDA_VISIBLE_DEVICES`、
 `TRAIN_BACKEND`、`TRAIN_PROFILE`、`TRAIN_NPROC_PER_NODE`、`TRAIN_MASTER_PORT`、
-`TRAIN_MAX_STEPS`、`TRAIN_LORA`、`TRAIN_LORA_R`、`TRAIN_LORA_ALPHA`、
-`TRAIN_LORA_DROPOUT`、`TRAIN_LORA_TARGET_MODULES`、`TRAIN_LORA_MERGE`、
+`TRAIN_MAX_STEPS`、`TRAIN_DS_AUTOTUNE`、`TRAIN_LORA`、`TRAIN_LORA_R`、
+`TRAIN_LORA_ALPHA`、`TRAIN_LORA_DROPOUT`、`TRAIN_LORA_TARGET_MODULES`、
+`TRAIN_LORA_MERGE`、
 `TENSOR_PARALLEL_SIZE`、`MAX_MODEL_LEN`、`SERVED_MODEL_NAME`、
 `DYNAMIC_GPU_MEM_UTIL`、`DEFAULT_GPU_MEM_UTIL`。
 

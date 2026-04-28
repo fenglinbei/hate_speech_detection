@@ -717,12 +717,36 @@ def get_prompt(prompt_name_or_prompt: str):
         return prompt_name_or_prompt
 
 
+def apply_cli_overrides(config: dict, args: argparse.Namespace) -> None:
+    training = config.setdefault("training", {})
+
+    if args.deepspeed:
+        training["deepspeed"] = args.deepspeed
+    if args.per_device_train_batch_size is not None:
+        training["per_device_train_batch_size"] = args.per_device_train_batch_size
+        if args.per_device_eval_batch_size is None:
+            training["per_device_eval_batch_size"] = args.per_device_train_batch_size
+    if args.per_device_eval_batch_size is not None:
+        training["per_device_eval_batch_size"] = args.per_device_eval_batch_size
+    if args.gradient_accumulation_steps is not None:
+        training["gradient_accumulation_steps"] = args.gradient_accumulation_steps
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LLM Fine-tuning Script")
     parser.add_argument("--config", type=str, default="config.json", help="Path to config file")
+    parser.add_argument("--deepspeed", type=str, default=None, help="Path to DeepSpeed config override")
+    parser.add_argument("--per_device_train_batch_size", type=int, default=None)
+    parser.add_argument("--per_device_eval_batch_size", type=int, default=None)
+    parser.add_argument("--gradient_accumulation_steps", type=int, default=None)
+    parser.add_argument("--local_rank", "--local-rank", dest="local_rank", type=int, default=None)
     args = parser.parse_args()
 
+    if args.local_rank is not None and "LOCAL_RANK" not in os.environ:
+        os.environ["LOCAL_RANK"] = str(args.local_rank)
+
     config = load_config(args.config)
+    apply_cli_overrides(config, args)
     config.setdefault("transfer_data", True)
     config.setdefault("exp_name", "default-exp")
 
