@@ -67,6 +67,26 @@ def cartesian_grid(grid: Dict[str, List[Any]] | List[Dict[str, Any]]) -> List[Di
     return combos
 
 
+def safe_name(value: Any) -> str:
+    """Return a filesystem-friendly experiment name segment."""
+    raw = str(value).strip()
+    chars = []
+    last_was_sep = False
+    for ch in raw:
+        if ch.isalnum() or ch in {"-", "_", "."}:
+            chars.append(ch)
+            last_was_sep = False
+        elif not last_was_sep:
+            chars.append("_")
+            last_was_sep = True
+    return "".join(chars).strip("_.-")
+
+
+def exp_dir_name(exp_id: str, name: Any = None) -> str:
+    cleaned = safe_name(name) if name else ""
+    return f"exp_{cleaned}_{exp_id}" if cleaned else f"exp_{exp_id}"
+
+
 def split_meta_overrides(overrides: dict) -> tuple[dict, dict]:
     config_overrides = {}
     meta = {}
@@ -165,13 +185,14 @@ def main():
         if default_model_ckpt is not None and "reuse.model_checkpoint" not in merged_overrides:
             merged_overrides["reuse.model_checkpoint"] = default_model_ckpt
 
+        config_overrides, meta = split_meta_overrides(merged_overrides)
+
         # exp_id 用 overrides 的 hash，保证可复现命名
         exp_id = canonical_hash({"project": project, "overrides": merged_overrides}, length=10)
-        exp_dir = output_root / f"exp_{exp_id}"
+        exp_name = exp_dir_name(exp_id, meta.get("name"))
+        exp_dir = output_root / exp_name
         exp_dir.mkdir(parents=True, exist_ok=True)
 
-
-        config_overrides, meta = split_meta_overrides(merged_overrides)
         build_cfg, train_cfg, runner_cfg, reuse_meta = apply_overrides(
             base_build, base_train, base_runner, config_overrides
         )
@@ -213,7 +234,7 @@ def main():
         train_cfg.setdefault("training", {})
         train_cfg["training"]["output_dir"] = config_path(exp_model_dir)
         # 让 exp_name/run_name 更直观
-        train_cfg["exp_name"] = f"exp_{exp_id}"
+        train_cfg["exp_name"] = exp_name
         train_cfg.setdefault("project_name", project)
 
         train_cfg.setdefault("data", {})
