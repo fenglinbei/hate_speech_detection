@@ -131,6 +131,110 @@ def apply_overrides(base_build: dict, base_train: dict, base_runner: dict, overr
     return b, t, r, reuse_meta
 
 
+def normalize_task_type(value: Any) -> str:
+    task = str(value or "structured").strip().lower()
+    if task in {"cold", "binary", "cold_binary"}:
+        return "cold_binary"
+    if task in {"hatexplain", "hate_xplain"}:
+        return "hatexplain"
+    return "structured"
+
+
+def baseline_from_configs(build_cfg: dict, runner_cfg: dict) -> dict:
+    baseline = {}
+    if isinstance(build_cfg.get("baseline"), dict):
+        baseline.update(build_cfg["baseline"])
+    if isinstance(runner_cfg.get("baseline"), dict):
+        baseline.update(runner_cfg["baseline"])
+    method = str(baseline.get("method", "standard")).strip().lower()
+    if method == "ddp":
+        method = "dpp"
+    if method not in {"standard", "ids", "dpp", "explicit_cot"}:
+        method = "standard"
+
+    task_type = baseline.get("task_type")
+    if task_type is None:
+        task_type = runner_cfg.get("tester", {}).get("task_type", build_cfg.get("task_type", "structured"))
+
+    baseline["method"] = method
+    baseline["task_type"] = normalize_task_type(task_type)
+    return baseline
+
+
+def apply_baseline_defaults(
+        build_cfg: dict,
+        train_cfg: dict,
+        runner_cfg: dict,
+        exp_dir: Path,
+        exp_cache_dir: Path,
+        exp_artifacts_dir: Path,
+        ) -> dict:
+    baseline = baseline_from_configs(build_cfg, runner_cfg)
+    method = baseline["method"]
+    task_type = baseline["task_type"]
+
+    build_cfg["baseline"] = copy.deepcopy(baseline)
+    train_cfg["baseline"] = copy.deepcopy(baseline)
+    runner_cfg["baseline"] = copy.deepcopy(baseline)
+    build_cfg.setdefault("cache_settings", {})
+    build_cfg["cache_settings"].update({
+        "build_cache_dir": config_path(exp_cache_dir / "build"),
+        "retrieval_cache_dir": config_path(exp_cache_dir / "retrieval"),
+        "lexicon_cache_dir": config_path(exp_cache_dir / "lexicon"),
+    })
+    build_cfg.setdefault("retrieval_settings", {})
+    build_cfg["retrieval_settings"].update({
+        "mmr_cache_dir": config_path(exp_cache_dir / "mmr"),
+        "mmr_index_path": config_path(exp_cache_dir / "mmr" / "faiss_hnsw.index"),
+        "mmr_docs_path": config_path(exp_cache_dir / "mmr" / "doc_store.json"),
+    })
+    if task_type != "structured":
+        build_cfg["task_type"] = task_type
+        runner_cfg.setdefault("tester", {})["task_type"] = task_type
+
+    if method == "ids":
+        ids_cfg = dict(baseline.get("ids", {}))
+        ids_cfg.setdefault("q", 3)
+        ids_cfg.setdefault("top_k", 10)
+        ids_cfg.setdefault("max_reason_chars", 512)
+        ids_cfg.setdefault("cache_dir", config_path(exp_cache_dir / "ids"))
+        baseline["ids"] = ids_cfg
+
+    if method == "dpp":
+        dpp_cfg = dict(baseline.get("dpp", {}))
+        dpp_artifacts = exp_artifacts_dir / "dpp"
+        k = int(dpp_cfg.get("k", 10))
+        dpp_cfg.setdefault("k", k)
+        dpp_cfg.setdefault("n_sem", 200)
+        dpp_cfg.setdefault("T", 128)
+        dpp_cfg.setdefault("m_per_group", 3)
+        dpp_cfg.setdefault("tau", 1.5)
+        dpp_cfg.setdefault("artifact_dir", config_path(dpp_artifacts))
+        dpp_cfg.setdefault("cache_dir", config_path(dpp_artifacts / "cache"))
+        dpp_cfg.setdefault("demos_path", config_path(dpp_artifacts / f"demos_k{k}.json"))
+        dpp_cfg.setdefault("prompt_path", config_path(dpp_artifacts / f"demos_k{k}_prompt.txt"))
+        dpp_cfg.setdefault("signature_path", config_path(dpp_artifacts / "selection_signature.json"))
+        baseline["dpp"] = dpp_cfg
+
+        build_cfg.setdefault("global_demo_settings", {})
+        build_cfg["global_demo_settings"].update({
+            "use_global_demos": True,
+            "global_demos_path": dpp_cfg["demos_path"],
+            "global_demos_top_k": k,
+            "global_demos_shuffle": False,
+            "global_demos_seed": int(dpp_cfg.get("seed", 42)),
+        })
+
+    if method == "explicit_cot":
+        runner_cfg.setdefault("tester", {}).setdefault("run", {}).setdefault("llm_params", {})["enable_thinking"] = False
+        runner_cfg.setdefault("model", {}).setdefault("params", {})["enable_thinking"] = False
+
+    build_cfg["baseline"] = copy.deepcopy(baseline)
+    train_cfg["baseline"] = copy.deepcopy(baseline)
+    runner_cfg["baseline"] = copy.deepcopy(baseline)
+    return baseline
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["gen"], help="gen experiments from spec")
@@ -205,8 +309,9 @@ def main():
         exp_prompts_dir = exp_dir / "prompts"
         exp_cache_dir = exp_dir / "cache"
         exp_logs_dir = exp_dir / "logs"
+        exp_artifacts_dir = exp_dir / "artifacts"
 
-        for d in [exp_data_dir, exp_model_dir, exp_out_dir, exp_progress_dir, exp_prompts_dir, exp_cache_dir, exp_logs_dir]:
+        for d in [exp_data_dir, exp_model_dir, exp_out_dir, exp_progress_dir, exp_prompts_dir, exp_cache_dir, exp_logs_dir, exp_artifacts_dir]:
             d.mkdir(parents=True, exist_ok=True)
 
         # ===== 复用数据（可选） =====
@@ -257,6 +362,16 @@ def main():
         # runner 输出名：用 exp_id，避免覆盖
         runner_cfg["output_name"] = f"exp_{exp_id}.json"
 
+        # ===== baseline defaults / self-contained artifacts =====
+        baseline = apply_baseline_defaults(
+            build_cfg=build_cfg,
+            train_cfg=train_cfg,
+            runner_cfg=runner_cfg,
+            exp_dir=exp_dir,
+            exp_cache_dir=exp_cache_dir,
+            exp_artifacts_dir=exp_artifacts_dir,
+        )
+
         # ===== manifest =====
         manifest = {
             "project": project,
@@ -280,7 +395,9 @@ def main():
                 "model_dir": config_path(exp_model_dir),
                 "runner_output_dir": config_path(exp_out_dir),
                 "logs_dir": config_path(exp_logs_dir),
+                "artifacts_dir": config_path(exp_artifacts_dir),
             },
+            "baseline": baseline,
             "runtime_defaults": {
                 "train_cuda_visible_devices": train_cuda,
                 "vllm": vllm_defaults,

@@ -59,6 +59,31 @@ COLD_BINARY_RAG_PROMPT_USER_V2 = """请判断下面文本是否属于仇恨言�
 文本：{text}
 标签："""
 
+COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+边界规则：
+- 单纯提到身份、地域、种族、性别、性取向等词，不等于 hate。
+- 反歧视讨论、引用或反驳歧视、事实描述，默认判为 non-hate。
+- 只针对个人行为或个人品质的负面评价，默认判为 non-hate；只有上升到群体身份攻击时才判 hate。
+- 对群体进行恶意泛化、污名化、排斥、驱逐、贬低或煽动敌意，即使表达委婉、反讽或使用谐音，也判为 hate。
+
+背景知识：
+{lexicons}
+
+示例：
+{examples}
+
+请先用一到三句话进行简短分析，然后在“最终标签：”后只输出一个标签：hate 或 non-hate。
+
+文本：{text}
+
+分析：
+最终标签："""
+
 COLD_BINARY_RAG_PROMPT_USER_V2_WO_EXAMPLES = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
 
 标签定义：
@@ -150,6 +175,34 @@ Text:
 {text}
 
 JSON:"""
+
+HATEXPLAIN_EXPLICIT_COT_RAG_PROMPT_USER = """Classify the text for the HateXplain task and identify target groups and rationales.
+
+Labels:
+- hatespeech: hateful content targeting a protected or identity-based group.
+- offensive: insulting, abusive, or profane content that is not clearly hate speech.
+- normal: content that is neither hate speech nor offensive.
+
+Background lexicon:
+{lexicons}
+
+Examples:
+{examples}
+
+Rules:
+- First provide a brief analysis in one to three sentences.
+- Then write FINAL_JSON: followed by one valid JSON object and nothing else after it.
+- The JSON must use exactly these keys: "label", "target_groups", "rationales".
+- "label" must be one of: "hatespeech", "offensive", "normal".
+- "target_groups" must be a list of target communities. Use [] when there is no target group.
+- "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
+- A lexicon match is only background knowledge; do not classify as hate or offensive solely because a listed term appears.
+
+Text:
+{text}
+
+Analysis:
+FINAL_JSON:"""
 
 HATEXPLAIN_RAG_PROMPT_USER_WO_EXAMPLES = """Classify the text for the HateXplain task and identify target groups and rationales.
 
@@ -405,6 +458,29 @@ RAG_PROMPT_USER_V6 = """你是一个内容审查专家，请你分析我的句�
 ### 句子：
 {text}
 ### 三元组："""
+
+STRUCTURED_EXPLICIT_COT_RAG_PROMPT_USER = """你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组。
+其中，仇恨类别请在以下选项中选择：
+'Racism': 种族歧视
+'Region': 地域
+'LGBTQ': 'LGBTQ'
+'Sexism': '性别'
+'others': '其他'
+'non-hate': 不包含仇恨言论
+
+背景知识：
+{lexicons}
+
+示例：
+{examples}
+### 句子：
+{text}
+
+请先用一到三句话进行简短分析，然后在“### 最终三元组：”后只输出三元组。
+三元组格式为：target | argument | targeted_group，多个三元组用 [SEP] 分隔，最后用 [END] 结束。
+
+### 分析：
+### 最终三元组："""
 
 RAG_PROMPT_EXAMPLE_V2 = """### 句子：
 {retrieve_content}

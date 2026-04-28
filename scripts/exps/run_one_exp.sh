@@ -113,6 +113,28 @@ print("" if cur is None else cur)
 ' "$MANIFEST" "$key"
 }
 
+read_json_field() {
+  local file="$1"
+  local key="$2"
+  PYTHONPATH=src python -c '
+import json,sys,os
+path=sys.argv[1]
+key=sys.argv[2]
+if not os.path.exists(path):
+    print("")
+    raise SystemExit(0)
+payload=json.load(open(path,"r",encoding="utf-8"))
+cur=payload
+for p in key.split("."):
+    if isinstance(cur, dict) and p in cur:
+        cur=cur[p]
+    else:
+        cur=None
+        break
+print("" if cur is None else cur)
+' "$file" "$key"
+}
+
 PORT="${PORT:-$(read_manifest_field port)}"
 TRAIN_CUDA_VISIBLE_DEVICES="${TRAIN_CUDA_VISIBLE_DEVICES:-$(read_manifest_field runtime_defaults.train_cuda_visible_devices)}"
 VLLM_CUDA_VISIBLE_DEVICES="${VLLM_CUDA_VISIBLE_DEVICES:-$(read_manifest_field runtime_defaults.vllm.cuda_visible_devices)}"
@@ -165,6 +187,25 @@ REUSE_MODEL_CKPT="${MODEL_CKPT_OVERRIDE:-$MANIFEST_REUSE_MODEL}"
 EXP_DATA_DIR="$(read_manifest_field paths.data_dir)"
 EXP_MODEL_DIR="$(read_manifest_field paths.model_dir)"
 BUILD_SIGNATURE_FILE="${EXP_DATA_DIR}/build_signature.json"
+BASELINE_METHOD="$(read_json_field "$RUNNER_CFG" baseline.method)"
+BASELINE_METHOD="${BASELINE_METHOD:-$(read_json_field "$BUILD_CFG" baseline.method)}"
+BASELINE_METHOD="${BASELINE_METHOD:-standard}"
+if [[ "$BASELINE_METHOD" == "ddp" ]]; then BASELINE_METHOD="dpp"; fi
+BASELINE_TASK_TYPE="$(read_json_field "$RUNNER_CFG" baseline.task_type)"
+BASELINE_TASK_TYPE="${BASELINE_TASK_TYPE:-$(read_json_field "$BUILD_CFG" baseline.task_type)}"
+BASELINE_TASK_TYPE="${BASELINE_TASK_TYPE:-structured}"
+DPP_DEMOS_PATH="$(read_json_field "$BUILD_CFG" baseline.dpp.demos_path)"
+
+dpp_demos_missing() {
+  [[ "$BASELINE_METHOD" == "dpp" && -n "$DPP_DEMOS_PATH" && ! -f "$DPP_DEMOS_PATH" ]]
+}
+
+run_dpp_select() {
+  if [[ "$BASELINE_METHOD" == "dpp" ]]; then
+    echo "[STEP] dpp demo selection"
+    PYTHONPATH=src python src/baselines/dpp_select.py --build-config "$BUILD_CFG" 2>&1 | tee "${LOG_DIR}/dpp_select.log"
+  fi
+}
 
 build_config_signature() {
   PYTHONPATH=src python - "$BUILD_CFG" <<'PY'
@@ -564,6 +605,7 @@ fi
 echo "[INFO] VLLM_CUDA_VISIBLE_DEVICES=$VLLM_CUDA_VISIBLE_DEVICES"
 echo "[INFO] REUSE_DATA_DIR=${REUSE_DATA_DIR:-<none>}"
 echo "[INFO] REUSE_MODEL_CKPT=${REUSE_MODEL_CKPT:-<none>}"
+echo "[INFO] BASELINE_METHOD=$BASELINE_METHOD  BASELINE_TASK_TYPE=$BASELINE_TASK_TYPE"
 
 case "$MODE" in
   data)  DO_BUILD=1; DO_TRAIN=0; DO_INFER=0 ;;
@@ -578,13 +620,22 @@ if [[ "$DO_BUILD" == "1" ]]; then
     echo "[SKIP] build_data because REUSE_DATA_DIR is set: $REUSE_DATA_DIR"
   elif [[ -f "${EXP_DATA_DIR}/train.jsonl" && -f "${EXP_DATA_DIR}/val.jsonl" && -f "${EXP_DATA_DIR}/test.json" ]]; then
     if [[ "$(build_requires_signature)" != "1" ]] || build_signature_matches; then
-      echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
+      if dpp_demos_missing; then
+        echo "[STEP] build_data (DPP demos missing)"
+        run_dpp_select
+        PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
+        write_build_signature
+      else
+        echo "[SKIP] build_data (found existing data in ${EXP_DATA_DIR})"
+      fi
     else
       echo "[STEP] build_data (existing data signature missing or stale)"
+      run_dpp_select
       PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
       write_build_signature
     fi
   else
+    run_dpp_select
     echo "[STEP] build_data"
     PYTHONPATH=src python src/data/build_data.py --config "$BUILD_CFG" 2>&1 | tee "$BUILD_LOG"
     write_build_signature
@@ -727,7 +778,11 @@ if [[ "$DO_INFER" == "1" ]]; then
       model.params.api_base "http://127.0.0.1:${PORT}/v1/"
   fi
 
-  PYTHONPATH=src python src/runner/run.py --config "$TMP_RUN_CFG" 2>&1 | tee "$RUN_LOG"
+  if [[ "$BASELINE_METHOD" == "ids" ]]; then
+    PYTHONPATH=src python src/baselines/ids_runner.py --config "$TMP_RUN_CFG" --build-config "$BUILD_CFG" 2>&1 | tee "$RUN_LOG"
+  else
+    PYTHONPATH=src python src/runner/run.py --config "$TMP_RUN_CFG" 2>&1 | tee "$RUN_LOG"
+  fi
   rm -f "$TMP_RUN_CFG"
 
   echo "[STEP] stop vLLM"

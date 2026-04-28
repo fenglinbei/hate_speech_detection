@@ -890,6 +890,10 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
         "stratify_field": getattr(config, "stratify_field", "targeted_group"),
         "query_instruction": getattr(config, "srag_query_instruction", ""),
     }
+    common_cache = {
+        "cache_dir": getattr(config, "retrieval_cache_dir", "./cache_retrieval"),
+        "enable_cache": getattr(config, "enable_retrieval_cache", True),
+    }
 
     if config.clustered:
         retriever = ClusteredRetriever(
@@ -897,6 +901,7 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
             model_name=model_name,
             n_clusters=config.n_clusters,
             random_state=config.random_state,
+            **common_cache,
             **common_task,
         )
         retriever._load_datas(data_list=raw_datas)
@@ -913,6 +918,7 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
             random_state=config.random_state,
             target_groups=target_groups,
             default_weights=default_weights,
+            **common_cache,
             **common_task,
         )
         retriever.load_datas(data_list=raw_datas)
@@ -945,12 +951,14 @@ def _create_srag_retriever(config: Config, raw_datas: list[dict]) -> Optional[An
             model_path=config.srag_model_path,
             model_name=model_name,
             random_state=config.random_state,
+            **common_cache,
             **common_task,
         )
     else:
         retriever = Retriever(
             model_path=config.srag_model_path,
             model_name=model_name,
+            **common_cache,
             **common_task,
         )
 
@@ -969,6 +977,8 @@ def _create_lex_retriever(config: Config) -> Optional[Any]:
         model_path=config.lexicon_model_path,
         model_name=_model_name_from_path(getattr(config, "lexicon_model_name", None), getattr(config, "lexicon_model_path", None)),
         data_path=config.lexicon_data_path,
+        cache_dir=getattr(config, "lexicon_cache_dir", "./cache_lexicon"),
+        enable_cache=getattr(config, "enable_retrieval_cache", True),
         lexicon_schema=getattr(config, "lexicon_schema", "cold"),
         match_mode=getattr(config, "lexicon_match_mode", "substring"),
         case_sensitive=getattr(config, "lexicon_case_sensitive", True),
