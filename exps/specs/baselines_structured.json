@@ -1,0 +1,48 @@
+{
+  "project": "structured_baselines",
+  "output_root": "exps/baselines/structured",
+  "base": {
+    "build": "exps/baselines/dpp/data/config.json",
+    "train": "config/finetune/k_ablation/k6.json",
+    "runner": "config/runner/k_ablation/k6.json"
+  },
+  "port_base": 35300,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": [
+    {
+      "name": "ids",
+      "runner.baseline.method": "ids",
+      "runner.baseline.task_type": "structured",
+      "build.global_demo_settings.use_global_demos": false,
+      "runner.tester.run.llm_params.enable_thinking": false
+    },
+    {
+      "name": "dpp",
+      "runner.baseline.method": "dpp",
+      "runner.baseline.task_type": "structured",
+      "runner.tester.run.llm_params.enable_thinking": false
+    },
+    {
+      "name": "explicit_cot",
+      "runner.baseline.method": "explicit_cot",
+      "runner.baseline.task_type": "structured",
+      "build.global_demo_settings.use_global_demos": false,
+      "build.prompt_templates.prompt_template": "STRUCTURED_EXPLICIT_COT_RAG_PROMPT_USER",
+      "train.prompt_template": "STRUCTURED_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.tester.prompt_templates.train": "STRUCTURED_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.tester.run.llm_params.enable_thinking": false,
+      "runner.tester.run.llm_params.max_new_tokens": 2048
+    }
+  ]
+}
+

@@ -3,13 +3,29 @@ import re
 from typing import Any, List, Dict
 
 
-def parse_binary_label(llm_output: str) -> str | None:
-    """Parse a binary hate-speech label from an LLM response."""
+def _extract_after_last_marker(text: str, markers: list[str]) -> str:
+    """Return text after the last explicit final-answer marker, if present."""
+    raw = str(text or "")
+    best_pos = -1
+    best_marker = ""
+    raw_lower = raw.lower()
+    for marker in markers:
+        if not marker:
+            continue
+        if marker.isascii():
+            pos = raw_lower.rfind(marker.lower())
+        else:
+            pos = raw.rfind(marker)
+        if pos >= 0 and pos >= best_pos:
+            best_pos = pos
+            best_marker = marker
+    if best_pos < 0:
+        return ""
+    return raw[best_pos + len(best_marker):].strip()
 
-    if llm_output is None:
-        return None
 
-    text = str(llm_output).strip().lower()
+def _parse_binary_label_raw(llm_output: str) -> str | None:
+    text = str(llm_output or "").strip().lower()
     if not text:
         return None
 
@@ -30,6 +46,25 @@ def parse_binary_label(llm_output: str) -> str | None:
     return None
 
 
+def parse_binary_label(llm_output: str) -> str | None:
+    """Parse a binary hate-speech label from an LLM response."""
+
+    if llm_output is None:
+        return None
+
+    final_segment = _extract_after_last_marker(
+        str(llm_output),
+        ["最终标签：", "最终标签:", "FINAL_LABEL:", "Final label:", "Label:"],
+    )
+    if final_segment:
+        first_line = final_segment.strip().splitlines()[0] if final_segment.strip().splitlines() else final_segment
+        label = _parse_binary_label_raw(first_line)
+        if label:
+            return label
+
+    return _parse_binary_label_raw(str(llm_output))
+
+
 def _strip_json_fence(text: str) -> str:
     text = str(text or "").strip()
     match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, flags=re.IGNORECASE | re.DOTALL)
@@ -48,8 +83,14 @@ def parse_hatexplain_output(llm_output: str) -> dict[str, Any] | None:
     if llm_output is None:
         return None
 
+    final_segment = _extract_after_last_marker(
+        str(llm_output),
+        ["FINAL_JSON:", "Final JSON:", "最终JSON：", "最终JSON:"],
+    )
+    source = final_segment if final_segment else llm_output
+
     try:
-        payload = json.loads(_strip_json_fence(llm_output))
+        payload = json.loads(_strip_json_fence(source))
     except Exception:
         return None
 
@@ -76,6 +117,26 @@ def parse_hatexplain_output(llm_output: str) -> dict[str, Any] | None:
     }
 
 def extract_triplets(text):
+    final_segment = _extract_after_last_marker(
+        str(text or ""),
+        ["### 最终三元组：", "### 最终三元组:", "FINAL_TRIPLES:", "Final triples:"],
+    )
+    if final_segment:
+        triplets_text = final_segment
+        triplets_text = re.sub(r'\s*\n\s*', ' ', triplets_text)
+        triplets_text = re.sub(r'\s+', ' ', triplets_text).strip()
+
+        triplet_pattern = r'([^|]+\|[^|]+\|[^\[\]]+)(?:\s*\[(END|SEP)\])?'
+        triplets = re.findall(triplet_pattern, triplets_text)
+        if triplets:
+            triplet_contents = [t[0].strip() for t in triplets]
+            if len(triplet_contents) == 1:
+                return f"{triplet_contents[0]} [END]"
+            result = " [SEP] ".join(triplet_contents[:-1])
+            result += f" [SEP] {triplet_contents[-1]} [END]"
+            return result
+        return triplets_text
+
     # 查找三元组开始标记
     triplets_start = re.search(r'(?:###\s*)?三元组：\s*', text)
     if not triplets_start:

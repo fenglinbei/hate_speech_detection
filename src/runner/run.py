@@ -161,6 +161,8 @@ class LLMTester:
         """
         self.llm = llm_model
         self.config = config.get('tester', {})
+        if isinstance(config.get("baseline"), dict):
+            self.config.setdefault("baseline", config["baseline"])
         self.global_config = config
         self.metric = metric
         self.task_type = str(self.config.get("task_type", config.get("task_type", "structured"))).lower()
