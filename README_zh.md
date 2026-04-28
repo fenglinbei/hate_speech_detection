@@ -380,7 +380,7 @@ profile patch，runner 临时配置会把 `model.params.api_base` patch 成实�
 full finetune 的分布式训练由这些变量控制：
 
 - `TRAIN_BACKEND=deepspeed|fsdp|single`，默认 `deepspeed`。
-- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs4|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`。
+- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs4|ds_zero2_bs8|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`。
 - `TRAIN_NPROC_PER_NODE` 默认等于 `TRAIN_CUDA_VISIBLE_DEVICES` 里的 GPU 数量。
 - `TRAIN_MASTER_PORT` 默认等于 `PORT + 1000`。
 - `TRAIN_MAX_STEPS=2` 可用于短 smoke test；正式训练时不要设置。
@@ -407,6 +407,7 @@ full finetune 的分布式训练由这些变量控制：
 
 - `ds_zero2_safe`：ZeRO-2，无 CPU offload，micro-batch 2，gradient accumulation 1。
 - `ds_zero2_bs4`：ZeRO-2，无 CPU offload，micro-batch 4，gradient accumulation 1。适合 LoRA 使用 `ds_zero2_safe` 后显存仍有余量、希望提升吞吐的场景。
+- `ds_zero2_bs8`：ZeRO-2，无 CPU offload，micro-batch 8，gradient accumulation 1。适合使用 `ds_zero2_bs4` 后显存仍有余量的场景。
 - `ds_zero2_bs1`：ZeRO-2，无 CPU offload，micro-batch 1，gradient accumulation 2。
 - `ds_zero3_safe`：ZeRO-3，无 CPU offload，micro-batch 2，gradient accumulation 1。
 - `ds_zero3_bs1`：ZeRO-3，无 CPU offload，micro-batch 1，gradient accumulation 2。
