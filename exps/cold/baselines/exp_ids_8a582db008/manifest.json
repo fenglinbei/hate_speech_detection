@@ -1,0 +1,52 @@
+{
+  "project": "cold_baselines",
+  "exp_id": "8a582db008",
+  "exp_dir": "exps/cold/baselines/exp_ids_8a582db008",
+  "created_at": "2026-04-28 12:17:08",
+  "index": 2,
+  "port": 35102,
+  "overrides": {
+    "name": "ids",
+    "runner.baseline.method": "ids",
+    "runner.baseline.task_type": "cold_binary",
+    "runner.tester.run.llm_params.enable_thinking": false,
+    "runner.tester.run.llm_params.max_new_tokens": 512
+  },
+  "meta": {
+    "name": "ids"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/cold/baselines/exp_ids_8a582db008/build_config.json",
+    "train_config": "exps/cold/baselines/exp_ids_8a582db008/train_config.json",
+    "runner_config": "exps/cold/baselines/exp_ids_8a582db008/runner_config.json",
+    "data_dir": "exps/cold/baselines/exp_ids_8a582db008/data",
+    "val_runner_file": "exps/cold/baselines/exp_ids_8a582db008/data/val_runner.json",
+    "model_dir": "exps/cold/baselines/exp_ids_8a582db008/model",
+    "runner_output_dir": "exps/cold/baselines/exp_ids_8a582db008/runner_output",
+    "logs_dir": "exps/cold/baselines/exp_ids_8a582db008/logs",
+    "artifacts_dir": "exps/cold/baselines/exp_ids_8a582db008/artifacts"
+  },
+  "baseline": {
+    "method": "ids",
+    "task_type": "cold_binary",
+    "ids": {
+      "q": 3,
+      "top_k": 10,
+      "max_reason_chars": 512,
+      "cache_dir": "exps/cold/baselines/exp_ids_8a582db008/cache/ids"
+    }
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
