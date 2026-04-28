@@ -396,7 +396,7 @@ If `reuse.model_checkpoint` is set, training is skipped unless `FORCE_TRAIN=1`.
 Distributed full fine-tuning is controlled by these variables:
 
 - `TRAIN_BACKEND=deepspeed|fsdp|single`, default `deepspeed`.
-- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs4|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`.
+- `TRAIN_PROFILE=ds_zero2_safe|ds_zero2_bs4|ds_zero2_bs8|ds_zero2_bs1|ds_zero3_safe|ds_zero3_bs1|ds_zero3_offload|fsdp_safe|single`.
 - `TRAIN_NPROC_PER_NODE` defaults to the number of IDs in `TRAIN_CUDA_VISIBLE_DEVICES`.
 - `TRAIN_MASTER_PORT` defaults to `PORT + 1000`.
 - `TRAIN_MAX_STEPS=2` is useful for a short smoke test; omit it for real runs.
@@ -423,6 +423,7 @@ Profile intent:
 
 - `ds_zero2_safe`: ZeRO-2, no CPU offload, micro-batch 2, gradient accumulation 1.
 - `ds_zero2_bs4`: ZeRO-2, no CPU offload, micro-batch 4, gradient accumulation 1. Use it for LoRA runs when `ds_zero2_safe` leaves GPU memory idle and you want higher throughput.
+- `ds_zero2_bs8`: ZeRO-2, no CPU offload, micro-batch 8, gradient accumulation 1. Use it when `ds_zero2_bs4` still leaves enough GPU memory idle.
 - `ds_zero2_bs1`: ZeRO-2, no CPU offload, micro-batch 1, gradient accumulation 2.
 - `ds_zero3_safe`: ZeRO-3, no CPU offload, micro-batch 2, gradient accumulation 1.
 - `ds_zero3_bs1`: ZeRO-3, no CPU offload, micro-batch 1, gradient accumulation 2.
