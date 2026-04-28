@@ -516,7 +516,33 @@ MODE=full bash scripts/exps/run_all_exps.sh exps/some_project
 ```
 
 `run_all_exps.sh` finds every `exp_*` directory directly under the given root
-and invokes `run_one_exp.sh` sequentially with the same `MODE`.
+and invokes `run_one_exp.sh` sequentially with the same `MODE`. It also accepts
+explicit experiment directories:
+
+```bash
+MODE=full \
+TRAIN_BACKEND=deepspeed \
+TRAIN_PROFILE=ds_zero2_bs8 \
+TRAIN_CUDA_VISIBLE_DEVICES=0,1,2,3 \
+TRAIN_LORA=1 \
+bash scripts/exps/run_all_exps.sh \
+  exps/ablation/more/exp_only_class_quota_acfada2f31 \
+  exps/ablation/more/exp_only_truncation_4624e4cede \
+  exps/ablation/more/exp_only_lex_a4d3f1fec9
+```
+
+If you want to preserve per-experiment settings stored in each generated
+`run.sh`, pass those scripts instead:
+
+```bash
+bash scripts/exps/run_all_exps.sh \
+  exps/ablation/more/exp_only_class_quota_acfada2f31/run.sh \
+  exps/ablation/more/exp_only_truncation_4624e4cede/run.sh \
+  exps/ablation/more/exp_only_lex_a4d3f1fec9/run.sh
+```
+
+Use `DRY_RUN=1` to preview the resolved commands, or
+`CONTINUE_ON_ERROR=1` to keep running remaining experiments after a failure.
 
 ## COLD Fixed-Split Conversion
 
