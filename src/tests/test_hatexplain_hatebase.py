@@ -13,6 +13,11 @@ from data.config import Config
 from data.hatebase_adapter import convert_hatebase
 from data.hatexplain_adapter import convert_dataset
 from metrics.metric_llm import HateXplainMetrics
+from prompt import (
+    HATEXPLAIN_PROMPT_USER,
+    HATEXPLAIN_RAG_PROMPT_USER_WO_EXAMPLES,
+    HATEXPLAIN_RAG_PROMPT_USER_WO_LEX,
+)
 from utils.parser import parse_hatexplain_output
 
 
@@ -228,6 +233,38 @@ class HateBaseRetrieverTest(unittest.TestCase):
 
 
 class HateXplainBuildParserMetricTest(unittest.TestCase):
+    def test_prompt_variants_omit_only_missing_resource_sections(self):
+        lexicons = "###\nTerm: slur\nCategory: ethnicity"
+        examples = 'Text:\nexample text\nJSON:\n{"label":"normal","target_groups":[],"rationales":[]}'
+
+        no_examples = (
+            HATEXPLAIN_RAG_PROMPT_USER_WO_EXAMPLES
+            .replace("{lexicons}", lexicons)
+            .replace("{text}", "sample text")
+        )
+        self.assertIn("Background lexicon:", no_examples)
+        self.assertIn("Term: slur", no_examples)
+        self.assertNotIn("Examples:", no_examples)
+        self.assertIn("A lexicon match is only background knowledge", no_examples)
+        self.assertIn('"label" must be one of: "hatespeech", "offensive", "normal"', no_examples)
+
+        no_lex = (
+            HATEXPLAIN_RAG_PROMPT_USER_WO_LEX
+            .replace("{examples}", examples)
+            .replace("{text}", "sample text")
+        )
+        self.assertIn("Examples:", no_lex)
+        self.assertIn("example text", no_lex)
+        self.assertNotIn("Background lexicon:", no_lex)
+        self.assertNotIn("lexicon match", no_lex)
+        self.assertIn('"target_groups" must be a list of target communities', no_lex)
+
+        no_resources = HATEXPLAIN_PROMPT_USER.replace("{text}", "sample text")
+        self.assertNotIn("Background lexicon:", no_resources)
+        self.assertNotIn("Examples:", no_resources)
+        self.assertNotIn("lexicon match", no_resources)
+        self.assertIn('"rationales" must be a list of short text spans', no_resources)
+
     def test_build_parser_and_metric_use_hatexplain_annotation(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             root = Path(tmp_dir)

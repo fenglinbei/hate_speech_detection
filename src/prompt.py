@@ -59,6 +59,66 @@ COLD_BINARY_RAG_PROMPT_USER_V2 = """请判断下面文本是否属于仇恨言�
 文本：{text}
 标签："""
 
+COLD_BINARY_RAG_PROMPT_USER_V2_WO_EXAMPLES = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+边界规则：
+- 单纯提到身份、地域、种族、性别、性取向等词，不等于 hate。
+- 反歧视讨论、引用或反驳歧视、事实描述，默认判为 non-hate。
+- 只针对个人行为或个人品质的负面评价，默认判为 non-hate；只有上升到群体身份攻击时才判 hate。
+- 对群体进行恶意泛化、污名化、排斥、驱逐、贬低或煽动敌意，即使表达委婉、反讽或使用谐音，也判为 hate。
+
+背景知识：
+{lexicons}
+
+输出要求：
+只输出一个标签：hate 或 non-hate。不要输出解释或标点。
+
+文本：{text}
+标签："""
+
+COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+边界规则：
+- 单纯提到身份、地域、种族、性别、性取向等词，不等于 hate。
+- 反歧视讨论、引用或反驳歧视、事实描述，默认判为 non-hate。
+- 只针对个人行为或个人品质的负面评价，默认判为 non-hate；只有上升到群体身份攻击时才判 hate。
+- 对群体进行恶意泛化、污名化、排斥、驱逐、贬低或煽动敌意，即使表达委婉、反讽或使用谐音，也判为 hate。
+
+示例：
+{examples}
+
+输出要求：
+只输出一个标签：hate 或 non-hate。不要输出解释或标点。
+
+文本：{text}
+标签："""
+
+COLD_BINARY_PROMPT_USER_V2 = """请判断下面文本是否属于仇恨言论二分类任务中的 hate 或 non-hate。
+
+标签定义：
+- hate：针对种族、地域、性别、性取向等群体或身份的贬低、侮辱、污名化、排斥、恶意泛化或煽动敌意。
+- non-hate：不包含上述仇恨言论；包括事实描述、反歧视讨论、引用或反驳歧视、普通负面情绪但未针对群体身份攻击。
+
+边界规则：
+- 单纯提到身份、地域、种族、性别、性取向等词，不等于 hate。
+- 反歧视讨论、引用或反驳歧视、事实描述，默认判为 non-hate。
+- 只针对个人行为或个人品质的负面评价，默认判为 non-hate；只有上升到群体身份攻击时才判 hate。
+- 对群体进行恶意泛化、污名化、排斥、驱逐、贬低或煽动敌意，即使表达委婉、反讽或使用谐音，也判为 hate。
+
+输出要求：
+只输出一个标签：hate 或 non-hate。不要输出解释或标点。
+
+文本：{text}
+标签："""
+
 COLD_BINARY_EXAMPLE_PROMPT = """文本：{retrieve_content}
 标签：{retrieve_output}
 """
@@ -85,6 +145,70 @@ Rules:
 - "target_groups" must be a list of target communities. Use [] when there is no target group.
 - "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
 - A lexicon match is only background knowledge; do not classify as hate or offensive solely because a listed term appears.
+
+Text:
+{text}
+
+JSON:"""
+
+HATEXPLAIN_RAG_PROMPT_USER_WO_EXAMPLES = """Classify the text for the HateXplain task and identify target groups and rationales.
+
+Labels:
+- hatespeech: hateful content targeting a protected or identity-based group.
+- offensive: insulting, abusive, or profane content that is not clearly hate speech.
+- normal: content that is neither hate speech nor offensive.
+
+Background lexicon:
+{lexicons}
+
+Rules:
+- The output must be one valid JSON object and nothing else.
+- Use exactly these keys: "label", "target_groups", "rationales".
+- "label" must be one of: "hatespeech", "offensive", "normal".
+- "target_groups" must be a list of target communities. Use [] when there is no target group.
+- "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
+- A lexicon match is only background knowledge; do not classify as hate or offensive solely because a listed term appears.
+
+Text:
+{text}
+
+JSON:"""
+
+HATEXPLAIN_RAG_PROMPT_USER_WO_LEX = """Classify the text for the HateXplain task and identify target groups and rationales.
+
+Labels:
+- hatespeech: hateful content targeting a protected or identity-based group.
+- offensive: insulting, abusive, or profane content that is not clearly hate speech.
+- normal: content that is neither hate speech nor offensive.
+
+Examples:
+{examples}
+
+Rules:
+- The output must be one valid JSON object and nothing else.
+- Use exactly these keys: "label", "target_groups", "rationales".
+- "label" must be one of: "hatespeech", "offensive", "normal".
+- "target_groups" must be a list of target communities. Use [] when there is no target group.
+- "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
+
+Text:
+{text}
+
+JSON:"""
+
+HATEXPLAIN_PROMPT_USER = """Classify the text for the HateXplain task and identify target groups and rationales.
+
+Labels:
+- hatespeech: hateful content targeting a protected or identity-based group.
+- offensive: insulting, abusive, or profane content that is not clearly hate speech.
+- normal: content that is neither hate speech nor offensive.
+
+Rules:
+- The output must be one valid JSON object and nothing else.
+- Use exactly these keys: "label", "target_groups", "rationales".
+- "label" must be one of: "hatespeech", "offensive", "normal".
+- "target_groups" must be a list of target communities. Use [] when there is no target group.
+- "rationales" must be a list of short text spans from the input that support the label. Use [] when no span is needed.
 
 Text:
 {text}

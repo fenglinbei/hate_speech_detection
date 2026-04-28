@@ -6,6 +6,11 @@ from pathlib import Path
 from data.build_data import make_data
 from data.config import Config
 from metrics.metric_llm import BinaryClassificationMetrics
+from prompt import (
+    COLD_BINARY_PROMPT_USER_V2,
+    COLD_BINARY_RAG_PROMPT_USER_V2_WO_EXAMPLES,
+    COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX,
+)
 from utils.parser import parse_binary_label
 
 
@@ -65,6 +70,99 @@ def make_record(sample_id, content, label, metadata=None):
 
 
 class ColdBinaryBuildTest(unittest.TestCase):
+    def _render_train_prompt(self, root: Path, prompt_template: str, retrieval_settings=None) -> str:
+        out_dir = root / "out"
+        cache_dir = root / "cache"
+        train_path = root / "train.json"
+        val_path = root / "val.json"
+        test_path = root / "test.json"
+        retrieval_settings = retrieval_settings or {
+            "use_srag": False,
+            "srag_top_k": 0,
+            "use_lex": False,
+        }
+
+        train_path.write_text(
+            json.dumps([make_record("train_1", "讨厌某群体", "hate")], ensure_ascii=False),
+            encoding="utf-8",
+        )
+        val_path.write_text(
+            json.dumps([make_record("val_1", "普通讨论", "non-hate")], ensure_ascii=False),
+            encoding="utf-8",
+        )
+        test_path.write_text(
+            json.dumps([make_record("test_1", "恶意泛化某群体", "hate")], ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        config_path = root / "config.json"
+        config_path.write_text(
+            json.dumps({
+                "task_type": "cold_binary",
+                "data_paths": {
+                    "raw_data_path": str(train_path),
+                    "val_data_path": str(val_path),
+                    "test_data_path": str(test_path),
+                    "train_output_path": str(out_dir / "train.jsonl"),
+                    "val_output_path": str(out_dir / "val.jsonl"),
+                    "val_runner_output_path": str(out_dir / "val_runner.json"),
+                    "test_output_path": str(out_dir / "test.json"),
+                    "lexicon_data_path": "",
+                    "tokenizer_path": None,
+                },
+                "prompt_templates": {
+                    "prompt_template": prompt_template,
+                    "example_template": "COLD_BINARY_EXAMPLE_PROMPT",
+                    "system_prompt": "COLD_BINARY_SYSTEM_PROMPT",
+                },
+                "retrieval_settings": retrieval_settings,
+                "training_settings": {
+                    "auto_length": False,
+                    "split_ratio": 0.9,
+                },
+                "cache_settings": {
+                    "enable_build_cache": False,
+                    "build_cache_dir": str(cache_dir),
+                },
+            }, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        make_data(Config(str(config_path)))
+        train_row = json.loads((out_dir / "train.jsonl").read_text(encoding="utf-8").splitlines()[0])
+        return train_row["input"]
+
+    def test_v2_prompt_variants_omit_only_missing_resource_sections(self):
+        lexicons = "关键词：坏词\n类别：Racism\n定义：测试背景"
+        examples = "文本：示例文本\n标签：hate"
+
+        no_examples = (
+            COLD_BINARY_RAG_PROMPT_USER_V2_WO_EXAMPLES
+            .replace("{lexicons}", lexicons)
+            .replace("{text}", "待判断文本")
+        )
+        self.assertIn("背景知识：", no_examples)
+        self.assertIn("关键词：坏词", no_examples)
+        self.assertNotIn("示例：", no_examples)
+        self.assertIn("边界规则", no_examples)
+        self.assertIn("只输出一个标签：hate 或 non-hate", no_examples)
+
+        no_lex = (
+            COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX
+            .replace("{examples}", examples)
+            .replace("{text}", "待判断文本")
+        )
+        self.assertIn("示例：", no_lex)
+        self.assertIn("示例文本", no_lex)
+        self.assertNotIn("背景知识：", no_lex)
+        self.assertIn("边界规则", no_lex)
+
+        no_resources = COLD_BINARY_PROMPT_USER_V2.replace("{text}", "待判断文本")
+        self.assertNotIn("背景知识：", no_resources)
+        self.assertNotIn("示例：", no_resources)
+        self.assertIn("边界规则", no_resources)
+        self.assertIn("文本：待判断文本", no_resources)
+
     def test_make_data_writes_label_outputs_and_gt_label(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             root = Path(tmp_dir)
@@ -160,6 +258,34 @@ class ColdBinaryBuildTest(unittest.TestCase):
             self.assertEqual(val_runner_rows[0]["gt_label"], "non-hate")
             self.assertEqual(val_runner_rows[0]["metadata"]["fine_grained_label"], "0")
             self.assertIn("messages_list", val_runner_rows[0])
+
+    def test_zero_shot_v2_prompt_omits_empty_resource_sections(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            prompt = self._render_train_prompt(Path(tmp_dir), "COLD_BINARY_PROMPT_USER_V2")
+
+        self.assertIn("边界规则", prompt)
+        self.assertIn("只输出一个标签：hate 或 non-hate", prompt)
+        self.assertIn("文本：讨厌某群体", prompt)
+        self.assertNotIn("背景知识", prompt)
+        self.assertNotIn("示例：", prompt)
+
+    def test_explicit_full_rag_v2_prompt_is_not_auto_switched(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            prompt = self._render_train_prompt(
+                Path(tmp_dir),
+                "COLD_BINARY_RAG_PROMPT_USER_V2",
+                {
+                    "use_srag": False,
+                    "srag_top_k": 0,
+                    "use_lex": False,
+                    "lex_top_k": 0,
+                },
+            )
+
+        self.assertIn("边界规则", prompt)
+        self.assertIn("背景知识：", prompt)
+        self.assertIn("示例：", prompt)
+        self.assertIn("文本：讨厌某群体", prompt)
 
 
 if __name__ == "__main__":
