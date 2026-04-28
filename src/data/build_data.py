@@ -337,6 +337,39 @@ def token_length(tokenizer, text) -> int:
     """Return token count without materializing a torch tensor."""
     return len(tokenizer.encode(text, add_special_tokens=True))
 
+
+def _decode_token_ids(tokenizer, token_ids: list[int]) -> str:
+    try:
+        return tokenizer.decode(
+            token_ids,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False,
+        )
+    except TypeError:
+        return tokenizer.decode(token_ids, skip_special_tokens=True)
+
+
+def truncate_prompt_from_tail(tokenizer, text: str, max_length: int) -> tuple[str, int, int, bool]:
+    """Keep the prompt prefix and drop tail tokens until it fits max_length."""
+    max_length = int(max_length or 0)
+    if tokenizer is None or max_length <= 0:
+        return text, 0, 0, False
+
+    token_ids = tokenizer.encode(text, add_special_tokens=True)
+    original_len = len(token_ids)
+    if original_len <= max_length:
+        return text, original_len, original_len, False
+
+    keep_len = max_length
+    truncated = _decode_token_ids(tokenizer, token_ids[:keep_len])
+    truncated_len = token_length(tokenizer, truncated)
+    while truncated_len > max_length and keep_len > 0:
+        keep_len -= 1
+        truncated = _decode_token_ids(tokenizer, token_ids[:keep_len])
+        truncated_len = token_length(tokenizer, truncated)
+
+    return truncated, original_len, truncated_len, True
+
 def build_prompt(
         datas: list,
         config: Config,
@@ -658,7 +691,8 @@ def build_prompt(
                 prompt = render_prompt(raw_data, examples, lex_contents)
                 original_examples = examples
 
-                # ?????????
+                # When auto_length is enabled, keep the original behavior:
+                # reduce demonstrations before rebuilding the prompt.
                 i = 1
                 cur_len = token_length(tokenizer, prompt) if config.auto_length and tokenizer is not None else 0
                 while config.auto_length and tokenizer is not None and cur_len > config.max_length:
@@ -685,6 +719,18 @@ def build_prompt(
                             break
                     i += 1
                     cur_len = token_length(tokenizer, prompt)
+
+                if not config.auto_length and tokenizer is not None:
+                    prompt, original_len, truncated_len, was_truncated = truncate_prompt_from_tail(
+                        tokenizer,
+                        prompt,
+                        config.max_length,
+                    )
+                    if was_truncated:
+                        logger.debug(
+                            f"Prompt tail-truncated: {original_len} > {config.max_length}, "
+                            f"new_len={truncated_len}."
+                        )
 
                 srag_examples_nums += len(examples)
 
@@ -738,7 +784,7 @@ def _legacy_make_data(config: Config):
     split_idx = int(len(raw_datas) * config.split_ratio)
 
     tokenizer = None
-    if config.auto_length and config.tokenizer_path is not None:
+    if getattr(config, "tokenizer_path", None):
         tokenizer = get_tokenizer(config.tokenizer_path)
 
     enable_build_cache = getattr(config, 'enable_build_cache', True)
@@ -1134,7 +1180,7 @@ def make_data(config: Config):
         val_datas = raw_datas[split_idx:]
 
     tokenizer = None
-    if config.auto_length and config.tokenizer_path is not None:
+    if getattr(config, "tokenizer_path", None):
         tokenizer = get_tokenizer(config.tokenizer_path)
 
     build_cache = BuildCacheManager(
