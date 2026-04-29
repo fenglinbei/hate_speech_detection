@@ -1,0 +1,265 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "shot_num": 0,
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_a4d3f1fec9.json",
+    "generated_at": "20260429_123920",
+    "llm_params_base": {
+      "max_new_tokens": 2048,
+      "n": 1,
+      "top_p": 0.5,
+      "top_k": 20,
+      "min_p": 0,
+      "temperature": 0.7,
+      "enable_thinking": false
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_a4d3f1fec9_s42.json",
+      "metric": {
+        "f1_hard": 0.2328,
+        "f1_soft": 0.449,
+        "f1_avg": 0.3409,
+        "success": 1605,
+        "total": 1605,
+        "success_rate": 1.0,
+        "hard_precision": 0.2307,
+        "hard_recall": 0.235,
+        "soft_precision": 0.4448,
+        "soft_recall": 0.4532,
+        "field_metrics": {
+          "text_similarity": {
+            "target_avg_sim": 0.7656,
+            "argument_avg_sim": 0.6761
+          },
+          "targeted_group": {
+            "tp": 1321,
+            "fp": 617,
+            "fn": 581,
+            "precision": 0.6816,
+            "recall": 0.6945,
+            "f1": 0.688
+          },
+          "hateful": {
+            "tp": 1477,
+            "fp": 461,
+            "fn": 425,
+            "precision": 0.7621,
+            "recall": 0.7766,
+            "f1": 0.7693
+          },
+          "matched_pairs": 1749
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "completion_tokens": 35093,
+          "prompt_tokens": 1549925,
+          "total_tokens": 1585018
+        },
+        "llm_params": {
+          "max_new_tokens": 2048,
+          "n": 1,
+          "top_p": 0.5,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0.7,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42,
+          "prompts_save_dir": "exps/ablation/more/exp_only_lex_a4d3f1fec9/prompts/exp_a4d3f1fec9_s42",
+          "output_dir": "exps/ablation/more/exp_only_lex_a4d3f1fec9/runner_output",
+          "concurrency": 1,
+          "max_retries": 50,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "exps/ablation/more/exp_only_lex_a4d3f1fec9/progress/exp_a4d3f1fec9_s42",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "你是一个内容审查专家，请你分析我的句子并且从中提取出一个或者多个三元组:\n背景知识：\n{lexicons}\n\n示例：\n{examples}\n### 句子：\n{text}\n### 三元组：\n",
+            "shot": "",
+            "system": "You are a professional linguist and hate speech analyst. Please strictly and correctly follow the user's instructions.",
+            "example": "### 句子：\n{retrieve_content}\n### 三元组：\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 2048,
+              "n": 1,
+              "top_p": 0.5,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0.7,
+              "enable_thinking": false,
+              "seed": 42424242
+            },
+            "seeds_list": [
+              42
+            ]
+          },
+          "use_cache": false,
+          "test_data_file": "exps/ablation/more/exp_only_lex_a4d3f1fec9/data/test.json",
+          "cache_dir": "exps/ablation/more/exp_only_lex_a4d3f1fec9/cache/exp_a4d3f1fec9_s42",
+          "output_name": "exp_a4d3f1fec9_s42.json",
+          "baseline": {
+            "task_type": "structured",
+            "method": "standard"
+          }
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "f1_hard": {
+      "mean": 0.2328,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_soft": {
+      "mean": 0.449,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_avg": {
+      "mean": 0.3409,
+      "std": 0.0,
+      "n": 1
+    },
+    "success": {
+      "mean": 1605.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "total": {
+      "mean": 1605.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "success_rate": {
+      "mean": 1.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "hard_precision": {
+      "mean": 0.2307,
+      "std": 0.0,
+      "n": 1
+    },
+    "hard_recall": {
+      "mean": 0.235,
+      "std": 0.0,
+      "n": 1
+    },
+    "soft_precision": {
+      "mean": 0.4448,
+      "std": 0.0,
+      "n": 1
+    },
+    "soft_recall": {
+      "mean": 0.4532,
+      "std": 0.0,
+      "n": 1
+    },
+    "field_metrics": {
+      "text_similarity": {
+        "target_avg_sim": {
+          "mean": 0.7656,
+          "std": 0.0,
+          "n": 1
+        },
+        "argument_avg_sim": {
+          "mean": 0.6761,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "targeted_group": {
+        "tp": {
+          "mean": 1321.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 617.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 581.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.6816,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.6945,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.688,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "hateful": {
+        "tp": {
+          "mean": 1477.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 461.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 425.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.7621,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.7766,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.7693,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "matched_pairs": {
+        "mean": 1749.0,
+        "std": 0.0,
+        "n": 1
+      }
+    }
+  }
+}

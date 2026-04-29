@@ -1,18 +1,18 @@
 {
   "backend": "deepspeed",
-  "profile": "ds_zero2_bs8",
+  "profile": "ds_zero3_safe",
   "nproc_per_node": 4,
   "master_port": 36001,
   "cuda_visible_devices": "0,1,2,3",
   "max_steps_override": null,
-  "effective_micro_batch": 8,
+  "effective_micro_batch": 2,
   "effective_gradient_accumulation": 1,
-  "deepspeed_config": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_class_quota_acfada2f31/logs/ds_config_ds_zero2_bs8.json",
-  "zero_stage": 2,
+  "deepspeed_config": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_class_quota_acfada2f31/logs/ds_config_ds_zero3_safe.json",
+  "zero_stage": 3,
   "offload": false,
   "autotuning": {
     "enabled": false,
-    "initial_micro_batch": 8,
+    "initial_micro_batch": 2,
     "initial_gradient_accumulation": 1,
     "results_dir": null,
     "exps_dir": null,
@@ -26,8 +26,8 @@
   },
   "training": {
     "output_dir": "exps/ablation/more/exp_only_class_quota_acfada2f31/model",
-    "per_device_train_batch_size": 8,
-    "per_device_eval_batch_size": 8,
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 2,
     "gradient_accumulation_steps": 1,
     "eval_strategy": "epoch",
     "logging_steps": 10,
@@ -41,18 +41,9 @@
     "lr_scheduler_type": "cosine",
     "warmup_ratio": 0,
     "bf16": true,
-    "deepspeed": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_class_quota_acfada2f31/logs/ds_config_ds_zero2_bs8.json"
+    "deepspeed": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_class_quota_acfada2f31/logs/ds_config_ds_zero3_safe.json"
   },
   "lora": {
-    "enabled": true,
-    "r": 8,
-    "alpha": 32,
-    "dropout": 0.1,
-    "target_modules": [
-      "q_proj",
-      "v_proj"
-    ],
-    "bias": "none",
-    "merge_on_save": true
+    "enabled": false
   }
 }
