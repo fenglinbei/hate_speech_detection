@@ -1,0 +1,30 @@
+{
+  "project": "cold_binary_wo_lex",
+  "output_root": "exps/cold/wo_lex",
+  "base": {
+    "build": "exps/cold/base_config_binary/data_config.json",
+    "train": "exps/cold/base_config_binary/train_config.json",
+    "runner": "exps/cold/base_config_binary/eval_config.json"
+  },
+  "port_base": 35300,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": [
+    {
+      "name": "wo_lex",
+      "build.retrieval_settings.use_lex": false,
+      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
+      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
+      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX"
+    }
+  ]
+}
