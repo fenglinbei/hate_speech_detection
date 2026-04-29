@@ -1,0 +1,165 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_554b05004a.json",
+    "generated_at": "20260429_205523",
+    "baseline": {
+      "method": "ids",
+      "task_type": "hatexplain",
+      "ids": {
+        "q": 3,
+        "top_k": 10,
+        "max_reason_chars": 512,
+        "cache_dir": "exps/hatexplain/baselines/exp_ids_554b05004a/cache/ids"
+      }
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_554b05004a_s42.json",
+      "metric": {
+        "task_type": "hatexplain",
+        "accuracy": 0.6019,
+        "macro_precision": 0.5988,
+        "macro_recall": 0.5932,
+        "macro_f1": 0.5948,
+        "f1_macro": 0.5948,
+        "target_group": {
+          "micro_precision": 0.5747,
+          "micro_recall": 0.5893,
+          "micro_f1": 0.5819,
+          "macro_f1": 0.3738
+        },
+        "rationale": {
+          "micro_precision": 0.5826,
+          "micro_recall": 0.3413,
+          "micro_f1": 0.4305,
+          "macro_f1": 0.3305
+        },
+        "success": 1923,
+        "total": 1924,
+        "success_rate": 0.9995,
+        "invalid": 1,
+        "per_label": {
+          "hatespeech": {
+            "tp": 381,
+            "fp": 194,
+            "fn": 213,
+            "precision": 0.6626,
+            "recall": 0.6414,
+            "f1": 0.6518,
+            "support": 594
+          },
+          "offensive": {
+            "tp": 265,
+            "fp": 365,
+            "fn": 283,
+            "precision": 0.4206,
+            "recall": 0.4836,
+            "f1": 0.4499,
+            "support": 548
+          },
+          "normal": {
+            "tp": 512,
+            "fp": 206,
+            "fn": 270,
+            "precision": 0.7131,
+            "recall": 0.6547,
+            "f1": 0.6827,
+            "support": 782
+          }
+        },
+        "confusion_matrix": {
+          "hatespeech": {
+            "hatespeech": 381,
+            "offensive": 174,
+            "normal": 38,
+            "invalid": 1
+          },
+          "offensive": {
+            "hatespeech": 115,
+            "offensive": 265,
+            "normal": 168,
+            "invalid": 0
+          },
+          "normal": {
+            "hatespeech": 79,
+            "offensive": 191,
+            "normal": 512,
+            "invalid": 0
+          }
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "prompt_tokens": 3783229,
+          "completion_tokens": 158975,
+          "total_tokens": 3942204
+        },
+        "llm_params": {
+          "max_new_tokens": 1024,
+          "n": 1,
+          "top_p": 1,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "task_type": "hatexplain",
+          "output_dir": "exps/hatexplain/baselines/exp_ids_554b05004a/runner_output",
+          "use_cache": false,
+          "test_data_file": "exps/hatexplain/baselines/exp_ids_554b05004a/data/test.json",
+          "shot_num": 0,
+          "max_retries": 50,
+          "concurrency": 1,
+          "compute_metric": true,
+          "prompt_templates": {
+            "system": "HATEXPLAIN_SYSTEM_PROMPT",
+            "train": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+            "shot": "",
+            "example": "HATEXPLAIN_EXAMPLE_PROMPT"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "seeds_list": [
+              42
+            ],
+            "llm_params": {
+              "max_new_tokens": 1024,
+              "n": 1,
+              "top_p": 1,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0,
+              "enable_thinking": false,
+              "seed": 42
+            }
+          },
+          "progress_dir": "exps/hatexplain/baselines/exp_ids_554b05004a/progress",
+          "prompts_save_dir": "exps/hatexplain/baselines/exp_ids_554b05004a/prompts",
+          "cache_dir": "exps/hatexplain/baselines/exp_ids_554b05004a/cache",
+          "baseline": {
+            "method": "ids",
+            "task_type": "hatexplain",
+            "ids": {
+              "q": 3,
+              "top_k": 10,
+              "max_reason_chars": 512
+            }
+          }
+        }
+      }
+    }
+  ]
+}

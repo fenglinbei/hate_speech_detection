@@ -1,0 +1,441 @@
+{
+  "info": {
+    "model": "qwen2.5",
+    "shot_num": 0,
+    "seeds_list": [
+      42
+    ],
+    "base_output_name": "exp_a641ace852.json",
+    "generated_at": "20260429_185725",
+    "llm_params_base": {
+      "max_new_tokens": 1024,
+      "n": 1,
+      "top_p": 1,
+      "top_k": 20,
+      "min_p": 0,
+      "temperature": 0,
+      "enable_thinking": false
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "output_file": "exp_a641ace852_s42.json",
+      "metric": {
+        "task_type": "hatexplain",
+        "accuracy": 0.6216,
+        "macro_precision": 0.5954,
+        "macro_recall": 0.606,
+        "macro_f1": 0.5955,
+        "f1_macro": 0.5955,
+        "target_group": {
+          "micro_precision": 0.6461,
+          "micro_recall": 0.6257,
+          "micro_f1": 0.6357,
+          "macro_f1": 0.3867
+        },
+        "rationale": {
+          "micro_precision": 0.4854,
+          "micro_recall": 0.4244,
+          "micro_f1": 0.4529,
+          "macro_f1": 0.3308
+        },
+        "success": 1923,
+        "total": 1924,
+        "success_rate": 0.9995,
+        "invalid": 1,
+        "per_label": {
+          "hatespeech": {
+            "tp": 462,
+            "fp": 270,
+            "fn": 132,
+            "precision": 0.6311,
+            "recall": 0.7778,
+            "f1": 0.6968,
+            "support": 594
+          },
+          "offensive": {
+            "tp": 186,
+            "fp": 225,
+            "fn": 362,
+            "precision": 0.4526,
+            "recall": 0.3394,
+            "f1": 0.3879,
+            "support": 548
+          },
+          "normal": {
+            "tp": 548,
+            "fp": 232,
+            "fn": 234,
+            "precision": 0.7026,
+            "recall": 0.7008,
+            "f1": 0.7017,
+            "support": 782
+          }
+        },
+        "confusion_matrix": {
+          "hatespeech": {
+            "hatespeech": 462,
+            "offensive": 83,
+            "normal": 48,
+            "invalid": 1
+          },
+          "offensive": {
+            "hatespeech": 178,
+            "offensive": 186,
+            "normal": 184,
+            "invalid": 0
+          },
+          "normal": {
+            "hatespeech": 92,
+            "offensive": 142,
+            "normal": 548,
+            "invalid": 0
+          }
+        }
+      },
+      "info": {
+        "model": "qwen2.5",
+        "shot_num": 0,
+        "seed": 42,
+        "usage": {
+          "completion_tokens": 43398,
+          "prompt_tokens": 1645528,
+          "total_tokens": 1688926
+        },
+        "llm_params": {
+          "max_new_tokens": 1024,
+          "n": 1,
+          "top_p": 1,
+          "top_k": 20,
+          "min_p": 0,
+          "temperature": 0,
+          "enable_thinking": false,
+          "seed": 42
+        },
+        "config": {
+          "shot_dataset_file": "data/full/std/train.json",
+          "test_dataset_file": "data/full/std/test.json",
+          "shot_num": 0,
+          "seed": 42,
+          "prompts_save_dir": "exps/hatexplain/baselines/exp_explicit_cot_a641ace852/prompts/exp_a641ace852_s42",
+          "output_dir": "exps/hatexplain/baselines/exp_explicit_cot_a641ace852/runner_output",
+          "concurrency": 1,
+          "max_retries": 5,
+          "base_retry_wait_time": 0,
+          "request_timeout": 45.0,
+          "checkpoint_interval": 10,
+          "progress_dir": "exps/hatexplain/baselines/exp_explicit_cot_a641ace852/progress/exp_a641ace852_s42",
+          "max_progress_files": 1,
+          "input_file": null,
+          "compute_metric": true,
+          "prompt_templates": {
+            "train": "Classify the text for the HateXplain task and identify target groups and rationales.\n\nLabels:\n- hatespeech: hateful content targeting a protected or identity-based group.\n- offensive: insulting, abusive, or profane content that is not clearly hate speech.\n- normal: content that is neither hate speech nor offensive.\n\nBackground lexicon:\n{lexicons}\n\nExamples:\n{examples}\n\nRules:\n- First provide a brief analysis in one to three sentences.\n- Then write FINAL_JSON: followed by one valid JSON object and nothing else after it.\n- The JSON must use exactly these keys: \"label\", \"target_groups\", \"rationales\".\n- \"label\" must be one of: \"hatespeech\", \"offensive\", \"normal\".\n- \"target_groups\" must be a list of target communities. Use [] when there is no target group.\n- \"rationales\" must be a list of short text spans from the input that support the label. Use [] when no span is needed.\n- A lexicon match is only background knowledge; do not classify as hate or offensive solely because a listed term appears.\n\nText:\n{text}\n\nAnalysis:\nFINAL_JSON:",
+            "shot": "",
+            "system": "You are a professional hate speech analyst. Return only valid JSON that follows the requested schema.",
+            "example": "Text:\n{retrieve_content}\nJSON:\n{retrieve_output}\n"
+          },
+          "run": {
+            "shots_list": [
+              0
+            ],
+            "llm_params": {
+              "max_new_tokens": 1024,
+              "n": 1,
+              "top_p": 1,
+              "top_k": 20,
+              "min_p": 0,
+              "temperature": 0,
+              "enable_thinking": false,
+              "seed": 42
+            },
+            "seeds_list": [
+              42
+            ]
+          },
+          "task_type": "hatexplain",
+          "use_cache": false,
+          "test_data_file": "exps/hatexplain/baselines/exp_explicit_cot_a641ace852/data/test.json",
+          "cache_dir": "exps/hatexplain/baselines/exp_explicit_cot_a641ace852/cache/exp_a641ace852_s42",
+          "output_name": "exp_a641ace852_s42.json",
+          "baseline": {
+            "method": "explicit_cot",
+            "task_type": "hatexplain"
+          }
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "accuracy": {
+      "mean": 0.6216,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_precision": {
+      "mean": 0.5954,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_recall": {
+      "mean": 0.606,
+      "std": 0.0,
+      "n": 1
+    },
+    "macro_f1": {
+      "mean": 0.5955,
+      "std": 0.0,
+      "n": 1
+    },
+    "f1_macro": {
+      "mean": 0.5955,
+      "std": 0.0,
+      "n": 1
+    },
+    "target_group": {
+      "micro_precision": {
+        "mean": 0.6461,
+        "std": 0.0,
+        "n": 1
+      },
+      "micro_recall": {
+        "mean": 0.6257,
+        "std": 0.0,
+        "n": 1
+      },
+      "micro_f1": {
+        "mean": 0.6357,
+        "std": 0.0,
+        "n": 1
+      },
+      "macro_f1": {
+        "mean": 0.3867,
+        "std": 0.0,
+        "n": 1
+      }
+    },
+    "rationale": {
+      "micro_precision": {
+        "mean": 0.4854,
+        "std": 0.0,
+        "n": 1
+      },
+      "micro_recall": {
+        "mean": 0.4244,
+        "std": 0.0,
+        "n": 1
+      },
+      "micro_f1": {
+        "mean": 0.4529,
+        "std": 0.0,
+        "n": 1
+      },
+      "macro_f1": {
+        "mean": 0.3308,
+        "std": 0.0,
+        "n": 1
+      }
+    },
+    "success": {
+      "mean": 1923.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "total": {
+      "mean": 1924.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "success_rate": {
+      "mean": 0.9995,
+      "std": 0.0,
+      "n": 1
+    },
+    "invalid": {
+      "mean": 1.0,
+      "std": 0.0,
+      "n": 1
+    },
+    "per_label": {
+      "hatespeech": {
+        "tp": {
+          "mean": 462.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 270.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 132.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.6311,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.7778,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.6968,
+          "std": 0.0,
+          "n": 1
+        },
+        "support": {
+          "mean": 594.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "offensive": {
+        "tp": {
+          "mean": 186.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 225.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 362.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.4526,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.3394,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.3879,
+          "std": 0.0,
+          "n": 1
+        },
+        "support": {
+          "mean": 548.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "normal": {
+        "tp": {
+          "mean": 548.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fp": {
+          "mean": 232.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "fn": {
+          "mean": 234.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "precision": {
+          "mean": 0.7026,
+          "std": 0.0,
+          "n": 1
+        },
+        "recall": {
+          "mean": 0.7008,
+          "std": 0.0,
+          "n": 1
+        },
+        "f1": {
+          "mean": 0.7017,
+          "std": 0.0,
+          "n": 1
+        },
+        "support": {
+          "mean": 782.0,
+          "std": 0.0,
+          "n": 1
+        }
+      }
+    },
+    "confusion_matrix": {
+      "hatespeech": {
+        "hatespeech": {
+          "mean": 462.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "offensive": {
+          "mean": 83.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "normal": {
+          "mean": 48.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "invalid": {
+          "mean": 1.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "offensive": {
+        "hatespeech": {
+          "mean": 178.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "offensive": {
+          "mean": 186.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "normal": {
+          "mean": 184.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "invalid": {
+          "mean": 0.0,
+          "std": 0.0,
+          "n": 1
+        }
+      },
+      "normal": {
+        "hatespeech": {
+          "mean": 92.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "offensive": {
+          "mean": 142.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "normal": {
+          "mean": 548.0,
+          "std": 0.0,
+          "n": 1
+        },
+        "invalid": {
+          "mean": 0.0,
+          "std": 0.0,
+          "n": 1
+        }
+      }
+    }
+  }
+}
