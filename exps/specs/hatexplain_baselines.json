@@ -23,48 +23,48 @@
       "name": "srag",
       "build.retrieval_settings.srag_top_k": 1,
       "build.retrieval_settings.use_lex": false,
-      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX"
+      "build.prompt_templates.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "train.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "runner.tester.prompt_templates.train": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX"
     },
     {
       "name": "zero_shot",
       "build.retrieval_settings.srag_top_k": 0,
       "build.retrieval_settings.use_lex": false,
-      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX"
+      "build.prompt_templates.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "train.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "runner.tester.prompt_templates.train": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX"
     },
     {
       "name": "ids",
       "runner.baseline.method": "ids",
-      "runner.baseline.task_type": "cold_binary",
+      "runner.baseline.task_type": "hatexplain",
       "runner.tester.run.llm_params.enable_thinking": false,
-      "runner.tester.run.llm_params.max_new_tokens": 512,
+      "runner.tester.run.llm_params.max_new_tokens": 1024,
       "build.retrieval_settings.use_lex": false,
-      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX"
+      "build.prompt_templates.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "train.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "runner.tester.prompt_templates.train": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX"
     },
     {
       "name": "dpp",
       "runner.baseline.method": "dpp",
-      "runner.baseline.task_type": "cold_binary",
+      "runner.baseline.task_type": "hatexplain",
       "runner.tester.run.llm_params.enable_thinking": false,
       "build.retrieval_settings.use_lex": false,
-      "build.prompt_templates.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "train.prompt_template": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX",
-      "runner.tester.prompt_templates.train": "COLD_BINARY_RAG_PROMPT_USER_V2_WO_LEX"
+      "build.prompt_templates.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "train.prompt_template": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX",
+      "runner.tester.prompt_templates.train": "HATEXPLAIN_RAG_PROMPT_USER_WO_LEX"
     },
     {
       "name": "explicit_cot",
       "runner.baseline.method": "explicit_cot",
-      "runner.baseline.task_type": "cold_binary",
-      "build.prompt_templates.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
-      "train.prompt_template": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
-      "runner.tester.prompt_templates.train": "COLD_BINARY_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.baseline.task_type": "hatexplain",
+      "build.prompt_templates.prompt_template": "HATEXPLAIN_EXPLICIT_COT_RAG_PROMPT_USER",
+      "train.prompt_template": "HATEXPLAIN_EXPLICIT_COT_RAG_PROMPT_USER",
+      "runner.tester.prompt_templates.train": "HATEXPLAIN_EXPLICIT_COT_RAG_PROMPT_USER",
       "runner.tester.run.llm_params.enable_thinking": false,
-      "runner.tester.run.llm_params.max_new_tokens": 512,
+      "runner.tester.run.llm_params.max_new_tokens": 1024,
       "build.retrieval_settings.use_lex": false
     }
   ]
