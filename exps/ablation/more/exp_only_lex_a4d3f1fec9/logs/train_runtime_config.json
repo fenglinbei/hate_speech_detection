@@ -1,0 +1,49 @@
+{
+  "backend": "deepspeed",
+  "profile": "ds_zero3_safe",
+  "nproc_per_node": 4,
+  "master_port": 36000,
+  "cuda_visible_devices": "0,1,2,3",
+  "max_steps_override": null,
+  "effective_micro_batch": 2,
+  "effective_gradient_accumulation": 1,
+  "deepspeed_config": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_lex_a4d3f1fec9/logs/ds_config_ds_zero3_safe.json",
+  "zero_stage": 3,
+  "offload": false,
+  "autotuning": {
+    "enabled": false,
+    "initial_micro_batch": 2,
+    "initial_gradient_accumulation": 1,
+    "results_dir": null,
+    "exps_dir": null,
+    "fast": true,
+    "overwrite": true,
+    "metric": "throughput",
+    "start_profile_step": 3,
+    "end_profile_step": 5,
+    "num_tuning_micro_batch_sizes": 3,
+    "max_train_batch_size": null
+  },
+  "training": {
+    "output_dir": "exps/ablation/more/exp_only_lex_a4d3f1fec9/model",
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 2,
+    "gradient_accumulation_steps": 1,
+    "eval_strategy": "epoch",
+    "logging_steps": 10,
+    "num_train_epochs": 2,
+    "save_strategy": "epoch",
+    "learning_rate": 1e-05,
+    "save_on_each_node": true,
+    "gradient_checkpointing": true,
+    "report_to": "none",
+    "run_name": "k6",
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0,
+    "bf16": true,
+    "deepspeed": "/data/liaozijie/hate_speech_detection/exps/ablation/more/exp_only_lex_a4d3f1fec9/logs/ds_config_ds_zero3_safe.json"
+  },
+  "lora": {
+    "enabled": false
+  }
+}
