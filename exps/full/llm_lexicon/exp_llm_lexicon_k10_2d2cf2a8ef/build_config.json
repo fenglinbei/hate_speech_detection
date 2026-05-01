@@ -1,0 +1,57 @@
+{
+  "data_paths": {
+    "raw_data_path": "data/full/std/train.json",
+    "test_data_path": "data/full/std/test.json",
+    "train_output_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data/train.jsonl",
+    "val_output_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data/val.jsonl",
+    "test_output_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data/test.json",
+    "lexicon_data_path": "data/lexicon/generated/full/lexicon.json",
+    "tokenizer_path": "./models/base/Qwen2.5-7B-Instruct",
+    "val_runner_output_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data/val_runner.json"
+  },
+  "prompt_templates": {
+    "prompt_template": "RAG_PROMPT_USER_V2",
+    "example_template": "RAG_PROMPT_EXAMPLE_V2",
+    "system_prompt": "DEFAULT_SYSTEM_PTOMPT_EN"
+  },
+  "retrieval_settings": {
+    "use_srag": true,
+    "stratified": true,
+    "srag_top_k": 10,
+    "srag_threshold": 0,
+    "use_lex": true,
+    "lex_top_k": 5,
+    "lex_sim_top_k": 5,
+    "lex_sim_threshold": 0,
+    "weights": null,
+    "weights_reverse": false,
+    "mmr_cache_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/mmr",
+    "mmr_index_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/mmr/faiss_hnsw.index",
+    "mmr_docs_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/mmr/doc_store.json"
+  },
+  "training_settings": {
+    "auto_length": true,
+    "max_length": 1280,
+    "split_ratio": 0.9
+  },
+  "model_settings": {
+    "srag_model_path": "./models/base/bge-large-zh-v1.5",
+    "lexicon_model_path": "./models/base/bge-large-zh-v1.5"
+  },
+  "require_build_signature": true,
+  "lexicon_settings": {
+    "lexicon_schema": "cold",
+    "match_mode": "substring",
+    "case_sensitive": true,
+    "include_variants": false
+  },
+  "baseline": {
+    "method": "standard",
+    "task_type": "structured"
+  },
+  "cache_settings": {
+    "build_cache_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/build",
+    "retrieval_cache_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/retrieval",
+    "lexicon_cache_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/cache/lexicon"
+  }
+}

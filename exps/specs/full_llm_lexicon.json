@@ -1,0 +1,51 @@
+{
+  "project": "full_llm_lexicon",
+  "output_root": "exps/full/llm_lexicon",
+  "base": {
+    "build": "data/exp_data/k_ablation/k10/config.json",
+    "train": "config/finetune/k_ablation/k10.json",
+    "runner": "config/runner/k_ablation/k10.json"
+  },
+  "port_base": 35400,
+  "train_cuda_visible_devices": "0,1,2,3",
+  "vllm": {
+    "cuda_visible_devices": "0,1,2,3",
+    "tensor_parallel_size": 4,
+    "max_model_len": 8192,
+    "served_model_name": "qwen2.5"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "grid": [
+    {
+      "name": "llm_lexicon_k10",
+      "meta.dataset": "full/state",
+      "meta.lexicon": "data/lexicon/generated/full/lexicon.json",
+      "build.require_build_signature": true,
+      "build.data_paths.raw_data_path": "data/full/std/train.json",
+      "build.data_paths.test_data_path": "data/full/std/test.json",
+      "build.data_paths.lexicon_data_path": "data/lexicon/generated/full/lexicon.json",
+      "build.retrieval_settings.use_srag": true,
+      "build.retrieval_settings.stratified": true,
+      "build.retrieval_settings.srag_top_k": 10,
+      "build.retrieval_settings.use_lex": true,
+      "build.retrieval_settings.lex_top_k": 5,
+      "build.retrieval_settings.lex_sim_top_k": 5,
+      "build.lexicon_settings.lexicon_schema": "cold",
+      "build.lexicon_settings.match_mode": "substring",
+      "build.lexicon_settings.case_sensitive": true,
+      "build.lexicon_settings.include_variants": false,
+      "train.project_name": "full_llm_lexicon",
+      "runner.tester.run.seeds_list": [
+        42,
+        4242,
+        424242,
+        42424242,
+        4242424242
+      ],
+      "runner.tester.run.llm_params.enable_thinking": false
+    }
+  ]
+}

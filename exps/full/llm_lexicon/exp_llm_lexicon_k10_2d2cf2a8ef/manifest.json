@@ -1,0 +1,69 @@
+{
+  "project": "full_llm_lexicon",
+  "exp_id": "2d2cf2a8ef",
+  "exp_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef",
+  "created_at": "2026-05-02 00:55:37",
+  "index": 0,
+  "port": 35400,
+  "overrides": {
+    "name": "llm_lexicon_k10",
+    "meta.dataset": "full/state",
+    "meta.lexicon": "data/lexicon/generated/full/lexicon.json",
+    "build.require_build_signature": true,
+    "build.data_paths.raw_data_path": "data/full/std/train.json",
+    "build.data_paths.test_data_path": "data/full/std/test.json",
+    "build.data_paths.lexicon_data_path": "data/lexicon/generated/full/lexicon.json",
+    "build.retrieval_settings.use_srag": true,
+    "build.retrieval_settings.stratified": true,
+    "build.retrieval_settings.srag_top_k": 10,
+    "build.retrieval_settings.use_lex": true,
+    "build.retrieval_settings.lex_top_k": 5,
+    "build.retrieval_settings.lex_sim_top_k": 5,
+    "build.lexicon_settings.lexicon_schema": "cold",
+    "build.lexicon_settings.match_mode": "substring",
+    "build.lexicon_settings.case_sensitive": true,
+    "build.lexicon_settings.include_variants": false,
+    "train.project_name": "full_llm_lexicon",
+    "runner.tester.run.seeds_list": [
+      42,
+      4242,
+      424242,
+      42424242,
+      4242424242
+    ],
+    "runner.tester.run.llm_params.enable_thinking": false
+  },
+  "meta": {
+    "name": "llm_lexicon_k10",
+    "dataset": "full/state",
+    "lexicon": "data/lexicon/generated/full/lexicon.json"
+  },
+  "reuse": {
+    "data_dir": null,
+    "model_checkpoint": null
+  },
+  "paths": {
+    "build_config": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/build_config.json",
+    "train_config": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/train_config.json",
+    "runner_config": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/runner_config.json",
+    "data_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data",
+    "val_runner_file": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/data/val_runner.json",
+    "model_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/model",
+    "runner_output_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/runner_output",
+    "logs_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/logs",
+    "artifacts_dir": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/artifacts"
+  },
+  "baseline": {
+    "method": "standard",
+    "task_type": "structured"
+  },
+  "runtime_defaults": {
+    "train_cuda_visible_devices": "0,1,2,3",
+    "vllm": {
+      "cuda_visible_devices": "0,1,2,3",
+      "tensor_parallel_size": 4,
+      "max_model_len": 8192,
+      "served_model_name": "qwen2.5"
+    }
+  }
+}
