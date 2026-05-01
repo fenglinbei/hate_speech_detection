@@ -1,0 +1,68 @@
+{
+  "data_paths": {
+    "input_paths": [
+      "data/hateXplain/std/train.json",
+      "data/hateXplain/std/val.json",
+      "data/hateXplain/std/test.json"
+    ],
+    "output_dir": "data/lexicon/generated/hatexplain"
+  },
+  "candidate_settings": {
+    "max_candidates": 300,
+    "max_samples_per_candidate": 5,
+    "min_count_for_llm": 1,
+    "min_hate_count_for_llm": 1,
+    "suppressed_reject_hints": [
+      "broken_fragment",
+      "generic_word",
+      "generic_phrase",
+      "singleton_ngram",
+      "substring_fragment"
+    ],
+    "en_max_ngram": 4,
+    "max_text_chars_per_record": 1200
+  },
+  "web_settings": {
+    "backend": "disabled",
+    "max_results": 3,
+    "cache_enabled": true,
+    "cache_path": "data/lexicon/generated/hatexplain/web_cache.sqlite3",
+    "api_base": "${LEXICON_SEARCH_API_BASE}",
+    "api_key_env": "LEXICON_SEARCH_API_KEY",
+    "llm_api_base": "${LEXICON_WEB_LLM_API_BASE}",
+    "llm_api_key_env": "LEXICON_WEB_LLM_API_KEY",
+    "llm_model": "${LEXICON_WEB_LLM_MODEL}"
+  },
+  "llm_settings": {
+    "backend": "deepseek",
+    "api_base": "https://api.deepseek.com",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "model": "deepseek-v4-pro",
+    "json_mode": true,
+    "thinking": {
+      "type": "enabled"
+    },
+    "reasoning_effort": "high",
+    "stream": false,
+    "temperature": 0,
+    "max_tokens": 1200,
+    "timeout": 120
+  },
+  "inclusion": {
+    "confidence_threshold": 0.65,
+    "single_mention_confidence": 0.85,
+    "min_count": 2,
+    "ambiguous_requires_nonhateful_meaning": true
+  },
+  "runtime_settings": {
+    "show_progress": true,
+    "log_level": "INFO",
+    "debug": false,
+    "debug_dir": null,
+    "resume": true,
+    "resume_require_config_match": true,
+    "llm_failure_policy": "reject_candidate",
+    "max_llm_failures": 50,
+    "max_consecutive_llm_failures": 8
+  }
+}
