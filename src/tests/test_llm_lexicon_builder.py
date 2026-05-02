@@ -16,6 +16,7 @@ from build_lex.llm_lexicon_builder import (
     build_candidates,
     build_lexicon,
     create_judgement_client,
+    default_config,
     select_candidates,
     write_jsonl,
 )
@@ -586,6 +587,13 @@ class WebSearcherConfigTest(unittest.TestCase):
 
 
 class DeepSeekJudgementClientTest(unittest.TestCase):
+    def test_default_output_language_tracks_dataset(self):
+        self.assertEqual(default_config("full")["llm_settings"]["output_language"], "zh")
+        self.assertEqual(default_config("state")["llm_settings"]["output_language"], "zh")
+        self.assertEqual(default_config("toxicn")["llm_settings"]["output_language"], "zh")
+        self.assertEqual(default_config("cold")["llm_settings"]["output_language"], "zh")
+        self.assertEqual(default_config("hatexplain")["llm_settings"]["output_language"], "en")
+
     def test_deepseek_backend_builds_official_chat_completion_payload(self):
         calls = []
 
@@ -629,6 +637,59 @@ class DeepSeekJudgementClientTest(unittest.TestCase):
         self.assertEqual(calls[0]["json"]["max_tokens"], 777)
         self.assertFalse(calls[0]["json"]["stream"])
         self.assertNotIn("temperature", calls[0]["json"])
+
+    def test_output_language_is_injected_into_prompt(self):
+        calls = []
+
+        def fake_post(url, json, headers, timeout):
+            calls.append({"url": url, "json": json, "headers": headers, "timeout": timeout})
+            return FakeResponse(
+                {
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {
+                                "content": json_module.dumps(
+                                    {
+                                        "include": True,
+                                        "category": "Racism",
+                                        "categories": ["Racism"],
+                                        "definition": "中文解释",
+                                        "nonhateful_meaning": "",
+                                        "variants": [],
+                                        "confidence": 0.9,
+                                        "reason": "中文原因",
+                                        "evidence_ids": [],
+                                    },
+                                    ensure_ascii=False,
+                                )
+                            },
+                        }
+                    ]
+                }
+            )
+
+        import json as json_module
+
+        client = create_judgement_client(
+            {
+                "backend": "deepseek",
+                "api_key": "DSK",
+                "model": "deepseek-v4-pro",
+                "output_language": "zh",
+                "max_tokens": 200,
+            }
+        )
+        with patch("build_lex.llm_lexicon_builder.requests.post", fake_post):
+            client.complete_json(
+                "final_lexicon_judge",
+                {"candidate": {"term": "测试词", "primary_category": "Racism"}},
+            )
+
+        user_prompt = calls[0]["json"]["messages"][1]["content"]
+        self.assertIn("必须使用简体中文", user_prompt)
+        self.assertIn("reason、definition、nonhateful_meaning", user_prompt)
+        self.assertIn("category 标签保持不变", user_prompt)
 
     def test_http_400_body_is_recorded_and_not_retried(self):
         with tempfile.TemporaryDirectory() as tmp_dir:

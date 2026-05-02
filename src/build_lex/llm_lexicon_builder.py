@@ -504,6 +504,7 @@ class OpenAICompatibleJudgementClient:
         )
         self.stream = bool(settings.get("stream", False))
         self.send_temperature = bool(settings.get("send_temperature", self.thinking is None))
+        self.output_language = normalize_output_language(settings.get("output_language", "auto"))
         self.debug_recorder = debug_recorder
         if not (self.api_base and self.api_key and self.model):
             raise ValueError(
@@ -511,7 +512,7 @@ class OpenAICompatibleJudgementClient:
             )
 
     def complete_json(self, stage: str, payload: dict[str, Any]) -> dict[str, Any]:
-        prompt = render_stage_prompt(stage, payload)
+        prompt = render_stage_prompt(stage, payload, output_language=self.output_language)
         last_error: Exception | None = None
         for attempt in range(self.retries + 1):
             request_payload: dict[str, Any] | None = None
@@ -791,10 +792,26 @@ def truncate_text(text: Any, max_chars: int = 240) -> str:
     return text[: max_chars - 1] + "…"
 
 
+def normalize_output_language(value: Any) -> str:
+    raw = str(value or "auto").strip().lower().replace("_", "-")
+    if raw in {"zh", "zh-cn", "cn", "chinese", "simplified-chinese", "simplified chinese"}:
+        return "zh"
+    if raw in {"en", "en-us", "english"}:
+        return "en"
+    if raw in {"auto", "same-as-candidate", "same-as-dataset", "dataset"}:
+        return "auto"
+    raise ValueError("llm_settings.output_language must be one of: zh, en, auto.")
+
+
 def normalize_dataset(dataset: str) -> str:
     value = str(dataset or "").strip().lower()
     aliases = {"state": "full", "toxicn": "full", "hate_xplain": "hatexplain", "hateXplain": "hatexplain"}
     return aliases.get(value, value)
+
+
+def default_output_language(dataset: str) -> str:
+    dataset = normalize_dataset(dataset)
+    return "en" if dataset == "hatexplain" else "zh"
 
 
 def default_config(dataset: str) -> dict[str, Any]:
@@ -840,6 +857,7 @@ def default_config(dataset: str) -> dict[str, Any]:
             "reasoning_effort": "high",
             "stream": False,
             "temperature": 0,
+            "output_language": default_output_language(dataset),
             "max_tokens": 1200,
             "timeout": 120,
         },
@@ -1535,7 +1553,32 @@ def build_search_queries(candidate: CandidateStats) -> list[str]:
     ]
 
 
-def render_stage_prompt(stage: str, payload: dict[str, Any]) -> str:
+def output_language_instruction(output_language: str) -> str:
+    language = normalize_output_language(output_language)
+    common = (
+        "Keep JSON keys, boolean values, numeric values, evidence_ids, term text, variants, "
+        "and canonical category labels unchanged."
+    )
+    if language == "zh":
+        return (
+            "所有自然语言解释字段必须使用简体中文：reason、definition、nonhateful_meaning"
+            "（当这些字段存在时）。JSON key、布尔值、数值、evidence_ids、term、variants "
+            "以及规范 category 标签保持不变。"
+        )
+    if language == "en":
+        return (
+            "Write all natural-language explanatory field values in English: "
+            "reason, definition, and nonhateful_meaning when those keys are present. "
+            f"{common}"
+        )
+    return (
+        "Write natural-language explanatory field values in the same language as the candidate "
+        "and dataset examples. For Chinese candidates, use Simplified Chinese. For English "
+        f"candidates, use English. {common}"
+    )
+
+
+def render_stage_prompt(stage: str, payload: dict[str, Any], output_language: str = "auto") -> str:
     if stage == "context_judge":
         instructions = (
             "Judge whether the candidate term functions as discriminatory, hateful, offensive, "
@@ -1558,6 +1601,7 @@ def render_stage_prompt(stage: str, payload: dict[str, Any]) -> str:
         )
     else:
         raise ValueError(f"Unknown LLM stage: {stage}")
+    instructions = instructions + " " + output_language_instruction(output_language)
     return instructions + "\n\nPayload JSON:\n" + json.dumps(payload, ensure_ascii=False, indent=2)
 
 
