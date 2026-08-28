@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wp3-candidate-observation/v1",
+  "title": "WP3 generator observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observation_id",
+    "record_id",
+    "content_sha256",
+    "surface",
+    "start",
+    "end",
+    "occurrence_ordinal",
+    "generator",
+    "generator_variant",
+    "mechanism",
+    "replacement",
+    "requires_context",
+    "rationale",
+    "source"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "wp3-candidate-observation/v1"
+    },
+    "observation_id": {
+      "type": "string",
+      "pattern": "^wp3obs-[0-9a-f]{32}$"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "start": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "end": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "occurrence_ordinal": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generator": {
+      "enum": [
+        "g1_rewrite",
+        "g2_direct",
+        "g3_form_rule"
+      ]
+    },
+    "generator_variant": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "mechanism": {
+      "enum": [
+        "abbreviation",
+        "phonetic_variant",
+        "orthographic_variant",
+        "mixed_script",
+        "unicode_nfkc",
+        "emoji",
+        "separator_insertion",
+        "slang",
+        "fixed_expression",
+        "metaphor",
+        "pragmatic_usage",
+        "known_variant",
+        "other_nontransparent"
+      ]
+    },
+    "replacement": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "requires_context": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "source_id",
+            "provider",
+            "model",
+            "prompt_version",
+            "response_sha256"
+          ],
+          "properties": {
+            "kind": {
+              "const": "model"
+            },
+            "source_id": {
+              "type": "string",
+              "pattern": "^modelsrc-[0-9a-f]{32}$"
+            },
+            "provider": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "prompt_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "response_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "source_id",
+            "rule_version",
+            "reference_sha256"
+          ],
+          "properties": {
+            "kind": {
+              "const": "rule"
+            },
+            "source_id": {
+              "type": "string",
+              "pattern": "^rulesrc-[0-9a-f]{32}$"
+            },
+            "rule_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "reference_sha256": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_manifest_v1.schema.json",
+  "title": "Stage 1 finalized split manifest",
+  "type": "object",
+  "required": [
+    "schema_version", "source_sha256", "policy", "id_policy",
+    "train_ids", "dev_ids", "test_ids", "train_ids_sha256",
+    "dev_ids_sha256", "test_ids_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-split/v1"},
+    "source_sha256": {
+      "type": "object",
+      "required": ["std-train", "std-test"],
+      "properties": {
+        "std-train": {"$ref": "#/$defs/sha256"},
+        "std-test": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "policy": {"const": "prefix-5781-643/v1"},
+    "id_policy": {"const": "canonical-decimal-string/v1"},
+    "train_ids": {"type": "array", "minItems": 5781, "maxItems": 5781, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "dev_ids": {"type": "array", "minItems": 643, "maxItems": 643, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "test_ids": {"type": "array", "minItems": 1605, "maxItems": 1605, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "train_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "dev_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "test_ids_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "quad": {
+      "type": "object",
+      "required": ["target", "argument", "targeted_group", "hateful"],
+      "properties": {
+        "target": {"type": ["string", "null"]},
+        "argument": {"type": ["string", "null"]},
+        "targeted_group": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["Racism", "Region", "LGBTQ", "Sexism", "others", "non-hate"]}
+        },
+        "hateful": {"enum": ["hate", "non-hate"]}
+      },
+      "additionalProperties": false
+    },
+    "normalizedRecord": {
+      "type": "object",
+      "required": ["id", "content", "quadruples"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "content": {"type": "string", "minLength": 1},
+        "quadruples": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/quad"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "stage1-analysis-profile/v1",
+  "profile_name": "stage1-fixed-three-seed-confirmatory",
+  "mode": "confirmatory",
+  "scientific_eligible": true,
+  "allowed_splits": ["dev", "test"],
+  "primary_model_role": "M_drop",
+  "secondary_model_role": "M_LD",
+  "fixed_training_seeds": [42, 43, 44],
+  "ordered_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "reducer_version": "stage1-factorial-reducer/v1",
+  "estimand": {
+    "population": "frozen-eligible-query-frame",
+    "seed_scope": "fixed-checkpoint-set",
+    "seed_aggregation": "mean-of-within-seed-effects",
+    "pool_seed_query_records": false,
+    "policy": "intention-to-treat"
+  },
+  "bootstrap": {
+    "unit": "paired-query",
+    "resample_training_seeds": false,
+    "replicates": 10000,
+    "seed": 42,
+    "interval": "percentile-95",
+    "family_stream": "sha256-seed-family-replicate/v1"
+  },
+  "multiple_testing": {
+    "method": "holm",
+    "alpha": 0.05,
+    "families": {
+      "free_generation_corroboration": {
+        "contrasts": ["CL-PL", "CD-PD"],
+        "endpoints": [
+          "tuple/f1_avg",
+          "field_unbound/target/similarity",
+          "field_unbound/argument/similarity",
+          "field_bound/targeted_group/f1"
+        ],
+        "sesoi_absolute_delta": 0.01
+      },
+      "gold_margin_total_effect": {
+        "contrasts": ["CL-C0", "CD-C0"],
+        "fields": ["target", "argument", "targeted_group", "hateful"],
+        "sesoi_dz": 0.1
+      },
+      "gold_margin_relevance": {
+        "contrasts": ["CL-PL", "CD-PD"],
+        "fields": ["target", "argument", "targeted_group", "hateful"],
+        "sesoi_dz": 0.1
+      }
+    }
+  },
+  "directional_stability": {
+    "minimum_seeds_in_claim_direction": 2,
+    "forbid_any_seed_at_opposite_sesoi": true
+  },
+  "gate_policy": {
+    "emit_confirmatory_gate": true,
+    "h1_1_requires_margin_support_for_both_sources_in_primary_model": true,
+    "free_generation_is_corroborating_not_substitutive": true,
+    "report_harm_as_tradeoff_not_cancellation": true
+  }
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <title>无类别术语 span 复审</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cases.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">WP3 · CATEGORY-FREE · OFFLINE</p>
+        <h1>术语 span 穷尽复审</h1>
+        <p>候选只作提示。请阅读全文，删除误报、修正边界并主动补出遗漏。</p>
+      </div>
+      <div class="actions">
+        <label>标注者 <input id="reviewer-id" value="reviewer-1" maxlength="100"></label>
+        <button id="import-button" type="button">导入</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden>
+        <button id="export-button" class="primary" type="button">导出完整 JSON</button>
+      </div>
+    </header>
+    <section class="progress">
+      <strong><span id="complete-count">0</span> / <span id="total-count">0</span></strong>
+      <div class="track"><span id="progress-fill"></span></div>
+      <span id="progress-message">尚未开始</span>
+    </section>
+    <details class="guidance" open>
+      <summary>统一口径</summary>
+      <div>
+        <p><strong>纳入：</strong>理解当前文本需要额外知识的最小连续表达，如网络用语、缩写、隐语、圈层表达、替换写法或特殊语用称谓。</p>
+        <p><strong>排除：</strong>普通可组合短语、整句/分句、纯粹低频词、无可复用含义的乱码。不要判断仇恨类别。</p>
+        <p><strong>重复词面：</strong>用“第几次出现”指定位置，从 1 开始；同一词面不同位置可以分别标注。</p>
+      </div>
+    </details>
+    <main class="layout">
+      <aside>
+        <label class="filter">查看
+          <select id="status-filter">
+            <option value="all">全部</option>
+            <option value="pending">待处理</option>
+            <option value="complete">已完成</option>
+            <option value="flagged">有问题标签</option>
+          </select>
+        </label>
+        <nav id="case-list"></nav>
+      </aside>
+      <article id="review-card" tabindex="-1">
+        <div class="case-head">
+          <div><p id="case-position" class="eyebrow"></p><h2 id="case-alias">—</h2></div>
+          <span id="case-status" class="pill">未完成</span>
+        </div>
+        <section class="source">
+          <div class="section-head"><h3>盲化原文</h3><span id="source-length"></span></div>
+          <p id="source-content"></p>
+        </section>
+        <section>
+          <div class="section-head"><h3>未标来源的机器候选</h3><span>候选可能全错或有遗漏</span></div>
+          <div id="focal-box" class="focal" hidden></div>
+          <div id="proposal-list" class="chips"></div>
+        </section>
+        <form id="review-form">
+          <fieldset>
+            <legend>这条原文是否包含需要额外解释的 span？</legend>
+            <label><input type="radio" name="decision" value="has_spans">有，填写全部正确 span</label>
+            <label><input type="radio" name="decision" value="no_span">没有有效 span</label>
+          </fieldset>
+          <section id="span-editor" hidden>
+            <div class="section-head"><h3>完整 Gold span</h3><button id="add-span" type="button">添加</button></div>
+            <div id="span-rows"></div>
+          </section>
+          <fieldset>
+            <legend>发现的问题（可多选）</legend>
+            <div class="tags">
+              <label><input type="checkbox" name="issue" value="missed_span">漏检</label>
+              <label><input type="checkbox" name="issue" value="too_wide">边界过宽</label>
+              <label><input type="checkbox" name="issue" value="too_narrow">边界过窄</label>
+              <label><input type="checkbox" name="issue" value="ordinary_phrase">普通词误报</label>
+              <label><input type="checkbox" name="issue" value="sentence_fragment">句子碎片</label>
+              <label><input type="checkbox" name="issue" value="wrong_occurrence">重复位置错误</label>
+              <label><input type="checkbox" name="issue" value="other">其他</label>
+            </div>
+          </fieldset>
+          <label class="notes">备注<textarea id="notes" rows="3" maxlength="2000"></textarea></label>
+          <p id="form-error" class="error" hidden></p>
+          <div class="form-actions">
+            <button id="previous" type="button">上一条</button>
+            <button id="clear" type="button">清除本条</button>
+            <button class="primary" type="submit">保存并下一条</button>
+          </div>
+        </form>
+      </article>
+    </main>
+    <template id="span-template">
+      <div class="span-row">
+        <label>Exact surface<input class="surface" maxlength="80" placeholder="逐字复制原文"></label>
+        <label>第几次出现<input class="ordinal" type="number" min="1" step="1" value="1"></label>
+        <span class="match"></span>
+        <button class="remove" type="button">删除</button>
+      </div>
+    </template>
+    <div id="toast" class="toast" hidden></div>
+  </body>
+</html>

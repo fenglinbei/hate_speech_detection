@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_cf_proposal_v1.schema.json",
+  "title": "Stage 1 counterfactual proposal candidate",
+  "type": "object",
+  "required": [
+    "schema_version", "cf_proposal_id", "candidate_id",
+    "context_record_sha256", "query_id", "query_content",
+    "gold_sha256", "gold_quadruples", "tuple_index", "field",
+    "gold_value", "candidate_value", "candidate_value_sha256",
+    "family", "source", "source_id", "review_required"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-cf-proposal-row/v1"},
+    "cf_proposal_id": {"type": "string", "pattern": "^cfp-[0-9a-f]{64}$"},
+    "candidate_id": {"type": "string", "pattern": "^cf:v1:[0-9a-f]{64}$"},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"},
+    "query_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "query_content": {"type": "string", "minLength": 1},
+    "gold_sha256": {"$ref": "#/$defs/sha256"},
+    "gold_quadruples": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/quadruple"}
+    },
+    "tuple_index": {"type": "integer", "minimum": 0},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "gold_value": {},
+    "candidate_value": {},
+    "candidate_value_sha256": {"$ref": "#/$defs/sha256"},
+    "family": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "minLength": 1},
+    "review_required": {"type": "boolean"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"field": {"enum": ["target", "argument"]}}, "required": ["field"]},
+      "then": {
+        "properties": {
+          "gold_value": {"type": ["string", "null"]},
+          "candidate_value": {"type": "string", "minLength": 1},
+          "review_required": {"const": true},
+          "source": {"const": "same-query"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field": {"const": "targeted_group"}}, "required": ["field"]},
+      "then": {
+        "properties": {
+          "gold_value": {"$ref": "#/$defs/groups"},
+          "candidate_value": {"$ref": "#/$defs/groups"},
+          "review_required": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"field": {"const": "hateful"}}, "required": ["field"]},
+      "then": {
+        "properties": {
+          "gold_value": {"enum": ["hate", "non-hate"]},
+          "candidate_value": {"enum": ["hate", "non-hate"]},
+          "review_required": {"const": false}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "group": {"enum": ["Racism", "Region", "LGBTQ", "Sexism", "others", "non-hate"]},
+    "groups": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/group"}},
+    "quadruple": {
+      "type": "object",
+      "required": ["target", "argument", "targeted_group", "hateful"],
+      "properties": {
+        "target": {"type": ["string", "null"]},
+        "argument": {"type": ["string", "null"]},
+        "targeted_group": {"$ref": "#/$defs/groups"},
+        "hateful": {"enum": ["hate", "non-hate"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

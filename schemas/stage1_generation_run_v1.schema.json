@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_generation_run_v1.schema.json",
+  "title": "Stage 1 immutable complete-block generation run",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generation_run_id",
+    "scope",
+    "scientific_eligible",
+    "model_registry_id",
+    "model_artifact_id",
+    "model_key",
+    "model_role",
+    "model_seed",
+    "checkpoint_format",
+    "tokenizer_revision",
+    "tokenizer_content_revision",
+    "split",
+    "ordered_conditions",
+    "ordered_query_ids",
+    "ordered_query_ids_sha256",
+    "row_traversal_policy",
+    "attempt_policy",
+    "query_count",
+    "row_count",
+    "complete_paired_blocks",
+    "dependencies",
+    "generation_profile_sha256",
+    "decoding_parameters_sha256",
+    "executor",
+    "records_sha256",
+    "record_hashes_sha256",
+    "determinism",
+    "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-generation-run/v1"},
+    "generation_run_id": {"type": "string", "pattern": "^gen-[0-9a-f]{64}$"},
+    "scope": {"enum": ["formal", "engineering"]},
+    "scientific_eligible": {"type": "boolean"},
+    "model_registry_id": {"type": "string", "pattern": "^mreg-[0-9a-f]{64}$"},
+    "model_artifact_id": {"type": "string", "pattern": "^mdl-[0-9a-f]{64}$"},
+    "model_key": {"type": "string", "pattern": "^(?:(?:M_LD|M_drop)/seed-[0-9]+|M_legacy/smoke)$"},
+    "model_role": {"enum": ["M_LD", "M_drop", "legacy-smoke-only"]},
+    "model_seed": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+    "checkpoint_format": {"enum": ["base", "full", "adapter"]},
+    "tokenizer_revision": {"type": "string", "minLength": 1},
+    "tokenizer_content_revision": {"type": "string", "pattern": "^tok-[0-9a-f]{64}$"},
+    "split": {"enum": ["train", "dev", "test"]},
+    "sealing_status": {"enum": ["unsealed-dev", "sealed-test"]},
+    "train_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+    "evaluation_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+    "ordered_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]}
+    },
+    "ordered_query_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "row_traversal_policy": {"const": "query-major-condition-minor/v1"},
+    "attempt_policy": {"const": "exactly-once-no-retry/v1"},
+    "query_count": {"type": "integer", "minimum": 1},
+    "row_count": {"type": "integer", "minimum": 1},
+    "complete_paired_blocks": {"const": true},
+    "dependencies": {"$ref": "#/$defs/dependencies"},
+    "generation_profile_sha256": {"$ref": "#/$defs/sha256"},
+    "decoding_parameters_sha256": {"$ref": "#/$defs/sha256"},
+    "executor": {"$ref": "#/$defs/executor"},
+    "records_sha256": {"$ref": "#/$defs/sha256"},
+    "record_hashes_sha256": {"$ref": "#/$defs/sha256"},
+    "determinism": {"$ref": "#/$defs/determinism"},
+    "id_inputs": {"$ref": "#/$defs/idInputs"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullable_sha256": {
+      "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "artifact_kind",
+        "artifact_id",
+        "payload_manifest_sha256",
+        "logical_repo_path"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/"}}
+      },
+      "additionalProperties": false
+    },
+    "dependencies": {
+      "type": "object",
+      "required": ["context", "model_registry"],
+      "properties": {
+        "context": {"$ref": "#/$defs/dependency"},
+        "control": {"$ref": "#/$defs/dependency"},
+        "counterfactual": {"$ref": "#/$defs/dependency"},
+        "model_registry": {"$ref": "#/$defs/dependency"},
+        "training_plan": {"$ref": "#/$defs/dependency"}
+      },
+      "additionalProperties": false
+    },
+    "executor": {
+      "type": "object",
+      "required": ["executor_id", "executor_revision", "backend", "scientific_eligible"],
+      "properties": {
+        "executor_id": {"type": "string", "minLength": 1},
+        "executor_revision": {"type": "string", "minLength": 1},
+        "backend": {"type": "string", "minLength": 1},
+        "scientific_eligible": {"type": "boolean"},
+        "fixture_sha256": {"$ref": "#/$defs/sha256"},
+        "model_binding_sha256": {"$ref": "#/$defs/sha256"},
+        "vllm_use_v1": {"const": "1"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "backend": {"const": "vllm"},
+              "scientific_eligible": {"const": true}
+            },
+            "required": ["backend", "scientific_eligible"]
+          },
+          "then": {"required": ["vllm_use_v1"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "determinismContract": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "comparison_policy",
+        "execution_repetitions"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-generation-determinism/v1"},
+        "comparison_policy": {"const": "full-frame-exact-record-and-raw-bytes/v1"},
+        "execution_repetitions": {"enum": [1, 2]}
+      },
+      "additionalProperties": false
+    },
+    "determinism": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "generation_run_id",
+        "comparison_policy",
+        "execution_repetitions",
+        "exact_match",
+        "mismatch_count",
+        "per_execution_records_sha256",
+        "per_execution_record_hashes_sha256",
+        "per_execution_raw_output_bytes_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-generation-determinism/v1"},
+        "generation_run_id": {"type": "string", "pattern": "^gen-[0-9a-f]{64}$"},
+        "comparison_policy": {"const": "full-frame-exact-record-and-raw-bytes/v1"},
+        "execution_repetitions": {"enum": [1, 2]},
+        "exact_match": {"const": true},
+        "mismatch_count": {"const": 0},
+        "per_execution_records_sha256": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {"$ref": "#/$defs/sha256"}
+        },
+        "per_execution_record_hashes_sha256": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {"$ref": "#/$defs/sha256"}
+        },
+        "per_execution_raw_output_bytes_sha256": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {"$ref": "#/$defs/sha256"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "idInputs": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "scope",
+        "dependencies",
+        "model_registry_id",
+        "model_artifact_id",
+        "model_key",
+        "model_role",
+        "model_seed",
+        "checkpoint_format",
+        "tokenizer_revision",
+        "tokenizer_content_revision",
+        "split",
+        "ordered_conditions",
+        "ordered_query_ids_sha256",
+        "query_count",
+        "row_traversal_policy",
+        "determinism",
+        "generation_profile",
+        "executor",
+        "builder_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-generation-id-inputs/v1"},
+        "scope": {"enum": ["formal", "engineering"]},
+        "dependencies": {"$ref": "#/$defs/dependencies"},
+        "model_registry_id": {"type": "string", "pattern": "^mreg-[0-9a-f]{64}$"},
+        "model_artifact_id": {"type": "string", "pattern": "^mdl-[0-9a-f]{64}$"},
+        "model_key": {"type": "string", "pattern": "^(?:(?:M_LD|M_drop)/seed-[0-9]+|M_legacy/smoke)$"},
+        "model_role": {"enum": ["M_LD", "M_drop", "legacy-smoke-only"]},
+        "model_seed": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "null"}]},
+        "checkpoint_format": {"enum": ["base", "full", "adapter"]},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "tokenizer_content_revision": {"type": "string", "pattern": "^tok-[0-9a-f]{64}$"},
+        "split": {"enum": ["train", "dev", "test"]},
+        "sealing_status": {"enum": ["unsealed-dev", "sealed-test"]},
+        "train_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+        "evaluation_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+        "ordered_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]}
+        },
+        "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "query_count": {"type": "integer", "minimum": 1},
+        "row_traversal_policy": {"const": "query-major-condition-minor/v1"},
+        "determinism": {"$ref": "#/$defs/determinismContract"},
+        "generation_profile": {"type": "object"},
+        "executor": {"$ref": "#/$defs/executor"},
+        "builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

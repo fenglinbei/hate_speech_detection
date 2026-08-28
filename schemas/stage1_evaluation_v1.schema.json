@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_evaluation_v1.schema.json",
+  "title": "Stage 1 per-query free-generation metric record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "condition",
+    "raw_output",
+    "runner_status",
+    "finish_reason",
+    "syntax_valid",
+    "schema_valid",
+    "strict_format_valid",
+    "recoverable_parse_valid",
+    "canonical_wire_equal",
+    "pred_tuple_count",
+    "gold_tuple_count",
+    "tuple_count_correct",
+    "tuple",
+    "field_unbound",
+    "field_bound",
+    "correctness",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-query-metrics/v1"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "condition": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]},
+    "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "gold_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "prompt_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "context_record_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "raw_output": {"type": "string"},
+    "runner_status": {"enum": ["ok", "length"]},
+    "finish_reason": {"enum": ["eos", "length", "fixture"]},
+    "syntax_valid": {"type": "boolean"},
+    "schema_valid": {"type": "boolean"},
+    "strict_format_valid": {"type": "boolean"},
+    "recoverable_parse_valid": {"type": "boolean"},
+    "canonical_wire_equal": {"type": "boolean"},
+    "pred_tuple_count": {"type": "integer", "minimum": 0},
+    "gold_tuple_count": {"type": "integer", "minimum": 0, "maximum": 6},
+    "tuple_count_correct": {"type": "boolean"},
+    "tuple": {
+      "type": "object",
+      "required": ["hard", "soft"],
+      "properties": {
+        "hard": {"type": "object"},
+        "soft": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "field_unbound": {
+      "type": "object",
+      "required": ["target", "argument", "targeted_group", "hateful"],
+      "properties": {
+        "target": {"type": "object"},
+        "argument": {"type": "object"},
+        "targeted_group": {"type": "object"},
+        "hateful": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "field_bound": {
+      "type": "object",
+      "required": ["alignment", "targeted_group", "hateful", "group_hate_joint"],
+      "properties": {
+        "alignment": {"type": "object"},
+        "targeted_group": {"type": "object"},
+        "hateful": {"type": "object"},
+        "group_hate_joint": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "correctness": {"type": "object"},
+    "errors": {"type": "array", "items": {"type": "object"}},
+    "warnings": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}

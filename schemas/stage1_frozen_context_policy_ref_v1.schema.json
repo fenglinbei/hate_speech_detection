@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_frozen_context_policy_ref_v1.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version", "frozen_dev_context_dependency", "data_dependency",
+    "train_partition_dependency", "lexicon_dependency", "dev_context_config_sha256", "retrieval_policy_sha256",
+    "rendering_policy_sha256", "budget_policy_sha256", "output_protocol_sha256",
+    "context_builder_code_sha256", "rendering_identity_sha256",
+    "runtime_source_identity_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-frozen-context-policy-ref/v1"},
+    "frozen_dev_context_dependency": {"$ref": "#/$defs/dependency"},
+    "data_dependency": {"$ref": "#/$defs/dependency"},
+    "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+    "lexicon_dependency": {"$ref": "#/$defs/compactDependency"},
+    "dev_context_config_sha256": {"$ref": "#/$defs/sha256"},
+    "retrieval_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "rendering_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "budget_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "output_protocol_sha256": {"$ref": "#/$defs/sha256"},
+    "context_builder_code_sha256": {"$ref": "#/$defs/sha256"},
+    "rendering_identity_sha256": {"$ref": "#/$defs/sha256"},
+    "runtime_source_identity_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "compactDependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

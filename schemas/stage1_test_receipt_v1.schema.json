@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_test_receipt_v1.schema.json",
+  "title": "Stage 1 P0 immutable test receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "test_receipt_id",
+    "status",
+    "all_passed",
+    "command_count",
+    "total_duration_ms",
+    "id_inputs",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-test-receipt/v1"},
+    "test_receipt_id": {"type": "string", "pattern": "^vrec-[0-9a-f]{64}$"},
+    "status": {"const": "completed"},
+    "all_passed": {"const": true},
+    "command_count": {"type": "integer", "minimum": 1},
+    "total_duration_ms": {"type": "integer", "minimum": 0},
+    "id_inputs": {"$ref": "#/$defs/id_inputs"},
+    "provenance": {"$ref": "#/$defs/provenance"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "runtime_identity": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "implementation",
+        "implementation_version",
+        "cache_tag",
+        "executable_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-test-python-runtime/v1"},
+        "implementation": {"type": "string", "minLength": 1},
+        "implementation_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "cache_tag": {"type": ["string", "null"]},
+        "executable_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "execution_policy": {
+      "type": "object",
+      "required": [
+        "policy",
+        "max_parallel_commands",
+        "log_normalization_policy",
+        "maximum_log_bytes_per_stream",
+        "expected_exit_code"
+      ],
+      "properties": {
+        "policy": {"const": "actual-subprocess-no-import/v1"},
+        "max_parallel_commands": {"type": "integer", "minimum": 1, "maximum": 16},
+        "log_normalization_policy": {"const": "utf8-replace-crlf-lf-strip-ansi-portable-paths/v1"},
+        "maximum_log_bytes_per_stream": {"const": 67108864},
+        "expected_exit_code": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "id_inputs": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "command_manifest_sha256",
+        "source_inventory_sha256",
+        "runtime_identity",
+        "execution_policy",
+        "ordered_results_sha256",
+        "builder_code_sha256",
+        "receipt_schema_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-test-receipt/v1"},
+        "command_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_identity": {"$ref": "#/$defs/runtime_identity"},
+        "execution_policy": {"$ref": "#/$defs/execution_policy"},
+        "ordered_results_sha256": {"$ref": "#/$defs/sha256"},
+        "builder_code_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "test_receipt_id",
+        "command_manifest_sha256",
+        "source_inventory_sha256",
+        "results_sha256",
+        "builder_code_sha256",
+        "receipt_schema_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-test-receipt-provenance/v1"},
+        "test_receipt_id": {"type": "string", "pattern": "^vrec-[0-9a-f]{64}$"},
+        "command_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "results_sha256": {"$ref": "#/$defs/sha256"},
+        "builder_code_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

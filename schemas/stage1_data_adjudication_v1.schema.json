@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_adjudication_v1.schema.json",
+  "title": "Completed Stage 1 data adjudication row",
+  "type": "object",
+  "required": [
+    "schema_version", "data_audit_id", "issue_id", "issue_kind", "decision",
+    "edits", "reason_code", "reason", "reviewer_id", "reviewed_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-adjudication-row/v1"},
+    "data_audit_id": {"type": "string", "pattern": "^daudit-[0-9a-f]{64}$"},
+    "issue_id": {"type": "string", "pattern": "^dissue:v1:[0-9a-f]{64}$"},
+    "issue_kind": {"enum": ["group-hate", "field-type", "record-id"]},
+    "decision": {"enum": ["accepted", "corrected"]},
+    "edits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["location_index", "op", "json_pointer", "value"],
+        "properties": {
+          "location_index": {"type": "integer", "minimum": 0},
+          "op": {"const": "set"},
+          "json_pointer": {"type": "string", "pattern": "^/(id|quadruples/[0-9]+/(target|argument|targeted_group|hateful))$"},
+          "value": true
+        },
+        "additionalProperties": false
+      }
+    },
+    "reason_code": {"type": "string", "minLength": 1},
+    "reason": {"type": "string", "minLength": 1},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "reviewed_at": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"decision": {"const": "accepted"}}},
+      "then": {"properties": {"edits": {"maxItems": 0}}}
+    },
+    {
+      "if": {"properties": {"decision": {"const": "corrected"}}},
+      "then": {"properties": {"edits": {"minItems": 1}}}
+    }
+  ]
+}

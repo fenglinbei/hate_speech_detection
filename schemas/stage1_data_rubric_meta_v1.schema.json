@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_rubric_meta_v1.schema.json",
+  "title": "Stage 1 data adjudication rubric metadata",
+  "type": "object",
+  "required": [
+    "schema_version", "rubric_version", "rubric_body_sha256",
+    "declaration_schema_version", "decision_codes", "reason_codes", "edit_contract"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-adjudication-rubric-meta/v1"},
+    "rubric_version": {"const": "stage1-data-adjudication-rubric/v1"},
+    "rubric_body_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "declaration_schema_version": {"const": "stage1-data-reviewer-declaration/v1"},
+    "decision_codes": {
+      "type": "array",
+      "prefixItems": [{"const": "accepted"}, {"const": "corrected"}],
+      "items": false
+    },
+    "reason_codes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["accepted", "corrected"],
+        "properties": {
+          "accepted": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "corrected": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "edit_contract": {"type": "object"}
+  },
+  "additionalProperties": false
+}

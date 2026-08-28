@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/terminology_span_exception_resolution_v1.schema.json",
+  "title": "WP3 exhausted-Qwen span exception resolution",
+  "type": "object",
+  "required": ["schema_version", "reviewer_id", "resolutions"],
+  "properties": {
+    "schema_version": {"const": "terminology-span-exception-resolution/v1"},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "resolutions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task_id", "spans", "notes"],
+        "properties": {
+          "task_id": {"type": "string", "pattern": "^span-[0-9a-f]{24}$"},
+          "spans": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["surface", "occurrence_ordinal"],
+              "properties": {
+                "surface": {"type": "string", "minLength": 1, "maxLength": 80},
+                "occurrence_ordinal": {"type": "integer", "minimum": 1}
+              },
+              "additionalProperties": false
+            }
+          },
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

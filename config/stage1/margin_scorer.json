@@ -1,0 +1,49 @@
+{
+  "schema_version": "stage1-margin-scorer-profile/v1",
+  "profile_name": "stage1-local-hf-field-margin-v1",
+  "backend": "local-huggingface-causal-lm",
+  "ordered_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "fields": ["target", "argument", "targeted_group", "hateful"],
+  "runtime": {
+    "dtype": "bfloat16",
+    "device_map": "auto",
+    "batch_unit": "gold-cf-pair",
+    "batch_size": 1,
+    "max_sequence_tokens": 2048,
+    "truncation_allowed": false,
+    "trust_remote_code": false,
+    "right_padding": true,
+    "position_ids": "attention-mask-cumsum-minus-one-zero-on-padding/v1",
+    "log_softmax_dtype": "float32",
+    "thinking_mode": false
+  },
+  "tokenization": {
+    "prompt_response_segmentation": "separate-no-special-tokens/v1",
+    "span_mask": "minimal-overlap-cover/v1",
+    "score_complete_json_value_literal": true,
+    "causal_shift": "logits-minus-last-vs-input-minus-first",
+    "record_boundary_crossing": true
+  },
+  "record_outputs": [
+    "token_ids",
+    "token_count",
+    "character_span",
+    "token_span",
+    "sum_logprob",
+    "mean_logprob",
+    "left_boundary_crossing",
+    "right_boundary_crossing"
+  ],
+  "aggregation": {
+    "primary_token_aggregation": "mean",
+    "sensitivity_token_aggregation": "sum",
+    "tuple_aggregation": "equal-weight-within-query",
+    "query_aggregation": "equal-weight",
+    "hateful_interpretation": "gold-prefix-conditional"
+  },
+  "eligibility": {
+    "mask_timing": "frozen-before-scoring",
+    "mask_shared_across_conditions_and_models": true,
+    "overflow_policy": "hard-fail-and-common-complete-case-mask"
+  }
+}

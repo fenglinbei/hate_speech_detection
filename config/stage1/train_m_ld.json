@@ -1,0 +1,115 @@
+{
+  "schema_version": "stage1-train-config/v1",
+  "model_name": "Qwen/Qwen3-8B",
+  "model_path": "models/base/Qwen3-8B",
+  "model_role": "M_LD",
+  "execution_status": "runtime-gated-by-immutable-training-refs",
+  "template_fields_resolved_by_training_plan": [
+    "exp_name",
+    "random_seed",
+    "training.output_dir",
+    "training.seed",
+    "training.data_seed",
+    "data.train_data_path"
+  ],
+  "exp_name": "stage1-m-ld",
+  "project_name": "stage1-causal-context",
+  "random_seed": 42,
+  "device_map": "auto",
+  "max_length": 2048,
+  "preprocessing_num_proc": 8,
+  "system_prompt": "STAGE1_QUAD_JSON_SYSTEM_PROMPT_V2",
+  "prompt_template": "STAGE1_QUAD_JSON_EVIDENCE_PROMPT_USER_V2",
+  "thinking_mode": false,
+  "lora": false,
+  "data": {
+    "source_schema": "stage1-training-schedule/v1",
+    "requires_frozen_schedule": true,
+    "train_data_path": null,
+    "val_data_path": null,
+    "selection_split": "train-only-calibration",
+    "calibration": {
+      "assignment": "sha256-query-id-v1",
+      "fraction": 0.1,
+      "hash_modulus": 10000,
+      "hash_threshold_exclusive": 1000,
+      "id_fields": ["id", "query_id"],
+      "salt": "stage1-train-calibration-v1"
+    },
+    "partition": {
+      "artifact_kind": "train-partition",
+      "policy": "immutable-explicit-ref/v1",
+      "nominal_hash_policy": "assertion-only"
+    },
+    "fixed_presentation": {
+      "policy": "calibration-epoch-1-wire/v1",
+      "wire_epoch": 1,
+      "demo_order_across_epochs": true,
+      "source_mask_across_epochs": true
+    }
+  },
+  "context_policy": {
+    "lexicon_dropout_probability": 0.0,
+    "demonstration_dropout_probability": 0.0,
+    "dropout_independent": true,
+    "order_policy": "per-seed-epoch-query-sha256/v1",
+    "matched_permutation_across_roles": true
+  },
+  "training": {
+    "output_dir": "exps/causal_context/stage1_p0/checkpoints/M_LD/seed-42",
+    "deepspeed": "config/stage1/deepspeed_zero3.json",
+    "num_train_epochs": 5,
+    "per_device_train_batch_size": 1,
+    "per_device_eval_batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "learning_rate": 1e-05,
+    "weight_decay": 0.1,
+    "warmup_ratio": 0.03,
+    "lr_scheduler_type": "cosine",
+    "optim": "adamw_torch_fused",
+    "bf16": true,
+    "tf32": false,
+    "gradient_checkpointing": true,
+    "gradient_checkpointing_kwargs": {"use_reentrant": false},
+    "max_grad_norm": 1.0,
+    "eval_strategy": "epoch",
+    "save_strategy": "epoch",
+    "logging_strategy": "steps",
+    "logging_steps": 10,
+    "save_total_limit": 5,
+    "load_best_model_at_end": true,
+    "metric_for_best_model": "eval_loss",
+    "greater_is_better": false,
+    "seed": 42,
+    "data_seed": 42,
+    "full_determinism": true,
+    "dataloader_num_workers": 0,
+    "ddp_find_unused_parameters": false,
+    "remove_unused_columns": true,
+    "save_safetensors": true,
+    "report_to": []
+  },
+  "early_stopping": {
+    "enabled": true,
+    "metric": "eval_loss",
+    "mode": "min",
+    "minimum_epochs": 1,
+    "maximum_epochs": 5,
+    "patience_evaluations": 3,
+    "threshold": 0.001,
+    "tie_break": "earliest-global-step",
+    "selection_data": "train-only-calibration",
+    "scientific_dev_used_for_selection": false
+  },
+  "checkpointing": {
+    "save_inference_only": false,
+    "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"
+  },
+  "tracking": {
+    "swanlab": {"enabled": false}
+  },
+  "eval": {
+    "eval_num": 0,
+    "max_retries": 0
+  }
+}

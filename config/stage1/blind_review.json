@@ -1,0 +1,65 @@
+{
+  "schema_version": "stage1-blind-review-policy/v1",
+  "temperature": 0,
+  "top_p": 1,
+  "max_attempts": 1,
+  "request_timeout_seconds": 120,
+  "max_tokens": 4096,
+  "max_concurrency_per_reviewer": 1,
+  "reviewer_request_options": {
+    "glm_high_parameter": {
+      "thinking": {"type": "enabled"},
+      "reasoning_effort": "high"
+    },
+    "deepseek_flash": {
+      "thinking": {"type": "disabled"},
+      "reasoning_effort": "medium"
+    }
+  },
+  "reviewers": [
+    {
+      "reviewer_id": "glm_high_parameter",
+      "backend": "openai_compatible",
+      "api_base_env": "STAGE1_GLM_API_BASE",
+      "default_api_base": "https://open.bigmodel.cn/api/paas/v4",
+      "api_key_env": "GLM_API_KEY",
+      "model_env": "STAGE1_GLM_MODEL",
+      "default_model": "glm-5.3"
+    },
+    {
+      "reviewer_id": "deepseek_flash",
+      "backend": "openai_compatible",
+      "api_base_env": "STAGE1_DEEPSEEK_API_BASE",
+      "default_api_base": "https://api.deepseek.com",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "model_env": "STAGE1_DEEPSEEK_MODEL",
+      "default_model": "deepseek-v4-flash"
+    }
+  ],
+  "blindness": {
+    "reviewers_see_each_other": false,
+    "show_model_predictions": false,
+    "show_experimental_condition": false,
+    "show_source_split": false,
+    "stable_shuffle_seed": 42
+  },
+  "consensus": {
+    "auto_accept_only_exact_structured_agreement": true,
+    "low_confidence_threshold": 0.8,
+    "agreement_qc_fraction": 0.1,
+    "agreement_qc_assignment": "sha256-review-item-id-v1",
+    "human_queue_reasons": [
+      "model_disagreement",
+      "parse_failure",
+      "low_confidence",
+      "agreement_qc_sample"
+    ]
+  },
+  "provenance": {
+    "retain_raw_request_without_secrets": true,
+    "retain_raw_response": true,
+    "record_prompt_sha256": true,
+    "record_model_identifier": true,
+    "record_provider_request_id_when_available": true
+  }
+}

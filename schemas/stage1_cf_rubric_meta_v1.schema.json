@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_cf_rubric_meta_v1.schema.json",
+  "title": "Stage 1 canonical counterfactual review rubric metadata",
+  "type": "object",
+  "required": [
+    "schema_version", "rubric_version", "policy_version", "selection_policy",
+    "rubric_body_sha256", "proposal_row_schema_version",
+    "review_row_schema_version", "reviewer_declaration_schema_version",
+    "allowed_decision_codes", "pass_reason_codes", "reject_reason_codes",
+    "automatic_reason_codes", "field_contract"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-cf-rubric-meta/v1"},
+    "rubric_version": {"const": "stage1-cf-review-rubric/v1"},
+    "policy_version": {"const": "query-local-candidate-policy/v1"},
+    "selection_policy": {"const": "query-local-valid-first/v1"},
+    "rubric_body_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "proposal_row_schema_version": {"const": "stage1-cf-proposal-row/v1"},
+    "review_row_schema_version": {"const": "stage1-cf-review-row/v1"},
+    "reviewer_declaration_schema_version": {"const": "stage1-cf-reviewer-declaration/v1"},
+    "allowed_decision_codes": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"enum": ["pass", "reject", "not_required"]}},
+    "pass_reason_codes": {"const": ["valid-local-foil"]},
+    "reject_reason_codes": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true},
+    "automatic_reason_codes": {"const": ["deterministic-label-foil"]},
+    "field_contract": {
+      "type": "object",
+      "required": ["target", "argument", "targeted_group", "hateful"],
+      "properties": {
+        "target": {"$ref": "#/$defs/reviewed"},
+        "argument": {"$ref": "#/$defs/reviewed"},
+        "targeted_group": {"$ref": "#/$defs/automatic"},
+        "hateful": {"$ref": "#/$defs/automatic"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "reviewed": {
+      "type": "object",
+      "required": ["review_required", "allowed_sources"],
+      "properties": {"review_required": {"const": true}, "allowed_sources": {"const": ["same-query"]}},
+      "additionalProperties": false
+    },
+    "automatic": {
+      "type": "object",
+      "required": ["review_required", "construction_coverage_required"],
+      "properties": {"review_required": {"const": false}, "construction_coverage_required": {"const": 1.0}},
+      "additionalProperties": false
+    }
+  }
+}

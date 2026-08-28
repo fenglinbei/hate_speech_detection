@@ -2,6 +2,26 @@ import json
 import re
 from typing import Any, List, Dict
 
+# Canonical Stage-1 JSON API.  Legacy parsers below intentionally retain their
+# existing behavior; this module only provides a compatibility import surface.
+from utils.quadruple import (
+    GROUP_ORDER,
+    HATEFUL_LABELS,
+    QUAD_KEYS,
+    SCHEMA_VERSION,
+    ParseIssue,
+    ParseResult,
+    Quadruple,
+    QuadrupleValidationError,
+    ValueSpanMap,
+    adapt_source_quad,
+    canonicalize_quadruple,
+    canonicalize_quadruples,
+    parse_quadruples,
+    serialize_quadruples,
+    serialize_with_spans,
+)
+
 
 def _extract_after_last_marker(text: str, markers: list[str]) -> str:
     """Return text after the last explicit final-answer marker, if present."""

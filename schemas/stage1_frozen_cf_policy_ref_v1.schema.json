@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_frozen_cf_policy_ref_v1.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version", "frozen_dev_cf_dependency", "frozen_dev_context_dependency",
+    "test_context_dependency", "foil_config_sha256", "review_rubric_sha256",
+    "review_rubric_meta_sha256", "candidate_policy_version", "proposal_code_sha256",
+    "selection_policy_sha256", "finalizer_code_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-frozen-cf-policy-ref/v1"},
+    "frozen_dev_cf_dependency": {"$ref": "#/$defs/dependency"},
+    "frozen_dev_context_dependency": {"$ref": "#/$defs/dependency"},
+    "test_context_dependency": {"$ref": "#/$defs/dependency"},
+    "foil_config_sha256": {"$ref": "#/$defs/sha256"},
+    "review_rubric_sha256": {"$ref": "#/$defs/sha256"},
+    "review_rubric_meta_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_policy_version": {"const": "query-local-candidate-policy/v1"},
+    "proposal_code_sha256": {"$ref": "#/$defs/sha256"},
+    "selection_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "finalizer_code_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

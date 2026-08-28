@@ -1,0 +1,89 @@
+{
+  "schema_version": "wp3-candidate-generators-config/v1",
+  "resource_role": "wp3-candidate-generators/v2",
+  "source_policy": "fit-content-only-no-task-fields/v1",
+  "handbook": {
+    "version": "wp3-terminology-evidence-handbook/v1.0",
+    "path": "docs/research/experiment-plans/wp3-a-core-annotation-handbook.md",
+    "sha256": "f5a2c5c2141b87074f42fd8502e2886e2913ff309becd8c7358a25f7072a7c57"
+  },
+  "expected_fit_count": 5165,
+  "artifact_root": "exps/causal_context/stage1_p0/wp3_candidate_generators_v2",
+  "g1": {
+    "enabled": true,
+    "passes": [
+      "surface_decode",
+      "lexical_pragmatic"
+    ],
+    "max_edits_per_pass": 8,
+    "provider_plan": [
+      {
+        "provider": "qwen",
+        "model": "Qwen3.8-27B",
+        "transport": "openai-compatible-local",
+        "scope": "development-default"
+      }
+    ]
+  },
+  "g2": {
+    "enabled": true,
+    "max_mentions": 8,
+    "provider_plan": [
+      {
+        "provider": "qwen",
+        "model": "Qwen3.8-27B",
+        "transport": "openai-compatible-local",
+        "scope": "development-and-proposed-formal"
+      },
+      {
+        "provider": "deepseek",
+        "model": "deepseek-v4-flash",
+        "transport": "openai-compatible-external",
+        "scope": "development-and-proposed-formal"
+      }
+    ],
+    "aggregation": "provider-union-no-vote/v1"
+  },
+  "g3": {
+    "enabled": true,
+    "rule_version": "wp3-form-rules/v1",
+    "max_surface_chars": 80,
+    "mixed_script_max_chars": 24,
+    "emoji_enabled": true,
+    "nfkc_enabled": true,
+    "reference_path": null,
+    "reference_sha256": null,
+    "romanizer_backend": null,
+    "romanizer_resource_sha256": null,
+    "phonetic_max_distance": 0,
+    "formal_phonetic_status": "disabled-until-backend-frozen"
+  },
+  "aggregation": {
+    "policy": "exact-occurrence-union/v1",
+    "preserve_nested": true,
+    "preserve_overlaps": true,
+    "majority_vote": false,
+    "automatic_tier_assignment": false,
+    "automatic_publication": false
+  },
+  "pilot": {
+    "development_sources": [
+      "historical-a1-200",
+      "historical-candidate-gate-80",
+      "historical-span-revision-49",
+      "historical-dual-model-240"
+    ],
+    "sealed_min_records": 240,
+    "sealed_target_records": 400,
+    "sealed_max_records": 600,
+    "hidden_repeat_records": 60,
+    "min_union_recall": 0.9,
+    "min_union_exact_boundary_f1": 0.85
+  },
+  "execution": {
+    "model_calls_authorized": false,
+    "network_calls_authorized": false,
+    "paid_calls_authorized": false,
+    "formal_artifact_publication_authorized": false
+  }
+}

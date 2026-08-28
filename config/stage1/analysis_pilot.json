@@ -1,0 +1,22 @@
+{
+  "schema_version": "stage1-analysis-profile/v1",
+  "profile_name": "stage1-seed-42-pilot",
+  "mode": "pilot",
+  "scientific_eligible": false,
+  "allowed_splits": ["dev"],
+  "required_model_keys": ["M_LD/seed-42", "M_drop/seed-42"],
+  "ordered_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "reducer_version": "stage1-factorial-reducer/v1",
+  "bootstrap": {
+    "unit": "paired-query",
+    "replicates": 10000,
+    "seed": 42,
+    "interval": "percentile-95",
+    "family_stream": "sha256-seed-family-replicate/v1"
+  },
+  "gate_policy": {
+    "emit_confirmatory_gate": false,
+    "allow_scientific_claim": false,
+    "effect_direction_may_control_seed_expansion": false
+  }
+}

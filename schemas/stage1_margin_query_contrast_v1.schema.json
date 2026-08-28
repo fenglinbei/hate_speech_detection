@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_query_contrast_v1.schema.json",
+  "title": "Stage 1 per-query field margin contrasts",
+  "type": "object",
+  "required": [
+    "schema_version", "id", "field", "model_key", "status", "TE_L", "TE_D",
+    "I_L_D", "TE_L_rel", "TE_D_rel", "L_shape", "D_shape",
+    "content_sha256", "gold_sha256", "context_record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-margin-query-contrasts/v1"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "model_key": {"type": "string", "minLength": 1},
+    "status": {"enum": ["ok", "ineligible-pre-frozen"]},
+    "TE_L": {"type": ["number", "null"]},
+    "TE_D": {"type": ["number", "null"]},
+    "I_L_D": {"type": ["number", "null"]},
+    "TE_L_rel": {"type": ["number", "null"]},
+    "TE_D_rel": {"type": ["number", "null"]},
+    "L_shape": {"type": ["number", "null"]},
+    "D_shape": {"type": ["number", "null"]},
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "gold_sha256": {"$ref": "#/$defs/sha256"},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

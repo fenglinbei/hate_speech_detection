@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_record_v1.schema.json",
+  "title": "Stage 1 query-field margin sufficient statistic",
+  "type": "object",
+  "required": [
+    "schema_version", "id", "condition", "field", "model_key", "status",
+    "margin_mean", "content_sha256", "gold_sha256",
+    "context_record_sha256", "cf_record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-margin-record/v1"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "condition": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "model_key": {"type": "string", "minLength": 1},
+    "status": {"enum": ["ok", "ineligible-pre-frozen"]},
+    "margin_mean": {"type": ["number", "null"]},
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "gold_sha256": {"$ref": "#/$defs/sha256"},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"},
+    "cf_record_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

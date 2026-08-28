@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>双模型 span 人工检查</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="cases.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">BLIND · OFFLINE · 288 CASES / 240 UNIQUE</p>
+        <h1>双模型 span 人工检查</h1>
+        <p class="subtitle">仅看原文与模型 A/B 本轮输出；类别和既有标注保持隐藏。</p>
+      </div>
+      <div class="topbar-actions">
+        <label class="reviewer-field">
+          <span>标注者</span>
+          <input id="reviewer-id" value="reviewer-1" maxlength="100" />
+        </label>
+        <button id="import-button" class="button secondary" type="button">导入 JSON</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+        <button id="export-button" class="button primary" type="button">导出 JSON</button>
+      </div>
+    </header>
+
+    <section class="progress-shell" aria-label="标注进度">
+      <div class="progress-copy">
+        <strong><span id="complete-count">0</span> / <span id="total-count">288</span></strong>
+        <span id="progress-message">尚未开始</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="288" aria-valuenow="0">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </section>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <label class="filter-field">
+          <span>查看</span>
+          <select id="status-filter">
+            <option value="all">全部 288 条</option>
+            <option value="pending">仅待检查</option>
+            <option value="disagreement">模型 span 不一致</option>
+            <option value="completed">仅已完成</option>
+          </select>
+        </label>
+        <div id="case-list" class="case-list" aria-label="case 列表"></div>
+        <p id="empty-list" class="empty-list" hidden>当前筛选没有 case。</p>
+      </aside>
+
+      <section id="review-card" class="review-card" tabindex="-1">
+        <div class="case-heading">
+          <div>
+            <p id="case-position" class="eyebrow"></p>
+            <h2 id="case-alias">—</h2>
+          </div>
+          <div id="case-flags" class="flag-row"></div>
+        </div>
+
+        <section class="source-panel" aria-labelledby="source-title">
+          <div class="section-heading">
+            <h3 id="source-title">盲化原文</h3>
+            <span id="source-length" class="muted"></span>
+          </div>
+          <p id="source-content" class="source-content"></p>
+        </section>
+
+        <section aria-labelledby="model-output-title">
+          <div class="section-heading">
+            <h3 id="model-output-title">模型输出</h3>
+            <span id="agreement-summary" class="agreement-summary"></span>
+          </div>
+          <div class="model-grid">
+            <article class="model-card model-a">
+              <div class="model-title"><span class="model-dot"></span><h4>模型 A</h4></div>
+              <div id="model-a-output"></div>
+            </article>
+            <article class="model-card model-b">
+              <div class="model-title"><span class="model-dot"></span><h4>模型 B</h4></div>
+              <div id="model-b-output"></div>
+            </article>
+          </div>
+        </section>
+
+        <form id="review-form" class="review-form">
+          <fieldset>
+            <legend>总体判断 <span class="required">必选</span></legend>
+            <div class="decision-grid">
+              <label><input type="radio" name="decision" value="model_a_better" />模型 A 更好</label>
+              <label><input type="radio" name="decision" value="model_b_better" />模型 B 更好</label>
+              <label><input type="radio" name="decision" value="both_acceptable" />两者均可接受</label>
+              <label><input type="radio" name="decision" value="both_wrong" />两者都有问题</label>
+              <label><input type="radio" name="decision" value="no_valid_span" />原文无有效词条</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>问题标签 <span class="optional">可多选</span></legend>
+            <div class="tag-grid">
+              <label><input type="checkbox" name="issue" value="neutral_identity" />中性身份/称谓误收</label>
+              <label><input type="checkbox" name="issue" value="fragment_or_sentence" />碎片或句子误收</label>
+              <label><input type="checkbox" name="issue" value="missed_valid_span" />漏掉有效 span</label>
+              <label><input type="checkbox" name="issue" value="hallucinated_span" />非原文 span</label>
+              <label><input type="checkbox" name="issue" value="wrong_type" />类型错误</label>
+              <label><input type="checkbox" name="issue" value="wrong_description" />描述错误</label>
+              <label><input type="checkbox" name="issue" value="other" />其他</label>
+            </div>
+          </fieldset>
+
+          <label class="text-field">
+            <span>人工 corrected spans <small>可选；每行一个，必须逐字存在于原文</small></span>
+            <textarea id="corrected-spans" rows="3" placeholder="例：郭楠"></textarea>
+          </label>
+          <label class="text-field">
+            <span>备注 <small>可选</small></span>
+            <textarea id="notes" rows="3" maxlength="2000"></textarea>
+          </label>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button id="previous-button" class="button secondary" type="button">上一条</button>
+            <button id="clear-button" class="button ghost" type="button">清除此条</button>
+            <button class="button primary" type="submit">保存并下一条</button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

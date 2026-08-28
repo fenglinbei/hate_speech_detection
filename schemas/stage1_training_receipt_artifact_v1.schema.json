@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_training_receipt_artifact_v1.schema.json",
+  "title": "Stage 1 portable training receipt artifact",
+  "type": "object",
+  "required": [
+    "schema_version", "training_receipt_id", "scope", "scientific_eligible",
+    "receipt_sha256", "model_key", "role", "seed",
+    "training_plan_dependency", "schedule_dependency", "train_partition_dependency", "base_model_dependency",
+    "environment_dependency", "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-training-receipt-artifact/v1"},
+    "training_receipt_id": {"type": "string", "pattern": "^trc-[0-9a-f]{64}$"},
+    "scope": {"enum": ["pilot", "formal"]},
+    "scientific_eligible": {"type": "boolean"},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "selected_checkpoint_file_tree_sha256": {
+      "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "model_key": {"$ref": "#/$defs/model_key"},
+    "role": {"enum": ["M_LD", "M_drop"]},
+    "seed": {"type": "integer", "minimum": 0},
+    "training_plan_dependency": {"$ref": "#/$defs/dependency"},
+    "schedule_dependency": {"$ref": "#/$defs/dependency"},
+    "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+    "base_model_dependency": {"$ref": "#/$defs/dependency"},
+    "environment_dependency": {"$ref": "#/$defs/dependency"},
+    "id_inputs": {"type": "object"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_key": {"type": "string", "pattern": "^(M_LD|M_drop)/seed-[1-9][0-9]*$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

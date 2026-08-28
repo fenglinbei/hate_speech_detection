@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_run_v1.schema.json",
+  "title": "Stage 1 field margin record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "margin_version",
+    "tuple_index",
+    "field",
+    "gold",
+    "counterfactual",
+    "mean_margin",
+    "sum_margin_sensitivity"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-field-margin/v1"},
+    "margin_version": {"const": "stage1-margin/v1"},
+    "tuple_index": {"type": "integer", "minimum": 0, "maximum": 5},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "gold": {"$ref": "#/$defs/fieldScore"},
+    "counterfactual": {"$ref": "#/$defs/fieldScore"},
+    "mean_margin": {"type": "number"},
+    "sum_margin_sensitivity": {"type": "number"}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "fieldScore": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "token_ids",
+        "token_count",
+        "character_span",
+        "sum_logprob",
+        "mean_logprob",
+        "left_boundary_crossing",
+        "right_boundary_crossing",
+        "span_mask_version",
+        "segmentation_version"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-field-score/v1"},
+        "token_ids": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 0}},
+        "token_count": {"type": "integer", "minimum": 1},
+        "character_span": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "sum_logprob": {"type": "number"},
+        "mean_logprob": {"type": "number"},
+        "left_boundary_crossing": {"type": "boolean"},
+        "right_boundary_crossing": {"type": "boolean"},
+        "span_mask_version": {"const": "minimal-overlap-cover/v1"},
+        "segmentation_version": {"const": "separate-no-special-tokens/v1"}
+      },
+      "additionalProperties": true
+    }
+  }
+}

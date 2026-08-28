@@ -1,0 +1,32 @@
+{
+  "schema_version": "stage1-control-config/v1",
+  "profile_name": "stage1-placebo-match-engineering-smoke-v1",
+  "artifact_root": "exps/causal_context/stage1_p0",
+  "policy_version": "placebo-match/v1",
+  "lexical_overlap_policy": "lexical-overlap-v1",
+  "quantile_policy": "nearest-rank-ceil-score-boundary/v1",
+  "candidate_expansion_tiers_percent": [10, 20, 30],
+  "tier_boundary_comparator": "<=",
+  "score_round_digits": 8,
+  "score_rounding": "half-even",
+  "low_similarity_threshold": null,
+  "max_block_token_delta_fraction": 0.01,
+  "matching_loss": "absolute-token-delta-then-similarity-sum-then-id-list/v1",
+  "replacement_order_policy": "target-quota-slot-then-stable-id/v1",
+  "require_complete_train_pool_scores": true,
+  "dev_nonempty_required": false,
+  "max_exact_search_states": 1000000,
+  "source_class_order": [
+    "terminology",
+    "non-hate",
+    "Region",
+    "Racism",
+    "Sexism",
+    "LGBTQ",
+    "others"
+  ],
+  "tokenizer": {
+    "logical_path": "models/base/Qwen3-8B",
+    "revision": "qwen3-8b-stage1-v1"
+  }
+}

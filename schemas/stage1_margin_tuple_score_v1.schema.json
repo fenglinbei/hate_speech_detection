@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_tuple_score_v1.schema.json",
+  "title": "Stage 1 tuple-field gold/counterfactual score audit",
+  "type": "object",
+  "required": [
+    "schema_version", "id", "condition", "tuple_index", "field", "model_key",
+    "status", "selected_cf_id", "gold", "counterfactual", "mean_margin",
+    "sum_margin_sensitivity", "content_sha256", "gold_sha256",
+    "context_record_sha256", "cf_record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-margin-tuple-score/v1"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "condition": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]},
+    "tuple_index": {"type": "integer", "minimum": 0},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "model_key": {"type": "string", "minLength": 1},
+    "status": {"const": "ok"},
+    "selected_cf_id": {"type": "string", "pattern": "^cf:v1:[0-9a-f]{64}$"},
+    "gold": {"$ref": "#/$defs/score"},
+    "counterfactual": {"$ref": "#/$defs/score"},
+    "mean_margin": {"type": "number"},
+    "sum_margin_sensitivity": {"type": "number"},
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "gold_sha256": {"$ref": "#/$defs/sha256"},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"},
+    "cf_record_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pair": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "prefixItems": [
+        {"type": "integer", "minimum": 0},
+        {"type": "integer", "minimum": 0}
+      ],
+      "items": false
+    },
+    "score": {
+      "type": "object",
+      "required": [
+        "token_ids", "token_count", "character_span", "token_span",
+        "sum_logprob", "mean_logprob", "left_boundary_crossing",
+        "right_boundary_crossing"
+      ],
+      "properties": {
+        "token_ids": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "token_count": {"type": "integer", "minimum": 1},
+        "character_span": {"$ref": "#/$defs/pair"},
+        "token_span": {"$ref": "#/$defs/pair"},
+        "sum_logprob": {"type": "number"},
+        "mean_logprob": {"type": "number"},
+        "left_boundary_crossing": {"type": "boolean"},
+        "right_boundary_crossing": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

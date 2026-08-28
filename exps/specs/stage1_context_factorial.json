@@ -1,0 +1,66 @@
+{
+  "schema_version": "stage1-training-source-recipe/v1",
+  "recipe_name": "stage1-context-factorial",
+  "scope": "formal",
+  "scientific_eligible": true,
+  "execution_status": "runtime-gated-by-immutable-training-refs",
+  "base_model": {
+    "model_name": "Qwen/Qwen3-8B",
+    "local_source": "models/base/Qwen3-8B",
+    "thinking_mode": false,
+    "revision_policy": "freeze-local-file-tree"
+  },
+  "environment": {
+    "spec": "environment/stage1-p0.yml",
+    "required_backend": "deepspeed-zero3",
+    "deepspeed_profile": "config/stage1/deepspeed_zero3.json"
+  },
+  "ordered_model_slots": [
+    {"model_key": "M_LD/seed-42", "role": "M_LD", "seed": 42, "train_config": "config/stage1/train_m_ld.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"},
+    {"model_key": "M_drop/seed-42", "role": "M_drop", "seed": 42, "train_config": "config/stage1/train_m_drop.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"},
+    {"model_key": "M_LD/seed-43", "role": "M_LD", "seed": 43, "train_config": "config/stage1/train_m_ld.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"},
+    {"model_key": "M_drop/seed-43", "role": "M_drop", "seed": 43, "train_config": "config/stage1/train_m_drop.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"},
+    {"model_key": "M_LD/seed-44", "role": "M_LD", "seed": 44, "train_config": "config/stage1/train_m_ld.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"},
+    {"model_key": "M_drop/seed-44", "role": "M_drop", "seed": 44, "train_config": "config/stage1/train_m_drop.json", "epochs": 5, "final_checkpoint_rule": "best-eval-loss-threshold-earliest/v1"}
+  ],
+  "pilot_slot_keys": ["M_LD/seed-42", "M_drop/seed-42"],
+  "epoch_and_checkpoint_selection_policy": {
+    "maximum_epochs": 5,
+    "minimum_epochs": 1,
+    "selection_data": "immutable-train-partition-calibration",
+    "nominal_hash_policy": "sha256-query-id-v1-assertion-only",
+    "fixed_presentation": "calibration-epoch-1-wire/v1",
+    "metric": "eval_loss",
+    "mode": "min",
+    "patience_evaluations": 3,
+    "threshold": 0.001,
+    "tie_break": "earliest-global-step",
+    "scientific_dev_used_for_selection": false
+  },
+  "order_dropout_rng_policy": {
+    "order": "per-seed-epoch-query-sha256/v1",
+    "matched_permutation_across_roles": true,
+    "fit_presentation": "per-seed-epoch-query/v1",
+    "calibration_presentation": {
+      "policy": "calibration-epoch-1-wire/v1",
+      "wire_epoch": 1,
+      "demo_order_across_epochs": true,
+      "source_mask_across_epochs": true
+    },
+    "m_drop": {
+      "lexicon_probability": 0.5,
+      "demonstration_probability": 0.5,
+      "independent_sources": true,
+      "rng": "sha256-model-seed-epoch-query-source/v1"
+    }
+  },
+  "protocol_profiles": {
+    "generation": "config/stage1/generation_greedy.json",
+    "evaluation": "config/stage1/evaluation_strict.json",
+    "margin": "config/stage1/margin_scorer.json",
+    "analysis_pilot": "config/stage1/analysis_pilot.json",
+    "analysis_confirmatory": "config/stage1/analysis_confirmatory.json"
+  },
+  "ordered_generation_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "ordered_margin_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"]
+}

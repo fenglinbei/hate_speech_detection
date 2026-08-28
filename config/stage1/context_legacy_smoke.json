@@ -1,0 +1,88 @@
+{
+  "schema_version": "stage1-context-factorial-config/v1",
+  "artifact_root": "exps/causal_context/stage1_p0",
+  "data": {
+    "schema_version": "stage1-data-policy/v1",
+    "source_of_truth": "data/full/std/v1",
+    "sources": {
+      "train": "data/full/std/train.json",
+      "test": "data/full/std/test.json"
+    },
+    "id_policy": "canonical-decimal-string/v1",
+    "split": {
+      "policy": "prefix-5781-643/v1",
+      "train_count": 5781,
+      "dev_count": 643,
+      "test_count": 1605
+    },
+    "normalization_policy": "stage1-source-normalization/v1",
+    "expected_counts": {
+      "group_hate_blocking": 30,
+      "field_type_blocking": 4,
+      "blocking_total": 34,
+      "substring_warnings": 99
+    }
+  },
+  "output_protocol": {
+    "name": "quad-json-v1",
+    "schema_version": "canonical-quad-json/v1",
+    "strict_parser": true,
+    "legacy_fallback": false
+  },
+  "retrieval": {
+    "demo_policy": "class-quota-round-robin-global-dedup/v1",
+    "demo_top_k": 10,
+    "candidate_multiplier": 3,
+    "source_class_order": [
+      "non-hate",
+      "Region",
+      "Racism",
+      "Sexism",
+      "LGBTQ",
+      "others"
+    ],
+    "class_weights": {
+      "non-hate": 36.9,
+      "Region": 13.8,
+      "Racism": 12.9,
+      "Sexism": 17.1,
+      "LGBTQ": 6.7,
+      "others": 12.6
+    },
+    "weights_reverse": false,
+    "allocated_class_top_k": {
+      "non-hate": 4,
+      "Region": 1,
+      "Racism": 1,
+      "Sexism": 2,
+      "LGBTQ": 1,
+      "others": 1
+    },
+    "similarity_threshold": 0,
+    "threshold_comparator": ">=",
+    "source_rank_policy": "round-filter-sort-rerank/v1",
+    "selection_score_policy": "eligible-written-cosine-max/v1",
+    "lexicon_selection_policy": "exact-first-semantic-global-dedup/v1",
+    "lex_exact_top_k": 5,
+    "lex_semantic_top_k": 5,
+    "score_round_digits": 8,
+    "seed": 42
+  },
+  "rendering": {
+    "system_prompt": "STAGE1_QUAD_JSON_SYSTEM_PROMPT_V2",
+    "user_prompt": "STAGE1_QUAD_JSON_EVIDENCE_PROMPT_USER_V2",
+    "example_prompt": "STAGE1_QUAD_JSON_EXAMPLE_PROMPT_V1",
+    "lexicon_evidence_policy": "category-free-terminology-evidence/v1",
+    "task_label_visibility": "absent",
+    "thinking_mode": false
+  },
+  "budget": {
+    "tokenizer_path": "exps/full/llm_lexicon/exp_llm_lexicon_k10_2d2cf2a8ef/model/checkpoint-1446",
+    "tokenizer_revision": "tok-887a5dfa6d5aa8642e2894372839af7b7672118381cb7ca13ca273f4e0dd1983",
+    "max_sequence_tokens": 2048,
+    "completion_reserve_tokens": 256,
+    "maximum_input_tokens": 1792,
+    "trim_policy": "drop-demo-tail-then-fail/v1",
+    "tail_truncation_allowed": false
+  }
+}

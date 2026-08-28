@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_training_evidence_v1.schema.json",
+  "title": "Stage 1 training evidence meta or record",
+  "oneOf": [
+    {"$ref": "#/$defs/meta"},
+    {"$ref": "#/$defs/record"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "build_id": {"type": "string", "pattern": "^tevd-[0-9a-f]{64}$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+      },
+      "additionalProperties": false
+    },
+    "id_inputs": {
+      "type": "object",
+      "required": [
+        "schema_version", "context_dependency", "base_model_dependency", "data_dependency", "lexicon_dependency",
+        "train_partition_dependency",
+        "train_context_policy", "train_context_policy_sha256",
+        "partition_counts", "fit_query_ids_sha256", "calibration_query_ids_sha256",
+        "records_content_sha256", "config_sha256", "replay_policy", "evidence_set_policy", "budget_policy",
+        "renderer_revision", "tokenizer_revision", "evidence_builder_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-training-evidence/v1"},
+        "context_dependency": {"$ref": "#/$defs/dependency"},
+        "base_model_dependency": {"$ref": "#/$defs/dependency"},
+        "data_dependency": {"$ref": "#/$defs/dependency"},
+        "lexicon_dependency": {"$ref": "#/$defs/dependency"},
+        "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+        "train_context_policy": {"$ref": "#/$defs/context_policy"},
+        "train_context_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "partition_counts": {"$ref": "#/$defs/partition_counts"},
+        "fit_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "calibration_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "records_content_sha256": {"$ref": "#/$defs/sha256"},
+        "config_sha256": {"$ref": "#/$defs/sha256"},
+        "replay_policy": {"const": "exact-context-dependency-replay/v1"},
+        "evidence_set_policy": {"const": "canonical-id-set-no-epoch-order/v1"},
+        "budget_policy": {"const": "prompt-plus-gold-plus-eos-hard-fail/v1"},
+        "renderer_revision": {"type": "string", "minLength": 1},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "evidence_builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "schema_version", "training_evidence_build_id", "split", "context_dependency", "base_model_dependency",
+        "data_dependency", "lexicon_dependency", "train_context_policy",
+        "train_partition_dependency",
+        "train_context_policy_sha256", "record_count", "ordered_query_ids_sha256",
+        "partition_counts", "fit_query_ids_sha256", "calibration_query_ids_sha256",
+        "records_content_sha256", "records_sha256", "replay_policy", "evidence_set_policy", "budget_policy",
+        "renderer_revision", "tokenizer_revision", "evidence_builder_code_sha256", "id_inputs"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-training-evidence/v1"},
+        "training_evidence_build_id": {"$ref": "#/$defs/build_id"},
+        "split": {"const": "train"},
+        "context_dependency": {"$ref": "#/$defs/dependency"},
+        "base_model_dependency": {"$ref": "#/$defs/dependency"},
+        "data_dependency": {"$ref": "#/$defs/dependency"},
+        "lexicon_dependency": {"$ref": "#/$defs/dependency"},
+        "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+        "train_context_policy": {"$ref": "#/$defs/context_policy"},
+        "train_context_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "record_count": {"type": "integer", "minimum": 1},
+        "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "partition_counts": {"$ref": "#/$defs/partition_counts"},
+        "fit_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "calibration_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "records_content_sha256": {"$ref": "#/$defs/sha256"},
+        "records_sha256": {"$ref": "#/$defs/sha256"},
+        "replay_policy": {"const": "exact-context-dependency-replay/v1"},
+        "evidence_set_policy": {"const": "canonical-id-set-no-epoch-order/v1"},
+        "budget_policy": {"const": "prompt-plus-gold-plus-eos-hard-fail/v1"},
+        "renderer_revision": {"type": "string", "minLength": 1},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "evidence_builder_code_sha256": {"$ref": "#/$defs/sha256"},
+        "id_inputs": {"$ref": "#/$defs/id_inputs"}
+      },
+      "additionalProperties": false
+    },
+    "context_dependency_identity": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-identity/v1"},
+        "artifact_kind": {"enum": ["data", "train-partition", "lexicon"]},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "partition_counts": {
+      "type": "object",
+      "required": ["fit", "calibration", "total"],
+      "properties": {
+        "fit": {"type": "integer", "minimum": 1},
+        "calibration": {"type": "integer", "minimum": 1},
+        "total": {"type": "integer", "minimum": 2}
+      },
+      "additionalProperties": false
+    },
+    "context_policy": {
+      "type": "object",
+      "required": [
+        "schema_version", "context_config_schema_version", "context_config_sha256",
+        "source_dependencies", "retrieval_policy", "retrieval_engine",
+        "rendering_policy", "resolved_prompt_sha256", "budget_policy",
+        "output_protocol", "tokenizer_revision", "context_builder_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-context-policy-lineage/v1"},
+        "context_config_schema_version": {"const": "stage1-context-factorial-config/v1"},
+        "context_config_sha256": {"$ref": "#/$defs/sha256"},
+        "source_dependencies": {
+          "type": "object",
+          "required": ["data", "train_partition", "lexicon"],
+          "properties": {
+            "data": {"$ref": "#/$defs/context_dependency_identity"},
+            "train_partition": {"$ref": "#/$defs/context_dependency_identity"},
+            "lexicon": {"$ref": "#/$defs/context_dependency_identity"}
+          },
+          "additionalProperties": false
+        },
+        "retrieval_policy": {"type": "object"},
+        "retrieval_engine": {
+          "type": "object",
+          "required": ["schema_version", "policy_version", "scorer"],
+          "properties": {
+            "schema_version": {"type": "string", "minLength": 1},
+            "policy_version": {"type": "string", "minLength": 1},
+            "scorer": {"type": "object", "minProperties": 1}
+          },
+          "additionalProperties": false
+        },
+        "rendering_policy": {"type": "object"},
+        "resolved_prompt_sha256": {
+          "type": "object",
+          "required": ["system_prompt", "user_prompt", "example_prompt"],
+          "properties": {
+            "system_prompt": {"$ref": "#/$defs/sha256"},
+            "user_prompt": {"$ref": "#/$defs/sha256"},
+            "example_prompt": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+          },
+          "additionalProperties": false
+        },
+        "budget_policy": {"type": "object"},
+        "output_protocol": {"type": "object"},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "context_builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "quad": {
+      "type": "object",
+      "required": ["target", "argument", "targeted_group", "hateful"],
+      "properties": {
+        "target": {"type": ["string", "null"]},
+        "argument": {"type": ["string", "null"]},
+        "targeted_group": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["Racism", "Region", "LGBTQ", "Sexism", "others", "non-hate"]}
+        },
+        "hateful": {"enum": ["hate", "non-hate"]}
+      },
+      "additionalProperties": false
+    },
+    "lexicon_item": {
+      "type": "object",
+      "required": ["lexicon_id", "rendered_block", "rendered_block_sha256"],
+      "properties": {
+        "lexicon_id": {"type": "string", "pattern": "^lex:v2:[0-9a-f]{64}$"},
+        "rendered_block": {"type": "string", "minLength": 1},
+        "rendered_block_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "demo_item": {
+      "type": "object",
+      "required": ["demo_id", "source_record_id", "rendered_block", "rendered_block_sha256"],
+      "properties": {
+        "demo_id": {"type": "string", "pattern": "^demo:v1:[0-9a-f]{64}$"},
+        "source_record_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "rendered_block": {"type": "string", "minLength": 1},
+        "rendered_block_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "record": {
+      "type": "object",
+      "required": [
+        "schema_version", "training_evidence_build_id", "query", "lexicon_evidence",
+        "demo_evidence", "rendering", "budget", "source_context_record_sha256", "record_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-training-evidence-record/v1"},
+        "training_evidence_build_id": {"$ref": "#/$defs/build_id"},
+        "query": {
+          "type": "object",
+          "required": ["id", "partition", "content", "content_sha256", "gold", "gold_text", "gold_sha256", "actual_gold_tokens"],
+          "properties": {
+            "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+            "partition": {"enum": ["fit", "calibration"]},
+            "content": {"type": "string", "minLength": 1},
+            "content_sha256": {"$ref": "#/$defs/sha256"},
+            "gold": {"type": "array", "items": {"$ref": "#/$defs/quad"}},
+            "gold_text": {"type": "string", "minLength": 2},
+            "gold_sha256": {"$ref": "#/$defs/sha256"},
+            "actual_gold_tokens": {"type": "integer", "minimum": 1}
+          },
+          "additionalProperties": false
+        },
+        "lexicon_evidence": {
+          "type": "object",
+          "required": ["ids", "items"],
+          "properties": {
+            "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^lex:v2:[0-9a-f]{64}$"}},
+            "items": {"type": "array", "items": {"$ref": "#/$defs/lexicon_item"}}
+          },
+          "additionalProperties": false
+        },
+        "demo_evidence": {
+          "type": "object",
+          "required": ["ids", "items"],
+          "properties": {
+            "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^demo:v1:[0-9a-f]{64}$"}},
+            "items": {"type": "array", "items": {"$ref": "#/$defs/demo_item"}}
+          },
+          "additionalProperties": false
+        },
+        "rendering": {
+          "type": "object",
+          "required": ["system_prompt", "user_prompt_template", "thinking_mode"],
+          "properties": {
+            "system_prompt": {"type": "string", "minLength": 1},
+            "user_prompt_template": {"type": "string", "minLength": 1},
+            "thinking_mode": {"const": false}
+          },
+          "additionalProperties": false
+        },
+        "budget": {
+          "type": "object",
+          "required": ["max_sequence_tokens", "completion_reserve_tokens", "source_cld_prompt_tokens", "eos_tokens", "overflow_policy"],
+          "properties": {
+            "max_sequence_tokens": {"type": "integer", "minimum": 2},
+            "completion_reserve_tokens": {"type": "integer", "minimum": 1},
+            "source_cld_prompt_tokens": {"type": "integer", "minimum": 1},
+            "eos_tokens": {"const": 1},
+            "overflow_policy": {"const": "prompt-plus-gold-plus-eos-hard-fail/v1"}
+          },
+          "additionalProperties": false
+        },
+        "source_context_record_sha256": {"$ref": "#/$defs/sha256"},
+        "record_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

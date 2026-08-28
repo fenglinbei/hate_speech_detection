@@ -16,6 +16,7 @@
 - `scripts/exps/run_all.sh`：k-ablation 风格实验的一键式循环脚本。
 - `scripts/exps/run_one_exp.sh`：运行由 `expctl.py` 生成的单个 `exp_*` 实验目录。
 - `scripts/exps/expctl.py`：从 JSON spec 生成自包含实验目录。
+- [`docs/README.md`](docs/README.md)：文档入口，包括研究计划与案例分析。
 
 ## 数据格式
 

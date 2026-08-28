@@ -1,0 +1,103 @@
+{
+  "$id": "stage1-lexicon-candidate-annotation/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "annotations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "case_id": {
+            "pattern": "^LCG80-[0-9]{3}$",
+            "type": "string"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "notes": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "provider_eligible": {
+            "enum": [
+              "yes",
+              "no",
+              "uncertain"
+            ]
+          },
+          "saved_at": {
+            "type": "string"
+          },
+          "surface_form": {
+            "enum": [
+              "complete",
+              "fragment",
+              "sentence",
+              "uncertain"
+            ]
+          },
+          "term": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "term_scope": {
+            "enum": [
+              "standalone_group_term",
+              "productive_stem",
+              "phrase_only",
+              "generic_abuse",
+              "behavior_or_phenomenon",
+              "non_hateful_or_other",
+              "context_fragment",
+              "uncertain"
+            ]
+          }
+        },
+        "required": [
+          "case_id",
+          "term",
+          "surface_form",
+          "term_scope",
+          "provider_eligible",
+          "confidence",
+          "saved_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "exported_at": {
+      "type": "string"
+    },
+    "package_id": {
+      "pattern": "^lcgate-[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "review_status": {
+      "enum": [
+        "partial",
+        "complete"
+      ]
+    },
+    "reviewer_id": {
+      "maxLength": 80,
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "stage1-lexicon-candidate-annotation/v1"
+    }
+  },
+  "required": [
+    "schema_version",
+    "package_id",
+    "reviewer_id",
+    "review_status",
+    "annotations"
+  ],
+  "type": "object"
+}

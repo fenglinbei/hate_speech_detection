@@ -7,8 +7,9 @@ import hashlib
 import json
 import io
 import re
+from decimal import Decimal, ROUND_HALF_EVEN
 from loguru import logger
-from typing import Optional, Dict, Any, List, Literal
+from typing import Optional, Dict, Any, List, Literal, Mapping
 from tools.json_tools import load_json
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer
@@ -18,7 +19,9 @@ from collections import Counter
 
 from prompt import *
 from rag.reranker import Reranker
+from rag.types import RetrievalHit, content_sha256, sha256_text, stable_demo_id, stable_lexicon_id
 from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg, parsed_quad_to_trip
+from utils.quadruple import QuadrupleValidationError, adapt_source_quad, serialize_quadruples
 from utils.sqlite_kv_cache import SQLiteKVCache
 
 TARGETED_GROUPS = ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"]
@@ -30,6 +33,13 @@ DEFAULT_WEIGHTS = {
     "LGBTQ": 6.7,
     "others": 12.6
 }
+
+
+def _stage1_written_similarity(score: float) -> float:
+    """Mirror the selector's persisted eight-decimal half-even score."""
+
+    value = float(Decimal(str(score)).quantize(Decimal("0.00000001"), rounding=ROUND_HALF_EVEN))
+    return 0.0 if value == 0 else value
 
 def normalize_target_groups(target_groups: Optional[List[str]] = None) -> List[str]:
     groups = target_groups or TARGETED_GROUPS
@@ -392,6 +402,7 @@ class Retriever:
                 for idx, text in enumerate(texts):
                     self.text2idx.setdefault(text, idx)
         else:
+            self.items = list(datas)
             self.texts = [item['content'] for item in datas]
             self.test2item = {}
             self.text2idx = {}
@@ -442,6 +453,7 @@ class Retriever:
         else:
             data = data_list
 
+        self.items = list(data)
         self.texts = [item['content'] for item in data]
         self.test2item = {}
         self.text2idx = {}
@@ -454,6 +466,154 @@ class Retriever:
         if not hasattr(self, "_corpus_embeddings_norm_np"):
             self._corpus_embeddings_norm_np = _l2_normalize_matrix(self.corpus_embeddings_np.astype(np.float32))
         return self._corpus_embeddings_norm_np
+
+    def _canonical_hit_output(self, record: dict) -> str:
+        raw_quads = record.get("quadruples", record.get("gt_quadruples"))
+        if isinstance(raw_quads, list):
+            try:
+                return serialize_quadruples([adapt_source_quad(quad) for quad in raw_quads])
+            except (QuadrupleValidationError, TypeError, ValueError):
+                pass
+        if isinstance(record.get("output"), str):
+            return record["output"]
+        return format_record_output(record, self.task_type)
+
+    def _make_retrieval_hit(
+            self,
+            corpus_index: int,
+            score: float,
+            rank: int,
+            source_class: str,
+            method: str = "cosine",
+            ) -> RetrievalHit:
+        record = self.items[corpus_index] if hasattr(self, "items") else self.test2item[self.texts[corpus_index]]
+        content = str(record.get("content", self.texts[corpus_index]))
+        output = self._canonical_hit_output(record)
+        source_record_id = str(record.get("source_record_id", record.get("id", f"corpus-index:{corpus_index}")))
+        content_hash = content_sha256(content)
+        gold_hash = sha256_text(output)
+        return RetrievalHit(
+            id=stable_demo_id(source_record_id, content_hash, gold_hash),
+            source_record_id=source_record_id,
+            content=content,
+            output=output,
+            content_sha256=content_hash,
+            gold_sha256=gold_hash,
+            score=float(score),
+            rank=rank,
+            source_class=str(source_class),
+            method=method,
+            provenance={
+                "corpus_index": corpus_index,
+                "retriever_model": self.model_name,
+                "task_type": self.task_type,
+                "stratify_field": self.stratify_field,
+            },
+        )
+
+    def _structured_score_rows(
+            self,
+            queries: List[str],
+            *,
+            use_cache: bool,
+            batch_size: int,
+            ) -> list[tuple[np.ndarray, np.ndarray, float]]:
+        if not getattr(self, "texts", []):
+            return []
+        query_embeddings = self._encode_query_batch(
+            queries,
+            use_cache=use_cache,
+            batch_size=batch_size,
+            cache_stage="retrieval_hits_v1_query_embedding",
+        )
+        return self._compute_similarity_topk_batch(
+            query_embeddings,
+            retrieval_k=len(self.texts),
+            batch_size=batch_size,
+        )
+
+    def retrieve_hits(
+            self,
+            query: str,
+            top_k: int = 1,
+            *,
+            source_class: str = "",
+            deduplicate: bool = True,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            ) -> list[RetrievalHit]:
+        """Return structured cosine hits without changing the legacy API."""
+
+        return self.retrieve_batch_hits(
+            [query],
+            top_k=top_k,
+            source_class=source_class,
+            deduplicate=deduplicate,
+            threshold=threshold,
+            use_cache=use_cache,
+        )[0]
+
+    def retrieve_batch_hits(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            *,
+            source_class: str = "",
+            deduplicate: bool = True,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            ) -> list[list[RetrievalHit]]:
+        """Return one traceable hit list per query from a single score pass."""
+
+        query_list = list(queries)
+        if not query_list:
+            return []
+        if top_k == 0 or not getattr(self, "texts", []):
+            return [[] for _ in query_list]
+        rows = self._structured_score_rows(
+            query_list,
+            use_cache=use_cache,
+            batch_size=batch_size,
+        )
+        results: list[list[RetrievalHit]] = []
+        for query, (indices, scores, _min_score) in zip(query_list, rows):
+            hits: list[RetrievalHit] = []
+            seen_ids: set[str] = set()
+            for corpus_index, score in zip(indices.tolist(), scores.tolist()):
+                if threshold is not None and float(score) < threshold:
+                    continue
+                hit = self._make_retrieval_hit(
+                    int(corpus_index),
+                    float(score),
+                    rank=len(hits),
+                    source_class=source_class,
+                )
+                if deduplicate and (hit.content == query or hit.id in seen_ids):
+                    continue
+                seen_ids.add(hit.id)
+                hits.append(hit)
+            hits.sort(key=lambda item: (-_stage1_written_similarity(float(item.score)), item.id))
+            if top_k >= 0:
+                hits = hits[:top_k]
+            hits = [
+                RetrievalHit(
+                    id=hit.id,
+                    source_record_id=hit.source_record_id,
+                    content=hit.content,
+                    output=hit.output,
+                    content_sha256=hit.content_sha256,
+                    gold_sha256=hit.gold_sha256,
+                    score=hit.score,
+                    rank=rank,
+                    source_class=hit.source_class,
+                    method=hit.method,
+                    provenance=hit.provenance,
+                )
+                for rank, hit in enumerate(hits)
+            ]
+            results.append(hits)
+        return results
 
     def _encode_query_batch(
             self,
@@ -972,10 +1132,14 @@ class LexiconRetriever:
             self.cache_manager.set_embedding(emb_key, self.corpus_embeddings_np)
 
     def load_datas(self, data_path: str):
-        datas = load_json(data_path)["terms"]
+        lexicon_payload = load_json(data_path)
+        datas = lexicon_payload["terms"]
+        self.lexicon_build_id = lexicon_payload.get("lexicon_build_id")
         self.texts = []
         self.word2item = {}
-        for data in datas:
+        self.entries = []
+        self.word2index = {}
+        for entry_index, data in enumerate(datas):
             if self.lexicon_schema == "hatebase":
                 prompt = HATEBASE_LEXICON_RAG_PROMPT.replace("{word}", data["term"]).\
                                             replace("{category}", str(data.get("category", ""))).\
@@ -988,11 +1152,189 @@ class LexiconRetriever:
                                             replace("{category}", data["category"]).\
                                             replace("{definition}", data["definition"])
             self.texts.append(prompt)
+            entry = dict(data)
+            entry["lexicon_id"] = entry.get("lexicon_id") or stable_lexicon_id(
+                str(entry.get("term", "")),
+                str(entry.get("category", "")),
+                str(entry.get("definition", "")),
+                list(entry.get("variants", []) or []),
+            )
+            self.entries.append(entry)
             self.word2item[data["term"]] = prompt
+            self.word2index[data["term"]] = entry_index
             if self.lexicon_schema == "hatebase" and self.include_variants:
                 for variant in data.get("variants", []) or []:
                     if variant and variant not in self.word2item:
                         self.word2item[str(variant)] = prompt
+                        self.word2index[str(variant)] = entry_index
+
+    def _make_lexicon_hit(
+            self,
+            entry_index: int,
+            *,
+            score: float | None,
+            rank: int,
+            method: str,
+            extra_provenance: Mapping[str, Any] | None = None,
+            ) -> RetrievalHit:
+        entry = self.entries[entry_index]
+        rendered = self.texts[entry_index]
+        return RetrievalHit(
+            id=str(entry["lexicon_id"]),
+            source_record_id=str(entry.get("term", "")),
+            content=rendered,
+            output=None,
+            content_sha256=content_sha256(rendered),
+            gold_sha256=None,
+            score=score,
+            rank=rank,
+            source_class=str(entry.get("category", "")),
+            method=method,
+            provenance={
+                "term": str(entry.get("term", "")),
+                "category": str(entry.get("category", "")),
+                "lexicon_schema": self.lexicon_schema,
+                "lexicon_build_id": getattr(self, "lexicon_build_id", None),
+                **dict(extra_provenance or {}),
+            },
+        )
+
+    def similarity_retrieve_hits(
+            self,
+            query: str,
+            top_k: int = 1,
+            *,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            ) -> list[RetrievalHit]:
+        return self.similarity_retrieve_batch_hits(
+            [query],
+            top_k=top_k,
+            threshold=threshold,
+            use_cache=use_cache,
+        )[0]
+
+    def similarity_retrieve_batch_hits(
+            self,
+            queries: List[str],
+            top_k: int = 1,
+            *,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            ) -> list[list[RetrievalHit]]:
+        query_list = list(queries)
+        if not query_list:
+            return []
+        if top_k == 0 or not self.texts:
+            return [[] for _ in query_list]
+        encoded = self._encode_texts(
+            query_list,
+            instruction=self.query_instruction,
+            batch_size=batch_size,
+            convert_to_tensor=True,
+            show_progress_bar=False,
+        )
+        if hasattr(encoded, "is_cuda") and encoded.is_cuda:
+            encoded = encoded.cpu()
+        query_embeddings = encoded.numpy().astype(np.float32)
+        if query_embeddings.ndim == 1:
+            query_embeddings = query_embeddings.reshape(1, -1)
+        similarities = np.matmul(
+            _l2_normalize_matrix(query_embeddings),
+            _l2_normalize_matrix(self.corpus_embeddings_np.astype(np.float32)).T,
+        )
+        results: list[list[RetrievalHit]] = []
+        for scores in similarities:
+            hits = [
+                self._make_lexicon_hit(
+                    entry_index,
+                    score=float(score),
+                    rank=0,
+                    method="cosine",
+                    extra_provenance={"retriever_model": self.model_name},
+                )
+                for entry_index, score in enumerate(scores.tolist())
+                if threshold is None or float(score) >= threshold
+            ]
+            hits.sort(key=lambda item: (-_stage1_written_similarity(float(item.score)), item.id))
+            if top_k >= 0:
+                hits = hits[:top_k]
+            results.append([
+                RetrievalHit(
+                    id=hit.id,
+                    source_record_id=hit.source_record_id,
+                    content=hit.content,
+                    output=hit.output,
+                    content_sha256=hit.content_sha256,
+                    gold_sha256=hit.gold_sha256,
+                    score=hit.score,
+                    rank=rank,
+                    source_class=hit.source_class,
+                    method=hit.method,
+                    provenance=hit.provenance,
+                )
+                for rank, hit in enumerate(hits)
+            ])
+        return results
+
+    def including_retrieve_hits(
+            self,
+            query: str,
+            top_k: int = -1,
+            *,
+            use_cache: bool = True,
+            ) -> list[RetrievalHit]:
+        del use_cache  # exact trace output is cheap and contains no legacy cache payload
+        query_text = query if self.case_sensitive else query.lower()
+        matches: dict[int, dict[str, Any]] = {}
+        for word, entry_index in self.word2index.items():
+            word_text = word if self.case_sensitive else word.lower()
+            if self.lexicon_schema == "hatebase" and self.match_mode == "word_boundary":
+                pattern = r"(?<![A-Za-z0-9_])" + re.escape(word_text) + r"(?![A-Za-z0-9_])"
+                spans = [list(match.span()) for match in re.finditer(pattern, query_text)]
+            else:
+                spans = []
+                start = query_text.find(word_text)
+                while start >= 0:
+                    spans.append([start, start + len(word_text)])
+                    start = query_text.find(word_text, start + max(len(word_text), 1))
+            if not spans:
+                continue
+            evidence = matches.setdefault(entry_index, {"match_terms": [], "match_spans": []})
+            evidence["match_terms"].append(word)
+            evidence["match_spans"].extend(spans)
+        ordered = sorted(
+            matches,
+            key=lambda index: (
+                min(span[0] for span in matches[index]["match_spans"]),
+                str(self.entries[index]["lexicon_id"]),
+            ),
+        )
+        if top_k >= 0:
+            ordered = ordered[:top_k]
+        return [
+            self._make_lexicon_hit(
+                entry_index,
+                score=None,
+                rank=rank,
+                method="substring" if self.match_mode != "word_boundary" else "word_boundary",
+                extra_provenance=matches[entry_index],
+            )
+            for rank, entry_index in enumerate(ordered)
+        ]
+
+    def including_retrieve_batch_hits(
+            self,
+            queries: List[str],
+            top_k: int = -1,
+            *,
+            use_cache: bool = True,
+            ) -> list[list[RetrievalHit]]:
+        return [
+            self.including_retrieve_hits(query, top_k=top_k, use_cache=use_cache)
+            for query in queries
+        ]
 
     def similarity_retrieve(
             self,
@@ -1497,6 +1839,59 @@ class MultiClassRetriever:
 
             retriever.create_embeddings(self.class_data_dict[class_name])
             self.retrievers[class_name] = retriever
+
+    def retrieve_hits(
+            self,
+            query: str,
+            top_k: int | Mapping[str, int] = 1,
+            *,
+            deduplicate: bool = True,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            ) -> dict[str, list[RetrievalHit]]:
+        """Return independent structured candidate lists for every source class."""
+
+        return self.retrieve_batch_hits(
+            [query],
+            top_k=top_k,
+            deduplicate=deduplicate,
+            threshold=threshold,
+            use_cache=use_cache,
+        )[0]
+
+    def retrieve_batch_hits(
+            self,
+            queries: List[str],
+            top_k: int | Mapping[str, int] = 1,
+            *,
+            deduplicate: bool = True,
+            threshold: float | None = None,
+            use_cache: bool = True,
+            batch_size: int = 256,
+            ) -> list[dict[str, list[RetrievalHit]]]:
+        """Score each query exactly once in each class-specific corpus."""
+
+        query_list = list(queries)
+        results = [dict() for _ in query_list]
+        if not query_list:
+            return results
+        for source_class in self.target_groups:
+            retriever = getattr(self, "retrievers", {}).get(source_class)
+            if retriever is None:
+                continue
+            class_top_k = top_k.get(source_class, 0) if isinstance(top_k, Mapping) else top_k
+            class_results = retriever.retrieve_batch_hits(
+                query_list,
+                top_k=int(class_top_k),
+                source_class=source_class,
+                deduplicate=deduplicate,
+                threshold=threshold,
+                use_cache=use_cache,
+                batch_size=batch_size,
+            )
+            for query_index, hits in enumerate(class_results):
+                results[query_index][source_class] = hits
+        return results
 
     def retrieve(
             self, 

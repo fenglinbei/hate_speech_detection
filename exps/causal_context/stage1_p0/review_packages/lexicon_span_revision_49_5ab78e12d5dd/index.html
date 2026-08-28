@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' data: blob:; connect-src 'none'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    >
+    <title>49-case 正确 span 人工修订</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="span.css">
+    <script src="cases.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#review-card">跳到当前 case</a>
+
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">STAGE 1 · WP3 · SPAN REVISION</p>
+        <h1>正确 span 人工修订</h1>
+        <p class="subtitle">为 49 个碎片/句子候选补充 exact-span gold；无可用词条时明确标记为无。</p>
+      </div>
+      <div class="header-tools">
+        <label class="reviewer-field">
+          <span>标注者代号</span>
+          <input id="reviewer-id" maxlength="80" value="reviewer-1" autocomplete="off">
+        </label>
+        <button id="import-button" class="button button-quiet" type="button">导入结果/备份</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden>
+        <button id="backup-button" class="button button-quiet" type="button">导出备份</button>
+        <button id="export-button" class="button button-primary" type="button" disabled>导出完整结果</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="progress-panel" aria-labelledby="progress-title">
+        <div>
+          <p id="progress-title" class="section-label">修订进度</p>
+          <p class="progress-number"><span id="complete-count">0</span><span>/</span><span id="total-count">49</span></p>
+        </div>
+        <div class="progress-copy">
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="49" aria-valuenow="0">
+            <span id="progress-fill"></span>
+          </div>
+          <p id="progress-message">每条保存后写入当前浏览器；建议中途导出备份。</p>
+        </div>
+      </section>
+
+      <details class="guidance" open>
+        <summary>修订口径</summary>
+        <div class="guidance-grid span-guidance">
+          <div><strong>无有效词条</strong><span>上下文中没有稳定指向群体的独立词或可生产词干。</span></div>
+          <div><strong>逐字匹配</strong><span>span 必须是所选上下文中的连续原文，不能改写、概括或拼接。</span></div>
+          <div><strong>允许多个</strong><span>同一错误片段可能覆盖多个有效词条，可分别添加。</span></div>
+        </div>
+      </details>
+
+      <div class="review-layout">
+        <aside class="case-sidebar" aria-labelledby="case-list-title">
+          <div class="sidebar-heading">
+            <h2 id="case-list-title">修订列表</h2>
+            <select id="status-filter" aria-label="按状态筛选">
+              <option value="all">全部</option>
+              <option value="pending">未完成</option>
+              <option value="complete">已完成</option>
+              <option value="corrected">有正确 span</option>
+              <option value="none">无有效词条</option>
+            </select>
+          </div>
+          <nav id="case-list" class="case-list" aria-label="49 条修订 case"></nav>
+          <p id="empty-list" class="empty-state" hidden>当前筛选下没有 case。</p>
+        </aside>
+
+        <article id="review-card" class="review-card" tabindex="-1">
+          <header class="case-header">
+            <div>
+              <p id="case-position" class="eyebrow"></p>
+              <p class="original-label">原错误候选</p>
+              <h2 id="candidate-term">—</h2>
+              <p id="source-form" class="source-form"></p>
+            </div>
+            <span id="case-status" class="status-pill">未完成</span>
+          </header>
+
+          <section aria-labelledby="contexts-title">
+            <div class="section-heading-row">
+              <h3 id="contexts-title">Fit-only 原文上下文</h3>
+              <span id="context-count" class="muted"></span>
+            </div>
+            <div id="contexts" class="context-list span-contexts"></div>
+          </section>
+
+          <form id="revision-form" novalidate>
+            <fieldset>
+              <legend>修订结论</legend>
+              <div class="option-grid option-grid-two">
+                <label class="option-card">
+                  <input type="radio" name="decision" value="no_valid_span">
+                  <span><strong>无有效词条</strong><small>这些上下文里没有可用于主词典的正确 span</small></span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="decision" value="corrected_spans">
+                  <span><strong>填写正确 span</strong><small>存在至少一个逐字连续匹配的有效词条</small></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <section id="span-editor" class="span-editor" hidden aria-labelledby="span-editor-title">
+              <div class="section-heading-row span-editor-heading">
+                <div>
+                  <h3 id="span-editor-title">正确 span</h3>
+                  <p>选择证据上下文并复制其中的原文；每个 surface 只需记录一次。</p>
+                </div>
+                <button id="add-span-button" class="button button-quiet" type="button">添加 span</button>
+              </div>
+              <div id="span-rows" class="span-rows"></div>
+            </section>
+
+            <label class="notes-field">
+              <span>备注（可选）</span>
+              <textarea id="notes" maxlength="1000" rows="3" placeholder="说明边界选择、为何没有有效词条或其他疑点"></textarea>
+              <small><span id="notes-count">0</span>/1000</small>
+            </label>
+
+            <p id="form-error" class="form-error" role="alert" hidden></p>
+            <footer class="form-actions">
+              <button id="previous-button" class="button button-quiet" type="button">上一条</button>
+              <button id="clear-button" class="button button-quiet" type="button">清除本条</button>
+              <button id="save-button" class="button button-primary" type="submit">保存并到下一条</button>
+            </footer>
+          </form>
+        </article>
+      </div>
+    </main>
+
+    <template id="span-row-template">
+      <div class="span-row">
+        <label>
+          <span>证据上下文</span>
+          <select class="span-context"></select>
+        </label>
+        <label class="surface-field">
+          <span>Exact surface</span>
+          <input class="span-surface" maxlength="80" autocomplete="off" placeholder="逐字复制原文中的连续 span">
+        </label>
+        <label>
+          <span>Scope</span>
+          <select class="span-scope">
+            <option value="standalone_group_term">独立群体词</option>
+            <option value="productive_stem">可生产词干</option>
+          </select>
+        </label>
+        <button class="remove-span-button" type="button" aria-label="删除这个 span">删除</button>
+        <p class="span-match-status" aria-live="polite"></p>
+      </div>
+    </template>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <noscript><p class="noscript">本离线工具需要启用 JavaScript。</p></noscript>
+  </body>
+</html>

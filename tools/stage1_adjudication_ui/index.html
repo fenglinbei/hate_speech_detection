@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>Stage 1 人工裁决台</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#review-main">跳到裁决内容</a>
+
+    <header class="app-header">
+      <div class="brand-block">
+        <p class="eyebrow">Stage 1 · P0</p>
+        <h1>人工裁决台</h1>
+        <p class="subtitle">逐条核对、确认并安全输出裁决结果</p>
+      </div>
+      <div class="header-actions">
+        <span id="connection-status" class="connection-status" role="status" aria-live="polite">正在连接…</span>
+        <button id="reload-button" class="button button-quiet" type="button">重新加载</button>
+        <button id="export-button" class="button button-primary" type="button" disabled>导出结果 ZIP</button>
+      </div>
+    </header>
+
+    <main id="review-main" class="page-shell" tabindex="-1">
+      <section class="progress-panel" aria-labelledby="progress-heading">
+        <div class="progress-copy">
+          <p id="progress-heading" class="section-label">总体进度</p>
+          <p class="progress-number"><span id="total-complete">0</span><span class="progress-divider">/</span><span id="total-count">0</span></p>
+        </div>
+        <div class="progress-track" role="progressbar" aria-labelledby="progress-heading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span id="total-progress-bar" class="progress-fill"></span>
+        </div>
+        <div id="scope-progress" class="scope-progress" aria-label="分组进度"></div>
+      </section>
+
+      <section class="filter-bar" aria-label="裁决筛选">
+        <div id="scope-tabs" class="scope-tabs" role="group" aria-label="范围">
+          <button class="scope-tab is-active" type="button" data-scope-filter="all" aria-pressed="true">全部</button>
+          <button class="scope-tab" type="button" data-scope-filter="group-hate" aria-pressed="false">Group–Hate</button>
+          <button class="scope-tab" type="button" data-scope-filter="field-type" aria-pressed="false">字段类型</button>
+        </div>
+        <label class="select-label">
+          <span>状态</span>
+          <select id="status-filter">
+            <option value="all">全部状态</option>
+            <option value="pending">待处理</option>
+            <option value="draft">有草稿</option>
+            <option value="complete">已完成</option>
+          </select>
+        </label>
+        <label class="select-label">
+          <span>类型</span>
+          <select id="type-filter">
+            <option value="all">全部类型</option>
+            <option value="group-hate-atypical">组合复核</option>
+            <option value="group-hate-conflict">组合冲突</option>
+            <option value="hateful-null-sentinel">NULL 标签</option>
+            <option value="non-string-quad-field">非字符串字段</option>
+          </select>
+        </label>
+      </section>
+
+      <div class="review-layout">
+        <aside class="issue-sidebar" aria-labelledby="issue-list-heading">
+          <div class="sidebar-heading">
+            <h2 id="issue-list-heading">盲化条目</h2>
+            <span id="visible-count" class="count-badge">0 条</span>
+          </div>
+          <nav id="issue-list" class="issue-list" aria-label="裁决条目列表"></nav>
+          <p id="empty-filter" class="empty-message" hidden>当前筛选下没有条目。</p>
+        </aside>
+
+        <section class="review-panel">
+          <div id="loading-state" class="state-card">
+            <div class="loading-dot" aria-hidden="true"></div>
+            <p>正在载入裁决工作区…</p>
+          </div>
+
+          <div id="error-state" class="state-card state-card-error" hidden>
+            <h2>无法载入工作区</h2>
+            <p id="error-message"></p>
+            <button id="retry-button" class="button button-primary" type="button">重试</button>
+          </div>
+
+          <div id="no-selection-state" class="state-card" hidden>
+            <h2>请选择一个条目</h2>
+            <p>可从左侧列表选择，或直接前往下一条待处理内容。</p>
+            <button id="empty-next-button" class="button button-primary" type="button">下一待处理</button>
+          </div>
+
+          <article id="issue-card" class="issue-card" hidden>
+            <header class="issue-header">
+              <div>
+                <p id="issue-position" class="eyebrow"></p>
+                <h2 id="issue-alias"></h2>
+                <p id="issue-code" class="issue-code"></p>
+              </div>
+              <span id="issue-status" class="status-pill"></span>
+            </header>
+
+            <p id="rule-summary" class="rule-summary"></p>
+
+            <section class="context-section" aria-labelledby="context-heading">
+              <h3 id="context-heading">待核对内容</h3>
+              <div id="context-content-wrap" class="content-quote" hidden>
+                <p class="field-caption">原文</p>
+                <blockquote id="context-content"></blockquote>
+              </div>
+              <dl id="context-metadata" class="context-metadata"></dl>
+              <div id="tuple-before-wrap" class="tuple-card" hidden>
+                <p class="field-caption">当前四元组</p>
+                <pre id="tuple-before"></pre>
+              </div>
+            </section>
+
+            <form id="decision-form" novalidate>
+              <fieldset class="decision-fieldset">
+                <legend>裁决</legend>
+                <div class="decision-options">
+                  <label id="accepted-option" class="decision-option">
+                    <input id="decision-accepted" type="radio" name="decision" value="accepted">
+                    <span><strong>接受原标注</strong><small>无需修改任何字段</small></span>
+                  </label>
+                  <label class="decision-option">
+                    <input id="decision-corrected" type="radio" name="decision" value="corrected">
+                    <span><strong>修正标注</strong><small>仅修改允许的字段</small></span>
+                  </label>
+                </div>
+                <p id="accept-unavailable" class="form-hint" hidden>此条目必须修正，不能接受原标注。</p>
+              </fieldset>
+
+              <section id="edit-section" class="edit-section" hidden aria-labelledby="edit-heading">
+                <div class="section-heading-row">
+                  <h3 id="edit-heading">字段修正</h3>
+                  <p>至少选择并填写一个允许路径</p>
+                </div>
+                <div id="edit-controls" class="edit-controls"></div>
+              </section>
+
+              <section id="preview-section" class="preview-section" hidden aria-labelledby="preview-heading">
+                <h3 id="preview-heading">变更预览</h3>
+                <div class="preview-grid">
+                  <div>
+                    <p class="field-caption">Before</p>
+                    <pre id="before-preview"></pre>
+                  </div>
+                  <div>
+                    <p class="field-caption">After</p>
+                    <pre id="after-preview"></pre>
+                  </div>
+                </div>
+              </section>
+
+              <div class="form-grid">
+                <label class="form-field">
+                  <span>理由代码</span>
+                  <select id="reason-code" required>
+                    <option value="">请选择</option>
+                  </select>
+                </label>
+                <label class="form-field form-field-wide">
+                  <span>裁决理由</span>
+                  <textarea id="reason" rows="4" maxlength="2000" required placeholder="简要说明判断依据"></textarea>
+                  <small><span id="reason-length">0</span>/2000</small>
+                </label>
+              </div>
+
+              <div id="validation-summary" class="validation-summary" role="alert" tabindex="-1" hidden></div>
+              <p id="draft-status" class="draft-status" aria-live="polite"></p>
+              <p class="shortcut-help">快捷键：Alt + ←/→ 切换 · Alt + N 下一待处理 · Alt + C 修正 · Alt + A 接受 · Ctrl/⌘ + Enter 确认</p>
+
+              <footer class="form-actions">
+                <button id="clear-draft-button" class="button button-quiet" type="button" disabled>清除本条草稿</button>
+                <button id="next-pending-button" class="button button-quiet" type="button">下一待处理</button>
+                <button id="confirm-button" class="button button-primary" type="submit">检查并确认</button>
+              </footer>
+            </form>
+
+            <div id="completed-notice" class="completed-notice" hidden>
+              <div>
+                <strong>此条裁决已提交</strong>
+                <p><span id="completed-time"></span> 已确认结果已锁定，网页不会覆盖。</p>
+              </div>
+              <button id="completed-next-button" class="button button-primary" type="button">下一待处理</button>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title">
+      <form method="dialog">
+        <div class="modal-heading">
+          <div>
+            <p class="eyebrow">提交前复核</p>
+            <h2 id="confirm-title">确认本条裁决</h2>
+          </div>
+          <button id="modal-close" class="icon-button" value="cancel" aria-label="关闭确认窗口">×</button>
+        </div>
+        <dl id="confirm-summary" class="confirm-summary"></dl>
+        <p id="modal-error" class="modal-error" role="alert" hidden></p>
+        <div class="modal-actions">
+          <button class="button button-quiet" value="cancel">返回修改</button>
+          <button id="modal-submit" class="button button-primary" type="button">确认提交</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast-region" class="toast-region"></div>
+
+    <noscript>
+      <p class="noscript-message">此工具需要启用 JavaScript 才能运行。</p>
+    </noscript>
+  </body>
+</html>

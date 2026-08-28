@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_evaluation_artifact_v1.schema.json",
+  "title": "Immutable Stage 1 free-evaluation metadata",
+  "type": "object",
+  "required": [
+    "schema_version", "evaluation_id", "generation_run_id", "scope",
+    "model_key", "role", "seed", "split", "sealing_status",
+    "scientific_eligible", "ordered_conditions", "ordered_query_ids",
+    "ordered_query_ids_sha256", "fixed_denominator_query_count",
+    "infra_exclusion_ids", "invalid_output_policy", "resolved_profile_sha256",
+    "contract_versions",
+    "id_inputs", "per_condition_sufficient_stats_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-evaluation/v1"},
+    "evaluation_id": {"type": "string", "pattern": "^eval-[0-9a-f]{64}$"},
+    "generation_run_id": {"type": "string", "pattern": "^gen-[0-9a-f]{64}$"},
+    "scope": {"enum": ["engineering-smoke", "pilot", "formal"]},
+    "model_key": {"type": "string", "minLength": 1},
+    "role": {"type": "string", "minLength": 1},
+    "seed": {"type": ["integer", "null"], "minimum": 0},
+    "split": {"enum": ["dev", "test"]},
+    "sealing_status": {"enum": ["unsealed-dev", "sealed-test"]},
+    "scientific_eligible": {"type": "boolean"},
+    "ordered_conditions": {"$ref": "#/$defs/conditions"},
+    "ordered_query_ids": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[1-9][0-9]*$"}
+    },
+    "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "fixed_denominator_query_count": {"type": "integer", "minimum": 1},
+    "infra_exclusion_ids": {"type": "array", "maxItems": 0},
+    "invalid_output_policy": {"const": "empty-prediction-retain-denominator/v1"},
+    "resolved_profile_sha256": {"$ref": "#/$defs/sha256"},
+    "contract_versions": {
+      "type": "object",
+      "required": [
+        "strict_parser", "normalizer", "tuple_assignment", "metrics",
+        "similarity", "flip", "sufficient_stats"
+      ],
+      "properties": {
+        "strict_parser": {"const": "canonical-quad-json/v1"},
+        "normalizer": {"const": "canonical-quad-json/v1"},
+        "tuple_assignment": {"const": "stage1-optimal-tuple-assignment/v1"},
+        "metrics": {"const": "stage1-query-metrics/v1"},
+        "similarity": {"type": "string", "minLength": 1},
+        "flip": {"const": "stage1-flip-table/v1"},
+        "sufficient_stats": {"const": "stage1-evaluation-summary/v1"}
+      },
+      "additionalProperties": false
+    },
+    "id_inputs": {"type": "object"},
+    "per_condition_sufficient_stats_sha256": {
+      "type": "object",
+      "required": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+      "properties": {
+        "C0": {"$ref": "#/$defs/sha256"}, "CL": {"$ref": "#/$defs/sha256"},
+        "CD": {"$ref": "#/$defs/sha256"}, "CLD": {"$ref": "#/$defs/sha256"},
+        "PL": {"$ref": "#/$defs/sha256"}, "PD": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "conditions": {
+      "type": "array", "minItems": 6, "maxItems": 6,
+      "prefixItems": [
+        {"const": "C0"}, {"const": "CL"}, {"const": "CD"},
+        {"const": "CLD"}, {"const": "PL"}, {"const": "PD"}
+      ],
+      "items": false
+    }
+  }
+}

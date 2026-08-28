@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_audit_issue_v1.schema.json",
+  "title": "Stage 1 blocking data-audit issue",
+  "type": "object",
+  "required": [
+    "schema_version", "data_audit_id", "issue_id", "issue_kind", "issue_code",
+    "issue_subtype", "issue_rule_version", "severity", "locations",
+    "accept_allowed", "allowed_edit_paths", "review_context"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-audit-issue/v1"},
+    "data_audit_id": {"type": "string", "pattern": "^daudit-[0-9a-f]{64}$"},
+    "issue_id": {"type": "string", "pattern": "^dissue:v1:[0-9a-f]{64}$"},
+    "issue_kind": {"enum": ["group-hate", "field-type", "record-id"]},
+    "issue_code": {
+      "enum": [
+        "group-hate-atypical", "hateful-null-sentinel", "group-hate-conflict",
+        "non-string-quad-field", "duplicate-record-id"
+      ]
+    },
+    "issue_subtype": {"type": "string", "minLength": 1},
+    "issue_rule_version": {"const": "stage1-data-issues/v1"},
+    "severity": {"const": "blocking"},
+    "locations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/location"}
+    },
+    "accept_allowed": {"type": "boolean"},
+    "allowed_edit_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^/(id|quadruples/[0-9]+/(target|argument|targeted_group|hateful))$"}
+    },
+    "review_context": {"type": "object"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "location": {
+      "type": "object",
+      "required": [
+        "source_key", "source_file_sha256", "source_ordinal", "split",
+        "source_record_id", "json_pointer", "observed_value_sha256"
+      ],
+      "properties": {
+        "source_key": {"enum": ["std-train", "std-test"]},
+        "source_file_sha256": {"$ref": "#/$defs/sha256"},
+        "source_ordinal": {"type": "integer", "minimum": 0},
+        "split": {"enum": ["train", "dev", "test"]},
+        "source_record_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "tuple_index": {"type": "integer", "minimum": 0},
+        "json_pointer": {"type": "string", "pattern": "^/(id|quadruples/[0-9]+(/(target|argument|targeted_group|hateful))?)$"},
+        "observed_value_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_control_manifest_v1.schema.json",
+  "title": "Stage 1 frozen PL/PD control record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "control_build_id",
+    "context_build_id",
+    "context_record_sha256",
+    "query_id",
+    "PL",
+    "PD",
+    "availability_mask",
+    "nondegenerate_mask",
+    "record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-control-record/v1"},
+    "control_build_id": {"type": "string", "pattern": "^ctl-[0-9a-f]{64}$"},
+    "context_build_id": {"type": "string", "minLength": 1},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"},
+    "query_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "PL": {"$ref": "#/$defs/controlShape"},
+    "PD": {"$ref": "#/$defs/controlShape"},
+    "availability_mask": {"$ref": "#/$defs/conditionMask"},
+    "nondegenerate_mask": {"$ref": "#/$defs/conditionMask"},
+    "record_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "conditionMask": {
+      "type": "object",
+      "required": ["PL", "PD"],
+      "properties": {"PL": {"type": "boolean"}, "PD": {"type": "boolean"}},
+      "additionalProperties": false
+    },
+    "controlShape": {
+      "type": "object",
+      "required": [
+        "target_ids",
+        "target_quota",
+        "quota_source",
+        "candidate_evidence",
+        "tier_attempts",
+        "used_tier_percent",
+        "replacement_ids",
+        "replacement_order",
+        "target_rendered_block_sha256",
+        "rendered_block_sha256",
+        "target_block_tokens",
+        "replacement_block_tokens",
+        "token_delta_ratio",
+        "similarity_sum",
+        "status",
+        "failure_reason",
+        "effective_treatment",
+        "degenerate_reason"
+      ],
+      "properties": {
+        "target_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "target_quota": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "quota_source": {"type": "string", "minLength": 1},
+        "candidate_evidence": {"type": "array", "items": {"type": "object"}},
+        "tier_attempts": {"type": "array", "items": {"type": "object"}},
+        "used_tier_percent": {"type": ["integer", "null"], "enum": [10, 20, 30, null]},
+        "replacement_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "replacement_order": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "target_rendered_block_sha256": {"$ref": "#/$defs/sha256"},
+        "rendered_block_sha256": {"$ref": "#/$defs/sha256"},
+        "target_block_tokens": {"type": "integer", "minimum": 0},
+        "replacement_block_tokens": {"type": "integer", "minimum": 0},
+        "token_delta_ratio": {"type": ["number", "null"], "minimum": 0},
+        "similarity_sum": {"type": ["number", "null"]},
+        "status": {"enum": ["ok", "empty", "unavailable"]},
+        "failure_reason": {"type": ["string", "null"]},
+        "effective_treatment": {"type": "boolean"},
+        "degenerate_reason": {
+          "type": ["string", "null"],
+          "enum": ["source-empty", "no-pre-registered-match", null]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

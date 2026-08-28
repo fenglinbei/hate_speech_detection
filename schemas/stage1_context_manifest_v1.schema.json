@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_context_manifest_v1.schema.json",
+  "title": "Stage 1 context record",
+  "type": "object",
+  "required": ["schema_version", "query", "selection", "budget", "conditions", "record_sha256"],
+  "properties": {
+    "schema_version": {"const": "stage1-context-record/v1"},
+    "context_build_id": {"type": ["string", "null"]},
+    "query": {
+      "type": "object",
+      "required": ["id", "content", "gold"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "content": {"type": "string", "minLength": 1},
+        "gold": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+    "selection": {"type": "object"},
+    "budget": {
+      "type": "object",
+      "required": ["max_sequence_tokens", "completion_reserve_tokens", "trim_policy", "tail_truncated", "status"],
+      "properties": {
+        "trim_policy": {"const": "drop-demo-tail-then-fail/v1"},
+        "tail_truncated": {"const": false},
+        "status": {"const": "ok"}
+      }
+    },
+    "conditions": {
+      "type": "object",
+      "required": ["C0", "CL", "CD", "CLD"],
+      "additionalProperties": false
+    },
+    "record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

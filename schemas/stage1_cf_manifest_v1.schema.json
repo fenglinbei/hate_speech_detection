@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_cf_manifest_v1.schema.json",
+  "title": "Stage 1 finalized counterfactual record",
+  "type": "object",
+  "required": [
+    "schema_version", "cf_build_id", "cf_proposal_id", "review_id",
+    "context_record_sha256", "query_id", "gold_sha256", "tuple_index",
+    "field", "gold_value", "candidates", "selected_cf_id",
+    "selection_policy", "construction_status", "reference_model_sha256",
+    "record_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-cf/v1"},
+    "cf_build_id": {"type": "string", "pattern": "^cf-[0-9a-f]{64}$"},
+    "cf_proposal_id": {"type": "string", "pattern": "^cfp-[0-9a-f]{64}$"},
+    "review_id": {"type": "string", "pattern": "^review:v1:[0-9a-f]{64}$"},
+    "context_record_sha256": {"$ref": "#/$defs/sha256"},
+    "query_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "gold_sha256": {"$ref": "#/$defs/sha256"},
+    "tuple_index": {"type": "integer", "minimum": 0},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "gold_value": {},
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "value", "family", "source", "source_id", "quality_status"],
+        "properties": {
+          "candidate_id": {"type": "string", "pattern": "^cf:v1:[0-9a-f]{64}$"},
+          "value": {},
+          "family": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
+          "source_id": {"type": "string", "minLength": 1},
+          "quality_status": {"enum": ["blind-review-pass", "deterministic-validated"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "selected_cf_id": {"type": ["string", "null"], "pattern": "^cf:v1:[0-9a-f]{64}$"},
+    "selection_policy": {"const": "query-local-valid-first/v1"},
+    "construction_status": {"enum": ["ok", "unavailable-no-passed-query-local-foil"]},
+    "reference_model_sha256": {"type": "null"},
+    "record_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"construction_status": {"const": "ok"}}, "required": ["construction_status"]},
+      "then": {"properties": {"selected_cf_id": {"type": "string"}, "candidates": {"minItems": 1}}}
+    },
+    {
+      "if": {"properties": {"construction_status": {"const": "unavailable-no-passed-query-local-foil"}}, "required": ["construction_status"]},
+      "then": {"properties": {"selected_cf_id": {"type": "null"}, "candidates": {"maxItems": 0}}}
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

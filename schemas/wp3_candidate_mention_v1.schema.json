@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wp3-candidate-mention/v1",
+  "title": "WP3 exact-occurrence candidate mention",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "record_id",
+    "content_sha256",
+    "surface",
+    "start",
+    "end",
+    "occurrence_ordinal",
+    "observation_ids",
+    "generators",
+    "generator_variants",
+    "mechanisms",
+    "replacement_hypotheses",
+    "requires_context_votes",
+    "review_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "wp3-candidate-mention/v1"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^wp3cand-[0-9a-f]{32}$"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "surface": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "start": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "end": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "occurrence_ordinal": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "observation_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^wp3obs-[0-9a-f]{32}$"
+      }
+    },
+    "generators": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "g1_rewrite",
+          "g2_direct",
+          "g3_form_rule"
+        ]
+      }
+    },
+    "generator_variants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      }
+    },
+    "mechanisms": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "abbreviation",
+          "phonetic_variant",
+          "orthographic_variant",
+          "mixed_script",
+          "unicode_nfkc",
+          "emoji",
+          "separator_insertion",
+          "slang",
+          "fixed_expression",
+          "metaphor",
+          "pragmatic_usage",
+          "known_variant",
+          "other_nontransparent"
+        ]
+      }
+    },
+    "replacement_hypotheses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "requires_context_votes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "true",
+        "false",
+        "unknown"
+      ],
+      "properties": {
+        "true": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "false": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "review_status": {
+      "const": "unreviewed"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "stage1-train-calibration-partition-config/v1",
+  "artifact_root": "exps/causal_context/stage1_p0",
+  "expected_train_count": 5781,
+  "policy": {
+    "schema_version": "stage1-train-partition-policy/v1",
+    "input_split": "train",
+    "content_normalization": "crlf-to-lf/v1",
+    "content_hash": "sha256-utf8-normalized-content/v1",
+    "cluster_policy": "exact-normalized-content-sha256/v1",
+    "cluster_representative": "minimum-canonical-numeric-query-id/v1",
+    "assignment": {
+      "assignment": "sha256-query-id-v1",
+      "salt": "stage1-train-calibration-v1",
+      "fraction": 0.1,
+      "hash_modulus": 10000,
+      "hash_threshold_exclusive": 1000,
+      "id_fields": ["id", "query_id"],
+      "nominal_fraction": 0.1,
+      "fraction_semantics": "nominal-hash-threshold-not-exact-count/v1",
+      "id_input": "cluster_representative_query_id"
+    },
+    "partitions": {
+      "fit": "bucket-greater-than-or-equal-to-threshold",
+      "calibration": "bucket-strictly-less-than-threshold"
+    },
+    "information_isolation": "full-information-isolated",
+    "fit_evidence_scope": "fit-only-demo-and-lexicon",
+    "calibration_presentation": "fixed-calibration-presentation"
+  }
+}

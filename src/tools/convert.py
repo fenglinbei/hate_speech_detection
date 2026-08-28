@@ -7,6 +7,7 @@ from typing import Any
 sys.path.append(".")
 
 from prompt import TRAIN_PROMPT_FEW_SHOT_V1, TRAIN_PROMPT_ZERO_SHOT_V2, TRAIN_PROMPT_ZERO_SHOT_SYSTEM_V2
+from utils.quadruple import Quadruple, adapt_source_quad, serialize_quadruples
 
 # 定义目标群体映射关系（英文标签转中文）
 TARGET_GROUP_MAPPING = {
@@ -51,6 +52,16 @@ def parse_output(output_str: str):
                 continue
             
     return quadruples
+
+
+def parsed_quad_to_canonical_json(parsed_quads) -> str:
+    """Serialize legacy/source quad dictionaries as canonical Stage-1 JSON."""
+
+    canonical = [
+        quad if isinstance(quad, Quadruple) else adapt_source_quad(quad)
+        for quad in parsed_quads
+    ]
+    return serialize_quadruples(canonical)
 
 def convert_to_training_format(sample):
     """转换为LLM训练格式"""

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/terminology_resolution_gold_v1.schema.json",
+  "title": "WP3 terminology-resolution calibration Gold",
+  "type": "object",
+  "required": [
+    "schema_version", "span_frame_id", "execution_contract_sha256",
+    "reviewer_id", "cases"
+  ],
+  "properties": {
+    "schema_version": {"const": "terminology-resolution-gold/v1"},
+    "span_frame_id": {"type": "string", "minLength": 1},
+    "execution_contract_sha256": {
+      "type": "string", "pattern": "^[0-9a-f]{64}$"
+    },
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id", "branch", "auto_accept", "human_acceptable", "notes"
+        ],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "branch": {
+            "enum": ["self_explanation", "web_evidence"]
+          },
+          "auto_accept": {"type": "boolean"},
+          "human_acceptable": {"type": "boolean"},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

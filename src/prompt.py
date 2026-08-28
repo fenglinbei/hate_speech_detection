@@ -547,3 +547,64 @@ RAG_PROMPT_USER_WO_LEX = """你是一个内容审查专家，请你分析我的�
 {text}
 ### 三元组：
 """
+
+
+# Stage 1 canonical-quad-json/v1 prompts.  These constants are intentionally
+# separate from the legacy triple/pipe prompts above.
+STAGE1_QUAD_JSON_SYSTEM_PROMPT_V1 = """你是中文仇恨言论四元组抽取器。
+你的回答必须且只能是一个符合 canonical-quad-json/v1 的 JSON 数组；不要输出分析、解释、Markdown 代码块或任何前后缀文字。
+数组中每个对象必须且只能按以下顺序包含四个键：target、argument、targeted_group、hateful。
+target 和 argument 必须是去除首尾空白后的字符串；字段缺失时使用 JSON null，禁止使用字符串 \"NULL\"。
+targeted_group 必须是非空字符串数组，标签只能来自 Racism、Region、LGBTQ、Sexism、others、non-hate；多个标签按该固定顺序排列、不得重复，non-hate 不得与其他标签共存。
+hateful 只能是 hate 或 non-hate。不得推断或改写不确定的人工标注。
+没有可抽取四元组时输出空数组 []。"""
+
+
+STAGE1_QUAD_JSON_RAG_PROMPT_USER_V1 = """请根据背景知识和示例，从待分析句子中抽取一个或多个仇恨言论四元组。
+
+背景知识：
+{lexicons}
+
+示例：
+{examples}
+
+待分析句子：
+{text}
+
+只输出 canonical-quad-json/v1 JSON 数组："""
+
+
+STAGE1_QUAD_JSON_SYSTEM_PROMPT_V2 = STAGE1_QUAD_JSON_SYSTEM_PROMPT_V1 + """
+必须依据当前句子独立判断 targeted_group 与 hateful；群体类别或词条命中不能直接推出 hate，词义涉及某群体也不等于句子实际针对该群体。"""
+
+
+STAGE1_QUAD_JSON_EVIDENCE_PROMPT_USER_V2 = """请从待分析句子抽取仇恨言论四元组。先按完整语境形成判断，再用术语理解信息核验词义。
+
+术语理解信息（不含任务类别；只是可由 verifier 按当前语境修正或拒绝的理解参考，不是分类结论）：
+{lexicons}
+
+约束：词条命中或通常带贬义都不等于当前句为 hate；须结合实际指向及引用、自称、否定、反讽、讨论、反仇恨语境，独立判断 targeted_group 与 hateful；忽略不相关词条。
+
+示例：
+{examples}
+
+待分析句子：
+{text}
+
+只输出 canonical-quad-json/v1 JSON 数组："""
+
+
+STAGE1_QUAD_JSON_EXAMPLE_PROMPT_V1 = """待分析句子：
+{retrieve_content}
+canonical-quad-json/v1 JSON 数组：
+{retrieve_output}
+"""
+
+
+# Short aliases keep configuration names compact without creating a second
+# prompt definition.
+QUAD_JSON_SYSTEM_PROMPT_V1 = STAGE1_QUAD_JSON_SYSTEM_PROMPT_V1
+QUAD_JSON_RAG_PROMPT_USER_V1 = STAGE1_QUAD_JSON_RAG_PROMPT_USER_V1
+QUAD_JSON_EXAMPLE_PROMPT_V1 = STAGE1_QUAD_JSON_EXAMPLE_PROMPT_V1
+QUAD_JSON_SYSTEM_PROMPT_V2 = STAGE1_QUAD_JSON_SYSTEM_PROMPT_V2
+QUAD_JSON_EVIDENCE_PROMPT_USER_V2 = STAGE1_QUAD_JSON_EVIDENCE_PROMPT_USER_V2

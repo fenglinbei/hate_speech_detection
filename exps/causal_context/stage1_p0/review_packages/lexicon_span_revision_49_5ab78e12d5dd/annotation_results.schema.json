@@ -1,0 +1,113 @@
+{
+  "$id": "stage1-lexicon-span-revision-annotation/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "annotations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "case_id": {
+            "pattern": "^LSR49-[0-9]{3}$",
+            "type": "string"
+          },
+          "decision": {
+            "enum": [
+              "no_valid_span",
+              "corrected_spans"
+            ]
+          },
+          "notes": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "original_term": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "saved_at": {
+            "type": "string"
+          },
+          "source_case_id": {
+            "pattern": "^LCG80-[0-9]{3}$",
+            "type": "string"
+          },
+          "spans": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "context_index": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "context_record_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "scope": {
+                  "enum": [
+                    "productive_stem",
+                    "standalone_group_term"
+                  ]
+                },
+                "surface": {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "surface",
+                "scope",
+                "context_index",
+                "context_record_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "case_id",
+          "source_case_id",
+          "original_term",
+          "decision",
+          "spans",
+          "notes",
+          "saved_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "exported_at": {
+      "type": "string"
+    },
+    "package_id": {
+      "pattern": "^lcsr-[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "review_status": {
+      "enum": [
+        "partial",
+        "complete"
+      ]
+    },
+    "reviewer_id": {
+      "maxLength": 80,
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "stage1-lexicon-span-revision-annotation/v1"
+    }
+  },
+  "required": [
+    "schema_version",
+    "package_id",
+    "reviewer_id",
+    "review_status",
+    "annotations"
+  ],
+  "type": "object"
+}

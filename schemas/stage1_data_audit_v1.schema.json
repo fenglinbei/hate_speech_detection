@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_audit_v1.schema.json",
+  "title": "Stage 1 immutable data-audit metadata",
+  "type": "object",
+  "required": [
+    "schema_version", "data_audit_id", "ordered_issue_ids_sha256",
+    "blocking_issue_count", "blocking_issue_counts_by_kind",
+    "blocking_issue_counts_by_code", "blocking_issue_counts_by_split",
+    "warning_count", "audit_id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-audit/v1"},
+    "data_audit_id": {"type": "string", "pattern": "^daudit-[0-9a-f]{64}$"},
+    "ordered_issue_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "blocking_issue_count": {"type": "integer", "minimum": 0},
+    "blocking_issue_counts_by_kind": {"$ref": "#/$defs/countMap"},
+    "blocking_issue_counts_by_code": {"$ref": "#/$defs/countMap"},
+    "blocking_issue_counts_by_split": {"$ref": "#/$defs/countMap"},
+    "warning_count": {"type": "integer", "minimum": 0},
+    "audit_id_inputs": {
+      "type": "object",
+      "required": [
+        "schema_version", "source_inventory_sha256", "split_policy_sha256",
+        "audit_config_sha256", "audit_rule_version", "normalization_schema_version",
+        "rubric_body_sha256", "rubric_meta_sha256", "audit_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-data-audit/v1"},
+        "source_inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "split_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "audit_config_sha256": {"$ref": "#/$defs/sha256"},
+        "audit_rule_version": {"const": "stage1-std-data-audit/v1"},
+        "normalization_schema_version": {"const": "stage1-source-normalization/v1"},
+        "rubric_body_sha256": {"$ref": "#/$defs/sha256"},
+        "rubric_meta_sha256": {"$ref": "#/$defs/sha256"},
+        "audit_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_adjudication_frame_v1.schema.json",
+  "title": "Stage 1 finalized data adjudication composition frame",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "data_audit_dependency",
+    "data_blind_review_dependency",
+    "blind_scope",
+    "audit_human_only_scope",
+    "blind_auto_adjudication_sha256",
+    "blind_human_completed_sha256",
+    "audit_human_only_completed_sha256",
+    "human_adjudication_queue_sha256",
+    "final_adjudication_rows_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-adjudication-frame/v1"},
+    "data_audit_dependency": {
+      "allOf": [
+        {"$ref": "#/$defs/dependency"},
+        {"properties": {
+          "artifact_kind": {"const": "data-audit"},
+          "artifact_id": {"pattern": "^daudit-[0-9a-f]{64}$"}
+        }}
+      ]
+    },
+    "data_blind_review_dependency": {
+      "allOf": [
+        {"$ref": "#/$defs/dependency"},
+        {"properties": {
+          "artifact_kind": {"const": "data-blind-review"},
+          "artifact_id": {"pattern": "^dreview-[0-9a-f]{64}$"}
+        }}
+      ]
+    },
+    "blind_scope": {
+      "type": "object",
+      "required": [
+        "issue_kinds", "issue_ids_sha256", "auto_issue_ids_sha256",
+        "human_issue_ids_sha256"
+      ],
+      "properties": {
+        "issue_kinds": {"const": ["group-hate"]},
+        "issue_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "auto_issue_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "human_issue_ids_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "audit_human_only_scope": {
+      "type": "object",
+      "required": ["issue_kinds", "issue_ids_sha256"],
+      "properties": {
+        "issue_kinds": {"const": ["field-type"]},
+        "issue_ids_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "blind_auto_adjudication_sha256": {"$ref": "#/$defs/sha256"},
+    "blind_human_completed_sha256": {"$ref": "#/$defs/sha256"},
+    "audit_human_only_completed_sha256": {"$ref": "#/$defs/sha256"},
+    "human_adjudication_queue_sha256": {"$ref": "#/$defs/sha256"},
+    "final_adjudication_rows_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dependency": {
+      "type": "object",
+      "required": [
+        "schema_version", "artifact_kind", "artifact_id",
+        "payload_manifest_sha256", "logical_repo_path"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

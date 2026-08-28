@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_data_reviewer_declaration_v1.schema.json",
+  "title": "Stage 1 data reviewer declaration",
+  "type": "object",
+  "required": [
+    "schema_version", "data_audit_id", "reviewer_id", "rubric_body_sha256",
+    "rubric_meta_sha256", "ordered_issue_ids_sha256", "completed_rows_sha256",
+    "saw_condition_outputs", "saw_model_scores", "attestation_confirmed"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-data-reviewer-declaration/v1"},
+    "data_audit_id": {"type": "string", "pattern": "^daudit-[0-9a-f]{64}$"},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "rubric_body_sha256": {"$ref": "#/$defs/sha256"},
+    "rubric_meta_sha256": {"$ref": "#/$defs/sha256"},
+    "ordered_issue_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "completed_rows_sha256": {"$ref": "#/$defs/sha256"},
+    "saw_condition_outputs": {"const": false},
+    "saw_model_scores": {"const": false},
+    "attestation_confirmed": {"type": "boolean"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

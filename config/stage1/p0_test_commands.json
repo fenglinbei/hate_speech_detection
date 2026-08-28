@@ -1,0 +1,275 @@
+{
+  "schema_version": "stage1-test-command-manifest/v1",
+  "execution_policy": "actual-subprocess-no-import/v1",
+  "log_normalization_policy": "utf8-replace-crlf-lf-strip-ansi-portable-paths/v1",
+  "commands": [
+    {
+      "command_id": "pytest.stage1-fast",
+      "group": "pytest-fast",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_blind_review.py",
+        "src/tests/test_stage1_cf_blind_review.py",
+        "src/tests/test_stage1_control_manifest.py",
+        "src/tests/test_stage1_counterfactual.py",
+        "src/tests/test_stage1_counterfactual_lifecycle.py",
+        "src/tests/test_stage1_data_lifecycle.py",
+        "src/tests/test_stage1_data_review_artifact.py",
+        "src/tests/test_stage1_environment.py",
+        "src/tests/test_stage1_evaluation_analysis_artifacts.py",
+        "src/tests/test_stage1_generation_lifecycle.py",
+        "src/tests/test_stage1_human_adjudication.py",
+        "src/tests/test_stage1_lexicon_preflight.py",
+        "src/tests/test_stage1_formal_lexicon_checkpoint.py",
+        "src/tests/test_llm_lexicon_builder.py::LLMLexiconBuilderTest::test_duplicate_entrypoint_namespace_resolves_canonical_formal_builder",
+        "src/tests/test_llm_lexicon_builder.py::LLMLexiconBuilderTest::test_duplicate_entrypoint_main_hands_off_canonical_formal_builder",
+        "src/tests/test_llm_lexicon_builder.py::WebSearcherConfigTest::test_tavily_transient_retry_is_narrow_and_bounded",
+        "src/tests/test_llm_lexicon_builder.py::WebSearcherConfigTest::test_checkpointed_tavily_redirect_is_terminal_and_never_followed",
+        "src/tests/test_llm_lexicon_builder.py::WebSearcherConfigTest::test_checkpointed_tavily_counts_retry_and_reuses_success_after_resume",
+        "src/tests/test_llm_lexicon_builder.py::DeepSeekJudgementClientTest::test_checkpointed_deepseek_retries_once_and_reuses_success_after_resume",
+        "src/tests/test_llm_lexicon_builder.py::DeepSeekJudgementClientTest::test_checkpointed_deepseek_semantic_invalid_response_retries_before_success",
+        "src/tests/test_llm_lexicon_builder.py::DeepSeekJudgementClientTest::test_checkpointed_deepseek_redirect_is_terminal_and_never_followed",
+        "src/tests/test_stage1_margin.py",
+        "src/tests/test_stage1_margin_lifecycle.py",
+        "src/tests/test_stage1_metrics.py",
+        "src/tests/test_stage1_p0_validation.py",
+        "src/tests/test_stage1_quadruple.py",
+        "src/tests/test_stage1_retrieval_bundle.py",
+        "src/tests/test_stage1_retrieval_hits.py",
+        "src/tests/test_stage1_sealed_workflow.py",
+        "src/tests/test_stage1_test_receipt.py",
+        "src/tests/test_stage1_train_only_lexicon.py",
+        "src/tests/test_stage1_train_partition.py",
+        "src/tests/test_stage1_training_policy.py"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 1800
+    },
+    {
+      "command_id": "pytest.context",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_context_build.py",
+        "src/tests/test_stage1_context_manifest.py",
+        "src/tests/test_stage1_context_selector.py"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "pytest.model-registry.fast",
+      "group": "pytest-fast",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::ModelInventoryTests::test_base_registration_rejects_missing_shard_and_symlink",
+        "src/tests/test_stage1_model_registry.py::ModelInventoryTests::test_new_base_tokenizer_inventory_freezes_extra_python_file",
+        "src/tests/test_stage1_model_registry.py::ModelInventoryTests::test_receipt_checkpoint_binding_rejects_changed_bytes_and_same_name_copy",
+        "src/tests/test_stage1_model_registry.py::FormalResolverLeaseUnitTests::test_exact_source_aliases_share_one_fresh_hash_per_lease_phase",
+        "src/tests/test_stage1_model_registry.py::FormalResolverLeaseUnitTests::test_formal_resolver_mints_only_after_fresh_source_lease",
+        "src/tests/test_stage1_model_registry.py::FormalResolverLeaseUnitTests::test_public_locator_and_dependency_resolution_reject_checkpoint_tamper",
+        "src/tests/test_stage1_model_registry.py::FormalResolverLeaseUnitTests::test_same_path_different_snapshots_do_not_share_lease_work",
+        "src/tests/test_stage1_model_registry.py::LegacyEngineeringRegistryTests::test_cli_contract_exposes_legacy_and_plan_binding_aliases",
+        "src/tests/test_stage1_model_registry.py::LegacyEngineeringRegistryTests::test_legacy_registration_is_truthful_full_tree_and_non_scientific",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_formal_exact_six_slot_registry_finalizes_and_validates",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_pilot_registry_preserves_order_and_is_fail_closed_ineligible",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_raw_receipt_independently_replays_checkpoint_selection",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_raw_receipt_rejects_non_finite_metrics_and_wrong_patience",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_receipt_policy_and_runtime_hash_must_match_frozen_plan"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 900
+    },
+    {
+      "command_id": "pytest.model-registry.legacy-bind",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::LegacyEngineeringRegistryTests::test_engineering_plan_binds_legacy_without_fake_training_lineage"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "pytest.model-registry.legacy-reject",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::LegacyEngineeringRegistryTests::test_engineering_plan_rejects_missing_wrong_or_qwen3_context_binding"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "pytest.model-registry.formal-adapter",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_adapter_checkpoint_uses_registered_base_and_frozen_tokenizer"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.model-registry.formal-tokenizer",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_formal_trained_model_tokenizer_inventory_and_projection_rejection"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.model-registry.formal-cross-lineage",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_plan_schedule_and_registered_receipt_mismatches_are_rejected"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.model-registry.formal-receipt-slot",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_receipt_slot_mismatch_is_rejected"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.model-registry.formal-slot-set",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_registry_rejects_missing_extra_duplicate_and_legacy_slots"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.model-registry.formal-checkpoint-binding",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_model_registry.py::FormalModelRegistryTests::test_same_receipt_cannot_register_replacement_checkpoint_tree"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 7200
+    },
+    {
+      "command_id": "pytest.training-artifacts",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_training_artifacts.py"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "pytest.training-runtime",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_training_runtime.py"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "pytest.training-schedule",
+      "group": "pytest-slow",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q",
+        "src/tests/test_stage1_training_schedule.py"
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 3600
+    },
+    {
+      "command_id": "check.py-compile",
+      "group": "static",
+      "argv": [
+        "{python}",
+        "scripts/stage1/run_test_receipt.py",
+        "check-python",
+        "--workspace-root",
+        "."
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 600
+    },
+    {
+      "command_id": "check.json-parse",
+      "group": "static",
+      "argv": [
+        "{python}",
+        "scripts/stage1/run_test_receipt.py",
+        "check-json",
+        "--workspace-root",
+        "."
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 300
+    },
+    {
+      "command_id": "check.json-schema",
+      "group": "static",
+      "argv": [
+        "{python}",
+        "scripts/stage1/run_test_receipt.py",
+        "check-schemas",
+        "--workspace-root",
+        "."
+      ],
+      "working_directory": ".",
+      "timeout_seconds": 300
+    }
+  ]
+}

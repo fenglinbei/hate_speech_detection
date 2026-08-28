@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/human_terminology_resolution_v1.schema.json",
+  "title": "WP3 human terminology resolution",
+  "type": "object",
+  "required": [
+    "schema_version", "resolution_id", "reviewer_id", "decisions", "qc_reviews"
+  ],
+  "properties": {
+    "schema_version": {"const": "human-terminology-resolution/v1"},
+    "resolution_id": {"type": "string", "pattern": "^termres-[0-9a-f]{64}$"},
+    "reviewer_id": {"type": "string", "minLength": 1},
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    },
+    "qc_reviews": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/qcReview"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "term", "definition", "usage_notes", "ambiguity_notes", "variants"
+      ],
+      "properties": {
+        "term": {"type": "string", "minLength": 1},
+        "definition": {"type": "string", "minLength": 1},
+        "usage_notes": {"type": "string"},
+        "ambiguity_notes": {"type": "string"},
+        "variants": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["candidate_id", "action", "entry", "notes"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^termcand-[0-9a-f]{20}$"},
+        "action": {"enum": ["include", "exclude"]},
+        "entry": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/entry"}
+          ]
+        },
+        "notes": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"action": {"const": "include"}}},
+          "then": {"properties": {"entry": {"$ref": "#/$defs/entry"}}}
+        },
+        {
+          "if": {"properties": {"action": {"const": "exclude"}}},
+          "then": {"properties": {"entry": {"type": "null"}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "qcReview": {
+      "type": "object",
+      "required": ["candidate_id", "material_error", "notes"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^termcand-[0-9a-f]{20}$"},
+        "material_error": {"type": "boolean"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

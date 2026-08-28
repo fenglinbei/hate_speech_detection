@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_batch_calibration_record_v1.schema.json",
+  "title": "Stage 1 batched versus singleton field-margin calibration record",
+  "type": "object",
+  "required": [
+    "schema_version", "id", "condition", "tuple_index", "field",
+    "gold_token_ids", "counterfactual_token_ids",
+    "batched_gold_mean_logprob", "batched_counterfactual_mean_logprob",
+    "singleton_gold_mean_logprob", "singleton_counterfactual_mean_logprob",
+    "batched_margin", "singleton_margin", "abs_margin_delta",
+    "compared_token_count"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-margin-batch-calibration-record/v1"},
+    "id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "condition": {"enum": ["C0", "CL", "CD", "CLD", "PL", "PD"]},
+    "tuple_index": {"type": "integer", "minimum": 0},
+    "field": {"enum": ["target", "argument", "targeted_group", "hateful"]},
+    "gold_token_ids": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "integer", "minimum": 0}
+    },
+    "counterfactual_token_ids": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "integer", "minimum": 0}
+    },
+    "batched_gold_mean_logprob": {"type": "number"},
+    "batched_counterfactual_mean_logprob": {"type": "number"},
+    "singleton_gold_mean_logprob": {"type": "number"},
+    "singleton_counterfactual_mean_logprob": {"type": "number"},
+    "batched_margin": {"type": "number"},
+    "singleton_margin": {"type": "number"},
+    "abs_margin_delta": {"type": "number", "minimum": 0},
+    "compared_token_count": {"type": "integer", "minimum": 2}
+  },
+  "additionalProperties": false
+}

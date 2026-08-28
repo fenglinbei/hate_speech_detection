@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_analysis_v1.schema.json",
+  "title": "Stage 1 paired analysis result",
+  "type": "object",
+  "required": ["schema_version"],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "stage1-fixed-seed-bootstrap/v1",
+        "stage1-flip-table/v1",
+        "stage1-factorial-analysis/v1"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

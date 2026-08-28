@@ -1,0 +1,32 @@
+{
+  "schema_version": "stage1-evaluation-profile/v1",
+  "profile_name": "stage1-strict-quad-v1",
+  "ordered_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "parser": {
+    "wire_format": "compact-json-array-v1",
+    "quad_schema": "canonical-quad-json/v1",
+    "strict_only": true,
+    "allow_recovery_for_scoring": false,
+    "allow_legacy_pipe": false,
+    "allow_markdown_fence": false,
+    "allow_trailing_text": false
+  },
+  "assignment": {
+    "version": "stage1-optimal-tuple-assignment/v1",
+    "tie_break": "lexicographic-canonical-tuple"
+  },
+  "denominator": {
+    "policy": "fixed-expected-query-frame/v1",
+    "exclude_parse_failures": false,
+    "exclude_invalid_outputs": false,
+    "silent_id_intersection": false
+  },
+  "metrics": {
+    "tuple": ["precision", "recall", "f1_avg", "hard_exact", "soft_exact"],
+    "target_argument": ["unbound_exact", "similarity"],
+    "targeted_group_hateful": ["bound_precision", "bound_recall", "bound_f1"],
+    "format": ["strict_format_valid", "canonical_wire_equal"],
+    "flip": ["wrong_to_correct", "correct_to_wrong", "net_flip", "exact_mcnemar"]
+  },
+  "invalid_output_correctness": false
+}

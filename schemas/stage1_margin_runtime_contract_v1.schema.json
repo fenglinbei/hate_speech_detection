@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_margin_runtime_contract_v1.schema.json",
+  "title": "Stage 1 portable margin runtime contract",
+  "type": "object",
+  "required": [
+    "schema_version", "executor", "python_implementation", "python_version",
+    "torch_version", "transformers_version", "peft_version", "accelerate_version",
+    "cuda_runtime_version", "cuda_driver_version", "gpu_architectures",
+    "batch_contract", "numeric_contract"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-margin-runtime-contract/v1"},
+    "executor": {"type": "object"},
+    "python_implementation": {"type": "string", "minLength": 1},
+    "python_version": {"type": "string", "minLength": 1},
+    "torch_version": {"type": "string", "minLength": 1},
+    "transformers_version": {"type": ["string", "null"]},
+    "peft_version": {"type": ["string", "null"]},
+    "accelerate_version": {"type": ["string", "null"]},
+    "cuda_runtime_version": {"type": ["string", "null"]},
+    "cuda_driver_version": {"type": ["integer", "null"], "minimum": 0},
+    "gpu_architectures": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sm_[0-9]+$"}
+    },
+    "batch_contract": {"$ref": "#/$defs/batchContract"},
+    "numeric_contract": {
+      "type": "object",
+      "required": ["log_softmax_dtype", "right_padding", "position_ids", "causal_shift"],
+      "properties": {
+        "log_softmax_dtype": {"const": "float32"},
+        "right_padding": {"const": true},
+        "position_ids": {"const": "attention-mask-cumsum-minus-one-zero-on-padding/v1"},
+        "causal_shift": {"const": "logits-minus-last-vs-input-minus-first"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "batchContract": {
+      "type": "object",
+      "required": [
+        "schema_version", "batch_unit", "batch_size", "sequences_per_unit",
+        "pair_member_order", "calibration_comparison"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-margin-batch-contract/v1"},
+        "batch_unit": {"const": "gold-cf-pair"},
+        "batch_size": {"const": 1},
+        "sequences_per_unit": {"const": 2},
+        "pair_member_order": {"const": ["gold", "counterfactual"]},
+        "calibration_comparison": {
+          "const": "one-pair-vs-two-singletons"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_model_artifact_v1.schema.json",
+  "title": "Stage 1 immutable model artifact",
+  "type": "object",
+  "required": [
+    "schema_version", "model_artifact_id", "artifact_type", "scope",
+    "scientific_eligible", "model_name", "model_key", "role", "seed",
+    "checkpoint_format", "checkpoint_inventory", "tokenizer_inventory",
+    "base_inventory", "tokenizer_contract", "training_plan_dependency", "schedule_dependency",
+    "training_receipt_dependency", "base_model_dependency",
+    "environment_dependency", "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-model-artifact/v1"},
+    "model_artifact_id": {"type": "string", "pattern": "^mdl-[0-9a-f]{64}$"},
+    "artifact_type": {"enum": ["base", "trained", "legacy-smoke-only"]},
+    "scope": {"enum": ["base", "engineering-smoke", "pilot", "formal"]},
+    "scientific_eligible": {"type": "boolean"},
+    "model_name": {"type": "string", "minLength": 1},
+    "model_key": {"anyOf": [{"$ref": "#/$defs/model_key"}, {"type": "null"}]},
+    "role": {"type": ["string", "null"], "minLength": 1},
+    "seed": {"type": ["integer", "null"], "minimum": 0},
+    "checkpoint_format": {"enum": ["base", "full", "adapter"]},
+    "checkpoint_inventory": {"$ref": "#/$defs/tree"},
+    "tokenizer_inventory": {"$ref": "#/$defs/tree"},
+    "base_inventory": {"$ref": "#/$defs/tree"},
+    "tokenizer_contract": {"$ref": "#/$defs/tokenizer_contract"},
+    "training_plan_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "schedule_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "training_receipt_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "train_partition_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "base_model_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "environment_dependency": {"anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]},
+    "legacy_source_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "id_inputs": {"type": "object"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"artifact_type": {"const": "legacy-smoke-only"}},
+        "required": ["artifact_type"]
+      },
+      "then": {"required": ["legacy_source_tree_sha256"]},
+      "else": {"not": {"required": ["legacy_source_tree_sha256"]}}
+    },
+    {
+      "if": {
+        "properties": {"artifact_type": {"const": "trained"}},
+        "required": ["artifact_type"]
+      },
+      "then": {
+        "required": ["train_partition_dependency"],
+        "properties": {"train_partition_dependency": {"$ref": "#/$defs/dependency"}}
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_key": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]*/[A-Za-z0-9_][A-Za-z0-9_.-]*$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+      },
+      "additionalProperties": false
+    },
+    "tree_file": {
+      "type": "object",
+      "required": ["path", "size", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}},
+        "size": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "tree": {
+      "type": "object",
+      "required": ["schema_version", "inventory_policy", "logical_repo_path", "file_count", "total_bytes", "files", "file_tree_sha256"],
+      "properties": {
+        "schema_version": {"const": "stage1-regular-file-tree/v1"},
+        "inventory_policy": {"enum": ["all-regular-files/v1", "tokenizer-files/v1"]},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}},
+        "file_count": {"type": "integer", "minimum": 1},
+        "total_bytes": {"type": "integer", "minimum": 0},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/tree_file"}},
+        "file_tree_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "tokenizer_contract": {
+      "type": "object",
+      "required": [
+        "schema_version", "tokenizer_revision", "tokenizer_content_revision", "tokenizer_config_sha256",
+        "chat_template_source", "chat_template_sha256",
+        "supports_add_generation_prompt", "supports_enable_thinking_false",
+        "eos_token", "pad_token"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-tokenizer-contract/v1"},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "tokenizer_content_revision": {"type": "string", "pattern": "^tok-[0-9a-f]{64}$"},
+        "tokenizer_config_sha256": {"$ref": "#/$defs/sha256"},
+        "chat_template_source": {"enum": ["tokenizer_config.json", "chat_template.jinja"]},
+        "chat_template_sha256": {"$ref": "#/$defs/sha256"},
+        "supports_add_generation_prompt": {"const": true},
+        "supports_enable_thinking_false": {"type": "boolean"},
+        "eos_token": {},
+        "pad_token": {}
+      },
+      "additionalProperties": false
+    }
+  }
+}

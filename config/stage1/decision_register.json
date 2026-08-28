@@ -1,0 +1,135 @@
+{
+  "schema_version": "stage1-decision-register/v1",
+  "status": "frozen",
+  "source_plan": "docs/research/experiment-plans/stage1-p0-implementation.md",
+  "decisions": {
+    "D0_split": {
+      "value": "prefix-90-10",
+      "train_count": 5781,
+      "dev_count": 643,
+      "test_count": 1605
+    },
+    "D1_wire_format": {
+      "value": "compact-json-array-v1",
+      "fields": ["target", "argument", "targeted_group", "hateful"]
+    },
+    "D2_anomaly_adjudication": {
+      "value": "dual-model-blind-then-human",
+      "expected_tuple_count": 30,
+      "human_queue": ["model_disagreement", "parse_failure", "low_confidence", "agreement_qc_sample"],
+      "agreement_qc_fraction": 0.1
+    },
+    "D3_group_semantics": {
+      "value": "preserve-current-taxonomy",
+      "non_hate_label": "non-hate",
+      "hateful_is_independent_output": true
+    },
+    "D4_sequence_budget": {
+      "max_sequence_tokens": 2048,
+      "completion_reserve_tokens": 256,
+      "tail_truncation_allowed": false
+    },
+    "D5_controls": {
+      "primary": ["PL", "PD"],
+      "sensitivity": ["NLD"]
+    },
+    "D6_cf_selector": {
+      "primary": "model-independent-blind-approved-foil",
+      "sensitivity": "base-reference-hardest"
+    },
+    "D7_training_seeds": {
+      "formal": [42, 43, 44],
+      "pilot": [42],
+      "matched_across_roles": true,
+      "automatic_seed_expansion": false
+    },
+    "D8_margin_scope": {
+      "free_generation": "all-eligible",
+      "counterfactual_cohort_target": 400,
+      "cohort_selection": "pre-registered-stratified-id-hash"
+    },
+    "D9_dev_gate": {
+      "primary_role": "M_drop",
+      "secondary_role": "M_LD",
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 42,
+      "multiple_testing": "holm-by-pre-registered-family"
+    },
+    "D10_placebo_matching": {
+      "relevance_tiers_percent": [10, 20, 30],
+      "lexical_policy": "lexical-overlap-v1",
+      "max_block_token_delta_fraction": 0.01
+    },
+    "D11_base_model": {
+      "model_name": "Qwen/Qwen3-8B",
+      "local_path": "models/base/Qwen3-8B",
+      "thinking_mode": false,
+      "revision_policy": "freeze-local-file-tree"
+    },
+    "D12_environment": {
+      "value": "new-conda-environment",
+      "prefix": ".conda/stage1-p0",
+      "spec": "environment/stage1-p0.yml",
+      "materialization_guide": "environment/stage1-p0-materialization.md",
+      "materialization": "fresh-from-environment-spec",
+      "runtime_family": "python-3.11.15-torch-2.6.0-cu124",
+      "portable_lineage_excludes_environment_prefix": true
+    },
+    "D13_training_recipe": {
+      "method": "full-finetune",
+      "distributed_backend": "deepspeed-zero3",
+      "deepspeed_profile": "config/stage1/deepspeed_zero3.json",
+      "max_epochs": 5,
+      "minimum_epochs": 1,
+      "early_stopping": {
+        "metric": "eval_loss",
+        "mode": "min",
+        "patience_evaluations": 3,
+        "threshold": 0.001,
+        "load_best_model_at_end": true,
+        "tie_break": "earliest-global-step"
+      },
+      "selection_data": "train-only-calibration",
+      "scientific_dev_used_for_selection": false,
+      "calibration_fraction_of_train": 0.1,
+      "calibration_fraction_semantics": "nominal-10-percent-hash-threshold-not-exact-count",
+      "calibration_assignment": "sha256-query-id-v1",
+      "calibration_information_isolation": "full-information-isolated",
+      "fit_evidence_scope": "fit-only-demo-and-lexicon",
+      "calibration_presentation": "fixed-calibration-presentation"
+    },
+    "D14_blind_review_models": {
+      "value": "two-independent-openai-compatible-reviewers",
+      "reviewer_ids": ["glm_high_parameter", "deepseek_flash"],
+      "temperature": 0,
+      "max_attempts": 1,
+      "mutual_visibility": false,
+      "prediction_visibility": false,
+      "raw_response_retention": true
+    },
+    "D15_terminology_library": {
+      "value": "category-free-terminology-understanding-library",
+      "resource_role": "terminology-understanding-library/v1",
+      "render_policy": "category-free-terminology-evidence/v1",
+      "entry_id_policy": "category-free-visible-semantics/lex-v2",
+      "model_visible_fields": ["term", "definition", "usage_notes", "ambiguity_notes", "variants"],
+      "definition_policy": "semantic-meaning-and-usage-not-task-taxonomy-copy/v1",
+      "forbidden_entry_fields": ["annotation_count", "categories", "category", "category_counts", "category_purity", "hate_count", "hate_precision", "hateful", "label", "labels", "log_odds", "non_hate_count", "nonhate_penalty", "primary_category", "targeted_group"],
+      "audit_only_fields": ["support", "provenance"],
+      "task_label_visibility": "absent",
+      "retrieval_text_uses_model_visible_fields_only": true,
+      "neutral_identity_terms_are_eligible": true,
+      "slang_and_context_dependent_terms_are_eligible": true,
+      "unknown_term_escalation": [
+        "model-self-explanation",
+        "versioned-web-evidence",
+        "human-terminology-queue"
+      ],
+      "live_web_during_formal_inference": false,
+      "library_updates_require_new_context_build": true,
+      "term_match_does_not_imply_hate": true,
+      "targeted_group_and_hateful_independent": true,
+      "strict_two_pass_verification_is_separate_estimand": true
+    }
+  }
+}

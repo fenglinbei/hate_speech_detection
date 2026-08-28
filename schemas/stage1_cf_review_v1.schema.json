@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage1_cf_review_v1.schema.json",
+  "title": "Stage 1 completed counterfactual blind-review row",
+  "type": "object",
+  "required": ["schema_version", "cf_proposal_id", "candidate_id", "decision", "reason_code", "note", "reviewer_id"],
+  "properties": {
+    "schema_version": {"const": "stage1-cf-review-row/v1"},
+    "cf_proposal_id": {"type": "string", "pattern": "^cfp-[0-9a-f]{64}$"},
+    "candidate_id": {"type": "string", "pattern": "^cf:v1:[0-9a-f]{64}$"},
+    "decision": {"enum": ["pass", "reject", "not_required"]},
+    "reason_code": {
+      "enum": [
+        "valid-local-foil", "equivalent-to-gold", "invalid-boundary-fragment",
+        "unsupported-by-query", "changes-more-than-one-field",
+        "malformed-candidate", "deterministic-label-foil"
+      ]
+    },
+    "note": {"type": "string"},
+    "reviewer_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

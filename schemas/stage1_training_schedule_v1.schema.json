@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_training_schedule_v1.schema.json",
+  "title": "Stage 1 complete stateless training schedule",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "schedule_build_id",
+    "training_plan_dependency",
+    "training_evidence_dependency",
+    "train_partition_dependency",
+    "renderer_revision",
+    "tokenizer_revision",
+    "rng_policy",
+    "slot_registry",
+    "total_record_count",
+    "all_schedule_records_sha256",
+    "preflight_status",
+    "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-training-schedule/v1"},
+    "schedule_build_id": {"type": "string", "pattern": "^sch-[0-9a-f]{64}$"},
+    "training_plan_dependency": {"$ref": "#/$defs/dependency"},
+    "training_evidence_dependency": {"$ref": "#/$defs/dependency"},
+    "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+    "renderer_revision": {"const": "stage1-training-evidence-renderer/v1"},
+    "tokenizer_revision": {"type": "string", "minLength": 1},
+    "rng_policy": {"const": "sha256-stateless-order-dropout/v1"},
+    "slot_registry": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["model_key", "role", "seed", "epochs", "relative_meta_path", "slot_records_sha256"],
+        "properties": {
+          "model_key": {"type": "string", "pattern": "^(M_LD|M_drop)/seed-[1-9][0-9]*$"},
+          "role": {"enum": ["M_LD", "M_drop"]},
+          "seed": {"type": "integer", "minimum": 0},
+          "epochs": {"type": "integer", "minimum": 1},
+          "relative_meta_path": {"type": "string", "pattern": "^schedules/(M_LD|M_drop)/seed-[1-9][0-9]*/schedule\\.meta\\.json$"},
+          "slot_records_sha256": {"$ref": "#/$defs/sha256"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "total_record_count": {"type": "integer", "minimum": 1},
+    "all_schedule_records_sha256": {"$ref": "#/$defs/sha256"},
+    "preflight_status": {"const": "complete-pass"},
+    "id_inputs": {
+      "type": "object",
+      "required": [
+        "training_plan_dependency",
+        "training_evidence_dependency",
+        "train_partition_dependency",
+        "schedule_schema_version",
+        "renderer_revision",
+        "tokenizer_revision",
+        "schedule_builder_code_sha256"
+      ],
+      "properties": {
+        "training_plan_dependency": {"$ref": "#/$defs/dependency"},
+        "training_evidence_dependency": {"$ref": "#/$defs/dependency"},
+        "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+        "schedule_schema_version": {"const": "stage1-training-schedule/v1"},
+        "renderer_revision": {"const": "stage1-training-evidence-renderer/v1"},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "schedule_builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

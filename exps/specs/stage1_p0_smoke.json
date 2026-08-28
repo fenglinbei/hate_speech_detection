@@ -1,0 +1,27 @@
+{
+  "schema_version": "stage1-training-source-recipe/v1",
+  "recipe_name": "stage1-p0-legacy-smoke",
+  "scope": "engineering-smoke",
+  "scientific_eligible": false,
+  "allowed_splits": ["dev"],
+  "ordered_model_slots": [
+    {
+      "model_key": "M_legacy/smoke",
+      "role": "legacy-smoke-only",
+      "seed": null,
+      "training_required": false,
+      "train_config": null,
+      "epochs": null,
+      "final_checkpoint_rule": null
+    }
+  ],
+  "pilot_slot_keys": [],
+  "protocol_profiles": {
+    "generation": "config/stage1/generation_legacy_smoke.json",
+    "evaluation": "config/stage1/evaluation_strict.json",
+    "margin": "config/stage1/margin_scorer.json",
+    "analysis": "config/stage1/analysis_smoke.json"
+  },
+  "ordered_generation_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+  "ordered_margin_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"]
+}

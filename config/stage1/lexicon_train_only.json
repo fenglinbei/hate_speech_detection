@@ -1,0 +1,105 @@
+{
+  "schema_version": "stage1-train-only-terminology-library-config/v1",
+  "resource_role": "terminology-understanding-library/v1",
+  "partition_policy": {
+    "required_artifact_kind": "train-partition",
+    "lexicon_source_partition": "fit",
+    "excluded_partition": "calibration",
+    "calibration_contribution_count": 0,
+    "dependency_binding": "exact-portable-dependency/v1"
+  },
+  "candidate_settings": {
+    "objective": "terminology-value/v1",
+    "source_policy": "content-only-no-task-labels/v1",
+    "max_candidates": 1000,
+    "max_samples_per_candidate": 5,
+    "min_count_for_llm": 1,
+    "min_hate_count_for_llm": 0,
+    "zh_min_ngram": 2,
+    "zh_max_ngram": 4,
+    "zh_token_max_ngram": 4,
+    "use_jieba": false,
+    "keep_all_content_ngrams": true,
+    "suppressed_reject_hints": [
+      "broken_fragment",
+      "generic_word",
+      "generic_phrase",
+      "substring_fragment"
+    ],
+    "en_max_ngram": 3,
+    "max_text_chars_per_record": 800
+  },
+  "web_settings": {
+    "backend": "search_api",
+    "api_base": "https://api.tavily.com/search",
+    "api_method": "POST",
+    "api_query_param": "query",
+    "api_key_env": "TAVILY_API_KEY",
+    "api_key_header": "Authorization",
+    "api_key_header_prefix": "Bearer ",
+    "api_extra_params": {
+      "max_results": 3,
+      "search_depth": "basic"
+    },
+    "api_results_path": "results",
+    "cache_enabled": false,
+    "cache_path": null,
+    "require_direct_term_match": true,
+    "dedupe_by_url": true,
+    "max_title_chars": 180,
+    "max_snippet_chars": 320,
+    "max_url_chars": 2048,
+    "max_source_chars": 80,
+    "max_results": 3,
+    "timeout": 30,
+    "transport_retry_policy": {
+      "id": "tavily-transient/v1",
+      "retries": 2,
+      "base_sleep_seconds": 1.0
+    },
+    "physical_attempt_budget": {
+      "scope_id": "stage1-p0-wp3-formal-full-tavily-key2/v1",
+      "cap": 3100
+    }
+  },
+  "llm_settings": {
+    "backend": "deepseek",
+    "provider": "deepseek",
+    "api_base": "https://api.deepseek.com",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "model": "deepseek-v4-flash",
+    "json_mode": true,
+    "thinking": {
+      "type": "disabled"
+    },
+    "reasoning_effort": null,
+    "stream": false,
+    "temperature": 0,
+    "send_temperature": true,
+    "output_language": "zh",
+    "max_tokens": 1024,
+    "timeout": 120,
+    "retries": 2,
+    "retry_sleep": 1.0
+  },
+  "inclusion": {
+    "confidence_threshold": 0.65,
+    "single_mention_confidence": 0.85,
+    "min_count": 2,
+    "definition_required": true,
+    "ambiguity_notes_required_when_ambiguous": true
+  },
+  "runtime_settings": {
+    "show_progress": true,
+    "log_level": "INFO",
+    "debug": false,
+    "resume": true,
+    "resume_require_config_match": true,
+    "formal_checkpoint_policy": "provider-slot-checkpoint/v1",
+    "ambiguous_attempt_policy": "count-and-retry-within-budget/v1",
+    "max_llm_http_attempts": 9000,
+    "llm_failure_policy": "raise",
+    "max_llm_failures": 1,
+    "max_consecutive_llm_failures": 1
+  }
+}

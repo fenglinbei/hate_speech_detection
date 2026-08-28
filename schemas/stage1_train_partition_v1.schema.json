@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_train_partition_v1.schema.json",
+  "title": "Stage 1 immutable fit/calibration train partition metadata",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "train_partition_id",
+    "data_dependency",
+    "policy",
+    "config_sha256",
+    "builder_code_sha256",
+    "partition_rows_sha256",
+    "ordered_query_ids_sha256",
+    "fit_ids_sha256",
+    "calibration_ids_sha256",
+    "train_count",
+    "fit_count",
+    "calibration_count",
+    "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-train-partition/v1"},
+    "artifact_kind": {"const": "train-partition"},
+    "train_partition_id": {"type": "string", "pattern": "^tpart-[0-9a-f]{64}$"},
+    "data_dependency": {"$ref": "#/$defs/data_dependency"},
+    "policy": {"$ref": "#/$defs/policy"},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "builder_code_sha256": {"$ref": "#/$defs/sha256"},
+    "partition_rows_sha256": {"$ref": "#/$defs/sha256"},
+    "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "fit_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "calibration_ids_sha256": {"$ref": "#/$defs/sha256"},
+    "train_count": {"const": 5781},
+    "fit_count": {"type": "integer", "minimum": 1, "maximum": 5780},
+    "calibration_count": {"type": "integer", "minimum": 1, "maximum": 5780},
+    "id_inputs": {"$ref": "#/$defs/id_inputs"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "canonical_id": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "data_dependency": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "artifact_kind",
+        "artifact_id",
+        "payload_manifest_sha256",
+        "logical_repo_path"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"const": "data"},
+        "artifact_id": {"type": "string", "pattern": "^data-[0-9a-f]{64}$"},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {
+          "type": "string",
+          "minLength": 1,
+          "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "assignment": {
+      "type": "object",
+      "required": [
+        "assignment",
+        "salt",
+        "fraction",
+        "hash_modulus",
+        "hash_threshold_exclusive",
+        "id_fields",
+        "nominal_fraction",
+        "fraction_semantics",
+        "id_input"
+      ],
+      "properties": {
+        "assignment": {"const": "sha256-query-id-v1"},
+        "salt": {"const": "stage1-train-calibration-v1"},
+        "fraction": {"const": 0.1},
+        "hash_modulus": {"const": 10000},
+        "hash_threshold_exclusive": {"const": 1000},
+        "id_fields": {"const": ["id", "query_id"]},
+        "nominal_fraction": {"const": 0.1},
+        "fraction_semantics": {"const": "nominal-hash-threshold-not-exact-count/v1"},
+        "id_input": {"const": "cluster_representative_query_id"}
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "input_split",
+        "content_normalization",
+        "content_hash",
+        "cluster_policy",
+        "cluster_representative",
+        "assignment",
+        "partitions",
+        "information_isolation",
+        "fit_evidence_scope",
+        "calibration_presentation"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-train-partition-policy/v1"},
+        "input_split": {"const": "train"},
+        "content_normalization": {"const": "crlf-to-lf/v1"},
+        "content_hash": {"const": "sha256-utf8-normalized-content/v1"},
+        "cluster_policy": {"const": "exact-normalized-content-sha256/v1"},
+        "cluster_representative": {"const": "minimum-canonical-numeric-query-id/v1"},
+        "assignment": {"$ref": "#/$defs/assignment"},
+        "partitions": {
+          "type": "object",
+          "required": ["fit", "calibration"],
+          "properties": {
+            "fit": {"const": "bucket-greater-than-or-equal-to-threshold"},
+            "calibration": {"const": "bucket-strictly-less-than-threshold"}
+          },
+          "additionalProperties": false
+        },
+        "information_isolation": {"const": "full-information-isolated"},
+        "fit_evidence_scope": {"const": "fit-only-demo-and-lexicon"},
+        "calibration_presentation": {"const": "fixed-calibration-presentation"}
+      },
+      "additionalProperties": false
+    },
+    "id_inputs": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "data_dependency",
+        "policy",
+        "config_sha256",
+        "builder_code_sha256",
+        "partition_rows_sha256",
+        "ordered_query_ids_sha256",
+        "fit_ids_sha256",
+        "calibration_ids_sha256",
+        "train_count",
+        "fit_count",
+        "calibration_count"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-train-partition/v1"},
+        "data_dependency": {"$ref": "#/$defs/data_dependency"},
+        "policy": {"$ref": "#/$defs/policy"},
+        "config_sha256": {"$ref": "#/$defs/sha256"},
+        "builder_code_sha256": {"$ref": "#/$defs/sha256"},
+        "partition_rows_sha256": {"$ref": "#/$defs/sha256"},
+        "ordered_query_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "fit_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "calibration_ids_sha256": {"$ref": "#/$defs/sha256"},
+        "train_count": {"const": 5781},
+        "fit_count": {"type": "integer", "minimum": 1, "maximum": 5780},
+        "calibration_count": {"type": "integer", "minimum": 1, "maximum": 5780}
+      },
+      "additionalProperties": false
+    },
+    "row": {
+      "type": "object",
+      "required": [
+        "query_id",
+        "content_sha256",
+        "cluster_representative_query_id",
+        "bucket",
+        "partition"
+      ],
+      "properties": {
+        "query_id": {"$ref": "#/$defs/canonical_id"},
+        "content_sha256": {"$ref": "#/$defs/sha256"},
+        "cluster_representative_query_id": {"$ref": "#/$defs/canonical_id"},
+        "bucket": {"type": "integer", "minimum": 0, "maximum": 9999},
+        "partition": {"enum": ["fit", "calibration"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

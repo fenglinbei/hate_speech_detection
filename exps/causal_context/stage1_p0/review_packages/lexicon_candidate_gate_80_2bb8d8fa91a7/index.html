@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' data: blob:; connect-src 'none'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    >
+    <title>词典候选 80-case 离线标注门</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cases.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#review-card">跳到当前 case</a>
+
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">STAGE 1 · WP3 · OFFLINE GATE</p>
+        <h1>词典候选人工标注</h1>
+        <p class="subtitle">只判断 exact candidate；不要把整句含义投射到候选词。</p>
+      </div>
+      <div class="header-tools">
+        <label class="reviewer-field">
+          <span>标注者代号</span>
+          <input id="reviewer-id" maxlength="80" value="reviewer-1" autocomplete="off">
+        </label>
+        <button id="import-button" class="button button-quiet" type="button">导入结果/备份</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden>
+        <button id="backup-button" class="button button-quiet" type="button">导出备份</button>
+        <button id="export-button" class="button button-primary" type="button" disabled>导出完整结果</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="progress-panel" aria-labelledby="progress-title">
+        <div>
+          <p id="progress-title" class="section-label">标注进度</p>
+          <p class="progress-number"><span id="complete-count">0</span><span>/</span><span id="total-count">80</span></p>
+        </div>
+        <div class="progress-copy">
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="80" aria-valuenow="0">
+            <span id="progress-fill"></span>
+          </div>
+          <p id="progress-message">结果只保存在本浏览器，建议定期导出备份。</p>
+        </div>
+      </section>
+
+      <details class="guidance">
+        <summary>查看判定口径</summary>
+        <div class="guidance-grid">
+          <div><strong>形式完整</strong><span>完整词或固定短语，可独立分析。</span></div>
+          <div><strong>独立群体词</strong><span>词条自身稳定指向某类群体。</span></div>
+          <div><strong>可生产词干</strong><span>在多个组合中仍稳定保留同一群体攻击含义。</span></div>
+          <div><strong>仅完整短语成立</strong><span>候选含义依赖更长短语，例如 easy 依赖 easy girl。</span></div>
+          <div><strong>上下文碎片</strong><span>截断 ngram、语法残片或完整句子。</span></div>
+          <div><strong>通用辱骂/行为</strong><span>可能冒犯，但不稳定指向受保护或社会群体。</span></div>
+        </div>
+      </details>
+
+      <div class="review-layout">
+        <aside class="case-sidebar" aria-labelledby="case-list-title">
+          <div class="sidebar-heading">
+            <h2 id="case-list-title">Case 列表</h2>
+            <select id="status-filter" aria-label="按状态筛选">
+              <option value="all">全部</option>
+              <option value="pending">未完成</option>
+              <option value="complete">已完成</option>
+              <option value="uncertain">含不确定</option>
+            </select>
+          </div>
+          <nav id="case-list" class="case-list" aria-label="80 条候选"></nav>
+          <p id="empty-list" class="empty-state" hidden>当前筛选下没有 case。</p>
+        </aside>
+
+        <article id="review-card" class="review-card" tabindex="-1">
+          <header class="case-header">
+            <div>
+              <p id="case-position" class="eyebrow"></p>
+              <h2 id="candidate-term">—</h2>
+            </div>
+            <span id="case-status" class="status-pill">未完成</span>
+          </header>
+
+          <section aria-labelledby="contexts-title">
+            <div class="section-heading-row">
+              <h3 id="contexts-title">Fit-only 语料上下文</h3>
+              <span id="context-count" class="muted"></span>
+            </div>
+            <div id="contexts" class="context-list"></div>
+          </section>
+
+          <form id="annotation-form" novalidate>
+            <fieldset>
+              <legend>1. 候选形式是否完整？</legend>
+              <div class="option-grid option-grid-two">
+                <label class="option-card"><input type="radio" name="surface_form" value="complete"><span><strong>完整词/短语</strong><small>形式完整，可独立分析</small></span></label>
+                <label class="option-card"><input type="radio" name="surface_form" value="fragment"><span><strong>碎片</strong><small>截断 ngram 或语法残片</small></span></label>
+                <label class="option-card"><input type="radio" name="surface_form" value="sentence"><span><strong>句子</strong><small>完整或近完整的陈述/命令</small></span></label>
+                <label class="option-card"><input type="radio" name="surface_form" value="uncertain"><span><strong>不确定</strong><small>现有上下文不足</small></span></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>2. Exact candidate 属于哪种 scope？</legend>
+              <div class="option-grid option-grid-two">
+                <label class="option-card"><input type="radio" name="term_scope" value="standalone_group_term"><span><strong>独立群体词</strong><small>候选本身稳定指向群体</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="productive_stem"><span><strong>可生产词干</strong><small>多个组合中含义稳定</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="phrase_only"><span><strong>仅完整短语成立</strong><small>当前候选不能继承长短语含义</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="generic_abuse"><span><strong>通用辱骂</strong><small>冒犯但不稳定指向群体</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="behavior_or_phenomenon"><span><strong>行为或现象</strong><small>描述行为、犯罪或社会现象</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="non_hateful_or_other"><span><strong>非仇恨/其他</strong><small>普通词、身份中性词或其他</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="context_fragment"><span><strong>上下文碎片</strong><small>不构成独立 lexical item</small></span></label>
+                <label class="option-card"><input type="radio" name="term_scope" value="uncertain"><span><strong>不确定</strong><small>无法可靠归类</small></span></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>3. 判断信心</legend>
+              <div class="option-grid option-grid-three compact-options">
+                <label class="option-card"><input type="radio" name="confidence" value="high"><span><strong>高</strong></span></label>
+                <label class="option-card"><input type="radio" name="confidence" value="medium"><span><strong>中</strong></span></label>
+                <label class="option-card"><input type="radio" name="confidence" value="low"><span><strong>低</strong></span></label>
+              </div>
+            </fieldset>
+
+            <label class="notes-field">
+              <span>备注（可选）</span>
+              <textarea id="notes" maxlength="1000" rows="3" placeholder="记录边界判断、依赖的完整短语或其他疑点"></textarea>
+              <small><span id="notes-count">0</span>/1000</small>
+            </label>
+
+            <div id="derived-result" class="derived-result" aria-live="polite">完成前两项后，页面会显示是否建议进入供应商阶段。</div>
+            <p id="form-error" class="form-error" role="alert" hidden></p>
+
+            <footer class="form-actions">
+              <button id="previous-button" class="button button-quiet" type="button">上一条</button>
+              <button id="clear-button" class="button button-quiet" type="button">清除本条</button>
+              <button id="save-button" class="button button-primary" type="submit">保存并到下一条</button>
+            </footer>
+          </form>
+        </article>
+      </div>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <noscript><p class="noscript">本离线工具需要启用 JavaScript。</p></noscript>
+  </body>
+</html>

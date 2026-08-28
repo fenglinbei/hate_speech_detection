@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.stage1/schemas/stage1_training_plan_v1.schema.json",
+  "title": "Stage 1 immutable training plan",
+  "type": "object",
+  "required": [
+    "schema_version", "training_plan_id", "scope", "scientific_eligible",
+    "context_dependency",
+    "training_evidence_dependency", "base_model_dependency",
+    "environment_dependency", "non_training_model_dependencies",
+    "ordered_model_slots", "pilot_slot_keys",
+    "per_slot_train_config_sha256", "epoch_and_checkpoint_selection_policy",
+    "order_dropout_rng_policy", "source_spec_sha256", "protocol_snapshot_sha256",
+    "decision_register_sha256", "train_code_sha256", "plan_builder_code_sha256", "id_inputs"
+  ],
+  "properties": {
+    "schema_version": {"const": "stage1-training-plan/v1"},
+    "training_plan_id": {"type": "string", "pattern": "^tpl-[0-9a-f]{64}$"},
+    "scope": {"enum": ["formal", "pilot", "engineering-smoke"]},
+    "scientific_eligible": {"type": "boolean"},
+    "context_dependency": {"$ref": "#/$defs/dependency"},
+    "train_context_policy": {"$ref": "#/$defs/nullable_context_policy"},
+    "train_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+    "training_evidence_dependency": {
+      "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+    },
+    "train_partition_dependency": {
+      "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+    },
+    "base_model_dependency": {
+      "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+    },
+    "environment_dependency": {"$ref": "#/$defs/dependency"},
+    "non_training_model_dependencies": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/model_key"},
+      "additionalProperties": {"$ref": "#/$defs/dependency"}
+    },
+    "ordered_model_slots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/slot"}
+    },
+    "pilot_slot_keys": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/model_key"}
+    },
+    "per_slot_train_config_sha256": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/model_key"},
+      "additionalProperties": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+    },
+    "epoch_and_checkpoint_selection_policy": {"type": ["object", "null"]},
+    "order_dropout_rng_policy": {"type": ["object", "null"]},
+    "source_spec_sha256": {"$ref": "#/$defs/sha256"},
+    "protocol_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+    "decision_register_sha256": {"$ref": "#/$defs/sha256"},
+    "train_code_sha256": {"$ref": "#/$defs/sha256"},
+    "runtime_code_sha256": {"$ref": "#/$defs/sha256"},
+    "plan_builder_code_sha256": {"$ref": "#/$defs/sha256"},
+    "id_inputs": {"$ref": "#/$defs/id_inputs"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"scope": {"const": "engineering-smoke"}}},
+      "then": {
+        "properties": {
+          "training_evidence_dependency": {"type": "null"},
+          "train_partition_dependency": {"type": "null"},
+          "base_model_dependency": {"type": "null"},
+          "train_context_policy": {"type": "null"},
+          "train_context_policy_sha256": {"type": "null"},
+          "non_training_model_dependencies": {"minProperties": 1}
+        }
+      },
+      "else": {
+        "required": ["runtime_code_sha256", "train_partition_dependency"],
+        "properties": {
+          "training_evidence_dependency": {"$ref": "#/$defs/dependency"},
+          "train_partition_dependency": {"$ref": "#/$defs/dependency"},
+          "base_model_dependency": {"$ref": "#/$defs/dependency"},
+          "train_context_policy": {"$ref": "#/$defs/context_policy"},
+          "train_context_policy_sha256": {"$ref": "#/$defs/sha256"},
+          "non_training_model_dependencies": {"maxProperties": 0}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullable_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "model_key": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]*/[A-Za-z0-9_][A-Za-z0-9_.-]*$"},
+    "dependency": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256", "logical_repo_path"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-ref/v1"},
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "logical_repo_path": {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+      },
+      "additionalProperties": false
+    },
+    "context_dependency_identity": {
+      "type": "object",
+      "required": ["schema_version", "artifact_kind", "artifact_id", "payload_manifest_sha256"],
+      "properties": {
+        "schema_version": {"const": "stage1-dependency-identity/v1"},
+        "artifact_kind": {"enum": ["data", "train-partition", "lexicon"]},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "nullable_context_policy": {
+      "anyOf": [{"$ref": "#/$defs/context_policy"}, {"type": "null"}]
+    },
+    "context_policy": {
+      "type": "object",
+      "required": [
+        "schema_version", "context_config_schema_version", "context_config_sha256",
+        "source_dependencies", "retrieval_policy", "retrieval_engine",
+        "rendering_policy", "resolved_prompt_sha256", "budget_policy",
+        "output_protocol", "tokenizer_revision", "context_builder_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-context-policy-lineage/v1"},
+        "context_config_schema_version": {"const": "stage1-context-factorial-config/v1"},
+        "context_config_sha256": {"$ref": "#/$defs/sha256"},
+        "source_dependencies": {
+          "type": "object",
+          "required": ["data", "train_partition", "lexicon"],
+          "properties": {
+            "data": {"$ref": "#/$defs/context_dependency_identity"},
+            "train_partition": {"$ref": "#/$defs/context_dependency_identity"},
+            "lexicon": {"$ref": "#/$defs/context_dependency_identity"}
+          },
+          "additionalProperties": false
+        },
+        "retrieval_policy": {"type": "object"},
+        "retrieval_engine": {
+          "type": "object",
+          "required": ["schema_version", "policy_version", "scorer"],
+          "properties": {
+            "schema_version": {"type": "string", "minLength": 1},
+            "policy_version": {"type": "string", "minLength": 1},
+            "scorer": {"type": "object", "minProperties": 1}
+          },
+          "additionalProperties": false
+        },
+        "rendering_policy": {"type": "object"},
+        "resolved_prompt_sha256": {
+          "type": "object",
+          "required": ["system_prompt", "user_prompt", "example_prompt"],
+          "properties": {
+            "system_prompt": {"$ref": "#/$defs/sha256"},
+            "user_prompt": {"$ref": "#/$defs/sha256"},
+            "example_prompt": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+          },
+          "additionalProperties": false
+        },
+        "budget_policy": {"type": "object"},
+        "output_protocol": {"type": "object"},
+        "tokenizer_revision": {"type": "string", "minLength": 1},
+        "context_builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "slot": {
+      "type": "object",
+      "required": [
+        "model_key", "role", "seed", "training_required", "train_config_logical_path",
+        "source_train_config_sha256", "resolved_train_config_sha256", "train_config_sha256",
+        "train_config_resolved", "deepspeed_config_logical_path", "deepspeed_config_sha256",
+        "deepspeed_config_resolved", "epochs", "final_checkpoint_rule"
+      ],
+      "properties": {
+        "model_key": {"$ref": "#/$defs/model_key"},
+        "role": {"type": "string", "minLength": 1},
+        "seed": {"type": ["integer", "null"], "minimum": 0},
+        "training_required": {"type": "boolean"},
+        "train_config_logical_path": {
+          "anyOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+          ]
+        },
+        "source_train_config_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "resolved_train_config_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "train_config_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "train_config_resolved": {"type": ["object", "null"]},
+        "deepspeed_config_logical_path": {
+          "anyOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "not": {"pattern": "^/|(^|/)\\.\\.(/|$)"}}
+          ]
+        },
+        "deepspeed_config_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "deepspeed_config_resolved": {"type": ["object", "null"]},
+        "epochs": {"type": ["integer", "null"], "minimum": 1},
+        "final_checkpoint_rule": {"type": ["string", "null"], "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "id_inputs": {
+      "type": "object",
+      "required": [
+        "schema_version", "scope", "source_spec_sha256", "protocol_snapshot_sha256",
+        "decision_register_sha256", "context_dependency", "training_evidence_dependency",
+        "base_model_dependency", "environment_dependency",
+        "non_training_model_dependencies", "ordered_model_slots",
+        "pilot_slot_keys", "per_slot_train_config_sha256",
+        "epoch_and_checkpoint_selection_policy", "order_dropout_rng_policy",
+        "train_code_sha256", "plan_builder_code_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "stage1-training-plan/v1"},
+        "scope": {"enum": ["formal", "pilot", "engineering-smoke"]},
+        "source_spec_sha256": {"$ref": "#/$defs/sha256"},
+        "protocol_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "decision_register_sha256": {"$ref": "#/$defs/sha256"},
+        "context_dependency": {"$ref": "#/$defs/dependency"},
+        "train_context_policy": {"$ref": "#/$defs/nullable_context_policy"},
+        "train_context_policy_sha256": {"$ref": "#/$defs/nullable_sha256"},
+        "training_evidence_dependency": {
+          "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+        },
+        "train_partition_dependency": {
+          "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+        },
+        "base_model_dependency": {
+          "anyOf": [{"$ref": "#/$defs/dependency"}, {"type": "null"}]
+        },
+        "environment_dependency": {"$ref": "#/$defs/dependency"},
+        "non_training_model_dependencies": {
+          "type": "object",
+          "propertyNames": {"$ref": "#/$defs/model_key"},
+          "additionalProperties": {"$ref": "#/$defs/dependency"}
+        },
+        "ordered_model_slots": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/slot"}},
+        "pilot_slot_keys": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/model_key"}},
+        "per_slot_train_config_sha256": {
+          "type": "object",
+          "propertyNames": {"$ref": "#/$defs/model_key"},
+          "additionalProperties": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+        },
+        "epoch_and_checkpoint_selection_policy": {"type": ["object", "null"]},
+        "order_dropout_rng_policy": {"type": ["object", "null"]},
+        "train_code_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_code_sha256": {"$ref": "#/$defs/sha256"},
+        "plan_builder_code_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"scope": {"const": "engineering-smoke"}}},
+          "then": {"properties": {"train_partition_dependency": {"type": "null"}}},
+          "else": {
+            "required": ["train_partition_dependency"],
+            "properties": {"train_partition_dependency": {"$ref": "#/$defs/dependency"}}
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}
