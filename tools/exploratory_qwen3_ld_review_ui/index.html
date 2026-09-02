@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>Qwen3 L/D 试验输入审核</title>
+    <link rel="stylesheet" href="/review-base.css">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button">☰</button>
+        <div>
+          <p class="eyebrow">Stage 1 · Exploratory · Input Audit</p>
+          <div class="title-row"><h1>词典命中与干预输入审核</h1><span class="badge">L/D v0</span></div>
+        </div>
+      </div>
+      <div class="topbar-status">
+        <div class="top-progress">
+          <span id="top-progress-text">读取审核状态…</span>
+          <div class="meter"><span id="progress-bar"></span></div>
+        </div>
+        <span id="save-state" class="save-state" data-state="idle">尚未修改</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="guidelines" class="quiet-button" type="button">审核说明</button>
+        <button id="shortcuts" class="quiet-button desktop-only" type="button">快捷键</button>
+      </div>
+    </header>
+
+    <div class="development-banner">
+      <strong>仅用于开发输入审核 · 不显示 gold / demo / 模型输出</strong>
+      <span>DEVELOPMENT ONLY · NON-SEALED · NON-SCIENTIFIC</span>
+    </div>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+    <div class="workbench">
+      <aside id="item-sidebar" class="case-sidebar">
+        <div class="sidebar-head">
+          <div><p class="section-kicker">预冻结候选队列</p><strong id="sidebar-progress">0 / 0</strong></div>
+          <button id="sidebar-close" class="icon-button mobile-tablet-only" type="button">×</button>
+        </div>
+        <div class="search-field">
+          <span>搜索盲化编号、查询或命中词</span>
+          <div class="case-search-controls">
+            <input id="item-search" maxlength="100" autocomplete="off" placeholder="输入关键词">
+            <button id="search-mode" class="quiet-button search-mode-button" type="button">连续 ↻</button>
+          </div>
+          <small id="search-status" class="search-status">全部 0 条</small>
+        </div>
+        <div id="item-filters" class="filter-tabs">
+          <button type="button" data-filter="all" class="active">全部</button>
+          <button type="button" data-filter="open">待确认</button>
+          <button type="button" data-filter="complete">已确认</button>
+          <button type="button" data-filter="reject">驳回</button>
+          <button type="button" data-filter="defer">暂缓</button>
+        </div>
+        <p id="item-empty" class="empty-state hidden">没有匹配项</p>
+        <nav id="item-list" class="case-list"></nav>
+      </aside>
+
+      <main class="source-pane">
+        <div class="case-toolbar">
+          <div><span id="item-position" class="badge">—</span><h2 id="item-id">正在读取审核项</h2></div>
+          <div class="case-nav">
+            <button id="previous-item" class="icon-button" type="button" title="上一条 [">←</button>
+            <button id="next-item" class="icon-button" type="button" title="下一条 ]">→</button>
+          </div>
+        </div>
+
+        <section class="audit-card query-card">
+          <div class="card-head">
+            <div><p class="section-kicker">盲化开发查询</p><strong>只根据当前输入判断，不推测 gold</strong></div>
+            <span id="audit-kind" class="badge">—</span>
+          </div>
+          <blockquote id="query-content" class="query-content">等待载入</blockquote>
+        </section>
+
+        <section class="audit-card">
+          <div class="card-head">
+            <div><p class="section-kicker">区分大小写精确 substring 命中</p><strong id="hit-status">等待载入</strong></div>
+          </div>
+          <div id="hit-list" class="hit-list"></div>
+          <div id="no-hit-card" class="no-hit-card hidden">
+            <strong>当前查询没有词典精确命中。</strong>
+            <p>请核验是否确实不存在大小写敏感 substring 命中；该项只进入 D-only 控制。</p>
+          </div>
+        </section>
+      </main>
+
+      <aside class="decision-pane">
+        <div class="decision-head">
+          <div><p class="section-kicker">当前审核决定</p><h2 id="decision-title">等待选择</h2></div>
+          <span id="decision-status" class="status-chip" data-state="draft">草稿</span>
+        </div>
+        <div class="decision-actions">
+          <button id="save-draft" class="secondary-button" type="button">保存草稿</button>
+          <button id="confirm-next" class="primary-button" type="button">确认并继续</button>
+        </div>
+        <div id="request-error" class="request-error hidden">
+          <strong id="request-error-message"></strong><pre id="request-error-details"></pre>
+        </div>
+
+        <div id="decision-editor" class="audit-editor">
+          <section class="editor-section">
+            <h3>处置 <small>快捷键 1 / 2 / 3</small></h3>
+            <div id="disposition-grid" class="choice-grid disposition-grid">
+              <button type="button" data-disposition="accept"><kbd>1</kbd><strong>接受</strong><small>全部适用维度通过</small></button>
+              <button type="button" data-disposition="reject"><kbd>2</kbd><strong>驳回</strong><small>至少一项不通过</small></button>
+              <button type="button" data-disposition="defer"><kbd>3</kbd><strong>暂缓</strong><small>冻结前必须清零</small></button>
+            </div>
+            <small id="disposition-error" class="field-error hidden"></small>
+          </section>
+
+          <section id="lex-dimensions" class="editor-section">
+            <h3>词典命中审核维度</h3>
+            <div class="dimension-row" data-field="relevance"><span><strong>相关性</strong><small>命中词条是否与当前用法相关</small></span><div class="binary-choices"><button type="button" data-value="pass" aria-keyshortcuts="Q"><kbd>Q</kbd><span>通过</span></button><button type="button" data-value="fail" aria-keyshortcuts="A"><kbd>A</kbd><span>不通过</span></button></div><small class="field-error hidden"></small></div>
+            <div class="dimension-row" data-field="boundary"><span><strong>span 边界</strong><small>substring 边界是否构成合理词条</small></span><div class="binary-choices"><button type="button" data-value="pass" aria-keyshortcuts="W"><kbd>W</kbd><span>通过</span></button><button type="button" data-value="fail" aria-keyshortcuts="S"><kbd>S</kbd><span>不通过</span></button></div><small class="field-error hidden"></small></div>
+            <div class="dimension-row" data-field="definition_quality"><span><strong>定义质量</strong><small>词典定义自身是否足以供模型理解</small></span><div class="trinary-choices"><button type="button" data-value="good" aria-keyshortcuts="E"><kbd>E</kbd><span>良好</span></button><button type="button" data-value="usable" aria-keyshortcuts="D"><kbd>D</kbd><span>可用</span></button><button type="button" data-value="poor" aria-keyshortcuts="C"><kbd>C</kbd><span>较差</span></button></div><small class="field-error hidden"></small></div>
+            <div class="dimension-row" data-field="sense_fit"><span><strong>当前 sense</strong><small>定义是否匹配查询中的具体词义</small></span><div class="binary-choices"><button type="button" data-value="pass" aria-keyshortcuts="R"><kbd>R</kbd><span>通过</span></button><button type="button" data-value="fail" aria-keyshortcuts="F"><kbd>F</kbd><span>不通过</span></button></div><small class="field-error hidden"></small></div>
+            <div class="dimension-row swap-dimension" data-field="swap_incompatibility"><span><strong>Swap 干预有效性</strong><small>donor 定义是否自然，且与原词义及当前用法明确不相容</small></span><div class="binary-choices"><button type="button" data-value="pass" aria-keyshortcuts="T"><kbd>T</kbd><span>有效：不相容</span></button><button type="button" data-value="fail" aria-keyshortcuts="G"><kbd>G</kbd><span>无效：相容或不自然</span></button></div><small class="field-error hidden"></small></div>
+          </section>
+
+          <section id="no-hit-dimension" class="editor-section hidden">
+            <h3>No-hit 核验</h3>
+            <div class="dimension-row" data-field="no_hit_verified"><span><strong>无精确命中</strong><small>确认词典中不存在大小写敏感 substring 命中</small></span><div class="binary-choices"><button type="button" data-value="pass" aria-keyshortcuts="Q"><kbd>Q</kbd><span>确认无命中</span></button><button type="button" data-value="fail" aria-keyshortcuts="A"><kbd>A</kbd><span>发现遗漏</span></button></div><small class="field-error hidden"></small></div>
+          </section>
+
+          <section class="editor-section">
+            <h3>语用标签 <small>可多选；没有则留空</small></h3>
+            <div id="tag-grid" class="tag-grid"></div>
+          </section>
+
+          <section class="editor-section">
+            <label class="field"><span>备注</span><textarea id="notes" maxlength="2000" placeholder="驳回时必填；可记录边界、sense 或 swap 问题"></textarea></label>
+            <small id="notes-error" class="field-error hidden"></small>
+          </section>
+
+          <div id="locked-card" class="locked-card hidden">
+            <strong>该决定已确认并锁定。</strong><p>更正必须重新打开并记录 amendment reason。</p>
+            <button id="reopen" class="danger-button" type="button">重新打开</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="guideline-dialog" class="app-dialog"><form method="dialog"><h2>审核说明</h2><p>接受要求所有适用维度通过；定义“可用”也允许接受。驳回必须至少有一个不通过或“较差”并填写备注。页面不显示 gold、demo、条件和模型输出。</p><p>Swap“有效”明确表示：donor 定义本身自然，并且替换后与原命中词条及当前 sense 明显不相容。“无效”表示 donor 与原义相容，或 donor 本身不自然、无法形成干净干预。</p><section class="pragmatic-guide"><h3>语用标签怎么选</h3><p>标签描述的是<strong>查询文本怎样使用相关表达</strong>，不是词典定义或 donor，也不直接决定接受/驳回。标签可多选；没有明确文本证据时全部留空。</p><dl><div><dt><kbd>⇧1</kbd> 引用/转述</dt><dd><strong>适用：</strong>明确复述或引用他人的话，作者未必认同。<strong>不适用：</strong>引号只用于强调、命名或讽刺，没有转述来源。</dd></div><div><dt><kbd>⇧2</kbd> 否定</dt><dd><strong>适用：</strong>用“不是、并非、不能一概而论”等明确否定某个命题或概括。<strong>不适用：</strong>词语中仅出现“反/不”，或只是表达“不喜欢、反对某类对象”。</dd></div><div><dt><kbd>⇧3</kbd> 反仇恨/反歧视</dt><dd><strong>适用：</strong>明确批评、制止或反驳仇恨/歧视，或直接为受针对群体辩护。<strong>不适用：</strong>仅仅“反对某群体/标签”，没有反歧视立场。</dd></div><div><dt><kbd>⇧4</kbd> 自称/重领</dt><dd><strong>适用：</strong>说话者表明群体成员身份，并自称或群体内部重用原本带贬义的称呼。<strong>不适用：</strong>仅出现“我/我们”，或从文本无法确认成员身份。</dd></div><div><dt><kbd>⇧5</kbd> 反讽</dt><dd><strong>适用：</strong>字面意思与真实立场相反，且有明确反讽线索。<strong>不适用：</strong>只有感叹号、夸张语气或直接立场，无法证明反向含义。</dd></div><div><dt><kbd>⇧6</kbd> 讨论/解释</dt><dd><strong>适用：</strong>新闻、研究、释义或语言讨论把词语/现象作为分析对象。<strong>不适用：</strong>只是发表与该主题有关的直接评价或攻击。</dd></div></dl><aside><strong>全部不适用时怎么办？</strong><p>直接立场、直接评价或直接攻击通常不需要语用标签。例如“反女拳就要从你这种男人开始！”中的“反”是直接反对，不是命题否定，也不等于反仇恨；该句六项均留空。不要为了“必须选一个”而添加标签，拿不准且没有明确证据时也应留空。</p></aside></section><button class="primary-button" value="close">知道了</button></form></dialog>
+    <dialog id="shortcut-dialog" class="app-dialog"><form method="dialog"><h2>快捷键</h2><dl class="shortcut-list"><div><dt>1 / 2 / 3</dt><dd>接受 / 驳回 / 暂缓</dd></div><div><dt>Q A</dt><dd>相关性通过 / 不通过；No-hit 页面复用为确认 / 发现遗漏</dd></div><div><dt>W S</dt><dd>span 边界通过 / 不通过</dd></div><div><dt>E D C</dt><dd>定义质量良好 / 可用 / 较差</dd></div><div><dt>R F</dt><dd>当前 sense 通过 / 不通过</dd></div><div><dt>T G</dt><dd>Swap 有效 / 无效</dd></div><div><dt>Shift+1…6</dt><dd>切换六个语用标签</dd></div><div><dt>[ / ]</dt><dd>上一条 / 下一条</dd></div><div><dt>Ctrl/⌘+S</dt><dd>保存草稿</dd></div><div><dt>Ctrl/⌘+Enter</dt><dd>确认并继续</dd></div></dl><button class="primary-button" value="close">关闭</button></form></dialog>
+
+    <script src="/review-core.js"></script>
+    <script src="/core.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

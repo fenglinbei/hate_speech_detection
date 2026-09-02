@@ -1,0 +1,32 @@
+[Unit]
+Description=Exploratory Qwen3 lexicon/demo input audit service
+After=network.target
+
+[Service]
+Type=simple
+User=hsd-review
+Group=hsd-review
+WorkingDirectory=/opt/hsd-qwen3-ld-pilot-review/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 scripts/stage1/exploratory_qwen3_ld_v0.py --output-root /var/lib/hsd-qwen3-ld-pilot-review serve-audit --frame-file /opt/hsd-qwen3-ld-pilot-review/current/artifacts/candidate_frame.json --session-file /var/lib/hsd-qwen3-ld-pilot-review/input-quality-session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8768 --public-origin https://hsd.fenglin.pro
+Restart=on-failure
+RestartSec=3s
+UMask=0077
+StateDirectory=hsd-qwen3-ld-pilot-review
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/hsd-qwen3-ld-pilot-review
+
+[Install]
+WantedBy=multi-user.target

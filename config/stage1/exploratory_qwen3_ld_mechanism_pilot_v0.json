@@ -1,0 +1,135 @@
+{
+  "schema_version": "exploratory-qwen3-ld-mechanism-pilot/v0",
+  "experiment_id": "stage1-exploratory-qwen3-ld-v0",
+  "scope": {
+    "development_only": true,
+    "scientific_eligible": false,
+    "sealed_test_allowed": false,
+    "estimand": "within-fixed-enriched-dev-frame-context-sensitivity",
+    "claims_excluded": [
+      "population_generalization",
+      "trained-LexSRAG-mechanism",
+      "lexicon-quality-ranking",
+      "truncation-effect"
+    ]
+  },
+  "sources": {
+    "model": "models/base/Qwen3-8B",
+    "tokenizer": "models/base/Qwen3-8B",
+    "embedding_model": "models/base/bge-large-zh-v1.5",
+    "lexicon": "data/lexicon/annotated_lexicon.json",
+    "train": "exps/causal_context/stage1_p0/data/data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843/train.json",
+    "dev": "exps/causal_context/stage1_p0/data/data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843/dev.json",
+    "fit_partition": "exps/causal_context/stage1_p0/train_partitions/tpart-dc73828edb28d36b4da72268914bea6b0ee94c2fa0e2bd37762829e6523eeb19/partition.jsonl",
+    "expected_fit_count": 5165,
+    "expected_dev_count": 643,
+    "expected_lexicon_count": 829
+  },
+  "frame": {
+    "seed": 42,
+    "exact_top_k": 5,
+    "exact_policy": "case-sensitive-substring-first-occurrence-longer-stable-id/v0",
+    "duplicate_policy": "drop-exact-term-category-definition-triples-only/v0",
+    "strata": {
+      "nontransparent": 16,
+      "suspicious": 16,
+      "pragmatic": 16,
+      "multi_hit": 8,
+      "no_hit": 8
+    },
+    "reserve_multiplier": 2,
+    "preflight_strata": {
+      "nontransparent": 2,
+      "suspicious": 2,
+      "pragmatic": 2,
+      "multi_hit": 1,
+      "no_hit": 1
+    },
+    "audit": {
+      "reviewer_id": "liaozijie",
+      "ui": "tools/exploratory_qwen3_ld_review_ui",
+      "reuse_policy": "adapt-G3-workbench-operations-to-pilot-specific-input-audit/v1",
+      "defer_allowed_at_freeze": false,
+      "replacement_policy": "pre-frozen-same-stratum-reserve-only/v0"
+    }
+  },
+  "retrieval": {
+    "demo_top_k": 10,
+    "candidate_multiplier": 3,
+    "source_class_order": ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"],
+    "allocated_class_top_k": {
+      "non-hate": 4,
+      "Region": 1,
+      "Racism": 1,
+      "Sexism": 2,
+      "LGBTQ": 1,
+      "others": 1
+    },
+    "single_tuple_demos_only": true,
+    "similarity_threshold": 0.0
+  },
+  "interventions": {
+    "seed_namespace": "stage1-exploratory-qwen3-ld-v0/seed-42",
+    "category_order": ["Racism", "Region", "LGBTQ", "Sexism", "others"],
+    "category_swap": "different-category-closest-token-length-stable-id/v0",
+    "definition_swap": "different-term-and-category-absent-from-query-closest-token-length/v0",
+    "demo_cross_label_shuffle": "joint-group-hate-no-fixed-point-rotation/v0",
+    "placebo_tolerance": {"absolute_tokens": 8, "relative": 0.02}
+  },
+  "matrix": {
+    "lex_hit_conditions": [
+      "C0", "L-Full", "D-Full", "LD-Full", "PL", "PD",
+      "L-Definition", "L-Category", "L-CategorySwap", "L-DefinitionSwap",
+      "D-Input", "D-Schema", "D-CrossLabelShuffle",
+      "LD-CategorySwap", "LD-DefinitionSwap"
+    ],
+    "no_hit_conditions": ["C0", "D-Full", "PD", "D-Input", "D-Schema", "D-CrossLabelShuffle"],
+    "expected_generation_count": 888,
+    "margin_conditions": [
+      "C0", "L-Full", "L-Definition", "L-Category", "L-CategorySwap",
+      "L-DefinitionSwap", "D-Full", "D-CrossLabelShuffle", "LD-Full",
+      "LD-CategorySwap", "LD-DefinitionSwap"
+    ]
+  },
+  "runtime": {
+    "backend": "transformers-single-gpu",
+    "dtype": "bfloat16",
+    "device": "cuda:0",
+    "enable_thinking": false,
+    "do_sample": false,
+    "max_sequence_tokens": 8192,
+    "max_prompt_tokens": 7680,
+    "max_new_tokens": 512,
+    "batch_size": 4,
+    "max_attempts": 1,
+    "overflow_policy": "hard-fail-no-trimming",
+    "fallback": false,
+    "stop_new_gpu_batches_local_time": "09:20",
+    "release_gpu_local_time": "09:30"
+  },
+  "preflight": {
+    "infrastructure_failure_max": 0,
+    "core_conditions": ["C0", "L-Full", "D-Full", "LD-Full"],
+    "strict_json_rate_min": 0.9,
+    "determinism_replay_count": 4,
+    "retain_passed_outputs": true,
+    "effect_metrics_forbidden": true
+  },
+  "analysis": {
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 42,
+    "population_p_values": false,
+    "partial_grid_conclusion": false,
+    "interpretation_order": [
+      "real-vs-placebo", "L-Definition-vs-C0", "L-Category-and-CategorySwap",
+      "L-DefinitionSwap", "D-Full-vs-D-Input-D-Schema-D-CrossLabelShuffle",
+      "LD-vs-single-resources", "LD-swaps", "audit-strata"
+    ]
+  },
+  "successor": {
+    "thinking_run_registered": true,
+    "only_change": "enable_thinking=true",
+    "separate_run_id": true,
+    "post_result_sample_selection": false
+  }
+}
