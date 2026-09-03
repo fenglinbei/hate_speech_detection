@@ -1,6 +1,9 @@
 import sys
+import json
+import tempfile
 import types
 import unittest
+from pathlib import Path
 
 
 class _NoopLogger:
@@ -174,6 +177,49 @@ class Stage1RetrievalHitTest(unittest.TestCase):
         self.assertEqual(hits[0].method, "word_boundary")
         self.assertEqual(hits[0].provenance["match_terms"], ["badword", "bad-word"])
         self.assertEqual(hits[0].provenance["match_spans"], [[0, 7], [12, 20]])
+
+    def test_repaired_lexicon_routes_legacy_api_through_controlled_matcher(self):
+        from rag.controlled_lexicon_matcher import ControlledLexiconMatcher
+
+        terms = [
+            {
+                "lexicon_id": "lex-short",
+                "term": "批",
+                "category": "others",
+                "definition": "fixture",
+                "senses": [{"sense_id": "sense-short", "definition": "fixture"}],
+                "variants": [],
+                "match_policy": {
+                    "exclude_any": [
+                        {"rule_id": "ordinary", "target": "right", "pattern": "^(判|评)"}
+                    ]
+                },
+            }
+        ]
+        policy_sha = ControlledLexiconMatcher(
+            terms,
+            lexicon_sha256="a" * 64,
+        ).policy_sha256
+        payload = {
+            "matcher_policy_version": "annotated-lexicon-controlled-longest/v1",
+            "matcher_policy_sha256": policy_sha,
+            "terms": terms,
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "lexicon.json"
+            path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            retriever = self.LexiconRetriever.__new__(self.LexiconRetriever)
+            retriever.lexicon_schema = "cold"
+            retriever.include_variants = False
+            retriever.load_datas(str(path))
+            hits = retriever.including_retrieve_hits("批判和一批", top_k=-1)
+            trace = retriever.including_match_trace("批判和一批")
+
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0].method, "controlled_longest")
+        self.assertEqual(hits[0].provenance["match_spans"], [[4, 5]])
+        self.assertEqual(hits[0].provenance["matcher_policy_sha256"], policy_sha)
+        self.assertEqual(trace["selected_spans"][0]["span"], [4, 5])
 
 
 if __name__ == "__main__":

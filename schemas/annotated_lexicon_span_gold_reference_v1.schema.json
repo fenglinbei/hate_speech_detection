@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-span-gold-reference/v1",
+  "type": "object",
+  "required": ["schema_version", "reference_id", "frame_id", "frame_sha256", "review_session_revision", "reviewer_id", "source_lexicon_sha256", "item_count", "rows_sha256", "development_only", "rows"],
+  "properties": {
+    "schema_version": {"const": "annotated-lexicon-span-gold-reference/v1"},
+    "reference_id": {"type": "string", "pattern": "^span-gold-ref-[0-9a-f]{64}$"},
+    "frame_id": {"type": "string"},
+    "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "review_session_revision": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer_id": {"type": "string"},
+    "source_lexicon_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "item_count": {"const": 39},
+    "rows_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "development_only": {"const": true},
+    "rows": {"type": "array", "minItems": 39, "maxItems": 39, "items": {"type": "object"}}
+  },
+  "additionalProperties": false
+}

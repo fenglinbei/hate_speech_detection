@@ -25,6 +25,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 from urllib.parse import urlsplit
 
+from rag.controlled_lexicon_matcher import ControlledLexiconMatcher
+
 
 SCHEMA_VERSION = "exploratory-qwen3-ld-mechanism-pilot/v0"
 FRAME_SCHEMA_VERSION = "exploratory-qwen3-ld-candidate-frame/v0"
@@ -181,17 +183,40 @@ def load_lexicon(config: Mapping[str, Any]) -> list[dict[str, Any]]:
         seen.add(key)
         result.append(
             {
-                "lexicon_id": f"lex-{ordinal:04d}",
+                "lexicon_id": str(raw.get("lexicon_id") or f"lex-{ordinal:04d}"),
                 "stable_ordinal": ordinal,
                 "term": term,
                 "category": category,
                 "definition": definition,
+                **{
+                    key: copy.deepcopy(raw[key])
+                    for key in ("senses", "variants", "match_policy")
+                    if key in raw
+                },
             }
         )
     return result
 
 
-def exact_hits(content: str, lexicon: Sequence[Mapping[str, Any]], top_k: int = 5) -> list[dict[str, Any]]:
+def exact_hits(
+    content: str,
+    lexicon: Sequence[Mapping[str, Any]],
+    top_k: int = 5,
+    *,
+    lexicon_sha256: str | None = None,
+) -> list[dict[str, Any]]:
+    controlled = any(
+        any(key in entry for key in ("senses", "variants", "match_policy"))
+        for entry in lexicon
+    )
+    if controlled:
+        if top_k >= 0:
+            raise PilotError("controlled repaired lexicon forbids top-k truncation")
+        matcher = ControlledLexiconMatcher(
+            lexicon,
+            lexicon_sha256=lexicon_sha256 or canonical_sha256(list(lexicon)),
+        )
+        return [dict(row) for row in matcher.match(content)["selected_hits"]]
     hits: list[dict[str, Any]] = []
     for entry in lexicon:
         term = str(entry["term"])
@@ -364,12 +389,18 @@ def build_candidate_frame(
     if not isinstance(dev, list) or len(dev) != int(config["sources"]["expected_dev_count"]):
         raise PilotError("dev count differs from frozen config")
     top_k = int(config["frame"]["exact_top_k"])
+    lexicon_source_sha256 = file_sha256(source_path(config, "lexicon"))
     seed = int(config["frame"]["seed"])
     namespace = str(config["interventions"]["seed_namespace"])
     by_stratum: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in dev:
         content = str(row["content"])
-        hits = exact_hits(content, lexicon, top_k=top_k)
+        hits = exact_hits(
+            content,
+            lexicon,
+            top_k=top_k,
+            lexicon_sha256=lexicon_source_sha256,
+        )
         enriched_hits = []
         for hit in hits:
             enriched_hits.append(

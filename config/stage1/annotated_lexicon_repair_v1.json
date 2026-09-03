@@ -1,0 +1,95 @@
+{
+  "schema_version": "annotated-lexicon-repair-plan/v1",
+  "repair_id": "annotated-lexicon-repair-v1",
+  "scope": {
+    "development_only": true,
+    "sealed_test_allowed": false,
+    "source_lexicon": "data/lexicon/annotated_lexicon.json",
+    "source_lexicon_sha256": "a4a2d1e7826419a365962ded70806a610345d21a998454adeda8b1f999738565",
+    "source_lexicon_immutable": true,
+    "allowed_changes": [
+      "legacy_and_exploratory_matcher",
+      "existing_entry_structure_and_content",
+      "small_reviewed_term_additions"
+    ],
+    "forbidden_changes": [
+      "model",
+      "prompt",
+      "formal_category_free_stage1",
+      "open_ended_lexicon_expansion"
+    ]
+  },
+  "evidence_boundary": {
+    "source_candidate_frame": "exps/causal_context/stage1_exploratory_qwen3_ld_v0/candidate_frame.json",
+    "source_audit_session": "exps/causal_context/stage1_exploratory_qwen3_ld_v0/audit/input_quality_session.json",
+    "reject_count": 34,
+    "duplicate_term_group_count": 11,
+    "known_omission_surfaces": ["畒勾", "蝲蝲蛄", "腐女", "瞎bb", "丰县", "盖盖", "褐兰州"],
+    "new_term_minimum": "one-audited-sentence-plus-reviewer-judgment/v1"
+  },
+  "matcher": {
+    "implementation": "src/rag/controlled_lexicon_matcher.py",
+    "policy_version": "annotated-lexicon-controlled-longest/v1",
+    "candidate_sources": ["term", "explicit_variant", "controlled_normalization"],
+    "normalization": ["unicode_nfc", "fullwidth_ascii_fold", "ascii_casefold"],
+    "normalization_forbidden": ["simplified_traditional", "phonetic", "homoglyph", "edit_distance", "fuzzy"],
+    "context_regex_role": "candidate-eligibility-only",
+    "context_window_codepoints_per_side": 16,
+    "rule_semantics": "exclude-any-first-then-require-any/v1",
+    "selection": "filter-then-global-longest-nonoverlap/v1",
+    "same_span_cross_entry": "fail-closed",
+    "top_k": null,
+    "runtime": {
+      "dependency": "regex==2026.4.4",
+      "max_pattern_characters": 256,
+      "max_rules_per_entry": 8,
+      "single_match_timeout_ms": 5,
+      "query_regex_budget_ms": 100
+    }
+  },
+  "review": {
+    "reviewer_id": "liaozijie",
+    "passes_per_stage": 1,
+    "stages": ["span_gold", "repair_operation", "blind_guardrail"],
+    "sessions_independent": true,
+    "defer_allowed_before_freeze": true,
+    "defer_allowed_at_freeze": false,
+    "public_origin": "https://hsd.fenglin.pro",
+    "minimum_upload": true,
+    "restore_formal_g3_after_completion": true
+  },
+  "artifacts": {
+    "output_root": "exps/causal_context/annotated_lexicon_repair_v1",
+    "materialized_lexicon": "data/lexicon/annotated_lexicon_repaired_v1.json",
+    "materialized_lexicon_editable": false,
+    "runtime_resource_count": 1
+  },
+  "acceptance": {
+    "repair_gold_exact": true,
+    "accepted_controls_exact": true,
+    "blind_confirmed_new_error_max": 0,
+    "unexplained_bridge_change_max": 0,
+    "model_metric_improvement_required": false
+  },
+  "successor_experiment": {
+    "experiment_id": "stage1-exploratory-qwen3-ld-repair-paired-v1",
+    "estimand": "paired-original-vs-repaired-lexicon-context-sensitivity",
+    "panels": ["repair_sensitive", "v0_bridge"],
+    "blind_guardrail_gpu_default": false,
+    "conditions": [
+      "C0",
+      "D-Full",
+      "L-OriginalFull",
+      "L-RepairedFull",
+      "LD-OriginalFull",
+      "LD-RepairedFull"
+    ],
+    "fixed_demos_within_query": true,
+    "new_output_root": true,
+    "reuse_v0_generation_or_margin_ledger": false,
+    "teacher_forcing_margin": true,
+    "thinking": false,
+    "max_sequence_tokens": 8192,
+    "overflow_policy": "explicit-exclusion-no-trimming"
+  }
+}

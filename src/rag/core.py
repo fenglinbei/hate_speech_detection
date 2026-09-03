@@ -19,6 +19,10 @@ from collections import Counter
 
 from prompt import *
 from rag.reranker import Reranker
+from rag.controlled_lexicon_matcher import (
+    MATCHER_POLICY_VERSION,
+    ControlledLexiconMatcher,
+)
 from rag.types import RetrievalHit, content_sha256, sha256_text, stable_demo_id, stable_lexicon_id
 from tools.convert import output2triple, parsed_quad_to_raw_quad, parsed_quad_to_tar_and_arg, parsed_quad_to_trip
 from utils.quadruple import QuadrupleValidationError, adapt_source_quad, serialize_quadruples
@@ -1067,12 +1071,21 @@ class LexiconRetriever:
             self.create_embeddings()
 
     def _cache_common(self) -> dict[str, Any]:
-        return {
+        identity = {
             "model": self.model_name,
             "query_instruction": self.query_instruction,
             "corpus_instruction": self.corpus_instruction,
             "lexicon_schema": self.lexicon_schema,
         }
+        if getattr(self, "controlled_matcher", None) is not None:
+            identity.update(
+                {
+                    "lexicon_build_id": getattr(self, "lexicon_build_id", None),
+                    "lexicon_sha256": self.lexicon_sha256,
+                    "matcher_policy_sha256": self.matcher_policy_sha256,
+                }
+            )
+        return identity
 
     def _encode_texts(
             self,
@@ -1135,6 +1148,10 @@ class LexiconRetriever:
         lexicon_payload = load_json(data_path)
         datas = lexicon_payload["terms"]
         self.lexicon_build_id = lexicon_payload.get("lexicon_build_id")
+        with open(data_path, "rb") as handle:
+            self.lexicon_sha256 = hashlib.sha256(handle.read()).hexdigest()
+        self.controlled_matcher = None
+        self.matcher_policy_sha256 = None
         self.texts = []
         self.word2item = {}
         self.entries = []
@@ -1162,11 +1179,21 @@ class LexiconRetriever:
             self.entries.append(entry)
             self.word2item[data["term"]] = prompt
             self.word2index[data["term"]] = entry_index
-            if self.lexicon_schema == "hatebase" and self.include_variants:
+            if (
+                (self.lexicon_schema == "hatebase" and self.include_variants)
+                or lexicon_payload.get("matcher_policy_version") == MATCHER_POLICY_VERSION
+            ):
                 for variant in data.get("variants", []) or []:
                     if variant and variant not in self.word2item:
                         self.word2item[str(variant)] = prompt
                         self.word2index[str(variant)] = entry_index
+        if lexicon_payload.get("matcher_policy_version") == MATCHER_POLICY_VERSION:
+            self.controlled_matcher = ControlledLexiconMatcher(
+                self.entries,
+                lexicon_sha256=self.lexicon_sha256,
+                policy_sha256=lexicon_payload.get("matcher_policy_sha256"),
+            )
+            self.matcher_policy_sha256 = self.controlled_matcher.policy_sha256
 
     def _make_lexicon_hit(
             self,
@@ -1286,6 +1313,30 @@ class LexiconRetriever:
             use_cache: bool = True,
             ) -> list[RetrievalHit]:
         del use_cache  # exact trace output is cheap and contains no legacy cache payload
+        if getattr(self, "controlled_matcher", None) is not None:
+            if top_k >= 0:
+                raise ValueError("controlled repaired lexicon forbids top-k truncation")
+            trace = self.controlled_matcher.match(query)
+            by_id = {
+                str(entry["lexicon_id"]): index
+                for index, entry in enumerate(self.entries)
+            }
+            return [
+                self._make_lexicon_hit(
+                    by_id[str(row["lexicon_id"])],
+                    score=None,
+                    rank=rank,
+                    method="controlled_longest",
+                    extra_provenance={
+                        **trace["cache_identity"],
+                        "match_terms": [str(row["term"])],
+                        "matched_surfaces": list(row["matched_surfaces"]),
+                        "match_spans": [list(span) for span in row["match_spans"]],
+                        "candidate_ids": list(row["candidate_ids"]),
+                    },
+                )
+                for rank, row in enumerate(trace["selected_hits"])
+            ]
         query_text = query if self.case_sensitive else query.lower()
         matches: dict[int, dict[str, Any]] = {}
         for word, entry_index in self.word2index.items():
@@ -1335,6 +1386,13 @@ class LexiconRetriever:
             self.including_retrieve_hits(query, top_k=top_k, use_cache=use_cache)
             for query in queries
         ]
+
+    def including_match_trace(self, query: str) -> dict[str, Any]:
+        """Return the full reviewed matcher trace for a repaired lexicon."""
+
+        if getattr(self, "controlled_matcher", None) is None:
+            raise ValueError("full candidate traces require a controlled repaired lexicon")
+        return self.controlled_matcher.match(query)
 
     def similarity_retrieve(
             self,
@@ -1606,7 +1664,20 @@ class LexiconRetriever:
             deduplicate: bool = True,
             use_cache: bool = True
             ) -> list[str]:
-        
+
+        if getattr(self, "controlled_matcher", None) is not None:
+            if top_k >= 0:
+                raise ValueError("controlled repaired lexicon forbids top-k truncation")
+            values = [
+                hit.content
+                for hit in self.including_retrieve_hits(
+                    query,
+                    top_k=-1,
+                    use_cache=False,
+                )
+            ]
+            return list(dict.fromkeys(values)) if deduplicate else values
+
         params = {
             "method": "including",
             "top_k": top_k,

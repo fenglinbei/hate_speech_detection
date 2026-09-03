@@ -1,0 +1,32 @@
+[Unit]
+Description=Annotated lexicon repair review service
+After=network.target
+
+[Service]
+Type=simple
+User=hsd-review
+Group=hsd-review
+WorkingDirectory=/opt/hsd-annotated-lexicon-repair-review/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 scripts/stage1/annotated_lexicon_repair.py serve-span-gold --frame /opt/hsd-annotated-lexicon-repair-review/current/artifacts/span_gold_frame.json --session /var/lib/hsd-annotated-lexicon-repair-review/span-gold-session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8769 --public-origin https://hsd.fenglin.pro
+Restart=on-failure
+RestartSec=3s
+UMask=0077
+StateDirectory=hsd-annotated-lexicon-repair-review
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/hsd-annotated-lexicon-repair-review
+
+[Install]
+WantedBy=multi-user.target

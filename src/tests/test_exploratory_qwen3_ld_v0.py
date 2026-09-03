@@ -139,6 +139,41 @@ class ExploratoryQwen3LDPilotTests(unittest.TestCase):
         self.assertEqual([row["lexicon_id"] for row in rows], ["lex-1", "lex-2", "lex-0"])
         self.assertEqual(rows[0]["match_spans"], [[0, 2]])
 
+    def test_exact_hits_uses_controlled_matcher_for_repaired_rows(self) -> None:
+        lexicon = [
+            {
+                "lexicon_id": "lex-short",
+                "stable_ordinal": 0,
+                "term": "基",
+                "category": "LGBTQ",
+                "definition": "fixture",
+                "senses": [{"sense_id": "sense-short", "definition": "fixture"}],
+                "variants": [],
+                "match_policy": {
+                    "exclude_any": [
+                        {"rule_id": "ordinary", "target": "right", "pattern": "^本"}
+                    ]
+                },
+            },
+            {
+                "lexicon_id": "lex-long",
+                "stable_ordinal": 1,
+                "term": "基本盘",
+                "category": "others",
+                "definition": "fixture",
+                "senses": [{"sense_id": "sense-long", "definition": "fixture"}],
+                "variants": [],
+                "match_policy": {},
+            },
+        ]
+
+        rows = exact_hits("基本尊重和基本盘", lexicon, top_k=-1)
+
+        self.assertEqual([(row["term"], row["match_spans"]) for row in rows], [("基本盘", [[5, 8]])])
+
+        with self.assertRaisesRegex(Exception, "top-k"):
+            exact_hits("基本盘", lexicon, top_k=5)
+
     def test_definition_donor_is_different_and_absent_from_query(self) -> None:
         hit = {"lexicon_id": "lex-0", "stable_ordinal": 0, "term": "甲", "category": "Racism", "definition": "短定义"}
         lexicon = [

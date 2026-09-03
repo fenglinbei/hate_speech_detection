@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-span-gold-frame/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest", "items"],
+  "properties": {
+    "manifest": {
+      "type": "object",
+      "required": ["schema_version", "frame_id", "development_only", "source_candidate_frame_sha256", "source_audit_session_sha256", "source_audit_revision", "source_lexicon_sha256", "affected_terms", "cohort_counts", "item_count", "items_sha256", "single_pass_review"],
+      "properties": {
+        "schema_version": {"const": "annotated-lexicon-span-gold-frame/v1"},
+        "frame_id": {"type": "string", "pattern": "^span-gold-frame-[0-9a-f]{64}$"},
+        "development_only": {"const": true},
+        "source_candidate_frame_sha256": {"$ref": "#/$defs/sha256"},
+        "source_audit_session_sha256": {"$ref": "#/$defs/sha256"},
+        "source_audit_revision": {"$ref": "#/$defs/sha256"},
+        "source_lexicon_sha256": {"$ref": "#/$defs/sha256"},
+        "affected_terms": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "cohort_counts": {"type": "object"},
+        "item_count": {"const": 39},
+        "items_sha256": {"$ref": "#/$defs/sha256"},
+        "single_pass_review": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "minItems": 39,
+      "maxItems": 39,
+      "items": {"$ref": "#/$defs/item"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "span": {
+      "type": "array",
+      "prefixItems": [{"type": "integer", "minimum": 0}, {"type": "integer", "minimum": 1}],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "surface", "span", "source_types", "source_hits"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^span-[0-9a-f]{20}$"},
+        "surface": {"type": "string", "minLength": 1},
+        "span": {"$ref": "#/$defs/span"},
+        "source_types": {"type": "array", "items": {"enum": ["legacy_hit", "known_omission"]}, "uniqueItems": true},
+        "source_hits": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "source_item_id", "cohort", "query_content", "content_sha256", "prior_audit", "candidates"],
+      "properties": {
+        "item_id": {"type": "string", "pattern": "^gold-[0-9a-f]{20}$"},
+        "source_item_id": {"type": "string", "minLength": 1},
+        "cohort": {"enum": ["repair_target", "accepted_control", "approved_adjudication"]},
+        "query_content": {"type": "string", "minLength": 1},
+        "content_sha256": {"$ref": "#/$defs/sha256"},
+        "prior_audit": {"type": "object"},
+        "candidates": {"type": "array", "items": {"$ref": "#/$defs/candidate"}}
+      }
+    }
+  }
+}

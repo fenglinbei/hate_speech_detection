@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-span-gold-session/v1",
+  "type": "object",
+  "required": ["schema_version", "frame_id", "frame_sha256", "reviewer_id", "single_pass_review", "decisions", "amendments", "finalized_reference_id", "created_at", "updated_at", "revision"],
+  "properties": {
+    "schema_version": {"const": "annotated-lexicon-span-gold-session/v1"},
+    "frame_id": {"type": "string"},
+    "frame_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewer_id": {"type": "string", "minLength": 1, "maxLength": 100},
+    "single_pass_review": {"const": true},
+    "decisions": {"type": "object"},
+    "amendments": {"type": "array"},
+    "finalized_reference_id": {"type": ["string", "null"]},
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"},
+    "revision": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
