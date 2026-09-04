@@ -1,0 +1,270 @@
+{
+  "schema_version": "annotated-lexicon-span-gold-adjudication-batch/v1",
+  "batch_id": "user-followup-20260904",
+  "development_only": true,
+  "authority": "用户本任务中明确接受前三项建议，确认它的协同贬损用法，要求检索丰县事件关联并撤回绝对化中性/义项判断。",
+  "executed_by": "assistant-on-user-instruction",
+  "frame_id": "span-gold-frame-58982b9b0867881940e3ba344bd94e552cc583f0c548107c39d9a1fbf1f49291",
+  "frame_sha256": "76d017a74d398dcd1aecee998f76749c389ee03b657a9c2ddcd612bef78afef6",
+  "source_lexicon_sha256": "a4a2d1e7826419a365962ded70806a610345d21a998454adeda8b1f999738565",
+  "expected_pre_revision": "91436f6a714ebff696b3d4bd3c2d13376eff7522eb48159ad7ed00ef9ec41a91",
+  "expected_pre_session_sha256": "dcfa8225cd6560005e3dbb11105ffd51abd2a4c42cf0c28dd190ce530d52fd54",
+  "constraints": {
+    "affected_item_count": 6,
+    "new_full_review_pass": false,
+    "freeze_session": false,
+    "change_frame": false,
+    "change_runtime_lexicon": false,
+    "change_public_stage": false,
+    "all_other_decisions_unchanged": true
+  },
+  "event_research": {
+    "term": "丰县",
+    "query_source_item_id": "blind-3dae416bb0e6ded1",
+    "event_hypothesis": "2022年丰县生育八孩女子事件",
+    "event_existence": "supported-by-dated-sources",
+    "query_event_binding": "plausible-not-established",
+    "missing_evidence": [
+      "query publication timestamp",
+      "original thread or parent context"
+    ],
+    "sources": [
+      {
+        "source_id": "fx-20220223",
+        "url": "https://www.zgjssw.gov.cn/yaowen/202202/t20220223_7431590.shtml",
+        "title": "江苏省委省政府调查组发布“丰县生育八孩女子”事件调查处理情况通报",
+        "published_date": "2022-02-23",
+        "accessed_date": "2026-09-04",
+        "supports": "通报记载2022-01-27相关视频流传，以及拐卖、虐待和相关问责调查。不能证明当前语料在指该事件。"
+      },
+      {
+        "source_id": "fx-20230407",
+        "url": "https://www.news.cn/2023-04/07/c_1129501525.htm",
+        "title": "“丰县生育八孩女子”事件相关案件一审宣判：董志民获刑九年",
+        "published_date": "2023-04-07",
+        "accessed_date": "2026-09-04",
+        "supports": "新华社报道相关案件一审宣判，涉及虐待、非法拘禁及拐卖妇女。提供后续事实校验，不作为未知发布时间语料的当时背景。"
+      },
+      {
+        "source_id": "fx-20170616-alternative",
+        "url": "https://m.news.cctv.com/2017/06/16/ARTIyCmJ6dluLTBVVk61ZdOV170616.shtml",
+        "title": "央视快讯：江苏丰县爆炸案件告破 嫌疑人为22岁男子当场死亡",
+        "published_date": "2017-06-16",
+        "accessed_date": "2026-09-04",
+        "supports": "丰县也关联2017-06-15爆炸事件；仅用于反对地名与单一事件的无条件等同，不认定是当前句子所指。"
+      }
+    ],
+    "next_stage_questions": [
+      "事件背景是否足以形成受控解释义项",
+      "三处地名分别属于事件关联还是普通地域定位",
+      "如何保留普通地名义项并避免单凭丰县触发事件断言"
+    ],
+    "forbidden_inferences": [
+      "丰县在所有语境都等于该事件",
+      "当地居民具有犯罪或道德属性",
+      "词典解释对象等于句子仇恨标签",
+      "词面大小写或相似度能确定义项"
+    ],
+    "runtime_status": "review-evidence-only-not-a-runtime-resource"
+  },
+  "operations": [
+    {
+      "item_id": "gold-da7fa9250a979b4d8483",
+      "source_item_id": "blind-3c83637cc05adbeb",
+      "query_content": "看网上广州好像老黑比较多🤔 我在南京除了英语外教就没见过黑人😅",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：撤回老黑一律中性的判断；保留解释对象并区分语境。",
+      "expected_decision": {
+        "additional_spans": [
+          {
+            "end": 9,
+            "reason": "\"老黑\"是一种对于黑人群里的中性用法，但是容易被过度纠偏解释为仇恨，需要解释",
+            "start": 7,
+            "surface": "老黑"
+          }
+        ],
+        "candidate_actions": {
+          "span-6af85a5c27930779fbc5": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [
+          {
+            "end": 9,
+            "reason": "本句中的族群指称具有解释价值；中性指称、戏谑或贬损等用法须结合上下文判断，不能由词面一律判定为中性或仇恨。",
+            "start": 7,
+            "surface": "老黑"
+          }
+        ],
+        "candidate_actions": {
+          "span-6af85a5c27930779fbc5": "drop"
+        },
+        "notes": "用户复议：撤回此前绝对化中性判断。保留老黑 span，下一阶段审核定义及适用语境，不预设句子标签。"
+      }
+    },
+    {
+      "item_id": "gold-fb59d29068c90040f6c6",
+      "source_item_id": "blind-3e04e1ef6428e392",
+      "query_content": "另外见义勇为是非常高尚的品格，你不能拿这个当作普遍的基本的道德标准，更不能拿这个去苛责别人，尤其是处于yp之下的受害者本人，这太离谱了",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：撤回yp确定为约炮的判断；缩写义项交下一阶段核实。",
+      "expected_decision": {
+        "additional_spans": [
+          {
+            "end": 53,
+            "reason": "yp为“约炮”的首字母，缺乏解释",
+            "start": 51,
+            "surface": "yp"
+          }
+        ],
+        "candidate_actions": {
+          "span-19a8c46db0cc1c00911e": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [
+          {
+            "end": 53,
+            "reason": "不透明缩写需要解释；当前句子不足以确定展开。现有YP的约炮义项仅为候选，不能直接继承，下一阶段需核实当前义项。",
+            "start": 51,
+            "surface": "yp"
+          }
+        ],
+        "candidate_actions": {
+          "span-19a8c46db0cc1c00911e": "drop"
+        },
+        "notes": "用户复议：保留yp解释需求，撤回确定为约炮的判断。ASCII大小写规范化只生成候选，不能完成义项判定；不自行补成另一确定含义。"
+      }
+    },
+    {
+      "item_id": "gold-5e8fa56976f0b62c736a",
+      "source_item_id": "blind-6e1501bdd6936fda",
+      "query_content": "能最大程度杜绝当地正府的腐败，也能最大限度避免大规模冲突，还能把不安定因素局限在有限的范围内。一举多得，多方盈利的事情。至于“反对种族歧视”。。还是让它去乐色堆待着吧",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：将乐色堆收窄为乐色；堆为普通组合成分。",
+      "expected_decision": {
+        "additional_spans": [
+          {
+            "end": 80,
+            "reason": "缺少解释",
+            "start": 77,
+            "surface": "乐色堆"
+          }
+        ],
+        "candidate_actions": {
+          "span-243d9d2502df312cbef0": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [
+          {
+            "start": 77,
+            "end": 79,
+            "surface": "乐色",
+            "reason": "非透明表达乐色具有解释价值；堆为普通组合成分，不随意扩大词条边界。参考现有黑乐色等词条中的乐色释义，下一阶段独立核实用途。"
+          }
+        ],
+        "candidate_actions": {
+          "span-243d9d2502df312cbef0": "drop"
+        },
+        "notes": "用户复议：乐色堆改为乐色[77,79)，不修改原文；此处它仍指前文主张，保持删除。"
+      }
+    },
+    {
+      "item_id": "gold-570f9b27ef0cfedd9523",
+      "source_item_id": "blind-c7c897ececb87712",
+      "query_content": "南京脏话是真脏，口音还尖锐沙哑，呆比呆比的脏话，掉的一批😂",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：补齐两处呆比，保留掉的一批原文供义项审核。",
+      "expected_decision": {
+        "additional_spans": [
+          {
+            "end": 28,
+            "reason": "缺少解释",
+            "start": 24,
+            "surface": "掉的一批"
+          }
+        ],
+        "candidate_actions": {
+          "span-2c6b2c3fd9863b6ccf4a": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "surface": "呆比",
+            "reason": "原文明确以脏话提及该表达；引用不消除解释需求，单独记录第一次出现。"
+          },
+          {
+            "start": 18,
+            "end": 20,
+            "surface": "呆比",
+            "reason": "同一表达第二次出现，按occurrence单独记录解释对象。"
+          },
+          {
+            "end": 28,
+            "reason": "保留原文形式供下一阶段释义审核；不自行改字，不预设对应的固定表达或确定义项。",
+            "start": 24,
+            "surface": "掉的一批"
+          }
+        ],
+        "candidate_actions": {
+          "span-2c6b2c3fd9863b6ccf4a": "drop"
+        },
+        "notes": "用户复议：补呆比[16,18)与[18,20)；掉的一批[24,28)保留，具体义项与词条/variant实现须再审。"
+      }
+    },
+    {
+      "item_id": "gold-b05c3f6bd9a31a95b737",
+      "source_item_id": "blind-e27031dd70845005",
+      "query_content": "之前懒得一般见识的想法都不该有，直接说学校你家开的？座位你私人的？然后她骂你，你直接跟老师反应，说她乱吠影响你听课了。老师不处理等下课你亲自掀它东西，干就完了",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：用户确认它与乱吠有协同贬损作用，恢复该处它。",
+      "expected_decision": {
+        "additional_spans": [],
+        "candidate_actions": {
+          "span-fa84261476806d03dadc": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [],
+        "candidate_actions": {
+          "span-fa84261476806d03dadc": "keep"
+        },
+        "notes": "用户复议确认：前文以她指人，并称其乱吠，后改用它，二者有协同贬损作用；保留它[71,72)。仅适用于此处，不将其它中的它或普通事物指代一并恢复，也不由此自动推出群体仇恨标签。"
+      }
+    },
+    {
+      "item_id": "gold-79be6389b12a363666db",
+      "source_item_id": "blind-3dae416bb0e6ded1",
+      "query_content": "丰县丢尽了江苏的脸，丰县是苏北的不？你不会说丰县是山东的吧🤣",
+      "reason": "用户授权定点复议（不新增全量审核轮次）：恢复丰县三处为待审解释对象，携带事件关联候选与不确定性，不确认为事件同义词。",
+      "expected_decision": {
+        "additional_spans": [],
+        "candidate_actions": {
+          "span-77c78d0d763a662357fa": "drop",
+          "span-ac1651005131b2389608": "drop",
+          "span-f5e0694e00a35d3505b1": "drop"
+        },
+        "notes": "",
+        "status": "confirmed"
+      },
+      "decision": {
+        "additional_spans": [],
+        "candidate_actions": {
+          "span-77c78d0d763a662357fa": "keep",
+          "span-ac1651005131b2389608": "keep",
+          "span-f5e0694e00a35d3505b1": "keep"
+        },
+        "notes": "用户复议：三处丰县保留为待审解释对象。优先事件候选为2022年丰县生育八孩女子事件；首处丢尽了江苏的脸可能有事件评价/地域归责，后两处主要是地域定位，三处不等同于三个确定事件指称。审核帧无原帖日期/上下文，不能断言指该事件；也有2017年丰县爆炸案等不同事件，不能将地名与单一事件无条件等同。下一阶段分别审核事件背景、普通地名义项与适用条件，不把地名或当地居民本身定义为仇恨对象。证据：https://www.zgjssw.gov.cn/yaowen/202202/t20220223_7431590.shtml ；https://www.news.cn/2023-04/07/c_1129501525.htm 。"
+      }
+    }
+  ]
+}
