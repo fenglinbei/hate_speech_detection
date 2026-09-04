@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>词典修复 · 修复操作审核</title>
+    <link rel="stylesheet" href="/review-base.css">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button" aria-label="打开词条列表">☰</button>
+        <div><p class="eyebrow">Annotated Lexicon Repair · Stage 2</p><div class="title-row"><h1>词典修复操作审核</h1><span class="badge">single pass</span></div></div>
+      </div>
+      <div class="topbar-status"><div class="top-progress"><span id="top-progress-text">读取审核状态…</span><div class="meter"><span id="progress-bar"></span></div></div><span id="save-state" class="save-state" data-state="idle" aria-live="polite">尚未修改</span></div>
+      <div class="topbar-actions"><button id="export-snapshot" class="quiet-button" type="button">下载快照</button><button id="guidelines" class="quiet-button" type="button">审核说明 <kbd>?</kbd></button></div>
+    </header>
+    <div class="development-banner"><strong>第一阶段 span 已冻结 · 本阶段审核词典修复操作</strong><span>仅开发集 · 不显示任务 gold 或模型输出</span></div>
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+    <div class="workbench">
+      <aside id="item-sidebar" class="case-sidebar">
+        <div class="sidebar-head"><div><p class="section-kicker">有界修复审核项</p><strong id="sidebar-progress">0 / 0</strong></div><button id="sidebar-close" class="icon-button mobile-tablet-only" type="button" aria-label="关闭词条列表">×</button></div>
+        <div class="search-field"><label for="item-search">搜索词条、编号或证据</label><div class="case-search-controls"><input id="item-search" maxlength="100" autocomplete="off" placeholder="输入关键词"><button id="search-mode" class="quiet-button search-mode-button" type="button" title="切换连续、多词或模糊搜索">连续 ↻</button></div><small id="search-status" class="search-status">全部 0 条</small></div>
+        <div id="item-filters" class="filter-tabs"><button type="button" data-filter="all" class="active">全部</button><button type="button" data-filter="open">待确认</button><button type="button" data-filter="complete">已确认</button><button type="button" data-filter="deferred">暂缓</button><button type="button" data-filter="duplicate_merge">重复组</button><button type="button" data-filter="new_entry">新增</button></div>
+        <p id="item-empty" class="empty-state hidden">没有匹配项</p><nav id="item-list" class="case-list" aria-label="审核词条列表"></nav>
+      </aside>
+      <main class="source-pane">
+        <div class="case-toolbar"><div><span id="item-position" class="badge">—</span><h2 id="item-id">正在读取审核项</h2><small id="stable-id" class="stable-id"></small></div><div class="case-nav"><button id="previous-item" class="icon-button" type="button" aria-label="上一个词条 [">←</button><button id="next-item" class="icon-button" type="button" aria-label="下一个词条 ]">→</button></div></div>
+        <div id="frame-warnings" class="warning-card hidden" role="status"></div>
+        <section class="audit-card"><div class="card-head"><div><p class="section-kicker">修复任务</p><strong id="operation-kind">—</strong></div></div><p id="rationale" class="preserve-lines"></p><div id="flags" class="source-tags"></div><div id="open-questions-card" class="warning-card hidden"><strong>待判断问题</strong><ul id="open-questions"></ul><p>证据不足时请“暂缓”并备注，空白提案不是确定性释义。</p></div></section>
+        <section class="audit-card"><div class="card-head"><div><p class="section-kicker">原词典记录</p><strong>与右侧修复提案对照</strong></div></div><div id="source-entries" class="source-entries"></div></section>
+        <section class="audit-card"><div class="card-head"><div><p class="section-kicker">已冻结 span 与开发语境</p><strong>先核对用法，再判断释义</strong></div><span id="evidence-count" class="badge">0</span></div><p class="section-hint">高亮为第一阶段保留的解释对象，边界只读。本页不能更改 span 真值；删除的旧候选仅作反例。</p><div id="evidence-list" class="evidence-list"></div></section>
+        <section id="external-card" class="audit-card hidden"><div class="card-head"><div><p class="section-kicker">外部证据</p><strong>事件事实不等于当前语境必然指涉</strong></div></div><div id="external-evidence" class="source-entries"></div></section>
+      </main>
+      <aside class="decision-pane">
+        <div class="decision-head"><div><p class="section-kicker">修复后的词条</p><h2 id="decision-title">等待载入</h2></div><span id="decision-status" class="status-chip" data-state="draft">草稿</span></div>
+        <div class="decision-actions"><button id="save-draft" class="secondary-button" type="button">保存草稿</button><button id="confirm-next" class="primary-button" type="button">确认并继续</button></div>
+        <div id="request-error" class="request-error hidden" role="alert"><strong id="request-error-message"></strong><pre id="request-error-details"></pre><button id="recover-local" class="quiet-button hidden" type="button">恢复冲突前本地草稿</button></div>
+        <div class="audit-editor">
+          <section class="editor-section"><h3>本条审核决定</h3><div id="resolution-options" class="resolution-options"><button type="button" data-resolution="approve">批准提案 <kbd>1</kbd></button><button type="button" data-resolution="revise">修改后采用 <kbd>2</kbd></button><button type="button" data-resolution="defer">暂缓 <kbd>3</kbd></button><button type="button" data-resolution="reject">不采用提案 <kbd>4</kbd></button></div><p id="resolution-hint" class="section-hint">选择决定不会自动确认；修改下方词条会自动切为“修改后采用”。</p><p id="resolution-error" class="field-error hidden"></p></section>
+          <section class="editor-section"><h3>1 · 释义与义项类别</h3><p class="section-hint">先解释当前用法、对象与必要语用条件，避免“一律中性”或无条件绑定事件。类别描述词典义项，不是句子标签。</p><div id="senses-list" class="senses-list"></div><button id="add-sense" class="quiet-button" type="button">＋ 添加义项</button><p id="senses-error" class="field-error hidden"></p></section>
+          <section class="editor-section"><h3>2 · 显式变体</h3><label class="field"><span>每行一个已核实词面</span><textarea id="variants" rows="3" placeholder="没有显式变体可留空；不要填写正则表达式"></textarea></label><p class="section-hint">候选仅来自 term、显式 variants 和受控规范化。本轮不开放任意扩词；越界候选由后端阻断。</p><p id="variants-error" class="field-error hidden"></p></section>
+          <section class="editor-section"><details id="policy-details"><summary><strong>3 · 高级：上下文过滤规则</strong><span id="rules-count" class="badge">0</span></summary><p class="section-hint">只判断已有候选是否合格，不能自行生成 span。左/右各 16 个 Unicode 字符，context 拼接左文＋候选词面＋右文；仅核对词面请选 surface。exclude_any 优先；require_any 非空时至少命中一条。最终取全局最长不重叠命中。</p><div class="policy-group"><h4>满足其一才合格 · require_any</h4><div id="require-rules" class="rules-list"></div><button data-add-rule="require_any" class="quiet-button" type="button">＋ 添加准入规则</button></div><div class="policy-group"><h4>命中其一即排除 · exclude_any</h4><div id="exclude-rules" class="rules-list"></div><button data-add-rule="exclude_any" class="quiet-button" type="button">＋ 添加排除规则</button></div><p class="section-hint">每条 ≤256 字、每词条 ≤8 条。这里不执行浏览器正则；后端使用固定版本引擎验证，非法/超时会阻断。标记为资格规则未决的提案，不能原样采用，必须补规则或暂缓。</p></details><p id="policy-error" class="field-error hidden"></p></section>
+          <section class="editor-section"><label class="field"><span>审核备注 <small>暂缓 / 不采用时必填</small></span><textarea id="notes" maxlength="2000" placeholder="说明修改理由、证据不足之处或不采用的原因"></textarea></label><p id="notes-error" class="field-error hidden"></p><p id="entry-error" class="field-error hidden"></p></section>
+          <div id="locked-card" class="locked-card hidden"><strong id="locked-message">该决定已锁定。</strong><p>需要更正时，先重新打开并留下理由。暂缓不会计入冻结完成。</p><button id="reopen" class="danger-button" type="button">重新打开</button></div>
+          <section class="editor-section shortcut-panel"><h3>快捷操作</h3><dl class="shortcut-list"><div><dt><kbd>1</kbd> / <kbd>2</kbd></dt><dd>批准提案 / 修改后采用</dd></div><div><dt><kbd>3</kbd> / <kbd>4</kbd></dt><dd>暂缓 / 不采用提案</dd></div><div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>上一条 / 下一条（先保存）</dd></div><div><dt><kbd>Ctrl/⌘ S</kbd></dt><dd>保存草稿</dd></div><div><dt><kbd>Ctrl/⌘ Enter</kbd></dt><dd>确认并继续</dd></div><div><dt><kbd>?</kbd> / <kbd>Esc</kbd></dt><dd>审核说明 / 关闭弹窗</dd></div></dl><p class="section-hint">单键只在非输入区生效；输入法组词、弹窗、请求中暂停。已锁定项不能修改；没有批量确认。</p></section>
+        </div>
+      </aside>
+    </div>
+    <dialog id="guideline-dialog" class="app-dialog guideline-dialog" aria-labelledby="guideline-title">
+      <form method="dialog" class="guide-shell">
+        <header class="dialog-head"><div><p class="section-kicker">判断口径 · 操作指引</p><h2 id="guideline-title">先解释用法，再审核类别、变体与条件</h2></div><button class="icon-button" value="close" aria-label="关闭审核说明">×</button></header>
+        <div class="guide-body">
+          <div class="guide-principle"><strong>第一阶段已确定“哪里需要解释”；本阶段确定“词典如何解释与匹配”。</strong><p>每个审核项对应一个有界词条操作，不重新标 span，不判断整句话是否仇恨，不用模型表现倒推释义。右侧是修复提案，不是已核准答案。</p></div>
+          <section><h3>推荐审核顺序</h3><ol class="review-steps"><li>读原词典记录、保留 span、删除反例和待判断问题，确认本条实际用法。</li><li>核对每个义项的释义：对象、用途和必要语境是否完整，有没有确定性过强的表述；再选择义项类别。</li><li>只登记已核实的显式变体，最后核对上下文过滤条件。无需改动的字段保留即可。</li><li>选择决定，必要时填写理由，然后“确认并继续”。自动保存只保存草稿，不表示批准。</li></ol></section>
+          <section><h3>四种决定有什么区别？</h3><div class="rule-grid"><article class="rule-card"><h4>1 · 批准提案</h4><p>原样采用完整提案。若已经编辑，不能直接批准；可选择“修改后采用”，或明确恢复原提案。空义项不可确认采用。</p></article><article class="rule-card"><h4>2 · 修改后采用</h4><p>采用右侧编辑后的完整词条。修改释义、类别、变体或规则会自动切到此选项；义项 ID 保持稳定。</p></article><article class="rule-card"><h4>3 · 暂缓</h4><p>仍不确定释义、事件指涉或匹配条件时选择，并写明缺什么证据。确认后锁定，但不计入冻结完成，需要后续解决。</p></article><article class="rule-card"><h4>4 · 不采用提案</h4><p>明确不同意此次修复方案，必须写理由。不等于删除原词条，也不会自动解除冻结 span 的覆盖约束；若留下冲突，后续验证仍会阻断。</p></article></div></section>
+          <section><h3>本轮需要特别留意</h3><ul><li>重复组应合并为一个规范词条，保留确实不同的义项或类别；不是机械删除不同定义。</li><li>“屌”需要说明当前骂人用途；“它”的贬损用法依赖“乱吠”等协同语境，不能把普通指代全部解释为辱骂。</li><li>“老黑”等表达不能固定为一律中性；“yp”不能仅凭现有词典断言当前义项。</li><li>“丰县”的高度关联事件是候选解释线索，不应写成“丰县＝该事件”；地理用法与可能的事件指涉应区分。</li><li>外部证据可支持事件事实，不能替代原帖语境。无法形成可靠释义时，宁可暂缓，不填猜测性定义。</li></ul></section>
+          <section><h3>上下文规则：过滤，不生成</h3><p>候选只能由 term、显式 variants 与 NFC / 全角 ASCII 折叠 / ASCII 大小写折叠产生。上下文正则仅过滤候选：exclude_any 优先，require_any 满足任一条即可。left/right 各 16 个 Unicode 字符；context 是左文＋候选词面＋右文；surface 是候选本身。合格后才进行全局最长不重叠选择，不设嵌套特例。</p><p>当前确认只验证字段结构及受限子进程中的规则编译，本页不执行正则预览，也不代表已验证语义覆盖。整体覆盖、运行预算（每规则匹配 5 毫秒、每查询 100 毫秒）和盲审是后续门槛。人工可阅读完整语境，但规则只看固定窗口；例如“它”与“乱吠”相距超过窗口时，人能判断协同贬损，不表示规则也能看到该证据。</p><p>词条资格过滤不等于逐处义项消歧：结构化多义会一同用于确定性渲染，不能据此宣称模型已经选中正确义项。存在待判断问题的提案，采用时必须备注核实依据；资格规则未决时必须先补规则，或暂缓。</p></section>
+          <section><h3>新增词面不一定需要新建词条</h3><p>如果新词面应作为已有词条的变体，请在所属既有卡加入 variant，并将该新词面卡选为“不采用提案”，备注“不单独新建”与归属。不要让两个词条同时拥有同一词面，否则全局验证会阻断。ASCII 大小写等价形式通常由受控规范化覆盖，无需重复添加。</p></section>
+          <section><h3>快捷键与防误触</h3><dl class="shortcut-list guide-shortcuts"><div><dt><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> / <kbd>4</kbd></dt><dd>仅选择批准 / 修改采用 / 暂缓 / 不采用，不自动确认，不批量作用于其他词条。</dd></div><div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>按当前搜索与过滤结果导航；有改动时先保存草稿，失败则停留。</dd></div><div><dt><kbd>Ctrl/⌘ S</kbd></dt><dd>保存草稿；停笔 5 秒也会自动保存。草稿允许未决定，但结构须有效。</dd></div><div><dt><kbd>Ctrl/⌘ Enter</kbd></dt><dd>执行与按钮相同的完整校验，确认后进入下一个未处理项。暂缓项留在“暂缓”筛选中。</dd></div><div><dt><kbd>?</kbd> / <kbd>Esc</kbd></dt><dd>打开说明 / 关闭弹窗；不会改变审核决定。</dd></div></dl><p>输入框内不触发单键快捷键，但可显式保存或确认；输入法组词、弹窗及请求进行中暂停全部审核快捷键。已确认 / 暂缓项先重新打开，才可编辑。</p></section>
+          <section><h3>保存、锁定与快照</h3><p>服务器是权威会话，保存使用 revision 比较避免多页面互相覆盖。发生冲突时，先载入服务器版本，本地草稿保留供核对恢复；不会自动覆盖已锁定项。下载快照前会保存当前合法草稿；快照只记录当前进度，不会自动冻结阶段。只有零未决、零暂缓并通过后端验证才可冻结。</p></section>
+        </div>
+        <footer class="dialog-footer"><span>单轮审核 · 逐词条决定 · 不确定先暂缓</span><button class="primary-button" value="close">知道了，开始审核</button></footer>
+      </form>
+    </dialog>
+    <script src="/review-core.js"></script><script src="/core.js"></script><script src="/app.js"></script>
+  </body>
+</html>

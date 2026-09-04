@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-operation-frame/v1",
+  "type": "object",
+  "required": ["manifest", "items"],
+  "properties": {
+    "manifest": {
+      "type": "object",
+      "required": ["schema_version", "development_only", "single_pass_review", "source_lexicon_sha256", "span_frame_sha256", "span_reference_id", "span_reference_sha256", "proposal_sha256", "item_count", "kind_counts", "duplicate_term_group_count", "items_sha256", "allowed_candidate_surfaces", "matcher_contract", "frame_id"],
+      "properties": {
+        "schema_version": {"const": "annotated-lexicon-operation-frame/v1"},
+        "development_only": {"const": true},
+        "single_pass_review": {"const": true},
+        "source_lexicon_sha256": {"$ref": "#/$defs/sha256"},
+        "span_frame_sha256": {"$ref": "#/$defs/sha256"},
+        "span_reference_id": {"type": "string", "pattern": "^span-gold-ref-[0-9a-f]{64}$"},
+        "span_reference_sha256": {"$ref": "#/$defs/sha256"},
+        "proposal_sha256": {"$ref": "#/$defs/sha256"},
+        "item_count": {"type": "integer", "minimum": 1},
+        "kind_counts": {
+          "type": "object",
+          "properties": {"duplicate_merge": {"type": "integer", "minimum": 0}, "existing": {"type": "integer", "minimum": 0}, "new_entry": {"type": "integer", "minimum": 0}},
+          "additionalProperties": false
+        },
+        "duplicate_term_group_count": {"const": 11},
+        "items_sha256": {"$ref": "#/$defs/sha256"},
+        "allowed_candidate_surfaces": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "matcher_contract": {
+          "type": "object",
+          "required": ["candidate_sources", "context_window_per_side", "regex_role", "sense_selection"],
+          "properties": {
+            "candidate_sources": {"const": ["term", "explicit_variant", "controlled_normalization"]},
+            "context_window_per_side": {"const": 16},
+            "regex_role": {"const": "eligibility-only"},
+            "sense_selection": {"const": "not-implemented-entry-eligibility-only"}
+          },
+          "additionalProperties": false
+        },
+        "frame_id": {"type": "string", "pattern": "^operation-frame-[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "items": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/item"}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "entry": {
+      "type": "object",
+      "required": ["lexicon_id", "term", "variants", "senses", "match_policy"],
+      "properties": {
+        "lexicon_id": {"type": "string", "pattern": "^lex-(?:[0-9]{4}|new-[0-9a-f]{16})$"},
+        "term": {"type": "string", "minLength": 1},
+        "variants": {"type": "array", "maxItems": 32, "items": {"type": "string", "maxLength": 100}},
+        "senses": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/sense"}},
+        "match_policy": {"$ref": "#/$defs/policy"}
+      },
+      "additionalProperties": false
+    },
+    "sense": {
+      "type": "object", "required": ["sense_id", "definition", "categories"],
+      "properties": {
+        "sense_id": {"type": "string", "minLength": 1, "maxLength": 100},
+        "definition": {"type": "string", "maxLength": 3000},
+        "categories": {"type": "array", "uniqueItems": true, "items": {"enum": ["Racism", "Sexism", "LGBTQ", "Region", "others"]}}
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object", "required": ["rule_id", "target", "pattern"],
+      "properties": {
+        "rule_id": {"type": "string", "maxLength": 100},
+        "target": {"enum": ["left", "right", "surface", "context"]},
+        "pattern": {"type": "string", "maxLength": 256}
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object", "required": ["require_any", "exclude_any"],
+      "properties": {
+        "require_any": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/rule"}},
+        "exclude_any": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/rule"}}
+      },
+      "additionalProperties": false
+    },
+    "span": {
+      "type": "object", "required": ["surface", "span"],
+      "properties": {
+        "surface": {"type": "string", "minLength": 1},
+        "span": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}},
+        "source_candidate_id": {"type": ["string", "null"]},
+        "reason": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "required": ["item_id", "term", "operation_kind", "source_entries", "proposed_entry", "rationale", "open_questions", "flags", "external_evidence", "evidence", "legacy_preview"],
+      "properties": {
+        "item_id": {"type": "string", "pattern": "^operation-[0-9a-f]{20}$"},
+        "term": {"type": "string", "minLength": 1},
+        "operation_kind": {"enum": ["duplicate_merge", "existing", "new_entry"]},
+        "source_entries": {
+          "type": "array", "items": {
+            "type": "object", "required": ["source_row_index", "lexicon_id", "term", "category", "definition"],
+            "properties": {"source_row_index": {"type": "integer", "minimum": 0}, "lexicon_id": {"type": "string", "pattern": "^lex-[0-9]{4}$"}, "term": {"type": "string"}, "category": {"type": "string"}, "definition": {"type": "string"}},
+            "additionalProperties": false
+          }
+        },
+        "proposed_entry": {"$ref": "#/$defs/entry"},
+        "rationale": {"type": "string", "minLength": 1, "maxLength": 6000},
+        "open_questions": {"type": "array", "items": {"type": "string", "maxLength": 3000}},
+        "flags": {"type": "array", "items": {"type": "string", "maxLength": 3000}},
+        "external_evidence": {
+          "type": "array", "items": {
+            "type": "object", "required": ["title", "url", "note"],
+            "properties": {"title": {"type": "string"}, "url": {"type": "string", "pattern": "^https://", "format": "uri"}, "note": {"type": "string"}},
+            "additionalProperties": false
+          }
+        },
+        "evidence": {
+          "type": "array", "items": {
+            "type": "object", "required": ["source_item_id", "query_content", "expected_spans", "dropped_candidates", "review_notes", "prior_audit"],
+            "properties": {
+              "source_item_id": {"type": "string"}, "query_content": {"type": "string"},
+              "expected_spans": {"type": "array", "items": {"$ref": "#/$defs/span"}},
+              "dropped_candidates": {"type": "array", "items": {"$ref": "#/$defs/span"}},
+              "review_notes": {"type": "string"}, "prior_audit": {"type": "object"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "legacy_preview": {
+          "type": "object", "required": ["term", "category", "definition"],
+          "properties": {"term": {"type": "string"}, "category": {"type": "string"}, "definition": {"type": "string"}},
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

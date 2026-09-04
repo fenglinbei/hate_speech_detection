@@ -1,0 +1,1781 @@
+{
+  "schema_version": "annotated-lexicon-operation-proposals/v1",
+  "items": [
+    {
+      "term": "亩",
+      "proposed_entry": {
+        "lexicon_id": "lex-0387",
+        "term": "亩",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0387:sense:01",
+            "definition": "“母”的变写，在某些网络性别争论中用来贬损女性；应结合语境判断，不把表示面积单位等普通用法解释为辱称。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留阳性对照；嵌套“亩篝”交由合格长项抑制，不全局关闭短词。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "亩篝",
+      "proposed_entry": {
+        "lexicon_id": "lex-0146",
+        "term": "亩篝",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0146:sense:01",
+            "definition": "“母狗”的谐音变写，可借动物称谓贬损女性。说明的是表达的用法，不是对被指称者的事实判断。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留完整长项；“畒勾”另设新候选卡，不预先建立变体关系。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "你妈",
+      "proposed_entry": {
+        "lexicon_id": "lex-0648",
+        "term": "你妈",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0648:sense:01",
+            "definition": "对对方母亲的指称；在部分争执、粗口或调侃中参与辱骂表达。普通亲属指代不能仅凭该词面认定为辱骂。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ordinary-mama",
+              "target": "right",
+              "pattern": "^妈"
+            }
+          ]
+        }
+      },
+      "rationale": "已确认“你妈妈”是普通亲属指代，不能截出两字辱称。",
+      "open_questions": [
+        "当前证据只支持排除你妈妈；其他普通亲属指代与粗口怎样区分，需要审核者确认。"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "厌男",
+      "proposed_entry": {
+        "lexicon_id": "lex-0331",
+        "term": "厌男",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0331:sense:01",
+            "definition": "对男性的厌恶或排斥的概括表达，也可用于指称相关态度或立场；是否构成歧视须结合具体语境，不预设表达者的性别。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "embedded-taoyan",
+              "target": "left",
+              "pattern": "讨$"
+            }
+          ]
+        }
+      },
+      "rationale": "已确认“讨厌男人”中的跨词片段不属于待解释术语。",
+      "open_questions": [
+        "左侧为讨时的排除是否符合术语边界，而非仅针对本句的偶然词序？"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "反黑",
+      "proposed_entry": {
+        "lexicon_id": "lex-0335",
+        "term": "反黑",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0335:sense:01",
+            "definition": "在治安等语境中可指打击黑社会势力。",
+            "categories": [
+              "Racism"
+            ]
+          },
+          {
+            "sense_id": "lex-0335:sense:02",
+            "definition": "在部分种族议题讨论中也可能指反对、排斥或敌视黑人；需依据具体语境区分，不能将所有“反黑”都解释为对黑人的迫害。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "当前完整span保留，但源定义把多种语境压成一个断言，需要分开条件性描述。",
+      "open_questions": [],
+      "flags": [
+        "multiple_senses",
+        "no_sense_level_disambiguation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "同志",
+      "proposed_entry": {
+        "lexicon_id": "lex-0286",
+        "term": "同志",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0286:sense:01",
+            "definition": "在部分语境中用于指称同性恋者；普通同伴、同事或政治称谓等用法不应直接套用这一义项。",
+            "categories": [
+              "LGBTQ"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [
+            {
+              "rule_id": "sexuality-context",
+              "target": "context",
+              "pattern": "(?:同性恋|同性伴侣|出柜|男同|女同|性取向)"
+            }
+          ],
+          "exclude_any": []
+        }
+      },
+      "rationale": "当前普通同伴/称呼语境删除；给出可审核的保守准入规则，尚无本轮阳性例支持泛化。",
+      "open_questions": [
+        "准入关键词只是本轮待审草案，不是可靠义项消歧；是否足以避免普通同志用法误报？"
+      ],
+      "flags": [
+        "negative_only_evidence",
+        "policy_draft_not_semantic_proof",
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "嘿畜",
+      "proposed_entry": {
+        "lexicon_id": "lex-0430",
+        "term": "嘿畜",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0430:sense:01",
+            "definition": "“黑畜”的谐音变写，可借动物化称谓侮辱黑人。引用、讨论这种表达不等于说话者认可其贬损内容。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "边界已通过，保留完整两字，说明贬损用途而非作事实断言。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "国女",
+      "proposed_entry": {
+        "lexicon_id": "lex-0069",
+        "term": "国女",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0069:sense:01",
+            "definition": "“中国女性”的网络简称，在部分性别争论中带有概括、嘲讽或贬损意味；具体语气取决于上下文，不预设使用者一定是男性。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "country-hanguo",
+              "target": "left",
+              "pattern": "韩$"
+            }
+          ]
+        }
+      },
+      "rationale": "修复“韩国女权”误切，同时保留三处已接受对照。",
+      "open_questions": [],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "国男",
+      "proposed_entry": {
+        "lexicon_id": "lex-0068",
+        "term": "国男",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0068:sense:01",
+            "definition": "“中国男性”的网络简称，在部分性别争论中带有概括、嘲讽或贬损意味；不等同于“中国男人”等普通完整表达中的任意两字片段，也不预设使用者的身份。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "country-prefix",
+              "target": "left",
+              "pattern": "(?:中|德)$"
+            }
+          ]
+        }
+      },
+      "rationale": "本轮“中国男人”“中国男性”“德国男孩”均是嵌入误切；只列开发证据支持的国名前缀草案。",
+      "open_questions": [
+        "当前规则只列中/德两个已见前缀；是否接受这一有界修复，并将其他国名的潜在误切交盲审验证？"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "国铝",
+      "proposed_entry": {
+        "lexicon_id": "lex-0087",
+        "term": "国铝",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0087:sense:01",
+            "definition": "“国女”的近音变写，在部分网络性别争论中用于指称或贬损中国女性；不能据此认定所有被指称者都是女权主义者。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "原定义错误使用“郭女”解释当前词面；改为明确当前变写与使用语境。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "基",
+      "proposed_entry": {
+        "lexicon_id": "lex-0111",
+        "term": "基",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0111:sense:01",
+            "definition": "在部分网络或粤语相关表达中与 gay、男同性恋指称有关；“基本”“基因”等普通词里的“基”不属于这一用法。不能把对“基佬”整词的解释直接当成所有单字“基”的含义。",
+            "categories": [
+              "LGBTQ"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ordinary-ji-word",
+              "target": "right",
+              "pattern": "^(?:本|因)"
+            }
+          ]
+        }
+      },
+      "rationale": "合并两条重复term；删除基本/基本盘/基因内误切，避免把基佬的整词释义直接移植到单字。",
+      "open_questions": [
+        "本轮没有独立的单字基阳性例；排除基本/基因后是否仍需要更保守的候选资格条件？"
+      ],
+      "flags": [
+        "duplicate_merge",
+        "negative_only_evidence",
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "媚外",
+      "proposed_entry": {
+        "lexicon_id": "lex-0081",
+        "term": "媚外",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0081:sense:01",
+            "definition": "指责某人迎合或奉承外国人、外国事物的评价性表达，常带贬义；这是说话者的评价，并非仅凭词面即可证实的事实。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "本例由崇洋媚外长项覆盖，并非删除该词条。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "媚白",
+      "proposed_entry": {
+        "lexicon_id": "lex-0178",
+        "term": "媚白",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0178:sense:01",
+            "definition": "指责某人过度迎合、追捧白人或与白人有关的事物，常含贬义；这是使用者的评价，不是被指称者的客观属性。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留span；将原定义中的指控性内容改为对使用方式的描述。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "媚黑",
+      "proposed_entry": {
+        "lexicon_id": "lex-0176",
+        "term": "媚黑",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0176:sense:01",
+            "definition": "指责某人过度迎合、追捧黑人或与黑人有关的事物，常含贬义；这是使用者的评价，不是被指称者的客观属性。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留span；将原定义中的指控性内容改为对使用方式的描述。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "它",
+      "proposed_entry": {
+        "lexicon_id": "lex-0326",
+        "term": "它",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0326:sense:01",
+            "definition": "通常用于指称非人的事物。在部分上下文明确指人、并伴随动物化或其他贬损表达时，改用“它”可能有贬低或去人格化作用；不能仅凭代词本身或普通事物指代作此判断，也不自动等于群体仇恨。",
+            "categories": [
+              "Sexism",
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [
+            {
+              "rule_id": "possessive-hostile-action-draft",
+              "target": "context",
+              "pattern": "掀它东西"
+            }
+          ],
+          "exclude_any": []
+        }
+      },
+      "rationale": "用户确认人称转变与更早“乱吠”协同贬损；固定左16窗口看不到乱吠，当前正则仅为窗口内动作结构的候选草案。",
+      "open_questions": [
+        "乱吠位于候选左16字窗口外；不能声称正则看到了该协同线索。",
+        "掀它东西仅是局部动作结构草案，不足以普遍证明指人，也可能误收动物所属物等非人指代；不能把该短搭配当作已经验证的泛化规则。是否需要另一个受限且可泛化的候选资格方案？"
+      ],
+      "flags": [
+        "semantic_boundary_review",
+        "context_window_limitation",
+        "policy_draft_not_semantic_proof",
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "它们",
+      "proposed_entry": {
+        "lexicon_id": "lex-0327",
+        "term": "它们",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0327:sense:01",
+            "definition": "通常用于指称非人的多个事物。在明确指人且伴随动物化等贬损的语境中，可能有贬低或去人格化作用；不能仅凭代词形式认定目标或贬损性质。",
+            "categories": [
+              "Sexism",
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "本轮唯一相关示例被删除，缺少可靠阳性证据；不伪造一个已验证的人物指代判定规则。",
+      "open_questions": [
+        "本轮仅有删除例，缺少可支持泛化准入规则的阳性例。match_policy故意未填；保持空策略将重现当前阴性例命中，不能直接视为修复完成。",
+        "请填写有语义依据的候选资格策略，或暂缓该项；不要用永不命中的正则掩盖未解决问题。"
+      ],
+      "flags": [
+        "policy_unresolved",
+        "negative_only_evidence",
+        "known_regression_until_policy_resolved"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "寄生虫",
+      "proposed_entry": {
+        "lexicon_id": "lex-0686",
+        "term": "寄生虫",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0686:sense:01",
+            "definition": "本为生物名称，也可比喻被说话者认为依赖、剥削他人或社会的人，常带贬损。比喻中的负面归因是说话者的指控，不应作为对被指称者的既定事实。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留完整三字并抑制虫；补充比喻及贬损用途，不把被指控依赖他人当事实。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "尼",
+      "proposed_entry": {
+        "lexicon_id": "lex-0273",
+        "term": "尼",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0273:sense:01",
+            "definition": "在部分网络种族辱称中借用英文相关辱称的起始音节指称黑人。人名音译等普通用法不能仅凭单字“尼”确定为种族辱称。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "transliterated-name-separator",
+              "target": "right",
+              "pattern": "^[·・]"
+            }
+          ]
+        }
+      },
+      "rationale": "删除音译姓名德尼·马兹雷卡伊里的单字命中。",
+      "open_questions": [
+        "音译间隔号规则覆盖当前姓名例，但不保证覆盖所有姓名；还需要什么有界、可验证的资格条件？"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "屌",
+      "proposed_entry": {
+        "lexicon_id": "lex-0531",
+        "term": "屌",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0531:sense:01",
+            "definition": "男性生殖器的粗俗称呼。",
+            "categories": [
+              "Sexism"
+            ]
+          },
+          {
+            "sense_id": "lex-0531:sense:02",
+            "definition": "在部分粤语口语中可作动词，表示骂、斥责或辱骂某人，语气粗俗；需结合动词宾语和上下文区分，不能只输出生殖器义。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两处“用粤语屌他/他们”保留，需补骂人的动词用途；系统仍输出条件性多义说明，不自动逐处选择sense。",
+      "open_questions": [],
+      "flags": [
+        "multiple_senses",
+        "no_sense_level_disambiguation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "崇洋媚外",
+      "proposed_entry": {
+        "lexicon_id": "lex-0082",
+        "term": "崇洋媚外",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0082:sense:01",
+            "definition": "指责某人盲目推崇外国事物、奉承外国人，常带贬义；这是说话者的评价，不是从词面即可证实的事实。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "完整四字保留；统一最长非重叠选择抑制内部媚外。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "批",
+      "proposed_entry": {
+        "lexicon_id": "lex-0669",
+        "term": "批",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0669:sense:01",
+            "definition": "在部分方言或粗俗表达中可作女性生殖器的俗称；“批评”“批判”以及普通批次或程度构式中的“批”不能直接套用这一义项。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ordinary-pi-word",
+              "target": "right",
+              "pattern": "^(?:评|判)"
+            },
+            {
+              "rule_id": "yi-pi-construction",
+              "target": "left",
+              "pattern": "一$"
+            }
+          ]
+        }
+      },
+      "rationale": "删除批评/批判误切；掉的一批须作为完整候选另审，不能输出单字生殖器义。",
+      "open_questions": [],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "操",
+      "proposed_entry": {
+        "lexicon_id": "lex-0635",
+        "term": "操",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0635:sense:01",
+            "definition": "在部分口语、网络粗口中用于咒骂或表达强烈不满，属粗俗表达；“操作”等普通词中的用法应排除。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ordinary-caozuo",
+              "target": "right",
+              "pattern": "^作"
+            }
+          ]
+        }
+      },
+      "rationale": "删除操作中的单字误切。",
+      "open_questions": [],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "棒子",
+      "proposed_entry": {
+        "lexicon_id": "lex-0169",
+        "term": "棒子",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0169:sense:01",
+            "definition": "在某些民族或地域讨论中用作对韩国人等对象的贬损称谓；表示棍棒或“一棒子打死”等普通表达时不能套用这一义项。",
+            "categories": [
+              "Region"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "one-stick-construction",
+              "target": "left",
+              "pattern": "一$"
+            }
+          ]
+        }
+      },
+      "rationale": "删除一棒子打死中的普通表达。",
+      "open_questions": [
+        "排除左侧为一的规则是否过宽？请核对其是否排除了可能的辱称用法。"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "畒",
+      "proposed_entry": {
+        "lexicon_id": "lex-0385",
+        "term": "畒",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0385:sense:01",
+            "definition": "在部分网络性别争论中用作“母”相关表达的变写，可能带有对女性的贬损；完整“畒勾”中的单字不应重复拆出解释。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "完整畒勾需要解释；短字由合格长项抑制，而非自动改写畒的字形或源数据。",
+      "open_questions": [
+        "畒与畒勾的词条关系是否保留为独立term加长项抑制？不能无审核添加谐音规范化。"
+      ],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "类人",
+      "proposed_entry": {
+        "lexicon_id": "lex-0061",
+        "term": "类人",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0061:sense:01",
+            "definition": "在部分贬损语境中可能借“似人而非人”的表达贬低对象；“此类人”等普通结构中跨词截取的“类人”不属于该用法。不能仅凭词面指定种族对象。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ci-lei-ren",
+              "target": "left",
+              "pattern": "此$"
+            }
+          ]
+        }
+      },
+      "rationale": "删除此类人中的跨词命中；源定义不能让任意类人一律绑定某种族。",
+      "open_questions": [
+        "当前仅排除此类人；单独类人是否需要更明确的指人贬损准入条件？"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "虫",
+      "proposed_entry": {
+        "lexicon_id": "lex-0267",
+        "term": "虫",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0267:sense:01",
+            "definition": "在部分明确指人的上下文中，可借虫类比喻贬损对象；普通虫类名称以及更长的完整词“寄生虫”中的单字不应重复或一律解释为针对黑人。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "完整寄生虫保留，单字虫被长项抑制；这不构成所有虫类词的语义结论。",
+      "open_questions": [
+        "本轮只有被寄生虫覆盖的阴性短项；其他普通虫类用法尚无本轮独立证据，是否需要增加受限资格条件？"
+      ],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "魄",
+      "proposed_entry": {
+        "lexicon_id": "lex-0020",
+        "term": "魄",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0020:sense:01",
+            "definition": "源词典将其收录为“白鬼”的拆字式种族辱称用法；普通词“落魄”中的“魄”不属于该用法，具体适用语境仍需谨慎判断。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "ordinary-luopo",
+              "target": "left",
+              "pattern": "落$"
+            }
+          ]
+        }
+      },
+      "rationale": "两处落魄内命中删除；本轮没有独立辱称阳性例。",
+      "open_questions": [
+        "本轮没有独立辱称阳性例；排除落魄后保留其他候选的风险是否可接受？"
+      ],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "鸡",
+      "proposed_entry": {
+        "lexicon_id": "lex-0104",
+        "term": "鸡",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0104:sense:01",
+            "definition": "在部分粗俗语境中可借与“妓”的近音贬损女性或指称性工作者；应描述说话者的用法，不能把对女性的道德指控当作事实。“嫁鸡随鸡”等普通表达不套用该义项。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "marriage-proverb",
+              "target": "context",
+              "pattern": "嫁鸡随鸡"
+            }
+          ]
+        }
+      },
+      "rationale": "两处嫁鸡随鸡删除；避免把普通惯用表达套为性别辱称。",
+      "open_questions": [],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "黑比",
+      "proposed_entry": {
+        "lexicon_id": "lex-0405",
+        "term": "黑比",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0405:sense:01",
+            "definition": "对黑人的粗俗贬损称谓之一；不能从“老黑比较多”等跨词位置截取出这一称谓。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": [
+            {
+              "rule_id": "cross-word-laohei-bi",
+              "target": "left",
+              "pattern": "老$"
+            }
+          ]
+        }
+      },
+      "rationale": "当前老黑比较多发生跨词误切；老黑完整新候选另审。",
+      "open_questions": [],
+      "flags": [
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "二极管",
+      "proposed_entry": {
+        "lexicon_id": "lex-0299",
+        "term": "二极管",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0299:sense:01",
+            "definition": "借电子元件单向导电的特性，比喻被说话者认为思维僵化、只作非黑即白判断的人，常带贬义；属于评价而非客观诊断。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义基本同义，合并为一条并保留来源映射。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "倭狗",
+      "proposed_entry": {
+        "lexicon_id": "lex-0521",
+        "term": "倭狗",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0521:sense:01",
+            "definition": "借对日本的旧称及动物化称谓贬损日本人；说明的是辱称用法，而非对被指称者的事实判断。",
+            "categories": [
+              "others",
+              "Region"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条释义同义、类别不同；合并释义并保留类别并集与来源。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "傻逼",
+      "proposed_entry": {
+        "lexicon_id": "lex-0349",
+        "term": "傻逼",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0349:sense:01",
+            "definition": "常用于直接骂人、贬低对方，属于粗俗辱骂表达；引用或讨论该词不等于认可其攻击内容。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义基本同义，避免重复输出。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "公交车",
+      "proposed_entry": {
+        "lexicon_id": "lex-0080",
+        "term": "公交车",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0080:sense:01",
+            "definition": "在部分性别贬损语境中，以可供多人乘坐的交通工具比喻女性，并污名化其性关系；这些是说话者的贬损指控，不是对女性行为或品格的事实认定。",
+            "categories": [
+              "Sexism"
+            ]
+          },
+          {
+            "sense_id": "lex-0080:sense:02",
+            "definition": "也存在不限定女性对象的类似性关系污名化用法；应结合所指对象判断，普通交通工具含义不属于贬损义。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义目标范围不同且含道德化断言；分sense描述污名化用法，不断言行为事实。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "女👊",
+      "proposed_entry": {
+        "lexicon_id": "lex-0094",
+        "term": "女👊",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0094:sense:01",
+            "definition": "“女权”的汉字与拳头 emoji 组合变写，在部分网络争论中用于讽刺或贬损女权主义者；具体立场和语气须结合上下文。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义基本同义，合并措辞并保持原始emoji。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "推土机",
+      "proposed_entry": {
+        "lexicon_id": "lex-0578",
+        "term": "推土机",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0578:sense:01",
+            "definition": "源词典记录的一种性相关贬称，指与被描述为身材偏胖的女性发生性关系的行为；该义项不同于普通工程机械名称，也不同于 ACGN 用法。",
+            "categories": [
+              "Sexism"
+            ]
+          },
+          {
+            "sense_id": "lex-0578:sense:02",
+            "definition": "在部分 ACGN 讨论中用于形容被描写为与多名女性角色建立性或恋爱关系、不断“推倒”女性角色的男性角色；需与其他义项按语境区分。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义指向不同语义，分sense保存，禁止简单拼接成一个确定含义。",
+      "open_questions": [
+        "两个源义项都保留，但系统不自动按occurrence选sense；条件性渲染是否足以避免输出不合语境的确定解释？"
+      ],
+      "flags": [
+        "duplicate_merge",
+        "multiple_senses",
+        "no_sense_level_disambiguation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "沙軟",
+      "proposed_entry": {
+        "lexicon_id": "lex-0482",
+        "term": "沙軟",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0482:sense:01",
+            "definition": "“傻卵”的近音变写，常以粗口方式骂人愚蠢或讥讽其言行；这是说话者的贬损评价。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义基本同义，合并措辞；保持显式字形，不启用繁简规范化。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "爬",
+      "proposed_entry": {
+        "lexicon_id": "lex-0256",
+        "term": "爬",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0256:sense:01",
+            "definition": "在部分川渝方言及网络口语中表示语气强烈的“走开”或“滚”；普通爬行动作不属于这一驱赶义。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义可归为带方言说明的驱赶义；不因此把爬行动作一律算粗口。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "脑残",
+      "proposed_entry": {
+        "lexicon_id": "lex-0225",
+        "term": "脑残",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0225:sense:01",
+            "definition": "常以粗俗方式贬低他人的思考、言行或直接骂人；不应当作医学判断，也不把说话者的评价认定为事实。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条源定义合并为评价/辱骂用途说明，避免医学化断言。",
+      "open_questions": [],
+      "flags": [
+        "duplicate_merge"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "黑杂",
+      "proposed_entry": {
+        "lexicon_id": "lex-0500",
+        "term": "黑杂",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0500:sense:01",
+            "definition": "源词典记录为针对具有黑人血统的混血者的侮辱性称谓；不得将该贬称当作中性身份称呼。",
+            "categories": [
+              "Racism"
+            ]
+          },
+          {
+            "sense_id": "lex-0500:sense:02",
+            "definition": "源词典另记录一种网络用法，指被说话者认为在事件立场上偏向黑人的人；这与血统指称不同，需结合上下文区分。",
+            "categories": [
+              "Racism",
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "两条来源含义不同，分别保留血统指称与立场指控；条件性渲染不等于已自动完成义项消歧。",
+      "open_questions": [
+        "血统辱称与立场指控是两种不同义项；是否确认来源差异和类别并集，且不把任一义无条件套用？"
+      ],
+      "flags": [
+        "duplicate_merge",
+        "multiple_senses",
+        "no_sense_level_disambiguation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "YP",
+      "proposed_entry": {
+        "lexicon_id": "lex-0378",
+        "term": "YP",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0378:sense:01",
+            "definition": "在部分性相关网络语境中可为“约炮”的首字母缩写，涉及非固定伴侣之间约定性接触。缩写可有不同展开；词面和 ASCII 大小写规范化本身不能确定具体义项。",
+            "categories": [
+              "Sexism",
+              "LGBTQ"
+            ]
+          },
+          {
+            "sense_id": "lex-0378:sense:02",
+            "definition": "",
+            "categories": [
+              "Sexism",
+              "LGBTQ"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留既有大写term并通过已批准ASCII规范化覆盖yp；撤回当前例必为约炮的判断，第二sense故意留空阻止直接批准。",
+      "open_questions": [
+        "当前句中的yp具体展开仍未确认；请填写可支持的第二sense，或重写为充分表达不确定性的合并释义并移除空sense，不能机械继承约炮。",
+        "ASCII大小写一致只支持候选生成；没有证据时不得换成另一个确定缩写展开。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "no_sense_level_disambiguation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "妈宝女",
+      "proposed_entry": {
+        "lexicon_id": "lex-0244",
+        "term": "妈宝女",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-0244:sense:01",
+            "definition": "常用于形容被认为成年后仍过度依赖母亲、缺少自主决定能力的女性，可能带调侃或贬损；具体是否符合该评价不能只凭称呼断定。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "保留完整三字；妈宝作为同句嵌套阴性证据，由最长非重叠机制抑制。",
+      "open_questions": [],
+      "flags": [],
+      "external_evidence": []
+    },
+    {
+      "term": "丰县",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-07532bbe192befc3",
+        "term": "丰县",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-07532bbe192befc3:sense:01",
+            "definition": "江苏省徐州市所辖县的地名。在部分网络讨论中，可能借地名提及当地相关公共事件，例如2022年“丰县生育八孩女子”事件；是否有关联、具体指何事须结合上下文，不能仅凭地名确定事件，更不能据此把犯罪或道德属性归于当地居民。",
+            "categories": [
+              "Region"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "用户复议恢复三处地名为解释对象；首处可能涉及事件评价，后两处主要作地域定位。当前证据只支持事件关联候选，不支持三处都确定为事件借代。",
+      "open_questions": [
+        "当前句缺少发表时间和原帖上下文，是否接受只提供带限制条件的事件背景，而不确定绑定？",
+        "三处occurrence用途不同；本阶段无sense级自动消歧，统一渲染必须同时保留普通地名与不确定性。",
+        "地名是否需要候选资格限制？若添加，必须仍覆盖三处已确认span，不能按句子ID特判。"
+      ],
+      "flags": [
+        "event_link_not_established",
+        "no_sense_level_disambiguation",
+        "user_adjudication_required"
+      ],
+      "external_evidence": [
+        {
+          "title": "江苏省委省政府调查组发布“丰县生育八孩女子”事件调查处理情况通报",
+          "url": "https://www.zgjssw.gov.cn/yaowen/202202/t20220223_7431590.shtml",
+          "note": "2022-02-23。支持事件事实及调查背景，不证明当前未知发表时间语料在指该事件。沿用第一阶段复议检索证据。"
+        },
+        {
+          "title": "“丰县生育八孩女子”事件相关案件一审宣判：董志民获刑九年",
+          "url": "https://www.news.cn/2023-04/07/c_1129501525.htm",
+          "note": "2023-04-07。提供后续判决事实校验，不应当作未知发布时间语料当时已经具备的背景。"
+        },
+        {
+          "title": "央视快讯：江苏丰县爆炸案件告破 嫌疑人为22岁男子当场死亡",
+          "url": "https://m.news.cctv.com/2017/06/16/ARTIyCmJ6dluLTBVVk61ZdOV170616.shtml",
+          "note": "2017-06-16。仅说明地名并非唯一指向2022年事件；不把此事件认定为本句所指。"
+        }
+      ]
+    },
+    {
+      "term": "乐色",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-6b02c58315cc4cdf",
+        "term": "乐色",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-6b02c58315cc4cdf:sense:01",
+            "definition": "“垃圾”的方言读音相关写法，可用于表示无价值、令人反感的事物或贬低对象；具体是物品、观点还是对人的贬损须结合上下文，不自动指定群体目标。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "按用户复议仅保留乐色，不纳入普通后缀堆。源词典黑乐色/嘿乐色的定义可供释义关系审核，但不代替本卡人工判断。",
+      "open_questions": [
+        "是否确认其与垃圾的词义关系及此处针对观点的贬低用途？",
+        "当前先审独立新term；挂靠垃圾lex-0590作为variant只是备选，本阶段不得隐式修改该未入主inventory的词条。"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "variant_link_not_approved"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "利女男",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-6ab3d9b2221b83f2",
+        "term": "利女男",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-6ab3d9b2221b83f2:sense:01",
+            "definition": "网络性别争论中，对被认为偏向女性利益、迎合或讨好女性的男性的一种称呼，常带批评或贬义；这是使用者的评价，不能据此断定被指称者的行为或动机。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "已确认完整三字为解释对象；当前句提供用舔和服从换爱情的评价线索，支持待审用途草案而非事实判断。",
+      "open_questions": [
+        "是否确认利女男的指称范围和评价色彩，不把单句中对动机的指控推广为完整定义？"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "reviewer_semantic_confirmation"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "呆比",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-c82a877782fdd0bf",
+        "term": "呆比",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-c82a877782fdd0bf:sense:01",
+            "definition": "",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "原文明示以脏话提及，两次occurrence均保留；具体方言义、来源或近音展开未核实，故释义留空。",
+      "open_questions": [
+        "请确认其具体辱骂含义与方言适用范围；不能仅靠相似字形自动等同傻逼或其他词。",
+        "引用脏话仍可有解释价值，但不等于当前说话者正在用它攻击某个人。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "宁",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-ed7b13fc9eadc2ee",
+        "term": "宁",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-ed7b13fc9eadc2ee:sense:01",
+            "definition": "",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [
+            {
+              "rule_id": "pronoun-position-draft",
+              "target": "right",
+              "pattern": "^(?:先|的)"
+            }
+          ],
+          "exclude_any": []
+        }
+      },
+      "rationale": "同句两处宁均被确认需要解释，但是否为您/你的替代、反讽或其他用法尚未获得明确释义判断；正文留空，规则仅给出待审局部句法资格。",
+      "open_questions": [
+        "请确认两处宁的具体指代与语用功能，不从相似发音自动确定展开。",
+        "right以先/的开头仅覆盖当前两个句法位置，不能证明这是代词，也不能把普通地名或人名中的宁收进来；请审核是否需更稳健的候选资格条件。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "掉的一批",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-88e049d0f3c5248f",
+        "term": "掉的一批",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-88e049d0f3c5248f:sense:01",
+            "definition": "",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "按用户复议保留原文四字，不自行改字；不能把末字批套为生殖器义。固定表达或variant对应仍未确认。",
+      "open_questions": [
+        "请确认整体用途和可支持的释义；不要自动改成屌的一批、吊的一批或其他确定形式。",
+        "当前作为独立新候选审核；如要改为显式variant，需明确目标词条、理由及所有权，不能用谐音规则隐式生成。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "raw_surface_must_remain_unchanged"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "畒勾",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-3d591e0f76f207d5",
+        "term": "畒勾",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-3d591e0f76f207d5:sense:01",
+            "definition": "“母狗”的变写形式候选，可借动物称谓贬损女性；是否为此用法需结合具体语境，引用或声音比较不自动等于认可这种贬损。",
+            "categories": [
+              "Sexism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "第一阶段确认完整畒勾，排除只提取畒；这仅确定span边界，不自动批准其与母狗/亩篝的词条合并。",
+      "open_questions": [
+        "是否确认该义项，以及保留独立term还是将畒勾挂为已入审核的亩篝lex-0146的显式variant？",
+        "若选择在亩篝卡增加variant，本新词面卡应拒绝独立新增并写明去向，防止同一规范化词面跨entry冲突。",
+        "母狗lex-0237挂靠仅为备选说明；当前不通过本卡隐式编辑未入inventory的母狗。"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "variant_link_not_approved"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "盖盖",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-74ccd7b1cff3f545",
+        "term": "盖盖",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-74ccd7b1cff3f545:sense:01",
+            "definition": "",
+            "categories": [
+              "Region"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "只有河南的盖盖呗这一封闭证据；可联想到井盖相关地域刻板印象，但当前不足以自动确定义项。",
+      "open_questions": [
+        "请确认盖盖的具体所指与用法；是否确为井盖相关地域讥讽，不能仅凭河南就将该猜测写成事实。",
+        "若涉及地域刻板印象，解释必须归于说话者的表达，不能断言当地人具有偷窃等共同属性。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "regional_stereotype_not_fact"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "瞎bb",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-529ade4e8976744c",
+        "term": "瞎bb",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-529ade4e8976744c:sense:01",
+            "definition": "网络口语中可表示胡乱说话、乱嚷或说没有根据的话，通常带不满或贬义；这里只描述整体用途，不把bb未经核实地展开为某一确定词语。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "完整三字符span保留；term按原文收录，ASCII大小写由既定规范化处理，不增加任意缩写生成规则。",
+      "open_questions": [
+        "是否确认整体用途及粗俗程度？目前不确定bb的唯一展开是否可以避免强行释写。"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "abbreviation_expansion_not_asserted"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "老黑",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-c71f26729b366979",
+        "term": "老黑",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-c71f26729b366979:sense:01",
+            "definition": "对黑人的口语称呼之一，可能用于一般指称、熟络或戏谑，也可能带贬损意味；须结合说话关系、上下文和语气判断，不能一律认定为中性或仇恨。",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "撤回用户先前写入的一律中性判断；保留完整老黑并修复老黑比较多中黑比的跨词误切。",
+      "open_questions": [
+        "是否确认该释义充分保留语境差异，避免把本句或所有用例绝对化？",
+        "category用于词典组织，不是对当前句子或该词每次出现的仇恨标签。"
+      ],
+      "flags": [
+        "user_adjudication_required",
+        "no_absolute_neutrality"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "腐女",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-4db860d45ffeff75",
+        "term": "腐女",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-4db860d45ffeff75:sense:01",
+            "definition": "通常指对描写男性之间恋爱关系的作品或相关文化感兴趣的女性群体。该称呼可用于自我认同或一般指称，也可能在具体争论中被贬损使用；不能自动等同于极端或不理性。",
+            "categories": [
+              "LGBTQ"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "原文完整腐女有解释需求；不能把源词典腐癌的贬损定义直接移植过来，也不能把偏激评价写入人群的固有定义。",
+      "open_questions": [
+        "是否确认指称范围、类别以及自称/他称差别？不能从兴趣或身份标签推出个人性取向。"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "category_needs_review"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "舔",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-85a9a8e7d39af4a3",
+        "term": "舔",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-85a9a8e7d39af4a3:sense:01",
+            "definition": "在部分网络口语中，比喻刻意迎合、讨好他人，往往带讽刺或贬义；普通舌头舔舐动作不属于这一比喻义，也不能仅凭此词断定被指称者的动机。",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [
+            {
+              "rule_id": "metaphoric-use-position-draft",
+              "target": "left",
+              "pattern": "(?:用|靠|跪)$"
+            }
+          ],
+          "exclude_any": []
+        }
+      },
+      "rationale": "当前用舔和服从换来爱情一处保留；给出仅作用于已生成候选的局部资格草案，避免默认解释所有字面舔舐。",
+      "open_questions": [
+        "左侧用/靠/跪只提供局部句法或搭配线索，不等同语义判定；是否需要更稳健且不越过16字窗口的资格条件？"
+      ],
+      "flags": [
+        "new_surface_draft",
+        "candidate_eligibility_rule_draft"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "蝲蝲蛄",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-75556549379cf8ed",
+        "term": "蝲蝲蛄",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-75556549379cf8ed:sense:01",
+            "definition": "",
+            "categories": [
+              "others"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "已确认完整三字解释对象；当前句用叫声作比较，但封闭证据没有提供可核实的物种或方言词义，不能自动补出精确生物学解释。",
+      "open_questions": [
+        "请确认它的普通名称/方言义及合适解释范围；可解释普通词不代表要赋予它侮辱或群体仇恨义项。",
+        "此处是对叫声的比较，是否仅需解释普通指称，避免把前后表达的贬损用途移植给该词？"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "ordinary_reference_possible"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "褐兰州",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-8985541c51136d6b",
+        "term": "褐兰州",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-8985541c51136d6b:sense:01",
+            "definition": "",
+            "categories": [
+              "Region"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "哪里人最会偷提供地域刻板印象线索，但不充分确定褐兰州的具体所指或谐音来源；故留空等待人工确认。",
+      "open_questions": [
+        "请确认具体所指地域、形成方式和用途；不能自动等同河南、荷兰或任一近音地名。",
+        "如确认是地域贬称，应把偷窃指控归于说话者的刻板印象，不作为当地居民的事实属性。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "regional_stereotype_not_fact"
+      ],
+      "external_evidence": []
+    },
+    {
+      "term": "黑人喃",
+      "proposed_entry": {
+        "lexicon_id": "lex-new-b5bb7feeffb85985",
+        "term": "黑人喃",
+        "variants": [],
+        "senses": [
+          {
+            "sense_id": "lex-new-b5bb7feeffb85985:sense:01",
+            "definition": "",
+            "categories": [
+              "Racism"
+            ]
+          }
+        ],
+        "match_policy": {
+          "require_any": [],
+          "exclude_any": []
+        }
+      },
+      "rationale": "同句两处完整三字在第一阶段被保留；末尾喃是否构成稳定表达、变体或话语成分尚未确认，不能从黑人二字自动补造整词定义。",
+      "open_questions": [
+        "请明确黑人喃整体的所指、末尾喃的作用及可复用的词条定义。",
+        "如果认为仅有黑人有词条资格而喃只是话语成分，这涉及已冻结span决定，应提出有记录的复议，不能在本阶段静默改动原span。"
+      ],
+      "flags": [
+        "sense_unresolved",
+        "empty_definition_blocks_approval",
+        "span_gold_change_requires_adjudication"
+      ],
+      "external_evidence": []
+    }
+  ]
+}

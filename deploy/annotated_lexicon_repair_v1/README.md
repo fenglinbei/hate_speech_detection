@@ -7,6 +7,15 @@ known omission candidates, and prior input-audit notes; it contains no task
 gold labels, demonstrations, model outputs, model weights, or sealed-test
 data.
 
+As of 2026-09-04 the public route serves the second, independent
+`repair-operation` stage (56 cards). The first-stage session is frozen and
+preserved. See the [stage-two deployment and review handoff](../../docs/research/experiment-plans/annotated-lexicon-repair-v1-operation-deployment.md)
+for the exact frame, runtime, active release, verification and rollback.
+The stage-two unit template is `hsd-annotated-lexicon-operation-review.service`,
+installed under the existing service name; its session is
+`/var/lib/hsd-annotated-lexicon-repair-review/repair-operation-session.json`.
+The first-release instructions below are retained as historical baseline.
+
 Production shape:
 
 - release root: `/opt/hsd-annotated-lexicon-repair-review/releases/<release-id>`;

@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-operation-session/v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "frame_id",
+    "frame_sha256",
+    "reviewer_id",
+    "single_pass_review",
+    "finalized_bundle_id",
+    "created_at",
+    "updated_at",
+    "amendments",
+    "decisions",
+    "revision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "annotated-lexicon-operation-session/v1"
+    },
+    "frame_id": {
+      "type": "string",
+      "pattern": "^operation-frame-[0-9a-f]{64}$"
+    },
+    "frame_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "reviewer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "single_pass_review": {
+      "const": true
+    },
+    "finalized_bundle_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "amendments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "reason",
+          "prior_revision",
+          "reopened_at"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "pattern": "^operation-[0-9a-f]{20}$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "prior_revision": {
+            "$ref": "#/$defs/sha256"
+          },
+          "reopened_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^operation-[0-9a-f]{20}$": {
+          "$ref": "#/$defs/decision"
+        }
+      },
+      "additionalProperties": false
+    },
+    "revision": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry": {
+      "type": "object",
+      "required": [
+        "lexicon_id",
+        "term",
+        "variants",
+        "senses",
+        "match_policy"
+      ],
+      "properties": {
+        "lexicon_id": {
+          "type": "string",
+          "pattern": "^lex-(?:[0-9]{4}|new-[0-9a-f]{16})$"
+        },
+        "term": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variants": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "senses": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/sense"
+          }
+        },
+        "match_policy": {
+          "$ref": "#/$defs/policy"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sense": {
+      "type": "object",
+      "required": [
+        "sense_id",
+        "definition",
+        "categories"
+      ],
+      "properties": {
+        "sense_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "definition": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "categories": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "Racism",
+              "Sexism",
+              "LGBTQ",
+              "Region",
+              "others"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "rule_id",
+        "target",
+        "pattern"
+      ],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "target": {
+          "enum": [
+            "left",
+            "right",
+            "surface",
+            "context"
+          ]
+        },
+        "pattern": {
+          "type": "string",
+          "maxLength": 256
+        }
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "require_any",
+        "exclude_any"
+      ],
+      "properties": {
+        "require_any": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "exclude_any": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "status",
+        "resolution",
+        "entry",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "draft",
+            "confirmed",
+            "deferred"
+          ]
+        },
+        "resolution": {
+          "enum": [
+            null,
+            "approve",
+            "revise",
+            "reject",
+            "defer"
+          ]
+        },
+        "entry": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/entry"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "confirmed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "resolution": {
+                "enum": [
+                  "approve",
+                  "revise",
+                  "reject"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "deferred"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "resolution": {
+                "const": "defer"
+              },
+              "notes": {
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "resolution": {
+                "enum": [
+                  null,
+                  "approve",
+                  "revise"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entry": {
+                "$ref": "#/$defs/entry"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "confirmed"
+              },
+              "resolution": {
+                "const": "reject"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "notes": {
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "confirmed"
+              },
+              "resolution": {
+                "enum": [
+                  "approve",
+                  "revise"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entry": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/entry"
+                  },
+                  {
+                    "properties": {
+                      "senses": {
+                        "minItems": 1,
+                        "items": {
+                          "properties": {
+                            "definition": {
+                              "minLength": 1,
+                              "pattern": "\\S"
+                            },
+                            "categories": {
+                              "minItems": 1
+                            }
+                          }
+                        }
+                      },
+                      "variants": {
+                        "items": {
+                          "minLength": 1,
+                          "pattern": "\\S"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -71,6 +72,42 @@ def parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_REPAIR_ROOT / "span_gold/reference.json",
     )
+
+    operation_build = subparsers.add_parser(
+        "build-repair-operation", help="build the independent entry-operation review frame"
+    )
+    operation_build.add_argument(
+        "--lexicon", type=Path, default=REPOSITORY_ROOT / "data/lexicon/annotated_lexicon.json"
+    )
+    operation_build.add_argument(
+        "--span-frame", type=Path, default=DEFAULT_REPAIR_ROOT / "span_gold/frame.json"
+    )
+    operation_build.add_argument(
+        "--span-reference", type=Path, default=DEFAULT_REPAIR_ROOT / "span_gold/reference.json"
+    )
+    operation_build.add_argument(
+        "--proposals",
+        type=Path,
+        default=REPOSITORY_ROOT / "config/stage1/annotated_lexicon_repair_operation_proposals_v1.json",
+    )
+    operation_build.add_argument(
+        "--output", type=Path, default=DEFAULT_REPAIR_ROOT / "repair_operation/frame.json"
+    )
+
+    operation_serve = subparsers.add_parser(
+        "serve-repair-operation", help="serve the independent entry-operation review UI"
+    )
+    operation_serve.add_argument(
+        "--frame", type=Path, default=DEFAULT_REPAIR_ROOT / "repair_operation/frame.json"
+    )
+    operation_serve.add_argument(
+        "--session", type=Path, default=DEFAULT_REPAIR_ROOT / "repair_operation/session.json"
+    )
+    operation_serve.add_argument("--reviewer-id", default="liaozijie")
+    operation_serve.add_argument("--host", default="127.0.0.1")
+    operation_serve.add_argument("--port", type=int, default=8769)
+    operation_serve.add_argument("--public-origin")
+    operation_serve.add_argument("--check", action="store_true")
     return result
 
 
@@ -129,6 +166,47 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
             return 0
+        if arguments.command == "build-repair-operation":
+            from build_lex.annotated_lexicon_operation_review import build_operation_frame
+
+            frame = build_operation_frame(
+                lexicon_path=arguments.lexicon,
+                span_frame_path=arguments.span_frame,
+                span_reference_path=arguments.span_reference,
+                proposals_path=arguments.proposals,
+                output_path=arguments.output,
+            )
+            print(
+                json.dumps(
+                    {
+                        "frame_id": frame["manifest"]["frame_id"],
+                        "item_count": frame["manifest"]["item_count"],
+                        "output": str(arguments.output.resolve()),
+                    },
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if arguments.command == "serve-repair-operation":
+            # A stage-specific module name avoids reusing the span server when
+            # callers invoke main() more than once in the same Python process.
+            module_path = REPOSITORY_ROOT / "tools/annotated_lexicon_operation_review_ui/server.py"
+            spec = importlib.util.spec_from_file_location("annotated_lexicon_operation_server", module_path)
+            if spec is None or spec.loader is None:
+                raise LexiconRepairError("repair-operation web service module is missing")
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[spec.name] = module
+            spec.loader.exec_module(module)
+            return module.run_server(
+                frame_path=arguments.frame,
+                session_path=arguments.session,
+                reviewer_id=arguments.reviewer_id,
+                host=arguments.host,
+                port=arguments.port,
+                check=arguments.check,
+                public_origin=arguments.public_origin,
+            )
         raise AssertionError(arguments.command)
     except (LexiconRepairError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
