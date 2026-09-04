@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "annotated-lexicon-mechanism-frozen/v1",
+  "type": "object",
+  "required": ["schema_version", "lexicon_build_id", "description", "matcher_policy_version", "matcher_policy_sha256", "normalization_version", "renderer_version", "terms_sha256", "freeze_identity", "quality", "terms"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "annotated-lexicon-mechanism-frozen/v1"},
+    "lexicon_build_id": {"type": "string", "pattern": "^lexicon-mechanism-frozen-[0-9a-f]{64}$"},
+    "description": {"type": "string", "minLength": 1},
+    "matcher_policy_version": {"const": "annotated-lexicon-controlled-longest/v1"},
+    "matcher_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "normalization_version": {"const": "unicode-nfc-fullwidth-ascii-ascii-casefold/v1"},
+    "renderer_version": {"const": "numbered-senses-explicit-missing-no-category-in-definition/v1"},
+    "terms_sha256": {"$ref": "#/$defs/sha256"},
+    "freeze_identity": {
+      "type": "object",
+      "required": ["schema_version", "policy_version", "source_lexicon_sha256", "review_frame_sha256", "review_session_sha256", "span_reference_sha256", "terms_sha256", "decisions_sha256", "matcher_policy_sha256", "matcher_policy_version", "normalization_version", "renderer_version", "unicode_database_version", "regex_version", "builder_code_sha256"],
+      "properties": {
+        "schema_version": {"const": "annotated-lexicon-mechanism-frozen/v1"},
+        "policy_version": {"const": "preserve-saved-edits-default-accept-untouched-proposals/v1"},
+        "source_lexicon_sha256": {"$ref": "#/$defs/sha256"},
+        "review_frame_sha256": {"$ref": "#/$defs/sha256"},
+        "review_session_sha256": {"$ref": "#/$defs/sha256"},
+        "span_reference_sha256": {"$ref": "#/$defs/sha256"},
+        "terms_sha256": {"$ref": "#/$defs/sha256"},
+        "decisions_sha256": {"$ref": "#/$defs/sha256"},
+        "matcher_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "matcher_policy_version": {"const": "annotated-lexicon-controlled-longest/v1"},
+        "normalization_version": {"const": "unicode-nfc-fullwidth-ascii-ascii-casefold/v1"},
+        "renderer_version": {"const": "numbered-senses-explicit-missing-no-category-in-definition/v1"},
+        "unicode_database_version": {"type": "string", "minLength": 1},
+        "regex_version": {"const": "2026.4.4"},
+        "builder_code_sha256": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha256"}}
+      },
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object", "required": ["development_only", "fully_human_reviewed", "missing_definition_count", "sense_disambiguation_implemented"],
+      "properties": {
+        "development_only": {"const": true}, "fully_human_reviewed": {"const": false},
+        "missing_definition_count": {"type": "integer", "minimum": 0},
+        "sense_disambiguation_implemented": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "terms": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sense": {
+      "type": "object", "required": ["sense_id", "definition", "categories"],
+      "properties": {
+        "sense_id": {"type": "string", "minLength": 1, "maxLength": 100},
+        "definition": {"type": "string", "maxLength": 3000},
+        "categories": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["Racism", "Sexism", "LGBTQ", "Region", "others"]}}
+      }, "additionalProperties": false
+    },
+    "rule": {
+      "type": "object", "required": ["rule_id", "target", "pattern"],
+      "properties": {
+        "rule_id": {"type": "string", "minLength": 1, "maxLength": 100},
+        "target": {"enum": ["left", "right", "surface", "context"]},
+        "pattern": {"type": "string", "minLength": 1, "maxLength": 256}
+      }, "additionalProperties": false
+    },
+    "policy": {
+      "type": "object", "required": ["require_any", "exclude_any"],
+      "properties": {
+        "require_any": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/rule"}},
+        "exclude_any": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/rule"}}
+      }, "additionalProperties": false
+    },
+    "entry": {
+      "type": "object", "required": ["lexicon_id", "term", "variants", "senses", "match_policy", "category", "definition", "source_record_indices", "freeze_selection_source"],
+      "properties": {
+        "lexicon_id": {"type": "string", "pattern": "^lex-(?:[0-9]{4}|new-[0-9a-f]{16})$"},
+        "term": {"type": "string", "minLength": 1},
+        "variants": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 100}},
+        "senses": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/sense"}},
+        "match_policy": {"$ref": "#/$defs/policy"},
+        "category": {"type": "string", "minLength": 1},
+        "definition": {"type": "string", "minLength": 1},
+        "source_record_indices": {"type": "array", "uniqueItems": true, "items": {"type": "integer", "minimum": 0, "maximum": 828}},
+        "freeze_selection_source": {"enum": ["original_preserved", "human_confirmed_preserved", "user_edited_deferred_preserved", "user_saved_draft_preserved", "user_batch_default_accept"]}
+      }, "additionalProperties": false
+    }
+  }
+}
