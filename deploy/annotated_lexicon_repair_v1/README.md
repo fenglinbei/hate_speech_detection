@@ -1,5 +1,11 @@
 # Annotated lexicon repair v1 review deployment
 
+Current status (2026-09-04): repair experiments and further annotation are
+paused by user decision. The repair review unit is stopped and disabled;
+the partial stage-two session is backed up, not finalized. See the
+[pause and resource-freeze decision](../../docs/research/experiment-plans/lexicon-resource-freeze-decision-20260904.md).
+The deployment instructions and initial-release status below are historical.
+
 This deployment adapts the established WP3 2.1 / G3 workbench flow for the
 three independent repair review stages.  The first release serves only the
 39-item `span-gold` frame.  It contains development query text, legacy hits,
