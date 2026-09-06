@@ -1,5 +1,7 @@
 # Merged-L Coverage Experiment v1
 
+New: [post-hoc dev classification metrics](posthoc/coverage-01-classification-20260906/README.md), including all eight conditions, per-label F1, joint correctness, Gold summaries, and a CPU replay script.
+
 Registered on 2026-09-06 (Asia/Shanghai). Current run: `coverage-01`.
 
 Status: complete and independently audited on 2026-09-06. All 18 preflight passes, 10,288 full-dev blocks and 174,896 candidates are sealed. The independent audit recomputed all 240 registered CI targets in all six strata. See [concise findings](RESULTS.md), [audited Chinese report](results/coverage-01/REPORT.md) and [audit receipt](audits/coverage-01-full-dev/audit.json).

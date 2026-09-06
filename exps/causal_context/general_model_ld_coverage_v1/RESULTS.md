@@ -1,5 +1,7 @@
 # Audited Merged-L Results: Qwen3-8B
 
+Post-hoc supplement (2026-09-06): [dev classification metrics and Gold summaries](posthoc/coverage-01-classification-20260906/README.md). This separately computed supplement includes F1 and joint correctness; it is not part of the original registered endpoints or independent audit below.
+
 Completed and independently audited on 2026-09-06. Scope: all 643 dev queries,
 10,288 blocks, 174,896 candidates, and 18 numerical preflight passes. All 240
 registered CI targets in all six strata were independently recomputed. See the
