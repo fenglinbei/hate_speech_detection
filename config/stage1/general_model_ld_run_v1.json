@@ -1,0 +1,71 @@
+{
+  "schema_version": "general-model-ld-run-config/v1",
+  "experiment_id": "general-model-ld-mechanism-v1",
+  "protocol": "docs/research/experiment-plans/general-model-ld-mechanism-protocol-v1.md",
+  "scope": "development-package",
+  "test_access": false,
+  "sources": {
+    "data_ref": "exps/causal_context/stage1_p0/refs/data_ref.json",
+    "data_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+    "data_payload_sha256": "7cadd0929c59481e82b3e0a1aff01830109dcca692860b73a44b287b1c6ce85d",
+    "partition_ref": "exps/causal_context/stage1_p0/refs/train_partition_ref.json",
+    "partition_id": "tpart-dc73828edb28d36b4da72268914bea6b0ee94c2fa0e2bd37762829e6523eeb19",
+    "partition_payload_sha256": "c98edd5243b1c7153d583937a20444d5d7b1eca4a2d4f100e3c884672e7c788c",
+    "lexicon": "data/lexicon/annotated_lexicon_mechanism_frozen_v1.json",
+    "lexicon_sha256": "31240193eeba29f712560e2e80e89ee9dd5c3c969aa180d10b95bf2451882385",
+    "lexicon_manifest": "exps/causal_context/lexicon_mechanism_frozen_v1/manifest.json",
+    "expected_counts": {"train": 5781, "fit": 5165, "calibration": 616, "dev": 643, "lexicon": 833}
+  },
+  "models": [
+    {"key": "qwen3-8b", "model_id": "Qwen/Qwen3-8B", "path": "models/base/Qwen3-8B", "role": "primary", "backend": "local-hf"},
+    {"key": "qwen3-14b", "model_id": "Qwen/Qwen3-14B", "path": "models/base/Qwen3-14B", "role": "replication", "backend": "pending"},
+    {"key": "qwen3.8-27b", "model_id": "Qwen/Qwen3.8-27B", "path": "models/base/Qwen3.8-27B", "role": "replication", "backend": "pending"}
+  ],
+  "retrieval": {
+    "model_path": "models/base/bge-large-zh-v1.5",
+    "demo_top_k": 10,
+    "source_class_order": ["non-hate", "Region", "Racism", "Sexism", "LGBTQ", "others"],
+    "allocated_class_top_k": {"non-hate": 4, "Region": 1, "Racism": 1, "Sexism": 2, "LGBTQ": 1, "others": 1},
+    "candidate_multiplier": 10,
+    "similarity_threshold": 0.0,
+    "single_tuple_demos_only": false,
+    "query_prefix": "为这个句子生成表示以用于检索相关文章：",
+    "max_embedding_tokens": 512,
+    "batch_size": 32,
+    "torch_num_threads": 16
+  },
+  "matrix": {
+    "classification_tasks": ["hate", "group"],
+    "primary_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD", "L-Definition", "L-Category", "L-CategorySwap", "D-Input", "D-Schema", "D-LabelShuffle", "D-Order", "LD-CategorySwap"],
+    "core_conditions": ["C0", "CL", "CD", "CLD", "PL", "PD"],
+    "extraction_dev_count": 64,
+    "preflight_query_count": 8,
+    "sampling_seed": 42,
+    "test_mechanism_target": 300,
+    "deferred_conditions": ["L-DefinitionSwap", "L-Paraphrase", "D-OppositeStance", "source-conflict-semantic", "instance-loo-addback", "activation-patching"]
+  },
+  "runtime": {
+    "enable_thinking": false,
+    "do_sample": false,
+    "seed": 42,
+    "dtype": "bfloat16",
+    "max_sequence_tokens": 8192,
+    "max_new_tokens": {"hate": 64, "group": 128, "extraction": 512},
+    "batch_size": 1,
+    "overflow_policy": "explicit-error-no-trimming",
+    "determinism_repetitions": 2,
+    "classification_valid_rate_min": 0.95,
+    "trust_remote_code": false,
+    "local_files_only": true
+  },
+  "controls": {"absolute_tokens": 8, "relative": 0.02},
+  "analysis": {
+    "hate_primary": ["macro_f1", "accuracy"],
+    "group_primary": ["sample_f1", "exact_match"],
+    "group_secondary": ["micro_f1", "macro_f1"],
+    "missing_policy": "retain-all-queries-report-invalid-and-coverage",
+    "extraction_scope": "field-unbound-auxiliary",
+    "scientific_success_requires_positive_effect": false,
+    "test_statistics_registration": "pending-dev-validation"
+  }
+}

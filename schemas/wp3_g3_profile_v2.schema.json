@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_profile_v2.schema.json",
+  "title": "WP3 G3 full profile v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_version",
+    "rule_version",
+    "families",
+    "phonetic_max_distance",
+    "reference_required",
+    "limits",
+    "romanizer"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-profile/v2"},
+    "profile_version": {"const": "wp3-g3-profile/full-v2"},
+    "rule_version": {"const": "wp3-form-rules/v2"},
+    "families": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mixed_script",
+        "unicode_nfkc",
+        "emoji",
+        "known_variant",
+        "pinyin_initials",
+        "phonetic_variant",
+        "separator_insertion",
+        "orthographic_variant"
+      ],
+      "properties": {
+        "mixed_script": {"const": true},
+        "unicode_nfkc": {"const": true},
+        "emoji": {"const": true},
+        "known_variant": {"const": true},
+        "pinyin_initials": {"const": true},
+        "phonetic_variant": {"const": true},
+        "separator_insertion": {"const": true},
+        "orthographic_variant": {"const": true}
+      }
+    },
+    "phonetic_max_distance": {"const": 0},
+    "reference_required": {"const": true},
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_surface_chars", "mixed_script_max_chars"],
+      "properties": {
+        "max_surface_chars": {"type": "integer", "minimum": 1, "maximum": 80},
+        "mixed_script_max_chars": {"type": "integer", "minimum": 2, "maximum": 80}
+      }
+    },
+    "romanizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backend_id",
+        "package_name",
+        "package_version",
+        "wheel_sha256",
+        "installed_distribution_manifest_sha256",
+        "resource_manifest_sha256",
+        "dependency_lock_path",
+        "dependency_lock_sha256",
+        "settings"
+      ],
+      "properties": {
+        "backend_id": {"const": "pypinyin-0.55.0/phrase-aware-one-best-normal-ascii/v1"},
+        "package_name": {"const": "pypinyin"},
+        "package_version": {"const": "0.55.0"},
+        "wheel_sha256": {"const": "d53b1e8ad2cdb815fb2cb604ed3123372f5a28c6f447571244aca36fc62a286f"},
+        "installed_distribution_manifest_sha256": {"const": "8e42ef9fab920c2a65fc2ba20d824d493baffb4a1a0fd34f7da4b4e618fabcf8"},
+        "resource_manifest_sha256": {"const": "b48ef6a7b3ade83ce6b4beeba3a9c10d2a22a0c08759d5a52ac67dae00b6b2a1"},
+        "dependency_lock_path": {"const": "config/stage1/wp3_g3_dependency_lock_v1.json"},
+        "dependency_lock_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "style",
+            "heteronym",
+            "errors",
+            "strict",
+            "v_to_u",
+            "tone_sandhi",
+            "tone_marks",
+            "umlaut"
+          ],
+          "properties": {
+            "style": {"const": "normal"},
+            "heteronym": {"const": false},
+            "errors": {"const": "exception"},
+            "strict": {"const": true},
+            "v_to_u": {"const": false},
+            "tone_sandhi": {"const": false},
+            "tone_marks": {"const": "folded"},
+            "umlaut": {"const": "v"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_manual_source_map_v1.schema.json",
+  "title": "WP3 G3 explicit manual-source attachment map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "map_id", "scope", "network_access_allowed", "attachments", "companion_contracts"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-manual-source-map/v1"},
+    "map_id": {"$ref": "#/$defs/id"},
+    "scope": {"const": "development-only-form-only-label-free-non-lexicon"},
+    "network_access_allowed": {"const": false},
+    "attachments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/attachment"}
+    },
+    "companion_contracts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/companion"}
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "httpUrl": {"type": "string", "format": "uri", "pattern": "^https?://"},
+    "pagination": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["page_index", "page_count"],
+      "properties": {
+        "page_index": {"type": "integer", "minimum": 1},
+        "page_count": {"type": "integer", "minimum": 2}
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias_id", "source_id", "component_id", "attachment_locator",
+        "requested_url", "final_url", "snapshot_url", "acquired_at", "title",
+        "acquisition_mode", "source_role", "format", "disposition",
+        "expected_size_bytes", "expected_sha256", "pagination", "wikimedia_revision_id"
+      ],
+      "properties": {
+        "alias_id": {"$ref": "#/$defs/id"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "component_id": {"$ref": "#/$defs/id"},
+        "attachment_locator": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?/)(?!.*\\\\).+$"},
+        "requested_url": {"$ref": "#/$defs/httpUrl"},
+        "final_url": {"$ref": "#/$defs/httpUrl"},
+        "snapshot_url": {"$ref": "#/$defs/httpUrl"},
+        "acquired_at": {"type": "string", "format": "date-time"},
+        "title": {"type": ["string", "null"], "minLength": 1},
+        "acquisition_mode": {"enum": ["user_supplied_archive", "publisher_pdf", "repository_archive", "repository_data", "license_file"]},
+        "source_role": {"enum": ["direct_evidence", "candidate_pool", "prevalence_or_taxonomy", "license_or_provenance"]},
+        "format": {"enum": ["mhtml", "pdf", "json", "zip", "text"]},
+        "disposition": {"enum": ["evidence_eligible", "candidate_only", "acquisition_only"]},
+        "expected_size_bytes": {"type": "integer", "minimum": 1, "maximum": 67108864},
+        "expected_sha256": {"$ref": "#/$defs/sha256"},
+        "pagination": {"$ref": "#/$defs/pagination"},
+        "wikimedia_revision_id": {"type": ["string", "null"], "pattern": "^[1-9][0-9]*$"}
+      }
+    },
+    "memberBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["member_path", "component_id"],
+      "properties": {
+        "member_path": {"type": "string", "minLength": 1},
+        "component_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "companion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_id", "repository_commit", "archive_component_id",
+        "data_component_id", "license_component_id", "archive_comment",
+        "member_bindings", "expected_record_count", "expected_candidate_count",
+        "expected_candidate_type_counts"
+      ],
+      "properties": {
+        "contract_id": {"$ref": "#/$defs/id"},
+        "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "archive_component_id": {"$ref": "#/$defs/id"},
+        "data_component_id": {"$ref": "#/$defs/id"},
+        "license_component_id": {"$ref": "#/$defs/id"},
+        "archive_comment": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "member_bindings": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/memberBinding"}},
+        "expected_record_count": {"type": "integer", "minimum": 1},
+        "expected_candidate_count": {"type": "integer", "minimum": 1},
+        "expected_candidate_type_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["abbreviation", "homophonic pun"],
+          "properties": {
+            "abbreviation": {"type": "integer", "minimum": 1},
+            "homophonic pun": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    }
+  }
+}

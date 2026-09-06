@@ -955,6 +955,14 @@ def generate_g3_observations(
         surface = content[start:end]
         if not surface.strip() or len(surface) > max_surface_chars:
             return
+        if replacement is not None and (
+            not replacement.strip() or replacement != replacement.strip()
+        ):
+            # Some compatibility/control characters normalize to the empty
+            # string or to a spacing combining sequence (for example U+FFE3).
+            # They do not provide a usable trimmed replacement hypothesis and
+            # must not create an observation that violates the shared schema.
+            return
         key = (start, end, surface, variant, mechanism, replacement)
         observations[key] = _make_observation(
             record_id=record_value,
@@ -1384,6 +1392,24 @@ def load_generator_config(
         raise CandidateGeneratorError("G1 passes are not frozen")
     if value.get("g2", {}).get("aggregation") != "provider-union-no-vote/v1":
         raise CandidateGeneratorError("G2 aggregation is not a provider union")
+    pilot = value.get("pilot")
+    if (
+        not isinstance(pilot, Mapping)
+        or pilot.get("development_sources")
+        != ["historical-a1-200", "historical-dual-model-240"]
+        or pilot.get("historical_case_references_only")
+        != ["historical-candidate-gate-80", "historical-span-revision-49"]
+        or pilot.get("development_unique_records") != 424
+        or pilot.get("development_source_intersection_records") != 16
+        or not isinstance(pilot.get("s22"), Mapping)
+        or pilot["s22"].get("status") != "deferred-not-implemented"
+        or pilot["s22"].get("unique_fit_records") != 340
+        or pilot["s22"].get("hidden_repeat_pages") != 60
+        or pilot["s22"].get("total_review_cases") != 400
+        or pilot["s22"].get("must_not_overlap_s21") is not True
+        or pilot["s22"].get("model_call_authorization_required") is not True
+    ):
+        raise CandidateGeneratorError("S2.1/S2.2 pilot boundary differs")
     aggregation = value.get("aggregation")
     if not isinstance(aggregation, Mapping) or any(
         aggregation.get(field) is not expected

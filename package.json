@@ -1,0 +1,16 @@
+{
+  "name": "hate-speech-detection-review-tools",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test:ui-core": "node tools/wp3_candidate_review_ui/test_core.cjs",
+    "test:ui-e2e": "playwright test tools/wp3_candidate_review_ui/e2e.spec.js",
+    "test:g3-ui-core": "node tools/wp3_g3_form_review_ui/test_core.cjs",
+    "test:g3-ui-e2e": "playwright test --config tools/wp3_g3_form_review_ui/playwright.config.cjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}

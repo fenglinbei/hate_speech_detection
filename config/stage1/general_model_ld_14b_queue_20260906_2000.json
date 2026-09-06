@@ -1,0 +1,38 @@
+{
+  "schema_version": "general-model-gpu-queue/v1",
+  "graceful_stop_at": "2026-09-06T11:55:00Z",
+  "hard_deadline": "2026-09-06T12:00:00Z",
+  "poll_seconds": 1,
+  "interrupt_grace_seconds": 120,
+  "terminate_grace_seconds": 30,
+  "hard_release_margin_seconds": 5,
+  "phases": [
+    {
+      "name": "14b-preflight-resume",
+      "jobs": [
+        {
+          "id": "14b-preflight",
+          "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "command": ["/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python", "scripts/stage1/general_model_coverage_replication.py", "preflight", "--plan", "exps/causal_context/general_model_ld_coverage_14b_v1/plan_ref.json", "--output", "exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01"],
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": ["preflight_passed"]
+        }
+      ]
+    },
+    {
+      "name": "14b-full-dev",
+      "jobs": [
+        {
+          "id": "14b-dev",
+          "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+          "requires_success": ["14b-preflight"],
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "command": ["/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python", "scripts/stage1/general_model_coverage_replication.py", "dev", "--plan", "exps/causal_context/general_model_ld_coverage_14b_v1/plan_ref.json", "--output", "exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01"],
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": ["complete"]
+        }
+      ]
+    }
+  ]
+}

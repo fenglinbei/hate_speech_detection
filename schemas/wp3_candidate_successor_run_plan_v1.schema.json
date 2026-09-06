@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_candidate_successor_run_plan_v1.schema.json",
+  "title": "WP3 S2.1b executable successor provider plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_revision",
+    "plan_id",
+    "scope",
+    "scientific_eligible",
+    "sealed",
+    "supersedes_plan_id",
+    "frame_dependency",
+    "raw_gold_boundary",
+    "prompt_contract",
+    "implementation_contract",
+    "g3_completion_dependency",
+    "request_profile",
+    "providers",
+    "slot_grid",
+    "resources",
+    "pricing",
+    "execution"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-s21-successor-run-plan/v1"},
+    "plan_revision": {"const": "wp3-s21b-provider-runner/v3"},
+    "plan_id": {"type": "string", "pattern": "^wp3runplan-[0-9a-f]{64}$"},
+    "scope": {"const": "development-only"},
+    "scientific_eligible": {"const": false},
+    "sealed": {"const": false},
+    "supersedes_plan_id": {"type": "string", "pattern": "^wp3runplan-[0-9a-f]{64}$"},
+    "frame_dependency": {"type": "object"},
+    "raw_gold_boundary": {"type": "object"},
+    "prompt_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "g1_surface_decode",
+        "g1_lexical_pragmatic",
+        "g2_direct_mention"
+      ],
+      "properties": {
+        "g1_surface_decode": {"$ref": "#/$defs/promptBinding"},
+        "g1_lexical_pragmatic": {"$ref": "#/$defs/promptBinding"},
+        "g2_direct_mention": {"$ref": "#/$defs/promptBinding"}
+      }
+    },
+    "implementation_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator_v2", "successor_runner"],
+      "properties": {
+        "generator_v2": {"$ref": "#/$defs/implementationBinding"},
+        "successor_runner": {"$ref": "#/$defs/implementationBinding"}
+      }
+    },
+    "g3_completion_dependency": {"type": "object"},
+    "request_profile": {"type": "object"},
+    "providers": {"type": "object"},
+    "slot_grid": {"type": "object"},
+    "resources": {"type": "object"},
+    "pricing": {"type": "object"},
+    "execution": {"type": "object"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "promptBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "system_prompt_sha256",
+        "response_schema_path",
+        "response_schema_sha256"
+      ],
+      "properties": {
+        "version": {"type": "string", "minLength": 1},
+        "system_prompt_sha256": {"$ref": "#/$defs/sha256"},
+        "response_schema_path": {
+          "type": "string",
+          "pattern": "^schemas/wp3_[A-Za-z0-9_.-]+\\.json$"
+        },
+        "response_schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "implementationBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

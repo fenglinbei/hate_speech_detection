@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_s21_locked_raw_gold_v1.schema.json",
+  "title": "WP3 S2.1 locked raw mention gold",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol_revision",
+    "frame_id",
+    "reviewer_id",
+    "scope",
+    "scientific_eligible",
+    "sealed",
+    "raw_annotations",
+    "raw_lock",
+    "raw_amendments",
+    "source_session"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "wp3-s21-locked-raw-gold/v1"
+    },
+    "protocol_revision": {
+      "const": "wp3-s21b-current-generator-diagnostic/v1"
+    },
+    "frame_id": {
+      "type": "string",
+      "pattern": "^wp3devframe-[0-9a-f]{64}$"
+    },
+    "reviewer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "scope": {
+      "const": "development-only"
+    },
+    "scientific_eligible": {
+      "const": false
+    },
+    "sealed": {
+      "const": false
+    },
+    "raw_annotations": {
+      "type": "object",
+      "minProperties": 424,
+      "maxProperties": 424,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^S21-[0-9]{3}$": {
+          "$ref": "#/$defs/raw_annotation"
+        }
+      }
+    },
+    "raw_lock": {
+      "$ref": "#/$defs/base_raw_lock"
+    },
+    "raw_amendments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/raw_amendment"
+      }
+    },
+    "source_session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "frame_payload_manifest_sha256",
+        "revision",
+        "phase",
+        "updated_at",
+        "legacy_proposals_revealed",
+        "legacy_diagnostic_decision_count",
+        "legacy_finalized_gold_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "wp3-s21-review-session/v1"
+        },
+        "frame_payload_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "revision": {
+          "$ref": "#/$defs/sha256"
+        },
+        "phase": {
+          "const": "diagnostic"
+        },
+        "updated_at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "legacy_proposals_revealed": {
+          "const": true
+        },
+        "legacy_diagnostic_decision_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6306
+        },
+        "legacy_finalized_gold_id": {
+          "type": "null"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reason_code": {
+      "enum": [
+        "stable_core_candidate",
+        "context_required",
+        "evidence_required",
+        "transparent",
+        "ordinary_identity_or_name",
+        "generic_insult",
+        "fragment",
+        "function_word_attached",
+        "sentence_level",
+        "wrong_boundary",
+        "substring_projection",
+        "unsupported_sense",
+        "one_off_creation",
+        "ambiguous_surface",
+        "context_polysemy",
+        "quoted_or_reclaimed",
+        "evidence_conflict",
+        "variant_unresolved",
+        "non_contiguous_unresolved",
+        "label_derived",
+        "not_fit_attested",
+        "duplicate",
+        "no_neutral_gloss",
+        "other"
+      ]
+    },
+    "mention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mention_id",
+        "surface",
+        "occurrence_ordinal",
+        "start",
+        "end",
+        "provisional_route",
+        "reason_codes",
+        "notes"
+      ],
+      "properties": {
+        "mention_id": {
+          "type": "string",
+          "pattern": "^s21mention-[0-9a-f]{32}$"
+        },
+        "surface": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        },
+        "occurrence_ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provisional_route": {
+          "enum": [
+            "A_candidate",
+            "B_candidate",
+            "C_candidate"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/reason_code"
+          }
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "raw_annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "content_sha256",
+        "needs_explanation",
+        "mentions",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "const": "confirmed"
+        },
+        "content_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "needs_explanation": {
+          "type": "boolean"
+        },
+        "mentions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mention"
+          }
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      }
+    },
+    "base_raw_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "raw_annotations_sha256",
+        "locked_at"
+      ],
+      "properties": {
+        "policy": {
+          "const": "raw-lock-before-unattributed-proposal-reveal/v1"
+        },
+        "raw_annotations_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "locked_at": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "raw_amendment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "case_id",
+        "proposal_id",
+        "reason",
+        "post_reveal_raw_amendment",
+        "reopened_at",
+        "prior_revision"
+      ],
+      "properties": {
+        "scope": {
+          "const": "raw"
+        },
+        "case_id": {
+          "type": "string",
+          "pattern": "^S21-[0-9]{3}$"
+        },
+        "proposal_id": {
+          "type": "null"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "post_reveal_raw_amendment": {
+          "const": false
+        },
+        "reopened_at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prior_revision": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

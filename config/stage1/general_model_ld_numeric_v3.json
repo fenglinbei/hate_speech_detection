@@ -1,0 +1,24 @@
+{
+  "schema_version": "general-model-ld-numeric-fallback-config/v1",
+  "parent_plan_ref": "exps/causal_context/general_model_ld_numeric_v2/plan_ref.json",
+  "source_failed_run": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03",
+  "protocol_path": "docs/research/experiment-plans/general-model-ld-numerical-measurement-v3.md",
+  "output_root": "exps/causal_context/general_model_ld_numeric_v3",
+  "production_batch_size": 1,
+  "raw_path": "dev-b1",
+  "device_indices": [0, 1, 2, 3],
+  "validation": {
+    "repeat_abs_tolerance": 0.0001,
+    "reference_abs_tolerance": 0.0001,
+    "inherit_epsilon": true,
+    "epsilon_recalibration": false,
+    "padding_extra": 64,
+    "replica_shift": 1,
+    "challenges": ["padding", "prefix", "members", "replica"]
+  },
+  "auto_expand_on_pass": true,
+  "stop_on_any_gate_failure": true,
+  "automatic_profile_search": false,
+  "test_access": false,
+  "query_gold_in_scoring": false
+}

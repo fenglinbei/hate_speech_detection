@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_form_relation_claims_v2.schema.json",
+  "title": "WP3 G3 evidence-bound form relation claims",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "extractor", "claims"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-form-relation-claims/v2"},
+    "extractor": {"const": "offline-explicit-form-relations/v2"},
+    "claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    }
+  },
+  "$defs": {
+    "trimmed160": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id",
+        "surface",
+        "canonical",
+        "proposed_family",
+        "phonetic_scan_enabled",
+        "quote",
+        "occurrence_ordinal",
+        "relation_note",
+        "source_row_ordinal"
+      ],
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,159}$"
+        },
+        "surface": {"$ref": "#/$defs/trimmed160"},
+        "canonical": {"$ref": "#/$defs/trimmed160"},
+        "proposed_family": {
+          "enum": [
+            "known_variant",
+            "phonetic_variant",
+            "orthographic_variant"
+          ]
+        },
+        "phonetic_scan_enabled": {"type": "boolean"},
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        },
+        "occurrence_ordinal": {"type": "integer", "minimum": 1},
+        "relation_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        },
+        "source_row_ordinal": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "integer", "minimum": 1}
+          ]
+        }
+      }
+    }
+  }
+}

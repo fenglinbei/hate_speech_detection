@@ -25,9 +25,14 @@ const ui = {
   nextItem: document.querySelector("#next-item"),
   cohort: document.querySelector("#cohort"),
   queryContent: document.querySelector("#query-content"),
+  selectionToolbar: document.querySelector("#selection-toolbar"),
+  selectionSurface: document.querySelector("#selection-surface"),
+  selectionError: document.querySelector("#selection-error"),
+  confirmSelection: document.querySelector("#confirm-selection"),
   priorDisposition: document.querySelector("#prior-disposition"),
   priorAudit: document.querySelector("#prior-audit"),
   candidateStatus: document.querySelector("#candidate-status"),
+  activeCandidateStatus: document.querySelector("#active-candidate-status"),
   candidateList: document.querySelector("#candidate-list"),
   zeroCandidate: document.querySelector("#zero-candidate"),
   decisionTitle: document.querySelector("#decision-title"),
@@ -36,7 +41,20 @@ const ui = {
   dropAll: document.querySelector("#drop-all"),
   clearAll: document.querySelector("#clear-all"),
   candidateError: document.querySelector("#candidate-error"),
-  additionalSpans: document.querySelector("#additional-spans"),
+  additionalList: document.querySelector("#additional-list"),
+  additionalCount: document.querySelector("#additional-count"),
+  additionalEmpty: document.querySelector("#additional-empty"),
+  selectInQuery: document.querySelector("#select-in-query"),
+  additionalDialog: document.querySelector("#additional-dialog"),
+  additionalForm: document.querySelector("#additional-form"),
+  additionalDialogTitle: document.querySelector("#additional-dialog-title"),
+  additionalSurface: document.querySelector("#additional-surface"),
+  additionalPosition: document.querySelector("#additional-position"),
+  additionalContext: document.querySelector("#additional-context"),
+  additionalReason: document.querySelector("#additional-reason"),
+  additionalDialogError: document.querySelector("#additional-dialog-error"),
+  cancelAdditional: document.querySelector("#cancel-additional"),
+  submitAdditional: document.querySelector("#submit-additional"),
   additionalError: document.querySelector("#additional-error"),
   notes: document.querySelector("#notes"),
   notesError: document.querySelector("#notes-error"),
@@ -54,8 +72,9 @@ const ui = {
 let bootstrap = null;
 let current = null;
 let draft = null;
-let additionalRaw = "";
-let additionalParseErrors = [];
+let activeCandidateIndex = 0;
+let selectedSpan = null;
+let pendingAdditional = null;
 let visibleItemIds = [];
 let itemFilter = "all";
 let searchMode = "literal";
@@ -198,7 +217,7 @@ function buildPriorAudit(item) {
   ui.priorDisposition.textContent = item.prior_audit.disposition;
   for (const key of Object.keys(labels)) {
     const value = item.prior_audit[key];
-    if (value === null || value === "") continue;
+    if (value === undefined || value === null || value === "") continue;
     const term = document.createElement("dt");
     term.textContent = labels[key];
     const description = document.createElement("dd");
@@ -207,11 +226,14 @@ function buildPriorAudit(item) {
   }
 }
 
-function buildCandidateCard(candidate) {
+function buildCandidateCard(candidate, index) {
   const card = document.createElement("article");
   card.className = "candidate-card";
   card.dataset.candidateId = candidate.candidate_id;
   card.dataset.action = draft.candidate_actions[candidate.candidate_id] || "";
+  card.setAttribute("aria-label", `候选 ${index + 1}：${candidate.surface}，位置 ${candidate.span[0]} 至 ${candidate.span[1]}`);
+  card.addEventListener("click", () => selectCandidate(index));
+  card.addEventListener("focusin", () => selectCandidate(index));
 
   const head = document.createElement("div");
   head.className = "candidate-head";
@@ -248,13 +270,12 @@ function buildCandidateCard(candidate) {
     const button = document.createElement("button");
     button.type = "button";
     button.dataset.action = action;
-    button.textContent = label;
+    button.textContent = `${label} · ${action === "keep" ? "Q" : "A"}`;
     button.classList.toggle("active", draft.candidate_actions[candidate.candidate_id] === action);
     button.disabled = busy || isLocked();
     button.addEventListener("click", () => {
-      draft.candidate_actions[candidate.candidate_id] = action;
-      buildCandidateList();
-      markDirty();
+      selectCandidate(index);
+      setCandidateAction(action);
     });
     actions.append(button);
   }
@@ -265,18 +286,167 @@ function buildCandidateCard(candidate) {
 
 function buildCandidateList() {
   ui.candidateList.replaceChildren();
-  for (const candidate of current.item.candidates) ui.candidateList.append(buildCandidateCard(candidate));
+  current.item.candidates.forEach((candidate, index) => ui.candidateList.append(buildCandidateCard(candidate, index)));
   ui.zeroCandidate.classList.toggle("hidden", current.item.candidates.length > 0);
+  refreshCandidateState();
+}
+
+function refreshCandidateState() {
+  const candidates = current.item.candidates;
+  activeCandidateIndex = Math.max(0, Math.min(activeCandidateIndex, candidates.length - 1));
+  ui.candidateList.querySelectorAll(".candidate-card").forEach((card, index) => {
+    const active = index === activeCandidateIndex;
+    const action = draft.candidate_actions[card.dataset.candidateId];
+    card.dataset.action = action || "";
+    card.classList.toggle("is-current", active);
+    card.tabIndex = active ? 0 : -1;
+    card.setAttribute("aria-current", String(active));
+    card.querySelectorAll("button[data-action]").forEach(button => {
+      const pressed = button.dataset.action === action;
+      button.classList.toggle("active", pressed);
+      button.setAttribute("aria-pressed", String(pressed));
+    });
+  });
   const values = Object.values(draft.candidate_actions);
   const decided = values.filter(Boolean).length;
   const kept = values.filter(value => value === "keep").length;
   ui.candidateStatus.textContent = `${decided} / ${values.length} 已决定；保留 ${kept}`;
+  const active = candidates[activeCandidateIndex];
+  ui.activeCandidateStatus.textContent = active
+    ? `当前 ${activeCandidateIndex + 1} / ${candidates.length}：“${active.surface}” · ↑ ↓ 切换 · Q 保留 / A 删除`
+    : "没有候选 occurrence；如有遗漏，请在原文中划词补充。";
+  renderQuery();
+}
+
+function selectCandidate(index, {focus = false} = {}) {
+  if (!current || busy || !current.item.candidates.length) return;
+  activeCandidateIndex = Math.max(0, Math.min(index, current.item.candidates.length - 1));
+  refreshCandidateState();
+  if (focus) {
+    const card = ui.candidateList.children[activeCandidateIndex];
+    card.focus({preventScroll: true});
+    card.scrollIntoView({block: "nearest"});
+  }
+}
+
+function setCandidateAction(action) {
+  if (!current || busy || isLocked()) return;
+  const candidate = current.item.candidates[activeCandidateIndex];
+  if (!candidate) return;
+  draft.candidate_actions[candidate.candidate_id] = action;
+  refreshCandidateState();
+  markDirty();
+}
+
+function renderQuery() {
+  const item = current.item;
+  const candidate = item.candidates[activeCandidateIndex];
+  const candidateId = candidate ? candidate.candidate_id : "";
+  if (ui.queryContent.dataset.itemId === item.item_id && ui.queryContent.dataset.candidateId === candidateId) return;
+  ui.queryContent.dataset.itemId = item.item_id;
+  ui.queryContent.dataset.candidateId = candidateId;
+  ui.queryContent.replaceChildren();
+  const text = Array.from(item.query_content);
+  if (candidate) {
+    const mark = document.createElement("mark");
+    mark.textContent = text.slice(candidate.span[0], candidate.span[1]).join("");
+    ui.queryContent.append(document.createTextNode(text.slice(0, candidate.span[0]).join("")), mark,
+      document.createTextNode(text.slice(candidate.span[1]).join("")));
+  } else ui.queryContent.textContent = item.query_content;
+  selectedSpan = null;
+  ui.selectionToolbar.classList.add("hidden");
+}
+
+function captureSelection() {
+  if (!current || busy || isLocked() || ui.additionalDialog.open || ui.guidelineDialog.open) return;
+  const span = Gold.selectedQuerySpan(ui.queryContent, window.getSelection());
+  selectedSpan = span ? {...span, itemId: current.item.item_id} : null;
+  ui.selectionToolbar.classList.toggle("hidden", !span);
+  ui.selectionSurface.textContent = span ? `“${span.surface}”` : "";
+  ui.selectionError.textContent = span ? Gold.additionalSpanError(current.item, draft, span) : "";
+  syncControls();
+}
+
+function renderAdditionalList() {
+  ui.additionalList.replaceChildren();
+  ui.additionalCount.textContent = draft.additional_spans.length;
+  ui.additionalEmpty.classList.toggle("hidden", draft.additional_spans.length > 0);
+  draft.additional_spans.forEach((row, index) => {
+    const card = document.createElement("article");
+    card.className = "additional-card";
+    const head = document.createElement("div");
+    head.className = "additional-card-head";
+    const surface = document.createElement("strong");
+    surface.textContent = `“${row.surface}”`;
+    const position = document.createElement("code");
+    position.textContent = `[${row.start}, ${row.end})`;
+    const reason = document.createElement("p");
+    reason.textContent = row.reason;
+    const actions = document.createElement("div");
+    actions.className = "additional-actions";
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.textContent = "修改理由";
+    edit.addEventListener("click", () => openAdditionalDialog(row, index));
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "移除";
+    remove.addEventListener("click", () => {
+      if (busy || isLocked()) return;
+      draft.additional_spans.splice(index, 1);
+      renderAdditionalList();
+      syncControls();
+      markDirty();
+    });
+    head.append(surface, position);
+    actions.append(edit, remove);
+    card.append(head, reason, actions);
+    ui.additionalList.append(card);
+  });
+}
+
+function openAdditionalDialog(span, editingIndex = -1) {
+  if (!current || busy || isLocked() || !span || (span.itemId && span.itemId !== current.item.item_id)) return;
+  pendingAdditional = {start: span.start, end: span.end, surface: span.surface, editingIndex, itemId: current.item.item_id};
+  window.clearTimeout(saveTimer);
+  const characters = Array.from(current.item.query_content);
+  ui.additionalSurface.textContent = `“${span.surface}”`;
+  ui.additionalPosition.textContent = `[${span.start}, ${span.end}) · 位置已自动计算`;
+  ui.additionalContext.textContent = `${span.start > 16 ? "…" : ""}${characters.slice(Math.max(0, span.start - 16), span.start).join("")}【${span.surface}】${characters.slice(span.end, span.end + 16).join("")}${span.end + 16 < characters.length ? "…" : ""}`;
+  ui.additionalReason.value = span.reason || "";
+  ui.additionalDialogError.classList.add("hidden");
+  ui.additionalDialogTitle.textContent = editingIndex < 0 ? "加入额外期望 span" : "修改补充理由";
+  ui.submitAdditional.textContent = editingIndex < 0 ? "加入本 case" : "保存理由";
+  ui.additionalDialog.showModal();
+  ui.additionalReason.focus();
+}
+
+function submitAdditional(event) {
+  event.preventDefault();
+  if (!pendingAdditional || !current || busy || isLocked() || pendingAdditional.itemId !== current.item.item_id) return;
+  const {start, end, surface, editingIndex} = pendingAdditional;
+  const reason = ui.additionalReason.value.trim();
+  const error = !reason ? "请填写此处需要解释的理由。"
+    : Array.from(reason).length > 500 ? "理由不能超过 500 字。"
+    : Gold.additionalSpanError(current.item, draft, pendingAdditional, editingIndex);
+  if (error) {
+    ui.additionalDialogError.textContent = error;
+    ui.additionalDialogError.classList.remove("hidden");
+    return;
+  }
+  const row = {start, end, surface, reason};
+  if (editingIndex < 0) draft.additional_spans.push(row);
+  else draft.additional_spans[editingIndex] = row;
+  ui.additionalDialog.close();
+  selectedSpan = null;
+  ui.selectionToolbar.classList.add("hidden");
+  renderAdditionalList();
+  syncControls();
+  markDirty();
 }
 
 function validationErrors(confirm = false) {
-  const errors = Gold.validateDecision(current.item, draft, {confirm});
-  if (additionalParseErrors.length) errors.additional_spans = additionalParseErrors.join("；");
-  return errors;
+  return Gold.validateDecision(current.item, draft, {confirm});
 }
 
 function renderErrors(confirm = false) {
@@ -293,7 +463,9 @@ function renderErrors(confirm = false) {
 function syncControls() {
   const disabled = busy || !current;
   const locked = isLocked();
-  for (const control of [ui.saveDraft, ui.confirmNext, ui.keepAll, ui.dropAll, ui.clearAll, ui.additionalSpans, ui.notes]) control.disabled = disabled || locked;
+  for (const control of [ui.saveDraft, ui.confirmNext, ui.keepAll, ui.dropAll, ui.clearAll, ui.selectInQuery, ui.additionalReason, ui.submitAdditional, ui.notes]) control.disabled = disabled || locked;
+  ui.confirmSelection.disabled = disabled || locked || !selectedSpan || Boolean(ui.selectionError.textContent);
+  ui.additionalList.querySelectorAll("button").forEach(control => { control.disabled = disabled || locked; });
   ui.candidateList.querySelectorAll("button[data-action]").forEach(control => {
     control.disabled = disabled || locked;
   });
@@ -310,13 +482,13 @@ function renderCurrent() {
   ui.itemPosition.textContent = position >= 0 ? `${position + 1} / ${visibleItemIds.length}` : "—";
   ui.itemId.textContent = item.source_item_id;
   ui.cohort.textContent = Gold.COHORT_LABELS[item.cohort] || item.cohort;
-  ui.queryContent.textContent = item.query_content;
+  renderQuery();
   buildPriorAudit(item);
   buildCandidateList();
   ui.decisionTitle.textContent = locked ? "已确认" : "待确认";
   ui.decisionStatus.textContent = locked ? "已确认" : "草稿";
   ui.decisionStatus.dataset.state = locked ? "confirmed" : "draft";
-  ui.additionalSpans.value = additionalRaw;
+  renderAdditionalList();
   ui.notes.value = draft.notes;
   ui.lockedCard.classList.toggle("hidden", !locked);
   renderErrors(false);
@@ -330,7 +502,7 @@ function markDirty() {
   setSaveState("dirty", "有未保存修改 · 5 秒后自动保存");
   renderErrors(false);
   window.clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => enqueueSave(false), AUTOSAVE_DELAY_MS);
+  if (!ui.additionalDialog.open) saveTimer = window.setTimeout(() => enqueueSave(false), AUTOSAVE_DELAY_MS);
 }
 
 function applyMutation(result) {
@@ -340,8 +512,6 @@ function applyMutation(result) {
   current.revision = result.revision;
   current.decision = result.decision;
   draft = Gold.decisionFields(current.item, result.decision);
-  additionalRaw = Gold.serializeAdditionalSpans(draft.additional_spans);
-  additionalParseErrors = [];
   dirty = false;
   renderProgress();
   renderCurrent();
@@ -351,7 +521,6 @@ function applyMutation(result) {
 
 async function resolveConflict(error) {
   const localDraft = Common.clone(draft);
-  const localRaw = additionalRaw;
   const latest = await getJson("/api/bootstrap");
   const replay = window.confirm("服务器版本已经更新。\n\n确定：载入服务器版本\n取消：保留本地草稿并以最新 revision 重新保存");
   bootstrap = latest;
@@ -363,7 +532,6 @@ async function resolveConflict(error) {
   } else {
     current.revision = latest.revision;
     draft = localDraft;
-    additionalRaw = localRaw;
     dirty = true;
     renderCurrent();
     setSaveState("dirty", "保留本地草稿 · 请重新保存");
@@ -372,7 +540,7 @@ async function resolveConflict(error) {
 }
 
 async function performSave(confirm) {
-  if (!current || isLocked()) return false;
+  if (!current || isLocked() || ui.additionalDialog.open) return false;
   const errors = renderErrors(confirm);
   if (Common.hasErrors(errors)) {
     setSaveState("error", "请先修正审核字段");
@@ -419,8 +587,8 @@ async function loadItem(itemId, {skipFlush = false} = {}) {
     current = await getJson(`/api/items/${encodeURIComponent(itemId)}`);
     bootstrap.revision = current.revision;
     draft = Gold.decisionFields(current.item, current.decision);
-    additionalRaw = Gold.serializeAdditionalSpans(draft.additional_spans);
-    additionalParseErrors = [];
+    activeCandidateIndex = 0;
+    selectedSpan = null;
     dirty = false;
     setSaveState("idle");
     clearError();
@@ -434,7 +602,7 @@ async function loadItem(itemId, {skipFlush = false} = {}) {
 }
 
 async function navigateTo(itemId) {
-  if (!itemId || (current && current.item.item_id === itemId)) return;
+  if (busy || ui.additionalDialog.open || !itemId || (current && current.item.item_id === itemId)) return;
   await loadItem(itemId);
   ui.sidebar.classList.remove("open");
   ui.sidebarBackdrop.classList.add("hidden");
@@ -447,6 +615,7 @@ async function navigateOffset(offset) {
 }
 
 async function confirmAndContinue() {
+  if (!current || busy || isLocked() || ui.additionalDialog.open) return;
   const itemId = current.item.item_id;
   const saved = await enqueueSave(true);
   if (!saved) return;
@@ -492,9 +661,9 @@ async function exportSnapshot() {
 }
 
 function setAllCandidates(value) {
-  if (!current || isLocked()) return;
+  if (!current || busy || isLocked()) return;
   for (const candidateId of Object.keys(draft.candidate_actions)) draft.candidate_actions[candidateId] = value;
-  buildCandidateList();
+  refreshCandidateState();
   markDirty();
 }
 
@@ -515,12 +684,18 @@ function bindEvents() {
   ui.keepAll.addEventListener("click", () => setAllCandidates("keep"));
   ui.dropAll.addEventListener("click", () => setAllCandidates("drop"));
   ui.clearAll.addEventListener("click", () => setAllCandidates(null));
-  ui.additionalSpans.addEventListener("input", () => {
-    additionalRaw = ui.additionalSpans.value;
-    const parsed = Gold.parseAdditionalSpans(additionalRaw);
-    additionalParseErrors = parsed.errors;
-    if (!parsed.errors.length) draft.additional_spans = parsed.rows;
-    markDirty();
+  document.addEventListener("selectionchange", captureSelection);
+  ui.confirmSelection.addEventListener("pointerdown", event => event.preventDefault());
+  ui.confirmSelection.addEventListener("click", () => openAdditionalDialog(selectedSpan));
+  ui.selectInQuery.addEventListener("click", () => {
+    ui.queryContent.scrollIntoView({block: "center", behavior: "smooth"});
+    ui.queryContent.focus({preventScroll: true});
+  });
+  ui.additionalForm.addEventListener("submit", submitAdditional);
+  ui.cancelAdditional.addEventListener("click", () => ui.additionalDialog.close());
+  ui.additionalDialog.addEventListener("close", () => {
+    pendingAdditional = null;
+    if (dirty) markDirty();
   });
   ui.notes.addEventListener("input", () => { draft.notes = ui.notes.value; markDirty(); });
   ui.saveDraft.addEventListener("click", () => enqueueSave(false));
@@ -533,22 +708,27 @@ function bindEvents() {
   ui.sidebarToggle.addEventListener("click", () => { ui.sidebar.classList.add("open"); ui.sidebarBackdrop.classList.remove("hidden"); });
   for (const control of [ui.sidebarClose, ui.sidebarBackdrop]) control.addEventListener("click", () => { ui.sidebar.classList.remove("open"); ui.sidebarBackdrop.classList.add("hidden"); });
   window.addEventListener("beforeunload", event => {
-    if (dirty || busy) { event.preventDefault(); event.returnValue = ""; }
+    if (dirty || busy || ui.additionalDialog.open) { event.preventDefault(); event.returnValue = ""; }
   });
   window.addEventListener("keydown", event => {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
-      event.preventDefault();
-      enqueueSave(false);
-      return;
-    }
-    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-      event.preventDefault();
-      confirmAndContinue();
-      return;
-    }
-    if (Common.isTextEntry(event.target)) return;
-    if (event.key === "[") navigateOffset(-1);
-    if (event.key === "]") navigateOffset(1);
+    const action = Gold.reviewShortcut(event, {
+      dialogOpen: Boolean(document.querySelector("dialog[open]")),
+      loaded: Boolean(current), busy, locked: isLocked(),
+    });
+    if (!action) return;
+    event.preventDefault();
+    const handlers = {
+      "keep-all": () => setAllCandidates("keep"),
+      "drop-all": () => setAllCandidates("drop"),
+      "clear-all": () => setAllCandidates(null),
+      "previous-candidate": () => selectCandidate(activeCandidateIndex - 1, {focus: true}),
+      "next-candidate": () => selectCandidate(activeCandidateIndex + 1, {focus: true}),
+      keep: () => setCandidateAction("keep"), drop: () => setCandidateAction("drop"),
+      "previous-item": () => navigateOffset(-1), "next-item": () => navigateOffset(1),
+      save: () => enqueueSave(false), confirm: confirmAndContinue,
+      help: () => ui.guidelineDialog.showModal(),
+    };
+    handlers[action]();
   });
 }
 

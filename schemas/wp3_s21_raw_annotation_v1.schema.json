@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wp3-s21-raw-annotation/v1",
+  "title": "WP3 S2.1 raw-only development annotation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["needs_explanation", "mentions", "notes"],
+  "properties": {
+    "needs_explanation": {"type": "boolean"},
+    "mentions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "surface",
+          "occurrence_ordinal",
+          "provisional_route",
+          "reason_codes",
+          "notes"
+        ],
+        "properties": {
+          "surface": {"type": "string", "minLength": 1, "maxLength": 80},
+          "occurrence_ordinal": {"type": "integer", "minimum": 1},
+          "provisional_route": {
+            "enum": ["A_candidate", "B_candidate", "C_candidate"]
+          },
+          "reason_codes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1, "maxLength": 80}
+          },
+          "notes": {"type": "string", "maxLength": 2000}
+        }
+      }
+    },
+    "notes": {"type": "string", "maxLength": 4000}
+  }
+}

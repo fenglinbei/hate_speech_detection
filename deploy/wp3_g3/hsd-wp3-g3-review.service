@@ -1,0 +1,32 @@
+[Unit]
+Description=WP3 G3 development form-relation review service
+After=network.target
+
+[Service]
+Type=simple
+User=hsd-review
+Group=hsd-review
+WorkingDirectory=/opt/hsd-wp3-g3-review/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 scripts/stage1/wp3_g3_form_reference.py serve-g3-reference --workspace-root /opt/hsd-wp3-g3-review/current --source-bundle-dir exps/causal_context/stage1_p0/wp3_candidate_generators_v2/g3_form_reference/public_source_bundles/wp3g3sources-d190a80c1e4fb970ee7495a3f3ce62f569cd2e0e8187e2d265868222b3fb1c5b --frame-dir exps/causal_context/stage1_p0/wp3_candidate_generators_v2/g3_form_reference/review_frames/wp3g3formframe-3ddee0733a9bf9bee2cf2f3cc1448fd2ec747e3ddb6b35100bbc3a79b26d1e00 --session-file /var/lib/hsd-wp3-g3-review/session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8767 --public-origin https://hsd.fenglin.pro
+Restart=on-failure
+RestartSec=3s
+UMask=0077
+StateDirectory=hsd-wp3-g3-review
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/hsd-wp3-g3-review
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_manual_source_intake_v1.schema.json",
+  "title": "WP3 G3 manual-source intake manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "artifact_kind", "scope", "network_access_performed",
+    "policy_id", "dependency_binding", "map_id", "source_map_sha256",
+    "source_map_canonical_sha256", "assets", "components", "aliases",
+    "companion_contracts", "intake_id", "source_map_file", "summary", "promotion"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-manual-source-intake/v1"},
+    "artifact_kind": {"const": "wp3-g3-manual-source-intake"},
+    "scope": {"const": "development-only-form-only-label-free-non-lexicon"},
+    "network_access_performed": {"const": false},
+    "policy_id": {"const": "explicit-relative-attachment-offline-replay/v1"},
+    "dependency_binding": {"type": "object"},
+    "map_id": {"$ref": "#/$defs/id"},
+    "source_map_sha256": {"$ref": "#/$defs/sha256"},
+    "source_map_canonical_sha256": {"$ref": "#/$defs/sha256"},
+    "assets": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "components": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "aliases": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "companion_contracts": {"type": "array", "items": {"type": "object"}},
+    "intake_id": {"type": "string", "pattern": "^wp3manual-[0-9a-f]{64}$"},
+    "source_map_file": {"const": "inputs/source_map.json"},
+    "summary": {"type": "object"},
+    "promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["g3_catalog_applied", "g3_source_bundle_created", "g3_form_reference_created", "human_relation_review_required"],
+      "properties": {
+        "g3_catalog_applied": {"const": false},
+        "g3_source_bundle_created": {"const": false},
+        "g3_form_reference_created": {"const": false},
+        "human_relation_review_required": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

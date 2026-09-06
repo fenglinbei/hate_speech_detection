@@ -1,0 +1,85 @@
+{
+  "schema_version": "wp3-provider-pricing-evidence/v1",
+  "scope": "development-only",
+  "scientific_eligible": false,
+  "sealed": false,
+  "currency": "RMB",
+  "captured_at": "2026-08-30T00:00:00Z",
+  "rate_policy": "wp3-conservative-peak-cache-miss/v1",
+  "source_receipts": [
+    {
+      "provider_id": "glm_flash",
+      "requested_model": "glm-5.3-flash",
+      "source_url": "https://bigmodel.cn/pricing",
+      "snapshot_path": "src/tests/fixtures/wp3_provider_pricing/glm_fake_official_page.txt",
+      "snapshot_sha256": "7fb107257f183eda8ddd98a041e874d338b9ef1fa650ec5ecd21ad97b112398a",
+      "snapshot_size_bytes": 144,
+      "captured_at": "2026-08-30T00:00:00Z",
+      "rate_policy_application": {
+        "applicability_scope": "requested-model-direct-token-tariff-only/v1",
+        "input_basis": "maximum-published-applicable-nondiscounted-input/v1",
+        "output_basis": "maximum-published-applicable-nondiscounted-output/v1"
+      },
+      "evidence": {
+        "model": {
+          "exact_text": "Requested model: glm-5.3-flash",
+          "occurrence_ordinal": 1
+        },
+        "input_rate": {
+          "exact_text": "Input RMB per million tokens: 3",
+          "occurrence_ordinal": 1,
+          "numeric_text": "3",
+          "semantic_label": "input_rmb_per_million"
+        },
+        "output_rate": {
+          "exact_text": "Output RMB per million tokens: 9",
+          "occurrence_ordinal": 1,
+          "numeric_text": "9",
+          "semantic_label": "output_rmb_per_million"
+        }
+      }
+    },
+    {
+      "provider_id": "deepseek_flash",
+      "requested_model": "deepseek-v4-flash",
+      "source_url": "https://api-docs.deepseek.com/test-fixture-only",
+      "snapshot_path": "src/tests/fixtures/wp3_provider_pricing/deepseek_fake_official_page.txt",
+      "snapshot_sha256": "f46dd4ca281ad7cb8a2e15e969b48864ffbafee4553739bfd1d64fc715de61a0",
+      "snapshot_size_bytes": 169,
+      "captured_at": "2026-08-30T00:00:00Z",
+      "rate_policy_application": {
+        "applicability_scope": "requested-model-direct-token-tariff-only/v1",
+        "input_basis": "peak-cache-miss-input/v1",
+        "output_basis": "peak-output/v1"
+      },
+      "evidence": {
+        "model": {
+          "exact_text": "Requested model: deepseek-v4-flash",
+          "occurrence_ordinal": 1
+        },
+        "input_rate": {
+          "exact_text": "Peak cache-miss input RMB per million tokens: 2",
+          "occurrence_ordinal": 1,
+          "numeric_text": "2",
+          "semantic_label": "input_rmb_per_million"
+        },
+        "output_rate": {
+          "exact_text": "Peak output RMB per million tokens: 8",
+          "occurrence_ordinal": 1,
+          "numeric_text": "8",
+          "semantic_label": "output_rmb_per_million"
+        }
+      }
+    }
+  ],
+  "provider_rates": {
+    "glm_flash": {
+      "input_rmb_per_million": "3",
+      "output_rmb_per_million": "9"
+    },
+    "deepseek_flash": {
+      "input_rmb_per_million": "2",
+      "output_rmb_per_million": "8"
+    }
+  }
+}

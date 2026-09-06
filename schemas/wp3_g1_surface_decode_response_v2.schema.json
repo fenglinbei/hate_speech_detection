@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g1_surface_decode_response_v2.schema.json",
+  "title": "WP3 G1 surface-decode response v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rewritten_text",
+    "edits",
+    "selection_truncated",
+    "record_reason"
+  ],
+  "properties": {
+    "rewritten_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100000
+    },
+    "edits": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_surface",
+          "occurrence_ordinal",
+          "replacement",
+          "mechanism",
+          "requires_context",
+          "reason"
+        ],
+        "properties": {
+          "source_surface": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+          },
+          "occurrence_ordinal": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "replacement": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+          },
+          "mechanism": {
+            "enum": [
+              "abbreviation",
+              "phonetic_variant",
+              "orthographic_variant",
+              "mixed_script",
+              "unicode_nfkc",
+              "emoji",
+              "separator_insertion",
+              "known_variant"
+            ]
+          },
+          "requires_context": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+          }
+        }
+      }
+    },
+    "selection_truncated": {
+      "type": "boolean"
+    },
+    "record_reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "selection_truncated": {
+            "const": true
+          }
+        },
+        "required": ["selection_truncated"]
+      },
+      "then": {
+        "properties": {
+          "edits": {
+            "minItems": 8,
+            "maxItems": 8
+          }
+        }
+      }
+    }
+  ]
+}

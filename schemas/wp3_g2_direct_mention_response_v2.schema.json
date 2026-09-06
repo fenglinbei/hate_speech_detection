@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g2_direct_mention_response_v2.schema.json",
+  "title": "WP3 G2 direct-mention response v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mentions",
+    "selection_truncated",
+    "record_reason"
+  ],
+  "properties": {
+    "mentions": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "surface",
+          "occurrence_ordinal",
+          "mechanism",
+          "requires_context",
+          "reason"
+        ],
+        "properties": {
+          "surface": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+          },
+          "occurrence_ordinal": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "mechanism": {
+            "enum": [
+              "abbreviation",
+              "phonetic_variant",
+              "orthographic_variant",
+              "mixed_script",
+              "unicode_nfkc",
+              "emoji",
+              "separator_insertion",
+              "slang",
+              "fixed_expression",
+              "metaphor",
+              "pragmatic_usage",
+              "known_variant",
+              "other_nontransparent"
+            ]
+          },
+          "requires_context": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+          }
+        }
+      }
+    },
+    "selection_truncated": {
+      "type": "boolean"
+    },
+    "record_reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^(?!\\s)[\\s\\S]*\\S$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "selection_truncated": {
+            "const": true
+          }
+        },
+        "required": ["selection_truncated"]
+      },
+      "then": {
+        "properties": {
+          "mentions": {
+            "minItems": 8,
+            "maxItems": 8
+          }
+        }
+      }
+    }
+  ]
+}

@@ -175,6 +175,54 @@
               "pattern": "^[0-9a-f]{64}$"
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "source_id",
+            "rule_version",
+            "reference_sha256",
+            "profile_version",
+            "profile_sha256",
+            "romanizer_backend",
+            "romanizer_resource_sha256"
+          ],
+          "properties": {
+            "kind": {"const": "rule"},
+            "source_id": {
+              "type": "string",
+              "pattern": "^rulesrc-[0-9a-f]{32}$"
+            },
+            "rule_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "reference_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "profile_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "profile_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "romanizer_backend": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "romanizer_resource_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
         }
       ]
     }

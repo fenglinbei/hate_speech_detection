@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_form_relation_seeds_v2.schema.json",
+  "title": "WP3 G3 pair-only form relation seeds",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "seed_role", "seeds"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-form-relation-seeds/v2"},
+    "seed_role": {"const": "pair-location-hints-only-not-evidence"},
+    "seeds": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/seed"}
+    }
+  },
+  "$defs": {
+    "trimmed160": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "seed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seed_id",
+        "source_id",
+        "surface",
+        "canonical",
+        "proposed_family",
+        "phonetic_scan_enabled"
+      ],
+      "properties": {
+        "seed_id": {
+          "type": "string",
+          "pattern": "^g3seed-[a-z0-9-]+$"
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,159}$"
+        },
+        "surface": {"$ref": "#/$defs/trimmed160"},
+        "canonical": {"$ref": "#/$defs/trimmed160"},
+        "proposed_family": {
+          "enum": [
+            "known_variant",
+            "phonetic_variant",
+            "orthographic_variant"
+          ]
+        },
+        "phonetic_scan_enabled": {"type": "boolean"}
+      }
+    }
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_candidate_current_run_plan_v1.schema.json",
+  "title": "WP3 S2.1 current generator provider plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_revision",
+    "plan_id",
+    "validation_contract",
+    "accepted_date",
+    "scope",
+    "scientific_eligible",
+    "sealed",
+    "supersedes",
+    "frame_dependency",
+    "preserved_raw_gold",
+    "implementation_dependency",
+    "prompt_contract",
+    "request_profile",
+    "providers",
+    "g1",
+    "g2",
+    "g3",
+    "total_logical_model_slot_count",
+    "execution"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "wp3-s21-current-run-provider-plan/v1"
+    },
+    "plan_revision": {
+      "const": "wp3-s21b-provider-plan/v2"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^wp3runplan-[0-9a-f]{64}$"
+    },
+    "validation_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_path",
+        "schema_id",
+        "schema_canonical_sha256"
+      ],
+      "properties": {
+        "schema_path": {
+          "const": "schemas/wp3_candidate_current_run_plan_v1.schema.json"
+        },
+        "schema_id": {
+          "const": "https://local.invalid/schemas/wp3_candidate_current_run_plan_v1.schema.json"
+        },
+        "schema_canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "accepted_date": {
+      "const": "2026-08-30"
+    },
+    "scope": {
+      "const": "development-only"
+    },
+    "scientific_eligible": {
+      "const": false
+    },
+    "sealed": {
+      "const": false
+    },
+    "supersedes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_protocol_revision",
+        "base_protocol_canonical_sha256",
+        "json_pointer",
+        "status",
+        "raw_gold_semantics_unchanged"
+      ],
+      "properties": {
+        "base_protocol_revision": {
+          "const": "wp3-s21b-current-generator-diagnostic/v1"
+        },
+        "base_protocol_canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "json_pointer": {
+          "const": "/current_generator_pilot"
+        },
+        "status": {
+          "const": "superseded-before-execution"
+        },
+        "raw_gold_semantics_unchanged": {
+          "const": true
+        }
+      }
+    },
+    "frame_dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_kind",
+        "artifact_id",
+        "payload_manifest_sha256",
+        "case_count",
+        "cases_canonical_sha256",
+        "case_id_set_canonical_sha256",
+        "input_projection",
+        "task_id_policy",
+        "task_projection_canonical_sha256"
+      ],
+      "properties": {
+        "artifact_kind": {
+          "const": "wp3-s21-development-frame"
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^wp3devframe-[0-9a-f]{64}$"
+        },
+        "payload_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "case_count": {
+          "const": 424
+        },
+        "cases_canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "case_id_set_canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_projection": {
+          "const": "task-id-blind-alias-content-only/v1"
+        },
+        "task_id_policy": {
+          "const": "frame-case-id/v1"
+        },
+        "task_projection_canonical_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "preserved_raw_gold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_kind",
+        "artifact_id",
+        "payload_manifest_sha256",
+        "run_must_not_read",
+        "first_join_stage"
+      ],
+      "properties": {
+        "artifact_kind": {
+          "const": "wp3-s21-locked-raw-gold"
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^wp3rawgold-[0-9a-f]{64}$"
+        },
+        "payload_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run_must_not_read": {
+          "const": true
+        },
+        "first_join_stage": {
+          "const": "development-evaluation/v1"
+        }
+      }
+    },
+    "implementation_dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "reuse_scope"
+      ],
+      "properties": {
+        "path": {
+          "const": "src/build_lex/terminology_candidate_generators.py"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reuse_scope": {
+          "const": "prompt-request-shape-and-response-normalizers-only"
+        }
+      }
+    },
+    "prompt_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "g1_surface_decode",
+        "g1_lexical_pragmatic",
+        "g2_direct_mention"
+      ],
+      "properties": {
+        "g1_surface_decode": {
+          "$ref": "#/$defs/prompt_binding"
+        },
+        "g1_lexical_pragmatic": {
+          "$ref": "#/$defs/prompt_binding"
+        },
+        "g2_direct_mention": {
+          "$ref": "#/$defs/prompt_binding"
+        }
+      }
+    },
+    "request_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "api_shape",
+        "temperature",
+        "top_p",
+        "max_tokens",
+        "stream",
+        "response_format",
+        "thinking",
+        "reasoning_effort",
+        "provider_parameter_overrides_allowed",
+        "equivalence_policy",
+        "reasoning_content_policy"
+      ],
+      "properties": {
+        "api_shape": {
+          "const": "openai-compatible-chat-completions/v1"
+        },
+        "temperature": {
+          "const": 1
+        },
+        "top_p": {
+          "const": 0.95
+        },
+        "max_tokens": {
+          "const": 4096
+        },
+        "stream": {
+          "const": false
+        },
+        "response_format": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "json_object"
+            }
+          }
+        },
+        "thinking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "enabled"
+            }
+          }
+        },
+        "reasoning_effort": {
+          "const": "low"
+        },
+        "provider_parameter_overrides_allowed": {
+          "const": false
+        },
+        "equivalence_policy": {
+          "const": "exact-request-body-except-model/v1"
+        },
+        "reasoning_content_policy": {
+          "const": "private-vault-only-not-normalizer-input/v1"
+        }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "glm_flash",
+        "deepseek_flash"
+      ],
+      "properties": {
+        "glm_flash": {
+          "$ref": "#/$defs/provider"
+        },
+        "deepseek_flash": {
+          "$ref": "#/$defs/provider"
+        }
+      }
+    },
+    "g1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passes",
+        "providers",
+        "aggregation",
+        "logical_slots_per_provider",
+        "logical_slot_count",
+        "dual_provider_status",
+        "post_pilot_retention_gate",
+        "post_pilot_retention_criteria"
+      ],
+      "properties": {
+        "passes": {
+          "const": [
+            "surface_decode",
+            "lexical_pragmatic"
+          ]
+        },
+        "providers": {
+          "const": [
+            "glm_flash",
+            "deepseek_flash"
+          ]
+        },
+        "aggregation": {
+          "const": "pass-then-provider-exact-occurrence-union-no-vote/v1"
+        },
+        "logical_slots_per_provider": {
+          "const": 848
+        },
+        "logical_slot_count": {
+          "const": 1696
+        },
+        "dual_provider_status": {
+          "const": "development-factorial-diagnostic"
+        },
+        "post_pilot_retention_gate": {
+          "const": "provider-ablation-before-s22-or-full-fit/v1"
+        },
+        "post_pilot_retention_criteria": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "decision_state_policy",
+            "decision_rule",
+            "completeness_scope",
+            "metric_contract",
+            "baseline_union",
+            "added_union",
+            "min_full_union_exact_recall_gain",
+            "min_full_union_unique_exact_true_positives",
+            "min_unique_tp_distinct_cases",
+            "full_union_exact_f1_floor",
+            "max_full_union_exact_f1_drop",
+            "required_offset_replay_rate",
+            "required_terminal_slot_count",
+            "required_terminal_failure_count"
+          ],
+          "properties": {
+            "decision_state_policy": {
+              "const": "incomplete-is-inconclusive-else-retain-or-drop/v1"
+            },
+            "decision_rule": {
+              "const": "retain-iff-(recall-gain-or-unique-tp)-and-f1-gates/v1"
+            },
+            "completeness_scope": {
+              "const": "all-2544-model-slots-plus-g3-and-offset-replay/v1"
+            },
+            "metric_contract": {
+              "const": "exact-occurrence-micro-unrounded-absolute-delta/v1"
+            },
+            "baseline_union": {
+              "const": "glm-g1-plus-dual-g2-plus-g3/v1"
+            },
+            "added_union": {
+              "const": "baseline-plus-deepseek-g1/v1"
+            },
+            "min_full_union_exact_recall_gain": {
+              "const": 0.01
+            },
+            "min_full_union_unique_exact_true_positives": {
+              "const": 2
+            },
+            "min_unique_tp_distinct_cases": {
+              "const": 2
+            },
+            "full_union_exact_f1_floor": {
+              "const": 0.85
+            },
+            "max_full_union_exact_f1_drop": {
+              "const": 0.005
+            },
+            "required_offset_replay_rate": {
+              "const": 1
+            },
+            "required_terminal_slot_count": {
+              "const": 2544
+            },
+            "required_terminal_failure_count": {
+              "const": 0
+            }
+          }
+        }
+      }
+    },
+    "g2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "providers",
+        "aggregation",
+        "logical_slots_per_provider",
+        "logical_slot_count"
+      ],
+      "properties": {
+        "providers": {
+          "const": [
+            "glm_flash",
+            "deepseek_flash"
+          ]
+        },
+        "aggregation": {
+          "const": "provider-exact-occurrence-union-no-vote/v1"
+        },
+        "logical_slots_per_provider": {
+          "const": 424
+        },
+        "logical_slot_count": {
+          "const": 848
+        }
+      }
+    },
+    "g3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution",
+        "logical_model_slot_count"
+      ],
+      "properties": {
+        "execution": {
+          "const": "offline-deterministic"
+        },
+        "logical_model_slot_count": {
+          "const": 0
+        }
+      }
+    },
+    "total_logical_model_slot_count": {
+      "const": 2544
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_calls_authorized",
+        "network_calls_authorized",
+        "paid_calls_authorized",
+        "formal_artifact_publication_authorized",
+        "full_fit_execution_authorized",
+        "s22_materialization_authorized",
+        "runner_status",
+        "plan_lifecycle_status",
+        "required_successor_change"
+      ],
+      "properties": {
+        "model_calls_authorized": {
+          "const": false
+        },
+        "network_calls_authorized": {
+          "const": false
+        },
+        "paid_calls_authorized": {
+          "const": false
+        },
+        "formal_artifact_publication_authorized": {
+          "const": false
+        },
+        "full_fit_execution_authorized": {
+          "const": false
+        },
+        "s22_materialization_authorized": {
+          "const": false
+        },
+        "runner_status": {
+          "const": "not-implemented"
+        },
+        "plan_lifecycle_status": {
+          "const": "planning-only-must-be-superseded-before-execution"
+        },
+        "required_successor_change": {
+          "const": "prompt-v2-run-plan-and-runner-contract/v1"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prompt_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "sha256"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "requested_model",
+        "transport",
+        "api_base_env",
+        "default_api_base",
+        "chat_completions_endpoint",
+        "allowed_origin",
+        "api_key_env",
+        "returned_model_policy"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requested_model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transport": {
+          "const": "openai-compatible-chat-completions-external"
+        },
+        "api_base_env": {
+          "type": "string",
+          "minLength": 1
+        },
+        "default_api_base": {
+          "type": "string",
+          "format": "uri"
+        },
+        "chat_completions_endpoint": {
+          "type": "string",
+          "format": "uri"
+        },
+        "allowed_origin": {
+          "type": "string",
+          "format": "uri"
+        },
+        "api_key_env": {
+          "type": "string",
+          "minLength": 1
+        },
+        "returned_model_policy": {
+          "const": "normalized-exact-requested-model/v1"
+        }
+      }
+    }
+  }
+}

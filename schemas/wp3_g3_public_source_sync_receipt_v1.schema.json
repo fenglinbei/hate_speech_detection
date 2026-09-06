@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_public_source_sync_receipt_v1.schema.json",
+  "title": "WP3 G3 public-source network synchronization receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "catalog_id",
+    "catalog_sha256",
+    "catalog_schema_sha256",
+    "snapshot_index_sha256",
+    "snapshot_index_schema_sha256",
+    "sync_receipt_schema_sha256",
+    "fetch_implementation_sha256",
+    "network_policy",
+    "network_access_performed",
+    "complete",
+    "source_count",
+    "source_ids",
+    "source_coverage_sha256",
+    "sync_receipt_id"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-public-source-sync-receipt/v1"},
+    "artifact_kind": {"const": "wp3-g3-public-source-sync-receipt"},
+    "catalog_id": {"const": "wp3-g3-fixed-public-priors/v1"},
+    "catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "catalog_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "snapshot_index_sha256": {"$ref": "#/$defs/sha256"},
+    "snapshot_index_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "sync_receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "fetch_implementation_sha256": {"$ref": "#/$defs/sha256"},
+    "network_policy": {"const": "closed-seven-source-https-no-link-follow/v1"},
+    "network_access_performed": {"const": true},
+    "complete": {"const": true},
+    "source_count": {"const": 7},
+    "source_ids": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}
+    },
+    "source_coverage_sha256": {"$ref": "#/$defs/sha256"},
+    "sync_receipt_id": {"type": "string", "pattern": "^wp3g3sync-[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

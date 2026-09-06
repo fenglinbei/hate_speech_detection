@@ -20,7 +20,7 @@
       </div>
       <div class="topbar-actions">
         <button id="export-snapshot" class="quiet-button" type="button">下载快照</button>
-        <button id="guidelines" class="quiet-button" type="button">审核说明</button>
+        <button id="guidelines" class="quiet-button" type="button">审核说明 <kbd>?</kbd></button>
       </div>
     </header>
 
@@ -51,8 +51,13 @@
           <div class="case-nav"><button id="previous-item" class="icon-button" type="button">←</button><button id="next-item" class="icon-button" type="button">→</button></div>
         </div>
         <section class="audit-card query-card">
-          <div class="card-head"><div><p class="section-kicker">开发查询</p><strong>判断哪些精确字符区间应该作为词典 span</strong></div><span id="cohort" class="badge">—</span></div>
-          <blockquote id="query-content" class="query-content">等待载入</blockquote>
+          <div class="card-head"><div><p class="section-kicker">开发查询</p><strong>判断当前语境中哪些片段需要词典解释</strong></div><span id="cohort" class="badge">—</span></div>
+          <p class="section-hint">发现遗漏？直接在下方原文中划词，再确认片段、填写理由。无需手填位置。</p>
+          <blockquote id="query-content" class="query-content" tabindex="0" aria-label="开发查询原文，可划词补充 span">等待载入</blockquote>
+          <div id="selection-toolbar" class="selection-toolbar hidden" role="status">
+            <div><small>已选片段</small><strong id="selection-surface"></strong><span id="selection-error" class="field-error"></span></div>
+            <button id="confirm-selection" class="primary-button" type="button">确认片段 → 填写理由</button>
+          </div>
         </section>
         <section class="audit-card">
           <div class="card-head"><div><p class="section-kicker">上一轮审核</p><strong id="prior-disposition">—</strong></div></div>
@@ -60,8 +65,9 @@
         </section>
         <section class="audit-card">
           <div class="card-head"><div><p class="section-kicker">逐 occurrence 决定</p><strong id="candidate-status">等待载入</strong></div></div>
+          <p id="active-candidate-status" class="section-hint" aria-live="polite">↑ / ↓ 切换当前候选，Q 保留，A 删除。</p>
           <div id="candidate-list" class="candidate-list"></div>
-          <div id="zero-candidate" class="zero-candidate hidden"><strong>当前没有候选 span。</strong><p>若确实应保持无命中，可直接确认；若发现遗漏，请在右侧填写额外 span。</p></div>
+          <div id="zero-candidate" class="zero-candidate hidden"><strong>当前没有候选 span。</strong><p>若确实应保持无命中，可直接确认；若发现遗漏，请在上方原文中划词补充。</p></div>
         </section>
       </main>
 
@@ -72,11 +78,16 @@
         <div class="audit-editor">
           <section class="editor-section">
             <h3>批量操作</h3>
-            <div class="bulk-actions"><button id="keep-all" type="button">全部保留</button><button id="drop-all" type="button">全部删除</button><button id="clear-all" type="button">全部清空</button></div>
+            <div class="bulk-actions"><button id="keep-all" type="button">全部保留 <kbd>1</kbd></button><button id="drop-all" type="button">全部删除 <kbd>2</kbd></button><button id="clear-all" type="button">全部清空 <kbd>3</kbd></button></div>
+            <p class="section-hint">仅作用于本 case 的候选决定，不会移除额外 span、清空备注或自动确认。</p>
             <small id="candidate-error" class="field-error hidden"></small>
           </section>
           <section class="editor-section">
-            <label class="field"><span>额外期望 span <small>通常留空；每行格式：start | end | surface | reason</small></span><textarea id="additional-spans" maxlength="5000" placeholder="例如：3 | 5 | 畒勾 | 应解释完整组合"></textarea></label>
+            <h3>额外期望 span <span id="additional-count" class="badge">0</span></h3>
+            <ol class="selection-steps"><li>在原文划词</li><li>确认片段</li><li>写理由并加入</li></ol>
+            <div id="additional-list" class="additional-list"></div>
+            <p id="additional-empty" class="section-hint">暂无补充。已列出的候选无需重复加入。</p>
+            <button id="select-in-query" class="quiet-button" type="button">前往原文划词 ↑</button>
             <small id="additional-error" class="field-error hidden"></small>
           </section>
           <section class="editor-section">
@@ -84,11 +95,61 @@
             <small id="notes-error" class="field-error hidden"></small>
           </section>
           <div id="locked-card" class="locked-card hidden"><strong>该决定已确认并锁定。</strong><p>如需更正，必须重新打开并留下 amendment reason。</p><button id="reopen" class="danger-button" type="button">重新打开</button></div>
+          <section class="editor-section shortcut-panel" aria-label="快捷操作说明">
+            <h3>快捷操作</h3>
+            <dl class="shortcut-list">
+              <div><dt><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></dt><dd>全部保留 / 删除 / 清空</dd></div>
+              <div><dt><kbd>↑</kbd> / <kbd>↓</kbd></dt><dd>切换当前 occurrence</dd></div>
+              <div><dt><kbd>Q</kbd> / <kbd>A</kbd></dt><dd>保留 / 删除当前 occurrence</dd></div>
+              <div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>上一个 / 下一个 case</dd></div>
+              <div><dt><kbd>Ctrl/⌘ S</kbd></dt><dd>保存草稿</dd></div>
+              <div><dt><kbd>Ctrl/⌘ Enter</kbd></dt><dd>确认并继续</dd></div>
+              <div><dt><kbd>?</kbd> / <kbd>Esc</kbd></dt><dd>打开说明 / 关闭弹窗</dd></div>
+            </dl>
+            <p class="section-hint">输入框内不触发单键操作。弹窗、输入法组词和保存中不触发审核快捷键；已确认项不可修改。</p>
+          </section>
         </div>
       </aside>
     </div>
 
-    <dialog id="guideline-dialog" class="app-dialog"><form method="dialog"><h2>精确 span 审核说明</h2><p>每张候选卡对应查询中的一个字符区间。选择“保留”表示 repaired matcher 应返回该 span；选择“删除”表示该位置不应作为词典解释资源。</p><p>同一句中不同 occurrence 必须分别判断。最终保留 span 不得重叠；例如“妈宝女/妈宝”“寄生虫/虫”只保留最长且合格的一项。已知遗漏已直接列为候选，不需要重复填入额外 span。</p><p>额外 span 仅用于发现候选清单之外的新遗漏，start/end 使用 Python Unicode 字符索引、左闭右开。</p><button class="primary-button" value="close">知道了</button></form></dialog>
+    <dialog id="guideline-dialog" class="app-dialog guideline-dialog" aria-labelledby="guideline-title">
+      <form method="dialog" class="guide-shell">
+        <header class="dialog-head"><div><p class="section-kicker">判断口径 · 操作指引</p><h2 id="guideline-title">先判断是否需要解释，再核对精确边界</h2></div><button class="icon-button" value="close" aria-label="关闭审核说明">×</button></header>
+        <div class="guide-body">
+          <div class="guide-principle"><strong>本轮标注合格的解释对象，不标注整句话是否仇恨。</strong><p>保留 = 修复后的 matcher 应返回此处的 span。删除 = 此处不应提供词典解释；不等于从词典全局删除这个词。</p></div>
+          <section aria-labelledby="sense-heading"><h3 id="sense-heading">当前义项决定保留与否</h3>
+            <div class="rule-grid">
+              <article class="rule-card rule-drop"><span class="rule-label">删除</span><h4>普通义项，不属于目标解释用法</h4><p>即使边界正确、多义词也确实存在，只要当前义项无关，就删除此处 span。</p><p class="rule-example">例：“各位同志辛苦了”中的“同志”不是词典所指的同性恋义项。“它们”若只是普通指代，也不应仅凭词面保留。</p></article>
+              <article class="rule-card rule-keep"><span class="rule-label">保留</span><h4>目标义项成立，句子未必有恶意</h4><p>引用、反驳、支持或反对歧视，不会自动使解释对象失效。</p><p class="rule-example">例：“不要歧视同性恋同志”中的“同志”义项匹配，应保留。普通义项 ≠ 非仇恨语境。</p></article>
+              <article class="rule-card rule-repair"><span class="rule-label">保留 + 备注</span><h4>应该解释，但释义错误或漏收义项</h4><p>保留合格的 span，在备注写清当前用法与释义问题，留到后续修复；不为扩充普通词义而保留无关命中。</p><p class="rule-example">例：“用粤语屌他”中的“屌”应解释为此处的骂人用法，不能只给出生殖器义。</p></article>
+            </div>
+          </section>
+          <section class="guide-boundaries"><h3>边界与 occurrence</h3><ul><li>同词在同一句出现多次，每个位置分别判断。边界或词义不匹配的候选应删除。</li><li>最终保留项不得重叠；“妈宝女 / 妈宝”“寄生虫 / 虫”只保留最长且合格的一项。</li><li>如果候选边界错误，应删除旧候选；缺少正确候选时，再划词补充精确片段。</li><li>若所有候选都不合格，可全部删除并确认；没有候选且没有遗漏时，可直接确认。</li></ul></section>
+          <section><h3>发现遗漏：划词 → 确认 → 写理由</h3><p>在开发查询原文中选中片段，点击“确认片段”，核对后填写理由并加入。页面自动计算字符位置，区分同词的不同 occurrence，保留原文字符。已知遗漏已列为候选，不要重复加入；新增项可修改理由或移除。</p></section>
+          <section><h3>快捷操作</h3><dl class="shortcut-list guide-shortcuts">
+            <div><dt><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></dt><dd>本 case 所有候选：保留 / 删除 / 清空决定；不影响额外 span 和备注，不会自动确认。</dd></div>
+            <div><dt><kbd>↑</kbd> / <kbd>↓</kbd></dt><dd>选择上一个 / 下一个 occurrence，当前项会高亮；到边界不循环。</dd></div>
+            <div><dt><kbd>Q</kbd> / <kbd>A</kbd></dt><dd>保留 / 删除当前 occurrence；操作后停留在当前项。</dd></div>
+            <div><dt><kbd>[</kbd> / <kbd>]</kbd></dt><dd>上一个 / 下一个 case；有改动时先保存草稿。</dd></div>
+            <div><dt><kbd>Ctrl/⌘ S</kbd></dt><dd>保存草稿（字段须通过校验）。</dd></div>
+            <div><dt><kbd>Ctrl/⌘ Enter</kbd></dt><dd>确认并继续；仍须完成全部候选决定且没有重叠等错误。</dd></div>
+            <div><dt><kbd>?</kbd> / <kbd>Esc</kbd></dt><dd>打开审核说明 / 关闭弹窗；关闭补充弹窗不会加入尚未提交的片段。</dd></div>
+          </dl><p class="section-hint">输入框内只响应显式的保存、确认组合键。弹窗、输入法组词及请求处理中暂停审核快捷键；已确认项须先重新打开才能修改。快捷键与点击执行相同校验。</p></section>
+        </div>
+        <footer class="dialog-footer"><span>一轮审核 · 逐处判断 · 确认前可调整</span><button class="primary-button" value="close">知道了，开始审核</button></footer>
+      </form>
+    </dialog>
+
+    <dialog id="additional-dialog" class="app-dialog additional-dialog" aria-labelledby="additional-dialog-title">
+      <form id="additional-form">
+        <header class="dialog-head"><div><p class="section-kicker">片段已确认 · 补充理由</p><h2 id="additional-dialog-title">加入额外期望 span</h2></div><button id="cancel-additional" class="icon-button" type="button" aria-label="取消补充 span">×</button></header>
+        <div class="additional-preview"><strong id="additional-surface"></strong><code id="additional-position"></code><p id="additional-context"></p></div>
+        <label class="field"><span>为什么此处需要解释？ <small>必填，最多 500 字</small></span><textarea id="additional-reason" maxlength="500" required placeholder="例如：应解释完整的“畒勾”，原候选仅截取了“畒”。"></textarea></label>
+        <p id="additional-dialog-error" class="field-error hidden" role="alert"></p>
+        <p class="section-hint">位置由原文选区自动生成。填写理由并点击下方按钮后，才会加入本 case 的草稿。</p>
+        <button id="submit-additional" class="primary-button" type="submit">加入本 case</button>
+      </form>
+    </dialog>
 
     <script src="/review-core.js"></script>
     <script src="/core.js"></script>

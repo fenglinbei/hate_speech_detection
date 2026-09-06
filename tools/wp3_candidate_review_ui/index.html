@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>WP3 S2.1 开发审核</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button" title="打开 Case 队列">☰</button>
+        <div class="brand">
+          <p class="eyebrow">WP3 · S2.1 · 开发审核</p>
+          <div class="title-row">
+            <h1 id="phase-title">正在加载</h1>
+            <span id="phase-badge" class="badge">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-status">
+        <div class="top-progress">
+          <span id="top-progress-text">读取审核状态…</span>
+          <div class="meter"><span id="progress-bar"></span></div>
+        </div>
+        <span id="save-state" class="save-state" data-state="idle">尚未保存</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="shortcuts" class="quiet-button desktop-only" type="button">快捷键</button>
+        <button id="guidelines" class="quiet-button" type="button">ABC 口径</button>
+        <details id="top-action-menu" class="top-action-menu">
+          <summary class="quiet-button">操作</summary>
+          <div class="top-action-menu-panel">
+            <button id="export" class="quiet-button" type="button">导出审核包</button>
+            <button id="lock-raw" class="primary-button hidden" type="button">锁定阶段 A</button>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <div class="development-banner">
+      <strong>仅用于开发审核 · 未封存 · 不用于科学结论</strong>
+      <span>DEVELOPMENT ONLY · NON-SEALED · NON-SCIENTIFIC</span>
+    </div>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+    <div class="workbench">
+      <aside id="case-sidebar" class="case-sidebar">
+        <div class="sidebar-head">
+          <div>
+            <p class="section-kicker">审核队列</p>
+            <strong id="sidebar-progress">0 / 0</strong>
+          </div>
+          <button id="sidebar-close" class="icon-button mobile-tablet-only" type="button" title="关闭">×</button>
+        </div>
+        <div class="search-field">
+          <span>定位 Case 或搜索冻结原文</span>
+          <div class="case-search-controls">
+            <input id="case-search" maxlength="80" placeholder="输入编号、别名或连续文本" autocomplete="off" aria-label="搜索 Case">
+            <button id="search-mode" class="quiet-button search-mode-button" type="button" title="点击切换为多词模式">连续 ↻</button>
+          </div>
+          <small id="search-status" class="search-status">全部 424 条</small>
+        </div>
+        <div id="case-filters" class="filter-tabs">
+          <button type="button" data-filter="all" class="active">全部</button>
+          <button type="button" data-filter="open">待确认</button>
+          <button type="button" data-filter="complete">已确认</button>
+        </div>
+        <p id="case-empty" class="empty-state hidden">没有匹配的 Case</p>
+        <nav id="case-list" class="case-list"></nav>
+      </aside>
+
+      <main class="source-pane">
+        <div class="case-toolbar">
+          <div>
+            <span id="case-position" class="badge">—</span>
+            <h2 id="case-alias">正在读取 Case</h2>
+          </div>
+          <div class="case-nav">
+            <button id="previous-case" class="icon-button" type="button" title="上一条 [">←</button>
+            <button id="next-case" class="icon-button" type="button" title="下一条 ]">→</button>
+          </div>
+        </div>
+
+        <section id="source-card" class="source-card">
+          <div class="card-head">
+            <div>
+              <p class="section-kicker">冻结原文</p>
+              <p id="source-hint" class="muted">选择需要解释的原文片段</p>
+            </div>
+            <button id="manual-mention" class="quiet-button raw-only hidden" type="button">手动添加</button>
+          </div>
+          <div id="content" class="content" tabindex="0"></div>
+          <div id="selection-bar" class="selection-bar hidden">
+            <div>
+              <span class="selection-label">已选择</span>
+              <strong id="selection-preview"></strong>
+            </div>
+            <div id="quick-route-actions" class="quick-route-actions">
+              <button class="quick-route-button route-a" type="button" data-route="A_candidate"><kbd>1</kbd><strong>A</strong><span>稳定核心</span></button>
+              <button class="quick-route-button route-b" type="button" data-route="B_candidate"><kbd>2</kbd><strong>B</strong><span>需上下文</span></button>
+              <button class="quick-route-button route-c" type="button" data-route="C_candidate"><kbd>3</kbd><strong>C</strong><span>待核实</span></button>
+            </div>
+            <button id="use-selection" class="primary-button diagnostic-selection-action hidden" type="button">使用所选文字</button>
+          </div>
+        </section>
+
+        <section id="item-strip-card" class="item-strip-card">
+          <div class="card-head">
+            <div>
+              <p id="item-strip-kicker" class="section-kicker">本条标注</p>
+              <strong id="item-strip-status">—</strong>
+            </div>
+            <div id="proposal-nav" class="proposal-nav diagnostic-only hidden">
+              <button id="previous-proposal" class="icon-button" type="button" title="上一提案 J">←</button>
+              <span id="proposal-position">0 / 0</span>
+              <button id="next-proposal" class="icon-button" type="button" title="下一提案 K">→</button>
+            </div>
+            <button id="proposal-sheet-toggle" class="quiet-button phone-only hidden" type="button">查看提案序列</button>
+          </div>
+          <div id="item-strip-body" class="item-strip-body">
+            <div id="item-strip" class="item-strip"></div>
+            <p id="item-empty" class="empty-state">尚未添加标注。请选择原文，或将本条标记为无可标注表达。</p>
+            <button id="proposal-sheet-close" class="primary-button proposal-sheet-close phone-only" type="button">完成提案选择</button>
+          </div>
+        </section>
+      </main>
+
+      <aside class="decision-pane">
+        <div class="decision-head">
+          <div>
+            <p id="decision-kicker" class="section-kicker">当前决定</p>
+            <h2 id="decision-title">等待选择</h2>
+          </div>
+          <span id="decision-status" class="status-chip">待处理</span>
+        </div>
+        <div class="decision-actions">
+          <button id="save-draft" class="secondary-button" type="button">保存草稿</button>
+          <button id="confirm-next" class="primary-button" type="button">确认并继续</button>
+        </div>
+        <div id="request-error" class="request-error error-card hidden">
+          <strong id="request-error-message">请求失败</strong>
+          <details>
+            <summary>查看技术详情</summary>
+            <pre id="request-error-details"></pre>
+          </details>
+        </div>
+        <div id="decision-editor" class="decision-editor">
+          <p class="empty-state">加载完成后可在这里进行标注。</p>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="action-dialog" class="app-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2 id="dialog-title">请确认</h2>
+          <button id="dialog-close" class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <p id="dialog-message"></p>
+        <label id="dialog-input-wrap" class="field hidden">
+          <span>修改原因</span>
+          <textarea id="dialog-input" maxlength="2000" placeholder="请说明本次修改的原因"></textarea>
+          <small id="dialog-input-error" class="field-error hidden">此项为必填</small>
+        </label>
+        <div class="dialog-actions">
+          <button value="cancel" class="secondary-button" type="submit">取消</button>
+          <button id="dialog-confirm" value="confirm" class="primary-button" type="submit">确认</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="conflict-dialog" class="app-dialog">
+      <form method="dialog">
+        <h2>检测到其他页面的修改</h2>
+        <p>服务器上的审核版本已经变化。请选择保留服务器版本，或将当前本地修改重新应用到最新版本。</p>
+        <details>
+          <summary>技术详情</summary>
+          <pre id="conflict-details"></pre>
+        </details>
+        <div class="dialog-actions stacked-mobile">
+          <button id="use-server" value="server" class="secondary-button" type="submit">采用服务器版本</button>
+          <button id="retry-local" value="retry" class="primary-button" type="submit">重新应用本地修改</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="guideline-dialog" class="app-dialog guideline-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <div>
+            <p class="section-kicker">原文标注指南</p>
+            <h2>A / B / C 暂定收录口径</h2>
+          </div>
+          <button class="icon-button" value="close" type="submit">×</button>
+        </div>
+        <div class="guide-callout">
+          <strong>一句话记忆：A 可以稳定讲清；B 必须结合上下文；C 目前还不能可靠讲清。</strong>
+          <p>这里的 A/B/C 是 mention 的暂定证据分流，不是质量分、任务类别或当前句子的结论。后续补证据和诊断仍可改变分流。</p>
+        </div>
+        <section class="guide-common">
+          <h3>共同前提：先确认值得收录</h3>
+          <ul>
+            <li>原文中有可重放的精确 occurrence，边界是最小且语义自足的连续单位。</li>
+            <li>确有非平凡解释缺口；不了解特殊写法、网络义、典故或语用时会看不懂或误解。</li>
+            <li>只解释表达本身，不依据任务标签，也不替当前文本作分类判断。</li>
+          </ul>
+        </section>
+        <div class="guide-grid">
+          <article class="guide-tier tier-a">
+            <span class="guide-letter">A</span>
+            <h3>稳定核心候选 <small>A_candidate</small></h3>
+            <p>精确表达可以稳定对应同一条有依据的核心释义，并且跨 occurrence 仍适用。</p>
+            <ul>
+              <li>核心含义或形式转换已有可追溯支持。</li>
+              <li>没有未解决的主要替代义或关键反例。</li>
+              <li>能够写成中性词义，不夹带任务裁决。</li>
+            </ul>
+            <p class="guide-example"><strong>典型：</strong><code>txl</code>、<code>舔狗</code> 在映射和稳定义均有证据时。</p>
+            <p class="guide-default">默认原因：稳定核心释义候选</p>
+          </article>
+          <article class="guide-tier tier-b">
+            <span class="guide-letter">B</span>
+            <h3>需上下文候选 <small>B_candidate</small></h3>
+            <p>表达确有解释价值且至少一个 sense 有支持，但不能安全压成一个无条件定义。</p>
+            <ul>
+              <li>普通义与网络义并存，或存在多个受支持解释。</li>
+              <li>语气、讽刺、立场、引述、讨论或回收用法会改变解释。</li>
+              <li>必须依据当前原文的可观察线索选择 sense。</li>
+            </ul>
+            <p class="guide-example"><strong>典型：</strong><code>基佬</code>、<code>666</code>、<code>呵呵</code> 等需判断具体用法。</p>
+            <p class="guide-default">默认原因：需要结合上下文</p>
+          </article>
+          <article class="guide-tier tier-c">
+            <span class="guide-letter">C</span>
+            <h3>待核实候选 <small>C_candidate</small></h3>
+            <p>表达可能有真实解释价值，但目前不足以可靠决定 A、B 或排除。</p>
+            <ul>
+              <li>具体含义、标准形式、变体关系、形成机制或边界仍未解决。</li>
+              <li>证据不足、相互冲突，或无法判断是稳定用法还是一次性创造。</li>
+              <li>只记录明确未知点；没有独立支持时不能猜写具体释义。</li>
+            </ul>
+            <p class="guide-example"><strong>典型：</strong><code>幕刃</code>、<code>郭女</code> 等映射或变体关系尚待证实。</p>
+            <p class="guide-default">默认原因：需要补充证据</p>
+          </article>
+        </div>
+        <section class="guide-reject">
+          <h3>不要把明确噪声塞进 C</h3>
+          <p>透明普通词、普通身份或名称、通用辱骂、语法碎片、带入功能词、完整句、错误 substring、非 fit 表达应排除为 R。例如 <code>女拳不</code> 是碎片，普通指称的 <code>黑人</code> 没有额外解释缺口。</p>
+          <p><strong>互斥判断顺序：</strong>不是资源对象 → R；有价值但证据未决 → C；含义成立但需上下文 → B；全部稳定门槛通过 → A。</p>
+        </section>
+        <div class="dialog-actions">
+          <button value="close" class="primary-button" type="submit">知道了</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="shortcut-dialog" class="app-dialog shortcut-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2>快捷键</h2>
+          <button class="icon-button" value="close" type="submit">×</button>
+        </div>
+        <dl class="shortcut-list">
+          <div><dt>1 / 2 / 3</dt><dd>阶段 A 有选区时，创建 A / B / C 标注</dd></div>
+          <div><dt>J / K</dt><dd>阶段 B 上一 / 下一提案</dd></div>
+          <div><dt>[ / ]</dt><dd>当前搜索或筛选结果中的上一 / 下一 Case</dd></div>
+          <div><dt>Ctrl/⌘ + S</dt><dd>保存草稿</dd></div>
+          <div><dt>Ctrl/⌘ + Enter</dt><dd>确认并继续</dd></div>
+          <div><dt>?</dt><dd>打开本帮助</dd></div>
+        </dl>
+      </form>
+    </dialog>
+
+    <script src="/core.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

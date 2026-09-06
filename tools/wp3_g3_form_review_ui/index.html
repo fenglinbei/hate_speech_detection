@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>WP3 G3 形式关系审核</title>
+    <link rel="stylesheet" href="/review-base.css">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button" title="打开审核队列">☰</button>
+        <div class="brand">
+          <p class="eyebrow">WP3 · G3 · 形式关系审核</p>
+          <div class="title-row">
+            <h1>公开证据关系审核</h1>
+            <span class="badge">FORM</span>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-status">
+        <div class="top-progress">
+          <span id="top-progress-text">读取审核状态…</span>
+          <div class="meter"><span id="progress-bar"></span></div>
+        </div>
+        <span id="save-state" class="save-state" data-state="idle">尚未修改</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="shortcuts" class="quiet-button desktop-only" type="button">快捷键</button>
+        <button id="guidelines" class="quiet-button" type="button">标注说明</button>
+      </div>
+    </header>
+
+    <div class="development-banner">
+      <strong>仅用于开发审核 · 未封存 · 不用于科学结论</strong>
+      <span>DEVELOPMENT ONLY · NON-SEALED · NON-SCIENTIFIC</span>
+    </div>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+    <div class="workbench">
+      <aside id="item-sidebar" class="case-sidebar">
+        <div class="sidebar-head">
+          <div>
+            <p class="section-kicker">关系审核队列</p>
+            <strong id="sidebar-progress">0 / 0</strong>
+          </div>
+          <button id="sidebar-close" class="icon-button mobile-tablet-only" type="button" title="关闭">×</button>
+        </div>
+        <div class="search-field">
+          <span>定位关系或搜索冻结摘要</span>
+          <div class="case-search-controls">
+            <input id="item-search" maxlength="80" placeholder="输入形式、标准形式、来源或编号" autocomplete="off" aria-label="搜索关系审核项">
+            <button id="search-mode" class="quiet-button search-mode-button" type="button" title="点击切换为多词模式">连续 ↻</button>
+          </div>
+          <small id="search-status" class="search-status">全部 0 条</small>
+        </div>
+        <div id="item-filters" class="filter-tabs">
+          <button type="button" data-filter="all" class="active">全部</button>
+          <button type="button" data-filter="open">待确认</button>
+          <button type="button" data-filter="complete">已确认</button>
+          <button type="button" data-filter="defer">Defer</button>
+        </div>
+        <p id="item-empty" class="empty-state hidden">没有匹配的关系审核项</p>
+        <nav id="item-list" class="case-list" aria-label="关系审核队列"></nav>
+      </aside>
+
+      <main class="source-pane">
+        <div class="case-toolbar">
+          <div>
+            <span id="item-position" class="badge">—</span>
+            <h2 id="item-id">正在读取关系审核项</h2>
+          </div>
+          <div class="case-nav">
+            <button id="previous-item" class="icon-button" type="button" title="上一条 [">←</button>
+            <button id="next-item" class="icon-button" type="button" title="下一条 ]">→</button>
+          </div>
+        </div>
+
+        <section class="source-card relation-card">
+          <div class="card-head">
+            <div>
+              <p class="section-kicker">待审核形式关系</p>
+              <p class="muted">只判断冻结公开证据是否支持这组形式关系，不补充定义、标签或任务结论。</p>
+            </div>
+            <span id="relation-family" class="badge">—</span>
+          </div>
+          <div class="relation-display" aria-live="polite">
+            <div>
+              <span class="relation-label">surface</span>
+              <strong id="relation-surface">—</strong>
+            </div>
+            <span class="relation-arrow" aria-hidden="true">→</span>
+            <div>
+              <span class="relation-label">canonical</span>
+              <strong id="relation-canonical">—</strong>
+            </div>
+          </div>
+          <div id="relation-meta" class="relation-meta"></div>
+        </section>
+
+        <section class="item-strip-card evidence-card">
+          <div class="card-head">
+            <div>
+              <p class="section-kicker">冻结公开证据</p>
+              <strong id="evidence-status">等待载入</strong>
+            </div>
+          </div>
+          <div id="evidence-list" class="evidence-list"></div>
+        </section>
+      </main>
+
+      <aside class="decision-pane">
+        <div class="decision-head">
+          <div>
+            <p class="section-kicker">当前决定</p>
+            <h2 id="decision-title">等待选择</h2>
+          </div>
+          <span id="decision-status" class="status-chip">待处理</span>
+        </div>
+        <div class="decision-actions">
+          <button id="save-draft" class="secondary-button" type="button">保存草稿</button>
+          <button id="confirm-next" class="primary-button" type="button">确认并继续</button>
+        </div>
+        <div id="request-error" class="request-error error-card hidden">
+          <strong id="request-error-message">请求失败</strong>
+          <details>
+            <summary>查看技术详情</summary>
+            <pre id="request-error-details"></pre>
+          </details>
+        </div>
+        <div id="decision-editor" class="decision-editor">
+          <section class="editor-section">
+            <h3>选择关系决定</h3>
+            <div id="action-grid" class="action-grid relation-action-grid">
+              <button class="action-choice" type="button" data-action="accept"><kbd>1</kbd><span>接受</span><small>提案与证据正确</small></button>
+              <button class="action-choice" type="button" data-action="edit"><kbd>2</kbd><span>修订</span><small>修正关系字段</small></button>
+              <button class="action-choice" type="button" data-action="reject"><kbd>3</kbd><span>驳回</span><small>关系无效或证据不足</small></button>
+              <button class="action-choice" type="button" data-action="defer"><kbd>4</kbd><span>暂缓</span><small>临时搁置，最终清零</small></button>
+            </div>
+            <small id="action-error" class="field-error hidden"></small>
+          </section>
+
+          <section id="proposal-fields" class="editor-section proposal-fields">
+            <h3>关系字段 <small id="proposal-mode-hint">选择“修订”后可编辑</small></h3>
+            <label class="field">
+              <span>surface</span>
+              <input id="surface" maxlength="160" autocomplete="off">
+              <small id="surface-error" class="field-error hidden"></small>
+            </label>
+            <label class="field">
+              <span>canonical</span>
+              <input id="canonical" maxlength="160" autocomplete="off">
+              <small id="canonical-error" class="field-error hidden"></small>
+            </label>
+            <label class="field">
+              <span>family</span>
+              <select id="family">
+                <option value="known_variant">known_variant · 已知书写变体</option>
+                <option value="phonetic_variant">phonetic_variant · 语音形式变体</option>
+                <option value="orthographic_variant">orthographic_variant · 字形形式变体</option>
+              </select>
+              <small id="family-error" class="field-error hidden"></small>
+            </label>
+            <label class="scan-field">
+              <input id="scan" type="checkbox">
+              <span>启用该 canonical 的受控 phonetic scan</span>
+            </label>
+            <small id="proposal-error" class="field-error hidden"></small>
+          </section>
+
+          <section class="editor-section">
+            <h3>采用的冻结证据</h3>
+            <div id="evidence-checks" class="evidence-checks"></div>
+            <small id="evidence-error" class="field-error hidden"></small>
+          </section>
+
+          <section class="editor-section">
+            <label class="field">
+              <span>备注</span>
+              <textarea id="notes" maxlength="2000" placeholder="可记录接受、修订、驳回或暂缓的判断依据"></textarea>
+              <small class="helper">备注不能代替冻结证据；defer 最终仍须重新打开并改为非 defer 决定。</small>
+            </label>
+          </section>
+
+          <div id="locked-card" class="locked-card hidden">
+            <strong>该关系决定已确认并锁定。</strong>
+            <p>如需更正，必须重新打开并写入 amendment reason。</p>
+            <button id="reopen" class="danger-button" type="button">重新打开</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="action-dialog" class="app-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2 id="dialog-title">请确认</h2>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <p id="dialog-message"></p>
+        <label class="field">
+          <span>修改原因</span>
+          <textarea id="dialog-input" maxlength="1000" placeholder="请说明本次重新打开的原因"></textarea>
+          <small id="dialog-input-error" class="field-error hidden">修改原因为必填</small>
+        </label>
+        <div class="dialog-actions">
+          <button value="cancel" class="secondary-button" type="submit">取消</button>
+          <button id="dialog-confirm" value="confirm" class="danger-button" type="submit">重新打开</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="conflict-dialog" class="app-dialog">
+      <form method="dialog">
+        <h2>检测到其他页面的修改</h2>
+        <p>服务器上的审核版本已经变化。请选择采用服务器版本，或将当前本地决定重新应用到最新版本。</p>
+        <details>
+          <summary>技术详情</summary>
+          <pre id="conflict-details"></pre>
+        </details>
+        <div class="dialog-actions stacked-mobile">
+          <button value="server" class="secondary-button" type="submit">采用服务器版本</button>
+          <button value="retry" class="primary-button" type="submit">重新应用本地决定</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="guideline-dialog" class="app-dialog guideline-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <div>
+            <p class="section-kicker">G3 形式关系审核指南</p>
+            <h2>只审核冻结证据支持的形式关系</h2>
+          </div>
+          <button class="icon-button" value="close" type="submit">×</button>
+        </div>
+        <div class="guide-callout">
+          <strong>一句话记忆：判断“这个 surface 是否是该 canonical 的这种形式变体”，不要判断词义、态度、类别或任务标签。</strong>
+          <p>handbook 仅提供审核规则，不能单独证明关系。页面中的公开材料快照才是本轮可以使用的证据。</p>
+        </div>
+        <section class="guide-common">
+          <h3>共同证据门槛</h3>
+          <ul>
+            <li>surface 与 canonical 必须能在所选冻结证据中逐字重放，并且材料确实陈述或展示二者的形式关系。</li>
+            <li>一次决定只能使用同一公开来源；采用 v2 单引文契约时，二者还必须位于同一冻结 component/quote。</li>
+            <li>相同词对来自不同来源时仍逐项独立审核，不合并，也不因另一项已通过而自动接受。</li>
+            <li>不要补写定义、证据分档、冒犯性、立场、任务类别、record ID 或任何训练标签。</li>
+          </ul>
+        </section>
+        <div class="guide-grid relation-guide-grid">
+          <article class="guide-tier tier-a">
+            <span class="guide-letter">1</span>
+            <h3>接受 <small>accept</small></h3>
+            <p>原 surface、canonical、family、scan 设置和证据选择均正确，冻结材料足以支持该形式关系。</p>
+            <p class="guide-default">接受会原样保留提案字段。</p>
+          </article>
+          <article class="guide-tier tier-b">
+            <span class="guide-letter">2</span>
+            <h3>修订 <small>edit</small></h3>
+            <p>材料支持一条形式关系，但提取的 surface、canonical、family、scan 或证据选择需要修正。</p>
+            <p class="guide-default">至少修改一个提案字段，且修订结果必须在同一冻结证据中重放。</p>
+          </article>
+          <article class="guide-tier tier-c">
+            <span class="guide-letter">3</span>
+            <h3>驳回 <small>reject</small></h3>
+            <p>不是有效形式关系、证据不足、把语义关系误当形式关系，或提案提取错误且无法由当前证据修正。</p>
+            <p class="guide-default">驳回仍原样保留提案字段，判断原因写入备注。</p>
+          </article>
+          <article class="guide-tier tier-defer">
+            <span class="guide-letter">4</span>
+            <h3>暂缓 <small>defer</small></h3>
+            <p>当前确实无法决定时临时搁置。defer 不是完成结论，reference finalize 前必须全部重新打开并清零。</p>
+            <p class="guide-default">请在备注中写明待解决问题。</p>
+          </article>
+        </div>
+        <section class="guide-common">
+          <h3>三种 family</h3>
+          <ul>
+            <li><code>known_variant</code>：公开材料明确给出的既有书写或约定变体。</li>
+            <li><code>phonetic_variant</code>：拼音首字母、谐音或近音等语音形式关系。</li>
+            <li><code>orthographic_variant</code>：字形替代、拆合或其他明确的书写形式关系。</li>
+          </ul>
+        </section>
+        <section class="guide-reject">
+          <h3>确认、锁定与更正</h3>
+          <p>草稿会自动保存；“确认并继续”后该项锁定。更正已确认项必须点击“重新打开”，填写 amendment reason 后再修改。不要在多个页面同时编辑同一 session；若发生 CAS 冲突，页面会要求明确选择服务器版本或重新应用本地决定。</p>
+        </section>
+        <div class="dialog-actions">
+          <button value="close" class="primary-button" type="submit">知道了</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="shortcut-dialog" class="app-dialog shortcut-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2>快捷键</h2>
+          <button class="icon-button" value="close" type="submit">×</button>
+        </div>
+        <dl class="shortcut-list">
+          <div><dt>1 / 2 / 3 / 4</dt><dd>选择接受 / 修订 / 驳回 / 暂缓</dd></div>
+          <div><dt>[ / ]</dt><dd>当前搜索或筛选结果中的上一条 / 下一条</dd></div>
+          <div><dt>Ctrl/⌘ + S</dt><dd>保存当前草稿</dd></div>
+          <div><dt>Ctrl/⌘ + Enter</dt><dd>确认当前决定并继续</dd></div>
+          <div><dt>?</dt><dd>打开本帮助</dd></div>
+        </dl>
+      </form>
+    </dialog>
+
+    <script src="/review-core.js"></script>
+    <script src="/core.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

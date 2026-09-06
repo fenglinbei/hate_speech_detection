@@ -1,0 +1,155 @@
+{
+  "schema_version": "wp3-s21-current-run-provider-plan/v1",
+  "plan_revision": "wp3-s21b-provider-plan/v2",
+  "plan_id": "wp3runplan-7c4b4c8bda5fd85a3ce9f26cae6069aa4bc8bb52497a2d5a6fb97194371ea90f",
+  "validation_contract": {
+    "schema_path": "schemas/wp3_candidate_current_run_plan_v1.schema.json",
+    "schema_id": "https://local.invalid/schemas/wp3_candidate_current_run_plan_v1.schema.json",
+    "schema_canonical_sha256": "5e6b841e6f3755a2ca9a18ad95c57fdb2ea4ebb1696f9f4ff68aab7fe04157ee"
+  },
+  "accepted_date": "2026-08-30",
+  "scope": "development-only",
+  "scientific_eligible": false,
+  "sealed": false,
+  "supersedes": {
+    "base_protocol_revision": "wp3-s21b-current-generator-diagnostic/v1",
+    "base_protocol_canonical_sha256": "c3c1442c02567e15aac2a664b5ffeb2b5fb7db8b48b691997e5c16d71c51ce4b",
+    "json_pointer": "/current_generator_pilot",
+    "status": "superseded-before-execution",
+    "raw_gold_semantics_unchanged": true
+  },
+  "frame_dependency": {
+    "artifact_kind": "wp3-s21-development-frame",
+    "artifact_id": "wp3devframe-0a28b5b91dff61db5d087a9dc64c095b01bf85fc64552fed5db05ea17fb47dab",
+    "payload_manifest_sha256": "8610262616ad993c7414b290e02daa74c4c8123cee6f4e6afd66cab5fe52415a",
+    "case_count": 424,
+    "cases_canonical_sha256": "392aa31e8fbc0c49b10cfe07fa9ac0f2fe4a1dcee0995afc923658d63678ce0b",
+    "case_id_set_canonical_sha256": "ae867eb3ec0fb6f3fed876633409d840146318bfa9bd8736f6d95099d237fbd6",
+    "input_projection": "task-id-blind-alias-content-only/v1",
+    "task_id_policy": "frame-case-id/v1",
+    "task_projection_canonical_sha256": "3660dbfdb518e469d62f69fabdfcb34f983269f3fb54e3bd1529419b3bd5b90d"
+  },
+  "preserved_raw_gold": {
+    "artifact_kind": "wp3-s21-locked-raw-gold",
+    "artifact_id": "wp3rawgold-41f16aabde6fd253485d853319ad949c1507a4caf29ba0f658e7ea28a3d3a7b0",
+    "payload_manifest_sha256": "35b655724079678cc5831a944aed6294c179d74470f4d76c22b7af79ab500364",
+    "run_must_not_read": true,
+    "first_join_stage": "development-evaluation/v1"
+  },
+  "implementation_dependency": {
+    "path": "src/build_lex/terminology_candidate_generators.py",
+    "sha256": "66a11209e615bcd6be90977276665118b7f155f32ecf1388b4ae08ea7b37f1bf",
+    "reuse_scope": "prompt-request-shape-and-response-normalizers-only"
+  },
+  "prompt_contract": {
+    "g1_surface_decode": {
+      "version": "wp3-g1-surface-decode/v1",
+      "sha256": "dfba0c116e76dea80efd98510194a5e038d46b19b9768e46bb03d32ece1be1ec"
+    },
+    "g1_lexical_pragmatic": {
+      "version": "wp3-g1-lexical-pragmatic/v1",
+      "sha256": "91b3d6552e736bf4fd6f8c8e7e217944e77cbeb25c84c6b938bb07c715bf47ec"
+    },
+    "g2_direct_mention": {
+      "version": "wp3-g2-direct-mention/v1",
+      "sha256": "ff7af4a9bc6e7bad06f965f5d4f0a95bee3ceb8fa37570055d38e2f64f23e459"
+    }
+  },
+  "request_profile": {
+    "api_shape": "openai-compatible-chat-completions/v1",
+    "temperature": 1,
+    "top_p": 0.95,
+    "max_tokens": 4096,
+    "stream": false,
+    "response_format": {
+      "type": "json_object"
+    },
+    "thinking": {
+      "type": "enabled"
+    },
+    "reasoning_effort": "low",
+    "provider_parameter_overrides_allowed": false,
+    "equivalence_policy": "exact-request-body-except-model/v1",
+    "reasoning_content_policy": "private-vault-only-not-normalizer-input/v1"
+  },
+  "providers": {
+    "glm_flash": {
+      "provider": "zhipu",
+      "requested_model": "glm-5.3-flash",
+      "transport": "openai-compatible-chat-completions-external",
+      "api_base_env": "WP3_GLM_API_BASE",
+      "default_api_base": "https://open.bigmodel.cn/api/paas/v4",
+      "chat_completions_endpoint": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      "allowed_origin": "https://open.bigmodel.cn",
+      "api_key_env": "GLM_API_KEY",
+      "returned_model_policy": "normalized-exact-requested-model/v1"
+    },
+    "deepseek_flash": {
+      "provider": "deepseek",
+      "requested_model": "deepseek-v4-flash",
+      "transport": "openai-compatible-chat-completions-external",
+      "api_base_env": "WP3_DEEPSEEK_API_BASE",
+      "default_api_base": "https://api.deepseek.com",
+      "chat_completions_endpoint": "https://api.deepseek.com/chat/completions",
+      "allowed_origin": "https://api.deepseek.com",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "returned_model_policy": "normalized-exact-requested-model/v1"
+    }
+  },
+  "g1": {
+    "passes": [
+      "surface_decode",
+      "lexical_pragmatic"
+    ],
+    "providers": [
+      "glm_flash",
+      "deepseek_flash"
+    ],
+    "aggregation": "pass-then-provider-exact-occurrence-union-no-vote/v1",
+    "logical_slots_per_provider": 848,
+    "logical_slot_count": 1696,
+    "dual_provider_status": "development-factorial-diagnostic",
+    "post_pilot_retention_gate": "provider-ablation-before-s22-or-full-fit/v1",
+    "post_pilot_retention_criteria": {
+      "decision_state_policy": "incomplete-is-inconclusive-else-retain-or-drop/v1",
+      "decision_rule": "retain-iff-(recall-gain-or-unique-tp)-and-f1-gates/v1",
+      "completeness_scope": "all-2544-model-slots-plus-g3-and-offset-replay/v1",
+      "metric_contract": "exact-occurrence-micro-unrounded-absolute-delta/v1",
+      "baseline_union": "glm-g1-plus-dual-g2-plus-g3/v1",
+      "added_union": "baseline-plus-deepseek-g1/v1",
+      "min_full_union_exact_recall_gain": 0.01,
+      "min_full_union_unique_exact_true_positives": 2,
+      "min_unique_tp_distinct_cases": 2,
+      "full_union_exact_f1_floor": 0.85,
+      "max_full_union_exact_f1_drop": 0.005,
+      "required_offset_replay_rate": 1,
+      "required_terminal_slot_count": 2544,
+      "required_terminal_failure_count": 0
+    }
+  },
+  "g2": {
+    "providers": [
+      "glm_flash",
+      "deepseek_flash"
+    ],
+    "aggregation": "provider-exact-occurrence-union-no-vote/v1",
+    "logical_slots_per_provider": 424,
+    "logical_slot_count": 848
+  },
+  "g3": {
+    "execution": "offline-deterministic",
+    "logical_model_slot_count": 0
+  },
+  "total_logical_model_slot_count": 2544,
+  "execution": {
+    "model_calls_authorized": false,
+    "network_calls_authorized": false,
+    "paid_calls_authorized": false,
+    "formal_artifact_publication_authorized": false,
+    "full_fit_execution_authorized": false,
+    "s22_materialization_authorized": false,
+    "runner_status": "not-implemented",
+    "plan_lifecycle_status": "planning-only-must-be-superseded-before-execution",
+    "required_successor_change": "prompt-v2-run-plan-and-runner-contract/v1"
+  }
+}

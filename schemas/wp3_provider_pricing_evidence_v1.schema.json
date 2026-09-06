@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_provider_pricing_evidence_v1.schema.json",
+  "title": "WP3 provider pricing source evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scope",
+    "scientific_eligible",
+    "sealed",
+    "currency",
+    "captured_at",
+    "rate_policy",
+    "source_receipts",
+    "provider_rates"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-provider-pricing-evidence/v1"},
+    "scope": {"const": "development-only"},
+    "scientific_eligible": {"const": false},
+    "sealed": {"const": false},
+    "currency": {"const": "RMB"},
+    "captured_at": {"$ref": "#/$defs/capturedAt"},
+    "rate_policy": {"const": "wp3-conservative-peak-cache-miss/v1"},
+    "source_receipts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/sourceReceipt"}
+    },
+    "provider_rates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["glm_flash", "deepseek_flash"],
+      "properties": {
+        "glm_flash": {"$ref": "#/$defs/ratePair"},
+        "deepseek_flash": {"$ref": "#/$defs/ratePair"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "capturedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "decimal": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,8})(\\.[0-9]{1,9})?$"
+    },
+    "modelEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exact_text", "occurrence_ordinal"],
+      "properties": {
+        "exact_text": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "occurrence_ordinal": {"type": "integer", "minimum": 1}
+      }
+    },
+    "rateEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact_text",
+        "occurrence_ordinal",
+        "numeric_text",
+        "semantic_label"
+      ],
+      "properties": {
+        "exact_text": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "occurrence_ordinal": {"type": "integer", "minimum": 1},
+        "numeric_text": {"$ref": "#/$defs/decimal"},
+        "semantic_label": {
+          "enum": ["input_rmb_per_million", "output_rmb_per_million"]
+        }
+      }
+    },
+    "sourceReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": ["provider_id"],
+            "properties": {"provider_id": {"const": "glm_flash"}}
+          },
+          "then": {
+            "properties": {
+              "source_url": {"const": "https://bigmodel.cn/pricing"}
+            }
+          }
+        }
+      ],
+      "required": [
+        "provider_id",
+        "requested_model",
+        "source_url",
+        "snapshot_path",
+        "snapshot_sha256",
+        "snapshot_size_bytes",
+        "captured_at",
+        "rate_policy_application",
+        "evidence"
+      ],
+      "properties": {
+        "provider_id": {"enum": ["glm_flash", "deepseek_flash"]},
+        "requested_model": {"enum": ["glm-5.3-flash", "deepseek-v4-flash"]},
+        "source_url": {"type": "string", "format": "uri", "minLength": 1},
+        "snapshot_path": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "snapshot_size_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2097152
+        },
+        "captured_at": {"$ref": "#/$defs/capturedAt"},
+        "rate_policy_application": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicability_scope", "input_basis", "output_basis"],
+          "properties": {
+            "applicability_scope": {
+              "const": "requested-model-direct-token-tariff-only/v1"
+            },
+            "input_basis": {"type": "string", "minLength": 1},
+            "output_basis": {"type": "string", "minLength": 1}
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model", "input_rate", "output_rate"],
+          "properties": {
+            "model": {"$ref": "#/$defs/modelEvidence"},
+            "input_rate": {"$ref": "#/$defs/rateEvidence"},
+            "output_rate": {"$ref": "#/$defs/rateEvidence"}
+          }
+        }
+      }
+    },
+    "ratePair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_rmb_per_million", "output_rmb_per_million"],
+      "properties": {
+        "input_rmb_per_million": {"$ref": "#/$defs/decimal"},
+        "output_rmb_per_million": {"$ref": "#/$defs/decimal"}
+      }
+    }
+  }
+}

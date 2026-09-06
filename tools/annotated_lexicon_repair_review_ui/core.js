@@ -33,30 +33,66 @@
     return result;
   }
 
-  function serializeAdditionalSpans(rows) {
-    return (rows || []).map(row => [row.start, row.end, row.surface, row.reason].join(" | ")).join("\n");
+  // DOM Range offsets count UTF-16 units; the persisted protocol counts Unicode
+  // codepoints. Never locate an occurrence with indexOf(surface): it may repeat.
+  function spanFromUtf16Offsets(text, startOffset, endOffset) {
+    if (!Number.isInteger(startOffset) || !Number.isInteger(endOffset) ||
+        startOffset < 0 || startOffset >= endOffset || endOffset > text.length) return null;
+    const splitsSurrogate = offset => offset > 0 && offset < text.length &&
+      /[\uD800-\uDBFF]/u.test(text[offset - 1]) && /[\uDC00-\uDFFF]/u.test(text[offset]);
+    if (splitsSurrogate(startOffset) || splitsSurrogate(endOffset)) return null;
+    return {
+      start: Array.from(text.slice(0, startOffset)).length,
+      end: Array.from(text.slice(0, endOffset)).length,
+      surface: text.slice(startOffset, endOffset),
+    };
   }
 
-  function parseAdditionalSpans(text) {
-    const rows = [];
-    const errors = [];
-    for (const [index, rawLine] of String(text || "").split(/\r?\n/u).entries()) {
-      const line = rawLine.trim();
-      if (!line) continue;
-      const fields = line.split("|").map(value => value.trim());
-      if (fields.length !== 4) {
-        errors.push(`第 ${index + 1} 行必须是 start | end | surface | reason`);
-        continue;
-      }
-      const start = Number(fields[0]);
-      const end = Number(fields[1]);
-      if (!Number.isInteger(start) || !Number.isInteger(end)) {
-        errors.push(`第 ${index + 1} 行的 start/end 必须是整数`);
-        continue;
-      }
-      rows.push({start, end, surface: fields[2], reason: fields[3]});
+  function selectedQuerySpan(root, selection) {
+    if (!selection || selection.rangeCount !== 1 || selection.isCollapsed) return null;
+    const range = selection.getRangeAt(0);
+    if (!root.contains(range.startContainer) || !root.contains(range.endContainer)) return null;
+    const prefix = range.cloneRange();
+    prefix.selectNodeContents(root);
+    prefix.setEnd(range.startContainer, range.startOffset);
+    const startOffset = prefix.toString().length;
+    prefix.setEnd(range.endContainer, range.endOffset);
+    const span = spanFromUtf16Offsets(root.textContent, startOffset, prefix.toString().length);
+    return span && span.surface.trim() && span.surface === range.toString() ? span : null;
+  }
+
+  function additionalSpanError(item, decision, span, editingIndex = -1) {
+    if ((item.candidates || []).some(candidate => candidate.span[0] === span.start && candidate.span[1] === span.end)) {
+      return "此位置已列为候选，请直接决定该 occurrence，不要重复补充。";
     }
-    return {rows, errors};
+    const rows = decision.additional_spans.filter((row, index) => index !== editingIndex);
+    if (rows.some(row => row.start === span.start && row.end === span.end)) return "此位置已经补充，可在额外 span 列表中修改理由。";
+    if (rows.length >= 32) return "每个 case 最多补充 32 个 span。";
+    if (rows.some(row => row.start < span.end && span.start < row.end)) return "此片段与已补充的 span 重叠，请先调整或移除原补充项。";
+    if ((item.candidates || []).some(candidate => decision.candidate_actions[candidate.candidate_id] === "keep" &&
+        candidate.span[0] < span.end && span.start < candidate.span[1])) {
+      return "此片段与已保留候选重叠，请先删除不应保留的候选。";
+    }
+    return "";
+  }
+
+  function reviewShortcut(event, {dialogOpen = false, busy = false, loaded = true, locked = false} = {}) {
+    if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || dialogOpen || busy || !loaded || event.altKey) return null;
+    const key = String(event.key || "").toLowerCase();
+    if (event.ctrlKey || event.metaKey) {
+      if (event.shiftKey || event.repeat || locked) return null;
+      return key === "s" ? "save" : key === "enter" ? "confirm" : null;
+    }
+    if (Common.isTextEntry(event.target)) return null;
+    if (event.shiftKey && key !== "?" && key !== "q" && key !== "a") return null;
+    const action = {
+      "1": "keep-all", "2": "drop-all", "3": "clear-all",
+      arrowup: "previous-candidate", arrowdown: "next-candidate",
+      q: "keep", a: "drop", "[": "previous-item", "]": "next-item", "?": "help",
+    }[key] || null;
+    if (event.repeat && !["previous-candidate", "next-candidate"].includes(action)) return null;
+    if (locked && ["keep-all", "drop-all", "clear-all", "keep", "drop"].includes(action)) return null;
+    return action;
   }
 
   function validateDecision(item, decision, {confirm = false} = {}) {
@@ -68,7 +104,8 @@
       const undecided = candidateIds.filter(candidateId => !["keep", "drop"].includes(decision.candidate_actions[candidateId]));
       if (confirm && undecided.length) errors.candidate_actions = `还有 ${undecided.length} 个候选未决定`;
     }
-    if (!Array.isArray(decision.additional_spans)) errors.additional_spans = "额外 span 格式无效";
+    const additional = Array.isArray(decision.additional_spans) ? decision.additional_spans : [];
+    if (!Array.isArray(decision.additional_spans) || additional.length > 32) errors.additional_spans = "额外 span 必须是最多 32 项的列表";
     if (String(decision.notes || "").length > 2000) errors.notes = "备注不能超过 2000 字";
 
     const codepoints = Array.from(String(item.query_content || ""));
@@ -78,7 +115,7 @@
         expected.push({start: candidate.span[0], end: candidate.span[1], surface: candidate.surface});
       }
     }
-    for (const [index, row] of (decision.additional_spans || []).entries()) {
+    for (const [index, row] of additional.entries()) {
       if (!Number.isInteger(row.start) || !Number.isInteger(row.end) || row.start < 0 || row.start >= row.end || row.end > codepoints.length) {
         errors.additional_spans = `额外 span 第 ${index + 1} 行边界无效`;
         continue;
@@ -87,6 +124,7 @@
         errors.additional_spans = `额外 span 第 ${index + 1} 行文本与边界不一致`;
       }
       if (!String(row.reason || "").trim()) errors.additional_spans = `额外 span 第 ${index + 1} 行缺少理由`;
+      if (Array.from(String(row.reason || "").trim()).length > 500) errors.additional_spans = `额外 span 第 ${index + 1} 行理由不能超过 500 字`;
       expected.push(row);
     }
     expected.sort((left, right) => left.start - right.start || left.end - right.end);
@@ -158,12 +196,14 @@
 
   const api = {
     COHORT_LABELS,
+    additionalSpanError,
     decisionFields,
     defaultDecision,
     itemMatches,
     nextUnfinishedItemId,
-    parseAdditionalSpans,
-    serializeAdditionalSpans,
+    reviewShortcut,
+    selectedQuerySpan,
+    spanFromUtf16Offsets,
     validateDecision,
     visibleItemQueue,
   };

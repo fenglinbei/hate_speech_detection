@@ -1,5 +1,7 @@
 # Stage 1 P0 执行状态与继续推进手册
 
+> 2026-09-04 范围更新：当前研究主协议为[通用模型机制实验正式协议 v1](general-model-ld-mechanism-protocol-v1.md)。下文是旧 category-free/微调 P0 管线的历史执行快照，不代表新版运行包已就绪，也不意味着必须恢复旧 WP3 构词才能研究机制。下文“test 封存”仅描述该管线当时的操作边界；同一 test 已有更早历史评测，新协议明确披露该事实。
+
 > 执行快照：2026-08-26
 >
 > 设计与验收规格：[Stage 1 P0 实施规格](stage1-p0-implementation.md)

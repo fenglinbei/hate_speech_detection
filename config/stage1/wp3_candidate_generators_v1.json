@@ -69,16 +69,24 @@
   "pilot": {
     "development_sources": [
       "historical-a1-200",
-      "historical-candidate-gate-80",
-      "historical-span-revision-49",
       "historical-dual-model-240"
     ],
-    "sealed_min_records": 240,
-    "sealed_target_records": 400,
-    "sealed_max_records": 600,
-    "hidden_repeat_records": 60,
+    "historical_case_references_only": [
+      "historical-candidate-gate-80",
+      "historical-span-revision-49"
+    ],
+    "development_unique_records": 424,
+    "development_source_intersection_records": 16,
     "min_union_recall": 0.9,
-    "min_union_exact_boundary_f1": 0.85
+    "min_union_exact_boundary_f1": 0.85,
+    "s22": {
+      "status": "deferred-not-implemented",
+      "unique_fit_records": 340,
+      "hidden_repeat_pages": 60,
+      "total_review_cases": 400,
+      "must_not_overlap_s21": true,
+      "model_call_authorization_required": true
+    }
   },
   "execution": {
     "model_calls_authorized": false,

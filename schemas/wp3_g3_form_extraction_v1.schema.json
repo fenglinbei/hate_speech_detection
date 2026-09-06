@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_form_extraction_v1.schema.json",
+  "title": "WP3 G3 form-only extraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "extractor", "evidence", "items"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-form-extraction/v1"},
+    "extractor": {"const": "human-prepared-form-relations/v1"},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "items": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/item"}
+    }
+  },
+  "$defs": {
+    "trimmed": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^\\S(?:[\\s\\S]*\\S)?$"},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "source_id", "quote", "occurrence_ordinal", "relation_note"],
+      "properties": {
+        "evidence_id": {"type": "string", "pattern": "^g3ev-[a-z0-9-]+$"},
+        "source_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "quote": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "occurrence_ordinal": {"type": "integer", "minimum": 1},
+        "relation_note": {"type": "string", "minLength": 1, "maxLength": 1000}
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "surface", "canonical", "proposed_family", "phonetic_scan_enabled", "evidence_ids"],
+      "properties": {
+        "item_id": {"type": "string", "pattern": "^g3form-[a-z0-9-]+$"},
+        "surface": {"$ref": "#/$defs/trimmed"},
+        "canonical": {"$ref": "#/$defs/trimmed"},
+        "proposed_family": {"enum": ["known_variant", "phonetic_variant", "orthographic_variant"]},
+        "phonetic_scan_enabled": {"type": "boolean"},
+        "evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^g3ev-[a-z0-9-]+$"}}
+      }
+    }
+  }
+}

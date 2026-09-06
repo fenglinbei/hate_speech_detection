@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_candidate_full_run_authorization_v1.schema.json",
+  "title": "WP3 full provider-run authorization receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "plan_id",
+    "authorized_by",
+    "authorized_at",
+    "authorization_scope",
+    "accepted_resource_contract_sha256",
+    "accepted_pricing_sha256",
+    "authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-s21-full-run-authorization/v1"},
+    "receipt_id": {"type": "string", "pattern": "^wp3runauth-[0-9a-f]{64}$"},
+    "plan_id": {"type": "string", "pattern": "^wp3runplan-[0-9a-f]{64}$"},
+    "authorized_by": {"type": "string", "minLength": 1, "maxLength": 100},
+    "authorized_at": {"type": "string", "minLength": 1, "maxLength": 100},
+    "authorization_scope": {"const": "exact-2544-development-slot-grid-only/v1"},
+    "accepted_resource_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "accepted_pricing_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authorized": {"const": true}
+  }
+}

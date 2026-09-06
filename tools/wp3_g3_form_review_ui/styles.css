@@ -1,0 +1,157 @@
+/* G3-specific additions. The workbench, dialogs, responsive layout, status
+   states, and common controls are served directly from the audited S2.1 UI. */
+
+.filter-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.filter-tabs button { font-size: .68rem; }
+
+.relation-card { position: sticky; top: 0; }
+.relation-display {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-subtle);
+}
+.relation-display > div { min-width: 0; }
+.relation-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.relation-display strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 1.24rem;
+  line-height: 1.5;
+}
+.relation-arrow { color: var(--primary); font-size: 1.4rem; font-weight: 800; }
+.relation-meta { margin-top: 11px; display: flex; flex-wrap: wrap; gap: 6px; }
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  padding: 4px 8px;
+  font-size: .66rem;
+  overflow-wrap: anywhere;
+}
+
+.evidence-list { margin-top: 14px; display: grid; gap: 12px; }
+.evidence-item {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-left: 4px solid #70aa9e;
+  border-radius: 10px;
+  background: var(--surface-subtle);
+}
+.evidence-item.selected { border-color: #70aa9e; background: var(--primary-soft); }
+.evidence-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.evidence-head strong { font-size: .82rem; }
+.evidence-head code, .provenance code {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .62rem;
+  overflow-wrap: anywhere;
+}
+.evidence-item blockquote {
+  margin: 11px 0 7px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--surface);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: .83rem;
+  line-height: 1.7;
+}
+.evidence-note { margin: 0; font-size: .75rem; line-height: 1.6; }
+.provenance { margin: 8px 0 0; color: var(--muted); font-size: .67rem; line-height: 1.5; overflow-wrap: anywhere; }
+
+.relation-action-grid .action-choice {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+}
+.action-choice kbd {
+  grid-row: 1 / 3;
+  min-width: 23px;
+  padding: 2px 5px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-subtle);
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .65rem;
+  text-align: center;
+}
+.action-choice.active kbd { border-color: #9dc8bc; background: #fff; color: var(--primary); }
+.proposal-fields .field + .field { margin-top: 11px; }
+.proposal-fields h3 { display: flex; justify-content: space-between; gap: 10px; }
+.proposal-fields h3 small { color: var(--muted); font-size: .66rem; font-weight: 500; }
+.proposal-fields.readonly { opacity: .88; }
+.scan-field {
+  margin-top: 11px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 8px;
+  color: var(--ink);
+  font-size: .75rem;
+  font-weight: 650;
+}
+.scan-field input, .evidence-check input { width: auto; margin-top: 3px; }
+.evidence-checks { display: grid; gap: 7px; }
+.evidence-check {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-subtle);
+  cursor: pointer;
+}
+.evidence-check strong { display: block; font-size: .72rem; overflow-wrap: anywhere; }
+.evidence-check small { display: block; margin-top: 2px; color: var(--muted); font-size: .64rem; line-height: 1.45; }
+.evidence-check.disabled { cursor: default; opacity: .78; }
+.locked-card p { margin: 5px 0 12px; color: var(--muted); }
+.locked-card .danger-button { width: 100%; }
+.case-item[data-action="defer"] .case-state-dot.complete { background: var(--warning); }
+.case-item .case-action-label { text-align: right; }
+.tier-defer .guide-letter { background: var(--danger-soft); color: var(--danger); }
+.relation-guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.guide-common code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: #eef0ed;
+  color: var(--ink);
+  font-size: .69rem;
+}
+
+@media (max-width: 1179px) {
+  .relation-guide-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  .relation-card { position: static; }
+  .relation-display { grid-template-columns: 1fr; gap: 8px; padding: 14px; }
+  .relation-arrow { transform: rotate(90deg); justify-self: start; font-size: 1rem; }
+  .relation-display strong { font-size: 1.12rem; }
+  .evidence-item { padding: 12px; }
+  .relation-action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

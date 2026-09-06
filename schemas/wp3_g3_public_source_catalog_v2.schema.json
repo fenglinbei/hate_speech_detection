@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_public_source_catalog_v2.schema.json",
+  "title": "WP3 G3 closed public-source catalog v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalog_id", "policy", "handbook", "targets"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-public-source-catalog/v2"},
+    "catalog_id": {"const": "wp3-g3-fixed-public-priors/v2"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowlist_closed",
+        "follow_links",
+        "bundle_builder_network_access",
+        "same_host_protocol_downgrade",
+        "relation_review_required",
+        "normalized_text_required_for_evidence",
+        "pricing_sources_excluded",
+        "acquisition_modes",
+        "source_roles",
+        "dispositions",
+        "extraction_scope",
+        "excluded_scope"
+      ],
+      "properties": {
+        "allowlist_closed": {"const": true},
+        "follow_links": {"const": false},
+        "bundle_builder_network_access": {"const": false},
+        "same_host_protocol_downgrade": {"const": "allowed-only-when-recorded"},
+        "relation_review_required": {"const": true},
+        "normalized_text_required_for_evidence": {"const": true},
+        "pricing_sources_excluded": {"const": true},
+        "acquisition_modes": {
+          "const": ["direct_fetch", "publisher_pdf", "user_supplied_archive"]
+        },
+        "source_roles": {
+          "const": ["candidate_pool", "direct_evidence", "method_only", "prevalence_or_taxonomy"]
+        },
+        "dispositions": {
+          "const": ["accepted", "companion", "duplicate", "rejected"]
+        },
+        "extraction_scope": {
+          "const": [
+            "attested_written_variant",
+            "homophone_or_near_homophone",
+            "orthographic_substitution",
+            "pinyin_initials"
+          ]
+        },
+        "excluded_scope": {
+          "const": [
+            "abc_or_r_tiers",
+            "definitions",
+            "fit_or_gold_records",
+            "offensiveness_or_profanity",
+            "pricing_material",
+            "semantic_slang_without_form_relation",
+            "stance",
+            "task_labels"
+          ]
+        }
+      }
+    },
+    "handbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "role", "version", "path", "sha256"],
+      "properties": {
+        "source_id": {"const": "wp3-handbook-v1"},
+        "role": {"const": "rubric-only-not-form-evidence"},
+        "version": {"const": "wp3-terminology-evidence-handbook/v1.0"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 42,
+      "maxItems": 42,
+      "items": {"$ref": "#/$defs/target"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "nullableCommit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id",
+        "component_kind",
+        "component_url",
+        "page_ordinal",
+        "wikimedia_oldid",
+        "required_commit",
+        "required_license_sha256"
+      ],
+      "properties": {
+        "component_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,119}$"},
+        "component_kind": {
+          "enum": ["dataset", "license", "page", "paper", "repository"]
+        },
+        "component_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "page_ordinal": {"type": ["integer", "null"], "minimum": 1},
+        "wikimedia_oldid": {"type": ["string", "null"], "pattern": "^[1-9][0-9]*$"},
+        "required_commit": {"$ref": "#/$defs/nullableCommit"},
+        "required_license_sha256": {"$ref": "#/$defs/nullableSha256"}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_id",
+        "publisher",
+        "requested_url",
+        "acquisition_mode",
+        "source_role",
+        "disposition",
+        "evidence_allowed",
+        "disposition_reason",
+        "components"
+      ],
+      "properties": {
+        "target_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,119}$"},
+        "publisher": {"type": "string", "minLength": 1, "maxLength": 300},
+        "requested_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+        "acquisition_mode": {
+          "enum": ["direct_fetch", "publisher_pdf", "user_supplied_archive"]
+        },
+        "source_role": {
+          "enum": ["candidate_pool", "direct_evidence", "method_only", "prevalence_or_taxonomy"]
+        },
+        "disposition": {"enum": ["accepted", "companion", "duplicate", "rejected"]},
+        "evidence_allowed": {"type": "boolean"},
+        "disposition_reason": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,119}$"},
+        "components": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {"$ref": "#/$defs/component"}
+        }
+      }
+    }
+  }
+}

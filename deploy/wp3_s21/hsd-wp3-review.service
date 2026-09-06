@@ -1,0 +1,32 @@
+[Unit]
+Description=WP3 S2.1 development annotation service
+After=network.target
+
+[Service]
+Type=simple
+User=hsd-review
+Group=hsd-review
+WorkingDirectory=/opt/hsd-wp3-review/current
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 scripts/stage1/wp3_candidate_review.py serve-dev-review --workspace-root /opt/hsd-wp3-review/current --frame-dir exps/causal_context/stage1_p0/wp3_candidate_generators_v2/development_frames/wp3devframe-0a28b5b91dff61db5d087a9dc64c095b01bf85fc64552fed5db05ea17fb47dab --session-file /var/lib/hsd-wp3-review/session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8766 --public-origin https://hsd.fenglin.pro
+Restart=on-failure
+RestartSec=3s
+UMask=0077
+StateDirectory=hsd-wp3-review
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/hsd-wp3-review
+
+[Install]
+WantedBy=multi-user.target

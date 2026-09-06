@@ -1,7 +1,9 @@
 # Stage 1 P0 实施规格：四字段、无泄漏与可配对因果评测
 
+> 2026-09-04 范围更新：当前固定资源研究采用[通用模型机制实验正式协议 v1](general-model-ld-mechanism-protocol-v1.md)。本文保留旧 P0 的设计及验收契约；其中 category-free/fit-only 词典、必需微调模型和严格四字段要求不作为新研究的直接启动门槛。新研究复用已冻结数据与 partition 成员分配，但不继承原人工词典独立于划分的声明。既有 test 的历史暴露及新验证边界见新版协议。
+
 > [!IMPORTANT]
-> **实时执行状态、当前有效 refs、阻断项和可复制命令以 [Stage 1 P0 执行状态](stage1-p0-execution-status.md) 为准。**
+> **旧 P0 管线的执行快照、refs、阻断项和命令见 [Stage 1 P0 执行状态](stage1-p0-execution-status.md)；新研究的决策以新版机制协议为准。**
 > 本文是冻结的设计与验收规格；其中较早的 CLI 示例可能落后于当前实现，不能替代执行状态文档中的已核验命令。
 
 > 状态：v1 决策已冻结，P0 工程实现已推进到外部/人工阻断边界；机器可读来源为 `config/stage1/decision_register.json`

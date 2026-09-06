@@ -1,6 +1,6 @@
 # WP3 Step 2：三个候选生成器实施计划
 
-> **状态：IMPLEMENTATION STARTED / MODEL RUN NOT AUTHORIZED**
+> **状态：S2.1b PROTOCOL ACCEPTED / MODEL RUN NOT AUTHORIZED**
 >
 > 日期：2026-08-27（Asia/Shanghai）
 >
@@ -131,8 +131,15 @@ source（provider/model/prompt/response hash，或 rule version）
 
 ### 3.3 默认 provider 路线
 
-开发 pilot 默认由本地 Qwen 对两个 pass 各运行一次。是否在完整 fit 上为 G1 增加第二 provider，
-只根据 guideline development set 的互补召回与错误类型决定；冻结后不得根据 sealed 结果临时追加。
+`wp3-s21b-provider-plan/v2` 已在任何 current-run 执行前用 `glm-5.3-flash` 替换 Qwen。424-case
+development pilot 对两个 pass 均运行 GLM + DeepSeek 的完整 factorial，用于测量 unique TP、边界互补
+与 provider ablation。是否将 DeepSeek-G1 保留到 S2.2/full-fit，只能在 development 报告后预先冻结，
+不得根据 sealed 结果临时追加或删除。
+
+保留判据以 full-pipeline provider ablation 为准：recall 增益至少 0.01，或至少 2 个 unique exact TP
+且跨至少 2 个 case；同时 union exact F1 不低于 0.85、下降不超过 0.005，offset replay 为 100%，
+terminal failure 为 0。只有 2,544 model slots、G3 和 offset replay 全部完成后才作 `retain/drop`；
+完整性不足一律为 `inconclusive`。完整后未同时满足增量门和全部质量门时，后续 G1 使用 GLM-only。
 
 ## 4. G2：直接术语 mention 提取器
 
@@ -144,7 +151,7 @@ G2 使用冻结手册的通俗六问、span 规则和正反最小对照，要求
 响应中只提交复制自原文的 `surface + occurrence_ordinal`、mechanism、context flag 和简短理由。
 代码解析 offset，并拒绝数值 offset、整句越界、重复 occurrence 与非精确 surface。
 
-开发 pilot 默认分别运行 Qwen 与 DeepSeek，候选取并集。两者一致只作为 provenance 特征，不是
+开发 pilot 默认分别运行 GLM-5.3-Flash 与 DeepSeek-V4-Flash，候选取并集。两者一致只作为 provenance 特征，不是
 自动 accept；两者分歧进入高优先级人工队列。完整 fit 是否保留两路模型，必须在 sealed 运行前
 冻结，不能因为其中一路结果更符合预期而事后选择。
 
@@ -172,13 +179,17 @@ hash、声调和距离策略。backend 缺失时必须显式报告该 rule famil
 ## 6. Prompt、provider 与 checkpoint 策略
 
 - G1 两个 pass 和 G2 使用不同 prompt version 与独立 response schema；
-- temperature 固定为 0，输出只接受 JSON object；
+- 两 provider 共用 `temperature=1/top_p=0.95/max_tokens=4096/stream=false/json_object`，并显式
+  `thinking=enabled/reasoning_effort=low`；provider 不得覆盖共同 profile；
+- 上述约束只保证 request body（除 `model`）一致；DeepSeek thinking 模式会忽略 temperature/top_p，
+  不声称两端实际解码行为或同名 reasoning effort 等价；
 - 每次请求绑定 handbook SHA、prompt SHA、provider、requested/returned model、参数和 content hash；
 - checkpoint 以 `(contract_sha256, generator_variant, provider, task_id)` 为主键；
 - success、empty、parse_failure、transport_failure 分开记录；失败不能转为空；
 - 重试次数和 physical attempt cap 在模型运行授权前冻结；
 - raw response 受限保存，公开 observation 只保存安全 hash 与规范化字段；
-- DeepSeek 等外部 provider 只接收 public task；本地 Qwen 也使用相同 content-only 投影。
+- GLM 与 DeepSeek 都只接收绑定 exact 424-case frame 的相同 public task；execution loader/CLI 不接受
+  raw-gold 参数，gold 只能在完整 run 封存后的 evaluation 阶段首次读取。
 
 ## 7. 开发、冻结与 sealed 评估顺序
 
@@ -190,12 +201,21 @@ hash、声调和距离策略。backend 缺失时必须显式报告该 rule famil
 - 用合成案例覆盖重复 surface、嵌套、substring、重叠 edit 和禁止字段；
 - 不调用任何模型。
 
-### S2.1：guideline development pilot
+### S2.1a：locked raw mention gold
 
 - 旧 240-case、A1 200-case、80-case、49-case 只作开发案例；
-- 人工按冻结手册给出完整 mention 与 A/B/C/R 后续去向；
+- 424 条 raw-only mention 标注必须在任何提案揭示前完成并锁定；
+- raw mention occurrence 独立固化为 development-only gold，provisional ABC 不成为正式 tier；
+- 历史 A1/双模型/首版 G3 的旧队列不再作为 completion gate；
+- 详细迁移与 artifact 契约见 `wp3-s21b-current-generator-revision.md`。
+
+### S2.1b：current-generator development pilot
+
+- G1/G2/G3 只读取 424 条 formal-fit content 投影，不能读取 locked gold 或人工路由；
+- 对 current run 自动计算每个生成器、provider 与 union 的完整指标；
+- 人工诊断覆盖 missed gold、边界错、unique TP 与固定种子分层抽样 FP；
 - 只在本阶段修 prompt、mechanism enum、G3 规则和解析器；
-- 记录每个生成器的独有召回、边界错误、碎片率和解析失败率。
+- 每轮必须独立版本化，冻结后才进入 S2.2。
 
 ### S2.2：冻结新 sealed mention benchmark
 
@@ -252,12 +272,12 @@ hash、声调和距离策略。backend 缺失时必须显式报告该 rule famil
 - `src/tests/test_wp3_candidate_generators.py`；
 - 本实施计划。
 
-本切片不创建正式 artifact，不写 refs，不触碰旧 A0/A1 目录。后续先完成 S2.1 开发复核与 S2.2
-sealed frame，再提交模型运行预算和授权包。
+首个离线切片不创建正式 generator run artifact，不触碰旧 A0/A1 目录。2026-08-30 的 S2.1b
+修订新增 locked raw-gold artifact/ref；current generator run、S2.2 与模型调用仍未获授权。
 
 ## 10. 当前启动状态
 
-截至 2026-08-27，S2.0 的首个离线工程切片已经落地：
+截至 2026-08-30，S2.0、S2.1a 与 S2.1b 的离线执行骨架已经落地：
 
 - 手册 v1.0 的版本与 SHA 已写入 config，并在加载时对本地文件重新计算；
 - G1 两个 request/response 契约和“edits 必须逐字重建 rewrite”校验已实现；
@@ -265,9 +285,13 @@ sealed frame，再提交模型运行预算和授权包。
 - G3 已实现混写、NFKC、emoji、reference、拼音首字母、分隔插入和可注入 romanizer 的音近候选；
 - 三路 observation 可按 exact occurrence 并集，并保留嵌套、重叠、分歧与全部 replacement hypotheses；
 - observation/candidate JSON Schema 已落地；
-- 11 项离线回归测试通过，包含重复 occurrence、模型伪 offset、重叠 rewrite、`J生虫` 混写边界、
+- 12 项 generator 离线回归测试通过，包含重复 occurrence、模型伪 offset、重叠 rewrite、`J生虫` 混写边界、
   `txl` 缩写、`幕刃` 注入式拼音匹配、`easy/easy girl` 嵌套保留和任务字段隔离。
 
-尚未实现或尚未授权：provider HTTP runner、resumable checkpoint、正式 form reference、冻结拼音 backend、
-development/sealed review package、全 fit 运行和任何 artifact/ref 发布。下一工程切片是 S2.1/S2.2 的
-只读抽样与人工 review frame；模型运行必须等待单独的任务量、外发范围和费用授权。
+已完成 424 条 raw annotation 锁定，并采用旁路 v2 lifecycle 将其固化为 mention-only development gold；
+旧 6,306 条 proposal queue 已降级为 archival diagnostic。prompt v2、双 provider HTTP runner、checkpoint、
+private vault、artifact/evaluator、G3 form-review/full-profile 与价格证据重放均已实现，但尚未物化正式
+form reference、G3 development run 或 current-run artifact，也没有执行任何模型调用。当前首先被教育部
+固定 HTTPS 页面降级到 HTTP 所阻断；修订公开 source catalog 后仍须完成 100% 人工 form review，并冻结
+可重放的 GLM/DeepSeek 官方价格快照，之后才允许六调用合成预检。Phase-B-v2、S2.2、2,544-slot 正式批次
+与 full fit 继续保持未授权。详见 `wp3-s21b-g3-runner-implementation-handoff.md`。

@@ -1,0 +1,18 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name hsd.fenglin.pro;
+
+    access_log /var/log/nginx/hsd.fenglin.pro.access.log;
+    error_log /var/log/nginx/hsd.fenglin.pro.error.log warn;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/acme;
+        default_type text/plain;
+    }
+
+    location / {
+        add_header Retry-After 300 always;
+        return 503;
+    }
+}

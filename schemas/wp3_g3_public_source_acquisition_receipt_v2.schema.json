@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_public_source_acquisition_receipt_v2.schema.json",
+  "title": "WP3 G3 v2 offline acquisition receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "catalog_id",
+    "catalog_sha256",
+    "catalog_schema_sha256",
+    "capture_dependency",
+    "manual_intake_dependency",
+    "bundle_builder_network_access_performed",
+    "complete",
+    "target_count",
+    "target_ids",
+    "target_urls_sha256",
+    "manual_alias_count",
+    "manual_aliases",
+    "manual_aliases_sha256",
+    "selected_component_count",
+    "target_coverage",
+    "target_coverage_sha256",
+    "acquisition_receipt_id"
+  ],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-public-source-acquisition-receipt/v2"},
+    "artifact_kind": {"const": "wp3-g3-public-source-acquisition-receipt"},
+    "catalog_id": {"const": "wp3-g3-fixed-public-priors/v2"},
+    "catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "catalog_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "capture_dependency": {"$ref": "#/$defs/dependency"},
+    "manual_intake_dependency": {"$ref": "#/$defs/dependency"},
+    "bundle_builder_network_access_performed": {"const": false},
+    "complete": {"const": true},
+    "target_count": {"const": 42},
+    "target_ids": {
+      "type": "array",
+      "minItems": 42,
+      "maxItems": 42,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,119}$"}
+    },
+    "target_urls_sha256": {"const": "2c95ea9709e1b4c916c38bb1748c4d0eb9c1097341d35f91df880a1a9249f844"},
+    "manual_alias_count": {"type": "integer", "minimum": 1},
+    "manual_aliases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "object"}
+    },
+    "manual_aliases_sha256": {"$ref": "#/$defs/sha256"},
+    "selected_component_count": {"type": "integer", "minimum": 1},
+    "target_coverage": {
+      "type": "array",
+      "minItems": 42,
+      "maxItems": 42,
+      "items": {"type": "object"}
+    },
+    "target_coverage_sha256": {"$ref": "#/$defs/sha256"},
+    "acquisition_receipt_id": {"type": "string", "pattern": "^wp3g3acq-[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_kind", "artifact_id", "payload_manifest_sha256"],
+      "properties": {
+        "artifact_kind": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "payload_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

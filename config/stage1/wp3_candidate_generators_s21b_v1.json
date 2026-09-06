@@ -1,0 +1,88 @@
+{
+  "schema_version": "wp3-s21b-protocol/v1",
+  "protocol_revision": "wp3-s21b-current-generator-diagnostic/v1",
+  "accepted_date": "2026-08-30",
+  "scope": "development-only",
+  "scientific_eligible": false,
+  "sealed": false,
+  "legacy_frame_dependency": {
+    "artifact_kind": "wp3-s21-development-frame",
+    "artifact_id": "wp3devframe-0a28b5b91dff61db5d087a9dc64c095b01bf85fc64552fed5db05ea17fb47dab",
+    "payload_manifest_sha256": "8610262616ad993c7414b290e02daa74c4c8123cee6f4e6afd66cab5fe52415a"
+  },
+  "legacy_phase_b": {
+    "status": "superseded-not-completion-gate",
+    "frozen_proposal_count": 6306,
+    "required_decision_count": 0,
+    "preserve_frame_and_session": true,
+    "permitted_use": "archival-metrics-and-stratified-error-sampling-only"
+  },
+  "locked_raw_gold": {
+    "artifact_kind": "wp3-s21-locked-raw-gold",
+    "schema_version": "wp3-s21-locked-raw-gold/v1",
+    "annotation_schema_id": "https://local.invalid/schemas/wp3_s21_locked_raw_gold_v1.schema.json",
+    "annotation_schema_sha256": "cab8287f2510d14c38484ceec218268fc5428e1889ea76957be84b4ae3426bb8",
+    "required_case_count": 424,
+    "gold_scope": "mention-occurrence-only",
+    "provisional_routes_are_formal_tiers": false,
+    "allowed_post_reveal_raw_amendment_count": 0,
+    "write_back_to_legacy_session": false
+  },
+  "current_generator_pilot": {
+    "case_count": 424,
+    "input_policy": "formal-fit-content-only-no-gold-fields/v1",
+    "g1": {
+      "passes": [
+        "surface_decode",
+        "lexical_pragmatic"
+      ],
+      "providers": [
+        "qwen:Qwen3.8-27B"
+      ],
+      "logical_task_count": 848
+    },
+    "g2": {
+      "providers": [
+        "qwen:Qwen3.8-27B",
+        "deepseek:deepseek-v4-flash"
+      ],
+      "aggregation": "provider-union-no-vote/v1",
+      "logical_task_count": 848
+    },
+    "g3": {
+      "execution": "offline-deterministic",
+      "logical_model_task_count": 0
+    },
+    "total_logical_model_task_count": 1696,
+    "full_fit_execution_authorized": false,
+    "run_artifact_status": "not-implemented"
+  },
+  "phase_b_v2": {
+    "status": "blocked-until-current-generator-run-artifact",
+    "queue_policy": "gold-relation-census-plus-seeded-stratified-fp/v1",
+    "required_census": [
+      "missed_gold",
+      "boundary_overlap_errors",
+      "generator_unique_exact_true_positives"
+    ],
+    "sampled_population": "disjoint-no-overlap-false-positives",
+    "forbidden_completion_sources": [
+      "historical_a1",
+      "historical_dual_model"
+    ],
+    "human_visible_provenance_fields": [],
+    "required_final_defer_count": 0
+  },
+  "execution": {
+    "model_calls_authorized": false,
+    "network_calls_authorized": false,
+    "paid_calls_authorized": false,
+    "formal_artifact_publication_authorized": false
+  },
+  "s22": {
+    "status": "deferred-not-implemented",
+    "must_not_overlap_s21": true,
+    "requires_frozen_current_generators": true,
+    "model_call_authorization_required": true
+  }
+}

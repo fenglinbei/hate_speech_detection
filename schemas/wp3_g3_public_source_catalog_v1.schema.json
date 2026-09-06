@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/schemas/wp3_g3_public_source_catalog_v1.schema.json",
+  "title": "WP3 G3 closed public-source catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalog_id", "policy", "handbook", "external_sources"],
+  "properties": {
+    "schema_version": {"const": "wp3-g3-public-source-catalog/v1"},
+    "catalog_id": {"const": "wp3-g3-fixed-public-priors/v1"},
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowlist_closed", "follow_links", "network_fetch_implemented", "extraction_scope", "excluded_scope"],
+      "properties": {
+        "allowlist_closed": {"const": true},
+        "follow_links": {"const": false},
+        "network_fetch_implemented": {"const": true},
+        "extraction_scope": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "excluded_scope": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "handbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "role", "version", "path", "sha256"],
+      "properties": {
+        "source_id": {"const": "wp3-handbook-v1"},
+        "role": {"const": "rubric-only-not-form-evidence"},
+        "version": {"const": "wp3-terminology-evidence-handbook/v1.0"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "external_sources": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "publisher", "requested_url", "wikimedia_revision_required"],
+        "properties": {
+          "source_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+          "publisher": {"type": "string", "minLength": 1},
+          "requested_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+          "wikimedia_revision_required": {"type": "boolean"}
+        }
+      }
+    }
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}
