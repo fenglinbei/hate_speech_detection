@@ -1,0 +1,311 @@
+{
+  "schema_version": "general-model-nolabel-paired-cases/v1",
+  "identity": "a8c1fc6a97f83b339f02e36c286da5954d233a568b47ec235e4a55b217842201",
+  "status": "complete",
+  "created_at": "2026-09-07T10:32:50.155285+00:00",
+  "base_commit": "f80fe355263c267606c9601ca5d12aabee26da10",
+  "execution_commit": "f80fe355263c267606c9601ca5d12aabee26da10",
+  "source_run": "nolabel-01",
+  "config_file_sha256": "57660e76916ac12477dc515cb9411cfa6ccfb3275ec872092eebfcdb2cb3e044",
+  "code_sha256": {
+    "src/diagnostics/general_model_nolabel_paired_cases.py": "d1b8dca169499432f7eb80c3033d1d69b5a1f55e8b97c1c617b9a13467466aa6",
+    "scripts/stage1/general_model_nolabel_paired_cases.py": "c224f83c8f601466f0daedd782dfb59595dea5e9b877f389450d94e59392ad8e",
+    "src/diagnostics/general_model_numeric_analysis.py": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2",
+    "src/tests/test_general_model_nolabel_paired_cases.py": "eb02156b152736d3beca6553a2589c33686f95ddc1d0998109e1b4f2b2e057c7"
+  },
+  "source_snapshot_is_execution_identity": true,
+  "environment": {
+    "python": "3.11.15",
+    "executable": "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python",
+    "numpy": "1.26.4",
+    "platform": "Linux-4.18.0-477.10.1.el8_8.x86_64-x86_64-with-glibc2.35",
+    "unicode_database": "14.0.0",
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "phases": {
+    "validate": {
+      "status": "complete",
+      "started_at": "2026-09-07T10:32:50.534440+00:00",
+      "completed_at": "2026-09-07T10:32:56.525866+00:00"
+    },
+    "analyze": {
+      "status": "complete",
+      "started_at": "2026-09-07T10:32:56.546031+00:00",
+      "completed_at": "2026-09-07T10:32:58.098527+00:00"
+    },
+    "select": {
+      "status": "complete",
+      "started_at": "2026-09-07T10:32:58.125881+00:00",
+      "completed_at": "2026-09-07T10:32:58.242983+00:00"
+    },
+    "review-export": {
+      "status": "complete",
+      "started_at": "2026-09-07T10:32:58.274129+00:00",
+      "completed_at": "2026-09-07T10:32:58.929924+00:00"
+    }
+  },
+  "artifacts": {
+    "FINDINGS.md": "95fb9d578e70f3a0547768f9546ce7e3cfe87f4c3608cc57df01468cc2dc3e10",
+    "REPORT.md": "3eee16b4fa335e1c800c71635d879623c964ce753a159ea14c20738c3767a02e",
+    "audit/baseline_reproduction.json": "5565c8e84c1acb6c5b4d3cf6c522723badb818dfebefb463563dd148c95450f9",
+    "audit/cpu-tests.txt": "2c86b75e6b6778f98ee7f5f59ebe6e9f3bdc708e41b510239751228b1e6bd059",
+    "audit/cpu_test_receipt.json": "e81dc138042cce55e63f8ce64b33f788d36b8c00e72465580a0fdedb07ed8b45",
+    "audit/input_audit.json": "bccf3f77fdce3c3383efba2008859e7a83566f046b55355d4e24befcb8631cee",
+    "audit/retry_consistency.json": "da5aac65874af1249ed5665706205239405b2852b56ca13814054dc60b2694ac",
+    "audit/source_unchanged.json": "cc2c5d3a793179f6a0f10d89f10d78f6f202edf6fc9089e5998130e5499067f0",
+    "audit/statistics_check.json": "82f991ba20001e409c753d6d8f46f034f5a5cfdf5cae435f52072020b3d23e92",
+    "cases/AI_REVIEW.md": "1aed883ea733982af622359e8c271d02f97c7603a2387dd551817d1c09d7aac6",
+    "cases/ai_review.csv": "33fcfae28725394b9896f74cc19c0bac993f45406e535627165ce6a1d15197b2",
+    "cases/ai_review_stage1.jsonl": "e029e11e4272567e5e41470ef0fc566dfb962abbeeca99a89e52eb1a156ca9cb",
+    "cases/ai_review_stage2.jsonl": "1a13c4da7c478b0bd3205c8d26dcc4bfb3f939fd6c31b771ef54006c45c25a50",
+    "cases/boundary_cases.jsonl": "be0a523fee53979affd449b6dcab20e0cb196aafd94447589b4ef87bca5a8b54",
+    "cases/candidate_pool.jsonl": "1707fc605880d95b1ad6799ae1648729426bce9a9e67bd0f509ff0f4a9d92502",
+    "cases/card_data/00-3683.json": "b72fab1322bd4a85c8ace6b96df638ec54c9aac461b312609160dc7366d8a287",
+    "cases/card_data/01-541.json": "903f51a7e8d51bc59a791d0b52479540adef8de07fa4a79c6b446f20bf5df383",
+    "cases/card_data/02-4615.json": "f0fa1fdc9e93bc64f4bfd4c0a1fc0a5489d7fc5eb4b942a79a66208123d811a0",
+    "cases/card_data/03-7903.json": "0af412662e2ae7e38f0604f4823f21dbe042cf4a6cc28a9bbef70783b15e84e0",
+    "cases/card_data/06-5086.json": "96e55ab3ed796911effde60d468f15c80f7042bbf8dbe9b0961a343c1fb6891e",
+    "cases/card_data/07-3169.json": "257ffc223438c7430e0d6b8f41c34416d13ddb0be1d92a01b02b609bbf75a1f3",
+    "cases/card_data/08-1160.json": "da101ed5b9f42d74d2dc9a4d7614541a96eafb452440558d7da341c2cfec659f",
+    "cases/card_data/09-3898.json": "461e4ec8be9b9b07ae2da02ae0ba25e8331981c9287a52cf03ee10f40863d4d2",
+    "cases/card_data/12-61.json": "a7a681194c252671f2908eda055f490c91586d113f651504b9e080d16d0e3854",
+    "cases/card_data/13-5423.json": "463c363422105bf959e7582f960dadc991985ec69b248a3e1688b0392f841e86",
+    "cases/card_data/14-7646.json": "8abc2ee511f7bc71a737c8dec4646dea9904b90742d98369d958741867051206",
+    "cases/card_data/15-1292.json": "b8df11cbe9ac87fa5325afc894a7a8bcbb2c510e6a7b2382df8478978f61bb05",
+    "cases/card_data/18-7960.json": "c3a22da4b3b0df24999b1bcf68a88b456cc42ed93dfb293a6b9fc018cb7dd5d7",
+    "cases/card_data/19-7244.json": "b229dcdb2dfa1406ac8ff2df516928e6ae6da7673e5a4b3710d6143d5e9eaa16",
+    "cases/card_data/20-554.json": "eefc3e02a4dacd8cbbeedb725693a4fdbc0aa69993486f7c3c5856816fccd280",
+    "cases/card_data/21-1746.json": "1b5dd663fbf6343dfdc76f83c2f37f25940a3881f7aa400cead81e3161798199",
+    "cases/card_data/24-2297.json": "490c5992d6a1781bb7c9802e8ee841ef7cbddc9a4912e7fb12795bdd56affd34",
+    "cases/card_data/25-1900.json": "a434663e793bb7ed1e184292789f5655ada9967f269021dee100588648ca2608",
+    "cases/card_data/26-4756.json": "e742b1330b4065dff30d9de36b11bbb508755119ed6f77837916e5597c230b3a",
+    "cases/card_data/27-7285.json": "717fd5db34dfb65fe249eaf020de5e19a7598400dbf893285905375aa6eb516e",
+    "cases/card_data/30-6037.json": "679ad6b49975b9c9af6e44b6cbedb70b4c3b38ef08a52b2700c8c37c27ef57a1",
+    "cases/card_data/31-2802.json": "2d86b05eb1c3e1f2b6230abe678059402513815d97e3962b4c1b73b900a8fda2",
+    "cases/card_data/32-376.json": "7364226d1743e1c6690549c500b2c54124402cc98175d9f19835f92949e722e2",
+    "cases/card_data/33-4080.json": "188f3bfa6eb83f425d59d058976e7edfd8d6c60455fc91078708846f0cff95a5",
+    "cases/card_data/36-1128.json": "c5bbcce5f83ead88c4d021abdfb9df45b6c281a5eccaddea1313a53e75dd65fb",
+    "cases/card_data/37-4189.json": "d68d1d80b2e3acda312b44a4f9fc1f99a887d17592f4a947b310d9be09efb22e",
+    "cases/card_data/38-3919.json": "317adf0f705a9adafb078fec6adce1a360bb28872c5283835a4dc6f5b09d6bb5",
+    "cases/card_data/39-3950.json": "ad64b04f097d2c982ba52f5d4ed08f2bc5e46bc2c01cd014148f93c6c101b38a",
+    "cases/card_data/42-4026.json": "38bcba55dc35bf6b4d9399053e5e782225e1e97793291b0eda15f0ba574d05e6",
+    "cases/card_data/43-4137.json": "1c4bc1e454007f64b086af4c8ba96ab70a307fa4dd553f1b5bf4ac93b201a93f",
+    "cases/card_data/44-4450.json": "bdd3df311c5c4f8cdc42d2b425077cf957904eba836b585d5ac65f94eec448f1",
+    "cases/card_data/45-2011.json": "a373e115c184b870a7c9a6907032c6c4da42b5bd0ad9316246c99eb2720f94f7",
+    "cases/cards/00-3683-1-resources.md": "5defca42077c5a1f1b2116181f95eabc3d11d8e20d462fe67f88a855a4ebe3ae",
+    "cases/cards/00-3683-2-trajectories.md": "6cd1610586b3365b1b891ce1a8b28a9d8cacbf17b029313868be3a31cbc8f9ae",
+    "cases/cards/01-541-1-resources.md": "2266546bcc2d440074e429deff3d536d225bd27f7613f42c0485e1bf7d2920ee",
+    "cases/cards/01-541-2-trajectories.md": "73b72510ef1eb1c67ce0eb1c322fbe552659ba479fef10789676cbb381a94e96",
+    "cases/cards/02-4615-1-resources.md": "e833371e27e325e38973357d397b051ae152c006b168cd6fde131e230311fe95",
+    "cases/cards/02-4615-2-trajectories.md": "4e5b87d906548902910fbbc131764440eb7ca402aa87e95128d947c29a0a71a5",
+    "cases/cards/03-7903-1-resources.md": "d65c66fb86a84e65175fb34672c7d992e360c502bc17877c950ba422bb01d8ed",
+    "cases/cards/03-7903-2-trajectories.md": "44213154d92ec46b689f0f85a8e7c507a2d2cec24ed7cb200bfd5a9a8cc2a045",
+    "cases/cards/06-5086-1-resources.md": "206b2b1933a5688858ccb4ad2b940f7373b53512cf3057e05b4666d1c2bf92d9",
+    "cases/cards/06-5086-2-trajectories.md": "f6c099831910e9dd791abff01d9c09e50b56a076af3f1a20e5c44e2f311fa09b",
+    "cases/cards/07-3169-1-resources.md": "c38cd15c03e4c19f24b56e762e207487d6cfbbe5d28a86eeef3ef7505dc52e09",
+    "cases/cards/07-3169-2-trajectories.md": "0062471e1ddd7a096823addbbd2e90ab2d23050ecaf2544cd220adb66bb34ffa",
+    "cases/cards/08-1160-1-resources.md": "8553206e8a04ffda80d2da359f31a250c139d7337b5a03c7a38258bfc7049ae9",
+    "cases/cards/08-1160-2-trajectories.md": "1db3ae750759f272d2dba165b92a1a1bae39cbba16819de6e108d4431611288d",
+    "cases/cards/09-3898-1-resources.md": "82b6af97e7e1d95ce94f822724069bd3e4ff8cb948539ec0a0469ffd77429c83",
+    "cases/cards/09-3898-2-trajectories.md": "7b856d03615877ee0eaec236e4206de8f0045588671b899c2cceafdea571cc10",
+    "cases/cards/12-61-1-resources.md": "9ecaf681fbf9fea36498be1c563760f48dba18d5a7922b2040b38012fddc0229",
+    "cases/cards/12-61-2-trajectories.md": "186378acc39ba2656dfd9c1e891a9167f2716e686098d2cfcbcad2767cdfe795",
+    "cases/cards/13-5423-1-resources.md": "d76147977cfb3de6276a9d469ef39fdc938caec7e4533af662e4dc653f019ff9",
+    "cases/cards/13-5423-2-trajectories.md": "61a28d40ebde6b06937618d45fde8a600ba21f8d9a1938e9c6f40bce5a55c8d6",
+    "cases/cards/14-7646-1-resources.md": "dcdbd7dbb430efc6f7763252bb21280a4d405a15b443b45ce866b1cebc2e2aa4",
+    "cases/cards/14-7646-2-trajectories.md": "e89de50b65c1058989a200d7fa25d589195605c40f8d5219a65374a4101ade82",
+    "cases/cards/15-1292-1-resources.md": "56b9ec5a2298364a1a53eaee02ea2d3594315df1f1d9f805554d828a4c5373b1",
+    "cases/cards/15-1292-2-trajectories.md": "5a95dd737523566837fe7519ab6ff47761ff42fa038c1e21dbd891de4ed6c924",
+    "cases/cards/18-7960-1-resources.md": "809aae1fbb65aaeef663be00f0897a7c0886b6a5b7f4166797ac6edc75721cc9",
+    "cases/cards/18-7960-2-trajectories.md": "9c27f3213e6f35dd0f1f06ffc87d8c487f7da8516bcdc87bf5ab4d2ea8e469cd",
+    "cases/cards/19-7244-1-resources.md": "678a37f16aa19e77997433d8f8dc13d1e264af2def8bd2c4671c809de2b95568",
+    "cases/cards/19-7244-2-trajectories.md": "70bb87addc220991d6db484d8ac4b38f5592703ae457344c0cc82a5255368755",
+    "cases/cards/20-554-1-resources.md": "016a4ce0ae66337521bdb2ce9d67b7eb0577af5a8fd3971c5d87e75b7ed0ef3e",
+    "cases/cards/20-554-2-trajectories.md": "a2bce1548e9a8f79e0fd6ef61b29d27bc95bb315908195df199121e7464c9b52",
+    "cases/cards/21-1746-1-resources.md": "96a8b7d589b0abc4391a12ea9fa6f2848f01d41859e1d8d3f54b8b57b9a6f1cb",
+    "cases/cards/21-1746-2-trajectories.md": "ed2f802e749396dd48ec3fe8904030f9aa57d7e65d0af761086ce57a18167ac8",
+    "cases/cards/24-2297-1-resources.md": "773b4aaa981fe4b4d92bd1d7779275c63fc675915f778c806de50eb0bcc9f009",
+    "cases/cards/24-2297-2-trajectories.md": "1562be562470ccd0405daecb1dfc9d2bf8498f5a33a63539e05d7f593cf65697",
+    "cases/cards/25-1900-1-resources.md": "b0e8f215333f892213432e638e2b6618f36bdba5a28fa5fca4f31490a93ee7d9",
+    "cases/cards/25-1900-2-trajectories.md": "611ccd0ea2b5c7bf2c3cca798c118e23413596b2a50821bc5f76e4066d94b311",
+    "cases/cards/26-4756-1-resources.md": "db1eda362d15b09f75e4ef4f3fab28823de4b90983ff50b1cf3efa13653a45a4",
+    "cases/cards/26-4756-2-trajectories.md": "a70fba3817827033c1ff9f494db472e06c2c0473caa3f0d96f6b7af77d0029ad",
+    "cases/cards/27-7285-1-resources.md": "7c41c6b3719ecdb4ec69f48f81a7776af5094a2cc000041a98b5c4c87a5dd4f0",
+    "cases/cards/27-7285-2-trajectories.md": "b3bb5fbf9eabbb805b186c1f9b140ea26bc050ad73615075c2058319d3d0e7e0",
+    "cases/cards/30-6037-1-resources.md": "8c516040f07a0087fef139ef63233b3aacb4d24b91f4245e1c3a9682f4823bbf",
+    "cases/cards/30-6037-2-trajectories.md": "35f1cf3824d55712ba1528915a47633eae6173691702df70c32edb9fb6b7022a",
+    "cases/cards/31-2802-1-resources.md": "9584d24db03c6406b8b0418fa031dfead1b9d60919e7187404c0b1b2ad8233f1",
+    "cases/cards/31-2802-2-trajectories.md": "6cee599d123e764c42a7fb503bc8537732e0afa9de1bd08bd01f81b5343450b8",
+    "cases/cards/32-376-1-resources.md": "f7f7f43207b42e96166195801b06f3277a01fae7e4d161f5e8da9cbd80dc27e8",
+    "cases/cards/32-376-2-trajectories.md": "e28333bccfee28f01db9cfef1ee0dcda79d3c2ed33246814b1f88effd589726d",
+    "cases/cards/33-4080-1-resources.md": "8e24833d888c4bd81c3ed121e269f71e25d784a77e0e86e9a6e6631d62d19d8f",
+    "cases/cards/33-4080-2-trajectories.md": "c3f4481eb6bc28d5c82314cfcc49c88b805830c99913ba2a7510e0a0626396f4",
+    "cases/cards/36-1128-1-resources.md": "2207adc5dde4e99b0be188db8c035cd211f3ed72b1e6b93fff9701663430b73a",
+    "cases/cards/36-1128-2-trajectories.md": "3b63c6e2ee2bd703dd297895360aa89dcfbab5e55a20d21380e270a7c7da0d1e",
+    "cases/cards/37-4189-1-resources.md": "1ba21f9e00e8468928d567cded13d44272358bc5eb448bad3dfd9e8146bd0af9",
+    "cases/cards/37-4189-2-trajectories.md": "02967d54c75d5ab824f4ed9015b57cb6633fe43930822ca12e80aeafc7bf608d",
+    "cases/cards/38-3919-1-resources.md": "9912513149db6bcfa0be3d9a7c366d952cf7de1eaac237281142d09e467dfd7f",
+    "cases/cards/38-3919-2-trajectories.md": "b472c908be7bf260765fd662c4c7164779cc56955b39cdfc82a6303cb93064ee",
+    "cases/cards/39-3950-1-resources.md": "223b3fd195801be5849d260bb8d058383ee85a991a64b7d60a95d3977e1b38d0",
+    "cases/cards/39-3950-2-trajectories.md": "ddc18d28b1d32dd5e17f22ab170fc7577b31fd21ab823255b1eaaccbfb587273",
+    "cases/cards/42-4026-1-resources.md": "d4a3e8a868d9c604fcee57a604023d92c6ab1825baea2799df861606b8eca0c8",
+    "cases/cards/42-4026-2-trajectories.md": "ad167e4a2d84d4595af36e53fa886a85dcfe4fbd52f28c7cb92fb5d313e65502",
+    "cases/cards/43-4137-1-resources.md": "65a9886b8f2f734e067bc3ffc001111b53109a8fca85b691ad2a275612cb6b95",
+    "cases/cards/43-4137-2-trajectories.md": "4e2e0d21a4959a5340ac7f883d68053d1ee4d93562e4ea9426f95357a197163d",
+    "cases/cards/44-4450-1-resources.md": "4792867bc4b2eed818cfbc0f2b0eac9688a5fc4988d58e613a5d931a6d93dec2",
+    "cases/cards/44-4450-2-trajectories.md": "5fe287eba656f8561d4b0cd595d8ef82659c9f406b9ad76af9ee5415b3570672",
+    "cases/cards/45-2011-1-resources.md": "cf218974bf3276ce03853458b5717f9f50ffc4ee47ec3eef15f4427137e2ab12",
+    "cases/cards/45-2011-2-trajectories.md": "5464125f3b8d05c16e34af2ac33312c5ab951bb7edb3782b5b16a8b9b2cf4564",
+    "cases/cards_index.json": "dd93c9c1d5624bdd6ec5c9981ab8df39a5969eb8987a9c13a935d243b13e28cd",
+    "cases/discovery.jsonl": "4a8bbeaf6877d285a5375342d9dca24117bdbdcfa9de23056bd576944725a1d4",
+    "cases/initial_review_batch.json": "a0ef5f567cd7f9d3439c609de705a0c1dd5aa1e0ed7146ea02ad7effa412ad86",
+    "cases/reserve.jsonl": "0a8a1f8d916bacc95c2084d800328f6fa8ca1375fc2a063905d43772866ae52e",
+    "cases/review_access.json": "a8348b7702a224a26f44e0a6f6f10e847b4a9f706aac014ce81075f58a638c71",
+    "cases/review_template.csv": "cd9f09d9e8f9daa75718c9becaf3cfacad7327c87d65a28640279f065ccc32f6",
+    "cases/selection_events.jsonl": "f0e10afa85abff11edec33281fff2028ff9851a4ad66e2a41e307399c689e7e7",
+    "cases/selection_manifest.json": "dd7df1157f8fde5c01fef101a00fe2abb33b88da3248517a0b9bb108d0b3ca72",
+    "cases/selection_quotas.csv": "c4ecb2359c026264a78cbf9a5dcb89cd6e487d0267df413c9d11bed8366f1d6a",
+    "config.frozen.json": "57660e76916ac12477dc515cb9411cfa6ccfb3275ec872092eebfcdb2cb3e044",
+    "execution.log": "8990e84b4575d56166e73b44170662d3302bd144025d44d146aab0498e10ba2c",
+    "source/execution_protocol.md": "d60e6aad0e922f37c4bdbbfe2036f5fba9dbed89180bcd2d2dedbc05c00fead5",
+    "source/original_proposal.md": "05d899697af52f3efae0efa8fe12f788fcf8307e4eb5e07bcfa36c915fe19c4b",
+    "source/scripts/stage1/general_model_nolabel_paired_cases.py": "c224f83c8f601466f0daedd782dfb59595dea5e9b877f389450d94e59392ad8e",
+    "source/src/diagnostics/general_model_nolabel_paired_cases.py": "d1b8dca169499432f7eb80c3033d1d69b5a1f55e8b97c1c617b9a13467466aa6",
+    "source/src/diagnostics/general_model_numeric_analysis.py": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2",
+    "source/src/tests/test_general_model_nolabel_paired_cases.py": "eb02156b152736d3beca6553a2589c33686f95ddc1d0998109e1b4f2b2e057c7",
+    "tables/candidate_counts.csv": "992826f9b73539cc373c71563900d16b41d2ca086c420223c3eb9b0322baad15",
+    "tables/classification.csv": "17de9b99ab695dff31354af20b0620f22885f2574cbdb018d035fe0171f58991",
+    "tables/condition_task_rows.csv": "7238e18c3ca9b5b48f66e3eaf5fa02da295f6cc29732bf5a4ab908fea137d09d",
+    "tables/continuous_summaries.csv": "e673ebf081d0a4c010c3ff04b5558e9b30437ed0016cd7eaa86235424d4b68a1",
+    "tables/core_masks.csv": "ce8e2b0a60bb2da50ea8c1233cf5a75729137ae0626f4940737de04b2d228933",
+    "tables/exploratory_ci.csv": "56ddbba02b792e66aef80c1181775a10851751b4fc3c92974e42a3b295217617",
+    "tables/metadata_by_transition.csv": "b3fd979b38402ceb1319cc9aad5163a2add2c1b45b41f6098edaedfc99854a9e",
+    "tables/numeric_quality.csv": "64837b054d0ea508bd20a0a1b66a0cd0bcd7aaea3f7483e64a8833f507942b42",
+    "tables/original_ci_check.csv": "1c6713dfcbdee271df4f69473905c4508fa461a9ce615725c6fe14e22e7e0de4",
+    "tables/paired_readouts.csv": "ef75ce88b27b783350052bdaa08602970140b3c20fd72d3d8310f8420d564c7c",
+    "tables/per_label_transitions.csv": "9e338fc5b63efcb42ae80ae0253ae84cf70d5d761f2102901f03c3ecac588293",
+    "tables/query_profiles.jsonl": "cd6103183c1358daeb1b396a1c9932309bf158714e820d0486ee113b6a5c4f51",
+    "tables/strata.csv": "7536a7aa3dae288921a6e28ac8bdbf734219dc9bfdc257ee22de5fc9cec8cd01",
+    "tables/transitions.csv": "e2cadabfec30b7900ab4bf93c973c1a237d240bff584ed44cc7043cd485194dd"
+  },
+  "model_forward_executed": false,
+  "test_content_read": false,
+  "source_receipt": {
+    "plan_ref": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/plan_ref.json",
+      "sha256": "f0b9d34dc9bcfd5c10615fa8e636fd7261485d46e7b2e3020e0c8da4d8a2aefe",
+      "reason": null
+    },
+    "plan": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/plans/gmlnolabel-3f09715c5e57531565c88e61da5d6bf4087b1cbd9629a5c8579d0f1f8a0c046f/plan.json",
+      "sha256": "f95c7519c1e12729dc59e0700caf3d4d71ba8bc54fdf6c67600a875899c6658f",
+      "reason": null
+    },
+    "run_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/run_manifest.json",
+      "sha256": "900dfd5034b284f60649936662f8cf545094f7087a63c17cda6093f2a28b6d9e",
+      "reason": null
+    },
+    "raw_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/dev-b1/manifest.json",
+      "sha256": "6e7faffa2d176bc503360689fa28db6306a35162c512ff9f4f43e0e5330e59b2",
+      "reason": null
+    },
+    "raw": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/dev-b1/scores.jsonl",
+      "sha256": "505f8da36596f1493ad4bf6b55985ab527dcfd5157a512a9722c5e1b1dac7eeb",
+      "reason": null
+    },
+    "analysis_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/analysis/manifest.json",
+      "sha256": "d03fb98ae0f6022ddc3f6f3c25117586fc8d3f7ed51e9c0de249b04b1528ef88",
+      "reason": null
+    },
+    "analysis": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/analysis/analysis.json",
+      "sha256": "5e5630736b3da89a05457fc13917c7203c87d7fe0692c439f5994c6cd55b2f77",
+      "reason": null
+    },
+    "report_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/results/nolabel-01/report_manifest.json",
+      "sha256": "52c92fb672a0cbce0e7a7d813cdff8a51b3411f33a91f9f65f51b801252e067f",
+      "reason": null
+    },
+    "classification": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/results/nolabel-01/classification.csv",
+      "sha256": "61b6384f969953ad39c184bb1c871f4ae46f8dddb2cc04d6caa747eca44395bf",
+      "reason": null
+    },
+    "original_ci": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/results/nolabel-01/primary_differences.csv",
+      "sha256": "42d3a0dbce27092d8272c0dd6e7080f4cfa70d21409de7e81351f7599e06a06c",
+      "reason": null
+    },
+    "package_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_v2/packages/gmlpkg-98926ff494901fc7ea09b41e0f40548ec4ccc8ab3713726361b7ab45c1f01fc4/manifest.json",
+      "sha256": "8e0a752a40fde48eff99f71e2ac10d98848a2b062d7c8ff9e4f1c33e8535ab71",
+      "reason": null
+    },
+    "queries": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_v2/packages/gmlpkg-98926ff494901fc7ea09b41e0f40548ec4ccc8ab3713726361b7ab45c1f01fc4/queries.dev.jsonl",
+      "sha256": "0dadeb6de3cc1536aec7862f65bc3611fabdbfba37865a4500b5e28e0ac7dc6b",
+      "reason": null
+    },
+    "contexts": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/plans/gmlnolabel-3f09715c5e57531565c88e61da5d6bf4087b1cbd9629a5c8579d0f1f8a0c046f/contexts.dev.jsonl",
+      "sha256": "97f41ab72df701c5539e0efdc7b1dd122c4f0f816e877294da0cc8861d9dbc43",
+      "reason": null
+    },
+    "inventory": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_v1/plans/gmlnolabel-3f09715c5e57531565c88e61da5d6bf4087b1cbd9629a5c8579d0f1f8a0c046f/resource_inventory.json",
+      "sha256": "c48d80ab03eaa82ee71efec0b90c224a40727d14d40adf9ba3d6ac101b56046f",
+      "reason": null
+    },
+    "parent_ref": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_v1/plan_ref.json",
+      "sha256": "794364648269cc285eca8add52acdda844eab2f06ca319be3a96cbb9acee5957",
+      "reason": null
+    },
+    "parent_plan": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_v1/plans/gmlcoverage-64e2986d5de1d9c9ff0ebc9c2d72944208b833ca9aacf115ec71a14403e0c6f4/plan.json",
+      "sha256": "31eb78cb942a6d929a04cd74c32b302d848ae4c7f73c782a37ae48033af3359d",
+      "reason": null
+    },
+    "parent_inventory": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_v1/plans/gmlcoverage-64e2986d5de1d9c9ff0ebc9c2d72944208b833ca9aacf115ec71a14403e0c6f4/resource_inventory.json",
+      "sha256": "8b452bdf164b4d814610721736789a5c506c11e1dc89a1c62a33755ef620e23b",
+      "reason": null
+    },
+    "lexicon": {
+      "path": "/data/liaozijie/hate_speech_detection/data/lexicon/annotated_lexicon_mechanism_frozen_v1.json",
+      "sha256": "31240193eeba29f712560e2e80e89ee9dd5c3c969aa180d10b95bf2451882385",
+      "reason": null
+    },
+    "fit_catalog": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_v2/packages/gmlpkg-98926ff494901fc7ea09b41e0f40548ec4ccc8ab3713726361b7ab45c1f01fc4/fit_catalog.jsonl",
+      "sha256": "fe332d94b3e253f9c4940af84ff1cda3edc2f5e0b7d3068f75a8d9f6d572fe1f",
+      "reason": null
+    },
+    "execution_protocol": {
+      "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/general-model-ld-nolabel-paired-cases-v1.md",
+      "sha256": "d60e6aad0e922f37c4bdbbfe2036f5fba9dbed89180bcd2d2dedbc05c00fead5",
+      "reason": null
+    },
+    "original_proposal": {
+      "path": "/data/liaozijie/.codex/attachments/99bcfba1-fea9-452b-b58f-7aceaaf99aaf/general-model-ld-nolabel-paired-cases-v1.md",
+      "sha256": "05d899697af52f3efae0efa8fe12f788fcf8307e4eb5e07bcfa36c915fe19c4b",
+      "reason": null
+    },
+    "previous_attempt_manifest": {
+      "path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_nolabel_paired_cases_v1/runs/paired-cases-01/manifest.json",
+      "sha256": "844e639a5a4eb3b331b3639b248369342c8ba1f15d7a98e07c8c6ed0f78104c4",
+      "reason": null
+    }
+  },
+  "current_phase": "review-export",
+  "updated_at": "2026-09-07T10:49:44.890635+00:00",
+  "automated_analysis_complete": true,
+  "review_status": "AI-assisted-initial-12-complete-human-review-pending"
+}
