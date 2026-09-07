@@ -1,0 +1,71 @@
+{
+  "schema_version": "general-model-ld-nolabel-config/v1",
+  "parent_plan_ref": "exps/causal_context/general_model_ld_coverage_v1/plan_ref.json",
+  "historical_run": "exps/causal_context/general_model_ld_coverage_v1/runs/coverage-01",
+  "protocol_path": "docs/research/experiment-plans/general-model-ld-nolabel-v1.md",
+  "output_root": "exps/causal_context/general_model_ld_nolabel_v1",
+  "authorization": "2026-09-07-user-approved-six-condition-preflight-and-full-dev-until-complete",
+  "model_key": "qwen3-8b",
+  "tasks": [
+    "hate",
+    "group"
+  ],
+  "conditions": [
+    "C0",
+    "CLnew",
+    "CD",
+    "CLDnew",
+    "CLnewNoCat",
+    "CLDnewNoCat"
+  ],
+  "resource": {
+    "lexicon_path": "data/lexicon/annotated_lexicon_mechanism_frozen_v1.json",
+    "lexicon_sha256": "31240193eeba29f712560e2e80e89ee9dd5c3c969aa180d10b95bf2451882385",
+    "definition": "query-hits-union-fixed-demonstration-hits",
+    "deduplication": "frozen-entry-id-across-prompt-dictionary",
+    "order": "frozen-entry-id-lexicographic",
+    "source_correspondence_visible": false,
+    "base_lexicon_changes": false,
+    "demonstration_count": 10,
+    "intervention": "delete-explicit-category-fields-only",
+    "definitions_and_demo_answers_preserved": true
+  },
+  "preflight": {
+    "regression_query_count": 8,
+    "validation_query_count": 24,
+    "boundary_query_count_max": 4,
+    "boundary_tie_order": "query-id-lexicographic",
+    "boundary_selection": [
+      "empty-union",
+      "largest-union",
+      "longest-lexicon",
+      "longest-complete-input"
+    ],
+    "deduplication_after_representative_selection": true,
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375,
+    "repeat_abs_tolerance": 0.0001,
+    "reference_abs_tolerance": 0.0001,
+    "padding_extra": 64,
+    "replica_shift": 1,
+    "epsilon_recalibration": false
+  },
+  "execution": {
+    "device_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "production_batch_size": 1,
+    "raw_path": "dev-b1",
+    "auto_expand_on_pass": true,
+    "stop_on_any_gate_failure": true,
+    "automatic_profile_search": false,
+    "expected_dev_queries": 643,
+    "expected_dev_blocks": 7716,
+    "expected_dev_candidates": 131172
+  },
+  "test_access": false,
+  "query_gold_in_scoring": false
+}
