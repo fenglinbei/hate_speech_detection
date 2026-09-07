@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>NoCat 配对案例 · 人工复核</title>
+  <link rel="stylesheet" href="/review-base.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-leading">
+      <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button" aria-label="打开案例队列">☰</button>
+      <div class="brand-mark" aria-hidden="true">阅</div>
+      <div><p class="eyebrow">NoCat · Paired Cases</p><div class="title-row"><h1>配对案例人工复核</h1></div></div>
+    </div>
+    <div class="topbar-status">
+      <div class="top-progress"><span id="top-progress-text">读取复核进度…</span><div class="meter"><span id="progress-bar"></span></div></div>
+      <span id="save-state" class="save-state" data-state="idle" role="status" aria-live="polite">正在连接</span>
+    </div>
+    <div class="topbar-actions">
+      <span id="reviewer-name" class="reviewer-label"></span>
+      <button id="guidelines" class="quiet-button" type="button">复核说明</button>
+      <details class="top-action-menu"><summary class="quiet-button">导出</summary><div class="top-action-menu-panel">
+        <button id="export-csv" class="quiet-button" type="button">下载 CSV 工作表</button>
+        <button id="export-json" class="quiet-button" type="button">下载 JSON 完整记录</button>
+      </div></details>
+    </div>
+  </header>
+  <div class="workflow-strip">
+    <span class="workflow-step active" id="step-resources"><b>1</b> 资源初读</span>
+    <span class="workflow-arrow" aria-hidden="true">→</span>
+    <span class="workflow-step" id="step-assessment"><b>2</b> 轨迹复核</span>
+    <span class="workflow-arrow" aria-hidden="true">→</span>
+    <span class="workflow-step" id="step-confirmed"><b>3</b> 确认用途</span>
+    <span class="workflow-note">先记下自己的理解，再对照预测与 AI 意见</span>
+  </div>
+  <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+  <div class="workbench">
+    <aside id="item-sidebar" class="case-sidebar">
+      <div class="sidebar-head">
+        <div><p class="section-kicker">Discovery 复核队列</p><strong id="sidebar-progress">首批 0 / 12</strong></div>
+        <button id="sidebar-close" class="icon-button mobile-tablet-only" type="button" aria-label="关闭案例队列">×</button>
+      </div>
+      <div class="scope-switch" role="group" aria-label="复核范围">
+        <button type="button" data-scope="initial" class="active" aria-pressed="true">首批 12 条</button>
+        <button type="button" data-scope="all" aria-pressed="false">全部 32 条</button>
+      </div>
+      <label class="search-field"><span>搜索编号或查询内容</span><span class="case-search-controls">
+        <input id="item-search" maxlength="100" autocomplete="off" placeholder="搜索案例…">
+        <button id="search-mode" class="quiet-button search-mode-button" type="button">连续 ↻</button>
+      </span></label>
+      <div id="item-filters" class="filter-tabs" role="group" aria-label="复核状态">
+        <button type="button" data-filter="all" class="active">全部</button>
+        <button type="button" data-filter="open">待完成</button>
+        <button type="button" data-filter="complete">已确认</button>
+        <button type="button" data-filter="verify_first">待核验</button>
+        <button type="button" data-filter="defer">暂缓</button>
+      </div>
+      <small id="search-status" class="search-status"></small>
+      <p id="item-empty" class="empty-state hidden">没有匹配案例，试试调整搜索或筛选。</p>
+      <nav id="item-list" class="case-list" aria-label="案例列表"></nav>
+      <div class="sidebar-footer"><span class="reserve-dot"></span><span>16 条 reserve 留给后续评估<br><small>当前工作台仅载入 discovery</small></span></div>
+    </aside>
+    <main class="source-pane" id="source-pane">
+      <div class="case-toolbar">
+        <div><p class="section-kicker" id="item-position">准备材料</p><div class="title-row"><h2 id="item-id">正在读取案例</h2><span id="focus-task" class="badge"></span></div></div>
+        <div class="case-nav"><button id="previous-item" class="icon-button" type="button" aria-label="上一条案例" title="上一条 [">←</button><button id="next-item" class="icon-button" type="button" aria-label="下一条案例" title="下一条 ]">→</button></div>
+      </div>
+      <div id="batch-complete" class="completion-banner hidden" role="status"></div>
+      <section class="material-card query-card">
+        <div class="card-head"><div><p class="section-kicker">当前查询</p><strong>先理解这句话在说什么</strong></div><span id="query-resource-count" class="quiet-meta"></span></div>
+        <blockquote id="query-content" class="query-content">等待载入…</blockquote>
+        <div id="query-context-hint" class="section-hint">查询原文与冻结资源保持原样。没有上下文时，可以明确记录不确定。</div>
+      </section>
+      <div class="material-tabs" role="tablist" aria-label="复核材料">
+        <button id="tab-resources" role="tab" type="button" aria-selected="true" aria-controls="panel-resources" class="active">词典与示例</button>
+        <button id="tab-trajectory" role="tab" type="button" aria-selected="false" aria-controls="panel-trajectory" disabled>预测轨迹 <span class="tab-lock">待初读</span></button>
+        <button id="tab-ai" role="tab" type="button" aria-selected="false" aria-controls="panel-ai" disabled>AI 初读 <span class="tab-lock">稍后对照</span></button>
+      </div>
+      <div id="panel-resources" role="tabpanel" aria-labelledby="tab-resources" class="material-panel">
+        <section class="material-card">
+          <div class="card-head"><div><p class="section-kicker">冻结词典</p><h3>义项与来源</h3></div><span id="lexicon-count" class="count-label"></span></div>
+          <p class="section-hint">S 使用这些义项；SG 额外包含显式类别。来源标记区分查询命中与示例带入。</p>
+          <div id="lexicon-list" class="lexicon-list"></div>
+        </section>
+        <section class="material-card">
+          <div class="card-head"><div><p class="section-kicker">固定示例 · 保持原顺序</p><h3>示例与冻结答案</h3></div><span id="demo-count" class="count-label"></span></div>
+          <p class="section-hint">答案属于示例自身。以当前重点任务查看，留意对应之处和离题内容。</p>
+          <div id="demo-list" class="demo-list"></div>
+        </section>
+      </div>
+      <div id="panel-trajectory" role="tabpanel" aria-labelledby="tab-trajectory" class="material-panel hidden">
+        <section class="material-card">
+          <div class="card-head"><div><p class="section-kicker">冻结模型结果</p><h3>六条件预测轨迹</h3></div><button id="open-prompt" class="quiet-button" type="button">完整提示</button></div>
+          <div id="trajectory-tasks" class="scope-switch task-switch" role="group" aria-label="预测任务"><button type="button" data-task="hate">仇恨判断</button><button type="button" data-task="group">目标群体</button></div>
+          <div id="gold-summary" class="gold-summary"></div>
+          <div class="table-scroll"><table class="trajectory-table"><thead><tr><th>条件</th><th>预测</th><th>正确性</th><th>Gold margin</th><th>Top gap</th><th>提示 tokens</th></tr></thead><tbody id="trajectory-rows"></tbody></table></div>
+          <p class="section-hint">正确性依据冻结 Gold；margin 为 Gold 与最高非 Gold 候选的分数差。计分敏感性单独标记。</p>
+          <div id="trajectory-warnings" class="quality-notes"></div>
+          <div id="paired-effects" class="effect-grid"></div>
+          <details class="secondary-detail"><summary>行为类型与原始 Gold 提取</summary><div id="trajectory-detail"></div></details>
+        </section>
+      </div>
+      <div id="panel-ai" role="tabpanel" aria-labelledby="tab-ai" class="material-panel hidden">
+        <section class="material-card"><div class="card-head"><div><p class="section-kicker">AI 辅助初读 · 单独记录</p><h3>对照自己的判断</h3></div></div><p class="section-hint">这是已存在的 AI 意见。可以保留不同判断；打开前的人工初判会单独保存。</p><div id="ai-content"></div></section>
+      </div>
+      <div class="source-bottom-note">已暴露 dev 上的非盲人工复核 · Gold 争议单列 · 用途决定仅影响下一阶段</div>
+    </main>
+    <aside class="decision-pane" id="decision-pane">
+      <div class="decision-heading"><div><p class="section-kicker" id="editor-phase-label">第一步</p><h2 id="editor-title">记录资源初读</h2></div><span id="decision-status" class="status-chip" data-state="draft">未开始</span></div>
+      <div id="request-error" class="request-error hidden" role="alert"><strong id="request-error-message"></strong><p id="request-error-details"></p><div class="error-actions"><button id="recover-local" type="button" class="secondary-button hidden">保留草稿，载入最新状态</button><button id="download-draft" type="button" class="quiet-button">下载当前草稿</button></div></div>
+      <div id="resume-notice" class="resume-notice hidden" role="status"></div>
+      <form id="review-form" class="review-form" novalidate>
+        <fieldset id="resource-editor"><legend class="sr-only">资源初读</legend>
+          <p class="editor-intro">每项一两句话即可；无相关词条、信息不足或拿不准，都可以直接写明。</p>
+          <div id="resource-fields"></div>
+          <label class="field exposure-field"><span>此前读过本例的 AI 解读吗？ <small>可选</small></span><select id="prior-ai-exposure"><option value="unspecified">尚未记录</option><option value="not_seen">没看过</option><option value="seen">看过</option><option value="unsure">记不清</option></select></label>
+        </fieldset>
+        <div id="resource-snapshot" class="resource-snapshot hidden"><strong>资源初读已保存</strong><p id="resource-snapshot-time"></p><details><summary>查看我的初读记录</summary><div id="resource-snapshot-notes"></div></details></div>
+        <fieldset id="assessment-editor" class="hidden"><legend class="sr-only">轨迹复核与用途</legend>
+          <p class="editor-intro">对照预测核实解释，记录分歧，并决定这一案例下一步怎么用。</p>
+          <div class="field-group"><span class="field-label">原 Gold 判断</span><div id="gold-options" class="choice-row" role="group" aria-label="原 Gold 判断"><button type="button" data-gold="agree">认可</button><button type="button" data-gold="dispute">有争议</button><button type="button" data-gold="uncertain">信息不足</button></div><small data-error="gold_verdict" class="field-error hidden"></small></div>
+          <div id="assessment-fields"></div>
+          <div class="field-group"><span class="field-label">下一阶段用途 <small>快捷键 1 / 2 / 3</small></span><div id="disposition-options" class="disposition-options" role="group" aria-label="下一阶段用途">
+            <button type="button" data-disposition="input_control"><kbd>1</kbd><span><strong>进入输入对照</strong><small>解释较清楚，有具体可检验的问题</small></span></button>
+            <button type="button" data-disposition="verify_first"><kbd>2</kbd><span><strong>先核验再使用</strong><small>先处理计分、上下文或 Gold 疑问</small></span></button>
+            <button type="button" data-disposition="defer"><kbd>3</kbd><span><strong>暂缓使用</strong><small>当前无法形成清楚的对照</small></span></button>
+          </div><small data-error="disposition" class="field-error hidden"></small></div>
+          <label id="defer-reason-field" class="field"><span>先核验 / 暂缓的原因</span><textarea id="patching_defer_reason" maxlength="2000" rows="2" placeholder="还有什么问题尚未解决？"></textarea><small data-error="patching_defer_reason" class="field-error hidden"></small></label>
+          <div id="ai-reveal-card" class="ai-reveal-card"><p>完成人工初判后，可以再对照 AI 初读。</p><button id="reveal-ai" class="secondary-button" type="button">保存初判并查看 AI</button><small id="ai-reveal-hint"></small></div>
+          <label id="ai-comparison-field" class="field hidden"><span>看过 AI 后的补充 <small>可选</small></span><textarea id="ai_comparison" maxlength="2000" rows="3" placeholder="哪些地方一致，哪些意见保留分歧？"></textarea><small data-error="ai_comparison" class="field-error hidden"></small></label>
+        </fieldset>
+      </form>
+      <div id="locked-card" class="locked-card hidden"><strong>本条人工复核已确认</strong><p>需要补充或更正时，可以重新打开，保留之前的判断。</p><button id="reopen" class="secondary-button" type="button">重新打开记录</button></div>
+      <div class="decision-footer"><div class="decision-actions"><button id="save-draft" class="secondary-button" type="button">保存草稿</button><button id="primary-action" class="primary-button" type="button">保存初读 · 查看轨迹</button></div><small id="action-hint">Ctrl/⌘ + S 保存 · Ctrl/⌘ + Enter 继续</small></div>
+    </aside>
+  </div>
+  <nav class="mobile-pane-nav" aria-label="手机阅读与填写"><button id="mobile-materials" type="button">↑ 查看材料</button><button id="mobile-editor" type="button">填写复核 ↓</button></nav>
+  <dialog id="guideline-dialog" class="app-dialog"><form method="dialog"><p class="eyebrow">人审工作台 · 使用说明</p><h2>从自己的理解开始</h2><ol><li><strong>资源初读：</strong>看查询、词典与示例，完成四项简短观察。</li><li><strong>轨迹复核：</strong>保存初读后，查看原 Gold、六条件预测和完整提示。</li><li><strong>确认用途：</strong>填写候选解释、替代解释与下一步；按需对照 AI 意见，再确认并继续。</li></ol><p>页面自动保存草稿，可随时离开后续审。已保存的初读保持原样，补充意见写入后续复核记录。16 条 reserve 不在本工作台内。</p><p>当前按<strong>非盲人工复核</strong>记录。AI 意见单独展示；你的确认不会修改原 Gold、词典、示例或实验名单。</p><dl class="shortcut-list"><div><dt>[ / ]</dt><dd>上一条 / 下一条</dd></div><div><dt>Ctrl/⌘ + S</dt><dd>保存草稿</dd></div><div><dt>Ctrl/⌘ + Enter</dt><dd>保存初读 / 确认并继续</dd></div><div><dt>1 / 2 / 3</dt><dd>选择下一阶段用途</dd></div></dl><button class="primary-button" value="close">知道了，开始复核</button></form></dialog>
+  <dialog id="prompt-dialog" class="app-dialog prompt-dialog"><div class="dialog-head"><h2>完整冻结提示</h2><button id="close-prompt" class="icon-button" type="button" aria-label="关闭完整提示">×</button></div><div class="prompt-controls"><label class="field"><span>任务</span><select id="prompt-task"><option value="hate">仇恨判断</option><option value="group">目标群体</option></select></label><label class="field"><span>条件</span><select id="prompt-condition"></select></label></div><small id="prompt-meta"></small><pre id="prompt-text"></pre></dialog>
+  <dialog id="reopen-dialog" class="app-dialog"><form id="reopen-form"><h2>重新打开复核记录</h2><p>原确认意见会保留。资源初读的最初记录保持不变。</p><label class="field"><span>更正或补充的原因</span><textarea id="reopen-reason" maxlength="1000" rows="3" required placeholder="简要说明本次重新打开的原因"></textarea></label><div class="dialog-actions"><button id="cancel-reopen" class="quiet-button" type="button">取消</button><button id="confirm-reopen" class="primary-button" type="submit">重新打开</button></div></form></dialog>
+  <script src="/review-core.js"></script>
+  <script src="/core.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

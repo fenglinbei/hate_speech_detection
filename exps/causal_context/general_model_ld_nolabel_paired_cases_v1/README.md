@@ -11,6 +11,7 @@
 - [32条discovery案例索引](results/paired-cases-02/cases/cards_index.json)
 - [首批12条AI辅助初读](results/paired-cases-02/cases/AI_REVIEW.md)
 - [完整dev查询](results/paired-cases-02/inputs/queries.dev.jsonl)、[完整冻结上下文与提示（gzip）](results/paired-cases-02/inputs/contexts.dev.jsonl.gz)
+- [人工复核页面与运行说明](../../../tools/general_model_paired_review_ui/README.md)：三栏工作台，支持首批12条/全部32条、自动保存、阶段展开与CSV/JSON导出；人工记录单独保存于`reviews/`。
 
 `paired-cases-02` 已完整完成：643条dev的全量配对分析、四项新增探索性区间、32条discovery和16条reserve选样，以及全部discovery案例导出。16项CPU测试通过。首批12条已作AI辅助初读；人工复核尚未完成，reserve正文未在本任务展开。
 
