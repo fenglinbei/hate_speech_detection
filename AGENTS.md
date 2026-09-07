@@ -37,3 +37,48 @@ Do not mark human review complete based on model output or automated test action
 Show only the authorized review queue; respect any reserved cases. Test meaningful
 save/resume, phase-gating, navigation, conflict, and responsive behavior using an
 isolated test session, without populating the user's real review records.
+
+## Public access through aliyun
+
+For this user's review pages, the established forwarding destination is SSH host
+`aliyun` and HTTPS origin `https://hsd.fenglin.pro`. When forwarding or publication
+is requested or already authorized, reuse that route and the existing login.
+Inspect the active domain configuration and upstream before switching tasks.
+
+The paired-case implementation and operational record are in
+`deploy/general_model_paired_review/README.md`. Its current route is:
+
+`hsd.fenglin.pro:443 -> aliyun Nginx -> aliyun 127.0.0.1:18772 -> SSH reverse tunnel -> local 127.0.0.1:8772`.
+
+- Run the review server with `--public-origin https://hsd.fenglin.pro` so the
+  intended Host and Origin are accepted by both page and save endpoints.
+- Bind both the review server and reverse listener to loopback. Reuse the SSH
+  alias and existing keys; do not copy credentials into the repository or logs.
+- Preserve the site's TLS certificate, Basic Auth, forwarded Host and Origin,
+  request headers, and body-size limit. Back up the current Nginx site before
+  changing its upstream, run `nginx -t`, and reload only after validation succeeds.
+- Use `ExitOnForwardFailure`, SSH keepalives, and a persistent process manager
+  with retries. Check that systemd actually works before choosing it. This
+  development container has no usable systemd bus, so the current implementation
+  uses a dedicated tmux socket/session with separate web and tunnel retry loops.
+- Manage this instance with `bash deploy/general_model_paired_review/review-forward.sh
+  start`, `status`, or `stop`. It resumes the existing session and refuses to
+  compete with an occupied local port. Stop only processes owned by this task.
+  tmux survives terminal closure; after the development container restarts, run
+  `start` again. Prefer a working service manager when automatic boot is needed.
+- Keep human records and runtime logs under the experiment's ignored `reviews/`
+  directory. Preserve a session backup before migration, and verify that process
+  restarts retain review progress. Do not reopen retired review services merely
+  to reuse their public route.
+- Check the local service, the remote loopback tunnel, Nginx/TLS/login protection,
+  and external domain access separately. Healthy loopback requests do not prove
+  that the public URL works. Use static assets and health endpoints for deployment
+  checks; any save/confirm test belongs in an isolated test session.
+- On 2026-09-07, this route was configured and the tunnel worked, but external
+  access returned Alibaba Cloud's `Non-compliance ICP Filing` block. The user
+  confirmed that this domain has no filing and that their other filed domain's
+  business scope does not include this review. Login credentials do not resolve
+  the provider-side block. Use the documented private SSH access for current
+  review; do not substitute the other domain without resolving that constraint.
+  Revalidate externally after the hosting/filing situation changes before
+  claiming the public page is usable.
