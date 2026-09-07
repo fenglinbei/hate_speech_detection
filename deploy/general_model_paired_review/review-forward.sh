@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Keep the existing local review session reachable through aliyun's HTTPS site.
+# Keep the existing local review session reachable through an aliyun SSH tunnel.
 set -euo pipefail
 umask 077
 
@@ -68,8 +68,8 @@ PY
         fi
         for attempt in {1..20}; do
             if health >"$RUNTIME/health.json" 2>/dev/null; then
-                printf 'Local review is ready. Public entry: %s\n' "$PUBLIC_ORIGIN"
-                printf 'Check the remote tunnel before switching Nginx. Logs: %s\n' "$RUNTIME"
+                printf 'Local review is ready. Browser entry after private forwarding: http://127.0.0.1:%s/\n' "$LOCAL_PORT"
+                printf 'Client instructions: %s/deploy/general_model_paired_review/README.md\nLogs: %s\n' "$ROOT" "$RUNTIME"
                 exit 0
             fi
             sleep 0.5

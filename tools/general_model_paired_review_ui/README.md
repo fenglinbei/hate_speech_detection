@@ -12,7 +12,7 @@ python scripts/stage1/general_model_paired_review.py --reviewer-id liaozijie --p
 
 浏览器打开 `http://127.0.0.1:8772/`。从另一台机器访问时，将服务所在机器的8772端口转发到本机后打开。
 
-使用 `aliyun` 和 `hsd.fenglin.pro` 的转发入口、进程管理、回退与公网访问状态见
+通过 `aliyun` 使用 SSH 私有转发、管理进程及续审的方法见
 [部署说明](../../deploy/general_model_paired_review/README.md)。该方式会管理本地8772服务，使用前不要重复启动上面的独立进程。
 
 默认读取 `exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02/`，人工记录独立保存到同实验的 `reviews/paired-cases-02/session.json`。该目录默认忽略入库。重启同一命令自动续审，不修改封存结果中的人工复核状态。
