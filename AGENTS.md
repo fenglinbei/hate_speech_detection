@@ -40,21 +40,20 @@ isolated test session, without populating the user's real review records.
 
 ## Paired-case deployment and authoritative records
 
-The authoritative paired-case session currently remains on the development machine:
-`exps/causal_context/general_model_ld_nolabel_paired_cases_v1/reviews/paired-cases-02/session.json`.
-Its local web service and aliyun reverse tunnel remain the active review path.
-DigitalOcean deployment is prepared, but the actual human session has not been
-migrated. Keep its production unit stopped and HTTPS in maintenance mode until
-an explicitly authorized, verified session cutover is completed.
+The authoritative paired-case session is on `digitalocean-sgp` (`165.22.48.237`):
+`/var/lib/hsd-general-model-paired-review/session.json`, available through
+`https://hsd.fenglin.pro`. The verified 2026-09-08 cutover preserved the existing
+3/12 confirmed reviews. The unit `hsd-general-model-paired-review.service` is
+enabled and active, runs as `hsd-review`, and binds to `127.0.0.1:8772`.
+It uses `/opt/hsd-general-model-paired-review/current`, a symlink to
+`releases/<full-archive-sha256>`. A nonempty existing session is required before
+startup so a missing state file cannot silently become an empty production session.
 
-The prepared target is `digitalocean-sgp` (`165.22.48.237`), serving
-`https://hsd.fenglin.pro`. The unit `hsd-general-model-paired-review.service` runs
-as `hsd-review`, binds to `127.0.0.1:8772`, and uses
-`/opt/hsd-general-model-paired-review/current`, a symlink to
-`releases/<full-archive-sha256>`. Its intended authoritative session is
-`/var/lib/hsd-general-model-paired-review/session.json`. The unit requires a
-nonempty existing session before startup, preventing accidental blank production
-sessions while migration is pending.
+The old local writer and aliyun reverse tunnel are stopped. The local
+`exps/causal_context/general_model_ld_nolabel_paired_cases_v1/reviews/paired-cases-02/session.json`
+is a retained backup, protected by the adjacent
+`session.json.remote-authority.json`. Direct private SSH access now forwards this
+development machine's `127.0.0.1:8772` to the authoritative DO service.
 
 - Build with `deploy/general_model_paired_review/build_release.py`. Verify archive
   and per-file hashes; preserve the original frozen manifest bytes. Package only
@@ -63,10 +62,9 @@ sessions while migration is pending.
 - Maintain one writable authoritative session. For an authorized migration, stop
   the old writer, back up and verify exact session bytes, preserve reviewer/source
   identity, and check that restarts retain progress.
-- After successful cutover, keep the local session as a backup and place
-  `session.json.remote-authority.json` beside it. The CLI and old forwarding
-  script then refuse to start its stale writer. Do not copy this marker beside
-  the remote production session. No marker is needed before cutover.
+- Keep the local backup and its `session.json.remote-authority.json` marker.
+  The CLI and old forwarding script refuse to start that stale writer. Do not
+  copy this marker beside the remote production session.
 - Roll back code independently of records. Preserve the latest authoritative
   session; never remove a migration marker merely to start stale local records,
   replace new decisions with an old backup, or run both writers.
@@ -81,25 +79,27 @@ sessions while migration is pending.
 See `deploy/general_model_paired_review/README.md` and
 `deploy/general_model_paired_review/digitalocean-sgp/README.md` for operations.
 
-## Private SSH access
+## Private SSH access and shared-server boundaries
 
-- Before cutover, manage the local web service and reverse tunnel with
-  `bash deploy/general_model_paired_review/review-forward.sh start`, `status`,
-  or `stop`. The browser computer forwards its `127.0.0.1:8772` to
-  `aliyun 127.0.0.1:18772`, which reaches the development service.
-- After cutover, use
+- Manage direct private access with
   `bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh`
-  with `start`, `status`, or `stop`. Its independent tmux session forwards local
-  `127.0.0.1:8772` directly to `digitalocean-sgp 127.0.0.1:8772` without starting
-  a local writer. `run` is foreground mode, stopped with Ctrl-C.
+  and `start`, `status`, or `stop`. Its independent tmux session forwards local
+  `127.0.0.1:8772` to `digitalocean-sgp 127.0.0.1:8772` without a local writer.
+  `run` is foreground mode, stopped with Ctrl-C. The old aliyun writer setup is
+  archived; its `start` and `run-web` are rejected by the migration marker.
 - Bind services and SSH listeners to loopback. Reuse existing aliases and keys,
   require known-host verification and batch authentication, and use
   `ExitOnForwardFailure`, 30-second keepalives and a three-failure limit.
-  Supervisors retry after three seconds and refuse occupied ports.
-- Use working process managers: systemd remotely and dedicated tmux sessions in
-  this container. Stop only this task's processes. tmux survives terminal closure;
-  rerun the appropriate `start` after a container restart.
-- Keep browser-side port 8772 aligned with application Host/Origin checks. Check
-  backend, SSH listeners, and browser access separately. Protect every public
-  application path with HTTPS authentication; bootstrap tokens do not authenticate
-  reviewers.
+  The supervisor retries after three seconds and refuses occupied ports.
+- Use systemd remotely and the dedicated tmux session in this container. Stop
+  only this task's processes. tmux survives terminal closure; rerun private-access
+  `start` after a container restart. Keep browser-side port 8772 aligned with
+  application Host/Origin checks and verify backend/listener/browser separately.
+- Protect every public application path with HTTPS authentication; bootstrap
+  tokens do not authenticate reviewers.
+- For hsd deployment work, the user's explicit boundary is to change only the
+  hsd site/service. Preserve `pdf.fenglin.pro`, its Nginx configuration, upstream
+  `127.0.0.1:8787`, and `pdf-translate-reader.service`; do not restart that service.
+  Run `nginx -t` before a graceful reload. Compare PDF configuration/static hashes,
+  backend PID/start time/restart count, and HTTPS response before and after the
+  reload to establish that the shared server's PDF application is unaffected.

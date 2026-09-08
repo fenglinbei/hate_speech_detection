@@ -2,26 +2,31 @@
 
 复用现有 WP3 人审工作台的三栏布局与共享组件：左侧固定案例队列，中间查询/词典/示例/预测材料，右侧人工记录。默认按冻结顺序复核首批12条，可切换全部32条discovery；16条reserve不进入工作台。
 
-## 启动
+## 访问与续审
 
-在项目根目录运行：
+正式服务已迁至 `digitalocean-sgp`：打开 `https://hsd.fenglin.pro/` 登录复核。
+2026-09-08 切换保留首批 **3/12** 已确认，正式 systemd 服务已启用并运行。
+当前登录文件仅保存在被忽略的
+`exps/causal_context/general_model_ld_nolabel_paired_cases_v1/reviews/paired-cases-02/runtime/digitalocean-login.json`。
+
+开发机已运行到远端的私有转发，`http://127.0.0.1:8772/` 可继续使用；在仓库根目录管理：
 
 ```bash
-python scripts/stage1/general_model_paired_review.py --reviewer-id liaozijie --port 8772
+bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh start
+bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh status
+bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh stop
 ```
 
-浏览器打开 `http://127.0.0.1:8772/`。从另一台机器访问时，将服务所在机器的8772端口转发到本机后打开。
+唯一正式记录是远端 `/var/lib/hsd-general-model-paired-review/session.json`，复核人为 `liaozijie`，
+重启继续读取同一会话。本机旧 `reviews/paired-cases-02/session.json` 仅为备份，旁边已有
+`session.json.remote-authority.json`，阻止 CLI 和旧脚本重新启动陈旧写入；旧本地服务和 aliyun 隧道已停止。
+不要删除迁移标记来恢复旧记录。访问与回退见 [访问说明](../../deploy/general_model_paired_review/README.md)，
+发布和同机 PDF 服务保护见 [部署说明](../../deploy/general_model_paired_review/digitalocean-sgp/README.md)。
 
-通过 `aliyun` 使用 SSH 私有转发、管理进程及续审的方法见
-[部署说明](../../deploy/general_model_paired_review/README.md)。该方式会管理本地8772服务，使用前不要重复启动上面的独立进程。
-
-`digitalocean-sgp` 的代码、HTTPS 和独立测试已准备完成，正式记录尚未迁移；目前继续使用上述本地入口。
-迁移流程和后续远端服务管理见 [DigitalOcean 部署说明](../../deploy/general_model_paired_review/digitalocean-sgp/README.md)。
-完成迁移后，远端会话成为唯一正式记录，本地保留备份；此时应使用文档中的私有访问隧道，旧会话旁的迁移标记会阻止再次启动本地写入服务。
-
-默认读取 `exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02/`，人工记录独立保存到同实验的 `reviews/paired-cases-02/session.json`。该目录默认忽略入库。重启同一命令自动续审，不修改封存结果中的人工复核状态。
-
-不同复核人使用不同 `--session-file`；现有会话绑定来源manifest与复核人，不能换人覆盖。可用 `--data-dir` 指定另一份结构相同的完整配对案例产物。
+复用工作台另建会话时，显式指定独立 `--session-file` 和对应 `--reviewer-id`；
+会话绑定来源 manifest 与复核人，不能换人覆盖。`--data-dir` 可指定结构相同的完整配对产物。
+本轮封存输入仍为 `exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02/`，
+远端 release 仅携带工作台必需数据。人工记录始终独立保存，不修改冻结结果。
 
 ## 这轮复核要完成什么
 

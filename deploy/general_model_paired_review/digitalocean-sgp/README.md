@@ -1,9 +1,9 @@
 # DigitalOcean Singapore 部署说明
 
-**2026-09-08 状态：代码和 HTTPS 已准备，真实会话未迁移。** 当前正式记录仍在开发机，
-[aliyun 私有入口](../README.md) 正常。远端正式 unit 已安装但 `disabled/inactive`，没有正式
-`session.json`；独立 HTTPS 测试已完成并停止。当前使用 [维护配置](hsd.fenglin.pro.maintenance.nginx)，
-HTTPS 证书验证通过，所有路径返回公开的静态 503，不弹登录框。明确授权迁移真实会话后才能切换。
+**2026-09-08 已完成正式切换：`https://hsd.fenglin.pro/` 已上线，首批 3/12 确认进度完整保留。**
+正式会话位于本服务器，unit 已 `enabled/active`，来源与会话哈希、重启续读均已核验。
+本机旧 writer 和 aliyun 反向隧道已停止，旧会话保留为带迁移标记的备份。
+[直接私有访问](../README.md) 已运行，本机 `http://127.0.0.1:8772/` 继续访问远端正式服务。
 
 ## 路径与配置
 
@@ -15,14 +15,14 @@ HTTPS 证书验证通过，所有路径返回公开的静态 503，不弹登录�
 | systemd | `hsd-general-model-paired-review.service`，用户/组 `hsd-review` |
 | 发布目录 | `/opt/hsd-general-model-paired-review/releases/<完整压缩包 SHA-256>/` |
 | 当前代码链接 | `/opt/hsd-general-model-paired-review/current` |
-| 切换后正式会话 | `/var/lib/hsd-general-model-paired-review/session.json` |
+| 唯一正式会话 | `/var/lib/hsd-general-model-paired-review/session.json` |
 
 [服务配置](hsd-general-model-paired-review.service) 用 `/usr/bin/python3 -B -S` 启动，
 `ExecStartPre` 要求正式会话文件已存在且非空，避免误启动生成空会话。失败后 3 秒重试，
 60 秒内最多启动 5 次；持久目录 0700、会话 0600，代码只读，正式记录写入独立状态目录。
 会话文件本身不能是符号链接。
 
-切换后使用 [正式 Nginx 配置](hsd.fenglin.pro.nginx)，对所有 HTTPS 应用路径执行 Basic 登录验证，
+当前使用 [正式 Nginx 配置](hsd.fenglin.pro.nginx)，对所有 HTTPS 应用路径执行 Basic 登录验证，
 保留 Host，并代理到 loopback 8772。应用 `--public-origin` 必须为 `https://hsd.fenglin.pro`，
 不带尾斜杠；页面使用 `/` 开始的资源路径，需部署在域名根目录。
 证书位于 `/etc/letsencrypt/live/hsd.fenglin.pro/`，登录哈希文件为 `/etc/nginx/.htpasswd-hsd-review`，
@@ -50,7 +50,7 @@ sha256sum "$HSD_BUILD_DIR/release.tar.gz"
 
 原始 `data/manifest.json` 逐字节保留，不能删去其中未打包的实验产物条目，避免破坏会话来源绑定。
 发布清单另行列出实际 50 个应用/数据文件的大小及 SHA-256；清单自身和压缩包的哈希由构建脚本输出。
-当前 `current` 已指向本次准备的 release，其完整压缩包 SHA-256 为：
+当前 `current` 指向正在运行的 release，其完整压缩包 SHA-256 为：
 
 ```text
 704ffe68544f5ba576c64de04934204dd3064a4bfdb6abd13322c05ecc3074ce
@@ -85,7 +85,7 @@ PYVERIFY
 ```
 
 校验后以同目录临时链接和原子重命名更新 `current`。运行用户只读代码；会话在独立持久目录，
-不会随 release 更换。后续构建须使用新输出的 SHA-256。真实会话迁移前不启动正式 unit。
+不会随 release 更换。后续构建须使用新输出的 SHA-256，继续读取现有远端正式会话。
 
 ## 隔离测试
 
@@ -106,22 +106,24 @@ HSD_REVIEW_SCREENSHOTS=/tmp/hsd-review-https-smoke \
 node deploy/general_model_paired_review/digitalocean-sgp/smoke_https.cjs
 ```
 
-测试后停止测试服务，恢复维护配置或已完成切换的正式服务。测试会话不能改名为正式会话，
+测试后停止测试服务并恢复正式代理，保持正式会话与测试会话隔离。测试会话不能改名为正式会话，
 测试确认数不能计入人审。正式进度仅以只读 health/bootstrap 检查。
 
-## 获得真实会话迁移授权后的切换
+## 已完成的切换与同机服务边界
 
-1. 明确迁移本机当前正式会话，停止旧 `review-forward.sh` 的 writer 和 aliyun 隧道，备份最新记录并记录哈希。
-2. 迁入 `/var/lib/hsd-general-model-paired-review/session.json`，核对字节哈希，保持复核人 `liaozijie`，
-   设置 `hsd-review:hsd-review`、0600。不要复制测试会话或本地迁移标记。
-3. 启动已校验 release 的正式 unit，核对来源、复核人、记录版本和实际进度，验证重启续读。
-   完成后启用开机启动，安装正式 Nginx 配置，先 `nginx -t` 再重载。
-4. 将本机旧会话保留为备份，在旁边建立 `session.json.remote-authority.json`，阻止 CLI 和旧脚本重新启用它。
-   远端不携带此标记。此后只保留远端一份正式 writer，并更新文档中的待切换状态。
+正式会话经授权迁入独立持久目录，迁移前后字节哈希一致；复核人仍为 `liaozijie`，3/12 确认记录保留。
+远端正式 unit 已启用，重启续读通过；本机旧 writer/aliyun 隧道已停止，旧会话旁已有
+`session.json.remote-authority.json`，CLI 和旧脚本 `start`、`run-web` 均拒绝旧写入。
+远端不携带此标记，本机只运行到远端的 SSH 转发。后续代码更新不迁移或覆盖正式会话。
 
-切换失败时保持写入关闭并核对来源，不用空白会话补位，也不同时开放两份可写会话。
+**用户约束：本任务只修改 hsd 站点/服务，保持 `pdf.fenglin.pro` 不受影响。**
+PDF 的 `/etc/nginx/conf.d/pdf-translate-reader.conf`、`127.0.0.1:8787` 上游与
+`pdf-translate-reader.service` 必须保持不变；先记录基线，再 `nginx -t`，仅平滑重载 Nginx，
+不重启 PDF 服务，之后复查配置、静态资源、后端进程和 HTTPS。
+此次前后检查确认配置/unit/242 个静态文件哈希不变，PDF 仍为 PID `1270223`、
+启动时间 `2026-08-20 17:38:12 UTC`、重启次数 0；HTTPS 返回 200，证书验证成功，首页哈希一致。
 
-## 切换后的私有访问和回退
+## 当前私有访问和回退
 
 ```bash
 bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh start
@@ -149,5 +151,5 @@ HTTPS 问题看 `/var/log/nginx/hsd.fenglin.pro.access.log`、`hsd.fenglin.pro.e
 本机私有转发看 `reviews/paired-cases-02/runtime/digitalocean-sgp-private-access/tunnel.log`。
 
 代码回退只切换兼容的 release，继续使用当时最新的唯一正式会话；操作前停写、备份并核对 schema/来源。
-远端切换完成后，不得恢复本机旧备份或仅删除 marker 来重启旧 writer。
+不得恢复本机旧备份或仅删除 marker 来重启旧 writer。
 如需迁回本机，应停远端写入、迁回远端最新记录并验证完整状态，作为另一次明确的状态迁移处理。
