@@ -13,6 +13,16 @@ PUBLIC_ORIGIN=https://hsd.fenglin.pro
 LOCAL_PORT=8772
 REMOTE_PORT=18772
 
+ensure_local_writer_allowed() {
+    local marker="$REVIEW_DIR/session.json.remote-authority.json"
+    if [[ -e "$marker" || -L "$marker" ]]; then
+        printf 'Review records have moved to digitalocean-sgp; this old local writer will not start.\n' >&2
+        printf 'Use: bash %s/deploy/general_model_paired_review/digitalocean-sgp/private-access.sh start\n' "$ROOT" >&2
+        printf 'Migration marker: %s\n' "$marker" >&2
+        return 1
+    fi
+}
+
 tmux_review() {
     tmux -L "$SOCKET" -f /dev/null "$@"
 }
@@ -44,6 +54,7 @@ repeat_command() {
 
 case "${1:-status}" in
     start)
+        ensure_local_writer_allowed
         if tmux_review has-session -t "$SESSION" 2>/dev/null; then
             printf 'The paired-review session is already running.\n'
             exec /bin/bash "$SCRIPT" status
@@ -89,6 +100,7 @@ PY
         printf 'The dedicated paired-review session is stopped; review records are retained.\n'
         ;;
     run-web)
+        ensure_local_writer_allowed
         cd "$ROOT"
         repeat_command web env PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
             /usr/bin/python scripts/stage1/general_model_paired_review.py \

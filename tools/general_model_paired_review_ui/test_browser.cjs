@@ -79,6 +79,13 @@ async function main() {
     await small.locator("#sidebar-close").click();
     await small.locator("#guidelines").click();
     await expect(small.getByRole("button", {name: "知道了，开始复核"})).toBeInViewport();
+    await small.locator("#guide-step-1 > summary").click();
+    await expect(small.locator("#guide-resource-examples .guide-example")).toHaveCount(4);
+    await small.locator("#guide-resource-examples .guide-example").last().scrollIntoViewIfNeeded();
+    await expect(small.locator("#guide-resource-examples .guide-example").last()).toBeInViewport();
+    assert.ok(await small.locator("#guideline-dialog").evaluate(dialog => dialog.scrollWidth <= dialog.clientWidth));
+    await expect(small.getByRole("button", {name: "知道了，开始复核"})).toBeInViewport();
+    await small.screenshot({path: path.join(artifacts, "guidance-" + viewport.width + ".png")});
     await small.keyboard.press("Escape");
     if (viewport.width < 760) {
       await small.locator("#mobile-editor").click();
@@ -90,6 +97,12 @@ async function main() {
     await responsive.close();
   }
   console.log("PASS tablet/mobile layout, sidebar, guidance, and reading/editing navigation");
+
+  await page.locator('[data-guide-section="guide-step-1"]').click();
+  await expect(page.locator("#guide-step-1")).toHaveAttribute("open", "");
+  await page.getByRole("button", {name: "知道了，开始复核"}).click();
+  await expect(page.locator("#ambiguity_stance")).toHaveAccessibleDescription(/只读查询/);
+  assert.equal((await state()).review.status, "unreviewed");
 
   const fields = ["ambiguity_stance", "definition_fit", "category_relation", "demo_correspondence"];
   for (const field of fields) await page.locator("#" + field).fill("自动化隔离测试观察：" + field);
@@ -143,10 +156,15 @@ async function main() {
   await expect(page.locator('[data-error="gold_verdict"]')).toBeVisible();
   await expect(page.locator("#tab-ai")).toBeDisabled();
   await page.locator('[data-gold="agree"]').click();
+  await expect(page.locator("#gold_dispute-requirement")).toHaveText("认可时可选");
+  await page.locator('[data-gold="dispute"]').click();
+  await expect(page.locator("#gold_dispute-requirement")).toHaveText("当前必填");
+  await page.locator('[data-gold="agree"]').click();
   await page.locator("#stage2_candidate_explanation").fill("自动化测试的人工初判候选解释。");
   await page.locator("#alternative_explanation").fill("自动化测试的替代解释。");
   await page.locator("#falsifiable_followup").fill("测试等长和同位置的输入对照。");
   await page.locator('[data-disposition="input_control"]').click();
+  await expect(page.locator("#falsifiable_followup-requirement")).toHaveText("当前必填");
   await page.locator("#reveal-ai").click();
   await expect(page.locator("#tab-ai")).toBeEnabled();
   await expect(page.locator("#ai-content .ai-section").first()).toBeVisible();

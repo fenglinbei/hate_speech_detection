@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name hsd.fenglin.pro;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/hsd-acme;
+        default_type text/plain;
+    }
+
+    location / {
+        return 503;
+    }
+}

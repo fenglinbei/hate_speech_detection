@@ -21,7 +21,7 @@
     </div>
     <div class="topbar-actions">
       <span id="reviewer-name" class="reviewer-label"></span>
-      <button id="guidelines" class="quiet-button" type="button">复核说明</button>
+      <button id="guidelines" class="quiet-button" type="button">怎么标注</button>
       <details class="top-action-menu"><summary class="quiet-button">导出</summary><div class="top-action-menu-panel">
         <button id="export-csv" class="quiet-button" type="button">下载 CSV 工作表</button>
         <button id="export-json" class="quiet-button" type="button">下载 JSON 完整记录</button>
@@ -72,7 +72,7 @@
       <section class="material-card query-card">
         <div class="card-head"><div><p class="section-kicker">当前查询</p><strong>先理解这句话在说什么</strong></div><span id="query-resource-count" class="quiet-meta"></span></div>
         <blockquote id="query-content" class="query-content">等待载入…</blockquote>
-        <div id="query-context-hint" class="section-hint">查询原文与冻结资源保持原样。没有上下文时，可以明确记录不确定。</div>
+        <div id="query-context-hint" class="section-hint">本轮要找出：模型加入词典、类别或示例后，为什么改变判断，以及下一步可以怎么检验。先按自己的理解读材料；缺上下文就直接记下。</div>
       </section>
       <div class="material-tabs" role="tablist" aria-label="复核材料">
         <button id="tab-resources" role="tab" type="button" aria-selected="true" aria-controls="panel-resources" class="active">词典与示例</button>
@@ -82,12 +82,12 @@
       <div id="panel-resources" role="tabpanel" aria-labelledby="tab-resources" class="material-panel">
         <section class="material-card">
           <div class="card-head"><div><p class="section-kicker">冻结词典</p><h3>义项与来源</h3></div><span id="lexicon-count" class="count-label"></span></div>
-          <p class="section-hint">S 使用这些义项；SG 额外包含显式类别。来源标记区分查询命中与示例带入。</p>
+          <p class="section-hint">先看“查询命中”的词条是否用对，再看“仅示例带入”的词条是否相关。“显式类别”是词典给出的群体分类；本句是否在攻击该群体，还要结合立场判断。</p>
           <div id="lexicon-list" class="lexicon-list"></div>
         </section>
         <section class="material-card">
           <div class="card-head"><div><p class="section-kicker">固定示例 · 保持原顺序</p><h3>示例与冻结答案</h3></div><span id="demo-count" class="count-label"></span></div>
-          <p class="section-hint">答案属于示例自身。以当前重点任务查看，留意对应之处和离题内容。</p>
+          <p class="section-hint">这些是模型可能收到的参考例句，旁边的答案只属于该示例。比较它与查询的对象、措辞和立场，找出可借鉴之处或可能误导的差异。</p>
           <div id="demo-list" class="demo-list"></div>
         </section>
       </div>
@@ -96,17 +96,19 @@
           <div class="card-head"><div><p class="section-kicker">冻结模型结果</p><h3>六条件预测轨迹</h3></div><button id="open-prompt" class="quiet-button" type="button">完整提示</button></div>
           <div id="trajectory-tasks" class="scope-switch task-switch" role="group" aria-label="预测任务"><button type="button" data-task="hate">仇恨判断</button><button type="button" data-task="group">目标群体</button></div>
           <div id="gold-summary" class="gold-summary"></div>
-          <div class="table-scroll"><table class="trajectory-table"><thead><tr><th>条件</th><th>预测</th><th>正确性</th><th>Gold margin</th><th>Top gap</th><th>提示 tokens</th></tr></thead><tbody id="trajectory-rows"></tbody></table></div>
-          <p class="section-hint">正确性依据冻结 Gold；margin 为 Gold 与最高非 Gold 候选的分数差。计分敏感性单独标记。</p>
+          <p class="trajectory-reading-order">先看预测有没有变，再看分差往哪边走。下面六行是<strong>同一句查询、不同附加材料</strong>的结果。<button class="inline-help" type="button" data-guide-section="guide-step-2">六条件和分数怎么看？</button></p>
+          <div class="table-scroll"><table class="trajectory-table"><thead><tr><th>条件</th><th>预测</th><th>与原 Gold</th><th>Gold margin<br><small>原答案的领先分差</small></th><th>Top gap<br><small>前两名分差</small></th><th>提示 tokens<br><small>输入长度</small></th></tr></thead><tbody id="trajectory-rows"></tbody></table></div>
+          <p class="section-hint">Gold 是原参考答案。“正确”表示与它一致；你仍可提出争议。margin 为正：Gold 领先；为负：别的答案领先。Top gap 越小，前两名越接近；两项都不是概率。显示为 0.000 时也可能只是四舍五入。</p>
           <div id="trajectory-warnings" class="quality-notes"></div>
           <div id="paired-effects" class="effect-grid"></div>
+          <p class="section-hint">上面四张卡比较的是 Gold margin。正值表示该对比更有利于原 Gold，不保证预测已经答对；分数变化本身不能证明原因。</p>
           <details class="secondary-detail"><summary>行为类型与原始 Gold 提取</summary><div id="trajectory-detail"></div></details>
         </section>
       </div>
       <div id="panel-ai" role="tabpanel" aria-labelledby="tab-ai" class="material-panel hidden">
         <section class="material-card"><div class="card-head"><div><p class="section-kicker">AI 辅助初读 · 单独记录</p><h3>对照自己的判断</h3></div></div><p class="section-hint">这是已存在的 AI 意见。可以保留不同判断；打开前的人工初判会单独保存。</p><div id="ai-content"></div></section>
       </div>
-      <div class="source-bottom-note">已暴露 dev 上的非盲人工复核 · Gold 争议单列 · 用途决定仅影响下一阶段</div>
+    <div class="source-bottom-note">本轮是已看过相关实验信息的开发集复核（非盲） · Gold 争议另记 · 用途决定用于安排下一阶段</div>
     </main>
     <aside class="decision-pane" id="decision-pane">
       <div class="decision-heading"><div><p class="section-kicker" id="editor-phase-label">第一步</p><h2 id="editor-title">记录资源初读</h2></div><span id="decision-status" class="status-chip" data-state="draft">未开始</span></div>
@@ -114,22 +116,22 @@
       <div id="resume-notice" class="resume-notice hidden" role="status"></div>
       <form id="review-form" class="review-form" novalidate>
         <fieldset id="resource-editor"><legend class="sr-only">资源初读</legend>
-          <p class="editor-intro">每项一两句话即可；无相关词条、信息不足或拿不准，都可以直接写明。</p>
+          <p class="editor-intro">先读中间的查询 → 词典 → 示例，再写下面四项。每项一两句话，写“观察 + 依据”；无相关词条、信息不足也算有效观察。<button class="inline-help" type="button" data-guide-section="guide-step-1">四项分别怎么写？</button></p>
           <div id="resource-fields"></div>
           <label class="field exposure-field"><span>此前读过本例的 AI 解读吗？ <small>可选</small></span><select id="prior-ai-exposure"><option value="unspecified">尚未记录</option><option value="not_seen">没看过</option><option value="seen">看过</option><option value="unsure">记不清</option></select></label>
         </fieldset>
         <div id="resource-snapshot" class="resource-snapshot hidden"><strong>资源初读已保存</strong><p id="resource-snapshot-time"></p><details><summary>查看我的初读记录</summary><div id="resource-snapshot-notes"></div></details></div>
         <fieldset id="assessment-editor" class="hidden"><legend class="sr-only">轨迹复核与用途</legend>
-          <p class="editor-intro">对照预测核实解释，记录分歧，并决定这一案例下一步怎么用。</p>
-          <div class="field-group"><span class="field-label">原 Gold 判断</span><div id="gold-options" class="choice-row" role="group" aria-label="原 Gold 判断"><button type="button" data-gold="agree">认可</button><button type="button" data-gold="dispute">有争议</button><button type="button" data-gold="uncertain">信息不足</button></div><small data-error="gold_verdict" class="field-error hidden"></small></div>
+          <p class="editor-intro">围绕案例标题的<strong>重点任务</strong>填写：核对原答案，解释条件之间的变化，再选下一步用途。另一个任务可切换查看，作为补充。<button class="inline-help" type="button" data-guide-section="guide-step-3">解释和用途怎么选？</button></p>
+          <div class="field-group"><span class="field-label">原 Gold 判断 <small>必选</small></span><p class="choice-hint">认可：原答案符合你的理解；有争议：有具体相反依据；信息不足：现有材料无法判断原答案是否合适。</p><div id="gold-options" class="choice-row" role="group" aria-label="原 Gold 判断"><button type="button" data-gold="agree">认可</button><button type="button" data-gold="dispute">有争议</button><button type="button" data-gold="uncertain">信息不足</button></div><small data-error="gold_verdict" class="field-error hidden"></small></div>
           <div id="assessment-fields"></div>
           <div class="field-group"><span class="field-label">下一阶段用途 <small>快捷键 1 / 2 / 3</small></span><div id="disposition-options" class="disposition-options" role="group" aria-label="下一阶段用途">
-            <button type="button" data-disposition="input_control"><kbd>1</kbd><span><strong>进入输入对照</strong><small>解释较清楚，有具体可检验的问题</small></span></button>
-            <button type="button" data-disposition="verify_first"><kbd>2</kbd><span><strong>先核验再使用</strong><small>先处理计分、上下文或 Gold 疑问</small></span></button>
-            <button type="button" data-disposition="defer"><kbd>3</kbd><span><strong>暂缓使用</strong><small>当前无法形成清楚的对照</small></span></button>
+            <button type="button" data-disposition="input_control"><kbd>1</kbd><span><strong>进入输入对照</strong><small>已有可比较的解释，能写出只改部分输入的检验方案</small></span></button>
+            <button type="button" data-disposition="verify_first"><kbd>2</kbd><span><strong>先核验再使用</strong><small>有希望继续，但须先解决具体的计分、Gold 或上下文疑问</small></span></button>
+            <button type="button" data-disposition="defer"><kbd>3</kbd><span><strong>暂缓使用</strong><small>目前找不到清楚的解释或可行对照，先搁置这条</small></span></button>
           </div><small data-error="disposition" class="field-error hidden"></small></div>
-          <label id="defer-reason-field" class="field"><span>先核验 / 暂缓的原因</span><textarea id="patching_defer_reason" maxlength="2000" rows="2" placeholder="还有什么问题尚未解决？"></textarea><small data-error="patching_defer_reason" class="field-error hidden"></small></label>
-          <div id="ai-reveal-card" class="ai-reveal-card"><p>完成人工初判后，可以再对照 AI 初读。</p><button id="reveal-ai" class="secondary-button" type="button">保存初判并查看 AI</button><small id="ai-reveal-hint"></small></div>
+          <label id="defer-reason-field" class="field"><span>先核验 / 暂缓的原因 <small>当前必填</small></span><textarea id="patching_defer_reason" maxlength="2000" rows="2" placeholder="先核验：具体查什么，查清后能决定什么？暂缓：为什么目前不适合继续？"></textarea><small data-error="patching_defer_reason" class="field-error hidden"></small></label>
+          <div id="ai-reveal-card" class="ai-reveal-card"><p>AI 意见可选查看。完成自己的初判后再对照；也可以直接“确认并继续”。</p><button id="reveal-ai" class="secondary-button" type="button">保存初判并查看 AI</button><small id="ai-reveal-hint"></small></div>
           <label id="ai-comparison-field" class="field hidden"><span>看过 AI 后的补充 <small>可选</small></span><textarea id="ai_comparison" maxlength="2000" rows="3" placeholder="哪些地方一致，哪些意见保留分歧？"></textarea><small data-error="ai_comparison" class="field-error hidden"></small></label>
         </fieldset>
       </form>
@@ -138,7 +140,52 @@
     </aside>
   </div>
   <nav class="mobile-pane-nav" aria-label="手机阅读与填写"><button id="mobile-materials" type="button">↑ 查看材料</button><button id="mobile-editor" type="button">填写复核 ↓</button></nav>
-  <dialog id="guideline-dialog" class="app-dialog"><form method="dialog"><p class="eyebrow">人审工作台 · 使用说明</p><h2>从自己的理解开始</h2><ol><li><strong>资源初读：</strong>看查询、词典与示例，完成四项简短观察。</li><li><strong>轨迹复核：</strong>保存初读后，查看原 Gold、六条件预测和完整提示。</li><li><strong>确认用途：</strong>填写候选解释、替代解释与下一步；按需对照 AI 意见，再确认并继续。</li></ol><p>页面自动保存草稿，可随时离开后续审。已保存的初读保持原样，补充意见写入后续复核记录。16 条 reserve 不在本工作台内。</p><p>当前按<strong>非盲人工复核</strong>记录。AI 意见单独展示；你的确认不会修改原 Gold、词典、示例或实验名单。</p><dl class="shortcut-list"><div><dt>[ / ]</dt><dd>上一条 / 下一条</dd></div><div><dt>Ctrl/⌘ + S</dt><dd>保存草稿</dd></div><div><dt>Ctrl/⌘ + Enter</dt><dd>保存初读 / 确认并继续</dd></div><div><dt>1 / 2 / 3</dt><dd>选择下一阶段用途</dd></div></dl><button class="primary-button" value="close">知道了，开始复核</button></form></dialog>
+  <dialog id="guideline-dialog" class="app-dialog guideline-dialog" aria-labelledby="guide-title"><form method="dialog">
+    <div class="guide-heading"><div><p class="eyebrow">人审工作台 · 标注说明</p><h2 id="guide-title">每条案例，留下一个有依据的判断</h2></div><button class="icon-button" value="close" aria-label="关闭标注说明">×</button></div>
+    <div class="guide-body">
+      <p class="guide-purpose">这轮复核要帮助我们理解：<strong>加入词典、类别字段或示例后，模型为什么改变判断？</strong>你的产出是自己的材料观察、可能原因和下一步检验方案。允许不同意原答案、明确写“不确定”。</p>
+      <div class="guide-map"><span><b>1</b> 读材料，写四项观察</span><span><b>2</b> 看同一句话的六组结果</span><span><b>3</b> 写两种解释，决定用途</span></div>
+      <details id="guide-step-1" class="guide-step"><summary><span>第 1 步 · 四项资源初读怎么写</span><small>先读查询，再看词典和示例</small></summary><div class="guide-step-content">
+        <p>中间是材料，右侧是记录。围绕标题所示的重点任务阅读：<strong>仇恨判断</strong>看整句话的表达与立场；<strong>目标群体</strong>看所针对的群体类别。每项写一两句话，并指向具体措辞、词条或示例。</p>
+        <p>“查询命中”指查询匹配到的词条；“仅示例带入”指查询未命中、但固定示例匹配到的词条。匹配到词不保证词义适用。“冻结”表示本轮材料保持原样，发现问题写进复核记录。</p>
+        <div class="guide-fiction-note"><strong>下面全是虚构练习，不来自本轮案例。</strong><p>“雾谷”及其居民是虚构的。例子只演示如何写观察，不预设真实案例的立场、标签或用途。</p></div>
+        <div id="guide-resource-examples"></div>
+        <p><strong>什么时候继续：</strong>四项都有记录后，点“保存初读 · 查看轨迹”。没有相关词条可写“无相关词条”；缺信息要写清缺什么。最初观察会固定保存，后来的修正放在第二步理由或解释中。</p>
+      </div></details>
+      <details id="guide-step-2" class="guide-step"><summary><span>第 2 步 · Gold、六条件和分数怎么看</span><small>先比较预测，再读分差；不必计算公式</small></summary><div class="guide-step-content">
+        <p><strong>Gold = 数据集原有的参考答案。</strong>表中“正确”只表示与它一致；你可以记录不同看法。目标群体任务要整组标签一致才算正确，“无目标群体 ∅”表示空集合。</p>
+        <p><strong>六条件 = 同一句查询，给模型搭配六种材料。</strong>所有条件都有相同的基础任务提示和查询。S 表示词条与释义，G 表示词典中显式写出的类别，D 表示固定示例及其答案；NoCat 就是删去 G。</p>
+        <div class="table-scroll"><table class="guide-condition-table"><thead><tr><th>简称</th><th>附加给模型的材料</th></tr></thead><tbody><tr><th>0</th><td>不加词典或示例</td></tr><tr><th>SG</th><td>词条、释义 + 显式类别</td></tr><tr><th>D</th><td>示例正文 + 示例答案</td></tr><tr><th>SGD</th><td>含类别词典 + 示例与答案</td></tr><tr><th>S</th><td>词条、释义，删去显式类别字段</td></tr><tr><th>SD</th><td>去类别词典 + 示例与答案</td></tr></tbody></table></div>
+        <p>词典词条取自查询和固定示例的命中并集，所以 S 中也可能有“仅示例带入”的词条。删除类别字段后，释义或示例里仍可能包含群体信息；示例答案也保留。</p>
+        <p><strong>按这个顺序读：</strong>先看 0 → S、0 → D、D → SD，知道加资源后预测有没有变；再比较 SG → S、SGD → SD，知道删除类别字段后怎样变化。需要确认模型究竟看到了什么时，点“完整提示”。</p>
+        <dl class="guide-terms">
+          <div><dt>Gold margin · 原答案的领先分差</dt><dd>Gold 的分数 − 得分最高的其他答案。正数：Gold 领先；负数：其他答案领先；精确为零：并列。数值增大表示相对更支持原 Gold，即使预测还没有变。</dd></div>
+          <div><dt>Top gap · 前两名分差</dt><dd>得分第一名 − 第二名。越接近零，两者越接近；第一名也可能是错误答案，所以分差大不代表答对。</dd></div>
+          <div><dt>这些分数的单位</dt><dd>主表按候选答案各 token 的对数概率相加计分。margin 和 gap 都是分数差，不是正确概率，也不是百分比。页面保留三位小数，0.000 可能只是舍入。</dd></div>
+          <div><dt>计分口径敏感 / 近并列</dt><dd>口径敏感指换成平均分或计入结束符后，选中的答案会改变；近并列指前两名差距很小。遇到这些提示，先考虑是否需要核验计分再作解释。</dd></div>
+          <div><dt>提示 tokens · 输入长度</dt><dd>模型切分后的输入单位数量，近似反映提示长度，不等于汉字数。删字段也会改变长度和后文位置，这可能成为替代解释。</dd></div>
+        </dl>
+        <div class="guide-example"><h4>虚构分数示例</h4><p>假设 Gold 为 A：某条件下 A 得 −2 分、B 得 −3 分，margin = +1，Top gap = 1；另一条件下 A 得 −4 分、B 得 −2 分，margin = −2，Top gap = 2。后者第一名领先更多，但选中的是 B，与 Gold 不一致。</p></div>
+        <p><strong>表下四张卡：</strong>前三张显示两个条件的 margin 差；第四张是“已有示例时加词典”的变化减去“没有示例时加词典”的变化，即 SD − S − D + 0。它们帮助描述变化，不能单凭正负号认定原因或证明模型内部机制。</p>
+      </div></details>
+      <details id="guide-step-3" class="guide-step"><summary><span>第 3 步 · 两种解释、输入对照和用途</span><small>写观察到什么，再写如何分辨原因</small></summary><div class="guide-step-content">
+        <p><strong>先判断原 Gold：</strong>“认可”表示符合你的理解；“有争议”表示你有具体依据支持不同答案；“信息不足”表示缺少判断所需的信息。后两项必须写理由。围绕本例重点任务填写，另一任务的发现可以作为补充注明。</p>
+        <dl class="guide-terms"><div><dt>候选解释：你目前更倾向的原因</dt><dd>写“哪两个条件发生了什么变化 → 哪段资源可能导致这种变化”。把观察和猜想分开，避免仅写“模型理解错了”。</dd></div><div><dt>替代解释：同一变化也可能怎样产生</dt><dd>提出与候选解释竞争的另一种原因。它不是另一个仇恨/群体标签，也不是把候选解释换句话重复；要能说明为什么现在还不能确定原因。</dd></div><div><dt>输入对照：改一点输入，再比较结果</dt><dd>给后续实验写方案：改什么、保持什么、观察什么，以及哪种结果会反驳候选解释。在当前工作台只记录方案，确认用途不会启动实验。</dd></div></dl>
+        <div class="guide-example"><h4>虚构解释与对照示例 · 不是本轮结果</h4><p><strong>假设观察：</strong>SGD 答错，SD 答对。</p><p><strong>候选解释：</strong>我猜显式类别字段把模型带向了错误的群体判断；删掉它后，模型更多依据查询中的反对立场。</p><p><strong>替代解释：</strong>也可能是删除字段缩短了提示、改变后文位置，而非类别含义本身起作用。</p><p><strong>输入对照：</strong>将类别内容换成同位置、等 token 长度的中性占位内容，保持查询、释义、示例及其顺序不变。比较原类别、等长占位、直接删除三版的预测和 margin。若等长占位仍像原类别版一样答错、只有删除才改善，就削弱“类别含义是主因”的猜想，需要继续检查长度和位置。</p></div>
+        <p><strong>用途按当前能推进到哪一步选择，三项都是有效复核结论：</strong></p>
+        <div class="guide-dispositions"><section><h4>1 · 进入输入对照</h4><p>有具体待检验解释，也能写出可区分解释的方案；关键 Gold、上下文和计分疑问已处理，或可清楚限定对照如何解释。必须填写“下一步输入对照”。选中只表示准备继续检验，不代表原因已证实。</p></section><section><h4>2 · 先核验再使用</h4><p>案例值得继续，但有一个可指出、可先检查的问题，例如计分口径敏感，或需核对原始上下文才能判断 Gold。原因里写“先查什么，查清后才能决定什么”。</p></section><section><h4>3 · 暂缓使用</h4><p>目前无法提出清楚、可行的对照，或材料缺失使下一步难以推进。原因里写具体卡在哪里。拿不准解释时可明确写“暂无法形成候选解释 / 暂无法区分替代解释”，不用编一个结论。</p></section></div>
+        <p><strong>最后：</strong>Gold 判断、候选解释、替代解释和用途都要填写；选“输入对照”补方案，选“先核验 / 暂缓”补原因。然后点“确认并继续”。</p>
+      </div></details>
+      <details id="guide-saving" class="guide-step"><summary><span>保存、AI 参考和断点续审</span><small>保存草稿与确认完成是两件事</small></summary><div class="guide-step-content">
+        <p>停止输入 5 秒后自动保存，也可手动“保存草稿”。看到顶栏“已保存”再离开；草稿不计入已确认进度。“确认并继续”才把本条记为完成，并跳转下一条未完成案例。</p>
+        <p>AI 意见可选查看。先完成自己的 Gold 判断、解释和用途，再点“保存初判并查看 AI”；打开前的人工初判会另存快照。可补充不同意见，也可不看 AI 直接确认。</p>
+        <p>资源初读固定保存后，补充写在后续复核里。已确认记录可说明原因后“重新打开”，旧记录会保留。发生保存冲突时，本地草稿会保留；按页面提示恢复、核对，再手动保存。</p>
+        <p>本轮为非盲人工复核：此前可能看过相关实验信息，页面也会分步开放结果。人工记录单独保存，原 Gold、词典、示例和实验名单保持原样。队列可选首批 12 条或全部 32 条 discovery；16 条 reserve 留待后续评估。</p>
+        <dl class="shortcut-list"><div><dt>[ / ]</dt><dd>上一条 / 下一条</dd></div><div><dt>Ctrl/⌘ + S</dt><dd>保存草稿</dd></div><div><dt>Ctrl/⌘ + Enter</dt><dd>保存初读 / 确认并继续</dd></div><div><dt>1 / 2 / 3</dt><dd>选择下一阶段用途</dd></div></dl>
+      </div></details>
+    </div>
+    <div class="guide-footer"><span>可随时从顶栏“怎么标注”重新打开</span><button class="primary-button" value="close">知道了，开始复核</button></div>
+  </form></dialog>
   <dialog id="prompt-dialog" class="app-dialog prompt-dialog"><div class="dialog-head"><h2>完整冻结提示</h2><button id="close-prompt" class="icon-button" type="button" aria-label="关闭完整提示">×</button></div><div class="prompt-controls"><label class="field"><span>任务</span><select id="prompt-task"><option value="hate">仇恨判断</option><option value="group">目标群体</option></select></label><label class="field"><span>条件</span><select id="prompt-condition"></select></label></div><small id="prompt-meta"></small><pre id="prompt-text"></pre></dialog>
   <dialog id="reopen-dialog" class="app-dialog"><form id="reopen-form"><h2>重新打开复核记录</h2><p>原确认意见会保留。资源初读的最初记录保持不变。</p><label class="field"><span>更正或补充的原因</span><textarea id="reopen-reason" maxlength="1000" rows="3" required placeholder="简要说明本次重新打开的原因"></textarea></label><div class="dialog-actions"><button id="cancel-reopen" class="quiet-button" type="button">取消</button><button id="confirm-reopen" class="primary-button" type="submit">重新打开</button></div></form></dialog>
   <script src="/review-core.js"></script>

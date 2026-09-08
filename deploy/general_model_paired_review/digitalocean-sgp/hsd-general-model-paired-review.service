@@ -1,0 +1,34 @@
+[Unit]
+Description=Paired-case human review workbench
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=hsd-review
+Group=hsd-review
+WorkingDirectory=/opt/hsd-general-model-paired-review/current
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/usr/bin/test -s /var/lib/hsd-general-model-paired-review/session.json
+ExecStart=/usr/bin/python3 -B -S scripts/stage1/general_model_paired_review.py --data-dir /opt/hsd-general-model-paired-review/current/data --session-file /var/lib/hsd-general-model-paired-review/session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8772 --public-origin https://hsd.fenglin.pro
+Restart=on-failure
+RestartSec=3s
+UMask=0077
+StateDirectory=hsd-general-model-paired-review
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/hsd-general-model-paired-review
+
+[Install]
+WantedBy=multi-user.target

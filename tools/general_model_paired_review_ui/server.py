@@ -185,6 +185,16 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8772)
     parser.add_argument("--public-origin", default=None)
     args = parser.parse_args()
+    authority_marker = args.session_file.with_name(args.session_file.name + ".remote-authority.json")
+    if authority_marker.exists() or authority_marker.is_symlink():
+        parser.exit(
+            2,
+            "审核记录已迁移至 digitalocean-sgp，本地旧会话已停止接收写入。\n"
+            "请访问 https://hsd.fenglin.pro/，或运行 "
+            "bash deploy/general_model_paired_review/digitalocean-sgp/private-access.sh start "
+            "后打开 http://127.0.0.1:8772/。\n"
+            f"迁移标记：{authority_marker}\n",
+        )
     server = create_server(
         data_dir=args.data_dir, session_path=args.session_file, reviewer_id=args.reviewer_id,
         host=args.host, port=args.port, public_origin=args.public_origin,

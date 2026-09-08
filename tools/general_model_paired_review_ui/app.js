@@ -10,15 +10,41 @@ let scope = "initial", filter = "all", searchMode = "literal", visibleIds = [];
 let materialTab = "resources", trajectoryTask = "hate", promptRequest = 0;
 let recoveryNeedsSave = false;
 const placeholders = {
-  ambiguity_stance: "在说谁？有引用、反驳、反讽或上下文缺失吗？",
-  definition_fit: "义项与本句用法是否匹配？没有查询命中也可以写明。",
-  category_relation: "类别与实际对象是否对应？哪些关系尚不明确？",
-  demo_correspondence: "示例与查询哪里相关？是否有离题或标签疑问？",
+  ambiguity_stance: "这句话在说……；作者是在……；不确定的是……",
+  definition_fit: "词条“……”在这里指……，与定义相符 / 不符，因为……",
+  category_relation: "词典标为……；本句实际谈论……，两者相符 / 存疑，因为……",
+  demo_correspondence: "示例 #……与本句同在……；不同之处是……",
   stage1_resource_notes: "补充目前观察到的资源问题。",
   gold_dispute: "有争议或信息不足时，简要写明依据。",
-  stage2_candidate_explanation: "观察到什么变化？哪项资源可能解释这一变化？",
-  alternative_explanation: "长度、位置、词义或示例内容能否同样解释？",
-  falsifiable_followup: "改什么、保持什么、观察什么结果？例如同位置等长字段对照。",
+  stage2_candidate_explanation: "从……条件到……条件，预测 / margin……；我猜可能是……，材料依据是……",
+  alternative_explanation: "同样的变化也可能来自……；目前还分不清，因为……",
+  falsifiable_followup: "只改……；保持……；比较……；若……，就不支持我的候选解释。",
+};
+const fieldHelp = {
+  ambiguity_stance: {
+    hint: "只读查询：谁在谈论谁，作者在赞同、转述还是反对？指出支持你理解的原句；缺上下文就写缺什么。",
+    material: "虚构查询：他说“雾谷人都不可靠”，我不同意这种一概而论。雾谷是虚构地区。",
+    example: "作者引用了对雾谷人的概括，但用“我不同意”明确反对；被引用者与作者的立场不同。",
+  },
+  definition_fit: {
+    hint: "对照词条的定义与本句用法：意思是否一样、有没有多义或误命中？先看查询命中；仅示例带入的词条可写与查询无直接对应。",
+    material: "虚构词条：雾谷人＝雾谷地区居民；虚构查询引用“雾谷人都不可靠”并表示反对。",
+    example: "“雾谷人”在本句仍指该地区居民，与定义相符。但这个定义本身不能说明作者是否赞同引文。",
+  },
+  category_relation: {
+    hint: "看词条下方的显式类别（地域、性别等）是否对应本句所指对象。提及某群体不等于攻击它；没有词条或无法确定对象，可以写明。",
+    material: "虚构词条“雾谷人”的类别为“地域”；虚构查询谈及该地区居民，同时反对对他们的一概而论。",
+    example: "“地域”对应被谈论的人群，但作者在反对偏见，不能仅因出现地域类别就认定作者在攻击这个群体。",
+  },
+  demo_correspondence: {
+    hint: "读示例正文和它自己的答案，挑最相关或最可疑的例子：措辞、对象、立场哪里相似或不同？不必逐条抄写；都不相关也可直说。",
+    material: "虚构示例：“不该因为出生地就说一个人不可靠”，答案为“非仇恨”；虚构查询引用地域偏见后明确反对。",
+    example: "示例和查询都在反对地域偏见，立场相似；查询多了一段负面引文。示例可供参考，但不能只因出现同类词就照搬答案。",
+  },
+  gold_dispute: {hint: "Gold 是数据集保存的参考答案。认可时理由可选；有争议或信息不足时，写清哪段原文支持不同理解，或缺少什么上下文。"},
+  stage2_candidate_explanation: {hint: "写你目前更倾向的原因：先点名哪两个条件出现什么变化，再用词条、类别或示例中的具体内容解释。只是待检验的猜想；无法解释也可写明。"},
+  alternative_explanation: {hint: "写另一个也能产生同样变化的原因，用来和候选解释竞争。例如你怀疑类别含义在起作用，也要考虑删除字段后的长度或位置变化。拿不准可写尚无法区分。"},
+  falsifiable_followup: {hint: "选择“进入输入对照”时必填。写一个后续重跑方案：只改哪部分输入、哪些保持不变、看什么结果，以及什么结果会使你放弃候选解释。此处只记录方案。"},
 };
 
 function node(tag, text, className) {
@@ -104,9 +130,12 @@ function downloadDraft() {
 }
 
 function makeField(key, label, section, optional = false) {
-  const wrapper = node("label", undefined, "field");
-  const title = node("span", label);
-  if (optional) title.append(node("small", "  可选"));
+  const wrapper = node("div", undefined, "field");
+  const title = node("label", label, "field-title");
+  title.htmlFor = key;
+  const requirement = node("small", optional ? "  可选" : "  必填");
+  requirement.id = key + "-requirement";
+  title.append(requirement);
   const input = node("textarea");
   input.id = key; input.rows = key === "gold_dispute" ? 2 : 3;
   input.maxLength = section === "resources" ? 1000 : 2000;
@@ -114,7 +143,20 @@ function makeField(key, label, section, optional = false) {
   input.autocomplete = "off";
   const error = node("small", "", "field-error hidden");
   error.dataset.error = key;
-  wrapper.append(title, input, error);
+  wrapper.append(title);
+  const help = fieldHelp[key];
+  if (help) {
+    const hint = node("small", help.hint, "field-hint");
+    hint.id = key + "-hint";
+    input.setAttribute("aria-describedby", hint.id + " " + requirement.id);
+    wrapper.append(hint);
+  }
+  wrapper.append(input, error);
+  if (help?.example) {
+    const example = node("details", undefined, "field-example");
+    example.append(node("summary", "看一个虚构填写示例"), node("p", help.material, "example-material"), node("p", "示范填写：" + help.example));
+    wrapper.append(example);
+  }
   ui[key] = input;
   input.addEventListener("input", () => {
     if (!canEdit(section)) return;
@@ -134,6 +176,12 @@ function setupFields() {
   }
   for (const key of ["gold_dispute", "stage2_candidate_explanation", "alternative_explanation", "falsifiable_followup"]) {
     ui["assessment-fields"].append(makeField(key, Pair.ASSESSMENT_LABELS[key], "assessment", key === "gold_dispute"));
+  }
+  for (const [key, help] of Object.entries(fieldHelp)) {
+    if (!help.example) continue;
+    const example = node("section", undefined, "guide-example");
+    example.append(node("h4", Pair.RESOURCE_LABELS[key]), node("p", help.hint), node("p", help.material, "example-material"), node("p", "示范填写：" + help.example, "example-answer"));
+    ui["guide-resource-examples"].append(example);
   }
   for (const key of ["patching_defer_reason", "ai_comparison"]) {
     ui[key].addEventListener("input", () => {
@@ -223,6 +271,8 @@ function renderChoices() {
   }
   const needsReason = ["verify_first", "defer"].includes(draft.assessment.disposition);
   show(ui["defer-reason-field"], needsReason || Boolean(draft.assessment.patching_defer_reason));
+  document.getElementById("gold_dispute-requirement").textContent = ["dispute", "uncertain"].includes(draft.assessment.gold_verdict) ? "  当前必填" : "  认可时可选";
+  document.getElementById("falsifiable_followup-requirement").textContent = draft.assessment.disposition === "input_control" ? "  当前必填" : "  进入输入对照时必填";
 }
 function renderProgress() {
   if (!bootstrap) return;
@@ -286,7 +336,7 @@ function renderResources() {
   for (const entry of entries) {
     const card = node("article", undefined, "lexicon-entry");
     const heading = node("div", undefined, "lexicon-heading");
-    const source = both.has(entry.lexicon_id) ? "查询与示例共有" : lq.has(entry.lexicon_id) ? "查询命中 · Lq" : "示例带入 · Ld-only";
+    const source = both.has(entry.lexicon_id) ? "查询与示例共有" : lq.has(entry.lexicon_id) ? "查询命中 · Lq" : "仅示例带入 · Ld-only";
     heading.append(node("strong", entry.term), node("span", source, "origin-chip" + (lq.has(entry.lexicon_id) ? " query-origin" : "")));
     card.append(heading);
     for (const sense of entry.senses || [{definition: entry.definition, categories: [entry.category]}]) {
@@ -346,13 +396,13 @@ function renderTrajectory() {
     ui["trajectory-rows"].append(row);
   }
   ui["trajectory-warnings"].replaceChildren();
-  if (warnings.length) ui["trajectory-warnings"].append(node("p", warnings.join("；") + "。建议在选作干预材料前先核验。"));
+  if (warnings.length) ui["trajectory-warnings"].append(node("p", warnings.join("；") + "。这说明结果可能依赖答案的计分方式或很小的分差；建议先核验，再用于输入对照。"));
   ui["paired-effects"].replaceChildren();
   const effects = [
     ["有示例时删除类别", margins.SD - margins.SGD, "SD − SGD"],
-    ["去类别词典的增量", margins.SD - margins.D, "SD − D"],
+    ["有示例时加入去类别词典", margins.SD - margins.D, "SD − D"],
     ["无示例时删除类别", margins.S - margins.SG, "S − SG"],
-    ["逐查询分数交互", margins.SD - margins.S - margins.D + margins["0"], "SD − S − D + 0"],
+    ["同时加入是否超过各自增量", margins.SD - margins.S - margins.D + margins["0"], "SD − S − D + 0"],
   ];
   for (const [label, value, formula] of effects) {
     const tile = node("div", undefined, "effect-tile");
@@ -629,7 +679,18 @@ function bindEvents() {
   ui["sidebar-toggle"].addEventListener("click", showSidebar);
   ui["sidebar-close"].addEventListener("click", closeSidebar);
   ui["sidebar-backdrop"].addEventListener("click", closeSidebar);
-  ui["guidelines"].addEventListener("click", () => ui["guideline-dialog"].showModal());
+  function openGuidelines(sectionId) {
+    const dialog = ui["guideline-dialog"];
+    dialog.querySelectorAll(".guide-step").forEach(section => { section.open = section.id === sectionId; });
+    dialog.showModal();
+    const target = sectionId ? ui[sectionId] : null;
+    if (target) {
+      target.scrollIntoView({block: "start"});
+      target.querySelector("summary").focus({preventScroll: true});
+    } else dialog.querySelector(".guide-body").scrollTop = 0;
+  }
+  ui["guidelines"].addEventListener("click", () => openGuidelines());
+  document.querySelectorAll("[data-guide-section]").forEach(control => control.addEventListener("click", () => openGuidelines(control.dataset.guideSection)));
   ui["open-prompt"].addEventListener("click", () => {
     ui["prompt-task"].value = trajectoryTask; ui["prompt-condition"].value = "CLDnewNoCat";
     ui["prompt-dialog"].showModal(); loadPrompt();

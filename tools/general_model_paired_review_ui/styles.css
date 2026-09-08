@@ -101,7 +101,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .editor-intro { margin: 17px 0 20px; font-size: .74rem; color: #7b847e; line-height: 1.75; }
 .review-form .field { margin: 0 0 18px; gap: 7px; }
 .review-form .field > span, .field-label { font-size: .77rem; font-weight: 680; color: #34463b; }
+.review-form .field > .field-title { font-size: .77rem; font-weight: 680; color: #34463b; }
 .review-form .field small, .field-label small { color: #8d978f; font-size: .63rem; font-weight: 400; }
+.review-form .field > .field-hint { color: #68776c; font-size: .69rem; line-height: 1.75; }
+.field-example { font-size: .68rem; color: #65746a; }
+.field-example summary { width: fit-content; cursor: pointer; color: var(--primary); padding: 2px 0; }
+.field-example p { margin: 7px 0 0; padding: 9px 11px; border-radius: 6px; background: #f1f6f0; line-height: 1.8; }
+.field-example p.example-material { color: #7b7865; background: #faf8ef; }
+.inline-help { display: inline; border: 0; background: transparent; color: var(--primary); padding: 0; min-height: 0; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.editor-intro .inline-help { display: block; margin-top: 6px; }
+.choice-hint, .trajectory-reading-order { font-size: .7rem; line-height: 1.75; color: #68776c; margin: 0 0 10px; }
+.trajectory-reading-order .inline-help { margin-left: 4px; }
 .review-form textarea { font-size: .77rem; line-height: 1.75; padding: 10px 11px; border-radius: 8px; resize: vertical; min-height: 80px; background: #fdfefd; }
 .review-form textarea::placeholder { color: #a0a89f; font-size: .72rem; }
 .review-form select { font-size: .76rem; padding: 8px 10px; }
@@ -154,6 +164,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .table-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
 .trajectory-table { width: 100%; border-collapse: collapse; white-space: nowrap; font-size: .7rem; }
 .trajectory-table th { color: #778279; background: #f8faf6; font-size: .62rem; padding: 11px 9px; font-weight: 650; text-align: left; }
+.trajectory-table th small { font-weight: 400; color: #839084; font-size: .58rem; }
 .trajectory-table td { padding: 13px 9px; border-top: 1px solid #edf0e9; color: #405447; }
 .trajectory-table td:nth-child(n+4) { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .69rem; font-variant-numeric: tabular-nums; }
 .condition-label { display: grid; gap: 2px; }
@@ -196,6 +207,44 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 #prompt-meta { display: block; margin: 12px 0; color: var(--muted); font-size: .72rem; }
 #prompt-text { white-space: pre-wrap; overflow-wrap: anywhere; background: #f6f8f3; padding: 18px; border: 1px solid var(--line); border-radius: 9px; font-size: .76rem; line-height: 1.85; }
 .mobile-pane-nav { display: none; }
+.app-dialog.guideline-dialog { width: min(790px,calc(100vw - 32px)); height: min(860px,90dvh); max-height: 90dvh; overflow: hidden; padding: 0; }
+.app-dialog.guideline-dialog form { display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 0; height: 100%; max-height: none; overflow: hidden; }
+.guide-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 21px 24px 17px; border-bottom: 1px solid var(--line); }
+.guide-heading .icon-button { flex-shrink: 0; }
+.guide-heading h2 { margin: 3px 0 0; line-height: 1.6; }
+.guide-body { overflow-y: auto; overscroll-behavior: contain; padding: 20px 24px; }
+.guide-purpose { margin-bottom: 16px !important; }
+.guide-map { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-bottom: 20px; }
+.guide-map span { padding: 10px; border-radius: 8px; background: #f0f6f0; font-size: .72rem; color: #4d6d58; }
+.guide-map b { display: block; color: var(--primary); font-size: .86rem; margin-bottom: 2px; }
+.guide-step { border: 1px solid var(--line); border-radius: 9px; margin-top: 10px; scroll-margin-top: 10px; }
+.guide-step > summary { padding: 14px 15px; color: #345e46; cursor: pointer; font-size: .85rem; font-weight: 650; }
+.guide-step > summary small { display: block; color: #7c897f; font-size: .71rem; font-weight: 400; margin: 3px 0 0 18px; }
+.guide-step[open] > summary { border-bottom: 1px solid var(--line); background: #f8faf5; border-radius: 9px 9px 0 0; }
+.guide-step-content { padding: 16px; display: grid; gap: 14px; min-width: 0; }
+.guide-step-content p, .guide-step-content dd { overflow-wrap: anywhere; }
+.guide-fiction-note { padding: 11px 13px; background: #faf6e9; border-radius: 7px; color: #8b6935; font-size: .79rem; }
+.guide-fiction-note p { font-size: .75rem; margin-top: 4px; }
+.guide-example { padding: 13px; margin-top: 12px; border: 1px solid #dce7d9; border-radius: 8px; background: #fafcf8; }
+.guide-example:first-child { margin-top: 0; }
+.guide-example h4, .guide-dispositions h4 { font-size: .82rem; color: #345e46; margin: 0 0 7px; }
+.guide-example p + p { margin-top: 8px; }
+.guide-example .example-material { color: #8b7d63; font-size: .76rem; }
+.guide-example .example-answer { color: #3b6650; border-left: 3px solid #b5d1b8; padding-left: 10px; }
+.guide-condition-table { border-collapse: collapse; width: 100%; font-size: .78rem; text-align: left; }
+.guide-condition-table th, .guide-condition-table td { padding: 8px 12px; border-bottom: 1px solid var(--line); color: #5a7161; }
+.guide-condition-table thead { background: #f2f6ed; }
+.guide-condition-table tr:last-child > * { border-bottom: 0; }
+.guide-condition-table tbody th { width: 68px; color: var(--primary); }
+.guide-terms { margin: 0; display: grid; gap: 14px; font-size: .81rem; line-height: 1.85; }
+.guide-terms dt { color: #345e46; font-weight: 650; margin-bottom: 4px; }
+.guide-terms dd { margin: 0; color: #6b796e; }
+.guide-dispositions { display: grid; gap: 12px; }
+.guide-dispositions section { border-left: 3px solid #c7d9c5; padding: 2px 0 2px 12px; }
+.guide-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding: 14px 24px; background: white; }
+.guide-footer span { font-size: .68rem; color: #859180; }
+.guide-footer button { font-size: .77rem; flex-shrink: 0; }
+@media (max-width: 600px) { .app-dialog.guideline-dialog { width: calc(100vw - 20px); height: 90dvh; } .guide-heading { padding: 15px; } .guide-heading h2 { font-size: .95rem; } .guide-body { padding: 15px; } .guide-map { grid-template-columns: 1fr; gap: 5px; } .guide-map span { padding: 7px 10px; } .guide-map b { display: inline; margin-right: 7px; } .guide-step > summary { padding: 12px; font-size: .79rem; } .guide-step-content { padding: 12px; } .guide-footer { padding: 12px 15px; justify-content: flex-end; } .guide-footer span { display: none; } }
 @media (min-width: 1600px) { .workbench { grid-template-columns: 260px minmax(450px,1fr) 450px; } .source-pane { padding-inline: 35px; } .review-form { padding-inline: 26px; } }
 @media (max-width: 1190px) { .topbar { grid-template-columns: minmax(260px,1fr) auto auto; padding-inline: 15px; gap: 10px; } .reviewer-label { display: none; } .topbar-status { gap: 8px; } .workbench { grid-template-columns: 211px minmax(330px,1fr) 372px; } .source-pane { padding-inline: 17px; } .material-card { padding: 17px; } .decision-heading { padding-inline: 18px; } .review-form { padding-inline: 18px; } .material-tabs { gap: 17px; } .workflow-note { font-size: .63rem; margin-left: 5px; } }
 @media (max-width: 1040px) { .mobile-tablet-only { display: inline-flex !important; } .workbench { grid-template-columns: minmax(0,1fr) 378px; } .case-sidebar { position: fixed; top: 0; left: 0; z-index: 60; height: 100dvh; width: min(300px,86vw); transform: translateX(-105%); transition: transform 160ms ease; box-shadow: 8px 0 35px #18372b16; } .case-sidebar.open { transform: translateX(0); } .sidebar-backdrop { position: fixed; inset: 0; z-index: 55; background: #233a2960; } .brand-mark { display: none; } .topbar-status .save-state { max-width: 145px; overflow: hidden; text-overflow: ellipsis; } }
