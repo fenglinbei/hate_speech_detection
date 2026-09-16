@@ -1,0 +1,340 @@
+{
+  "all_608_draft_comparisons_covered": true,
+  "artifacts": {
+    "functional-query-diagnostics-v1/execution-01.json": "2a511fe48850292a0fe61f6c1e9c83f7ccbdb0ac89d750b4c6f51c8d3f76cca4",
+    "functional-query-diagnostics-v1/feedback-01.json": "60ed799ab1db89e21d53db921c87927af309ca16321fa67c0cb86266d8255de2",
+    "functional-query-results-v1/INTERPRETATION.md": "e5cf2beb5e90026a9263986ae9541393101816965de5d0dfe82fcec41ec8efec",
+    "functional-query-results-v1/README.md": "8ab6e1df6944f76ac68937f4325fc940e89e7e88699719ba472468e1f10be575",
+    "functional-query-results-v1/report-facts.json": "ff8349ef6d573bd6c19ab13aaba6131dd2f1c62732d3dcece8eed44ecd3a53fc",
+    "functional-query-results-v1/stage-1-C-I.png": "9776bd752f57c518c0f4c13a65aa0af9c1a0daea3f98af353aa60481e524f4b7",
+    "functional-query-results-v1/stage-2-C-I.png": "e55163a7a832a7ea98762ab8ba1e9d823c926e4575b7438919805edd43555a1b",
+    "reviews/functional-query-diagnostics-v1/execution-01/audits/cpu-acceptance-01.json": "b172b9122c1f791b7f64eaf24fbc6bae005dfa1bf03d0da3a6b8b1b5d1476ed6",
+    "reviews/functional-query-diagnostics-v1/execution-01/audits/gpu-release-01.json": "d66b40a68b2cbb4a63e4ff2bbb48f926d13c29ba83252fb37a2af761ed5c0f14",
+    "reviews/functional-query-diagnostics-v1/execution-01/audits/plot-results-01.py": "67eb7474dd1ff4f2198d9720e1133dbff330ed745e691a69dfe86d8a3a9afa44",
+    "reviews/functional-query-diagnostics-v1/execution-01/audits/publish-results-01.py": "84670cce5923f80eff1a5a31e64bb38f76901d94a3d5369c5577bfee47f0e18c"
+  },
+  "bulk_adoption_preserves_ai_authorship": true,
+  "candidate_evaluations": 9712,
+  "cpu_tests_passed": 7,
+  "device_indices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "formal_test_or_reserve_access": false,
+  "gpu_workers_exited": true,
+  "human_fields_changed_by_analysis": 0,
+  "independent_audit_totals": {
+    "direction_checks": 16120,
+    "near_zero_rounding_cases": 0,
+    "prediction_checks": 5184,
+    "scalar_checks": 35528
+  },
+  "mechanism_ready": false,
+  "model_forward_executed": true,
+  "new_queries_have_no_original_gold": true,
+  "new_scientific_conditions": 192,
+  "numerical_validation_passed": true,
+  "old_pointer_changes": 0,
+  "online_writeback": false,
+  "recorded_at": "2026-09-14T16:13:47.216443+00:00",
+  "schema_version": "evidence-functional-query-results-current/v1",
+  "scientific_queries": 8,
+  "stage_bridge": {
+    "limit": 0.0013427734375,
+    "max_abs_error": 0.0,
+    "passed": true,
+    "shared_prompts": 80
+  },
+  "stages": [
+    {
+      "counts": {
+        "candidate_evaluations": 5840,
+        "candidates": 952,
+        "comparisons": 360,
+        "historical_conditions": 4,
+        "historical_prompts": 32,
+        "logical_conditions": 132,
+        "new_query_conditions": 128,
+        "stage_bridge_new_query_conditions": 0,
+        "unique_prompts": 476
+      },
+      "derived_gates": [
+        {
+          "max_bound_fraction": 0.004401532678333098,
+          "pass": "functional-b1-r0",
+          "passed": true,
+          "readouts": 5904
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-r1",
+          "passed": true,
+          "readouts": 5904
+        },
+        {
+          "max_bound_fraction": 0.023484848484672097,
+          "pass": "functional-b1-padding",
+          "passed": true,
+          "readouts": 5904
+        },
+        {
+          "max_bound_fraction": 0.017045454545454544,
+          "pass": "functional-b1-prefix",
+          "passed": true,
+          "readouts": 5904
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-members",
+          "passed": true,
+          "readouts": 5904
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-replica",
+          "passed": true,
+          "readouts": 5904
+        }
+      ],
+      "freeze_manifest_sha256": "31ef96979d17c7bda5343ec7e3691b61ce9817b30abccc07c36db91e77df2f5f",
+      "freeze_path": "reviews/functional-query-diagnostics-v1/execution-01/frozen-stage-1-01",
+      "independent_results_path": "reviews/functional-query-diagnostics-v1/execution-01/audits/independent-results-stage-1-01.json",
+      "independent_results_sha256": "3b84bf14fa930c89955f65b535ace35e1a8218750a062a1050e204380465df42",
+      "plan_id": "functional-query-ee2ccfbf45097c2382f1e78764607eb3928129965b0c0b7ed303f2e1a2117e47",
+      "raw_gates": [
+        {
+          "check": "same_logits_reference",
+          "limit": 0.0001,
+          "manifest_sha256": "d098a300e817be2cede07d28775afb54be7f57a98b33a57c2641f26adfa46b9e",
+          "max_abs_error": 3.142186642435263e-06,
+          "pass": "regression-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "historical_replay",
+          "limit": 0.0013427734375,
+          "max_abs_error": 0.0,
+          "pass": "regression-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "repeat",
+          "limit": 0.0001,
+          "manifest_sha256": "2b39e5e6e7c6c180589a52e84e70c09f0e78bc13b99bb16c416404250f6abc4a",
+          "max_abs_error": 0.0,
+          "pass": "regression-b1-r1",
+          "passed": true
+        },
+        {
+          "check": "same_logits_reference",
+          "limit": 0.0001,
+          "manifest_sha256": "b5f329e77daeb4fc2c9027829c25f3dd54a0e628b4f59af53b0a4a6351ee3d6c",
+          "max_abs_error": 3.828418236651032e-06,
+          "pass": "functional-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "raw_baseline_replay",
+          "limit": 0.0013427734375,
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "repeat",
+          "limit": 0.0001,
+          "manifest_sha256": "db7ec88ca17044e54d0cdd95f2c17c3d7657a126fcea9003fc611e086db519f6",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-r1",
+          "passed": true
+        },
+        {
+          "check": "padding",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "7d10c85d03607377eb18a798e8d27e2ea48d95b541b1b6ee9dacf62fc5af331d",
+          "max_abs_error": 0.000244140625,
+          "pass": "functional-b1-padding",
+          "passed": true
+        },
+        {
+          "check": "prefix",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "1d9b647b7c4f39e7b747add43aa00705b233e115ed4a92e2b662047f0a79c8ee",
+          "max_abs_error": 0.000118255615234375,
+          "pass": "functional-b1-prefix",
+          "passed": true
+        },
+        {
+          "check": "members",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "c5c46b99c0add72e4592731c25fdb02e4ad90aa1bfad7ad0d953821e38242aca",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-members",
+          "passed": true
+        },
+        {
+          "check": "replica",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "89e22a69c43247c98fd009ba6c622b5745ed41a825400334e68cad3619e5f48e",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-replica",
+          "passed": true
+        }
+      ],
+      "raw_scores_sha256": "6cc597d57784076f4aae0718514796cca1bebb21a40b4e8b349f710bcf60d3de",
+      "results_manifest_sha256": "c7bdf33b5788da13969c5ca76f580c6a0160d1fa55e02b87d0f3aa234bbed772",
+      "results_path": "reviews/functional-query-diagnostics-v1/execution-01/results-stage-1-01",
+      "run_manifest_sha256": "9991b4e427429d6938793a21984eb154146079fb08560ed50a5cd16e7ad15ba0",
+      "run_path": "reviews/functional-query-diagnostics-v1/execution-01/run-stage-1-01",
+      "source_files_unchanged": 287,
+      "stage": 1
+    },
+    {
+      "counts": {
+        "candidate_evaluations": 3872,
+        "candidates": 624,
+        "comparisons": 260,
+        "historical_conditions": 4,
+        "historical_prompts": 32,
+        "logical_conditions": 84,
+        "new_query_conditions": 64,
+        "stage_bridge_new_query_conditions": 16,
+        "unique_prompts": 312
+      },
+      "derived_gates": [
+        {
+          "max_bound_fraction": 0.00531187959174062,
+          "pass": "functional-b1-r0",
+          "passed": true,
+          "readouts": 4128
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-r1",
+          "passed": true,
+          "readouts": 4128
+        },
+        {
+          "max_bound_fraction": 0.023484848484672097,
+          "pass": "functional-b1-padding",
+          "passed": true,
+          "readouts": 4128
+        },
+        {
+          "max_bound_fraction": 0.013446969696815358,
+          "pass": "functional-b1-prefix",
+          "passed": true,
+          "readouts": 4128
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-members",
+          "passed": true,
+          "readouts": 4128
+        },
+        {
+          "max_bound_fraction": 0.0,
+          "pass": "functional-b1-replica",
+          "passed": true,
+          "readouts": 4128
+        }
+      ],
+      "freeze_manifest_sha256": "ee49c8c8da18dd2d994d3d7c55c1410b83bbe3992226b7272fdf337fc114d497",
+      "freeze_path": "reviews/functional-query-diagnostics-v1/execution-01/frozen-stage-2-01",
+      "independent_results_path": "reviews/functional-query-diagnostics-v1/execution-01/audits/independent-results-stage-2-01.json",
+      "independent_results_sha256": "18f2713f4cb41d5df5dfeea1d3e973bbb6ed2cf8d718b945c6724a75958cacdb",
+      "plan_id": "functional-query-fbb962f632eee07a5c8e26727b21853da01ce4fcfa1e4efdc4b5b00e42b2adec",
+      "raw_gates": [
+        {
+          "check": "same_logits_reference",
+          "limit": 0.0001,
+          "manifest_sha256": "e2f107d6303d24942f71a08840e8b334786e976f863955d2a9ac2841ce78391a",
+          "max_abs_error": 3.142186642435263e-06,
+          "pass": "regression-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "historical_replay",
+          "limit": 0.0013427734375,
+          "max_abs_error": 0.0,
+          "pass": "regression-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "repeat",
+          "limit": 0.0001,
+          "manifest_sha256": "b594c3c128dc2392fd27e9691a7d0fcdb8db3147ac5f381fe38ab0031447afc6",
+          "max_abs_error": 0.0,
+          "pass": "regression-b1-r1",
+          "passed": true
+        },
+        {
+          "check": "same_logits_reference",
+          "limit": 0.0001,
+          "manifest_sha256": "196fdd74dda61e925db31263673632893bc7784e29b466008e8dccbadda2fab3",
+          "max_abs_error": 3.6972146233438252e-06,
+          "pass": "functional-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "raw_baseline_replay",
+          "limit": 0.0013427734375,
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-r0",
+          "passed": true
+        },
+        {
+          "check": "repeat",
+          "limit": 0.0001,
+          "manifest_sha256": "b23b8b9a77844939735e81651f6f2540042f3492f0f2b4972d3295c75576de6b",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-r1",
+          "passed": true
+        },
+        {
+          "check": "padding",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "b32d8efd90340d6b47e2033bce96660b938bd5daca614eb5b2a7dd81850ec77d",
+          "max_abs_error": 0.000453948974609375,
+          "pass": "functional-b1-padding",
+          "passed": true
+        },
+        {
+          "check": "prefix",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "d5fded4ff05f8c442f55e05f07be343c6bf93e246e77f77073a5e8ac3c55875c",
+          "max_abs_error": 0.0001678466796875,
+          "pass": "functional-b1-prefix",
+          "passed": true
+        },
+        {
+          "check": "members",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "6650b14613253bbabe2ab6a5e2290f26630a38ed48eb6ae8d636296e8c614aa9",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-members",
+          "passed": true
+        },
+        {
+          "check": "replica",
+          "limit": 0.0013427734375,
+          "manifest_sha256": "ed62c3df21f4c26a391398a5f160d1b9d48041f72d816d2a474ddaa73e596ec3",
+          "max_abs_error": 0.0,
+          "pass": "functional-b1-replica",
+          "passed": true
+        }
+      ],
+      "raw_scores_sha256": "ea26e5ce069bc3a8e72256223012aca027a432f8930a2ea0fe7ed836a3084580",
+      "results_manifest_sha256": "d473f61b235f6b4cf81f1ebd293d6ef477647eef5797672119b04f047257dae5",
+      "results_path": "reviews/functional-query-diagnostics-v1/execution-01/results-stage-2-01",
+      "run_manifest_sha256": "65c72e56db9359f2997a16e3e1255943bf837899722f08541e4f4b85a036341d",
+      "run_path": "reviews/functional-query-diagnostics-v1/execution-01/run-stage-2-01",
+      "source_files_unchanged": 287,
+      "stage": 2
+    }
+  ],
+  "status": "complete",
+  "unique_prompt_inputs": 708
+}

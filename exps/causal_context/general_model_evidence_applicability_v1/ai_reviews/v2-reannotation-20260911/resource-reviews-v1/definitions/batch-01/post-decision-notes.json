@@ -1,0 +1,141 @@
+{
+  "schema_version": "evidence-definition-post-decision-notes/v1",
+  "review_kind": "ai_note",
+  "sources": [
+    {
+      "path": "resource-reviews-v1/definitions/batch-01/discussions/user-decisions-01.json",
+      "sha256": "1979eecb8446983d1f0b13098e6b547d24381ff4119ecde34552e2c2a6ef1d37"
+    },
+    {
+      "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.json",
+      "sha256": "818f70a61d7fa0a5aea0f8080cda23fa0001a917b8621e2cc3f69be0a0593861"
+    }
+  ],
+  "instruction_applications": [
+    {
+      "object_id": "definition:lex-0473:sense:01",
+      "source_event_id": "definitions-batch-01-q10-reply-01",
+      "review_kind": "ai_note_following_user_instruction",
+      "verbatim_user_approval": false,
+      "definition_text": "网络用语主要指的是中国城市上海。这一隐喻起源于2022年上海第六人民医院发布的一篇关于救治外籍患者特殊病例（涉及男性生殖器）的文章，引发了公众对于医疗资源分配问题的讨论。此义仅适用于相应的网络戏称语境；正常地名用法中的“爱丁堡”指苏格兰城市，不应直接套用此义。",
+      "origin_evidence_provenance": "用户明确提供并要求保留的词源说明；本轮未独立核实医院原始文章。"
+    }
+  ],
+  "lexical_supplements": [
+    {
+      "term": "波刚",
+      "related_definition_id": "definition:lex-0449:sense:01",
+      "source_event_id": "definitions-batch-01-q08-reply-01",
+      "user_verbatim": "合理，且关联用法”波刚“也有此意",
+      "scope": "用户补充波刚也有相近辱女隐语义；不等于新增词条、全部词义或任何具体命中已获确认。",
+      "added_to_frozen_queue": false
+    }
+  ],
+  "case_summaries": [
+    {
+      "id": "D01",
+      "topic": "身份指称、污名用法与语境",
+      "case_summary_ai": "基佬、白皮、黑皮按本轮裁决增加语境限制，不能因释义记录侮辱用法便认定每次出现均攻击。",
+      "boundary_ai": "这些是三个定义的明确裁决；不据此宣布所有侮辱义项都必须改写。",
+      "basis_event_ids": [
+        "definitions-batch-01-q00-reply-01",
+        "definitions-batch-01-q05-reply-01",
+        "definitions-batch-01-q06-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D02",
+      "topic": "避免把广义行为锁定为性别或性取向",
+      "case_summary_ai": "接盘侠、骗婚原定义判过窄，采用广义核心加特定语境说明；染艾不自动绑定男同性恋。",
+      "boundary_ai": "此前允许单列有效义项的个案仍保留；本轮不意味着词库每个义项必须罗列所有用法。",
+      "basis_event_ids": [
+        "definitions-batch-01-q01-reply-01",
+        "definitions-batch-01-q02-reply-01",
+        "definitions-batch-01-q07-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D03",
+      "topic": "地域与种族分别有据",
+      "case_summary_ai": "非洲佬说明为对非洲人的贬称，不因地域身份自动等同黑人种族身份。",
+      "boundary_ai": "针对该定义及其适配；遇到句内另有种族依据时另判。",
+      "basis_event_ids": [
+        "definitions-batch-01-q04-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D04",
+      "topic": "词源陈述按具体证据处理",
+      "case_summary_ai": "撑同去掉确定起源断言；爱丁堡根据用户补充保留原起源描述并增加正常地名说明。",
+      "boundary_ai": "用户提供的词源说明与独立查证分列。检索未找到原材料不等于起源为假。",
+      "basis_event_ids": [
+        "definitions-batch-01-q03-reply-01",
+        "definitions-batch-01-q10-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D05",
+      "topic": "隐语定义成立与具体命中分开",
+      "case_summary_ai": "阿娜原定义获认可，用户补充波刚有相近辱女用法；#5998的具体指代与用法仍需命中阶段复查。",
+      "boundary_ai": "不把词义确认自动变成#5998的Sexism或严重度修订。波刚未加入冻结队列。",
+      "basis_event_ids": [
+        "definitions-batch-01-q08-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D06",
+      "topic": "星号可以主动暗示未写出的内容",
+      "case_summary_ai": "两个星号按部分语境的隐去或暗示解释，不自动还原具体词或认定是平台屏蔽。",
+      "boundary_ai": "与#2004裁决一致；符号本身不直接确定攻击对象、类别或强度。",
+      "basis_event_ids": [
+        "definitions-batch-01-q09-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D07",
+      "topic": "魔怔保留原定义",
+      "case_summary_ai": "用户认为原定义合理，未采用AI关于戒断、诊断或过窄的修改建议。",
+      "boundary_ai": "这是该定义的裁决；用户没有说明对所有精神状态词或类似定义的统一规则。",
+      "basis_event_ids": [
+        "definitions-batch-01-q11-reply-01"
+      ],
+      "is_explicit_general_user_rule": false
+    }
+  ],
+  "followup_checks": [
+    {
+      "id": "definition-ana-occurrence-5998",
+      "status": "queued_for_hit_phase",
+      "classification": "new_lexical_evidence_not_yet_a_decision_conflict",
+      "source_event_id": "definitions-batch-01-q08-reply-01",
+      "linked_sentence_id": "demo:5998",
+      "previous_sentence_source": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.json",
+        "sha256": "818f70a61d7fa0a5aea0f8080cda23fa0001a917b8621e2cc3f69be0a0593861"
+      },
+      "previous_sentence_text": "是被阿娜夺舍了吗我寻思着就阿娜这个水平应该也学不会盗号啊",
+      "previous_sentence_values": {
+        "hate": "hate",
+        "group": [
+          "others"
+        ],
+        "attack_severity": 1
+      },
+      "target_hit_ids": [
+        "hit:5423:demo:5998:lex-0449:sense:01:2:4",
+        "hit:5423:demo:5998:lex-0449:sense:01:13:15"
+      ],
+      "reason_ai": "先前只确认对具体人的能力讥讽，未采纳缺少证明的辱女释义；本轮该释义获用户确认。需判断此句具体使用昵称、角色或辱女隐语，不能仅凭定义覆盖旧group或严重度。",
+      "existing_queue_items_only": true,
+      "sentence_decision_changed": false
+    }
+  ],
+  "new_general_human_rules": 0,
+  "online_material_confirmations_added": 0
+}

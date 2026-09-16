@@ -1,0 +1,173 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 4,
+  "recorded_at_utc": "2026-09-11T06:25:25.109214+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "task_policies": {
+    "hate": {
+      "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+      "version": "evidence-applicability-annotation-policy/v2"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    },
+    {
+      "path": "discussions/batch-02/user-decisions-01.json",
+      "sha256": "d0448387ebda0d7bde30541382705a3e09f83b64c3897a0f499f6337c2ed6652"
+    },
+    {
+      "path": "discussions/batch-03/user-decisions-01.json",
+      "sha256": "e491c5eabb27b2009d21c4b1f645cca776644d7961b4a5f5b537d60adac6a6f8"
+    },
+    {
+      "path": "policies/personal-insult-others-v1.json",
+      "sha256": "c26d8033917756cad68fbf68473afd7e7b6ac22eb591e40255ba091d05bc38c8"
+    },
+    {
+      "path": "severity/pilot-01/calibration-summary.json",
+      "sha256": "c6048311a0bba011da6544a035732eba7df06f025ec125f307c0f866eef8b14b"
+    }
+  ],
+  "pre_calibration_annotation_sha256": "0dedc8f04b2f047fa0876a887243e005d41098fdd2d09562ef0f3c66cbd1e3a8",
+  "post_calibration_annotation_sha256": "b5299959711d8308255469621bef59aeba7e951b24374a391083587ba16d8766",
+  "method": "All 30 source texts reread; prior explicit decisions used as case analogies; severity drafted separately without original answers or predictions.",
+  "original_answer_exposure": "No original answers or predictions read by annotator for this batch; comparisons may be generated programmatically only after saved labels.",
+  "external_sense_checks": [
+    {
+      "term": "嘿嘿",
+      "queries": [
+        "\"嘿嘿\" \"黑人\" \"称呼\"",
+        "\"被嘿嘿玩过\""
+      ],
+      "finding": "No retrieved result confirmed the use in this sentence; absence of relevant results does not prove the reading impossible.",
+      "accepted_sense_sources": []
+    }
+  ],
+  "changes": [
+    {
+      "object_id": "demo:3652",
+      "before_hate": "?",
+      "before_group": "R,S",
+      "after_hate": "?",
+      "after_group": "R,S",
+      "note": "种族与性别是本句争偶故事的突出对象，group 暂取 Racism、Sexism。与 #2759 的接盘羞辱不同，本句没有同等明确的羞辱词；可能是在讥讽跨种族交往女性，也可能只是讲述冲突和语言反差。仅叙述嘿人被打不自动构成暴力认可，hate 继续待讨论。"
+    },
+    {
+      "object_id": "demo:3660",
+      "before_hate": "?",
+      "before_group": "?",
+      "after_hate": "?",
+      "after_group": "?",
+      "note": "被玩过、那得多么的具有贬低暗示，但嘿嘿所指及被评价者性别仍不够明确。检索未取得能确认本句释义的相关证据。参照 #1509 将词义未知与标签分别处理，但该例尚缺少如 EG 那样已经由用户确认的女性指代，hate/group 继续待讨论。"
+    },
+    {
+      "object_id": "demo:3742",
+      "before_hate": "n",
+      "before_group": "?",
+      "after_hate": "?",
+      "after_group": "?",
+      "note": "讥讽网上攻击者不敢现实硬碰黑人；参照 #2773，需要区分是否认可按身份发生冲突，还是仅批评网上喷人行为。黑人明确为讨论对象；同胞是在强调国别身份还是仅指受喷的人，以及网络攻击者是否成为独立角色评价单位，影响完整 group，暂留未决。"
+    },
+    {
+      "object_id": "demo:3749",
+      "before_hate": "h",
+      "before_group": "S,O",
+      "after_hate": "h",
+      "after_group": "S",
+      "note": "参照 #100、#1158 和第三批 #3212、#3372：本句女拳仍用于性别贬损，并泛化责备女性，不机械另加运动社群 others；未出现独立个人辱骂。妖魔横行是强烈污名，但仅靠比喻词不能自动确定严重度 3。"
+    },
+    {
+      "object_id": "demo:3784",
+      "before_hate": "h",
+      "before_group": "?",
+      "after_hate": "h",
+      "after_group": "D,S,O",
+      "note": "参照 #2298：这里中外地域身份实际参与比较，取 Region；对有国外对象的女性和国内男女作性别化评价，取 Sexism；土豪作为富裕阶层被赋予优先地位，取 others。没有明确肤色、种族对象，不补加 Racism。二鬼子和男女双重标准支持 hate。"
+    },
+    {
+      "object_id": "demo:3845",
+      "before_hate": "h",
+      "before_group": "R",
+      "after_hate": "h",
+      "after_group": "R,S",
+      "note": "公的黑人把黑人男性作为动物性称谓的贬损对象，种族和男性性别均参与这一称谓，倾向 hate / Racism、Sexism。公的是否已经形成足够强的非人化命题，或仍是 2 级侮辱，另在严重度中讨论；不因添加强度字段而预设其必为 3。"
+    },
+    {
+      "object_id": "demo:3882",
+      "before_hate": "n",
+      "before_group": "D",
+      "after_hate": "?",
+      "after_group": "D",
+      "note": "前半以南京小张、黑龙江张某的区别批评报道选择地域标签，属于反地域歧视；括号中的在南京居然还敢见义勇为可能另影射当地人，也可能只讽刺当地事件或环境。参照 #1517 的混合表达规则，不让前半反歧视立场覆盖可能的后半攻击，hate 暂待讨论；不补具体历史案件。"
+    },
+    {
+      "object_id": "demo:43",
+      "before_hate": "?",
+      "before_group": "?",
+      "after_hate": "?",
+      "after_group": "?",
+      "note": "对重庆使用重灾区，但所涉事项未出现。若指实际灾害或事件，只是地点；若影射当地居民，则可能地域贬损。参照 #1456、#3194 不补造上文，也不能将重灾区自动视为既定群体辱骂，保持原有待讨论状态。"
+    },
+    {
+      "object_id": "demo:4392",
+      "before_hate": "n",
+      "before_group": "R,S,O",
+      "after_hate": "n",
+      "after_group": "R,S,O",
+      "note": "明确以本人自述民族、性别及政治角色标签；西安上学只作地点背景。当前倾向 non-hate / Racism、Sexism、others，不因蛆字自动判去人化攻击。自嘲是否还应另记 1 级轻度贬损，在严重度中单独讨论。"
+    },
+    {
+      "object_id": "demo:4443",
+      "before_hate": "h",
+      "before_group": "S,O",
+      "after_hate": "h",
+      "after_group": "S",
+      "note": "参照 #100、#1158：女拳与应该还有些好点的女人共同实施女性贬损；不将女拳另当成独立政治社群 others，也没有另行个人辱骂。整体是轻度负面概括，倾向 hate / Sexism。"
+    },
+    {
+      "object_id": "demo:4690",
+      "before_hate": "?",
+      "before_group": "O",
+      "after_hate": "h",
+      "after_group": "O",
+      "note": "参照 #3281 及 #179：对贴吧社群成员整体说都魔怔了、喊不醒，足以支持 hate / others，不再以社群不属专门身份类别为由悬置 hate。与 #309 的轻度人格贬评相近，严重度可另取 1。"
+    },
+    {
+      "object_id": "demo:4744",
+      "before_hate": "h",
+      "before_group": "D",
+      "after_hate": "h",
+      "after_group": "D",
+      "note": "明确为地域歧视作普遍正当化，支持 hate / Region。具体被认可的地域命题未给出，不能从以上或全部猜出其最高严重度；严重度独立保留 null。"
+    }
+  ],
+  "pending_ids": [
+    "demo:3652",
+    "demo:3660",
+    "demo:3742",
+    "demo:3882",
+    "demo:43"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "evidence-expanded-round-validation/v1",
+  "recorded_at_utc": "2026-09-11T11:52:29.551492+00:00",
+  "result": "passed",
+  "stage": "initial_ai_draft_before_reply_incorporation",
+  "review_round": 7,
+  "object_count": 60,
+  "discussion_case_count": 12,
+  "source_exports": [
+    {
+      "path": "discussions/round-07/review.json",
+      "sha256": "7f5cd119333dde2b3d92148ae3f11fbc270392e395f128d01489ac420d150202"
+    },
+    {
+      "path": "discussions/round-07/review.csv",
+      "sha256": "45521dda48e5d043b6a2760f9601277804f147084bf3a7dcb5c111b528307357"
+    },
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "fea4f2b46279af5deb70dc46ca3bb243111b7ba549cf66d3422fdaa862dff955"
+    }
+  ],
+  "checks": [
+    "All 60 current records match authorized frozen inputs, object versions and evidence spans.",
+    "Combined JSON/CSV and the 180-record mapping view agree.",
+    "All six-source calibration references, preserved decisions, original bundle and policy identities match.",
+    "Isolated exporter rejects duplicated source chunks and changed case text before overwriting outputs.",
+    "Initial drafts contain no human decisions; two incoming replies are saved separately and await incorporation."
+  ],
+  "human_decisions_added_to_initial_draft": 0,
+  "online_material_confirmations_added": 0
+}

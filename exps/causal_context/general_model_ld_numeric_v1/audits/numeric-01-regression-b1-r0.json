@@ -1,0 +1,137 @@
+{
+  "answer_token_length_histograms": {
+    "group": {
+      "1": 48,
+      "3": 96,
+      "4": 48,
+      "5": 144,
+      "6": 96,
+      "7": 192,
+      "8": 144,
+      "9": 144,
+      "10": 192,
+      "11": 96,
+      "12": 144,
+      "13": 48,
+      "14": 96,
+      "16": 48
+    },
+    "hate": {
+      "3": 48,
+      "5": 48
+    }
+  },
+  "audit_source_sha256": "7b68622c1c5404afbcf3b60ab5ecc65c7bd61b6c2d596d805d7df94b0d321d31",
+  "blocks": 96,
+  "checks": {
+    "all_margins_independently_recomputed_with_scipy": true,
+    "canonical_candidates_and_independent_tokenizer_ids": true,
+    "causal_boundary_and_batch_metadata": true,
+    "complete_frozen_frame": true,
+    "eos_excluded_from_primary_sum": true,
+    "manifest_and_plan_hashes": true,
+    "math_fsum_recomputation_exact": true,
+    "raw_unchanged_during_audit": true,
+    "reference_differences_recomputed_exact": true,
+    "stored_reference_recomputation_exact": true
+  },
+  "counts": {
+    "all_registered_readouts": 22752,
+    "answer_token_logprob": 13440,
+    "answer_tokens": 13440,
+    "candidate_answer_mean": 1632,
+    "candidate_answer_sum": 1632,
+    "candidate_eos_logprob": 1632,
+    "candidate_mean_with_eos": 1632,
+    "candidate_total_with_eos": 1632,
+    "candidates": 1632,
+    "margin_answer_mean": 288,
+    "margin_answer_sum": 288,
+    "margin_mean_with_eos": 288,
+    "margin_total_with_eos": 288
+  },
+  "limitation": "Full vocabulary logits were intentionally not stored; this independently verifies saved CPU reference values, score aggregation and error propagation, not a fresh normalization of the original forward logits.",
+  "manifest_sha256": "888c5a6e7e0dc5e1d7bde1cb620e40e310e7914c24c84c9b6ae5f58912510b7c",
+  "maxima": {
+    "all_registered_readouts": {
+      "difference": 1.1473908990922155e-05,
+      "max_abs_error": 1.1473908990922155e-05,
+      "metric": "group-15/total_with_eos",
+      "record_id": "3531:group:PD"
+    },
+    "answer_token_logprob": {
+      "difference": -2.7899668566533364e-06,
+      "max_abs_error": 2.7899668566533364e-06,
+      "metric": "group-11/token/1",
+      "record_id": "6034:group:CLD"
+    },
+    "candidate_answer_mean": {
+      "difference": 1.8259286278521358e-06,
+      "max_abs_error": 1.8259286278521358e-06,
+      "metric": "group-00",
+      "record_id": "3531:group:PD"
+    },
+    "candidate_answer_sum": {
+      "difference": 1.1462718134680472e-05,
+      "max_abs_error": 1.1462718134680472e-05,
+      "metric": "group-15",
+      "record_id": "3531:group:PD"
+    },
+    "candidate_eos_logprob": {
+      "difference": -1.811685706343269e-06,
+      "max_abs_error": 1.811685706343269e-06,
+      "metric": "hate",
+      "record_id": "7290:hate:C0"
+    },
+    "candidate_mean_with_eos": {
+      "difference": 1.3591315592975661e-06,
+      "max_abs_error": 1.3591315592975661e-06,
+      "metric": "group-00",
+      "record_id": "6034:group:CL"
+    },
+    "candidate_total_with_eos": {
+      "difference": 1.1473908990922155e-05,
+      "max_abs_error": 1.1473908990922155e-05,
+      "metric": "group-15",
+      "record_id": "3531:group:PD"
+    },
+    "margin_answer_mean": {
+      "difference": -1.5662075586453383e-06,
+      "max_abs_error": 1.5662075586453383e-06,
+      "metric": "Sexism",
+      "record_id": "6034:group:PL"
+    },
+    "margin_answer_sum": {
+      "difference": 6.919391967841193e-06,
+      "max_abs_error": 6.919391967841193e-06,
+      "metric": "LGBTQ",
+      "record_id": "7648:group:CD"
+    },
+    "margin_mean_with_eos": {
+      "difference": 9.149397257601777e-07,
+      "max_abs_error": 9.149397257601777e-07,
+      "metric": "hate",
+      "record_id": "884:hate:C0"
+    },
+    "margin_total_with_eos": {
+      "difference": 7.015333771676069e-06,
+      "max_abs_error": 7.015333771676069e-06,
+      "metric": "LGBTQ",
+      "record_id": "7648:group:CD"
+    }
+  },
+  "pass_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v1/runs/numeric-01/preflight/regression-b1-r0",
+  "passed": true,
+  "plan_id": "gmlnum-9d42aaf7255a7cf66da07eeb7d6d03b6ca709006e6d3aff9f4a11ff034a7a2f1",
+  "reference_abs_tolerance": 0.0001,
+  "schema_version": "independent-numeric-raw-audit/v1",
+  "scope": {
+    "gpu_used": false,
+    "imports_runtime_comparison_code": false,
+    "query_gold_read": false,
+    "scientific_effects_analyzed": false,
+    "test_content_read": false
+  },
+  "scores_sha256": "bf7e3ad11922188e05f07adf40062b607aab0be9a5c0795f1c63752a8b136a5c",
+  "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+}

@@ -11,7 +11,8 @@ Group=hsd-review
 WorkingDirectory=/opt/hsd-general-model-paired-review/current
 Environment=PYTHONUNBUFFERED=1
 ExecStartPre=/usr/bin/test -s /var/lib/hsd-general-model-paired-review/session.json
-ExecStart=/usr/bin/python3 -B -S scripts/stage1/general_model_paired_review.py --data-dir /opt/hsd-general-model-paired-review/current/data --session-file /var/lib/hsd-general-model-paired-review/session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8772 --public-origin https://hsd.fenglin.pro
+ExecStartPre=/usr/bin/test -s /var/lib/hsd-general-model-paired-review/evidence-applicability-v1/session.json
+ExecStart=/usr/bin/python3 -B -S scripts/stage1/general_model_paired_review.py --data-dir /opt/hsd-general-model-paired-review/current/data --session-file /var/lib/hsd-general-model-paired-review/session.json --reviewer-id liaozijie --host 127.0.0.1 --port 8772 --public-origin https://hsd.fenglin.pro --evidence-bundle /opt/hsd-general-model-paired-review/current/evidence/evidence_bundle.json --evidence-session /var/lib/hsd-general-model-paired-review/evidence-applicability-v1/session.json --evidence-policy /opt/hsd-general-model-paired-review/current/evidence/evidence_policy.json
 Restart=on-failure
 RestartSec=3s
 UMask=0077

@@ -1,0 +1,63 @@
+{
+  "schema_version": "local-explicit-sentence-followup-ai/v1",
+  "records": [
+    {
+      "object_id": "demo:5998",
+      "text_sha256": "218ffb6ceed85b4863b502805f641b8826888ec4b0c1bb0aa26a25babd9bfb42",
+      "scope": [
+        "group"
+      ],
+      "values": {
+        "group": [
+          "Sexism",
+          "others"
+        ]
+      },
+      "proposal": {
+        "group": [
+          "Sexism",
+          "others"
+        ]
+      },
+      "status": {
+        "group": "ai_reviewed"
+      },
+      "assessment_provenance": "ai_note",
+      "rationale": "用户在命中复核中确认两处阿娜均采用辱女义，随后明确把 group 改为 Sexism、others，并保留 1 级及 hate。新的词义依据补充性别维度，个人能力讥讽仍保留 others。",
+      "rule_ids": [
+        "P02",
+        "P11",
+        "P13"
+      ],
+      "quotes": [
+        "阿娜",
+        "这个水平应该也学不会盗号"
+      ],
+      "online_material_confirmed": false,
+      "reopen_reason": "用户新增具体用法确认后，已展示与旧仅 others 裁决的差异并获得明确修订。",
+      "reopen_authorization": {
+        "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/ana-raw-reply.json",
+        "sha256": "a52396774c2f3162c9da50bb3463272a3456f788b49107539f875582ff0f5e14"
+      },
+      "prior_human_group": true,
+      "retained_task_acknowledgment": {
+        "source": {
+          "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/ana-raw-reply.json",
+          "sha256": "a52396774c2f3162c9da50bb3463272a3456f788b49107539f875582ff0f5e14"
+        },
+        "answer_verbatim": "改为 Sexism、others；保留 1 级及 hate",
+        "values": {
+          "attack_severity": 1,
+          "hate": "hate"
+        },
+        "new_numeric_or_hate_fields_counted": false
+      },
+      "draft_prepared_after_reply": true,
+      "pre_reply_proposal_source": {
+        "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/ana-question.json",
+        "sha256": "cfc57234b0a058904b63c68f7e872d9b3c6ee6e6485b1603838765fc76d03eb7"
+      }
+    }
+  ],
+  "provenance_note": "结构化补录在回复后生成；此前已提问的 group 建议保存在预先写入的 question 文件中，不宣称独立盲标。"
+}

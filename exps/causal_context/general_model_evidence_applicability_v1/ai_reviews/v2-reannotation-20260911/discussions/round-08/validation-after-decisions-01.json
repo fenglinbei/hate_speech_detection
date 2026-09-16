@@ -1,0 +1,69 @@
+{
+  "schema_version": "evidence-expanded-round-validation/v1",
+  "recorded_at_utc": "2026-09-11T12:48:53.071694+00:00",
+  "result": "passed",
+  "review_round": 8,
+  "stage": "after_all_13_replies_and_explicit_priority_rule",
+  "object_count": 30,
+  "discussion_case_count": 0,
+  "explicit_user_field_counts": {
+    "hate": 3,
+    "group": 8,
+    "attack_severity": 13
+  },
+  "source_exports": [
+    {
+      "path": "discussions/round-08/review.json",
+      "sha256": "4a95d2c20cb09de710b129058567cea350bdf0fd58f17bfb8b61a3bd82fdfa4e"
+    },
+    {
+      "path": "discussions/round-08/review.csv",
+      "sha256": "e08884fd6c7c583bc902b68b51f045286cf6c0d2f8801f32fb19ad7f1493757f"
+    },
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "3a235714e59a9d332014b4cba1e995f1002809f1bb73ee1544f057bac6abfa3f"
+    }
+  ],
+  "preference_snapshot": {
+    "path": "preferences/snapshots/67f52f0bb542bffb2eb511d72b045eabe01943a4e91ad6e76aa3f34bcec183f3/preferences.json",
+    "sha256": "1d5051c5b14a6058d493e2e2a6cfcd9160787d4f3e2d89f5a458a7a51a51e037"
+  },
+  "checks": [
+    "All 30 IDs/texts/evidence spans/versions match the authorized frozen label input; 28 queries and two demos.",
+    "Current JSON and CSV agree; 0/non-hate, 1–4/hate and null/null mapping is exact.",
+    "Separate human field scopes and online-confirmation flags are preserved.",
+    "Each new case refers only to existing preference rule cards and explicit human anchors; old snapshot is bound by hash.",
+    "Frozen bundle, manifest, rules and previous round exports/calibration hashes are preserved; prior master bytes are archived.",
+    "The round exporter rejects a changed preference snapshot before touching output, verified with an isolated fixture.",
+    "All 13 exact saved replies match active values and field attribution: H3/G8/severity13; five score-only group fields remain AI.",
+    "Preference table contains 73 user-adjudicated cases and 24 rules/summaries, with H36/G56/severity49 total explicit fields.",
+    "Only query:1746 current AI group changes under the new rule; original label, scores and all human records are retained.",
+    "Isolated fixtures reject deleting independent Sexism, applying priority to independent others, or replacing a human group without explicit reopening.",
+    "Legacy hate task policies are resolved from the original manifest when no task-level declaration exists.",
+    "All remaining 17 numerical values are AI; current global mapping is hate128/non-hate80/null2 across210 records."
+  ],
+  "online_material_confirmations_added": 0,
+  "calibration_summary": {
+    "path": "discussions/round-08/calibration-summary.json",
+    "sha256": "7497407781f8a4a3176051927270cf6ed50e140db639eb657815578d11f7ca1d"
+  },
+  "preference_current": {
+    "path": "preferences/preferences.json",
+    "sha256": "c8e22efb0e1be690dd6e9c991181ac2a2addf5a74b42a685417dde494c3a510b"
+  },
+  "group_priority_context": {
+    "path": "group_priority_context.json",
+    "sha256": "4defd3b9ce383978d293d2bdcf660b1227863199e753acc9f99398519db9f95f"
+  },
+  "code_checks": {
+    "preference_exporter": {
+      "path": "scripts/review/export_adjudication_preferences.py",
+      "sha256": "75699fe1922c23ae75a6b09c1754b251a76efcdc72de247103f209ffc1b4b96a"
+    },
+    "group_priority_exporter": {
+      "path": "scripts/review/export_severity_hate_mapping.py",
+      "sha256": "28a8f841c6c134c45fe10df79926b5fdf51418644dfa35f488607c28c45728f5"
+    }
+  }
+}

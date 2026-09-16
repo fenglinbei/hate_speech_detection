@@ -1,0 +1,2599 @@
+{
+  "schema_version": "evidence-severity-ai-label-batch/v1",
+  "label_batch": 7,
+  "state": "awaiting_discussion",
+  "review_kind": "ai_note",
+  "task_policy": {
+    "version": "evidence-attack-severity-policy/v1",
+    "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+  },
+  "selection": {
+    "path": "selection.json",
+    "sha256": "f7bb5b37d8bc4bacd2001f8141ef0ab634f80de049b92afb743d373780fba5f3"
+  },
+  "annotation_source": {
+    "path": "../annotations/labels-07.json",
+    "sha256": "a88a0eab248a5ba88d82f3a36b5beeed6d45ecad1552637c5b0abaf88d5fed45"
+  },
+  "discussion_provenance": [],
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "object_count": 30,
+  "assessment_counts": {
+    "needs_discussion": 4,
+    "scored": 26
+  },
+  "score_counts": {
+    "0": 10,
+    "1": 7,
+    "2": 6,
+    "3": 1,
+    "4": 2
+  },
+  "null_score_count": 4,
+  "human_numeric_scores_recorded": 0,
+  "human_score_decisions_recorded": 0,
+  "ai_numeric_score_draft_count": 26,
+  "online_material_confirmations_added": 0,
+  "prior_labels_recomputed": false,
+  "independent_annotator_agreement_claimed": false,
+  "records": [
+    {
+      "object_id": "demo:6469",
+      "kind": "demo",
+      "text": "批评干嘛，求仁得仁又何求！求黑得黑，与黑长存嘛",
+      "text_sha256": "f802c914398438d374b85cb68b566288fee5ddf094ff1a63576d28aafe70e17f",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": null,
+        "attack_forms": [
+          "derogation"
+        ],
+        "targets": [
+          "黑人及与黑人交往者"
+        ],
+        "rationale": "以求黑的改写挖苦与黑人交往者；Racism 可见，但没有性别线索。倾向轻度讥讽 1；“与黑长存”若承接死亡或严重不幸，可能类似 #5394 的冷漠取 3。原句未给出此事件，不把死亡读法当成事实，也不推为暴力认可。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 5,
+            "end": 12,
+            "text": "求仁得仁又何求"
+          },
+          {
+            "source": "text",
+            "start": 13,
+            "end": 22,
+            "text": "求黑得黑，与黑长存"
+          }
+        ]
+      },
+      "assessment_status": "needs_discussion",
+      "discussion": {
+        "key": "label_interpretation",
+        "candidate_scores": [
+          1,
+          3
+        ],
+        "suggested_score": 1,
+        "candidate_forms": [
+          "exclusion_or_rights_denial"
+        ]
+      }
+    },
+    {
+      "object_id": "demo:649",
+      "kind": "demo",
+      "text": "回族不算被黑的吧？毕竟除了关外，回族在哪儿都挺强势的，唐山条约我还记得呢",
+      "text_sha256": "c2ad4c2c55415e820ff479a1d4de204c8e80623d17787e69bb6352fb56c7b4f0",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "回族"
+        ],
+        "rationale": "讨论回族是否受到歧视及其处境，当前“强势”没有展开明确贬损。参照 #5900 不仅凭强弱、优势的描述补出攻击，拟 0／Racism。关外只是例外范围，唐山条约只是所引事件，不另计 Region，也不认证事件真伪。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 8,
+            "text": "回族不算被黑的吧"
+          },
+          {
+            "source": "text",
+            "start": 16,
+            "end": 26,
+            "text": "回族在哪儿都挺强势的"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6493",
+      "kind": "demo",
+      "text": "哈哈哈，没想到现在妹子都挺聪明，也知道嘿人那些手段了",
+      "text_sha256": "c60ee825acb4bfd3b1727099815cb0bb1ae8170f587295f4deb3a1581479e873",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism",
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "黑人群体",
+          "女性"
+        ],
+        "rationale": "赞美女性识破“嘿人那些手段”，把黑人概括成惯用可疑手段者，拟 1／Racism、Sexism。未补出手段的具体内容，也未把仅泛指的对象记成独立个人辱骂。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 7,
+            "end": 15,
+            "text": "现在妹子都挺聪明"
+          },
+          {
+            "source": "text",
+            "start": 19,
+            "end": 25,
+            "text": "嘿人那些手段"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6525",
+      "kind": "demo",
+      "text": "说个最简单的，回家打开电视，调到cctv3，每天都有宣传黑人的节目",
+      "text_sha256": "c9dd34027b298275e3d72667f9d5f6c1ad90ec055215c1b3bc0d777f33f0006c",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "节目中的黑人群体"
+        ],
+        "rationale": "只描述电视节目宣传黑人，未出现对黑人或观众的贬损命题，参照 #4744、#5780 取 0／Racism。频道名本身不是被评价的人群。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 22,
+            "end": 33,
+            "text": "每天都有宣传黑人的节目"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6553",
+      "kind": "demo",
+      "text": "毕竟东北人也就一亿人 肯定反驳力度差",
+      "text_sha256": "24013dda997eff7cfbb980a468153e4c9aa17f04de0761349792913719ac3e54",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Region"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "东北居民"
+        ],
+        "rationale": "以人数说明反驳力度，未把地域群体归为人格或能力低等，拟 0／Region。语气本身不足以补出具体辱骂。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 2,
+            "end": 10,
+            "text": "东北人也就一亿人"
+          },
+          {
+            "source": "text",
+            "start": 11,
+            "end": 18,
+            "text": "肯定反驳力度差"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6554",
+      "kind": "demo",
+      "text": "我不清楚那个文化，把你研究犹太人的证据说出来！ 我的观点就是法兰西列强进行黑奴贩卖，大量黑人被贩卖到法国，葡萄牙等地进行劳动，随着林肯解放黑奴，这些黑人就在其国家繁衍！ 你的呢？？？说出来听听",
+      "text_sha256": "b5fc71ec4e2e9de472146b745dc9f4a88cea1a4c65873013df818b7d5c6b12ec",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Racism",
+            "Region"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "犹太人",
+          "被贩卖的黑人",
+          "所讨论国家的人群"
+        ],
+        "rationale": "争论犹太人、黑奴及不同国家的历史联系，没有另行认可的身份贬损，拟 0／Racism、Region。国家作为实施历史行为的主体参与讨论；奴隶经历为描述，非作者认可伤害，不核实其历史断言。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 11,
+            "end": 19,
+            "text": "研究犹太人的证据"
+          },
+          {
+            "source": "text",
+            "start": 30,
+            "end": 41,
+            "text": "法兰西列强进行黑奴贩卖"
+          },
+          {
+            "source": "text",
+            "start": 50,
+            "end": 62,
+            "text": "法国，葡萄牙等地进行劳动"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6624",
+      "kind": "demo",
+      "text": "结果那个泼男就是他们另外反同吧的吧主？哎哟，我都兴奋了！打的就是你们窝里的老杂毛！把话带到，我回重庆的时候约他不要怂",
+      "text_sha256": "e68acabb20fc5ef17bb109ebf89caf371177b9ebeabbc0f45551375ba580a35c",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 4,
+        "attack_forms": [
+          "personal_insult",
+          "violence_threat_or_call"
+        ],
+        "targets": [
+          "被约架的男性吧主"
+        ],
+        "rationale": "针对具体男性反同吧主辱骂，并明确挑衅线下打架，拟 4／Sexism、others；最高分来自身体暴力威胁。反对反同者不抵消独立攻击；未实际评价同性恋本身，不因反同吧一词另加 LGBTQ。重庆仅为会面地点。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 2,
+            "end": 6,
+            "text": "那个泼男"
+          },
+          {
+            "source": "text",
+            "start": 12,
+            "end": 18,
+            "text": "反同吧的吧主"
+          },
+          {
+            "source": "text",
+            "start": 28,
+            "end": 40,
+            "text": "打的就是你们窝里的老杂毛"
+          },
+          {
+            "source": "text",
+            "start": 46,
+            "end": 58,
+            "text": "我回重庆的时候约他不要怂"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6629",
+      "kind": "demo",
+      "text": "我怀疑你还活在梦里全世界著名的公交车eglkd还以为自己受欢迎有人高价接盘现在是你们想嫁都没愿意娶的",
+      "text_sha256": "1f4824e21ddff4105e5c31fe140c01d26dde2491c90557d63c064f99eaf80119",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "personal_insult",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "被辱骂的女性受话者"
+        ],
+        "rationale": "直接对受话者作女性私生活和婚配价值羞辱，eg 与 lkd 采用用户已确认的用法，拟 2／Sexism、others。公交车为性污名比喻，没有据物品词单独升为 3。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 15,
+            "end": 23,
+            "text": "公交车eglkd"
+          },
+          {
+            "source": "text",
+            "start": 23,
+            "end": 37,
+            "text": "还以为自己受欢迎有人高价接盘"
+          },
+          {
+            "source": "text",
+            "start": 42,
+            "end": 50,
+            "text": "想嫁都没愿意娶的"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6631",
+      "kind": "demo",
+      "text": "现实中不敢跟黑人硬碰硬，网络上还收拾不了本国人？😆",
+      "text_sha256": "ecb51caba38ac0bfce7713b7d2ca943f8bc1484fc4390d591078abb5a6b80f98",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": null,
+          "group": null
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": null,
+        "attack_forms": [],
+        "targets": [
+          "网络冲突参与者",
+          "黑人及本国人"
+        ],
+        "rationale": "黑人与本国人参与比较，已知类别 Racism、Region。可能只是反讽网络欺凌行为（0），也可能在贬评欺软怕硬的人（1，另有 others）。倾向 1；“收拾”在网络语境下未明确身体伤害，不能升为 4。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 11,
+            "text": "现实中不敢跟黑人硬碰硬"
+          },
+          {
+            "source": "text",
+            "start": 12,
+            "end": 23,
+            "text": "网络上还收拾不了本国人"
+          }
+        ]
+      },
+      "assessment_status": "needs_discussion",
+      "discussion": {
+        "key": "label_interpretation",
+        "candidate_scores": [
+          0,
+          1
+        ],
+        "suggested_score": 1,
+        "candidate_forms": [
+          "derogation",
+          "personal_insult"
+        ]
+      }
+    },
+    {
+      "object_id": "demo:6644",
+      "kind": "demo",
+      "text": "为啥？就是因为现在中国女人地位高到离谱，男人任劳任怨还被女性瞧不起。破坏人类的根本原则",
+      "text_sha256": "a6f84d63b46a9b5ce52a53cdbc8eddb0ea9c63f30456ce2178409598c859b33b",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Region",
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "group_stigmatization"
+        ],
+        "targets": [
+          "中国女性",
+          "男性"
+        ],
+        "rationale": "把中国女性的地位和对男性的态度概括为不合理，形成明确的性别及国别污名，拟 2／Region、Sexism。虽宣称破坏原则，未明说女性天生低等或要求剥夺某项基本权利，不仅凭夸张语升 3。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 9,
+            "end": 19,
+            "text": "中国女人地位高到离谱"
+          },
+          {
+            "source": "text",
+            "start": 20,
+            "end": 33,
+            "text": "男人任劳任怨还被女性瞧不起"
+          },
+          {
+            "source": "text",
+            "start": 34,
+            "end": 43,
+            "text": "破坏人类的根本原则"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6658",
+      "kind": "demo",
+      "text": "人家那是和全世界联系起来的，眼界比我们开阔多了，有这种优势哪个女的不想嫁给他们？",
+      "text_sha256": "73977577881f0d08716e9851971a33bf9a85703ee524a410ad8d5087cf24d961",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "女性及其择偶对象"
+        ],
+        "rationale": "描述眼界优势与女性择偶意愿，未见具体贬损，拟 0／Sexism。“他们”的国籍种族均未在句中给出，不补 Racism 或 Region。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 14,
+            "end": 23,
+            "text": "眼界比我们开阔多了"
+          },
+          {
+            "source": "text",
+            "start": 29,
+            "end": 39,
+            "text": "哪个女的不想嫁给他们"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6764",
+      "kind": "demo",
+      "text": "其实在早些年，有个外国学家做过一篇调查的发现的是男人更支持女同婚姻，女人更支持男同婚姻",
+      "text_sha256": "4ff2b77afd940a465d5e3a78ed91482b5b1e7bb9de107e6be3b0660b497f2f16",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "LGBTQ",
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "男女群体",
+          "同性婚姻参与者"
+        ],
+        "rationale": "中性转述不同性别对同性婚姻的支持倾向，拟 0／LGBTQ、Sexism。外国学家只是来源背景，不据此增 Region，也不将未查证调查写成事实认证。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 24,
+            "end": 33,
+            "text": "男人更支持女同婚姻"
+          },
+          {
+            "source": "text",
+            "start": 34,
+            "end": 43,
+            "text": "女人更支持男同婚姻"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6835",
+      "kind": "demo",
+      "text": "然后就是B站，舞蹈区，瑜伽区，健身区，女的恰钱和这些男的相安无事。而且说白了人，拳头没打到自己身上都不会痛的",
+      "text_sha256": "c96711ad787e34af778937494544777dce1d1ca19cfb7369ee7f2a932d28cb1d",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "男女参与者",
+          "一般利害关系中的人"
+        ],
+        "rationale": "讨论女性挣钱、男性参与者及人面对自身利益的行为，未明确将女性称作骗子或人格低等，拟 0／Sexism。拳头是一般利害比喻，不是认可身体暴力；B站为场景。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 19,
+            "end": 32,
+            "text": "女的恰钱和这些男的相安无事"
+          },
+          {
+            "source": "text",
+            "start": 40,
+            "end": 54,
+            "text": "拳头没打到自己身上都不会痛的"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6852",
+      "kind": "demo",
+      "text": "小仙女不是说中国男人配不上中国女人吗？男人只好找外国女人了，合情合理",
+      "text_sha256": "42ac5da39377d2eb4910ddd6b1faedd431073c2929510f4793e719ae0a31db54",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Region",
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "中国女性",
+          "中外婚恋参与者"
+        ],
+        "rationale": "借小仙女称谓和婚恋比较挖苦部分中国女性，拟 1／Region、Sexism。被转述的配不上并非作者另行对男性背书；仍有作者自己的轻度女性贬称。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 3,
+            "text": "小仙女"
+          },
+          {
+            "source": "text",
+            "start": 6,
+            "end": 17,
+            "text": "中国男人配不上中国女人"
+          },
+          {
+            "source": "text",
+            "start": 23,
+            "end": 34,
+            "text": "找外国女人了，合情合理"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6931",
+      "kind": "demo",
+      "text": "骂南方人马来猴子的，都是瑞典和族混血老铁。",
+      "text_sha256": "c9e68a7fbb6661fd3eb5a821bad46be2507dd1173dd253e27d93e433c086fe5d",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism",
+            "Region"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "被称为瑞典和族混血的群体",
+          "被他人辱骂的南方人"
+        ],
+        "rationale": "批评辱骂南方人的同时，以地域隐称和族裔混血说法回讽另一群体，拟 1／Racism、Region。“瑞典人”代东北人已有外部用例，“和族”与混血构成族裔维度；未直接断言混血天生低等。马来猴子是被批评的他人辱称，不把它按作者新动物化直接计 3。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 9,
+            "text": "骂南方人马来猴子的"
+          },
+          {
+            "source": "text",
+            "start": 12,
+            "end": 20,
+            "text": "瑞典和族混血老铁"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:6989",
+      "kind": "demo",
+      "text": "我工作时被河南信阳女客户的素质大跌眼镜。。无语住了。",
+      "text_sha256": "1c32da25f2765f137c34d02766a87886da02e10c95aee4bb26f484ff7493a8c0",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": null
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation",
+          "personal_insult"
+        ],
+        "targets": [
+          "被评价的客户"
+        ],
+        "rationale": "“素质大跌眼镜”对具体客户作轻度人格贬评，拟 1。倾向仅 others：河南信阳和女性可能只是指认背景；若身份本身参与负面评价，应另纳 Region／Sexism。完整 group 待裁定，不能由身份词齐全自动并入。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 5,
+            "end": 12,
+            "text": "河南信阳女客户"
+          },
+          {
+            "source": "text",
+            "start": 13,
+            "end": 19,
+            "text": "素质大跌眼镜"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7133",
+      "kind": "demo",
+      "text": "原贴没了看来是被正义的小腐女们举报了",
+      "text_sha256": "01560bc119686af5158c5928576b079622295fa58b1b85e2e413fab78e8a0780",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation"
+        ],
+        "targets": [
+          "被指举报的女性兴趣社群"
+        ],
+        "rationale": "反讽举报者为正义的小腐女，对女性兴趣社群作轻度贬评，拟 1／Sexism、others。腐女是兴趣身份，不能据此断定本人为性少数；未加 LGBTQ。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 8,
+            "end": 18,
+            "text": "正义的小腐女们举报了"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7161",
+      "kind": "demo",
+      "text": "不会氙钕怕事情败露自己删了吧",
+      "text_sha256": "d66345aba5075f707985ca6d0a78f090f7b02d3bbdd499d02138723a031ed4b9",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation",
+          "personal_insult"
+        ],
+        "targets": [
+          "被指删帖的女性"
+        ],
+        "rationale": "以小仙女的谐音称呼具体对象并挖苦其心虚，拟 1／Sexism、others。只采用可见轻度讽刺，不补造事情败露的具体性质。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 2,
+            "end": 13,
+            "text": "氙钕怕事情败露自己删了"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:717",
+      "kind": "demo",
+      "text": "一口一个普信男，你是微博里的普信女还是烂裤裆",
+      "text_sha256": "4a3303eecf54bb793d6205f61cb87a143a6030565282d6c731fecf5727625ce0",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "personal_insult",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "受话者",
+          "被引用的男性类别"
+        ],
+        "rationale": "反击他人用语时独立对女性受话者作人格和私生活辱骂，拟 2／Sexism、others。烂裤裆沿用用户 #1729 已明确的性污名含义。微博仅是说法来源背景。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 7,
+            "text": "一口一个普信男"
+          },
+          {
+            "source": "text",
+            "start": 8,
+            "end": 22,
+            "text": "你是微博里的普信女还是烂裤裆"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:718",
+      "kind": "demo",
+      "text": "按照你的逻辑你可以和男人doi的，只是你不想罢了",
+      "text_sha256": "0c1911c6e95b6f8500346b975f0d67c2e8433f155fce894c82868598ed3c5007",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "男性性伴侣及被讨论的选择"
+        ],
+        "rationale": "对与男性发生性行为的可能性作逻辑争论，当前没有独立攻击命题，拟 0／Sexism。受话者性别和性取向未给出，不靠猜测另纳 LGBTQ。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 7,
+            "end": 24,
+            "text": "可以和男人doi的，只是你不想罢了"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7188",
+      "kind": "demo",
+      "text": "经统计黑人艾滋率，暴力犯罪率，没爹率都出奇的高，所以其实他们是对我自身生命安全的负责。假如你遇到一片雷区，然后心想我们不能种族歧视，雷区和马路耕地都必须一样，然后大胆的踩过去，那我也很支持你。😆",
+      "text_sha256": "4f3e7e1aafa6f75d1735113ef5f894c00a308bc484dc2b50e94cba6309b26282",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 3,
+        "attack_forms": [
+          "group_stigmatization",
+          "dehumanization",
+          "exclusion_or_rights_denial"
+        ],
+        "targets": [
+          "黑人群体"
+        ],
+        "rationale": "以疾病犯罪污名把黑人整体类比为致命雷区，为身份歧视和排斥辩护，拟 3／Racism。最高分来自整个人群被当作内在危险物；“支持你踩过去”是挖苦和漠视，未明确认可对人实施身体伤害，不升 4。所谓统计未获得事实认证。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 3,
+            "end": 23,
+            "text": "黑人艾滋率，暴力犯罪率，没爹率都出奇的高"
+          },
+          {
+            "source": "text",
+            "start": 43,
+            "end": 52,
+            "text": "假如你遇到一片雷区"
+          },
+          {
+            "source": "text",
+            "start": 66,
+            "end": 78,
+            "text": "雷区和马路耕地都必须一样"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7189",
+      "kind": "demo",
+      "text": "希望你们都能花钱娶女同",
+      "text_sha256": "ec5f4d007840e6b47b5d09d80c57ae36a788d9a1469c7a84f697786e30cc7a4f",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": null,
+          "group": null
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": null,
+        "attack_forms": [],
+        "targets": [
+          "女同性恋",
+          "被祝愿的受话者"
+        ],
+        "rationale": "可见对象涉及女同性恋及婚配者。可能是普通祝愿或议论（0，LGBTQ、Sexism），也可能把娶女同当作不幸来挖苦受话者（1，并加 others）。倾向 1；无前文，保留分数及完整类别待定。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 11,
+            "text": "希望你们都能花钱娶女同"
+          }
+        ]
+      },
+      "assessment_status": "needs_discussion",
+      "discussion": {
+        "key": "label_interpretation",
+        "candidate_scores": [
+          0,
+          1
+        ],
+        "suggested_score": 1,
+        "candidate_forms": [
+          "derogation",
+          "personal_insult"
+        ]
+      }
+    },
+    {
+      "object_id": "demo:72",
+      "kind": "demo",
+      "text": "在所谓“自立自强”中走向极端，然后彻底反智。管中窥豹，略见一斑，权拳二象性实乃真知灼见PS：素材来自吧中某帖一个破防幕刃的主页，欢迎仗义之辈同去屠?",
+      "text_sha256": "fbbb3aaee7947441485ab86700a3d5866b14871648744e52e7d2f2015bd58992",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "personal_insult",
+          "group_stigmatization"
+        ],
+        "targets": [
+          "女性权益参与者",
+          "被点名账号使用者"
+        ],
+        "rationale": "以反智、幕刃辱骂女性及具体账号，并动员攻击其主页，拟 2／Sexism、others。句内明确是网上主页，屠字未建立身体伤害主张；未凭一个暴力字升 4。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 17,
+            "end": 21,
+            "text": "彻底反智"
+          },
+          {
+            "source": "text",
+            "start": 32,
+            "end": 37,
+            "text": "权拳二象性"
+          },
+          {
+            "source": "text",
+            "start": 54,
+            "end": 63,
+            "text": "一个破防幕刃的主页"
+          },
+          {
+            "source": "text",
+            "start": 70,
+            "end": 73,
+            "text": "同去屠"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7212",
+      "kind": "demo",
+      "text": "就应该给媚黑的女人一耳光，这本来就是为她们好，更是为我们国家好，对待黑人，矫枉必须过正…",
+      "text_sha256": "f8e8d6e00c25fb155bacece4fa8731dd09ce1394c7553d76216c80889426ecf2",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism",
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 4,
+        "attack_forms": [
+          "group_stigmatization",
+          "violence_endorsement",
+          "violence_threat_or_call"
+        ],
+        "targets": [
+          "与黑人交往的女性（身体暴力）",
+          "黑人群体"
+        ],
+        "rationale": "明确鼓动扇与黑人交往的女性耳光，并正当化针对黑人的过度对待，拟 4／Racism、Sexism；身体暴力的明确对象为女性，不把最高分无区分地传给全部提及对象。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 3,
+            "end": 12,
+            "text": "给媚黑的女人一耳光"
+          },
+          {
+            "source": "text",
+            "start": 14,
+            "end": 22,
+            "text": "本来就是为她们好"
+          },
+          {
+            "source": "text",
+            "start": 32,
+            "end": 43,
+            "text": "对待黑人，矫枉必须过正"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7232",
+      "kind": "demo",
+      "text": "魔都+帝都从人人清北复交，到著名的排外说，再到男人没男子气概，女人跪舔老外，再到小市民精打细算小家子气斤斤计较，我真的不想列举了",
+      "text_sha256": "a64191fe2c9fc393e7c56d86a73bcec03828fe51d44f2d95fed5e8ccfacd6b3b",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": null,
+          "group": [
+            "Region",
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": null,
+        "attack_forms": [],
+        "targets": [
+          "上海北京居民",
+          "男女群体",
+          "小市民角色"
+        ],
+        "rationale": "地域、性别和小市民角色都成为所列评价单位，group 拟 Region、Sexism、others。全文可能在罗列并厌烦这些偏见（0），也可能自己认可这些负面概括（2）；倾向前者，缺少明示的引用或立场标记，待校准。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 5,
+            "text": "魔都+帝都"
+          },
+          {
+            "source": "text",
+            "start": 23,
+            "end": 30,
+            "text": "男人没男子气概"
+          },
+          {
+            "source": "text",
+            "start": 31,
+            "end": 37,
+            "text": "女人跪舔老外"
+          },
+          {
+            "source": "text",
+            "start": 40,
+            "end": 55,
+            "text": "小市民精打细算小家子气斤斤计较"
+          },
+          {
+            "source": "text",
+            "start": 56,
+            "end": 64,
+            "text": "我真的不想列举了"
+          }
+        ]
+      },
+      "assessment_status": "needs_discussion",
+      "discussion": {
+        "key": "label_interpretation",
+        "candidate_scores": [
+          0,
+          2
+        ],
+        "suggested_score": 0,
+        "candidate_forms": [
+          "group_stigmatization"
+        ]
+      }
+    },
+    {
+      "object_id": "demo:7235",
+      "kind": "demo",
+      "text": "这是真女拳吧…😅还分上等级了",
+      "text_sha256": "4ce47336b24b4680f04de82b65c0991707189bd5f1ac4cf60c65c98ed9acf184",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Sexism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 1,
+        "attack_forms": [
+          "derogation"
+        ],
+        "targets": [
+          "被称为女拳的群体"
+        ],
+        "rationale": "使用女拳贬称并讽刺给人分等级，拟轻度 1／Sexism；类似已确认的低强度女权贬评，未见词语释义或纯粹无害谈论的证据。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 2,
+            "end": 6,
+            "text": "真女拳吧"
+          },
+          {
+            "source": "text",
+            "start": 8,
+            "end": 14,
+            "text": "还分上等级了"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7247",
+      "kind": "demo",
+      "text": "让我看看你长啥样",
+      "text_sha256": "e1a9803626e5b9a504f2f243e0bedf164e96adaa3326d6ccda48d0753c507fac",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": []
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "受话者"
+        ],
+        "rationale": "仅要求看外貌，未作具体贬损，依可见文字取 0／[]。不从未知上下文补造外貌羞辱。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 8,
+            "text": "让我看看你长啥样"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7248",
+      "kind": "demo",
+      "text": "解决艾滋病的根本方法真的是绞杀txl吗？符合道德吗？如果txl有着和异性恋一样的社会环境，那txl就算传播是不是也应该是圈子自己人传播呢？直男直女们在害怕什么？那请问山村拐卖妇女儿童的法律惩罚就是上升到死刑能彻底解决问题吗？民智需要开化才能解决，同样的道理，txl本就不是疾病，普及性知识，提倡安全性爱，营造社会宽容的氛围，让txl不要需要隐藏自己的身份才是解决问题的关键。",
+      "text_sha256": "b469c726ef93d4cc5c7ed13c067d0a79784f00d96ed01409b40c0c3c7d61e124",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "non-hate",
+          "group": [
+            "LGBTQ",
+            "Sexism",
+            "others"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 0,
+        "attack_forms": [],
+        "targets": [
+          "同性恋与异性恋群体",
+          "直男直女"
+        ],
+        "rationale": "明确反对绞杀和疾病化，倡导安全性教育与社会包容，拟 0／LGBTQ、Sexism、others。异性恋及直男直女是实际比较和辩护对象；山村只提供行为类比场景，不增 Region。没有将被反驳的暴力命题计入攻击。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 13,
+            "end": 25,
+            "text": "绞杀txl吗？符合道德吗"
+          },
+          {
+            "source": "text",
+            "start": 33,
+            "end": 44,
+            "text": "和异性恋一样的社会环境"
+          },
+          {
+            "source": "text",
+            "start": 69,
+            "end": 79,
+            "text": "直男直女们在害怕什么"
+          },
+          {
+            "source": "text",
+            "start": 129,
+            "end": 138,
+            "text": "txl本就不是疾病"
+          },
+          {
+            "source": "text",
+            "start": 152,
+            "end": 161,
+            "text": "营造社会宽容的氛围"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7253",
+      "kind": "demo",
+      "text": "可以这么说白皮是普遍性都长得很丑只有极个别长得还算中规中距而黄种人可以说基本上百分之90都长得非常不错而且黄种人也是极不显老的人种",
+      "text_sha256": "eb0c996e802a98ebf4ee60e32d9b199fc47ce4b288f598b424225edf1e64f65b",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "group_stigmatization"
+        ],
+        "targets": [
+          "白人与黄种人"
+        ],
+        "rationale": "普遍贬低白人外貌并以黄种人作优越比较，拟 2／Racism。明显外貌污名不自动等同于否认人的地位或基本权利，未升 3。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 5,
+            "end": 16,
+            "text": "白皮是普遍性都长得很丑"
+          },
+          {
+            "source": "text",
+            "start": 30,
+            "end": 51,
+            "text": "黄种人可以说基本上百分之90都长得非常不错"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    },
+    {
+      "object_id": "demo:7319",
+      "kind": "demo",
+      "text": "黑人吧早被我们反黑站了，你还洗",
+      "text_sha256": "e835d591218ff87d2b75aef42def0b0123fb3d23af652d6bebe28215b17e7c45",
+      "base_version": 0,
+      "review_kind": "ai_note",
+      "human_confirmed": false,
+      "human_adjudicated_tasks": [],
+      "human_score_decision": null,
+      "human_numeric_score_confirmed": false,
+      "online_material_confirmed": false,
+      "task_policy": {
+        "version": "evidence-attack-severity-policy/v1",
+        "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+      },
+      "prior_label_reference": {
+        "batch": 7,
+        "values": {
+          "hate": "hate",
+          "group": [
+            "Racism"
+          ]
+        },
+        "review_kind": "ai_note",
+        "field_provenance": {
+          "hate": "ai_note",
+          "group": "ai_note"
+        },
+        "task_policies": {
+          "hate": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "group": {
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+          }
+        },
+        "human_rationale": null,
+        "artifact": {
+          "path": "discussions/batch-07/initial-label-reference/labels-07.json",
+          "sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059"
+        }
+      },
+      "field_provenance": {
+        "attack_severity": "ai_note",
+        "attack_forms": "ai_note",
+        "supporting_fields": "ai_note"
+      },
+      "values": {
+        "attack_severity": 2,
+        "attack_forms": [
+          "group_stigmatization"
+        ],
+        "targets": [
+          "黑人群体"
+        ],
+        "rationale": "作者自述参与反黑占领社群并斥责为黑人辩护，认可种族敌意，拟 2／Racism。“你还洗”在此是对辩护行为的批评，未另立个人辱骂项；没有明示身体伤害。",
+        "evidence": [
+          {
+            "source": "text",
+            "start": 0,
+            "end": 11,
+            "text": "黑人吧早被我们反黑站了"
+          },
+          {
+            "source": "text",
+            "start": 12,
+            "end": 15,
+            "text": "你还洗"
+          }
+        ]
+      },
+      "assessment_status": "scored",
+      "discussion": {
+        "key": null,
+        "candidate_scores": [],
+        "suggested_score": null,
+        "candidate_forms": []
+      }
+    }
+  ]
+}

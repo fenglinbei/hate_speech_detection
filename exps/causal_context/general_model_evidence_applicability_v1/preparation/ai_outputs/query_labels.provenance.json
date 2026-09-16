@@ -1,0 +1,24 @@
+{
+  "review_kind": "ai_note",
+  "generator": "query_ai_drafts",
+  "model_revision": "not_exposed",
+  "generation_method": "Assistant per-query semantic analysis; Python serialization and exact Unicode code-point quotation offsets.",
+  "policy_path": "docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md",
+  "policy_sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+  "input_path": "exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/queries.jsonl",
+  "input_sha256": "c953d9407ec9a9832498abd07438f590051085c7c08ad83fe4cc9175f08eebe2",
+  "output_path": "exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/query_labels.jsonl",
+  "output_sha256": "71c0195c76a15c56d01c708706d9935fca539bc4f05fae225d26af498bbafe70",
+  "record_count": 32,
+  "input_scope": "query_text_and_policy_only",
+  "excluded_inputs": [
+    "query Gold",
+    "model predictions",
+    "selection buckets",
+    "source cards",
+    "reserve cases"
+  ],
+  "batch_context": "32 query texts; no query Gold or predictions",
+  "generation_prompt": "Read only the frozen evidence-applicability annotation policy v1 and the 32 id/text rows in queries.jsonl. Analyze author stance, actual evaluated target, expression and exact text evidence independently for hate and group. Do not infer hate from abusive tokens alone or group from identity mentions. Under the frozen conservative boundary, retain null for unresolved individual or pure-institution scope, incomplete category mapping, unclear target/stance/sense, or consequential missing context. Emit one AI-note draft per query with no human confirmation; compute evidence code-point offsets from exact quotations. No external resources, Gold, model predictions, source cards, or reserve texts may inform these drafts.",
+  "human_confirmation": false
+}

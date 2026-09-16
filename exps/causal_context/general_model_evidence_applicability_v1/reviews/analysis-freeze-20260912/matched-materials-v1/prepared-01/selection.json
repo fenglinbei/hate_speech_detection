@@ -1,0 +1,164 @@
+{
+  "author": "assistant",
+  "authoring_rounds": [
+    "round-01.json",
+    "round-02.json",
+    "round-03.json",
+    "round-04.json",
+    "round-05.json"
+  ],
+  "authorization": {
+    "gpu_execution_in_this_step": false,
+    "individual_human_adoption": false,
+    "scope": "prepare the first batch of matched replacement and paraphrase materials for 541/hate and 3169/hate",
+    "user_message": "好的，那现在可以先完成材料"
+  },
+  "cases": [
+    {
+      "demo_answer": "non-hate",
+      "preserve_semantics": [
+        "以吴亦凡的异性恋身份为例",
+        "性取向与道德水平没有必然联系",
+        "反对因一个人的坏事而讨厌整个群体",
+        "作者没有赞同被反驳的偏见"
+      ],
+      "prompt_tokens": 918,
+      "query_id": "541",
+      "semantic_limit": "C 同时去掉性取向话题与反泛化规则；本批先检验这个语义组合，不能单独分离话题、规则或具体词汇贡献。D 将原文末尾不流畅的问句自然改写，仍需审核反驳立场是否保持。",
+      "target_demo_id": "826",
+      "task": "hate"
+    },
+    {
+      "demo_answer": "hate",
+      "preserve_semantics": [
+        "保留‘被嘿嘿玩过的’这一指称",
+        "保留对该对象思想不一般的贬低暗示",
+        "‘嘿嘿’继续按原示例的种族代称用法理解",
+        "不补充受辱者身份、具体行为细节或暴力命题",
+        "保留未说完的省略表达"
+      ],
+      "prompt_tokens": 742,
+      "query_id": "3169",
+      "semantic_limit": "C 改为个人辱骂，攻击对象和攻击命题也随之变化；C/D 对比检验整段语义与同形词线索的组合，不能归因为单独移除‘嘿嘿’。原示例话题无关联、规则部分关联；本批不是严格 U 筛选或词典释义改写。",
+      "target_demo_id": "3660",
+      "task": "hate"
+    }
+  ],
+  "interpretation_limits": [
+    "All new semantic labels are assistant drafts, not inherited human confirmations.",
+    "This discovery batch was selected after exposure to prior natural-edit results; it is not an independent confirmatory sample.",
+    "Two variants per family test sensitivity to wording; they are not independent cases.",
+    "Fixed prompt length and unchanged boundary positions do not establish equivalent internal token semantics or activation-patching readiness.",
+    "No free padding, query-answer hints, score-guided search, or new model forward was used.",
+    "Position swaps and short/long semantic variants remain separate follow-up batches; this batch fixes the existing position and length."
+  ],
+  "preference_snapshot_id": "cf158ae3d22aadf1bff45ff5398c3de415c16fc02963f18d0fdc7918f3aa5ed1",
+  "relation_preference_snapshot_id": "28cd3f73e884e1decd10f3a04a7425e2a90acfe024694948c735b61124ea9f6f",
+  "review_fields": [
+    {
+      "allowed": [
+        "pass",
+        "revise",
+        "uncertain"
+      ],
+      "field": "naturalness",
+      "label": "文字是否自然、可理解"
+    },
+    {
+      "allowed": [
+        "hate",
+        "non-hate",
+        "uncertain"
+      ],
+      "field": "hate",
+      "label": "新文本的 hate 标签"
+    },
+    {
+      "allowed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        "uncertain"
+      ],
+      "field": "attack_severity",
+      "label": "新文本攻击严重度"
+    },
+    {
+      "allowed": [
+        "pass",
+        "revise",
+        "uncertain"
+      ],
+      "field": "control_intent",
+      "label": "C 是否去掉指定语义／D 是否保留指定语义"
+    },
+    {
+      "allowed": [
+        "none_found",
+        "present",
+        "uncertain"
+      ],
+      "field": "unintended_change",
+      "label": "是否出现未记录的对象、命题或立场变化"
+    },
+    {
+      "allowed": "free_text",
+      "field": "note",
+      "label": "修改建议或不确定依据"
+    }
+  ],
+  "schema_version": "evidence-matched-material-selection/v1",
+  "selected": [
+    {
+      "ai_attack_severity": 0,
+      "ai_rationale": "公园书店、书籍与画册的普通观察及提问，没有对人或群体的攻击，也没有反对由个人泛化到群体的规则。",
+      "id": "541-C1",
+      "round": "round-02.json"
+    },
+    {
+      "ai_attack_severity": 0,
+      "ai_rationale": "整理书桌和询问物品用途、位置，没有人格贬损或身份概括；纸张分类不构成对人的群体泛化。",
+      "id": "541-C2",
+      "round": "round-05.json"
+    },
+    {
+      "ai_attack_severity": 0,
+      "ai_rationale": "保留吴亦凡／异性恋例子、道德与性取向不相关，以及反对把一个人的坏事扩大到全群体；结尾反问仍表达反对偏见。",
+      "id": "541-D1",
+      "round": "round-02.json"
+    },
+    {
+      "ai_attack_severity": 0,
+      "ai_rationale": "以另一种措辞保留性取向不决定道德、个人行为不能代表全群体及作者反对偏见的立场。",
+      "id": "541-D2",
+      "round": "round-03.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_rationale": "‘蠢货’及对脑子笨的直接贬评构成个人能力侮辱，拟定 2 级／hate；与查询中的笑声、押韵无具体话题对应，不包含‘嘿嘿’。",
+      "id": "3169-C1",
+      "round": "round-03.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_rationale": "‘无耻骗子’是作者直接认可的人格侮辱，拟定 2 级／hate；仍需核对是否与单纯行为批评有清楚分界，不包含‘嘿嘿’。",
+      "id": "3169-C2",
+      "round": "round-02.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_rationale": "仅调整思想不一般和未完成感叹句的语序，保留‘被嘿嘿玩过的’及其贬低指向；未补入性别字样或新的具体攻击内容。",
+      "id": "3169-D1",
+      "round": "round-03.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_rationale": "‘思想就不一般’和‘那得是多么的’替换相邻表达，保留原对象、代称、贬损暗示和省略结尾。",
+      "id": "3169-D2",
+      "round": "round-02.json"
+    }
+  ],
+  "status": "draft_pending_human_review"
+}

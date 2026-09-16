@@ -1,0 +1,40 @@
+{
+  "review_kind": "ai_note",
+  "generator": "resource_ai_drafts_b",
+  "model_revision": "not_exposed",
+  "input_scope": "authorized_query_and_resource_texts_only",
+  "input_file": "exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part2.jsonl",
+  "input_sha256": "1b035ff45debce54b0c5715580201bcaef819d6a1fabaeda11ae73fedc8701ac",
+  "policy_file": "docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md",
+  "policy_sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+  "case_ids": [
+    "2297",
+    "1900",
+    "4756",
+    "7285",
+    "6037",
+    "2802",
+    "376",
+    "4080"
+  ],
+  "actual_task_prompt_summary": "Read only the frozen evidence applicability policy and sanitized resource_cases_part2.jsonl. For each authorized required object, independently judge task-specific query-demo topic/rule applicability and introduced lexicon risk, definition quality, or exact-span source sense and query applicability. Produce substantive Chinese notes and exact Unicode evidence. No query Gold, original demo answers, predictions, buckets, reserve cases or other AI outputs. Do not confirm human records. Split first eight cases to b1 and last eight to an independent fresh agent b2. All semantic selections manually authored by the language model; Python only expands explicit tuples and validates structure/spans.",
+  "generation_method": "Manually authored per-object decisions, serialized and validated by Python without semantic label heuristics.",
+  "source_read_disclosure": "This agent initially read the whole authorized part2 file in a truncated tool output, then inspected all first eight cases; only the first eight cases are authored in this file. No excluded data was read.",
+  "record_counts": {
+    "relation": 80,
+    "hit": 78,
+    "definition": 28
+  },
+  "total": 186,
+  "output_sha256": "e7ed9cc744de4260563f1c62f16621bfcc8062bf377399f9d281d3ff4a48f91e",
+  "validation": {
+    "required_id_coverage": "exact",
+    "duplicate_ids": 0,
+    "all_evidence_spans_verified": true,
+    "human_confirmations_written": 0
+  },
+  "actual_task_prompts": [
+    "Generate AI resource applicability drafts for authorized last16discovery cases, exactly354 required objects. Workspace /data/liaozijie/hate_speech_detection. Read ONLY docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md and exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part2.jsonl. Sanitizedcaseinputs contain query text, demos text, definitions and required_drafts array id/kind/source span metadata; no Gold, sourceanswers, predictions, buckets. Do not read other experimentdata or otherAIoutputs. Analyze EACH required object substantively using only these texts; no automatic keywordlabelheuristics. Output exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/resource_drafts_b.jsonl exactly354rows {id,values,provenance:{review_kind:'ai_note',input_scope:'authorized_query_and_resource_texts_only',model_revision:'not_exposed',generator:'resource_ai_drafts_b',batch_context:'16 sanitized cases; no query Gold, demo original answers, predictions or sample buckets'}}. For relation values={topic_hate,topic_group,rule_hate,rule_group:each direct|partial|none|unclear,lexicon_risk:yes|no|unclear,evidence:[{source:'query'|'demo',start,end,text}],note:briefChinese}; decide topicandspecificjudgmentrule independently andtaskindependent. lexiconrisk when introduced_entry_ids notempty assess wronglymatched/unrelated definitions toquery (notcausalclaim). For definition values={definition_verdict:reasonable|too_narrow|other_problem|uncertain,issues:[valid_sense|substring_mismatch|wrong_sense|overly_narrow_definition|uncertain|not_rendered|provenance_mismatch],evidence:[{source:'text',...}],note}; definitionitselfquality separatefrom occurrence. For hit values={source_fit:valid_sense|wrong_sense|substring_mismatch|uncertain|not_rendered,query_fit:applicable|inapplicable|uncertain,issues:[sameallowed],evidence:[{source:'text'|'query'|'definition',...}],note}. Source hit rawtext=case.query if source_kind=query else demos[source_id]; definition=definitions[sense_id].text. raw_span isverifiedmatchposition; examine substringcontext: validmatcherdoesnotimplycorrectsense, e.g 笑声嘿 inside嘲黑人义 or lettersinsideword. Even appropriatedemosense can beinapplicablequery. All hits actuallyrendered andpositionverified; no need provenance_mismatch absentrealreason. Use exactrawspan as source:'text' evidence; optionalqueryquote. Computeoffsets Pythonstr.index/check. Definitionsentry_ID mayhave multiple senses eachjudgedseparately. Can manuallyauthorcompactpercase tuplelists andexpandwithPython, but consider everyobject. Persist actualprompt/provenance summary andinputfile/policyhash. Do NOT human-confirm anything or alterotherfiles. Need efficientcompletion, reportcounts andvalidateIDs/evidence.",
+    "现在一个并发slot已释放。可主动把你16cases后8cases的required_drafts分给fresh fork none子代理（只读你授权sanitized文件相应case，输出resource_drafts_b2.jsonl），你做前8输出resource_drafts_b1.jsonl；不要另产生重复总b.jsonl。这样加速但务必exact354total无漏重。你自行切分并协调。"
+  ]
+}

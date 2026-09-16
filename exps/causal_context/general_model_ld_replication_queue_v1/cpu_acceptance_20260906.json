@@ -1,0 +1,61 @@
+{
+  "schema_version": "coverage-replication-operational-cpu-acceptance/v1",
+  "date_local": "2026-09-06",
+  "timezone": "Asia/Shanghai",
+  "joint_replication_cpu_tests": {"passed": true, "tests": 58},
+  "detached_queue_lifecycle_tests": {"passed": true, "tests": 12},
+  "existing_run_guard_lifecycle_tests": {"passed": true, "tests": 9},
+  "existing_8b_guard": {
+    "path": "existing-8b-watchdog-01",
+    "source_sha256": "d2d1ebd19cad821fcb3b0f17130ba489ae5f0314dd3f0d2a4dcf4426349553d1",
+    "initial_state": "watching",
+    "signals_sent_at_acceptance": 0,
+    "signal_backend": "pid-start-ticks-recheck-kill-enosys",
+    "signal_backend_limitation": "narrow check-to-signal PID reuse race; kernel pidfd unavailable"
+  },
+  "models": {
+    "qwen3-14b": {
+      "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+      "plan_sha256": "efcf9e4079fc790db0fd92d60b78b3f00091954958780429fb16835ed51f0b5c",
+      "full_cpu_build_passed": true,
+      "full_source_and_plan_validation_passed": true,
+      "queries": 643,
+      "blocks": 10288,
+      "candidates": 174896,
+      "max_full_sequence_tokens": 2151,
+      "max_full_sequence_with_padding_tokens": 2215,
+      "unchanged_non_placebo_messages": 7716,
+      "compact_placebo_applied_record_ids": []
+    },
+    "qwen3.8-27b": {
+      "plan_id": "gmlrep-ddb99ece34fd821c743f497140d65db255c2d675d9e6df199f9c2f1aabc647c5",
+      "plan_sha256": "b5d85bdfe62a3941e477978f83c30a8c2b76da96171d6b0fd69b7f3ee3b8dc64",
+      "full_cpu_build_passed": true,
+      "full_source_and_plan_validation_passed": true,
+      "queries": 643,
+      "blocks": 10288,
+      "candidates": 174896,
+      "max_full_sequence_tokens": 2034,
+      "max_full_sequence_with_padding_tokens": 2098,
+      "unchanged_non_placebo_messages": 7716,
+      "compact_placebo_applied_record_ids": ["3072:group:PD"]
+    }
+  },
+  "preflight_cohort_sizes_per_model": [8, 24, 4],
+  "neutral_control_tolerance": {"absolute_tokens": 8, "relative": 0.02},
+  "gpu_preflight_pass_claimed": false,
+  "query_gold_read_by_cpu_build": false,
+  "test_content_read": false,
+  "queue_launch": {
+    "path": "runs/window-20260906-01",
+    "config_sha256": "089ad162f7629e052c94589e6aa38a529518b745faf7943234aa6b330ead2710",
+    "source_sha256": "59f969cad8d58bdea817b2dd9d5a01f5de67396237d30931272f3a652272bd3a",
+    "created_at_utc": "2026-09-05T20:28:46.504112+00:00",
+    "initial_state": "waiting",
+    "initial_wait_reason": "source-not-complete",
+    "initial_owned_process_count": 0,
+    "watchdog_initial_state": "watching",
+    "graceful_stop_at_utc": "2026-09-06T01:55:00Z",
+    "hard_deadline_utc": "2026-09-06T02:00:00Z"
+  }
+}

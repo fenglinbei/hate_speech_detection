@@ -1,0 +1,570 @@
+{
+  "schema_version": "general-model-numeric-validation-failure-engineering-audit/v1",
+  "created_at_utc": "2026-09-04T21:04:34.887204+00:00",
+  "run_id": "numeric-03",
+  "plan_id": "gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209",
+  "scope": {
+    "gpu_used": false,
+    "model_rerun": false,
+    "query_gold_read": false,
+    "scientific_effect_read": false,
+    "validation_profile_search_performed": false,
+    "frozen_sources_changed": false,
+    "scores_scope": "Sealed validation candidate numerical-compatibility evidence only; no effect contrasts or query projection."
+  },
+  "terminal": {
+    "analysis_published": false,
+    "execution": "data-parallel-identical-fp32",
+    "failure": "validation-batch-compatibility-gate",
+    "fallback_automatic": false,
+    "full_dev_started": false,
+    "phase": "preflight-then-dev-on-pass",
+    "physical_device_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "plan_id": "gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209",
+    "preflight_report_sha256": "d8175e894e007b1ff3facc8132de3215576d459b0b05c92ad9645a4188f8c648",
+    "query_gold_loaded_during_scoring": false,
+    "schema_version": "general-model-ld-numeric-run/v2",
+    "status": "preflight_failed",
+    "test_content_read": false
+  },
+  "fixed_gate": {
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375,
+    "validation": {
+      "baseline_passed": true,
+      "baseline_repeat_max_abs_error": 0,
+      "blocks": 288,
+      "challenges": {
+        "batch": {
+          "largest_error": {
+            "difference": -0.001621246337890625,
+            "metric": "candidate/group-24/answer_sum",
+            "record_id": "844:group:CD"
+          },
+          "max_abs_error": 0.001621246337890625,
+          "passed": false
+        }
+      },
+      "complete": false,
+      "max_abs_error": 0.001621246337890625,
+      "passed": false,
+      "reference_max_abs_error": 0.000009625574207916543
+    },
+    "regression_prefix": {
+      "largest_error": {
+        "difference": 0.000209808349609375,
+        "metric": "candidate/group-24/answer_sum",
+        "record_id": "6034:group:CLD"
+      },
+      "max_abs_error": 0.000209808349609375,
+      "passed": true
+    }
+  },
+  "sealed_pass_validation": {
+    "method": "diagnostics.general_model_numeric_pool.validate_sealed_pass(output,effective_plan), read-only",
+    "passes": [
+      "validation-b1-r0",
+      "validation-b1-r1",
+      "validation-b4-r0"
+    ],
+    "all_passed": true,
+    "checks": "Top/shard hashes, manifests, assignments, runtime/producer identities, canonical merged coverage and block identities."
+  },
+  "target_evidence": {
+    "validation-b1-r0": {
+      "manifest_status": "complete",
+      "blocks": 288,
+      "candidates": 4896,
+      "shards": 4,
+      "row_identity": {
+        "record_id": "844:group:CD",
+        "context_sha256": "f629dd58796a89e91180e754d7782bb87064d4015c504bada866c89e6634cc52",
+        "prompt_sha256": "e15f75fe8e517450c04d8743d285fc1c2cdba927231a3ce56594ace2a6f2b443",
+        "runtime_sha256": "983ead5bc67e89e1c330a1ce7f136c6f7da7f8cfe3453282009b6cb9e614572e",
+        "execution_batch_size": 1,
+        "scoring_profile": {
+          "candidate_permutation": "canonical",
+          "padding_extra": 0,
+          "prefix": false,
+          "replica_shift": 0
+        }
+      },
+      "candidate": {
+        "candidate_id": "group-24",
+        "answer_tokens": 6,
+        "answer_token_ids": [
+          1183,
+          19439,
+          2142,
+          2198,
+          58861,
+          1341
+        ],
+        "answer_token_ids_sha256": "fcae0c825355d1f921adeeadfc1bb35a7042dfa50b0e1163a5484a16128b00cb",
+        "prompt_tokens": 814,
+        "prompt_token_ids_sha256": "b77e75ff4862591120d49bcc737d79b798148fb17fe1d9c8323290ecdf954aec",
+        "sequence_tokens": 821,
+        "padded_sequence_tokens": 821,
+        "batch_size": 1,
+        "effective_batch_size": 1,
+        "batch_members": [
+          "844:group:CD:group-24"
+        ],
+        "batch_member_ordinal": 0,
+        "physical_gpu_index": 2,
+        "physical_gpu_uuid": "GPU-278f5973-425f-514a-8a2d-db77f55d481b",
+        "causal_shift": 1,
+        "use_cache": false,
+        "padding_side": "right",
+        "model_logits_dtype": "torch.float32",
+        "logprob_arithmetic_dtype": "torch.float32",
+        "token_boundary_checked": true,
+        "finite_target_logits_checked": true,
+        "token_logprobs": [
+          -0.000064849853515625,
+          -26.4666748046875,
+          0,
+          -8.979324340820312,
+          -36.751182556152344,
+          -0.000194549560546875
+        ],
+        "answer_sum": -72.19744110107422,
+        "eos_token_id": 151645,
+        "eos_logprob": 0,
+        "reference_checked": true
+      },
+      "same_forward_cpu_reference": {
+        "reference_scores": {
+          "answer_mean": -12.032907370210589,
+          "answer_sum": -72.19744422126354,
+          "eos_logprob": -3.255417624359325e-8,
+          "mean_with_eos": -10.313920607688246,
+          "token_logprobs": [
+            -0.00006643383417781479,
+            -26.466674804692957,
+            -3.8165666182976565e-9,
+            -8.979324486791114,
+            -36.751182572028746,
+            -0.00019592009998348203
+          ],
+          "total_with_eos": -72.19744425381772
+        },
+        "reference_differences": {
+          "answer_mean": 5.200315520426102e-7,
+          "answer_sum": 0.0000031201893193610886,
+          "eos_logprob": 3.255417624359325e-8,
+          "mean_with_eos": 4.5039192819729124e-7,
+          "token_logprobs": [
+            0.0000015839806621897878,
+            5.4569682106375694e-12,
+            3.8165666182976565e-9,
+            1.4597080166822707e-7,
+            1.5876402414960467e-8,
+            0.0000013705394366070323
+          ],
+          "total_with_eos": 0.000003152743502710109
+        },
+        "reference_abs_error_max": 0.000003152743502710109
+      },
+      "batch_companion_geometry": [
+        {
+          "candidate_id": "group-24",
+          "sequence_tokens": 821,
+          "padded_sequence_tokens": 821,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-25",
+          "sequence_tokens": 825,
+          "padded_sequence_tokens": 825,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-26",
+          "sequence_tokens": 823,
+          "padded_sequence_tokens": 823,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-27",
+          "sequence_tokens": 827,
+          "padded_sequence_tokens": 827,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        }
+      ]
+    },
+    "validation-b1-r1": {
+      "manifest_status": "complete",
+      "blocks": 288,
+      "candidates": 4896,
+      "shards": 4,
+      "row_identity": {
+        "record_id": "844:group:CD",
+        "context_sha256": "f629dd58796a89e91180e754d7782bb87064d4015c504bada866c89e6634cc52",
+        "prompt_sha256": "e15f75fe8e517450c04d8743d285fc1c2cdba927231a3ce56594ace2a6f2b443",
+        "runtime_sha256": "983ead5bc67e89e1c330a1ce7f136c6f7da7f8cfe3453282009b6cb9e614572e",
+        "execution_batch_size": 1,
+        "scoring_profile": {
+          "candidate_permutation": "canonical",
+          "padding_extra": 0,
+          "prefix": false,
+          "replica_shift": 0
+        }
+      },
+      "candidate": {
+        "candidate_id": "group-24",
+        "answer_tokens": 6,
+        "answer_token_ids": [
+          1183,
+          19439,
+          2142,
+          2198,
+          58861,
+          1341
+        ],
+        "answer_token_ids_sha256": "fcae0c825355d1f921adeeadfc1bb35a7042dfa50b0e1163a5484a16128b00cb",
+        "prompt_tokens": 814,
+        "prompt_token_ids_sha256": "b77e75ff4862591120d49bcc737d79b798148fb17fe1d9c8323290ecdf954aec",
+        "sequence_tokens": 821,
+        "padded_sequence_tokens": 821,
+        "batch_size": 1,
+        "effective_batch_size": 1,
+        "batch_members": [
+          "844:group:CD:group-24"
+        ],
+        "batch_member_ordinal": 0,
+        "physical_gpu_index": 2,
+        "physical_gpu_uuid": "GPU-278f5973-425f-514a-8a2d-db77f55d481b",
+        "causal_shift": 1,
+        "use_cache": false,
+        "padding_side": "right",
+        "model_logits_dtype": "torch.float32",
+        "logprob_arithmetic_dtype": "torch.float32",
+        "token_boundary_checked": true,
+        "finite_target_logits_checked": true,
+        "token_logprobs": [
+          -0.000064849853515625,
+          -26.4666748046875,
+          0,
+          -8.979324340820312,
+          -36.751182556152344,
+          -0.000194549560546875
+        ],
+        "answer_sum": -72.19744110107422,
+        "eos_token_id": 151645,
+        "eos_logprob": 0,
+        "reference_checked": false
+      },
+      "same_forward_cpu_reference": {},
+      "batch_companion_geometry": [
+        {
+          "candidate_id": "group-24",
+          "sequence_tokens": 821,
+          "padded_sequence_tokens": 821,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-25",
+          "sequence_tokens": 825,
+          "padded_sequence_tokens": 825,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-26",
+          "sequence_tokens": 823,
+          "padded_sequence_tokens": 823,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-27",
+          "sequence_tokens": 827,
+          "padded_sequence_tokens": 827,
+          "batch_size": 1,
+          "batch_member_ordinal": 0
+        }
+      ]
+    },
+    "validation-b4-r0": {
+      "manifest_status": "complete",
+      "blocks": 288,
+      "candidates": 4896,
+      "shards": 4,
+      "row_identity": {
+        "record_id": "844:group:CD",
+        "context_sha256": "f629dd58796a89e91180e754d7782bb87064d4015c504bada866c89e6634cc52",
+        "prompt_sha256": "e15f75fe8e517450c04d8743d285fc1c2cdba927231a3ce56594ace2a6f2b443",
+        "runtime_sha256": "983ead5bc67e89e1c330a1ce7f136c6f7da7f8cfe3453282009b6cb9e614572e",
+        "execution_batch_size": 4,
+        "scoring_profile": {
+          "candidate_permutation": "canonical",
+          "padding_extra": 0,
+          "prefix": false,
+          "replica_shift": 0
+        }
+      },
+      "candidate": {
+        "candidate_id": "group-24",
+        "answer_tokens": 6,
+        "answer_token_ids": [
+          1183,
+          19439,
+          2142,
+          2198,
+          58861,
+          1341
+        ],
+        "answer_token_ids_sha256": "fcae0c825355d1f921adeeadfc1bb35a7042dfa50b0e1163a5484a16128b00cb",
+        "prompt_tokens": 814,
+        "prompt_token_ids_sha256": "b77e75ff4862591120d49bcc737d79b798148fb17fe1d9c8323290ecdf954aec",
+        "sequence_tokens": 821,
+        "padded_sequence_tokens": 827,
+        "batch_size": 4,
+        "effective_batch_size": 4,
+        "batch_members": [
+          "844:group:CD:group-24",
+          "844:group:CD:group-25",
+          "844:group:CD:group-26",
+          "844:group:CD:group-27"
+        ],
+        "batch_member_ordinal": 0,
+        "physical_gpu_index": 2,
+        "physical_gpu_uuid": "GPU-278f5973-425f-514a-8a2d-db77f55d481b",
+        "causal_shift": 1,
+        "use_cache": false,
+        "padding_side": "right",
+        "model_logits_dtype": "torch.float32",
+        "logprob_arithmetic_dtype": "torch.float32",
+        "token_boundary_checked": true,
+        "finite_target_logits_checked": true,
+        "token_logprobs": [
+          -0.000064849853515625,
+          -26.467029571533203,
+          0,
+          -8.979591369628906,
+          -36.75218200683594,
+          -0.000194549560546875
+        ],
+        "answer_sum": -72.19906234741211,
+        "eos_token_id": 151645,
+        "eos_logprob": 0,
+        "reference_checked": false
+      },
+      "same_forward_cpu_reference": {},
+      "batch_companion_geometry": [
+        {
+          "candidate_id": "group-24",
+          "sequence_tokens": 821,
+          "padded_sequence_tokens": 827,
+          "batch_size": 4,
+          "batch_member_ordinal": 0
+        },
+        {
+          "candidate_id": "group-25",
+          "sequence_tokens": 825,
+          "padded_sequence_tokens": 827,
+          "batch_size": 4,
+          "batch_member_ordinal": 1
+        },
+        {
+          "candidate_id": "group-26",
+          "sequence_tokens": 823,
+          "padded_sequence_tokens": 827,
+          "batch_size": 4,
+          "batch_member_ordinal": 2
+        },
+        {
+          "candidate_id": "group-27",
+          "sequence_tokens": 827,
+          "padded_sequence_tokens": 827,
+          "batch_size": 4,
+          "batch_member_ordinal": 3
+        }
+      ]
+    }
+  },
+  "independent_arithmetic": {
+    "answer_sum_recomputed_with_math_fsum_in_all_three_passes": true,
+    "batch1_repeat_token_values_identical": true,
+    "batch4_minus_batch1_answer_token_differences": [
+      0,
+      -0.000354766845703125,
+      0,
+      -0.00026702880859375,
+      -0.00099945068359375,
+      0
+    ],
+    "batch4_minus_batch1_answer_sum": -0.001621246337890625,
+    "batch4_minus_batch1_cpu64_reference_answer_sum": -0.001618126148571264,
+    "same_forward_batch4_cpu_reference_available": false
+  },
+  "actual_runtime": [
+    {
+      "physical_gpu_index": 0,
+      "uuid": "GPU-09b29c25-c372-62f4-3098-9734013e93c0",
+      "transformer_dtype": "torch.float32",
+      "lm_head_dtype": "torch.float32",
+      "logprob_arithmetic": "float32",
+      "aggregation": "float64",
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "use_cache": false,
+      "bf16_reduced_precision_reduction": false,
+      "deterministic_algorithms": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    {
+      "physical_gpu_index": 1,
+      "uuid": "GPU-9145ca41-4f0b-6f81-9a0b-118cb4596601",
+      "transformer_dtype": "torch.float32",
+      "lm_head_dtype": "torch.float32",
+      "logprob_arithmetic": "float32",
+      "aggregation": "float64",
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "use_cache": false,
+      "bf16_reduced_precision_reduction": false,
+      "deterministic_algorithms": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    {
+      "physical_gpu_index": 2,
+      "uuid": "GPU-278f5973-425f-514a-8a2d-db77f55d481b",
+      "transformer_dtype": "torch.float32",
+      "lm_head_dtype": "torch.float32",
+      "logprob_arithmetic": "float32",
+      "aggregation": "float64",
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "use_cache": false,
+      "bf16_reduced_precision_reduction": false,
+      "deterministic_algorithms": true,
+      "cublas_workspace_config": ":4096:8"
+    },
+    {
+      "physical_gpu_index": 3,
+      "uuid": "GPU-6e7d956e-0a22-7fac-a093-130cc1190f38",
+      "transformer_dtype": "torch.float32",
+      "lm_head_dtype": "torch.float32",
+      "logprob_arithmetic": "float32",
+      "aggregation": "float64",
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "use_cache": false,
+      "bf16_reduced_precision_reduction": false,
+      "deterministic_algorithms": true,
+      "cublas_workspace_config": ":4096:8"
+    }
+  ],
+  "static_checks": [
+    {
+      "source": "src/diagnostics/general_model_numeric_kernel.py",
+      "line": 27,
+      "finding": "_prepare recomputes prompt/answer hashes and ids, requires joint tokenization equals concatenation, rejects embedded EOS/overflow, and creates prompt+answer+EOS."
+    },
+    {
+      "source": "src/diagnostics/general_model_numeric_kernel.py",
+      "line": 64,
+      "finding": "_scores uses Python math.fsum; answer_sum excludes EOS."
+    },
+    {
+      "source": "src/diagnostics/general_model_numeric_kernel_v2.py",
+      "line": 27,
+      "finding": "FP32 amendment invokes model.float(); recorded trunk/head dtype float32 and TF32 flags false agree."
+    },
+    {
+      "source": "src/diagnostics/general_model_numeric_kernel_v2.py",
+      "line": 151,
+      "finding": "Full sequence path uses actual batch-size rows, right-padding masks over real lengths, attention_mask and use_cache=False; prediction positions begin prompt_tokens-1."
+    },
+    {
+      "source": ".conda/stage1-p0/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py",
+      "line": 374,
+      "finding": "Uncached forward constructs zero-based positions and causal mask from attention_mask. Right-padding does not shift real token positions."
+    },
+    {
+      "source": "src/diagnostics/general_model_numeric_kernel_v2.py",
+      "line": 89,
+      "finding": "CPU64 reference recomputes gather/logsumexp from identical forward logits, not an independent higher-precision model."
+    }
+  ],
+  "engineering_judgment": {
+    "confirmed_implementation_bug": null,
+    "finding": "No evidence of candidate misassociation, wrong token boundary/causal shift, accidental low-precision execution, changed device, omitted attention mask, or aggregation error in this block.",
+    "likely_mechanism_not_proven": "Compatible with shape-dependent FP32 forward rounding: 1x821 versus 4x827 on the same GPU. Hidden states and full logits were not retained, so the precise operator/layer and forward-versus-normalization contributions cannot be identified.",
+    "normalizer_only_repair": "Not established. Baseline CPU64 answer_sum arithmetic error is only 3.1201893e-6; substituting it leaves a 0.0016181261 discrepancy. Batch4 same-logits CPU64 reference is absent.",
+    "deterministic_flag_limit": "Deterministic algorithms and disabled TF32 were already enabled. Repeat determinism is not an assurance of identical rounding across different tensor shapes.",
+    "guaranteed_batch4_repair_with_current_evidence": false
+  },
+  "registered_batch1_fallback_assessment": {
+    "technical_feasibility": "Conditionally supported as the previously registered fallback; not yet validated for complete dev.",
+    "basis": "Original protocol section 9 explicitly allows a separate complete batch1 run after batch4 failure; this is an existing production mode, not a profile iteratively chosen on the 24 validation queries.",
+    "required_boundaries": [
+      "Keep numeric-03 terminal preflight_failed immutable.",
+      "New run, actual batch1 forwards, truthful identity, no dummy-row emulation or mixed/relabelled batch4 scores.",
+      "Keep epsilon=0.0013427734375, reference definition, all readouts, original 8/24 membership and full 643-query coverage unchanged.",
+      "Gate original 8 and 24 on production-relevant repeat, same-logits CPU reference, uncached/unpadded prefix, extra-padding, member-order, and cross-GPU equivalence.",
+      "Mark unused batch4/tail2 acceleration paths not applicable to genuine batch1 production, not passed; preserve the original failure.",
+      "Any fallback gate failure stops expansion; no validation-driven epsilon recalibration or iterative profile selection."
+    ],
+    "evidence_limit": "Original-eight prefix max 0.000209808349609375 is below the fixed epsilon. Validation batch1 repeat/CPU reference passed, but validation prefix and remaining production challenges have not run; no guarantee that fallback will pass."
+  },
+  "checked_files_sha256": {
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/preflight_report.json": "d8175e894e007b1ff3facc8132de3215576d459b0b05c92ad9645a4188f8c648",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/run_manifest.json": "2435950f432d119a19abc8808396eaecfa6fd0124dd65d7c72d8999ddcadc688",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/runtime_identity.json": "b146b2c9788cc16f5c7554a7323ed05cb601a8118531727f6b5dc6ad6f8ef426",
+    "exps/causal_context/general_model_ld_numeric_v2/plan_ref.json": "965fd84e933437c74dfeff0354eb9c059e0740c1baf2b222b3984db7ef313b6b",
+    "exps/causal_context/general_model_ld_numeric_v2/plans/gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209/plan.json": "be81dc86cbcb9ae0e6bd488fee6a670874d9ab222b6c4c81935e88fd5fb300a9",
+    "src/diagnostics/general_model_numeric_kernel_v2.py": "58abb51a4d74a0ac124578de340151f31d480b7be5069ef415a454dcc53287c8",
+    "src/diagnostics/general_model_numeric_v2.py": "66a23d017e395f5a6845023a953fe3398ea7dc74578361ee22938edf5c43f12f",
+    "src/diagnostics/general_model_numeric_pool.py": "d86fe474b7cd5c9187cf5f77813734d9bb9151debdd838b686e85f2fc9fb8cc5",
+    "src/diagnostics/general_model_numeric_kernel.py": "668862ca2bdfe6b555d56e66ee02b8179262d1cb6e39b51acf07fd5dd5ca4a3f",
+    "src/diagnostics/general_model_runtime.py": "92aaf0264fc5ac8213d7be577c8ba20738d5153548edc3b9a2e7ac2bfbd0ee9e",
+    "docs/research/experiment-plans/general-model-ld-numerical-measurement-v1.md": "bed003bd6226b919d89fd01f76f6c093828f161720f06f8620f871f3d07df17c",
+    ".conda/stage1-p0/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py": "2d4441e36b40799b05ab514d8774b12e15fd5412699d444509b0a610ce23c9b8",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/manifest.json": "23cbf0c7a3298057f77d835cc9113c8dec839ead636b023dc42688a96ea04432",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/scores.jsonl": "f909dc5a4d05ac4ea991bc17a6da487e68ddc95b38478500bdb2412849a377d1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/pool_binding.json": "f91e595c49f29bd9150ed652d7f3909f8241dec6af3505ee145ab4bcbf2451c9",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/0/validation-b1-r0/manifest.json": "0b79cdfd856d846274cedb95d3d678b4c75f4b314500e2e88dab9c6a067a9e5b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/0/validation-b1-r0/scores.jsonl": "a413d1e1ba8680305f3a28f9544fca9010a34f0e5306570161982625b11f9998",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/1/validation-b1-r0/manifest.json": "bf4ab01456d7c1ae5cfe46fddbc9699ae2db9f83821996706f87fbf73cc46baf",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/1/validation-b1-r0/scores.jsonl": "36a62ac4fb1fd7ac73d5132f9be2b4179caf9e3faab99d5f4e404bc9f37567c4",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/2/validation-b1-r0/manifest.json": "b9acddb55ea10195e41d19e79213bd34b8d4cd69b8b370abbe3552c5bb363702",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/2/validation-b1-r0/scores.jsonl": "621fcc02d034ef253f613fbfa8daa381c2feec7a3279955fa7cb8f664719c60b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/3/validation-b1-r0/manifest.json": "35b26a42abbf8fba664b91cc1b163f0a4f95a2821fc1e494a300fc645cbcc643",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r0/shards/3/validation-b1-r0/scores.jsonl": "d95c7d346507585f485ac44d5cec3b19bb7dabcfce2e2dce113bdc7fbba382c1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/manifest.json": "c8fed05e47611c44d20f0dcf7bd3b1d7076990fd413dab138a5a141e0f2ffde6",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/scores.jsonl": "72946fb284903bda82440c85abb7feefca89d45cdb10546b0ddbe96143a2e233",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/pool_binding.json": "7d7a1c572e6ae64c6204963ee1d87a9e36f596cd3e6d7a9a27f4ea3bdeb98395",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/0/validation-b1-r1/manifest.json": "f1f5368cdaa2fb4629d1b7e500b89be043716bd47e8c7cf348cb73001c200f6b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/0/validation-b1-r1/scores.jsonl": "3db7d806ae60f03357a73a731dce8370af8e0fc3527aa79ad10ecfe749e58334",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/1/validation-b1-r1/manifest.json": "534a6c30c7d9d826322f42989ac676e9cbb959b6b5c424962d7b5137d6ab91eb",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/1/validation-b1-r1/scores.jsonl": "f9736276e68fa53f1a92016770057d3aa3012c8de81f3b85ca0a1af550e6c9a2",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/2/validation-b1-r1/manifest.json": "c44de915c0c36e263008298a4417b0bf68b7aa4f0eef0be5f4a843a965542a14",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/2/validation-b1-r1/scores.jsonl": "8172b582a84a08eec16060aac7ebc1a4eddf37de6ec8338df8d130a379b3662e",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/3/validation-b1-r1/manifest.json": "3c09e0e8d62558fe8b17219ed6ba34ba9919241f139285b4415a665127b210a3",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b1-r1/shards/3/validation-b1-r1/scores.jsonl": "85cfb1c2f4451345c822398c83e3a692263525c5f5f3f6bb5c3cd8a7e627bcd8",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/manifest.json": "89b15185835e01fa0d556c4661fe59dc78e1dfb82d61cf9c3fb38fdb5ad6d4ad",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/scores.jsonl": "67ad2b5b8b4c1f445323d78c4328a61902c6a3eb535760138b8693ef16e305b3",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/pool_binding.json": "01c395a2d18022083e9bbe4103082ca4113987e000f778e7436d09abe092673d",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/0/validation-b4-r0/manifest.json": "2d31e3fa0f424193a82a48e279306d779b0f3246c129289bf9b979106429a1c0",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/0/validation-b4-r0/scores.jsonl": "27cbf91082799ce1023bf2d96acff5d56b3ed56cc87fdf128b4658f6b017057e",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/1/validation-b4-r0/manifest.json": "e48f59039440412d42059c7f77cbe1a008902b109cef528d711744272279c2f1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/1/validation-b4-r0/scores.jsonl": "42000d9032e22ee78489659d3ddecd5e4e6a955d3b027ba2c2ee1807f9748fd1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/2/validation-b4-r0/manifest.json": "eb3d7049818512a7318e008530bdcb6cf9bd05c119cc4d68f2d617723a285eb5",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/2/validation-b4-r0/scores.jsonl": "7128f5079b86050b94a77a67956df51b0e477cf33e7b570d4a60fde6eeba2ab2",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/3/validation-b4-r0/manifest.json": "fcb67dfe76138d1347346f6eb5f71d17cb53eb98635c41da97cbff51c7ec2d86",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/validation-b4-r0/shards/3/validation-b4-r0/scores.jsonl": "9afbd7d3fa37eea9e1d7b38a74243ba31ed75da7988ee5026e0c336043dbaab2"
+  }
+}

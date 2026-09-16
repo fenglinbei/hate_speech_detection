@@ -1,0 +1,126 @@
+{
+  "schema_version": "evidence-definition-post-decision-notes/v1",
+  "review_kind": "ai_note",
+  "sources": [
+    {
+      "path": "resource-reviews-v1/definitions/batch-02/discussions/user-decisions-01.json",
+      "sha256": "6d3aa5b6661326c699a24b833e4404e6f5299f5357eb06877d9f3e82de77101d"
+    },
+    {
+      "path": "resource-reviews-v1/definitions/batch-02/discussions/user-decisions-02.json",
+      "sha256": "1c47c9afd6658792f023dfb99c7fff88c13f71feb28d808cd690e93f363d4742"
+    },
+    {
+      "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.json",
+      "sha256": "818f70a61d7fa0a5aea0f8080cda23fa0001a917b8621e2cc3f69be0a0593861"
+    }
+  ],
+  "instruction_applications": [],
+  "lexical_supplements": [],
+  "case_summaries": [
+    {
+      "id": "D08",
+      "topic": "用户确认的独立词义与目标范围",
+      "case_summary_ai": "老g原定义获认可；山越猴原定义获认可，用户确认它可以指浙江人。",
+      "boundary_ai": "独立用法成立不等于每次出现都采用此义；可以指浙江不扩大成只能指浙江。外部检索与用户词义确认的来源分列。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q00",
+        "definitions-batch-02-01-q08"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D09",
+      "topic": "缺失定义与补写字段",
+      "case_summary_ai": "黑人喃由用户补为对黑人男性的贬损称呼。",
+      "boundary_ai": "用户直接补写的是定义文本；原定义为空的other_problem由AI判断，不增计用户未直接回答的质量选项。原冻结空文本保留。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q01"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D10",
+      "topic": "不预设使用者身份或既有品格",
+      "case_summary_ai": "江浙人种不预设使用者来自其他地区或被称呼者确有地域歧视；过男删除使用者必为中国女权主义者的限制。",
+      "boundary_ai": "两项明确改写分别处理说话者籍贯、立场与被称呼者行为；不把某词出现就归为该作者群体。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q02",
+        "definitions-batch-02-02-q00"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D11",
+      "topic": "网络指控与诊断、性别属性",
+      "case_summary_ai": "炼铜、nt、人妖采用改写，分别明确网络用法与临床标准、侮辱与实际疾病、性别认同或表达与贬损评价的区别。",
+      "boundary_ai": "上轮魔怔原定义合理仍保留。用户没有给出覆盖所有精神或性别相关术语的统一判准；遇到更近的边界继续比较。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q03",
+        "definitions-batch-02-01-q04",
+        "definitions-batch-02-01-q06"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D12",
+      "topic": "保留构词核心并归属评价",
+      "case_summary_ai": "理中客补回理性、中立、客观的构词，讽刺内容归为使用者评价，也保留字面用法。",
+      "boundary_ai": "这不意味着任何自称中立、对论点的批评或使用该缩写都构成人格攻击。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q05"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D13",
+      "topic": "地域谐音称呼与实际贬损",
+      "case_summary_ai": "胡建采用口音模仿、地名戏称、地域贬损分开判断的定义。",
+      "boundary_ai": "东百的相似改写仍为AI类推；不自动更改白完、京巴等其他已审义项，也不统一给地名戏称标仇恨。",
+      "basis_event_ids": [
+        "definitions-batch-02-01-q07"
+      ],
+      "is_explicit_general_user_rule": false
+    },
+    {
+      "id": "D14",
+      "topic": "有效定义与子串误命中可以并存",
+      "case_summary_ai": "用户确认过男可作国男谐音，并采纳去掉使用者身份限制的改写；#2445靠过男人中的匹配仍不构成独立过男用法。",
+      "boundary_ai": "定义确认不修订句子标签；该匹配的substring_mismatch是AI位置观察，待命中阶段补全资源适配字段。",
+      "basis_event_ids": [
+        "definitions-batch-02-02-q00"
+      ],
+      "is_explicit_general_user_rule": false
+    }
+  ],
+  "followup_checks": [
+    {
+      "id": "definition-guonan-substring-2445",
+      "status": "queued_for_hit_phase",
+      "classification": "valid_definition_and_substring_mismatch_are_distinct",
+      "source_event_id": "definitions-batch-02-02-q00",
+      "linked_sentence_id": "demo:2445",
+      "previous_sentence_source": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.json",
+        "sha256": "818f70a61d7fa0a5aea0f8080cda23fa0001a917b8621e2cc3f69be0a0593861"
+      },
+      "previous_sentence_text": "不好意思，你们的言论我看不懂，因为我从来没有靠过男人（除了我爸爸），也没有诋毁过任何一个正常男性 你们说的那些人跟我也不是一个圈子的，我也无法理解，所以，我也只是从我的角度说出我的想法，意见不一样很正常，我也接受任何的批评",
+      "previous_sentence_values": {
+        "hate": "non-hate",
+        "group": [
+          "Sexism"
+        ],
+        "attack_severity": 0
+      },
+      "target_hit_ids": [
+        "hit:1746:demo:2445:lex-0119:sense:01:23:25"
+      ],
+      "reason_ai": "用户确认过男的独立谐音用法并采纳改写；实际匹配却来自靠过男人中的相邻字。AI预判source_fit为substring_mismatch，命中阶段仍需补齐query_fit等字段，不把定义确认等同本次命中有效。",
+      "consistency_note_ai": "独立定义有效与这一次子串误命中可以同时成立，不构成前后裁决冲突；原句子裁决保留。",
+      "existing_queue_items_only": true,
+      "sentence_decision_changed": false
+    }
+  ],
+  "new_general_human_rules": 0,
+  "online_material_confirmations_added": 0
+}

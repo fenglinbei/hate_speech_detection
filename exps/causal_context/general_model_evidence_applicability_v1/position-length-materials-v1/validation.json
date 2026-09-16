@@ -1,0 +1,64 @@
+{
+  "byte_reconstruction": {
+    "command": ".conda/stage1-p0/bin/python scripts/review/prepare_evidence_position_length_materials.py --output exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260912/position-length-materials-v1/prepared-01 --check",
+    "passed": true
+  },
+  "independent_checks": {
+    "contexts": 36,
+    "first_batch_background_bridges": 10,
+    "length_variants": 4,
+    "material_rows": 6,
+    "method": "standard-library parse of full demo blocks, exact substitutions, answer order, query displacement, empty human fields and all source/output hashes; no builder import",
+    "passed": true,
+    "position_pairs": 10,
+    "source_files_verified": 63
+  },
+  "manifest_sha256": "02c16bf1c38d266e6c32ec390df7ddbf032316abc24594856561ca1acb95e675",
+  "new_batch_human_adoption": false,
+  "new_individual_human_fields": 0,
+  "new_model_forward_executed": false,
+  "production_writes": 0,
+  "schema_version": "evidence-position-length-material-validation/v1",
+  "status": "passed",
+  "technical_audit": {
+    "authoring_candidates_retained": 7,
+    "background_bridge_checks": 10,
+    "candidate_boundary_checks": 72,
+    "cases": 2,
+    "contexts": 36,
+    "contrast_specs": 38,
+    "first_batch_overall_feedback_bound": true,
+    "first_batch_replays": 12,
+    "input_scoring_ready": false,
+    "length_contexts": 4,
+    "length_shift_checks": 4,
+    "materials_status": "draft_pending_human_review",
+    "mechanism_ready": false,
+    "model_frameworks_loaded": false,
+    "new_batch_human_adoption": false,
+    "new_contexts": 24,
+    "new_individual_human_fields": 0,
+    "new_model_forward_executed": false,
+    "new_texts": 6,
+    "position_contexts": 20,
+    "position_pair_checks": 10,
+    "production_writes": 0,
+    "review_queue_deployed": false,
+    "schema_version": "evidence-position-length-material-audit/v1",
+    "source_partner_candidates_screened": 20,
+    "technical_validation": "passed",
+    "tokenizer_tree_sha256": "ff36aee198780ed161fe50302f0fb3ca54bd69076bba25cd150e3da17ad65809",
+    "transformers_version": "4.55.4"
+  },
+  "unit_tests": {
+    "command": ".conda/stage1-p0/bin/python -m unittest scripts.review.test_prepare_evidence_position_length_materials -v",
+    "passed": 5,
+    "scope": [
+      "label_order_preservation_and_joint_scope",
+      "equal_length_with_moved_slot_or_query",
+      "edited_payload_or_unrelated_tokens",
+      "downstream_answer_and_query_displacement",
+      "multiple_material_changes"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "code_sha256": {
+    "scripts/review/evaluate_evidence_references.py": "7b7cdb9724864683b39d6619ec980a501960c5289f98a68b78427d4e5fbb1b8f",
+    "src/diagnostics/general_model_evidence_evaluation.py": "e1188ddd0a7ed33c8d45a09c4ed8f04d2d368574e4f502121bbbe4b87e1593f4",
+    "src/diagnostics/general_model_numeric_analysis.py": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2"
+  },
+  "independent_metrics": {
+    "absolute_tolerance": 1e-12,
+    "implementation": "scikit-learn",
+    "metric_rows": 24,
+    "passed": true,
+    "per_label_confusion_tables": 84,
+    "scalar_metrics": 72,
+    "version": "1.8.0"
+  },
+  "real_frame_failure_checks": {
+    "all_384_revised_margins_null_in_fallback": true,
+    "corrupt_scores_rejected_even_with_fallback_flag": true,
+    "explicit_fallback_preserves_discrete_tables": true,
+    "missing_file_simulated_without_source_mutation": true,
+    "missing_scores_rejected_by_default": true
+  },
+  "real_score_validation": {
+    "all_historical_predictions_reproduced": true,
+    "candidate_scores": 6528,
+    "discovery_queries": 32,
+    "source_files_verified": 50,
+    "task_condition_blocks": 384
+  },
+  "reconstruction": {
+    "artifacts_verified": 21,
+    "byte_for_byte_match": true,
+    "command": "python scripts/review/evaluate_evidence_references.py check --output exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260912/dual-reference-v1"
+  },
+  "recorded_at": "2026-09-12T03:38:25.159499+00:00",
+  "result_manifest_sha256": "256fb6bdb36ae1f39a6a2eb8a9ecd413c022a5821fccc646b85059bd9a390df7",
+  "runtime": {
+    "gpu_used": false,
+    "model_forward_executed": false,
+    "runtime_import_requires_third_party_packages": false
+  },
+  "schema_version": "evidence-dual-reference-validation/v1",
+  "status": "passed",
+  "unit_tests": {
+    "command": "python -m unittest src.tests.test_general_model_evidence_evaluation scripts.review.test_freeze_evidence_analysis -v",
+    "failed": 0,
+    "passed": 17,
+    "test_source_sha256": {
+      "scripts/review/test_freeze_evidence_analysis.py": "c40fa4440dbb9431e07978b04171d529b05dae5ed0967e67531ba01622a37a5a",
+      "src/tests/test_general_model_evidence_evaluation.py": "a2dec4b6eb40920e8bbdff6be3e93e9ddc3e2507c4162e3ec2022bc1efa58a45"
+    }
+  }
+}

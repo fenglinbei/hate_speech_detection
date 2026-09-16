@@ -1,0 +1,596 @@
+{
+  "schema_version": "numeric-allocator-warning-review/v1",
+  "created_at_utc": "2026-09-04T20:30:22.488376+00:00",
+  "run_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03",
+  "plan_id": "gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209",
+  "scientific_result": false,
+  "query_gold_read": false,
+  "scientific_effects_read": false,
+  "gpu_model_rerun": false,
+  "frozen_files_modified": false,
+  "warning": {
+    "observed_text_fragment": "cuMemoryAllocate failed res=2",
+    "source": "Root agent observed active numeric-03 output; no standalone full log artifact was available to this review.",
+    "exact_warning_timestamp": null
+  },
+  "checked_files": {
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/manifest.json": "f38f43c4840386a1b275aa43221e69c877647ded27a528e4e55d8a87a284490e",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/pool_binding.json": "0ec3afd8f69046be34b9213c76f148c2aac0e94da80eec8a4ef25f464063a20c",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/scores.jsonl": "cd35bc92465b741f4ef41c6e4e8ea7cf791cb3febed2d75867a06cdb80af75d6",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/0/regression-b1-r0/manifest.json": "88e811ae0cbe426a698d39b36dc529b4493c9395087910a960b06c07ee623b7b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/0/regression-b1-r0/scores.jsonl": "9187443fa3f66c580697c0512c8670b438cb46507539357b42cad070ffcd9eda",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/1/regression-b1-r0/manifest.json": "bc82fec150cf280a3ee86d26706c948c4ac93476e4b2f36e4f5cd2a09555d25b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/1/regression-b1-r0/scores.jsonl": "73af039193a5dff8dba8e53356b9ee069beb3dd48db2d2a782ed59367b2cabc4",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/2/regression-b1-r0/manifest.json": "30abf56a965549c7ce099f97d89b9518443ad170d2721b3008aec37b9dc788a1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/2/regression-b1-r0/scores.jsonl": "df7fc1e3fcced28952a228f7e787e31bc504794bc4028e98e09bc1cecd52c2da",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/3/regression-b1-r0/manifest.json": "cfb0f27ffd4d7a0bf9f5179b15e7a5ae4d7ab0c23eb19329a10aed0cb69808a6",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/3/regression-b1-r0/scores.jsonl": "6287a4a7e87761be47095c950cb2b29e3090118b72af0073777a342f3746f659",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/manifest.json": "ef2b17e0c77bb5a3a60150199ee2d54301522e5a13e555988b8753c701985c94",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/pool_binding.json": "58fdc93a7982a0846d6a7b1e4ebce1c9037ba7819ca2c6c25ae0b463ea68c603",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/scores.jsonl": "2813d25ea94edce39187f7da738ddbe5675fd9400699e4cca327d597ad58ae66",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/0/regression-b1-r1/manifest.json": "e8cf4b0d3b6f4272d08baa89005ee34de484013498ef5ad73f5b5d40c54ac37f",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/0/regression-b1-r1/scores.jsonl": "8d0c2b5989dfb3857dff73938a0fb62327719225b6a367a3ab5b2d3ddbe3975b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/1/regression-b1-r1/manifest.json": "9ac7a45a33bb690a76a25ab1e1e83c9ae11dc7ab6d3ec66fe4063defc9a67d65",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/1/regression-b1-r1/scores.jsonl": "124a6472824918d5ba6efe5ae670eb386a58245c301bf3bb8e0f858b27d6a6b6",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/2/regression-b1-r1/manifest.json": "f479b29d7f8579424aa6a66cce032f99eda5b81d7fb4cea97026736337c8db3f",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/2/regression-b1-r1/scores.jsonl": "8b85234f1e85bfb6d5d402d5b56e375f45acd7c442808df599054158dd5c3b43",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/3/regression-b1-r1/manifest.json": "d00defd7c9eb36085774726ea4455966fa1890ee3e57b79bee9c448aa23bd20d",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/3/regression-b1-r1/scores.jsonl": "441c0f0663c5b01a6af1cf86ed7df3a15b6b63a2c4c922b97ce8f2a71c0afd6c",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/manifest.json": "bf4d6e115b344c1cf15eac30eba5a126e1080e77538b96467c835551a03983a6",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/pool_binding.json": "732b73b6fc2a8b05c3d519d3a7c6e8fe438d85a04775fe8cd915574c8128496b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/scores.jsonl": "1c4a02b937d0dbbe97d1761ceffe33cf5d3d81d485e662af01df2e13fd6a031a",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/0/regression-b4-r0/manifest.json": "8637611215d5c278a5cbd432ef9ea5c08b50787b3059c007dea3c892e2a959c7",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/0/regression-b4-r0/scores.jsonl": "e3b2214ebe88fae84e78f2881f0571cfef0c584f39bbd528b7b3a7255702b74d",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/1/regression-b4-r0/manifest.json": "0286962b24dc04c69657036223a04570c281e930db50352059e0838e56613c79",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/1/regression-b4-r0/scores.jsonl": "79aa9451cf78cdb2923d0eac0f5c6dce05fb2527234cd9484d7b0296a037cc32",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/2/regression-b4-r0/manifest.json": "ef18fbb50a2437809738fae1b1c9c3876b63f826d64fbd1acb42939ca3abe085",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/2/regression-b4-r0/scores.jsonl": "1baf9cd47d474f5fcbe18135b99b65890cc39ed0e607ec6f9c88739a8d70a33b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/3/regression-b4-r0/manifest.json": "c4376e974cbb267add5562bb3e22509982b3f2020eda0c31937c7cc062416587",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/3/regression-b4-r0/scores.jsonl": "fcb3ae8f5f2668991693db24c293a75384fdba5ca1fa33a27d741a762163e517",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/manifest.json": "2a5821bd27b1ec934fe6420e90650e494e82a7d2c55be68900010700b56e5501",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/pool_binding.json": "f95906efd1b215a48c8db623c99a6e85ff113c8aa5587d9a4594997769daac97",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/scores.jsonl": "6f3b5b6e5901742e5782f4dc40348c848eb5cf937eafb977bae9855077c0fc4b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/0/regression-b4-tail2/manifest.json": "c40e885d9a842f16d421a34a467bd30658659cd9e4713de45a17bb37da4eb312",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/0/regression-b4-tail2/scores.jsonl": "34b8e7cb102f339c2f810e674f50147b699d60483c7cb6423700832ee12afc2f",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/1/regression-b4-tail2/manifest.json": "4bb19a7d08ea2b321c1d8d972f38683250ebdabf2affcf98aa5bf3a1591e4690",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/1/regression-b4-tail2/scores.jsonl": "4028efc25300c96defb3a106b9661c122726291a953eaf4d8bc4511c954cf007",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/2/regression-b4-tail2/manifest.json": "48bf3d6650a357d1fd1f85b9302317f878237aa9042fb4ed7574370c5e76a057",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/2/regression-b4-tail2/scores.jsonl": "18808d684a5cc6f78fac8ac7540dc03070002c1d34175a8d439b3557309b7d4c",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/3/regression-b4-tail2/manifest.json": "0df25b10d1f3f896d481ee2ab587a3ebe06fa6c4e6cae83c139b6145d08685bf",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/3/regression-b4-tail2/scores.jsonl": "18061d7557aa9fa39579e73ef06fecc1d8d615d7c9d881fdfae0f599cb6dd8be",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/manifest.json": "a42f93b866f2b77c87eb42b83770c83ddae8ca476075230b5bc0b091e0167039",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/pool_binding.json": "da517ecdfdec1004e1913216f82ce9c4f1d8935f4e87996c379321414db0afb1",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/scores.jsonl": "dc7bd0ecee6ca2373dceb939fcae8d80201ca2e1d443c7f848a9bf7ca87a10fc",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/0/regression-b4-padding/manifest.json": "aba4b269027127a0b967f9bde9fa71e31d052b47434f7a955deb26fc0b011018",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/0/regression-b4-padding/scores.jsonl": "a0075bb9a084981eb41d889d727484f19319bf404f715a5e5b1f7b0ec221444f",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/1/regression-b4-padding/manifest.json": "9255ed6a0550c420d12f4c986660ed8d35d1de51a49167608c6fc3bad60ce383",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/1/regression-b4-padding/scores.jsonl": "17ec5eef5b12e4ff2d89fcbfbf68375fcb2924917cd8980bca7b4c0c54ddb5f0",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/2/regression-b4-padding/manifest.json": "852b71fb3441ee58b27b30fe5ae408525e9709ca9cbb5047ac5d4923ef60ebd5",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/2/regression-b4-padding/scores.jsonl": "7d8cf56449831cb1e2fd4a3427a2eb2dfb519da882973acdda3615a355a38da4",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/3/regression-b4-padding/manifest.json": "c1f70be8bce6223058b82118506a54f5bd84d56eb8780cb1c11f071e31ed166e",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/3/regression-b4-padding/scores.jsonl": "517647183cdeca2efd2326cda7d01535fa895e09ddc8c868070a0e43d282c3a3",
+    "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_numeric_kernel_v2.py": "58abb51a4d74a0ac124578de340151f31d480b7be5069ef415a454dcc53287c8",
+    "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_numeric_pool.py": "d86fe474b7cd5c9187cf5f77813734d9bb9151debdd838b686e85f2fc9fb8cc5",
+    "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_numeric_v2.py": "66a23d017e395f5a6845023a953fe3398ea7dc74578361ee22938edf5c43f12f",
+    "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/lib/python3.11/site-packages/torch/cuda/memory.py": "131fcd492398bc4443ccff0c27a9963a5acb2ab1bde8e62f0430fb9fc8d3557b",
+    "/usr/local/cuda/include/cuda.h": "dbd3ae3677ecf076f6b2a0971d42b2dd5b9d5f1ccdf34e74774a16fc2df7cac1",
+    "/usr/local/cuda/include/driver_types.h": "e1e050d7437381fb36065c466861d53162ef9c97caac49cc9a5f737c58b40f20",
+    "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v2/plan_ref.json": "965fd84e933437c74dfeff0354eb9c059e0740c1baf2b222b3984db7ef313b6b",
+    "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v2/plans/gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209/plan.json": "be81dc86cbcb9ae0e6bd488fee6a670874d9ab222b6c4c81935e88fd5fb300a9",
+    "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v1/plan_ref.json": "82d8a565f8cbda1590fb060f842eb6f81f81440f91be89473278e3464f4fc8ec",
+    "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v1/plans/gmlnum-9d42aaf7255a7cf66da07eeb7d6d03b6ca709006e6d3aff9f4a11ff034a7a2f1/plan.json": "73a96548adb804260d1f9d71a5612b9dec8cbec91131366e6aabbd430aa6a568"
+  },
+  "sealed_passes": [
+    {
+      "pass": "regression-b1-r0",
+      "status": "complete",
+      "blocks": 96,
+      "candidates": 1632,
+      "exact_unique_record_coverage_and_top_merge_verified": true,
+      "all_record_runtime_hashes_match_shard_identity": true,
+      "all_candidates_actual_logits_dtypes": [
+        "torch.float32"
+      ],
+      "actual_and_effective_batch_sizes": [
+        [
+          1,
+          1
+        ]
+      ],
+      "padding_challenge_extra_values": [
+        0
+      ],
+      "all_target_logits_finite_checked": true,
+      "all_use_cache_false": true,
+      "wall_time_source": "Filesystem mtime: top pool_binding.json to top manifest.json; includes slowest shard completion and parent merge, not a sum across GPUs.",
+      "wall_started_at_utc": "2026-09-04T20:05:17.028030+00:00",
+      "wall_completed_at_utc": "2026-09-04T20:07:38.447145+00:00",
+      "wall_seconds": 141.41911482810974,
+      "shards": [
+        {
+          "physical_gpu_index": 0,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/0/regression-b1-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/0/regression-b1-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33259097088,
+          "pytorch_peak_allocated_GiB": 30.974947929382324
+        },
+        {
+          "physical_gpu_index": 1,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/1/regression-b1-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/1/regression-b1-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33108392448,
+          "pytorch_peak_allocated_GiB": 30.834593296051025
+        },
+        {
+          "physical_gpu_index": 2,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/2/regression-b1-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/2/regression-b1-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33025126912,
+          "pytorch_peak_allocated_GiB": 30.757046222686768
+        },
+        {
+          "physical_gpu_index": 3,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/3/regression-b1-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r0/shards/3/regression-b1-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33034996224,
+          "pytorch_peak_allocated_GiB": 30.76623773574829
+        }
+      ]
+    },
+    {
+      "pass": "regression-b1-r1",
+      "status": "complete",
+      "blocks": 96,
+      "candidates": 1632,
+      "exact_unique_record_coverage_and_top_merge_verified": true,
+      "all_record_runtime_hashes_match_shard_identity": true,
+      "all_candidates_actual_logits_dtypes": [
+        "torch.float32"
+      ],
+      "actual_and_effective_batch_sizes": [
+        [
+          1,
+          1
+        ]
+      ],
+      "padding_challenge_extra_values": [
+        0
+      ],
+      "all_target_logits_finite_checked": true,
+      "all_use_cache_false": true,
+      "wall_time_source": "Filesystem mtime: top pool_binding.json to top manifest.json; includes slowest shard completion and parent merge, not a sum across GPUs.",
+      "wall_started_at_utc": "2026-09-04T20:07:38.455145+00:00",
+      "wall_completed_at_utc": "2026-09-04T20:10:05.663396+00:00",
+      "wall_seconds": 147.20825123786926,
+      "shards": [
+        {
+          "physical_gpu_index": 0,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/0/regression-b1-r1/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/0/regression-b1-r1/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33259097088,
+          "pytorch_peak_allocated_GiB": 30.974947929382324
+        },
+        {
+          "physical_gpu_index": 1,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/1/regression-b1-r1/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/1/regression-b1-r1/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33108392448,
+          "pytorch_peak_allocated_GiB": 30.834593296051025
+        },
+        {
+          "physical_gpu_index": 2,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/2/regression-b1-r1/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/2/regression-b1-r1/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33025126912,
+          "pytorch_peak_allocated_GiB": 30.757046222686768
+        },
+        {
+          "physical_gpu_index": 3,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/3/regression-b1-r1/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b1-r1/shards/3/regression-b1-r1/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 24
+          },
+          "pytorch_peak_allocated_bytes": 33034996224,
+          "pytorch_peak_allocated_GiB": 30.76623773574829
+        }
+      ]
+    },
+    {
+      "pass": "regression-b4-r0",
+      "status": "complete",
+      "blocks": 96,
+      "candidates": 1632,
+      "exact_unique_record_coverage_and_top_merge_verified": true,
+      "all_record_runtime_hashes_match_shard_identity": true,
+      "all_candidates_actual_logits_dtypes": [
+        "torch.float32"
+      ],
+      "actual_and_effective_batch_sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "padding_challenge_extra_values": [
+        0
+      ],
+      "all_target_logits_finite_checked": true,
+      "all_use_cache_false": true,
+      "wall_time_source": "Filesystem mtime: top pool_binding.json to top manifest.json; includes slowest shard completion and parent merge, not a sum across GPUs.",
+      "wall_started_at_utc": "2026-09-04T20:10:05.885401+00:00",
+      "wall_completed_at_utc": "2026-09-04T20:12:16.799285+00:00",
+      "wall_seconds": 130.9138844013214,
+      "shards": [
+        {
+          "physical_gpu_index": 0,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/0/regression-b4-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/0/regression-b4-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 34643514368,
+          "pytorch_peak_allocated_GiB": 32.26428699493408
+        },
+        {
+          "physical_gpu_index": 1,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/1/regression-b4-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/1/regression-b4-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 34034790912,
+          "pytorch_peak_allocated_GiB": 31.69736909866333
+        },
+        {
+          "physical_gpu_index": 2,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/2/regression-b4-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/2/regression-b4-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 33708738048,
+          "pytorch_peak_allocated_GiB": 31.3937087059021
+        },
+        {
+          "physical_gpu_index": 3,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/3/regression-b4-r0/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-r0/shards/3/regression-b4-r0/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 33748143616,
+          "pytorch_peak_allocated_GiB": 31.430408000946045
+        }
+      ]
+    },
+    {
+      "pass": "regression-b4-tail2",
+      "status": "complete",
+      "blocks": 6,
+      "candidates": 12,
+      "exact_unique_record_coverage_and_top_merge_verified": true,
+      "all_record_runtime_hashes_match_shard_identity": true,
+      "all_candidates_actual_logits_dtypes": [
+        "torch.float32"
+      ],
+      "actual_and_effective_batch_sizes": [
+        [
+          2,
+          2
+        ]
+      ],
+      "padding_challenge_extra_values": [
+        0
+      ],
+      "all_target_logits_finite_checked": true,
+      "all_use_cache_false": true,
+      "wall_time_source": "Filesystem mtime: top pool_binding.json to top manifest.json; includes slowest shard completion and parent merge, not a sum across GPUs.",
+      "wall_started_at_utc": "2026-09-04T20:12:16.883287+00:00",
+      "wall_completed_at_utc": "2026-09-04T20:12:17.769307+00:00",
+      "wall_seconds": 0.8860194683074951,
+      "shards": [
+        {
+          "physical_gpu_index": 0,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/0/regression-b4-tail2/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/0/regression-b4-tail2/scores.jsonl",
+          "status": "complete",
+          "blocks": 2,
+          "candidates": 4,
+          "checkpoint_attempt_status_counts": {
+            "committed": 2
+          },
+          "pytorch_peak_allocated_bytes": 32885586944,
+          "pytorch_peak_allocated_GiB": 30.627089500427246
+        },
+        {
+          "physical_gpu_index": 1,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/1/regression-b4-tail2/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/1/regression-b4-tail2/scores.jsonl",
+          "status": "complete",
+          "blocks": 2,
+          "candidates": 4,
+          "checkpoint_attempt_status_counts": {
+            "committed": 2
+          },
+          "pytorch_peak_allocated_bytes": 33006745600,
+          "pytorch_peak_allocated_GiB": 30.739927291870117
+        },
+        {
+          "physical_gpu_index": 2,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/2/regression-b4-tail2/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/2/regression-b4-tail2/scores.jsonl",
+          "status": "complete",
+          "blocks": 1,
+          "candidates": 2,
+          "checkpoint_attempt_status_counts": {
+            "committed": 1
+          },
+          "pytorch_peak_allocated_bytes": 33005270528,
+          "pytorch_peak_allocated_GiB": 30.738553524017334
+        },
+        {
+          "physical_gpu_index": 3,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/3/regression-b4-tail2/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-tail2/shards/3/regression-b4-tail2/scores.jsonl",
+          "status": "complete",
+          "blocks": 1,
+          "candidates": 2,
+          "checkpoint_attempt_status_counts": {
+            "committed": 1
+          },
+          "pytorch_peak_allocated_bytes": 33051485696,
+          "pytorch_peak_allocated_GiB": 30.78159475326538
+        }
+      ]
+    },
+    {
+      "pass": "regression-b4-padding",
+      "status": "complete",
+      "blocks": 96,
+      "candidates": 1632,
+      "exact_unique_record_coverage_and_top_merge_verified": true,
+      "all_record_runtime_hashes_match_shard_identity": true,
+      "all_candidates_actual_logits_dtypes": [
+        "torch.float32"
+      ],
+      "actual_and_effective_batch_sizes": [
+        [
+          4,
+          4
+        ]
+      ],
+      "padding_challenge_extra_values": [
+        64
+      ],
+      "all_target_logits_finite_checked": true,
+      "all_use_cache_false": true,
+      "wall_time_source": "Filesystem mtime: top pool_binding.json to top manifest.json; includes slowest shard completion and parent merge, not a sum across GPUs.",
+      "wall_started_at_utc": "2026-09-04T20:12:17.778307+00:00",
+      "wall_completed_at_utc": "2026-09-04T20:14:44.171537+00:00",
+      "wall_seconds": 146.39322972297668,
+      "shards": [
+        {
+          "physical_gpu_index": 0,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/0/regression-b4-padding/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/0/regression-b4-padding/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 34827785216,
+          "pytorch_peak_allocated_GiB": 32.43590259552002
+        },
+        {
+          "physical_gpu_index": 1,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/1/regression-b4-padding/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/1/regression-b4-padding/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 34186857472,
+          "pytorch_peak_allocated_GiB": 31.83899211883545
+        },
+        {
+          "physical_gpu_index": 2,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/2/regression-b4-padding/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/2/regression-b4-padding/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 33815171072,
+          "pytorch_peak_allocated_GiB": 31.49283218383789
+        },
+        {
+          "physical_gpu_index": 3,
+          "manifest": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/3/regression-b4-padding/manifest.json",
+          "scores": "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/regression-b4-padding/shards/3/regression-b4-padding/scores.jsonl",
+          "status": "complete",
+          "blocks": 24,
+          "candidates": 408,
+          "checkpoint_attempt_status_counts": {
+            "committed": 18
+          },
+          "pytorch_peak_allocated_bytes": 33856198656,
+          "pytorch_peak_allocated_GiB": 31.531042098999023
+        }
+      ]
+    }
+  ],
+  "code_evidence": [
+    {
+      "file": "src/diagnostics/general_model_numeric_kernel_v2.py",
+      "claim": "Scoring has no OOM exception handler or adaptive batch/dtype fallback. Runtime precision is initialized once; batch tensors use the requested item count."
+    },
+    {
+      "file": "src/diagnostics/general_model_numeric_pool.py",
+      "claim": "An uncaught worker exception sends an error; parent collection fails and terminates the owned pool. Merging requires all assigned shards and exact coverage."
+    },
+    {
+      "file": ".conda/stage1-p0/lib/python3.11/site-packages/torch/cuda/memory.py",
+      "line": 266,
+      "claim": "PyTorch documents num_alloc_retries as failed cudaMalloc calls resulting in cache flush and retry, separately from thrown num_ooms."
+    },
+    {
+      "file": "/usr/local/cuda/include/cuda.h",
+      "line": 2284,
+      "claim": "CUDA_ERROR_OUT_OF_MEMORY has numeric value 2."
+    }
+  ],
+  "gpu_status_observation": {
+    "source_command": "nvidia-smi --query-gpu=index,uuid,name,memory.used,memory.total,utilization.gpu --format=csv,noheader,nounits",
+    "timestamp_precision": "Earlier in the same review; exact sample timestamp was not recorded.",
+    "physical_gpu_utilization_percent": [
+      98,
+      97,
+      97,
+      100
+    ],
+    "physical_gpu_uuids": [
+      "GPU-09b29c25-c372-62f4-3098-9734013e93c0",
+      "GPU-9145ca41-4f0b-6f81-9a0b-118cb4596601",
+      "GPU-278f5973-425f-514a-8a2d-db77f55d481b",
+      "GPU-6e7d956e-0a22-7fac-a093-130cc1190f38"
+    ],
+    "reported_memory_used_MiB": [
+      158403,
+      0,
+      0,
+      0
+    ],
+    "reported_total_memory_MiB": [
+      46068,
+      46068,
+      46068,
+      46068
+    ],
+    "memory_counter_interpretation": "HAMI-interposed used-memory counters are not credible per-device free-memory evidence: device 0 reports more than its physical capacity while other busy devices report zero. No resource-control bypass was attempted."
+  },
+  "time_estimate": {
+    "conditional_on": "Every remaining numerical gate passes; no interruptions or competing GPU work.",
+    "metadata_only_work_proxy": {
+      "regression": {
+        "query_count": 8,
+        "block_count": 96,
+        "candidate_token_work": 768900,
+        "candidate_token_squared_work": 493942500,
+        "prompt_mean": 420.84375,
+        "prompt_max": 1126
+      },
+      "validation": {
+        "query_count": 24,
+        "block_count": 288,
+        "candidate_token_work": 2612460,
+        "candidate_token_squared_work": 1941536928,
+        "prompt_mean": 482.9270833333333,
+        "prompt_max": 1413
+      },
+      "dev": {
+        "query_count": 643,
+        "block_count": 7716,
+        "candidate_token_work": 61815858,
+        "candidate_token_squared_work": 39755241282,
+        "prompt_mean": 420.8398133748056,
+        "prompt_max": 1687
+      }
+    },
+    "dev_linear_work_ratio_to_regression": 80.39518532969177,
+    "dev_quadratic_work_ratio_to_regression": 80.48556518623118,
+    "dev_raw_point_estimate_hours": 2.923568332965022,
+    "dev_raw_range_hours": [
+      2.5,
+      4
+    ],
+    "remaining_preflight_range_hours_at_review": [
+      1.5,
+      2.5
+    ],
+    "preflight_estimate_observation": "Regression prefix pass was still running at approximately 12 wall-clock minutes and each shard was in its final blocks; prefix cost is substantially higher than ordinary teacher-forcing passes.",
+    "validation_linear_work_ratio_to_regression": 3.397658993367148,
+    "validation_quadratic_work_ratio_to_regression": 3.9306942164320744,
+    "scope": "These are broad prospective estimates from the earlier in-flight review, not a completion promise or updated remaining-time counter. Full-dev estimate covers raw scoring, not final analysis.",
+    "summed_gpu_seconds_used_as_wall": false
+  },
+  "conclusion": {
+    "silent_batch_dtype_or_coverage_change_observed": false,
+    "interpretation": "Evidence is consistent with a low-level allocation failure followed by successful allocator recovery. The exact recovery path is not established because allocator retry counters were not retained.",
+    "continuation": "The isolated warning does not by itself invalidate the sealed padding pass. Continue only under the existing complete numerical preflight gates; an escaping allocation error still stops the pool.",
+    "necessary_verification_completed": [
+      "All four padding shard manifests and raw hashes match the top receipt.",
+      "Padding pass has exactly 96 unique blocks and 1632 candidates.",
+      "Every padding candidate records float32 logits, actual/effective batch 4, padding_extra 64, finite target check, and no cache.",
+      "All padding shard atomic attempts are committed; no started attempt remains."
+    ],
+    "limitations": [
+      "num_alloc_retries and num_ooms were not recorded by the frozen runtime; the exact allocator recovery cannot be proved retrospectively.",
+      "The full warning log and precise warning timestamp were not available as standalone artifacts.",
+      "HAMI NVML counters cannot establish actual per-card free memory; PyTorch peak allocated bytes do not include all reserved cache or driver allocations.",
+      "Completed-pass integrity and finite checks do not replace the remaining numerical compatibility gates."
+    ]
+  }
+}

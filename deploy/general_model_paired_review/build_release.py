@@ -33,10 +33,15 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA = REPOSITORY_ROOT / (
     "exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02"
 )
+DEFAULT_EVIDENCE = REPOSITORY_ROOT / 'exps/causal_context/general_model_evidence_applicability_v1/bundle/evidence_bundle.json'
 CODE_FILES = (
     "scripts/stage1/general_model_paired_review.py",
     "tools/general_model_paired_review_ui/server.py",
     "tools/general_model_paired_review_ui/store.py",
+    "tools/general_model_paired_review_ui/evidence_store.py",
+    "tools/general_model_paired_review_ui/evidence_schema.py",
+    "tools/general_model_paired_review_ui/evidence_policy.py",
+    "tools/general_model_paired_review_ui/evidence_finalization.py",
     "tools/annotated_lexicon_operation_review_ui/server.py",
     "src/build_lex/annotated_lexicon_repair.py",
     "src/build_lex/annotated_lexicon_operation_review.py",
@@ -48,6 +53,9 @@ STATIC_FILES = (
     "tools/general_model_paired_review_ui/app.js",
     "tools/general_model_paired_review_ui/core.js",
     "tools/general_model_paired_review_ui/styles.css",
+    "tools/general_model_paired_review_ui/evidence.html",
+    "tools/general_model_paired_review_ui/evidence.js",
+    "tools/general_model_paired_review_ui/evidence.css",
     "tools/wp3_candidate_review_ui/styles.css",
     "tools/wp3_candidate_review_ui/core.js",
 )
@@ -71,7 +79,8 @@ def read_file(root: Path, relative: str) -> bytes:
     return resolved.read_bytes()
 
 
-def collect_payload(data_dir: Path) -> tuple[dict[str, bytes], dict[str, Any]]:
+def collect_payload(data_dir: Path, evidence_bundle: Path | None = None,
+                    evidence_policy: Path | None = None) -> tuple[dict[str, bytes], dict[str, Any]]:
     """Snapshot each included file once, validating those exact frozen bytes."""
     payload = {
         name: read_file(REPOSITORY_ROOT, name)
@@ -138,6 +147,28 @@ def collect_payload(data_dir: Path) -> tuple[dict[str, bytes], dict[str, Any]]:
         if len(set(ai_ids)) != len(ai_ids) or not set(ai_ids) <= case_ids:
             raise ValueError("AI review contains duplicate or unauthorized case IDs")
 
+    if evidence_policy is not None and evidence_bundle is None:
+        raise ValueError('--evidence-policy requires --evidence-bundle')
+    evidence_info = None
+    if evidence_bundle is not None:
+        evidence_raw = read_file(evidence_bundle.parent.resolve(), evidence_bundle.name)
+        evidence = json.loads(evidence_raw)
+        if set(evidence['order']) != case_ids or evidence['source_identity']['paired_manifest_sha256'] != sha256(manifest_bytes):
+            raise ValueError('evidence bundle discovery/source identity differs')
+        if evidence['preparation']['human_confirmed'] != 0:
+            raise ValueError('AI bundle must not contain human confirmations')
+        payload['evidence/evidence_bundle.json'] = evidence_raw
+        evidence_info = {'sha256': sha256(evidence_raw), 'case_count': len(case_ids), 'object_count': len(evidence['objects']), 'policy': {k: evidence['policy'][k] for k in ('version', 'sha256')}}
+        if evidence_policy is not None:
+            policy_raw = read_file(evidence_policy.parent.resolve(), evidence_policy.name)
+            policy = json.loads(policy_raw)
+            if not isinstance(policy, dict):
+                raise ValueError('evidence policy must be a JSON object')
+            payload['evidence/evidence_policy.json'] = policy_raw
+            evidence_info['active_policy'] = {
+                'path': 'evidence/evidence_policy.json', 'sha256': sha256(policy_raw),
+                'version': policy['version'],
+            }
     metadata = {
         "schema_version": "general-model-paired-review-release/v1",
         "source_identity": identity,
@@ -145,6 +176,7 @@ def collect_payload(data_dir: Path) -> tuple[dict[str, bytes], dict[str, Any]]:
         "runtime": {"python": ">=3.10", "platform": "linux", "third_party_packages": []},
         "case_count": len(case_ids),
         "initial_case_count": len(initial_ids),
+        "evidence": evidence_info,
         "payload_file_count": len(payload),
         "payload_bytes": sum(map(len, payload.values())),
         "files": {
@@ -194,6 +226,27 @@ reopened = PairedWebService(
 )
 if reopened.store.bootstrap() != service.store.bootstrap():
     raise RuntimeError("isolated session did not resume")
+if manifest.get('evidence'):
+    from tools.general_model_paired_review_ui.evidence_store import EvidenceReviewStore
+    kwargs = dict(bundle_path=release / 'evidence/evidence_bundle.json', session_path=session.parent / 'evidence-session.json', reviewer_id='automated-release-verification')
+    if manifest['evidence'].get('active_policy'):
+        from tools.general_model_paired_review_ui.evidence_policy import migrate_policy_session
+        initial_evidence = EvidenceReviewStore(**kwargs)
+        migrate_policy_session(**kwargs, policy_path=release / manifest['evidence']['active_policy']['path'],
+                               expected_revision=initial_evidence.bootstrap()['revision'],
+                               expected_session_sha256=hashlib.sha256(kwargs['session_path'].read_bytes()).hexdigest(),
+                               actor='automated-release-verification')
+        kwargs['policy_path'] = release / manifest['evidence']['active_policy']['path']
+    evidence = EvidenceReviewStore(**kwargs)
+    bootstrap = evidence.bootstrap()
+    assert bootstrap['status']['item_count'] == manifest['evidence']['case_count']
+    assert bootstrap['status']['object_count'] == manifest['evidence']['object_count']
+    assert bootstrap['status']['confirmed_count'] == bootstrap['status']['confirmed_object_count'] == 0
+    for row in bootstrap['items']:
+        item = evidence.item_state(row['item_id'])
+        assert item['comparison'] is None and not item['review']['material_snapshots']
+        assert all(o['review']['status'] == 'unreviewed' for o in item['objects'])
+    assert EvidenceReviewStore(**kwargs).bootstrap() == bootstrap
 for name, module in list(sys.modules.items()):
     if name.startswith(("tools.", "build_lex.", "rag.")) and getattr(module, "__file__", None):
         if not Path(module.__file__).resolve().is_relative_to(release):
@@ -235,6 +288,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--output-dir", required=True, type=Path, help="new or empty output directory inside /tmp")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA, help="frozen paired-case source directory")
+    parser.add_argument("--evidence-bundle", type=Path, default=None, help="optional completed discovery AI-note bundle")
+    parser.add_argument("--evidence-policy", type=Path, default=None, help="optional separately frozen active policy; requires an evidence bundle")
     args = parser.parse_args()
     try:
         output = args.output_dir.resolve()
@@ -243,7 +298,7 @@ def main() -> int:
             raise ValueError("--output-dir must be a directory inside /tmp")
         if output.exists() and (not output.is_dir() or any(output.iterdir())):
             raise ValueError("--output-dir already exists and is not an empty directory")
-        payload, metadata = collect_payload(args.data_dir.resolve(strict=True))
+        payload, metadata = collect_payload(args.data_dir.resolve(strict=True), args.evidence_bundle, args.evidence_policy)
         payload["release_manifest.json"] = json_bytes(metadata)
         output.mkdir(parents=True, exist_ok=True)
         release = output / "release"

@@ -1,0 +1,213 @@
+{
+  "schema_version": "evidence-sentence-completion-user-decisions/v1",
+  "review_round": 9,
+  "recorded_at_utc": "2026-09-11T13:43:08.435752+00:00",
+  "selection_sha256": "5bb695c272953f1328e483952ff85809dbdbb2bdf48c6b75b29c24e62f7a4587",
+  "pre_discussion_annotation": {
+    "path": "sentence-completion-v1/ai-drafts.json",
+    "sha256": "83f6217b34517e4461272b605890f513682305bc0391e88d5525a9d216e0d6bb"
+  },
+  "task_policies": {
+    "attack_severity": {
+      "version": "evidence-attack-severity-policy/v1",
+      "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+    },
+    "hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1+racism-personal-priority.1+same-target.1",
+      "sha256": "3853739a723368445b29d461f1ed10a4570da3537f3b3fe55077961c35a6a312"
+    }
+  },
+  "records": [
+    {
+      "object_id": "demo:3742",
+      "text_sha256": "6a6f57bb5d6f00e75d49b190a988801a0ace092b46755fcf49008f93ac160a8c",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "sentence-completion-v1/discussions/received-replies-04.json",
+        "sha256": "cd798474ae36c7b354437e3472bde4527aa20af01e95790dbc684b0f31ae7cfe"
+      },
+      "source_reply_index": 0,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_kCF1Bvf0uhBwcP8cOMTgW25T",
+        11
+      ],
+      "rationale": "保留 此处的受话者不是黑人，因此需要独立other，当受话者是黑人且个人时，“种族＋个人优先仅种族”才适用",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_fields",
+      "supersedes_event_ids": {
+        "group": [
+          "discussions/batch-04/user-decisions-01.json#records/2/group"
+        ]
+      },
+      "amendment_reason": "本轮明确重开group以应用用户新增的种族与个人合并规则；保留旧裁决全文及政策。"
+    },
+    {
+      "object_id": "demo:4392",
+      "text_sha256": "d1dc8cad0972f0e4ca88a0424e88beff27413fe7e33d9f9aaf45f69919d54a0f",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "sentence-completion-v1/discussions/received-replies-04.json",
+        "sha256": "cd798474ae36c7b354437e3472bde4527aa20af01e95790dbc684b0f31ae7cfe"
+      },
+      "source_reply_index": 1,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_kCF1Bvf0uhBwcP8cOMTgW25T",
+        12
+      ],
+      "rationale": "保留 Racism、Sexism、others：政治身份独立",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism",
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_fields",
+      "supersedes_event_ids": {
+        "group": [
+          "discussions/batch-04/user-decisions-01.json#records/6/group"
+        ]
+      },
+      "amendment_reason": "本轮明确重开group以应用用户新增的种族与个人合并规则；保留旧裁决全文及政策。"
+    },
+    {
+      "object_id": "demo:4810",
+      "text_sha256": "746ae65f7c8cd0f9d57f9653dbc8471de73e80872e9f9812155a08ffee02492e",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "sentence-completion-v1/discussions/received-replies-04.json",
+        "sha256": "cd798474ae36c7b354437e3472bde4527aa20af01e95790dbc684b0f31ae7cfe"
+      },
+      "source_reply_index": 2,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_kCF1Bvf0uhBwcP8cOMTgW25T",
+        13
+      ],
+      "rationale": "保留 Racism、Sexism、others：有独立身份依据",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism",
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_fields",
+      "supersedes_event_ids": {
+        "group": [
+          "discussions/batch-05/user-decisions-01.json#records/0/group"
+        ]
+      },
+      "amendment_reason": "本轮明确重开group以应用用户新增的种族与个人合并规则；保留旧裁决全文及政策。"
+    },
+    {
+      "object_id": "demo:7927",
+      "text_sha256": "61b999be55bd9c9d778441530081fc4cc1a924a4f06852a004a2cec8680ec6f8",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "sentence-completion-v1/discussions/received-replies-04.json",
+        "sha256": "cd798474ae36c7b354437e3472bde4527aa20af01e95790dbc684b0f31ae7cfe"
+      },
+      "source_reply_index": 3,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_kCF1Bvf0uhBwcP8cOMTgW25T",
+        14
+      ],
+      "rationale": "Racism、others：此处个人攻击对象独立",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_fields"
+    },
+    {
+      "object_id": "query:5423",
+      "text_sha256": "8732377d904a110c0f4abdb9c63465b6f37385afdd364fcc5fb46ded9f32e0e3",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "sentence-completion-v1/discussions/received-replies-04.json",
+        "sha256": "cd798474ae36c7b354437e3472bde4527aa20af01e95790dbc684b0f31ae7cfe"
+      },
+      "source_reply_index": 4,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_JRywHQow8INUfOothYtRquJ2",
+        0
+      ],
+      "rationale": "改为 Racism、others：受辱者未被证明是黑人",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_fields",
+      "supersedes_event_ids": {
+        "group": [
+          "discussions/batch-09/user-decisions-03.json#records/1/group"
+        ]
+      },
+      "amendment_reason": "本轮明确重开group以应用用户新增的种族与个人合并规则；保留旧裁决全文及政策。"
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

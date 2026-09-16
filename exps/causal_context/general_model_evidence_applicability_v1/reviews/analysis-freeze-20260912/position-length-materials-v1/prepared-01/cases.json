@@ -1,0 +1,80 @@
+[
+  {
+    "answer": "non-hate",
+    "long_prompt_tokens": 938,
+    "original_prompt_tokens": 918,
+    "partner_choice": "选择已有 non-hate 且审核同意的 3156，将其中性个人经历自然扩展至与 826 等长；第 9 位提供更靠近查询的位置。它与查询话题直接、规则部分相关，不能称为中性无效示例。",
+    "partner_demo_id": "3156",
+    "partner_preserve": [
+      "此前没有这个概念",
+      "因为喜欢张国荣而逐渐了解这个圈子",
+      "不讨厌、不惊讶，认为很自然",
+      "对自己的反应觉得奇怪"
+    ],
+    "position_limit": "交换同时移动 826 变体与 3156 改写，测的是二者相对顺序／距离组合的变化；不能归因为 826 单独的绝对位置。共同背景因 3156 加长而比第一批多 12 tokens，须单列背景改写效应。",
+    "position_prompt_tokens": 930,
+    "query_id": "541",
+    "short_prompt_tokens": 907,
+    "source_partner_reference": {
+      "adoption": "adopted_modified",
+      "available": true,
+      "pre_acceptance_provenance": null,
+      "record_id": "demo:3156",
+      "record_version": 3,
+      "value": "non-hate"
+    },
+    "source_partner_severity": {
+      "adoption": "adopted_modified",
+      "available": false,
+      "pre_acceptance_provenance": null,
+      "record_id": "demo:3156",
+      "record_version": 3,
+      "value": null
+    },
+    "swap_slots_1_based": [
+      5,
+      9
+    ],
+    "target_demo_id": "826",
+    "task": "hate"
+  },
+  {
+    "answer": "hate",
+    "long_prompt_tokens": 749,
+    "original_prompt_tokens": 742,
+    "partner_choice": "6493 原／审核 hate 一致，与目标完整块只差 1 token；追加省略标点即可匹配，避免为凑长度大幅改写其他示例。7640 虽然块长相同，但原答案 non-hate 与审核 hate 不同；6035 也有答案差异，均不作为本次配对。",
+    "partner_demo_id": "6493",
+    "partner_preserve": [
+      "哈哈哈及没想到的语气",
+      "对妹子聪明的评价",
+      "知道嘿人那些手段的指向",
+      "不改写正文，仅在句尾补省略标点"
+    ],
+    "position_limit": "仅交换相邻的第 2／3 位，不能代表远距离靠近查询的效应。6493 本身还有嘿人这一相关身份线索；顺序实验同时移动两条示例。共同背景比第一批多 1 token，背景改写效应单列。",
+    "position_prompt_tokens": 743,
+    "query_id": "3169",
+    "short_prompt_tokens": 736,
+    "source_partner_reference": {
+      "adoption": "explicit_final_batch",
+      "available": true,
+      "pre_acceptance_provenance": "rule_mapping_from_ai_score",
+      "record_id": "demo:6493",
+      "record_version": 1,
+      "value": "hate"
+    },
+    "source_partner_severity": {
+      "adoption": "explicit_final_batch",
+      "available": true,
+      "pre_acceptance_provenance": "ai_note",
+      "record_id": "demo:6493",
+      "record_version": 1,
+      "value": 1
+    },
+    "swap_slots_1_based": [
+      3,
+      2
+    ],
+    "target_demo_id": "3660",
+    "task": "hate"
+  }
+]

@@ -1,0 +1,125 @@
+{
+  "schema_version": "evidence-sentence-closeout-validation/v1",
+  "recorded_at_utc": "2026-09-11T13:47:54.179057+00:00",
+  "status": "passed",
+  "snapshot": {
+    "snapshot_id": "fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444",
+    "complete": true,
+    "artifacts": {
+      "current-sentences.json": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.json",
+        "sha256": "818f70a61d7fa0a5aea0f8080cda23fa0001a917b8621e2cc3f69be0a0593861"
+      },
+      "review.json": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/review.json",
+        "sha256": "ea66e50b5bd80ffe0911bb6a7e3732ff72532e7d4c7628b6dbf0246bc51aff37"
+      },
+      "current-sentences.csv": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/current-sentences.csv",
+        "sha256": "588bd3341d36b838ff62d483fde3646255aaf06bf424c366d77022a7e4b200ea"
+      },
+      "review.csv": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/review.csv",
+        "sha256": "2e94c104dbde728ccff5c1368ddb247ebc4a316cee2cfd2d6b0e898715626bbc"
+      },
+      "review.md": {
+        "path": "sentence-completion-v1/snapshots/fbac55fdcd9a5cdca7b93e06ccebe620b09f6de62f84a79ded8d46b0eed82444/review.md",
+        "sha256": "178d65763bdcfb2f5b8d1e2ba3b768541d9dacb301dddd191dbfec94eddfb55e"
+      }
+    }
+  },
+  "preferences_snapshot": {
+    "snapshot_id": "c6975b97bb3f6d6f75bbcf4d07d1a8c1459a831f5c3356ed37678a926cdbf178",
+    "artifacts": {
+      "preferences.json": {
+        "path": "preferences/snapshots/c6975b97bb3f6d6f75bbcf4d07d1a8c1459a831f5c3356ed37678a926cdbf178/preferences.json",
+        "sha256": "1558df945bdcbec638046aa3d66136e399f168ac8089a71518372e235ee141e7"
+      },
+      "preferences.md": {
+        "path": "preferences/snapshots/c6975b97bb3f6d6f75bbcf4d07d1a8c1459a831f5c3356ed37678a926cdbf178/preferences.md",
+        "sha256": "7e9ba5e1a8069a83c56c4fdde1dac47a6534c234418577dde0238f7b8813d890"
+      },
+      "cases.csv": {
+        "path": "preferences/snapshots/c6975b97bb3f6d6f75bbcf4d07d1a8c1459a831f5c3356ed37678a926cdbf178/cases.csv",
+        "sha256": "b78f98661b80f51f94a0cc3f294c68f63a3cdb96a743c52f91a026a5c48ccc3c"
+      }
+    }
+  },
+  "checks": {
+    "sentence_count": 270,
+    "kinds": {
+      "demo": 242,
+      "query": 28
+    },
+    "csv_matches_json": true,
+    "missing_severity_count": 0,
+    "null_severity_count": 0,
+    "unresolved_group_count": 0,
+    "mapping_consistent": true,
+    "explicit_replies_incorporated": 16,
+    "new_human_fields": {
+      "attack_severity": 11,
+      "group": 7
+    },
+    "preference_cases": 83,
+    "preference_conflicts_pending": 0,
+    "prior_human_group_amendments": 4,
+    "frozen_input_hashes_match": true,
+    "online_material_confirmations_added": 0
+  },
+  "tests": [
+    {
+      "command": "python -m unittest discover -s scripts/review -p test_sentence_completion.py -v",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "command": "python scripts/review/export_sentence_completion.py --check",
+      "status": "passed"
+    },
+    {
+      "command": "python scripts/review/export_adjudication_preferences.py --check",
+      "status": "passed"
+    }
+  ],
+  "frozen_inputs": [
+    {
+      "path": "exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/input_manifest.json",
+      "sha256": "d65d755c25b79f9824e8cb989131fa7dce1be071922c9d4df69c85553909b4ba"
+    },
+    {
+      "path": "exps/causal_context/general_model_evidence_applicability_v1/bundle/evidence_bundle.json",
+      "sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4"
+    },
+    {
+      "path": "exps/causal_context/general_model_ld_nolabel_paired_cases_v1/reviews/paired-cases-02/runtime/ai-v2-reannotation-parent-20260911.json",
+      "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+    },
+    {
+      "path": "docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v2.md",
+      "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97"
+    },
+    {
+      "path": "docs/research/annotation-guidelines/evidence-attack-severity-policy-v1.md",
+      "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+    },
+    {
+      "path": "docs/research/annotation-guidelines/evidence-severity-hate-default-mapping-v1.md",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    }
+  ],
+  "code": [
+    {
+      "path": "scripts/review/export_sentence_completion.py",
+      "sha256": "371a03f18d9b9af4f86455e9099854bcfaec1ae6146bb58d05aacb7c3715837e"
+    },
+    {
+      "path": "scripts/review/export_adjudication_preferences.py",
+      "sha256": "cbaa7a71deec4cc035ae5e411b90edd25726b9362f2b5fd73b98977c5d53c1ee"
+    },
+    {
+      "path": "scripts/review/test_sentence_completion.py",
+      "sha256": "e7dc115c57a243e6996c0a861a51d43c736f4d128c9393d98dec85661e480434"
+    }
+  ]
+}

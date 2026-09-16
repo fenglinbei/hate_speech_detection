@@ -1,0 +1,113 @@
+{
+  "schema_version": "evidence-discussion-user-decisions/v1",
+  "batch": 3,
+  "recorded_at_utc": "2026-09-11T05:49:32.136127+00:00",
+  "policy": {
+    "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+    "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "source_message": "2773 仇恨 / 地域、种族 整体内涵为”南方人也会揍黑人白人“并觉得此行为为正常，包含了仇恨意\n3194 非仇恨 / 空 仅靠文字判断即可，该句无任何攻击意\n3281 仇恨 / other 整体对”编乎“（即国内知乎平台的玩笑性代称）说里面的人都是CJB（某事某物靠吹起来），整体仇恨程度不高，若用严格判定则为hate + others否则为non-hate+ others\n3492 仇恨 / 性别、other 借由”微博厕所“这一说法抨击其主要使用的女性群体，同时也会误伤正常使用的男女群体，符合仇恨判定，但是攻击性不重\n\n补充说明：为本任务添加一个攻击性量表会不会更加科学？不同的语句冒犯程度可能有不少差别，都归入仇恨当时不做区分感觉会有失偏颇",
+  "source_message_sha256": "56c02b81e152f6f76e7a2149d7afb1fb950ccd4b45dd9d48b2ec8dfe16d1ad2f",
+  "scope": "case-specific labels and quoted user rationales; the severity-scale question does not establish a scoring policy or numeric scores",
+  "pre_discussion_annotation_sha256": "88ab87ae7ae34709761c763468e0e571024bd75c54082b68f3835dd6fd529983",
+  "records": [
+    {
+      "object_id": "demo:2773",
+      "text_sha256": "533133c79b15e80dca521115fbc301334760d0a6f43c6e49725dc98d0936052b",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Racism",
+          "Region"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "整体内涵为”南方人也会揍黑人白人“并觉得此行为为正常，包含了仇恨意",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:3194",
+      "text_sha256": "46b83918161f7c00061ed189322bd80e28a5e1c8586120e9736c01ee0d3df09f",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": []
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "仅靠文字判断即可，该句无任何攻击意",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:3281",
+      "text_sha256": "d9e14ec9b65c855492dd92adb3f95c158b5fb1ed154a391c9e5481e61c42a716",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "others"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "整体对”编乎“（即国内知乎平台的玩笑性代称）说里面的人都是CJB（某事某物靠吹起来），整体仇恨程度不高，若用严格判定则为hate + others否则为non-hate+ others",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:3492",
+      "text_sha256": "0ad0065dd16b2d59bc8dcc2d9e44cc597d6e89a6c7bb41048fc9b1f35a2a2003",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism",
+          "others"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "借由”微博厕所“这一说法抨击其主要使用的女性群体，同时也会误伤正常使用的男女群体，符合仇恨判定，但是攻击性不重",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

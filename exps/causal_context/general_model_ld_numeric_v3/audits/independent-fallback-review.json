@@ -1,0 +1,140 @@
+{
+  "schema_version": "general-model-numeric-v3-independent-design-review/v1",
+  "created_at_utc": "2026-09-04T21:23:52.168073+00:00",
+  "status": "passed-independent-cpu-review",
+  "scope": {
+    "gpu_used": false,
+    "model_rerun": false,
+    "query_gold_read": false,
+    "query_projection_read": false,
+    "scientific_effect_read": false,
+    "validation_profile_search": false,
+    "production_source_edits_by_reviewer": false,
+    "tests_use_synthetic_data": true,
+    "source_failure_metadata_hash_only": true
+  },
+  "reviewed_source_sha256": {
+    "src/diagnostics/general_model_numeric_v3.py": "97f07bb96a7fb7e14a4b91e26edd62e3095271350e9879d4f1bf431d57945259",
+    "scripts/stage1/general_model_numeric_v3.py": "eefe63c66d2bc74f3a986f23cdd4dd40b5724cc525ca81395560c02d807d5cfe",
+    "src/tests/test_general_model_numeric_v3.py": "67d061c934c108e7fa76b46dc2971d4a95c18f90b15ec0b9989781112a93a2d8",
+    "src/diagnostics/general_model_numeric_v2.py": "66a23d017e395f5a6845023a953fe3398ea7dc74578361ee22938edf5c43f12f",
+    "src/diagnostics/general_model_numeric_pool.py": "d86fe474b7cd5c9187cf5f77813734d9bb9151debdd838b686e85f2fc9fb8cc5",
+    "src/diagnostics/general_model_numeric_kernel_v2.py": "58abb51a4d74a0ac124578de340151f31d480b7be5069ef415a454dcc53287c8",
+    "src/diagnostics/general_model_numeric.py": "36d7d1e15226e4d4c9df4b3f3fc4ee11161085c2584444133210030dd0b64649",
+    "src/diagnostics/general_model_numeric_kernel.py": "668862ca2bdfe6b555d56e66ee02b8179262d1cb6e39b51acf07fd5dd5ca4a3f",
+    "src/diagnostics/general_model_numeric_analysis.py": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2",
+    "src/tests/test_general_model_numeric.py": "4313d2f3e76997c5ecfa717bdedf624b558bd197f0a2d5d4c534751980a2e939",
+    "config/stage1/general_model_ld_numeric_v3.json": "dc122c268b5ee49b3d0705ff3a5c1822508b6d21e6cd27ad9ae06a22e9633478",
+    "docs/research/experiment-plans/general-model-ld-numerical-measurement-v3.md": "4d5ef48b9b63a6f43582755a4bcb9565abefa343706fefda6e38b0d74c233a4c",
+    "exps/causal_context/general_model_ld_numeric_v3/audits/test_reused_batch1_execution.py": "978519a3d6369e59ab4b177cf980aba526fe9efe6409241b4168849343dadcff",
+    "exps/causal_context/general_model_ld_numeric_v3/audits/test_v3_independent_acceptance.py": "4b727064af42e0388e64627f8cd4d0567928216d01b071de474d2b642c6249dd",
+    "exps/causal_context/general_model_ld_numeric_v2/plan_ref.json": "965fd84e933437c74dfeff0354eb9c059e0740c1baf2b222b3984db7ef313b6b",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/run_manifest.json": "2435950f432d119a19abc8808396eaecfa6fd0124dd65d7c72d8999ddcadc688",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/preflight/preflight_report.json": "d8175e894e007b1ff3facc8132de3215576d459b0b05c92ad9645a4188f8c648",
+    "exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03/runtime_identity.json": "b146b2c9788cc16f5c7554a7323ed05cb601a8118531727f6b5dc6ad6f8ef426"
+  },
+  "reviewed_files_unchanged_during_tests": true,
+  "parent_v2_frozen_source_checks": {
+    "scripts/stage1/general_model_numeric_v2.py": true,
+    "src/diagnostics/general_model_numeric_kernel_v2.py": true,
+    "src/diagnostics/general_model_numeric_pool.py": true,
+    "src/diagnostics/general_model_numeric_v2.py": true,
+    "src/tests/test_general_model_numeric_kernel_v2.py": true,
+    "src/tests/test_general_model_numeric_pool.py": true,
+    "src/tests/test_general_model_numeric_v2.py": true
+  },
+  "tests": {
+    "command": "env PYTHONPATH=src .conda/stage1-p0/bin/python [unittest harness for two independent audit files]",
+    "test_count": 25,
+    "passed": true,
+    "failures": [],
+    "errors": [],
+    "elapsed_wall_seconds": 18.21477993344888,
+    "test_ids": [
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_identical_resume_reuses_complete_blocks_without_forward",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_member_order_is_actual_singleton_invocation_order",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_padding_challenge_keeps_true_batch_one_and_restores_prior_setting",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_partial_group_failure_commits_no_partial_candidate_block",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_real_single_candidate_calls_and_canonical_raw_metadata",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_replica_shift_changes_all_block_devices_not_group_members",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_resume_rejects_another_plan_and_changed_padding_order_or_device_profile",
+      "independent_audit_0.ReusedBatchOneExecutionTests.test_unpadded_prefix_reference_cannot_be_mixed_with_padding_or_order_modes",
+      "independent_audit_1.GeometryIndependentTests.test_eos_must_equal_the_frozen_plan_eos",
+      "independent_audit_1.GeometryIndependentTests.test_exact_registered_modes_are_accepted",
+      "independent_audit_1.GeometryIndependentTests.test_metadata_cannot_emulate_real_batch_one",
+      "independent_audit_1.GeometryIndependentTests.test_permutation_label_alone_does_not_prove_changed_execution_order",
+      "independent_audit_1.GeometryIndependentTests.test_prefix_reference_cannot_be_accepted_as_production_raw",
+      "independent_audit_1.GoldBoundaryIndependentTests.test_failed_preflight_status_cannot_reach_gold_or_raw_reads",
+      "independent_audit_1.GoldBoundaryIndependentTests.test_incomplete_raw_cannot_reach_gold",
+      "independent_audit_1.GoldBoundaryIndependentTests.test_raw_identity_rejects_different_runtime_plan_or_batch",
+      "independent_audit_1.PreflightIndependentTests.test_all_modes_cover_original_disjoint_cohorts_without_recalibration",
+      "independent_audit_1.PreflightIndependentTests.test_complete_passed_evidence_roundtrip_and_missing_pass_rejection",
+      "independent_audit_1.PreflightIndependentTests.test_duplicated_query_membership_is_rejected_before_any_forward",
+      "independent_audit_1.PreflightIndependentTests.test_each_production_challenge_stops_on_either_cohort_failure",
+      "independent_audit_1.PreflightIndependentTests.test_incomplete_cohort_is_rejected_before_any_forward",
+      "independent_audit_1.PreflightIndependentTests.test_margin_gate_can_fail_when_every_candidate_token_error_is_below_epsilon",
+      "independent_audit_1.PreflightIndependentTests.test_runtime_different_from_source_failure_is_rejected_before_forward",
+      "independent_audit_1.SealedPreflightIndependentTests.test_changed_epsilon_or_runtime_cannot_be_accepted_as_inherited",
+      "independent_audit_1.SealedPreflightIndependentTests.test_passed_summary_without_mandatory_evidence_is_rejected"
+    ],
+    "test_output": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 18.210s\n\nOK\n"
+  },
+  "resolved_findings": [
+    {
+      "finding": "Candidate EOS must equal the frozen generation EOS, not merely a positive integer.",
+      "resolution": "validate_geometry binds exact frozen EOS; independent mutation test passes."
+    },
+    {
+      "finding": "A passed summary must prove full required evidence, not only hash whichever files it lists.",
+      "resolution": "_verify_passed_evidence requires exact inventory and mandatory 12 passes, then checks sealed shards, geometry, all comparison values and replica proofs. Positive roundtrip and missing-prefix negative test pass."
+    }
+  ],
+  "review_conclusions": [
+    "Production calls use actual batch_size=1, one real candidate per forward; no dummy rows or relabelled batch4 execution.",
+    "Full-sequence selected projection kernel, FP32 source model/runtime and dynamic right-padding remain the unchanged v2 implementation.",
+    "Fallback E8 and epsilon are inherited from sealed numeric03 failure; observed fallback errors never recalibrate either value.",
+    "Runtime identity SHA must exactly match the source failure before scoring and when revalidating passed receipts.",
+    "Both original 8 and original 24 have complete two-task/six-condition matrices. They are explicitly labelled previously exposed fallback revalidation, not fresh independent validation.",
+    "Repeat and same-logits CPU64 reference retain 1e-4 limits; padding64, uncached/unpadded prefix, real execution order and physical-replica comparisons all use fixed epsilon=0.0013427734375.",
+    "All registered candidate tokens, EOS, score modes and per-condition margins remain in compare_passes. Independent test confirms an over-limit margin fails even when individual candidate token errors are below epsilon.",
+    "Batch4, size-two tail and within-batch row position are marked not applicable to true batch1 production, not as passed; original numeric03 failure is immutable.",
+    "True production geometry is rechecked in preflight and after full raw seal; prefix reference metadata cannot pass as production raw.",
+    "New run/checkpoint identities bind plan, runtime, partition, reference and scoring profile; reused complete blocks require identical identity and interrupted candidate blocks are not committed.",
+    "Initial successful preflight is independently reverified against complete sealed evidence before dev starts; any numerical or identity failure prevents dev expansion.",
+    "Gold joining requires successful preflight, exact full dev coverage (7716 blocks,131172 candidates), top/shard hash chain, batch1 runtime identity and production geometry."
+  ],
+  "limitations": [
+    "This audit validates implementation contracts and synthetic failure paths, not whether the actual fallback GPU numerical gates will pass.",
+    "The positive passed-evidence roundtrip isolates the v3 validator by mocking the already tested pool sealed-shard validator; inherited pool integrity is covered separately and its frozen source hash is checked.",
+    "Source failure metadata files are bound by hash only in this final review; detailed numerical failure evidence is preserved in the separate numeric03 failure engineering audit.",
+    "At close-out, active v3 plan/ref hashes and all three v3 source snapshots were checked against the reviewed files. A separate agent performs the full parent/failure-boundary plan validation."
+  ],
+  "blocking_findings": [],
+  "frozen_plan_binding": {
+    "plan_id": "gmlnum3-790a36db6bddb6f6898ecef5781deb6e3c02946ba6bebf93b41204c8876d6e17",
+    "plan_file": "exps/causal_context/general_model_ld_numeric_v3/plans/gmlnum3-790a36db6bddb6f6898ecef5781deb6e3c02946ba6bebf93b41204c8876d6e17/plan.json",
+    "plan_file_sha256": "1fa729179d38f9cd8c8d0afd28e758945b8c1b6a5f226aeb12f7e3279d378cfa",
+    "plan_ref_file": "exps/causal_context/general_model_ld_numeric_v3/plan_ref.json",
+    "plan_ref_sha256": "8454caeed5c133cbb967e6890b904ae9dbe3159f637518f4deaab677c4952ea5",
+    "code_sha256": {
+      "scripts/stage1/general_model_numeric_v3.py": "eefe63c66d2bc74f3a986f23cdd4dd40b5724cc525ca81395560c02d807d5cfe",
+      "src/diagnostics/general_model_numeric_v3.py": "97f07bb96a7fb7e14a4b91e26edd62e3095271350e9879d4f1bf431d57945259",
+      "src/tests/test_general_model_numeric_v3.py": "67d061c934c108e7fa76b46dc2971d4a95c18f90b15ec0b9989781112a93a2d8"
+    },
+    "source_snapshot_matches": {
+      "scripts/stage1/general_model_numeric_v3.py": true,
+      "src/diagnostics/general_model_numeric_v3.py": true,
+      "src/tests/test_general_model_numeric_v3.py": true
+    },
+    "parent_plan_id": "gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209",
+    "source_failed_run": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03",
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375
+  },
+  "coordinator_reported_integration_tests": {
+    "tests": 311,
+    "subtests": 339,
+    "passed": true,
+    "source": "Root coordinator message; separate from the 25 tests run by this reviewer."
+  }
+}

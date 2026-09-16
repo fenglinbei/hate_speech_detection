@@ -1,0 +1,208 @@
+{"stage": "evidence-loading-fp32-replicas", "conditions": 320, "baselines": 32}
+[HAMI-core Msg(721207:140249633540992:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(721208:140357026151296:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(721207:140249633540992:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:721208 thread=140357026151296 utils.c:160)]: host pid is error!
+[HAMI-core Msg(721208:140357026151296:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(721208:140357026151296:libvgpu.c:880)]: SET_TASK_PID FAILED.
+[HAMI-core ERROR (pid:721207 thread=140249633540992 utils.c:160)]: host pid is error!
+[HAMI-core Msg(721207:140249633540992:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(721207:140249633540992:libvgpu.c:880)]: SET_TASK_PID FAILED.
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:02,  1.43it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:00<00:01,  2.16it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:00,  2.58it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  3.15it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.12it/s]
+Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.01it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:01,  2.09it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:00,  2.97it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:01<00:00,  4.06it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:01<00:00,  3.56it/s]
+{"stage": "numeric-pool-ready", "device_indices": [1, 2], "runtime_sha256": "01a3917d652ffd3c3daf46f3347e3bf355024b7f94fddbb55d179f280e878af8"}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r0", "blocks": 32}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 12, "expected_blocks": 16, "elapsed_seconds": 11.46}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 12, "expected_blocks": 16, "elapsed_seconds": 11.8}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 16, "expected_blocks": 16, "elapsed_seconds": 15.27}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 16, "expected_blocks": 16, "elapsed_seconds": 15.72}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r0", "check": "historical_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r1", "blocks": 32}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 12, "expected_blocks": 16, "elapsed_seconds": 11.38}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 12, "expected_blocks": 16, "elapsed_seconds": 11.75}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 16, "expected_blocks": 16, "elapsed_seconds": 15.24}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 16, "expected_blocks": 16, "elapsed_seconds": 15.73}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "6fe8cc57a7360031e85d32cc6823bc760313ae322eb2dd2f0962ebd8bb8a4bbe"}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-r0", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 11.64}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 12.07}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 23.25}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 24.13}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 34.92}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 36.37}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 46.65}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 48.78}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 58.6}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 61.42}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 70.69}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 74.19}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 82.77}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 86.85}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 94.79}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 99.42}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 106.93}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 112.15}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 119.04}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 124.92}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 131.22}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 137.68}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 143.19}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 150.31}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 155.24}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 159.26}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 162.91}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r0", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 167.13}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-r0", "check": "raw_baseline_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-r1", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 11.91}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 12.61}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 23.86}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 25.27}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 36.0}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 38.31}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 48.39}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 51.17}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 60.35}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 63.99}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 72.29}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 76.48}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 84.3}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 89.08}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 96.33}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 101.77}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 108.46}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 114.48}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 120.47}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 127.08}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 132.6}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 139.69}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 144.83}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 152.44}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 156.78}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 160.83}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 164.97}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-r1", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 169.18}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "541c54df5d07478e1f4736e80a2b8ac5aff65bf0b64fe48d8b8f9cce7afdbc70"}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-padding", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 12.81}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 13.83}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 25.68}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 27.45}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 38.21}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 40.45}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 50.69}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 53.28}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 63.13}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 66.19}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 75.77}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 79.55}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 88.7}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 92.91}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 101.46}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 106.17}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 114.23}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 119.44}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 127.0}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 132.75}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 139.84}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 146.39}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 153.03}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 159.82}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 165.84}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 170.26}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 173.32}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-padding", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 177.87}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-padding", "check": "padding", "max_abs_error": 0.000370025634765625, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "d7d3a4df9f967443affc07c5ad4c0b6c3ec34929ca667488f6bd3ad5a2045e17"}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-prefix", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 54.07}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 57.27}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 107.75}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 113.36}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 161.57}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 169.23}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 214.85}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 224.86}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 268.45}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 280.58}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 321.8}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 335.82}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 375.65}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 391.72}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 429.62}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 447.68}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 483.47}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 504.49}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 537.43}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 561.4}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 567.57}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 593.09}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 597.68}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 624.76}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 627.96}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 638.07}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 656.01}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-prefix", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 666.72}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-prefix", "check": "prefix", "max_abs_error": 0.000118255615234375, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "a6b403495dff3e2e828f79cb2020a53583b81a6a70f9903e265bc08266a5551c"}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-members", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 11.79}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 12.85}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 23.58}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 25.58}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 35.13}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 37.86}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 46.82}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 50.07}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 58.49}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 62.49}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 70.63}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 75.28}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 82.59}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 87.99}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 94.66}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 100.82}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 106.87}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 113.58}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 118.97}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 126.29}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 131.09}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 139.07}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 143.33}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 151.92}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 155.69}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 159.77}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 164.75}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-members", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 169.05}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-members", "check": "members", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "3bef8c53a5152416c3a7302d33ddc908a959530170c6171250ac8c6572ebe7db"}
+{"stage": "evidence-pass-start", "pass_name": "lexicon-b1-replica", "blocks": 320}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 11.83}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 12, "expected_blocks": 160, "elapsed_seconds": 12.62}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 23.7}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 24, "expected_blocks": 160, "elapsed_seconds": 25.18}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 35.58}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 36, "expected_blocks": 160, "elapsed_seconds": 37.76}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 47.61}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 48, "expected_blocks": 160, "elapsed_seconds": 50.46}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 59.59}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 60, "expected_blocks": 160, "elapsed_seconds": 63.14}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 71.92}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 72, "expected_blocks": 160, "elapsed_seconds": 76.11}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 83.91}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 84, "expected_blocks": 160, "elapsed_seconds": 88.7}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 95.92}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 96, "expected_blocks": 160, "elapsed_seconds": 101.26}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 107.99}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 108, "expected_blocks": 160, "elapsed_seconds": 113.95}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 120.0}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 120, "expected_blocks": 160, "elapsed_seconds": 126.55}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 132.12}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 132, "expected_blocks": 160, "elapsed_seconds": 139.27}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 144.28}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 144, "expected_blocks": 160, "elapsed_seconds": 151.93}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 156.5}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 160.59}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 156, "expected_blocks": 160, "elapsed_seconds": 164.67}
+{"stage": "scoring-v2", "pass_name": "lexicon-b1-replica", "completed_blocks": 160, "expected_blocks": 160, "elapsed_seconds": 168.91}
+{"stage": "evidence-pass-verified", "pass": "lexicon-b1-replica", "check": "replica", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "cebeff2f71dd3635c7633433193576af8ff0b2b8f6eec65a63e8d1c03d453582"}
+{"stage": "evidence-scoring-complete", "blocks": 320, "candidates": 640}
+[HAMI-core Msg(721208:140357026151296:multiprocess_memory_limit.c:455)]: Calling exit handler 721208
+[HAMI-core Msg(721207:140249633540992:multiprocess_memory_limit.c:455)]: Calling exit handler 721207

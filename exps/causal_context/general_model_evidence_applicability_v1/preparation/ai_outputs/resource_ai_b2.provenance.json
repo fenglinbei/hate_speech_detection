@@ -1,0 +1,1636 @@
+{
+  "generator": "resource_ai_b2",
+  "review_kind": "ai_note",
+  "model_revision": "not_exposed",
+  "actual_task_prompt": "请完成独立、可并行资源适配AI草稿。只读 /data/liaozijie/hate_speech_detection/docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md 和 /data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part2.jsonl 的后8案例(index8..15; query_ids1128,4189,3919,3950,4026,4137,4450,2011)，禁止读取其他实验data或AI输出。这8案例required_drafts共168对象(请验证)。每条实质分析，禁止按关键词自动标签。输出唯一文件 exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/resource_drafts_b2.jsonl 每行{id,values,provenance:{review_kind:'ai_note',input_scope:'authorized_query_and_resource_texts_only',model_revision:'not_exposed',generator:'resource_ai_b2',batch_context:'8 sanitized cases; no query Gold, demo original answers, predictions or sample buckets'}}. relation values={topic_hate,topic_group,rule_hate,rule_group:direct|partial|none|unclear,lexicon_risk:yes|no|unclear,evidence:[{source:'query'|'demo',start,end,text}],note:简短中文}；独立评估话题与具体判定规则，对hate/group独立，lexicon_risk在introduced_entry_ids非空评估引入词典与查询无关/误义风险，无条目则no。definition values={definition_verdict:reasonable|too_narrow|other_problem|uncertain,issues:[valid_sense|substring_mismatch|wrong_sense|overly_narrow_definition|uncertain|not_rendered|provenance_mismatch],evidence:[{source:'text',start,end,text}],note}; 定义自身质量和来源命中分别。hit values={source_fit:valid_sense|wrong_sense|substring_mismatch|uncertain|not_rendered,query_fit:applicable|inapplicable|uncertain,issues:[上述合法],evidence:[{source:'text'|'query'|'definition',start,end,text}],note}. hit的rawtext=source_kind query时query，否则demos[source_id]；definition=definitions[sense_id].text。来源证据必须用准确raw_span/raw_surface(source=text)，可加query。要看完整上下文：例如嘿人内嘿不能套笑声定义、字母在词内可能误命中；来源义合理不表示适用query。已有全部hit实际呈现且位置验证，无真实证据不标provenance_mismatch。每一required对象单独检查，definition同entry不同sense分开。可手写按case小tuple再Python展开(仅结构转换，不推断标签)。同时保存实际prompt/provenance说明与输入/规则SHA256为自己命名的同目录文件。不能确认human或修改任何其他文件。请尽快完成并返回数量、ID完整和证据验证。绝对不要读取b1/b输出。你只负责b2。",
+  "created_utc": "2026-09-08T08:03:49.700938+00:00",
+  "input_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part2.jsonl",
+  "input_sha256": "1b035ff45debce54b0c5715580201bcaef819d6a1fabaeda11ae73fedc8701ac",
+  "selected_input_record_indices_zero_based": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "selected_input_records_sha256": "da9eda9e1213163d4658502a2282711a583c663f546393b6c214544556a2ad56",
+  "query_ids": [
+    "1128",
+    "4189",
+    "3919",
+    "3950",
+    "4026",
+    "4137",
+    "4450",
+    "2011"
+  ],
+  "policy_path": "/data/liaozijie/hate_speech_detection/docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md",
+  "policy_sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+  "input_scope": "authorized_query_and_resource_texts_only",
+  "batch_context": "8 sanitized cases; no query Gold, demo original answers, predictions or sample buckets",
+  "method": "Read the frozen policy and the complete authorized query/demo/definition text for each assigned case; authored every relation, definition and occurrence judgment manually. Python only expanded supplied tuples, copied exact source spans, located manually selected quotations, serialized records and validated fields, IDs and Unicode code-point offsets. No keyword rules or model-label inference in the conversion code.",
+  "scope_exclusions": [
+    "query original Gold",
+    "demo original answers",
+    "model predictions",
+    "sample selection buckets",
+    "other experiment data",
+    "other agents AI outputs",
+    "human review records"
+  ],
+  "human_confirmation_performed": false,
+  "required_count": 168,
+  "output_count": 168,
+  "kind_counts": {
+    "relation": 80,
+    "hit": 76,
+    "definition": 12
+  },
+  "case_counts": {
+    "1128": 13,
+    "4189": 34,
+    "3919": 20,
+    "3950": 31,
+    "4026": 16,
+    "4137": 15,
+    "4450": 18,
+    "2011": 21
+  },
+  "validation": {
+    "id_order_exact": true,
+    "ids_unique": true,
+    "required_id_set_exact": true,
+    "all_evidence_unicode_codepoint_spans_valid": true,
+    "all_hit_raw_span_surface_pairs_exact": true,
+    "valid_enums": true,
+    "no_provenance_mismatch_without_evidence": true
+  },
+  "output_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/resource_drafts_b2.jsonl",
+  "output_sha256": "a512f8cfdd9ccdbde9af134caeec7b70f98e9788aa159f9ea43d64a8b8776ed2",
+  "manually_authored_decision_tuples": {
+    "1128": {
+      "r": {
+        "387": [
+          "none",
+          "none",
+          "none",
+          "none",
+          "yes",
+          "你见过吗？",
+          "母畜能干得出来这种事",
+          "示例含女性去人化称呼，查询只是询问，所引母畜义项与查询无关。"
+        ],
+        "1180": [
+          "none",
+          "none",
+          "partial",
+          "none",
+          "yes",
+          "你见过吗？",
+          "你们txl的好队友",
+          "虽都问句，示例借性少数身份评价队友；查询无身份或讽刺依据，txl不适配。"
+        ],
+        "1456": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "上广东待几天就看到了",
+          "见闻话题相关；示例地名属于地点建议，不能补成查询的群体目标。"
+        ],
+        "1986": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "在现实生活中根本见不着",
+          "现实见闻主题部分相近；示例对网络性别攻击有所评价，查询无相应群体依据。"
+        ],
+        "2218": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "没见过，只是他说",
+          "都涉及是否亲见；示例另有地域攻击的转述，查询没有该对象或引文，归属规则仅部分可迁移。"
+        ],
+        "2945": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "这也能遇到你",
+          "都是人际接触表达，示例是偶遇感叹，查询是询问；缺对象时不扩写群体。"
+        ],
+        "3081": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "你见过吗？",
+          "你是自己见过，还是经历过",
+          "均为索要亲历依据的问句；对象未明，不能从见过一词补成群体攻击。"
+        ],
+        "3456": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "不是你们先来碰瓷的",
+          "都采用问句；示例反问指控行为，查询未显反问或侮辱，两者不能等同。"
+        ],
+        "6282": [
+          "partial",
+          "none",
+          "none",
+          "none",
+          "no",
+          "你见过吗？",
+          "印巴人种有深潭一样美丽的眼睛",
+          "仅经历话题略有关联；示例按人种泛化身体特征，查询未提供此类评价对象。"
+        ],
+        "7247": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "你见过吗？",
+          "让我看看你长啥样",
+          "均是看/见的对话表达，但查看外貌与询问经历不同；需避免由第二人称直接推定攻击。"
+        ]
+      },
+      "d": {
+        "lex-0282:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "作为针对女性的去人化辱称义项合理；是否真的针对女性仍须由具体语境判断。"
+        ]
+      },
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例“你们txl”以缩写指同性恋群体；查询未出现性取向线索。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例以母畜贬损被指对象，符合女性辱称义项；查询没有相关称谓或目标。"
+        ]
+      ]
+    },
+    "2011": {
+      "r": {
+        "2101": [
+          "none",
+          "none",
+          "partial",
+          "partial",
+          "yes",
+          "比黑人智商更高",
+          "相差很多的两个群体没必要产生多少联系",
+          "不同具体话题，但均以群体差异支持距离或否定评价；撑同及女性支持者不是查询的种族比较对象。"
+        ],
+        "2132": [
+          "partial",
+          "direct",
+          "partial",
+          "direct",
+          "yes",
+          "黑色的皮肤也往往不受人喜欢",
+          "黑男黄女和黑女黄男生的孩子都一样黑",
+          "共享肤色与种族对象；示例描述婚配后代肤色，查询加入智力及受欢迎程度评价，不能自动把黑男黑女释为讽刺。"
+        ],
+        "3463": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "比黑人智商更高",
+          "混杂后代智商低下，面貌丑陋所占比例更大",
+          "共享人种智力、外貌等级化及排斥推理；黑皮概念相关，但圣母和混血政治归责并无查询依据。"
+        ],
+        "3784": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "yes",
+          "金发碧眼一般是西方白人",
+          "有国外对象的女人明里暗里秀优越",
+          "同涉及非洲和跨国关系比较，但示例重点攻击女性崇外及贬国男，查询重点种族智力与外观，国男、二鬼子无关。"
+        ],
+        "4653": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "黑色的皮肤也往往不受人喜欢",
+          "一棍子打死所有人不好吧",
+          "同涉不同人种审美与偏好，示例反泛化可用于检查查询是否扩大个人偏好；作者立场不能复制。"
+        ],
+        "5473": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "黑色的皮肤也往往不受人喜欢",
+          "黑人严重不符合我的审美",
+          "同论肤色与审美；示例主要个人审美与辨认困难，查询还断言群体智商低，不能用审美解释覆盖智力贬损。"
+        ],
+        "5734": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "黑色的皮肤也往往不受人喜欢",
+          "看着那血盆大嘴在那一张一张的心里就难受的慌",
+          "都按种族外观表达贬斥，并涉及对外貌偏好的评价；示例它们指向追捧者，查询没有同一代词或对象。"
+        ],
+        "5784": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "非洲，则一般智商平均水平偏低",
+          "分不清美国黑人，法国黑人，东非的还是西非的",
+          "共享黑人及地区差异，但示例攻击择偶女性的文化认识，查询直接评价黑人智力，实际目标有别。"
+        ],
+        "7253": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "皮肤白色，很多中国的美女也是皮肤白色的",
+          "白皮是普遍性都长得很丑",
+          "均按人种概括外观并比较优劣；示例贬低白人而查询相对赞扬白人，白皮辱称义可能误移。"
+        ],
+        "7545": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "比黑人智商更高，就是更开化一点",
+          "没必要说哪种人比哪种人聪明，更开化什么的",
+          "直接对应肤色、智商与开化程度的种族概括；示例反对这种排名，查询在实施排名，须识别相反立场。"
+        ]
+      },
+      "d": {
+        "lex-0383:sense:01": [
+          "too_narrow",
+          [
+            "overly_narrow_definition"
+          ],
+          "黑男也可作黑人男性的压缩描述，只写常用于讽刺会把中性肤色婚配描述推成攻击，需保留语境判断。"
+        ],
+        "lex-0468:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "区分历史伪军蔑称和网络媚外贬称，作为多语境解释合理；汉奸、媚外仍是使用者指控而非事实认定。"
+        ]
+      },
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“贬国男”中的国男为独立中国男性简称，来源义匹配；查询未评价中国男性。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例白皮确以肤色贬称白人并泛称其丑，来源义成立；查询对西方白人相对赞扬，不能引入对白人的辱称立场。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例黑皮以肤色贬称黑人并宣称同化威胁；查询也针对黑人及黑皮肤贬评，可作相关词义但同化断言不可迁移。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“它们喜欢的是外种”把被批评的追捧者作非人代称，语境有贬损；查询没有该代词及明确追捧者对象。"
+        ],
+        [
+          "uncertain",
+          "inapplicable",
+          [
+            "overly_narrow_definition",
+            "uncertain"
+          ],
+          "黑男在黑男黄女婚配组合中清楚指黑人男性，但无明确讽刺依据，狭义定义不足；查询未特指男性。"
+        ],
+        [
+          "uncertain",
+          "inapplicable",
+          [
+            "overly_narrow_definition",
+            "uncertain"
+          ],
+          "黑女在与黄男配对的叙述中是黑人女性简称，未证实讽刺语气；查询未独立评价黑人女性。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense",
+            "overly_narrow_definition"
+          ],
+          "欧洲圣母用于讥讽主张接纳移民难民的人；定义所写无原则等是作者评判不能视为事实，查询无此对象。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "二鬼子是对被指媚外女性的网络贬称，非历史伪军所指；查询没有此类称谓或汉奸归责。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "撑同的人指支持同性恋群体者，来源词义清楚；查询比较种族智力和外观，没有性少数议题。"
+        ]
+      ]
+    },
+    "3919": {
+      "r": {
+        "255": [
+          "partial",
+          "none",
+          "partial",
+          "none",
+          "yes",
+          "普遍的基本的道德标准",
+          "既当婊子有立牌坊的人",
+          "同涉及道德评价边界，但示例含性别标签与双重标准辱骂，查询无普信男或婊子线索。"
+        ],
+        "476": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "unclear",
+          "处于yp之下的受害者本人",
+          "假如那姑娘被黑人给QJ了怎么算",
+          "受害情境与免予责难部分相关；查询yp未能展开，QJ的性暴力义是否适用不能由示例补足。"
+        ],
+        "1786": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "不能拿这个当作普遍的基本的道德标准",
+          "跟后头闹事儿的就无辜",
+          "都判断行为责任，但示例追究跟随者责任，查询反对苛责受害者，角色不同。"
+        ],
+        "2117": [
+          "direct",
+          "partial",
+          "direct",
+          "partial",
+          "no",
+          "处于yp之下的受害者本人",
+          "骗人的不管被骗的有罪",
+          "均反对对受害/善意一方苛责；示例以反话表达，查询直接否定，查询缩写对象仍未明。"
+        ],
+        "2593": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "普遍的基本的道德标准",
+          "体型和道德要求的区别",
+          "都质疑道德要求差异；示例明确比较男女家暴处境，查询未确定性别对象，不能搬用分类。"
+        ],
+        "2800": [
+          "partial",
+          "none",
+          "none",
+          "none",
+          "no",
+          "不能拿这个去苛责别人",
+          "这样不敬不孝不仁不义的人，人人得而诛之",
+          "同涉及道德评价，但示例对同性恋作身份贬损与排斥；查询维护受害者，无性取向依据。"
+        ],
+        "3252": [
+          "direct",
+          "partial",
+          "direct",
+          "partial",
+          "no",
+          "更不能拿这个去苛责别人",
+          "弱势群体为什么不能反击",
+          "均反对要求弱势者单方面满足高道德标准；示例泛称弱势群体，不能确定查询yp具体所指。"
+        ],
+        "3882": [
+          "direct",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "见义勇为是非常高尚的品格",
+          "见义勇为：南京小张",
+          "都涉及见义勇为；示例讽刺地域称谓或南京经历，查询不含明确地域评价。"
+        ],
+        "4839": [
+          "partial",
+          "none",
+          "none",
+          "none",
+          "yes",
+          "不能拿这个去苛责别人",
+          "用歧视修正道德吧",
+          "虽同谈道德，示例主动主张歧视及株连，查询反对过度苛责；媚黑与查询无关。"
+        ],
+        "7782": [
+          "direct",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "见义勇为是非常高尚的品格",
+          "我们扶等着赔钱吧",
+          "同涉助人与道德要求；示例另有针对个人的贬低，查询是反对苛责受害者。"
+        ]
+      },
+      "d": {
+        "lex-0247:sense:01": [
+          "too_narrow",
+          [
+            "overly_narrow_definition"
+          ],
+          "仅限女性群体遗漏对个人及成语式比喻的辱称用法；不能由这一词直接推断女性是实际评价对象。"
+        ],
+        "lex-0378:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "明确限定约炮只是部分语境的缩写展开并保留歧义，定义自身合理；不保证本查询命中。"
+        ],
+        "lex-0378:sense:02": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "地域贬称硬盘是带条件的候选义，定义明确缩写不能单独定义；来源yp仍需语境辨别。"
+        ],
+        "lex-0758:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "作为强奸的拼音缩写义项能够说明行为的违背意愿和强制性；具体命中需结合上下文。"
+        ]
+      },
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例以媚黑为歧视对象的贬义标签，契合定义；查询道德苛责议题未涉及黑人。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "普信男指普通却自信的男性，示例相对正面评价不改变称谓义；查询无该性别标签。"
+        ],
+        [
+          "uncertain",
+          "inapplicable",
+          [
+            "overly_narrow_definition",
+            "uncertain"
+          ],
+          "“既当婊子有立牌坊”是虚伪指控的成语式辱骂，未明确只针对女性群体，狭义定义不足覆盖；查询无该称谓。"
+        ],
+        [
+          "uncertain",
+          "uncertain",
+          [
+            "uncertain"
+          ],
+          "“处于yp之下的受害者”不能确证约炮展开，且可能是压迫等其他缩写；不借示例强奸情节补义。"
+        ],
+        [
+          "uncertain",
+          "uncertain",
+          [
+            "uncertain"
+          ],
+          "查询没有地域、外来人员或硬盘语境，yp不能仅凭大小写归入该义；具体展开仍缺上下文。"
+        ],
+        [
+          "valid_sense",
+          "uncertain",
+          [
+            "valid_sense",
+            "uncertain"
+          ],
+          "“被黑人给QJ”明确表达强奸，来源义成立；查询仅有未释明yp及受害者，是否性暴力仍不确定。"
+        ]
+      ]
+    },
+    "3950": {
+      "r": {
+        "2101": [
+          "partial",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "坐等她们自己打起来就好了",
+          "尤其是女性，就是站着说话不腰疼",
+          "都对部分女性作负面概括，需核对行为与身份范围；撑同议题不是查询的内容创作议题。"
+        ],
+        "2349": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "yes",
+          "物化女性还得看女人",
+          "你气炸了的部分原因也有物化女性的成分吧",
+          "共享物化女性议题，但示例反对限制伴侣选择，查询责怪女主播；国女在中国女性内部误匹配。"
+        ],
+        "3177": [
+          "partial",
+          "direct",
+          "partial",
+          "partial",
+          "no",
+          "物化女性还得看女人",
+          "三从四德是糟粕",
+          "均涉及女性与性别规范；示例反对旧式规范并转述遭辱骂，查询责怪部分女性自身，立场不同。"
+        ],
+        "3749": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "物化女性还得看女人",
+          "是女性自己不争取正确价值观",
+          "都把性别争议责任归向女性自身，须检查从部分行为向女性群体扩张；国女是子串命中，女拳及嘴炮也非查询称谓。"
+        ],
+        "4443": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "还得看女人",
+          "应该还有些好点的女人",
+          "都以貌似限定对象的说法带出对女人的更广评价，需检视限定范围；查询未把主播称女拳。"
+        ],
+        "6291": [
+          "partial",
+          "direct",
+          "partial",
+          "direct",
+          "yes",
+          "舞蹈区和各大直播平台那些女人",
+          "漂亮女同学都跟我玩儿得挺好的",
+          "同评女性，但示例以现实反例抵抗网络概括，查询批评特定平台女性并有泛化开头；女拳义不宜覆盖主播。"
+        ],
+        "6413": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "坐等她们自己打起来就好了",
+          "男性会被女性压着，直到在忍耐中爆发",
+          "都从平台冲突扩及性别对立，需辨认行为批评与身份泛化；多项称谓查询未用，ex更是人名内误命中。"
+        ],
+        "6835": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "舞蹈区和各大直播平台那些女人",
+          "舞蹈区，瑜伽区，健身区，女的恰钱",
+          "同讨论女性内容创作者、男性观众和利益；均需判断批评落在获利行为还是性别身份。"
+        ],
+        "7212": [
+          "partial",
+          "direct",
+          "partial",
+          "direct",
+          "yes",
+          "不整治她们评论区就干净不了",
+          "给媚黑的女人一耳光",
+          "同有针对女性的惩治措辞，但示例明确鼓动暴力且涉黑人，查询整治具体手段未明；媚黑无关。"
+        ],
+        "7235": [
+          "partial",
+          "direct",
+          "partial",
+          "partial",
+          "yes",
+          "舞蹈区和各大直播平台那些女人",
+          "这是真女拳吧",
+          "同在性别争论中评价对象，示例针对女拳分等级，查询针对主播行为，女拳标签不可直接引入。"
+        ]
+      },
+      "d": {
+        "lex-0333:sense:01": [
+          "other_problem",
+          [
+            "overly_narrow_definition"
+          ],
+          "将被讽刺者确认为不明事理、居高临下，把使用者贬损直接当成客观属性；也遗漏自称理性中立客观的核心。"
+        ]
+      },
+      "h": [
+        [
+          "substring_mismatch",
+          "inapplicable",
+          [
+            "substring_mismatch"
+          ],
+          "国女只是“中国女性”内部跨词截取，并非独立网络简称；查询也没有使用该简称。"
+        ],
+        [
+          "substring_mismatch",
+          "inapplicable",
+          [
+            "substring_mismatch"
+          ],
+          "命中位于“中国女性是中国男性的伴侣”中的国女，完整词是中国女性，不构成国女称谓。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "首处女拳是被指微博高声发言的一群人；查询的舞蹈主播不能由此推定是女权主义者。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“女拳如果不是”延续对相关群体的条件批评，符合贬称义项；查询无该身份线索。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“女拳这样妖魔”明显贬损相关群体；查询女性主播的商业行为不等同女拳身份。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“女拳要的条件”继续指同一政治诉求群体；查询未提女权诉求。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "针对女拳与“好点的女人”的对比符合其性别贬称用法；查询所批女主播并无同义称谓。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "真女拳借称谓作嘲讽，来源义成立；查询没有女拳分级或相同身份。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“女拳集体冲”指被贬称的维权参与者；查询仅凭同一平台话题不能套用该身份。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“舔饭圈和女拳”中的女拳仍指被讥讽群体；查询主播获利并未给出女权群体关系。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例否认观察到女拳行为，仍为该称谓的否定提及；查询未用女拳标签。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "舔狗在示例中是对过度迎合者的贬称；查询中的女主播及观众没有相应明确称谓或行为描述。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "媚黑被用来指责与黑人相关的女性，符合主观贬义定义；查询没有黑人关系。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“它们的口号”指前文被贬称的人群，符合定义所述指人可能贬低的条件；查询用她们，不能替换为去人格代词。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“舔它们”仍回指示例中女拳等人群，敌意语境可支持贬低分析；查询未使用它们。"
+        ],
+        [
+          "uncertain",
+          "inapplicable",
+          [
+            "uncertain",
+            "overly_narrow_definition"
+          ],
+          "理中客确是争论中的讽刺标签，但此处未给出不明前因后果等具体行为，定义把评价写实过窄；查询无此词。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“撑同的人”确指支持同性恋的一方；查询的女主播并无性少数支持立场线索。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“打嘴炮”指言语攻击或空谈，符合义项；查询讨论内容生产与收益，未指空谈。"
+        ],
+        [
+          "substring_mismatch",
+          "inapplicable",
+          [
+            "substring_mismatch"
+          ],
+          "ex位于LexBurner人名内部，不能拆成恶心缩写；查询也无该缩写。"
+        ],
+        [
+          "substring_mismatch",
+          "inapplicable",
+          [
+            "substring_mismatch"
+          ],
+          "第二处ex仍是LexBurner姓名的一部分，非独立情绪缩写；不适用于查询。"
+        ]
+      ]
+    },
+    "4026": {
+      "r": {
+        "25": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "黑河南的主要是南方系媒体",
+          "继续地域黑",
+          "同涉及河南、西安与网络攻击归责，需分辨个别账号行为与地域群体；地域黑适用但网暴词及具体事件非查询证据。"
+        ],
+        "1242": [
+          "direct",
+          "partial",
+          "direct",
+          "partial",
+          "yes",
+          "都不叫地域黑，只能叫地域矛盾",
+          "很明显的地域偏见",
+          "都辨析何为地域偏见与普通好恶，规则可对照；示例另含性少数和性别气质议题，txl/娘娘腔与查询无关。"
+        ],
+        "2792": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "不叫地域黑，只能叫地域矛盾",
+          "很多不好的印象其实并不来自于新闻",
+          "同论河南形象及歧视来源，但示例部分合理化亲历印象，查询归责媒体；需分别评估泛化范围。"
+        ],
+        "3168": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "只能叫地域矛盾",
+          "不存在歧视黑人这个说法，只是正常的排外罢了",
+          "都争论负面关系是否算歧视，但示例明确认同种族排斥，查询归责媒体，不能因否认歧视结构相同就复制立场。"
+        ],
+        "4448": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "黑河南的主要是南方系媒体",
+          "河南人被黑的情况",
+          "均为河南被攻击的处境辩护，同时批评对话者或媒体；不同目标需分开而非清空地域对象。"
+        ],
+        "5135": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "黑河南的主要是南方系媒体",
+          "地域黑是西方资本控制的国内某些媒体",
+          "都指责媒体制造河南地域歧视；应区分为河南人辩护与对媒体机构的归责，地域黑词义适用。"
+        ],
+        "5297": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "除了西安都不叫地域黑",
+          "请不要再挑起豫陕两省的矛盾了",
+          "共享西安河南与地域冲突话题，均归责挑动者；示例不能证明查询对西安例外划分正确。"
+        ],
+        "5855": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "黑河南的主要是南方系媒体",
+          "河南，河北是不存在同性恋的",
+          "同提河南并可能反驳偏见，但示例用反讽谈同性恋，查询无性取向话题，不可复制类别。"
+        ],
+        "6307": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "黑河南的主要是南方系媒体",
+          "我不歧视河南，我觉得黑河南是有人带节奏",
+          "同在反对黑河南并归责煽动者；反歧视立场不能因出现地名而改读成地域攻击。"
+        ],
+        "6334": [
+          "partial",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "不叫地域黑，只能叫地域矛盾",
+          "别娶江西的就可以了",
+          "都涉及地域归属与负面判断；示例以籍贯排斥女性婚配，是群体化实例，查询主要谈歧视来源与界线。"
+        ]
+      },
+      "d": {},
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "txl在“不喜欢txl”中指同性恋，来源义明确；查询仅涉及地域与媒体，无性取向对象。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "查询用地域黑区分地域歧视和地域矛盾，词义匹配；否认若干事件归类不等于否认该义。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例以地域黑称对河南的歧视并指控媒体制造，和查询词义、论题直接相关。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例把博主反复地域辱骂称地域黑，适合解释查询同词；具体责任不可从示例移植。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "娘娘腔被作为上海男性刻板印象的引例，义项成立但作者将其作为偏见反驳；查询无性别气质讨论。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“说你网暴他”转述别人对网络辱骂的指控，符合网暴义；查询归责媒体不直接描述集中网络攻击个体。"
+        ]
+      ]
+    },
+    "4137": {
+      "r": {
+        "467": [
+          "direct",
+          "direct",
+          "none",
+          "direct",
+          "yes",
+          "女圈有不少女同",
+          "同性是真“艾”",
+          "同涉同性恋，但示例以艾滋病谐音污名化，查询为圈内人数陈述，真艾攻击义不适用。"
+        ],
+        "2787": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "女圈有不少女同",
+          "她们很多也对同性恋博主持友好态度",
+          "均谈女性圈层与同性恋的关系，描述或友好态度不构成攻击；双标是示例新增行为评价，查询未涉及。"
+        ],
+        "3680": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "女圈有不少女同",
+          "在姬圈有个别人还觉得",
+          "共享女性同性恋圈层；示例反对某些成员羞辱性经历，查询仅数量陈述，须区分引文与作者立场。"
+        ],
+        "4299": [
+          "partial",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "女圈有不少女同",
+          "微博豆瓣小红书哪个不是女性的天下",
+          "都描述某圈层或平台的女性构成；示例反问有反驳态度，查询女同另引性取向对象。"
+        ],
+        "5330": [
+          "partial",
+          "partial",
+          "none",
+          "partial",
+          "no",
+          "女圈有不少女同",
+          "身边的女孩子都是这样",
+          "同谈女性圈层，但示例转述对黑白人气味的负面概括，查询没有种族对象或此类贬损。"
+        ],
+        "6291": [
+          "partial",
+          "partial",
+          "direct",
+          "partial",
+          "yes",
+          "女圈有不少女同",
+          "漂亮女同学都跟我玩儿得挺好的",
+          "均可作非攻击的女性相关描述，但示例女同学不是女同性恋；女拳也不能由女圈直接确证。"
+        ],
+        "6764": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "yes",
+          "女圈有不少女同",
+          "男人更支持女同婚姻，女人更支持男同婚姻",
+          "同在陈述性别和性取向相关现象，需区分描述与贬损；男同是示例另一群体，查询只明确女同。"
+        ],
+        "7189": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "女圈有不少女同",
+          "希望你们都能花钱娶女同",
+          "同涉女同性恋，但示例可能讽刺婚配、需语境，查询没有祝愿或反讽线索。"
+        ],
+        "7394": [
+          "direct",
+          "direct",
+          "direct",
+          "partial",
+          "no",
+          "女圈有不少女同",
+          "3女同还是一个系列的的片",
+          "同含女同，示例谈影片类型，查询描述圈子成员；均不能从身份词直接推攻击，但被评价群体范围不同。"
+        ],
+        "7661": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "女圈有不少女同",
+          "层主是女性反串的吗",
+          "均有女性身份线索，但示例询问个人反串，查询描述群体构成，不能相互补出身份或攻击立场。"
+        ]
+      },
+      "d": {
+        "lex-0292:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "说明真爱与艾的谐音及对同性恋、艾滋病群体的污名用法，作为特定义项合理；具体攻击仍看使用语境。"
+        ]
+      },
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "示例女拳指被否认亲历的相关贬称行为；查询女圈不等于女拳，不能靠近形词判同义。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "男同婚姻明确指男性同性恋婚姻，来源为调查式描述，无必然贬义；查询只提女同。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "真艾在“同性是真艾”中借疾病污名化同性恋，符合义项；查询并未把女同与疾病联系。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "接受不了双标中的双标指不一致评判标准，来源义合理；查询未评价标准或支持态度。"
+        ]
+      ]
+    },
+    "4189": {
+      "r": {
+        "1158": [
+          "direct",
+          "direct",
+          "partial",
+          "partial",
+          "no",
+          "男的假冒女拳败坏我国大部分女性形象",
+          "女拳真是典中典",
+          "同涉女拳，但示例直接嘲讽该对象，查询指责假冒者并维护多数女性，立场不能照搬。"
+        ],
+        "2025": [
+          "direct",
+          "direct",
+          "partial",
+          "partial",
+          "yes",
+          "败坏我国大部分女性形象",
+          "任何一个我不是很熟的年轻女的都先贴上两个标签",
+          "同涉女性污名，示例主动向年轻女性泛化，查询在反对形象败坏；女拳王可解释近义称呼，但媚黑引入无关种族联想。"
+        ],
+        "2075": [
+          "partial",
+          "partial",
+          "direct",
+          "partial",
+          "yes",
+          "我国大部分女性形象",
+          "对于男同仇女确实有，但是我觉得大多数不会",
+          "均需区分少数行为与群体泛化，涉及女性评价；示例的男同、骗婚不能补入查询。"
+        ],
+        "2685": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "男的假冒女拳",
+          "女汉奸的问题",
+          "同涉带性别指向的归责；示例另有汉奸与狗表情攻击，查询仅能依据冒充行为本身分析。"
+        ],
+        "3212": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "假冒女拳败坏我国大部分女性形象",
+          "一直就有大把女人反对女拳",
+          "都区分女性群体与女拳标签，不能因词面相同自动判为仇女。"
+        ],
+        "3372": [
+          "direct",
+          "direct",
+          "partial",
+          "partial",
+          "no",
+          "假冒女拳败坏我国大部分女性形象",
+          "女权怼了女拳",
+          "同样区分女权相关身份与污名标签；示例反问戏谑，未提供查询的冒充行为事实。"
+        ],
+        "4443": [
+          "direct",
+          "direct",
+          "partial",
+          "partial",
+          "no",
+          "败坏我国大部分女性形象",
+          "应该还有些好点的女人",
+          "同涉女拳与女性，示例“还有些好点”仍贬低多数女性；查询保护多数女性，需读完整立场。"
+        ],
+        "4810": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "yes",
+          "假冒女拳败坏我国大部分女性形象",
+          "替美国佬办事的狗东西",
+          "女权争议部分同题，但示例含涉美及黑人指控、定向辱骂；美国佬和狗东西均非查询用语。"
+        ],
+        "6291": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "败坏我国大部分女性形象",
+          "也都很有素质",
+          "均拒绝把网络女拳印象扩及普通女性；查询还指责部分男性冒充，新增对象需单判。"
+        ],
+        "7235": [
+          "direct",
+          "direct",
+          "partial",
+          "partial",
+          "no",
+          "男的假冒女拳",
+          "这是真女拳吧",
+          "同论真假女拳；示例嘲讽其分等级，查询归责假冒男性，需分别识别攻击目标。"
+        ]
+      },
+      "d": {
+        "lex-0092:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "把女拳王作为针对女权主义者的贬称义项基本合理；标签是否被滥贴应由来源上下文判断。"
+        ],
+        "lex-0603:sense:01": [
+          "too_narrow",
+          [
+            "overly_narrow_definition"
+          ],
+          "仅写调侃性遗漏美国佬在敌意语境中的轻蔑、贬损用法；不能据此弱化来源的攻击立场。"
+        ],
+        "lex-0749:sense:01": [
+          "reasonable",
+          [
+            "valid_sense"
+          ],
+          "准确说明其为骂人话，未把攻击对象预设成某类群体；类别仍需另看上下文。"
+        ]
+      },
+      "h": [
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "查询的女拳是女权相关贬称；被置于男性假冒的指控中，不等于作者贬损所有女性。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例以女拳作嘲讽对象，义项与查询词义相通；查询的假冒和辩护立场须另判。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例“真女拳”沿用相关贬称；查询说假冒女拳，同义称谓但真假判断不同。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "首次女拳是被女权反驳的对象，符合区分女权与贬称的用法；查询同有此标签。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "再次女拳承接被反问的同一群体；可解释查询称谓，不能复制示例的嘲讽立场。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“针对女拳”使用贬称，和查询共享词义；对普通女性的态度需独立阅读。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例否认见过所谓女拳行为，词义仍为相关贬称；否定出现不构成直接攻击。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“反对女拳”的宾语符合该义项；同查询一样区分女性与女拳身份。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“现实中女拳并不多”承接同一称谓；可解释查询词义，数量断言不可迁移。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "示例把女拳王强贴给不熟的年轻女性，是贬称被泛用；可辅助理解查询女拳标签但不证明其适用对象。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "媚黑是示例给女性强贴的亲黑人贬义标签；查询无黑人或相关亲密关系话题。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "首处男同为女性地位争论中的男同性恋者；查询的“男的”没有性取向信息。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "男同仇女指男同性恋者的相关行为，随后限制为少数；查询男性不可据此定性取向。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "抵制男同中的称谓指男同性恋群体，属于被反对的抵制观点；查询无此对象。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“没有男同”仍指男同性恋存在，不因否定结构失去词义；查询没有同性恋线索。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“男同事基因”结合“不是后天学习”应读为“男同是基因”的错字表达，而非男同事职业称呼；查询无此义。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“打压男同”针对同性恋群体，作者反对该行为；与查询指责冒充男性不同。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“更多的男同”承接社会压力下的同性恋者；查询男性不具相应身份依据。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "骗婚在示例中与男同因社会压力婚姻相连，符合该具体义项；查询不存在婚姻隐瞒情节。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense",
+            "overly_narrow_definition"
+          ],
+          "美国佬确指美国人，来源敌意强于定义的调侃描述；查询没有美国对象。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "狗东西在示例中明确辱骂被指替美国办事者；查询无该辱称，也不能由行为指责推成同类辱骂。"
+        ]
+      ]
+    },
+    "4450": {
+      "r": {
+        "235": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "在全国拉低了东北人的形象",
+          "网络媒体很多带节奏的别有用心的人",
+          "同为东北形象解释来源，示例归责媒体并援引指标，查询归责东北务工人群，攻击目标不同。"
+        ],
+        "986": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "no",
+          "在外地的东北人涉黑涉黄比较多",
+          "浙江卫视台倒是全国各地都在骂",
+          "共享地域歧视议题；示例区分居民与电视台，查询明确评价地域人群，机构辱骂不能替代人群规则。"
+        ],
+        "1242": [
+          "direct",
+          "partial",
+          "direct",
+          "partial",
+          "yes",
+          "没有歧视的意思，就事论事",
+          "在还不了解真实情况或者了解不全的的时候",
+          "同涉及偏见与好恶边界，可检验免责声明能否支持结论；性少数和娘娘腔词条无查询依据。"
+        ],
+        "1336": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "东北也没安徽，贵州，广西，河北，陕西，西藏，青海落魄吧",
+          "东北曾经是发达地区只是现在衰落了",
+          "都反驳东北极度落后的形象；查询随后贬损在外东北人，示例主要反对地域黑，后续立场不能被开头覆盖。"
+        ],
+        "2004": [
+          "partial",
+          "partial",
+          "partial",
+          "partial",
+          "yes",
+          "在外打工的东北人",
+          "自己外地的去新一线然后瞧不起我大连土著",
+          "同涉外来与本地身份；示例围绕个体争执及吧内辱骂，不能泛成查询的东北整体，星号替代词无查询依据。"
+        ],
+        "2416": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "素质太差了",
+          "民风肯定算不上第一梯队",
+          "均混合东北形象辩护与人群素质评价，需判断保留或否定的部分，不能仅取反地域黑语气。"
+        ],
+        "3619": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "yes",
+          "没有歧视的意思，就事论事",
+          "没什么可黑的",
+          "都谈东北等地形象，示例用正面亲历反驳污名，查询免责声明后仍贬损；地域黑可用，黑子兼含种族义易引无关解释。"
+        ],
+        "3701": [
+          "partial",
+          "partial",
+          "direct",
+          "direct",
+          "no",
+          "没有歧视的意思，就事论事",
+          "他们刻在骨子里的懒惰，与不安分",
+          "跨种族与地域话题但同把负面品质赋给群体，个人偏好或免责声明不能抵消后续泛化。"
+        ],
+        "5868": [
+          "direct",
+          "direct",
+          "partial",
+          "direct",
+          "no",
+          "在外打工的东北人太多分布太广素质太差了",
+          "你碰上的大概是个例",
+          "都讨论东北人印象；示例反对由个例推广，查询扩大评价外出人群，泛化方向不同。"
+        ],
+        "6334": [
+          "direct",
+          "direct",
+          "direct",
+          "direct",
+          "no",
+          "东北人太多分布太广素质太差了",
+          "别娶江西的就可以了",
+          "均以地域归属概括人的负面属性或作排斥，需独立识别查询务工人群与示例女性婚配对象。"
+        ]
+      },
+      "d": {},
+      "h": [
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“那些黑子的经历”指抹黑地域者，匹配网络贬低者义，不是黑人；查询未称黑子且重点归责外出东北人。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "“到黑子嘴里”仍指歪曲地域形象者，不能启用定义并列的黑人辱称义；查询无该称谓。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "txl是示例讨论个人好恶时指同性恋的缩写；查询没有性少数对象。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“很多地域黑”把实施地域歧视的人称作地域黑，是行为称谓的人称转用；可帮助判断查询地域刻板印象。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“这些地域黑言论”明确指地域歧视言论；查询对外出东北人的素质、违法倾向泛化与此概念相关。"
+        ],
+        [
+          "valid_sense",
+          "applicable",
+          [
+            "valid_sense"
+          ],
+          "“微博知乎上都有很多地域黑”指网络地域歧视现象或实施者；适用于检视查询所称非歧视是否成立。"
+        ],
+        [
+          "valid_sense",
+          "inapplicable",
+          [
+            "valid_sense"
+          ],
+          "娘娘腔是被拿来说明地域偏见的性别气质贬称，来源未实施赞同；查询无相应气质对象。"
+        ],
+        [
+          "uncertain",
+          "inapplicable",
+          [
+            "uncertain"
+          ],
+          "“这个吧里都是**”像是被遮蔽的攻击词，替代内容无法恢复，不足确定具体辱称；查询无此符号。"
+        ]
+      ]
+    }
+  }
+}

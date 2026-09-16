@@ -1,0 +1,12 @@
+Reconstructing nine sealed pass gates and capture provenance on CPU.
+Traceback (most recent call last):
+  File "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/reviews/q01-local-mechanism-v1/interim-01/build_interim.py", line 110, in <module>
+    main()
+  File "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/reviews/q01-local-mechanism-v1/interim-01/build_interim.py", line 48, in main
+    references = verify_completed_passes(plan, contexts, requests, FREEZE, RUN, state, require_complete=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/q01_mechanism_execution.py", line 401, in verify_completed_passes
+    require(read_json(target / 'acceptance.json') == acceptance, 'gate reconstruction differs')
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_evidence_evaluation.py", line 42, in require
+    raise ValueError(message)
+ValueError: gate reconstruction differs

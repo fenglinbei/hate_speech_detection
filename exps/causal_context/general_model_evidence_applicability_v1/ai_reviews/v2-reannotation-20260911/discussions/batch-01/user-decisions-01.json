@@ -1,0 +1,353 @@
+{
+  "schema_version": "evidence-discussion-user-decisions/v1",
+  "batch": 1,
+  "recorded_at_utc": "2026-09-10T21:22:26.159752+00:00",
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "source_message": "1240 / 179 都可以按建议，1158判为 仇恨 / 性别，原因是：无论是上下文还是用词，都没有任何显然证据表明此处讨论的是”女性拳击“\n\n100：仇恨 / 性别 ”国内女权的德行“即带有贬损义，虽然程度不高，但足以纳入\n1180：非仇恨 / LGBTQ 没有明显攻击意\n1224： 需要参考原标注判断\n1456：非仇恨 / 空 广东仅作地名\n1509：仇恨 / 性别 虽老g意义暂时不明，但是没有证据显示这句话是对eg的非污名化讨论，可以检索一下老g的含义\n1517： 仇恨 / LGBTQ，others 提到同性恋的同时包含对个人的辱骂\n159 非仇恨 / 地域 没证据表明存在地域歧视\n1729：仇恨 / 性别 白楠-白男 yy-意淫 lkd-烂裤裆，用于辱骂女性私生活不检点\n1815 仇恨 / 性别 没有证据表明讨论的是男性生殖器以外的事物\n1859 非仇恨 / 性别 仅为话题讨论，不包含攻击\n1915 仇恨 / 种族 BBC在此处没有任何证据表明指向英国广播公司以及其他专有名词，因此此处只能是对黑人群体的侮辱代称，直接导致仇恨+种族\n2004 仇恨 / 地域，其他 **并非被屏蔽，只是一种让人联想的写法，参考后面语句，没有证据表明此处不是辱骂意",
+  "source_message_sha256": "59fa57430e3059d8061c4529b8672d17155cf94939e82bd42b3cd7e6410cdf80",
+  "scope": "case-specific labels and user reasons; no policy amendment or implicit acceptance of other objects",
+  "pre_discussion_annotation_sha256": "1242e1973dbdc12a5e76268802972be7adc2961e131db4b6f1b6305402e3d588",
+  "records": [
+    {
+      "object_id": "demo:1240",
+      "text_sha256": "a7d8384019d932047d9780ffa81adafd801a992058bf72472174dd8f0463b5db",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": []
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "adopted_suggestion",
+      "rationale": "采纳建议：轻度个人贬称，不足以判 hate；无群体身份对象。",
+      "rationale_provenance": "accepted_ai_suggestion",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:179",
+      "text_sha256": "66ce125bb6388604ca8a9b0b7232548f20eed678802053429242dd54080b7bed",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "others"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "adopted_suggestion",
+      "rationale": "采纳建议：对贴吧社群成员作性污名泛化。",
+      "rationale_provenance": "accepted_ai_suggestion",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1158",
+      "text_sha256": "35c9b2a1d7d52e6358e77433a2c2445bdc1172668a0c1fb272e8e1eb261d745c",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "无论是上下文还是用词，都没有任何显然证据表明此处讨论的是”女性拳击“",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:100",
+      "text_sha256": "63ec081502cee51bce6a8dcbc0d1b423165fffe8b171cedd55bcf5754fcafda1",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "”国内女权的德行“即带有贬损义，虽然程度不高，但足以纳入",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1180",
+      "text_sha256": "d8477aff19adb585094259b40548455fd6a3e59ef39efaf8c9780f7fde442ada",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": [
+          "LGBTQ"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "没有明显攻击意",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1456",
+      "text_sha256": "9024732b976a3e7a3bc4a302300b3ff9918be3486ce63a5a00c33bd91d4c9e4a",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": []
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "广东仅作地名",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1509",
+      "text_sha256": "b526768028c21d218c27d1344b36809a8e7fedf27cb380546e23481b81e9cfad",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "虽老g意义暂时不明，但是没有证据显示这句话是对eg的非污名化讨论，可以检索一下老g的含义",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1517",
+      "text_sha256": "1d76dabe0d23e5bf5fd7456762ee52e02d3d3b2f5734c0d1f43de9447ab9f721",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "LGBTQ",
+          "others"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "提到同性恋的同时包含对个人的辱骂",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:159",
+      "text_sha256": "03e916e4ec6e2c9a8adeb97f1aa71c79656c90e55f8dc9fc8631f0965e1421f6",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": [
+          "Region"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "没证据表明存在地域歧视",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1729",
+      "text_sha256": "41ae22a4875943900c3fae8f84c67c6c0f6c7926a261a896dcf593182d1de3cc",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "白楠-白男 yy-意淫 lkd-烂裤裆，用于辱骂女性私生活不检点",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1815",
+      "text_sha256": "28c8f357f8d9c7092665d113815597b971687109049808e079d679d57dfd43b4",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "没有证据表明讨论的是男性生殖器以外的事物",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1859",
+      "text_sha256": "dcd71d9eff2bc77448844a0e1fd2be6df11b07a3e19a5071eeb01215cb31e699",
+      "base_version": 0,
+      "values": {
+        "hate": "non-hate",
+        "group": [
+          "Sexism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "仅为话题讨论，不包含攻击",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:1915",
+      "text_sha256": "4e2fc59c8076a334e6d39ec799d501d183a461dd21f39ace3be2f6c9a7f49c1e",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Racism"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "BBC在此处没有任何证据表明指向英国广播公司以及其他专有名词，因此此处只能是对黑人群体的侮辱代称，直接导致仇恨+种族",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    },
+    {
+      "object_id": "demo:2004",
+      "text_sha256": "492487e216575726577e95732753da0ddc8081404ec884e86a21e8369dd82752",
+      "base_version": 0,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Region",
+          "others"
+        ]
+      },
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "mode": "explicit_labels",
+      "rationale": "**并非被屏蔽，只是一种让人联想的写法，参考后面语句，没有证据表明此处不是辱骂意",
+      "rationale_provenance": "user_verbatim",
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "online_material_confirmation_added": false
+    }
+  ],
+  "followup_requests": [
+    {
+      "object_id": "demo:1224",
+      "request": "需要参考原标注判断",
+      "labels_adjudicated": false
+    },
+    {
+      "object_id": "demo:1509",
+      "request": "检索老g的含义",
+      "labels_adjudicated": true
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

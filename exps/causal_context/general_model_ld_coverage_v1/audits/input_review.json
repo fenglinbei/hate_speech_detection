@@ -1,0 +1,65 @@
+{
+  "schema_version": "general-model-coverage-input-independent-review/v1",
+  "passed": true,
+  "scope": "CPU-inputs-only-no-score-analysis",
+  "plan_binding": {
+    "plan_id": "gmlcoverage-64e2986d5de1d9c9ff0ebc9c2d72944208b833ca9aacf115ec71a14403e0c6f4",
+    "plan_sha256": "31eb78cb942a6d929a04cd74c32b302d848ae4c7f73c782a37ae48033af3359d"
+  },
+  "input_sha256": {
+    "contexts.dev.jsonl": "1fd10c32de866ad7261d339477f6b52015b33a8dd9fc2e792a2d6527703cdeed",
+    "resource_inventory.json": "8b452bdf164b4d814610721736789a5c506c11e1dc89a1c62a33755ef620e23b"
+  },
+  "source_package_id": "gmlpkg-98926ff494901fc7ea09b41e0f40548ec4ccc8ab3713726361b7ab45c1f01fc4",
+  "frozen_lexicon_sha256": "31240193eeba29f712560e2e80e89ee9dd5c3c969aa180d10b95bf2451882385",
+  "counts": {
+    "queries": 643,
+    "contexts": 10288,
+    "candidate_sequence_length_checks": 174896,
+    "fit_demo_appearances_verified": 6430,
+    "unique_demo_matches_replayed": 2522,
+    "query_matches_replayed": 643,
+    "visible_resource_contexts_reconstructed": 5144,
+    "unchanged_C0_CD_PD_contexts_verified": 3858,
+    "nonempty_PLnew_token_gates_verified": 1280,
+    "same_entry_set_byte_identity_comparisons": 4351,
+    "distinct_visible_entry_sets": 793,
+    "Lq_hit_queries": 223,
+    "Lnew_hit_queries": 640
+  },
+  "limits": {
+    "max_union_entries": 17,
+    "max_dictionary_tokens": 773,
+    "max_prompt_tokens": 2134,
+    "max_full_sequence_tokens": 2151,
+    "max_full_sequence_with_padding64": 2215,
+    "registered_limit": 8192
+  },
+  "boundary_query_ids": ["2312", "612", "4239", "5975"],
+  "checks": {
+    "full_Lq_and_Ld_matching_replayed": true,
+    "whole_prompt_entry_ID_union_and_deduplication": true,
+    "frozen_entry_ID_lexicographic_order": true,
+    "all_frozen_senses_preserved": true,
+    "source_correspondence_and_internal_IDs_not_added_to_visible_input": true,
+    "same_entry_sets_have_identical_dictionary_bytes": true,
+    "D_off_preserves_demo_derived_Ld": true,
+    "original_demo_text_answers_and_order_unchanged": true,
+    "Lq_reference_conditions_reconstructed_under_new_order": true,
+    "PLnew_whole_block_token_tolerance_preserved": true,
+    "all_prompt_text_token_counts_and_hashes_replayed": true,
+    "all_candidate_answer_tokenizations_replayed": true,
+    "all_candidate_lengths_include_EOS_and_padding64": true,
+    "original_32_preflight_queries_preserved": true,
+    "boundary_representative_first_then_dedup_recomputed": true,
+    "input_files_unchanged_and_match_latest_plan_reference": true
+  },
+  "limitations": [
+    "No numerical scores inspected.",
+    "Prompt-plus-answer joint tokenization boundary checks are covered by the frozen builder; this independent review rechecks prompt tokens, canonical answer tokens, and every complete sequence length, not joint retokenization."
+  ],
+  "query_gold_loaded": false,
+  "test_content_read": false,
+  "model_forward_executed": false,
+  "GPU_used": false
+}

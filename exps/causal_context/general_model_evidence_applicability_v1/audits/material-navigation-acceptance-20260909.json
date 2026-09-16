@@ -1,0 +1,199 @@
+{
+  "schema_version": "hsd-material-navigation-acceptance/v1",
+  "observed_at": "2026-09-08T18:18:05.161738+00:00",
+  "status": "passed",
+  "release_sha256": "211f4b4f2da3a2cfd0725e5cfba4c75f57c41db5426bc4e95190a4de4e668037",
+  "source_sha256": {
+    "tools/general_model_paired_review_ui/evidence.html": "de7d8e077e7820cdb08184b6c72dc56d228a1575696786ffd9b65170199bc4a7",
+    "tools/general_model_paired_review_ui/evidence.css": "eaef3f989f12588aaaa6ce027c24e912a5cf13cab1bf67b718366b402116494e",
+    "tools/general_model_paired_review_ui/evidence.js": "5083fbe6773aaa99185b1326a570e23bca532ca3022fe595311848cd1d2e8d14",
+    "tools/general_model_paired_review_ui/test_evidence_navigation_browser.cjs": "7292e23cb53cab02480a4537ffd204328318c18d13d793d36c2499059a52e611",
+    "tools/general_model_paired_review_ui/test_evidence_browser.cjs": "96654c2f9bec7faa2c99375bc054837d3e6b988fb9ef42e3bbc6475f6ed2f165",
+    "deploy/general_model_paired_review/digitalocean-sgp/smoke_evidence_readonly.cjs": "cb0791835e9b3e60a6a60353f30d9839082fa16ed0220aae3a110be0bbdb9308"
+  },
+  "changes": {
+    "assets": [
+      "tools/general_model_paired_review_ui/evidence.css",
+      "tools/general_model_paired_review_ui/evidence.html",
+      "tools/general_model_paired_review_ui/evidence.js"
+    ],
+    "buttons": [
+      "上一材料",
+      "下一材料"
+    ],
+    "shortcuts": [
+      "Alt+ArrowUp",
+      "Alt+ArrowDown"
+    ],
+    "current_filter_order": true,
+    "boundary_wrap": false,
+    "cross_case": false,
+    "save_before_navigation": true,
+    "failed_save_keeps_draft_and_position": true
+  },
+  "verification": {
+    "isolated_navigation_browser": "passed",
+    "existing_browser_regression": "passed",
+    "navigation_viewport_widths": [
+      1440,
+      1024,
+      390,
+      320
+    ],
+    "navigation_screenshots": "/tmp/evidence-navigation-browser-9mqRMU/screenshots",
+    "regression_screenshots": "/tmp/evidence-browser-kfZ8lC/screenshots",
+    "navigation_checks": [
+      "buttons and real keyboard",
+      "filtered order and empty/single/boundary controls",
+      "no POST on unchanged navigation",
+      "input/select/contenteditable/IME/repeat/dialog exclusions",
+      "group-only save preserves hate provenance",
+      "network failure and invalid groups retain draft and filter",
+      "409 conflict recovery",
+      "delayed and rapid operations cannot duplicate save",
+      "comparison mode disabled",
+      "existing case shortcuts"
+    ],
+    "independent_code_and_v2_static_updater_review": "passed",
+    "production_readonly": {
+      "status": "passed",
+      "auth_required": {
+        "/evidence/": 401,
+        "/api/evidence/bootstrap": 401,
+        "/evidence/evidence.js": 401,
+        "/api/health": 401
+      },
+      "reviewer_id": "liaozijie",
+      "evidence": {
+        "confirmed_count": 0,
+        "confirmed_object_count": 20,
+        "item_count": 32,
+        "needs_group_recheck_count": 621,
+        "object_count": 1072
+      },
+      "policy": {
+        "version": "evidence-applicability-annotation-policy/v2",
+        "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+        "original_ai_policy": "evidence-applicability-annotation-policy/v1",
+        "affected_group_objects": 632,
+        "confirmations_added_by_migration": 0
+      },
+      "material_navigation": {
+        "buttons": true,
+        "shortcuts": [
+          "Alt+ArrowUp",
+          "Alt+ArrowDown"
+        ],
+        "boundaries": true,
+        "filtered_order": true,
+        "layouts": [
+          {
+            "width": 1440,
+            "height": 1000
+          },
+          {
+            "width": 390,
+            "height": 844
+          },
+          {
+            "width": 844,
+            "height": 390
+          }
+        ]
+      },
+      "old_confirmed": 3,
+      "revision_unchanged": true,
+      "post_requests": 0,
+      "javascript_errors": 0,
+      "batch_layouts": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        },
+        {
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        }
+      ],
+      "screenshots": "/tmp/hsd-material-navigation-production-20260909"
+    }
+  },
+  "preservation": {
+    "latest_stopped_sessions_exact": true,
+    "sessions": {
+      "paired": {
+        "sha256": "feb6b4e86c444cf5ea0732a8cac30016a10e195505513799875dcd37f4ba1654",
+        "revision": "6be5e44c00fcc425132c4a63372a2d71c6501b8e64a720c7f270a01088807961",
+        "record_count": 32,
+        "confirmed_count": 3,
+        "confirmed_object_count": 0
+      },
+      "evidence": {
+        "sha256": "e9fb83124ee4e4d888a58d7f56566327a9c7d15092b878ac2263e6227772c42a",
+        "revision": "9b7685adf803428b0793498992364626e05307e47de15a578e5e8ba971550f49",
+        "record_count": 32,
+        "confirmed_count": 1,
+        "confirmed_object_count": 39
+      }
+    },
+    "active_policy_unchanged": true,
+    "ai_bundle_unchanged": true,
+    "unit_unchanged": true,
+    "nginx_unchanged": true,
+    "pdf_baseline_exact": true,
+    "pdf_hash_count": 244,
+    "pdf_service": {
+      "MainPID": "1270223",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Thu 2026-08-20 17:38:12 UTC",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "pdf_https": {
+      "certificate_verified": true,
+      "body_sha256": "7a064af6368c926bc3dc8c6ed8c77fc3b273b60aa3de1c014bdc3b4422aa64a3",
+      "bytes": 425
+    }
+  },
+  "service": {
+    "MainPID": "1827772",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Tue 2026-09-08 18:14:23 UTC",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "receipts": {
+    "release-build": "material-navigation-release-build-20260909.json",
+    "remote-preflight": "material-navigation-remote-preflight-20260909.json",
+    "deployment": "material-navigation-deployment-20260909.json",
+    "https-readonly": "material-navigation-https-readonly-20260909.json"
+  }
+}

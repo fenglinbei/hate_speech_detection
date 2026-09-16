@@ -1,0 +1,53 @@
+{
+  "C_coefficients_H_A": [
+    0.5,
+    0.5
+  ],
+  "I_coefficients_H_A": [
+    1.0,
+    -1.0
+  ],
+  "K": "N-patched(N<-O)",
+  "R": "patched(O<-N)-O",
+  "background_bound_epsilon_units": 1,
+  "encodings": [
+    "original",
+    "ab_forward",
+    "ab_reverse"
+  ],
+  "fixed_prior": "subtract recipient unpatched prior from recipient, patched and target donor",
+  "margin": "non-hate-minus-hate",
+  "ncc_background": "logit(mean(sigmoid(original_answer_mean_margin_each_probe)))",
+  "numeric_policy": {
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375,
+    "padding_extra": 64,
+    "reference_abs_tolerance": 0.0001,
+    "repeat_abs_tolerance": 0.0001,
+    "replica_shift": 1
+  },
+  "physical_shared_terms_merge_before_bounds": true,
+  "primary": "original/answer_sum",
+  "probe_texts": {
+    "empty": "",
+    "lorem": "Lorem ipsum",
+    "mask": "[MASK]",
+    "na": "N/A",
+    "space": " "
+  },
+  "query_hehe_recalibrated_ncc": null,
+  "raw_C_bound_epsilon_units": 2,
+  "raw_I_bound_epsilon_units": 4,
+  "raw_margin_bound_epsilon_units": 1,
+  "raw_modes": [
+    "answer_sum",
+    "answer_mean",
+    "total_with_eos",
+    "mean_with_eos"
+  ],
+  "raw_reverse_shift_saved": true,
+  "recalibrated_aggregate_single_and_loo": true,
+  "recalibrated_ncc_C_bound_epsilon_units": 4,
+  "recalibrated_ncc_I_bound_epsilon_units": 8,
+  "statistical_confidence_claimed": false
+}

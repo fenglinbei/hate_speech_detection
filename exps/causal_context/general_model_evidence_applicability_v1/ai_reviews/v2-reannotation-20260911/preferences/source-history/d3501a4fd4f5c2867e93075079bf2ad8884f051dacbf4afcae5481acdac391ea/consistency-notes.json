@@ -1,0 +1,93 @@
+{
+  "schema_version": "evidence-consistency-notes/v1",
+  "notes": [
+    {
+      "id": "C01",
+      "status": "已知政策变化",
+      "case_ids": [
+        "demo:1240",
+        "demo:4392"
+      ],
+      "rule_ids": [
+        "P01",
+        "P02",
+        "P22"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#1240 早期采用 non-hate / []；后续当前映射可由 AI 严重度 1 得到 hate。",
+      "handling": "差异来自用户后来批准的映射，不能写成用户重新裁定 #1240。旧 group 也保留原政策身份。"
+    },
+    {
+      "id": "C02",
+      "status": "用户明确修订合并优先级",
+      "case_ids": [
+        "demo:5615",
+        "query:5423",
+        "demo:1517",
+        "demo:2750"
+      ],
+      "rule_ids": [
+        "P02",
+        "P18",
+        "P22",
+        "P24"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "对 #5423／#5615 与原个人辱骂规则的疑似差异，用户明确回复：如果同时出现 种族+个人 那就优先仅种族。",
+      "handling": "作为新的优先级 P24 记录，不把差异强行解释为没有个人辱骂。两例旧值不变；#2750 等早期含 others 的人工记录保留原身份，进入有版本的复核清单。"
+    },
+    {
+      "id": "C03",
+      "status": "可区分的命题边界",
+      "case_ids": [
+        "demo:924",
+        "query:2011",
+        "demo:2750",
+        "demo:877"
+      ],
+      "rule_ids": [
+        "P12",
+        "P14",
+        "P15",
+        "P16"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#924 含基因表述定 2；#2011 有智力、开化比较也明确判 hate／2／Racism；#2750 垃圾原材料影射定 3；#877 优势地位定 1。",
+      "handling": "不以基因、智商、开化或优势等单词机械升级。#2011 未给解释，因此与“本性低等”的细分边界仍属 AI 归纳；遇到更接近的句子继续对照，不自行改写旧分数。"
+    },
+    {
+      "id": "C04",
+      "status": "用户已区分的自我描述",
+      "case_ids": [
+        "demo:4392",
+        "query:4080",
+        "demo:857"
+      ],
+      "rule_ids": [
+        "P08",
+        "P09",
+        "P19"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#4392 自称包含实际冒犯词被判 1；#4080 自称河南回族处于互联网最底层，被明确判为自嘲处境、未认可身份贬低（0）。",
+      "handling": "按实际用词与所表达的立场区别，不按第一人称统一归 0 或 1。#4080 的 group 仍为 AI 草稿。"
+    },
+    {
+      "id": "C05",
+      "status": "用户已区分的作者立场",
+      "case_ids": [
+        "demo:986",
+        "demo:996",
+        "demo:7232"
+      ],
+      "rule_ids": [
+        "P08",
+        "P09",
+        "P15"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#986 的末句被明确判为作者认可群体污名（2）；#996 被明确判为描述社会处境（0）。此前 #7232 是罗列并反感偏见（0）。",
+      "handling": "按各句作者实际立场区分，未发现需要覆盖旧决定的冲突。仅给分数的 #986／#996 不额外计作 group 裁决。"
+    }
+  ]
+}

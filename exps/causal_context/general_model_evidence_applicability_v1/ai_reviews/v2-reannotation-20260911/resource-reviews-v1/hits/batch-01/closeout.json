@@ -1,0 +1,140 @@
+{
+  "schema_version": "local-hit-batch-closeout/v1",
+  "batch": "batch-01",
+  "state": "local_review_complete",
+  "current_snapshot": "dd12bb63a72611923b53c6bd9f92d78af71ea995274eb860d1182c4c9bf3246b",
+  "status": {
+    "hits_total": 292,
+    "hits_selected": 292,
+    "hits_not_started": 0,
+    "hits_ai_only": 280,
+    "hits_user_participated": 12,
+    "hits_with_explicit_fit_fields": 11,
+    "hits_with_related_instruction_only": 1,
+    "source_fit_user_fields": 10,
+    "query_fit_user_fields": 3,
+    "explicit_human_field_events": 13,
+    "questions_pending": 0,
+    "hits_awaiting_reply": 0,
+    "source_fit_unresolved": 5,
+    "query_fit_unresolved": 4,
+    "online_material_confirmations_added": 0
+  },
+  "batches": [
+    {
+      "batch": "batch-01",
+      "selected": 292,
+      "question_count": 9,
+      "questions_answered": 9,
+      "questions_pending": 0,
+      "questions_answered_by_fit_fields": 8,
+      "questions_resolved_by_related_instruction": 1
+    }
+  ],
+  "initial_ai_drafts": {
+    "path": "resource-reviews-v1/hits/batch-01/initial-ai-drafts.json",
+    "sha256": "1924900aa8ee705b09d7dbf9b1802928fc0245962b5e92af0dd1804bf921625b"
+  },
+  "artifacts": {
+    "reviews.json": {
+      "path": "resource-reviews-v1/hits/snapshots/dd12bb63a72611923b53c6bd9f92d78af71ea995274eb860d1182c4c9bf3246b/reviews.json",
+      "sha256": "dd12bb63a72611923b53c6bd9f92d78af71ea995274eb860d1182c4c9bf3246b"
+    },
+    "reviews.csv": {
+      "path": "resource-reviews-v1/hits/snapshots/dd12bb63a72611923b53c6bd9f92d78af71ea995274eb860d1182c4c9bf3246b/reviews.csv",
+      "sha256": "ef608e7843a8853045c893547e29bb7dbf08242361106bc1b079b83bb2ce4d23"
+    },
+    "preferences.md": {
+      "path": "resource-reviews-v1/hits/snapshots/dd12bb63a72611923b53c6bd9f92d78af71ea995274eb860d1182c4c9bf3246b/preferences.md",
+      "sha256": "28a5bc8a6c4f4362e4a722ccfde77a7672dd5ad0b8157c7cf3c8630012690b2c"
+    }
+  },
+  "validation": {
+    "path": "resource-reviews-v1/hits/batch-01/validation.json",
+    "sha256": "ed9120f17d15029ed3381f2e66c22287ea4dcb142f26e8430a17a26dcda812f3"
+  },
+  "retained_uncertain": [
+    {
+      "object_id": "hit:1160:demo:7959:lex-0455:sense:01:5:8",
+      "source_fit": "uncertain",
+      "query_fit": "inapplicable",
+      "reason_ai": "原定义限定男性婚恋承接他人情史；“一位优秀的接盘侠”缺少该语境。扩展定义可解释一般承接负担的讥讽，但不替换本次原定义。"
+    },
+    {
+      "object_id": "hit:3898:query:3898:lex-new-b5bb7feeffb85985:sense:01:40:43",
+      "source_fit": "uncertain",
+      "query_fit": "uncertain",
+      "reason_ai": "冻结原定义为空，无法对其文字作适配判断；新增人工释义另作比较，不冒充原提示中已有释义。"
+    },
+    {
+      "object_id": "hit:3898:query:3898:lex-new-b5bb7feeffb85985:sense:01:94:97",
+      "source_fit": "uncertain",
+      "query_fit": "uncertain",
+      "reason_ai": "冻结原定义为空，无法对其文字作适配判断；新增人工释义另作比较，不冒充原提示中已有释义。"
+    },
+    {
+      "object_id": "hit:3919:query:3919:lex-0378:sense:01:51:53",
+      "source_fit": "uncertain",
+      "query_fit": "uncertain",
+      "reason_ai": "“处于yp之下的受害者”不足以在约炮、外地人或其他缩写间确定所指；不由召回的性别示例填补它的上文。"
+    },
+    {
+      "object_id": "hit:3919:query:3919:lex-0378:sense:02:51:53",
+      "source_fit": "uncertain",
+      "query_fit": "uncertain",
+      "reason_ai": "“处于yp之下的受害者”不足以在约炮、外地人或其他缩写间确定所指；不由召回的性别示例填补它的上文。"
+    }
+  ],
+  "resolved_definition_followups": [
+    {
+      "source_id": "5998",
+      "object_id": "hit:5423:demo:5998:lex-0449:sense:01:2:4",
+      "source_fit": "valid_sense",
+      "provenance": "user_discussion"
+    },
+    {
+      "source_id": "5998",
+      "object_id": "hit:5423:demo:5998:lex-0449:sense:01:13:15",
+      "source_fit": "valid_sense",
+      "provenance": "user_discussion"
+    },
+    {
+      "source_id": "2445",
+      "object_id": "hit:1746:demo:2445:lex-0119:sense:01:23:25",
+      "source_fit": "substring_mismatch",
+      "provenance": "ai_note"
+    }
+  ],
+  "separate_lexicon_additions": {
+    "path": "resource-reviews-v1/lexicon-additions/current.json",
+    "sha256": "9aa555d49d8f395b2f29df0ec25b436afc643fa384cd937aa3d8f85efa0ac90f"
+  },
+  "sentence_followups": [
+    {
+      "object_id": "demo:5998",
+      "group": [
+        "Sexism",
+        "others"
+      ],
+      "severity_retained": 1
+    },
+    {
+      "object_id": "query:4137",
+      "attack_severity": 0,
+      "group_remains_ai": [
+        "LGBTQ",
+        "Sexism"
+      ]
+    }
+  ],
+  "sentence_context": {
+    "path": "sentence_context.json",
+    "sha256": "e282b952c114b2840c6ed78d438ae531aa3b6757fb60c9154e75ac50327ebf1a"
+  },
+  "next_queue": {
+    "kind": "relation",
+    "object_count": 283,
+    "state": "not_started_locally"
+  },
+  "online_material_confirmations_added": 0
+}

@@ -1,0 +1,158 @@
+{
+  "author": "assistant",
+  "authoring_rounds": [
+    "round-01.json",
+    "round-02.json"
+  ],
+  "cases": [
+    {
+      "answer": "non-hate",
+      "partner_choice": "选择已有 non-hate 且审核同意的 3156，将其中性个人经历自然扩展至与 826 等长；第 9 位提供更靠近查询的位置。它与查询话题直接、规则部分相关，不能称为中性无效示例。",
+      "partner_demo_id": "3156",
+      "partner_preserve": [
+        "此前没有这个概念",
+        "因为喜欢张国荣而逐渐了解这个圈子",
+        "不讨厌、不惊讶，认为很自然",
+        "对自己的反应觉得奇怪"
+      ],
+      "position_limit": "交换同时移动 826 变体与 3156 改写，测的是二者相对顺序／距离组合的变化；不能归因为 826 单独的绝对位置。共同背景因 3156 加长而比第一批多 12 tokens，须单列背景改写效应。",
+      "query_id": "541",
+      "swap_slots_1_based": [
+        5,
+        9
+      ],
+      "target_demo_id": "826",
+      "task": "hate"
+    },
+    {
+      "answer": "hate",
+      "partner_choice": "6493 原／审核 hate 一致，与目标完整块只差 1 token；追加省略标点即可匹配，避免为凑长度大幅改写其他示例。7640 虽然块长相同，但原答案 non-hate 与审核 hate 不同；6035 也有答案差异，均不作为本次配对。",
+      "partner_demo_id": "6493",
+      "partner_preserve": [
+        "哈哈哈及没想到的语气",
+        "对妹子聪明的评价",
+        "知道嘿人那些手段的指向",
+        "不改写正文，仅在句尾补省略标点"
+      ],
+      "position_limit": "仅交换相邻的第 2／3 位，不能代表远距离靠近查询的效应。6493 本身还有嘿人这一相关身份线索；顺序实验同时移动两条示例。共同背景比第一批多 1 token，背景改写效应单列。",
+      "query_id": "3169",
+      "swap_slots_1_based": [
+        3,
+        2
+      ],
+      "target_demo_id": "3660",
+      "task": "hate"
+    }
+  ],
+  "continuation_basis": {
+    "earlier_user_message": "好的，那现在可以先完成材料",
+    "latest_user_message": "第一批没什么问题，还有下一批吗？",
+    "new_materials_already_accepted": false,
+    "scope_interpretation": "continue preparing the next material batch in the discussed input-control sequence",
+    "scope_interpretation_author": "assistant"
+  },
+  "first_batch_feedback_sha256": "ddaee8155f31b52a4f2dfd7eace5f40ea9f71eb5aa7dea0453d0898d6dab7dd0",
+  "first_batch_manifest_sha256": "cd88b7e34598080cac502aa62627edab620855c5a28ceee37842307842741e78",
+  "general_limits": [
+    "New materials are AI drafts; the first-batch no-objection does not accept this batch.",
+    "Source examples retain their original labels and historical differences; no new source adjudication is inferred.",
+    "Position comparisons move two examples together and require their common rewritten background; source-A differences are not position effects.",
+    "Length variants also change wording, repetition, information density and downstream token positions.",
+    "All variants are retained before model scores, including future no-effect or reverse results.",
+    "No new case, reserve example, model forward, production write or activation-patching readiness is introduced."
+  ],
+  "length_design": {
+    "baseline": "first_batch_A_with_original_partner",
+    "changes": "target_demo_text_only",
+    "interpretation": "length and wording-density sensitivity; not an isolated pure-length effect",
+    "keep": [
+      "target_demo_identity",
+      "intended_semantics",
+      "all_demo_answers",
+      "demo_count",
+      "demo_order",
+      "dictionary",
+      "query_text"
+    ],
+    "minimum_absolute_token_change": 4,
+    "query_position_fixed": false
+  },
+  "position_design": {
+    "P0": "original order with the same matched partner rewrite in every target variant",
+    "P1": "swap the target text-plus-answer and partner text-plus-answer, keeping ordinal headers at their slots",
+    "first_batch_bridge_required": true,
+    "required_fixed": [
+      "full_prompt_token_count_within_P0_P1",
+      "all_slot_boundaries",
+      "all_answer_positions_and_labels_by_slot",
+      "query_position",
+      "all_other_demo_text_and_tokens",
+      "dictionary",
+      "query"
+    ],
+    "target_variants": [
+      "A",
+      "C1",
+      "C2",
+      "D1",
+      "D2"
+    ]
+  },
+  "preference_snapshot_id": "cf158ae3d22aadf1bff45ff5398c3de415c16fc02963f18d0fdc7918f3aa5ed1",
+  "relation_preference_snapshot_id": "28cd3f73e884e1decd10f3a04a7425e2a90acfe024694948c735b61124ea9f6f",
+  "review_fields": [
+    "naturalness",
+    "hate",
+    "attack_severity",
+    "meaning_preservation",
+    "unintended_change",
+    "note"
+  ],
+  "schema_version": "evidence-position-length-material-selection/v1",
+  "scope": "second material batch for 541/hate and 3169/hate; no scoring",
+  "selected": [
+    {
+      "ai_attack_severity": 0,
+      "ai_hate": "non-hate",
+      "id": "541-P",
+      "rationale": "保留原个人经历和接纳立场，展开时间关系并把对自己反应的疑惑改为问句；没有增加群体攻击或反泛化原则。",
+      "round": "round-02.json"
+    },
+    {
+      "ai_attack_severity": 1,
+      "ai_hate": "hate",
+      "id": "3169-P",
+      "rationale": "原正文逐字保留，仅补三个句号形成省略结尾；沿用原句贬义指向作 AI 判断，仍需核对标点是否改变语气。新文本 1 级是 AI 提案，原 6493 的 1 级属于此前整体采纳的 AI 分级。",
+      "round": "round-01.json"
+    },
+    {
+      "ai_attack_severity": 0,
+      "ai_hate": "non-hate",
+      "id": "541-S",
+      "rationale": "压缩重复转述和反问，保留吴亦凡／异性恋的例子、道德与性取向无关、反对由个人坏事泛化到整个群体。",
+      "round": "round-01.json"
+    },
+    {
+      "ai_attack_severity": 0,
+      "ai_hate": "non-hate",
+      "id": "541-L",
+      "rationale": "把相同论证展开，增加衔接和重述，不增加新的事例或攻击对象；更明确的论证与重复本身也是可能影响因素。",
+      "round": "round-01.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_hate": "hate",
+      "id": "3169-S",
+      "rationale": "保留被嘿嘿玩过的对象、思想不一般的暗示及省略结尾，去掉主要是和重复指代；需核对压缩后贬损含义与强度是否仍相当。",
+      "round": "round-01.json"
+    },
+    {
+      "ai_attack_severity": 2,
+      "ai_hate": "hate",
+      "id": "3169-L",
+      "rationale": "通过重述思想及感叹衔接增加长度，保留原指称、嘿嘿用法和含蓄贬评；没有补出具体性行为、女性字样或暴力内容。",
+      "round": "round-01.json"
+    }
+  ],
+  "status": "draft_pending_human_review"
+}

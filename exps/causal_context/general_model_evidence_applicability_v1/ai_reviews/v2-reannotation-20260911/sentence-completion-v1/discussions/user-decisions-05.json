@@ -1,0 +1,57 @@
+{
+  "schema_version": "evidence-sentence-completion-user-decisions/v1",
+  "review_round": 10,
+  "recorded_at_utc": "2026-09-11T16:06:31.269855+00:00",
+  "selection_sha256": "5bb695c272953f1328e483952ff85809dbdbb2bdf48c6b75b29c24e62f7a4587",
+  "pre_discussion_annotation": {
+    "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/ana-question.json",
+    "sha256": "cfc57234b0a058904b63c68f7e872d9b3c6ee6e6485b1603838765fc76d03eb7"
+  },
+  "task_policies": {
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1+racism-personal-priority.1+same-target.1",
+      "sha256": "3853739a723368445b29d461f1ed10a4570da3537f3b3fe55077961c35a6a312"
+    }
+  },
+  "records": [
+    {
+      "object_id": "demo:5998",
+      "text_sha256": "218ffb6ceed85b4863b502805f641b8826888ec4b0c1bb0aa26a25babd9bfb42",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/ana-raw-reply.json",
+        "sha256": "a52396774c2f3162c9da50bb3463272a3456f788b49107539f875582ff0f5e14"
+      },
+      "source_reply_index": 0,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_JiuKF1ItLVdglaWhF38omruu",
+        0
+      ],
+      "rationale": "改为 Sexism、others；保留 1 级及 hate",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_group_amendment",
+      "supersedes_event_ids": {
+        "group": [
+          "discussions/batch-06/user-decisions-01.json#records/1/group"
+        ]
+      },
+      "amendment_reason": "命中复核新增阿娜两处实际采用辱女义的明确确认；经一致性提问，用户明确增加 Sexism，保留 others、1 级与 hate。"
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

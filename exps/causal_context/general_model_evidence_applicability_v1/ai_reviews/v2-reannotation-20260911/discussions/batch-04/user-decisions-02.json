@@ -1,0 +1,45 @@
+{
+  "schema_version": "evidence-discussion-user-decisions/v1",
+  "batch": 4,
+  "recorded_at_utc": "2026-09-11T08:14:47.055420+00:00",
+  "policy": {
+    "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+    "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "source_message": "改为hate，且暂时先用默认非0严重度即是hate的映射",
+  "source_message_sha256": "c9d6352e642579ed67be033574906366b01610f8f9e989c6ef0d5f10c86efaef",
+  "scope": "explicit hate decision for #4392; rule confirmation stored separately",
+  "pre_discussion_annotation_sha256": "dda94f8f198a3a4017387273b3b02302d753e0cd6fd902c40a9701eba357810a",
+  "mapping_confirmation": {
+    "path": "policies/severity-hate-default-mapping-v1.json",
+    "sha256": "b84a3acf37659291bb75a98db221a2bf8fcc2e612d41c877e5daeceae3838879"
+  },
+  "records": [
+    {
+      "object_id": "demo:4392",
+      "text_sha256": "d1dc8cad0972f0e4ca88a0424e88beff27413fe7e33d9f9aaf45f69919d54a0f",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "rationale": "改为hate",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate"
+      },
+      "scope": [
+        "hate"
+      ],
+      "mode": "explicit_hate_only",
+      "superseded_ai_value": "non-hate"
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

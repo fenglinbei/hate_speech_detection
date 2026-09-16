@@ -1,0 +1,140 @@
+{
+  "arms": [
+    "O",
+    "D",
+    "N1",
+    "E1",
+    "N2",
+    "E2",
+    "P1",
+    "X1",
+    "P2",
+    "X2"
+  ],
+  "authorization": {
+    "authority_record_writeback": false,
+    "individual_human_material_adoption": false,
+    "material_preparation_and_execution_authorized": true,
+    "prior_gpu_window_verbatim": "可以启动GPU运行，目前只有两卡空闲，剩下的两卡晚点才能空出来",
+    "scope": "New local lexicon deletion, natural length/position controls, and literal-laughter scope-note experiment; preserve original human records.",
+    "user_request_verbatim": "帮我做多一个实验，去掉3169中”嘿嘿“这一词条，然后同样测试“嘿嘿地笑” / “哈哈地笑”这两个示例，重点比较两行各自的“嘿嘿－哈哈”差值：\n- 去掉词条后差值明显减弱或消失：支持这条说明参与或放大了词语效应。\n- 去掉后差值仍接近原来：说明该效应不完全依赖这条说明，但还可能来自模型已有知识或其余示例。\n- 两种示例的分数一起变化，而差值基本不变：说明词条影响了整体判断，却未必解释此次词语配对的差异。\n删除词条也会改变长度和后续位置，所以还需配套位置、长度对照。\n\n然后再比较“保留原释义”与“明确注明普通笑声不适用该义项”，检查问题是否出在把特定用法泛化到了当前语境。这比现在就把结果归因于独立的“词形偏向”更有依据。"
+  },
+  "bound_rule": "sum(abs(coefficient) * per_condition_bound); NCC condition=2*epsilon",
+  "classification_rule": "Only descriptive direction/magnitude and numerical unresolved; no statistical or percentage equivalence threshold",
+  "counts": {
+    "ab_real": 80,
+    "background_probes": 200,
+    "candidate_evaluations_across_passes": 3968,
+    "candidates": 640,
+    "comparisons": 124,
+    "contexts": 320,
+    "demo_templates": 2,
+    "derived_readouts_per_gate": 1968,
+    "historical_contexts": 32,
+    "original_real": 40,
+    "passes": 8,
+    "real_conditions": 40,
+    "transitions_per_demo_template": 13,
+    "within_arm_pairs": 20
+  },
+  "mechanism_ready": false,
+  "new_individual_human_fields": 0,
+  "numeric_policy": {
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375,
+    "padding_extra": 64,
+    "reference_abs_tolerance": 0.0001,
+    "repeat_abs_tolerance": 0.0001,
+    "replica_shift": 1
+  },
+  "ratio_rule": "Only if original pair is numerically resolved; retain signs, absolute magnitudes and reversals",
+  "readout": {
+    "auxiliary": "All four score modes, background, both A/B diagnostics, five single and five leave-one-out probes",
+    "common_shift": "(B_H+B_O-A_H-A_O)/2",
+    "interaction": "(B_H-B_O)-(A_H-A_O)",
+    "margin": "non-hate minus hate",
+    "parallel_groups": [
+      "original sum/mean",
+      "five-probe NCC mean",
+      "A/B forward and reverse"
+    ],
+    "primary_original": "answer_sum",
+    "word_pair": "H minus O"
+  },
+  "references_loaded_after_all_gates": true,
+  "schema_version": "evidence-lexicon-scope-protocol/v1",
+  "scientific_plan_sha256": "6d98aca3a3f75618a7651a737861d9c358d3111816d381670e86bf4d0e64e25d",
+  "target": {
+    "demo": "3660",
+    "entry": "lex-0419",
+    "query": "3169",
+    "sense": "sense:01"
+  },
+  "transitions": [
+    {
+      "from_arm": "O",
+      "role": "natural_deletion",
+      "to_arm": "D"
+    },
+    {
+      "from_arm": "O",
+      "role": "matched_replacement",
+      "to_arm": "N1"
+    },
+    {
+      "from_arm": "O",
+      "role": "matched_replacement",
+      "to_arm": "N2"
+    },
+    {
+      "from_arm": "D",
+      "role": "length_refill_bridge",
+      "to_arm": "E1"
+    },
+    {
+      "from_arm": "D",
+      "role": "length_refill_bridge",
+      "to_arm": "E2"
+    },
+    {
+      "from_arm": "N1",
+      "role": "filler_position_control",
+      "to_arm": "E1"
+    },
+    {
+      "from_arm": "N2",
+      "role": "filler_position_control",
+      "to_arm": "E2"
+    },
+    {
+      "from_arm": "O",
+      "role": "restatement_bridge",
+      "to_arm": "P1"
+    },
+    {
+      "from_arm": "O",
+      "role": "restatement_bridge",
+      "to_arm": "P2"
+    },
+    {
+      "from_arm": "O",
+      "role": "scope_total_bridge",
+      "to_arm": "X1"
+    },
+    {
+      "from_arm": "O",
+      "role": "scope_total_bridge",
+      "to_arm": "X2"
+    },
+    {
+      "from_arm": "P1",
+      "role": "matched_scope_note",
+      "to_arm": "X1"
+    },
+    {
+      "from_arm": "P2",
+      "role": "matched_scope_note",
+      "to_arm": "X2"
+    }
+  ]
+}

@@ -1,5 +1,101 @@
 # DigitalOcean Singapore 部署说明
 
+## group 范围 v2 的代码与规则迁移
+
+用户于 2026-09-09 接受 group 范围修订。生效文档与完整规则、父版哈希、用户确认、
+discovery 影响 ID 清单保存在独立 policy JSON 中。v1 AI bundle 和原 manifest 保留原字节；
+新规则不意味着旧的人审决定已按 v2 复核。2026-09-09 01:15:38（Asia/Shanghai）已上线，
+ release 为 `af7a61fe2b2324f6d2954ae07c04f7b2736a34b3eb2791e3049e0a6f6dffa5a3`；
+[执行与验收记录](../../../exps/causal_context/general_model_evidence_applicability_v1/execution-status.md)保留具体回执。
+
+2026-09-09 02:14:23（Asia/Shanghai）材料导航静态更新已上线，当前 release 为
+`211f4b4f2da3a2cfd0725e5cfba4c75f57c41db5426bc4e95190a4de4e668037`。
+本次沿用同一 v2 unit、policy 与最新会话，仅替换三份证据 UI 文件；
+使用下文 `update_static_release.py`，没有重跑一次性规则迁移。
+
+```bash
+python3 -B -S deploy/general_model_paired_review/build_release.py \
+  --output-dir /tmp/hsd-evidence-policy-release-NEW \
+  --evidence-bundle exps/causal_context/general_model_evidence_applicability_v1/bundle/evidence_bundle.json \
+  --evidence-policy exps/causal_context/general_model_evidence_applicability_v1/policies/group-scope-v2/policy_amendment.json
+```
+
+构建仍只包含运行闭包和 discovery 输入；独立 policy 文件随 manifest 逐文件校验，
+使用 `python -I -B -S` 在隔离会话检验新规则启动、零自动确认和续读。
+正式 unit 仅在 `ExecStart` 末尾追加固定的 `--evidence-policy` 路径，其他设置不变。
+
+使用 [update_evidence_policy_release.py](update_evidence_policy_release.py)，不要重跑首次激活脚本。
+将它与 [update_static_release.py](update_static_release.py) 上传至同一私有操作目录，
+另传入发布压缩包及本仓库的候选 unit。先执行以下只读预检；`ARCHIVE_SHA256` 和
+`UNIT_SHA256` 均须使用本机计算、独立核对的完整哈希：
+
+```bash
+python3 -B -S update_evidence_policy_release.py \
+  --archive /tmp/hsd-evidence-policy-release.tar.gz --sha256 ARCHIVE_SHA256 \
+  --unit /tmp/hsd-evidence-policy.service --unit-sha256 UNIT_SHA256 --check-only
+```
+
+预检在 0700 临时目录复制当前记录，执行真实迁移和续读，再删除临时副本；
+不写正式会话、unit、release 链接，也不控制任何服务。去掉 `--check-only` 执行上线：
+
+1. 取得与静态更新共用的部署锁，验证新代码/规则和 frozen 输入字节。
+2. 仅停止 HSD，并核对无运行中的主进程；以 0600 备份两层最新会话与原 unit。
+3. 对停写后的最新快照再次隔离验证，仅显式迁移 evidence 层；保留全部旧对象、裁决、
+   材料快照、历史事件与暴露记录。受影响决定通过规则版本等待重核，不自动确认。
+4. 原子切换代码和 unit，启动 HSD，只读 health/bootstrap 核对进度与续读，
+   允许启动后用户正常保存并保留这些最新写入。部署回执不包含人审正文或凭据。
+
+迁移尚未改变正式 evidence 文件时，失败只回退代码与 unit，沿用最新记录。
+**一旦 evidence 字节改变，失败会保持新代码/规则与最新会话，并停止 HSD 等待向前修复。**
+即使迁移子进程在原子写入后异常退出，也按磁盘实际字节判定；不得启动不兼容的 v1 writer，
+更不能用部署前备份覆盖后续人审决定。此流程不修改或 reload Nginx，不控制 PDF 服务；
+执行前后运行只读 audit 证明 PDF 的配置、静态资源、PID/启动时间/重启数和 HTTPS 不变。
+
+该迁移是已经完成的一次性 v1 → v2 转换，不能对当前会话再次执行。
+后续代码更新（包括纯前端修复）必须继续携带相同的 `--evidence-policy` 与原 AI bundle，
+保留已迁移的最新会话；不能用下文历史首次上线命令构建缺少 active policy 的生产版本。
+`smoke_evidence_readonly.cjs` 可设置 `HSD_EXPECT_POLICY_VERSION=evidence-applicability-annotation-policy/v2`
+验证生效规则、旧 AI 版本、无自动确认、完整规则的手机阅读及零 POST。
+另设 `HSD_CHECK_MATERIAL_NAVIGATION=1` 验证上一／下一材料按钮、`Alt + ↑/↓`、
+筛选边界与三种视口的按钮可达性；脚本拦截所有 API 写请求。
+
+## 证据适用性附属模式（2026-09-08）
+
+新模式使用同一服务的 `/evidence/` 与 `/api/evidence/`，新会话独立保存在
+`/var/lib/hsd-general-model-paired-review/evidence-applicability-v1/session.json`。
+原 `/` 模式继续使用原会话；两者均有单独的非空启动检查。仅替换 hsd 代码和 unit，
+不修改或 reload Nginx，不操作 PDF 服务。
+
+带初稿包的发布命令如下；输出目录须新建且为空：
+
+```bash
+python3 -B -S deploy/general_model_paired_review/build_release.py \
+  --output-dir /tmp/hsd-evidence-release-NEW \
+  --evidence-bundle exps/causal_context/general_model_evidence_applicability_v1/bundle/evidence_bundle.json
+```
+
+包中新增证据模式的两份 Python 源码、三份静态文件及一份只读 AI bundle。
+原始 manifest 字节仍保持不变；不包含真实人工会话、凭据、测试会话或 reserve。
+构建脚本对两模式分别创建临时隔离会话，验证隐藏、零人工确认和重启续读。
+
+首次上线使用 [activate_evidence_release.py](activate_evidence_release.py)：先验证上传压缩包、
+逐文件清单与 unit 哈希，检查旧会话仍与只读父记录引用一致；停止 hsd 后备份最新原记录，
+以 `hsd-review` 初始化全新的独立会话，再原子切换代码和启动服务。
+该脚本拒绝覆盖已有的新模式会话；后续更新应复用其最新记录，不能再次初始化。
+失败只回退代码和 unit，保留所有最新会话。只读检查使用
+[audit_readonly.py](audit_readonly.py)，比较 PDF 配置、242 个静态文件、进程和 HTTPS。
+
+已有两层会话时，证据模式的纯前端修复可使用
+[update_static_release.py](update_static_release.py)。先传入 `--archive`、`--sha256` 和
+`--check-only` 做只读预检，再以同一参数去掉 `--check-only` 执行更新。
+该脚本仅允许 `evidence.html`、`evidence.css`、`evidence.js` 改变，验证所有其他包内文件字节一致；
+停写后以 0600 备份两层最新会话，只切换代码并启动 hsd，失败只回退代码。
+不初始化或恢复会话、不改 unit 或 Nginx；启动后的人工作业也保留。
+
+线上进度及最新 release 身份见
+[证据审核执行记录](../../../exps/causal_context/general_model_evidence_applicability_v1/execution-status.md)。
+下文为原 paired 模式的迁移背景与通用操作，旧 release 哈希仅表示首次切换时状态。
+
 **2026-09-08 已完成正式切换：`https://hsd.fenglin.pro/` 已上线，首批 3/12 确认进度完整保留。**
 正式会话位于本服务器，unit 已 `enabled/active`，来源与会话哈希、重启续读均已核验。
 本机旧 writer 和 aliyun 反向隧道已停止，旧会话保留为带迁移标记的备份。
@@ -153,3 +249,28 @@ HTTPS 问题看 `/var/log/nginx/hsd.fenglin.pro.access.log`、`hsd.fenglin.pro.e
 代码回退只切换兼容的 release，继续使用当时最新的唯一正式会话；操作前停写、备份并核对 schema/来源。
 不得恢复本机旧备份或仅删除 marker 来重启旧 writer。
 如需迁回本机，应停远端写入、迁回远端最新记录并验证完整状态，作为另一次明确的状态迁移处理。
+# Final annotation writeback, 2026-09-12
+
+The user explicitly accepted the completed 954-object local result. The evidence
+session now contains 1,072 confirmed materials, with its 118 earlier confirmations
+and all 32 separate case records preserved. The case-level stage remains 3/32.
+
+The compatible release is
+`25d100d40d3107cc8d016ed6a5c11b445ceb250ed56da95a76fab3b87a385785`.
+The final artifact SHA-256 is
+`737ccd7c81ade5a7c9617be0e6afb68f4e966028a20c8237b906e038a84f5177`.
+The artifact and writeback receipt are under the evidence state's
+`final-results/<artifact-sha256>/`; exact pre-writeback copies of both sessions
+are in `/var/lib/hsd-general-model-paired-review/final-annotation-backup-di3mqzyp`.
+
+`finalize_annotation_release.py` performed the explicit, version-checked operation
+with a stopped writer. Do not rerun its original import against later decisions.
+Code rollback must retain a finalization-compatible reader and the latest session;
+never restore a session backup to make old code start. Nginx, the service unit and
+the PDF service were not changed by this operation.
+
+The UI and JSON/CSV exports retain `final_annotation` receipts, including severity
+and adopted definition wording, while the original frozen input definitions stay
+intact. These receipts record bulk acceptance and preserve pre-acceptance field
+provenance. Blank demo original-label verdicts were outside this sentence-label
+review; they must not be converted into invented source-error confirmations.

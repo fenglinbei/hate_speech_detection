@@ -1,0 +1,182 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 3,
+  "recorded_at_utc": "2026-09-10T22:04:13.238354+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    },
+    {
+      "path": "discussions/batch-02/user-decisions-01.json",
+      "sha256": "d0448387ebda0d7bde30541382705a3e09f83b64c3897a0f499f6337c2ed6652"
+    }
+  ],
+  "pre_calibration_annotation_sha256": "3de69ffbc35536bc314c650666429814b5f6d6e37260b2848cb8e00b7c6b7350",
+  "post_calibration_annotation_sha256": "22a40c5e92e8fda377eb3168c0c07b43fb0733cffbe41c86a7d762043c23b259",
+  "method": "All 30 source texts reread; preceding explicit decisions used as case analogies; unresolved shared boundary is not silently generalized.",
+  "original_answer_exposure": "No new original answer or prediction read by annotator during calibration; programmatic comparisons occur after saved labels.",
+  "external_sense_checks": [
+    {
+      "term": "cjb",
+      "query": "\"cjb\" \"吹\" \"意思\"",
+      "sources": [
+        "https://bangumi.tv/group/topic/390288",
+        "https://henan.china.com/m/news/yaowen/2022/1229/2530334523.html"
+      ],
+      "finding": "有讥讽名不副实、吹嘘的用法；本句对象仍须另判。",
+      "source_kind": "usage discussion and secondary explanation; not task-label evidence"
+    }
+  ],
+  "changes": [
+    {
+      "object_id": "demo:2759",
+      "before_hate": "?",
+      "before_group": "R,S",
+      "after_hate": "h",
+      "after_group": "R,S",
+      "note": "参照用户对接盘羞辱与种族影射的裁决：作者在种族化婚恋叙事中用接盘侠很开心和笑脸实施讥讽，取 hate + Racism + Sexism；不是把故事来源当成作者免责或已核实的原始出处。"
+    },
+    {
+      "object_id": "demo:2773",
+      "before_hate": "n",
+      "before_group": "D,R",
+      "after_hate": "?",
+      "after_group": "R,D",
+      "note": "南方居民及黑人、白人是明确比较对象，group 为 Racism + Region。对南方人低人一等的说法作反驳，同时把揍黑人白人作为论据；需区分是否认可按身份施暴，还是只反驳不敢反抗的印象。此前 #2180 的裁决说明反讽或辩护本身不排除另行攻击，但不能补造本例打人缘由。"
+    },
+    {
+      "object_id": "demo:2785",
+      "before_hate": "?",
+      "before_group": "-",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "作者将具体几个账号直接说成恶心，参照已裁定个人辱骂，hate 取 hate；批评落在直播行为，黑人在本例先按指认背景处理。按现行 v2 此类纯个人目标应为 []，但需对齐 #2750 个人辱骂另加 others 的适用范围，因此暂等共享范围问题，候选 [] / others。"
+    },
+    {
+      "object_id": "demo:309",
+      "before_hate": "?",
+      "before_group": "-",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "对答主实施故作清高、自以为是、狭隘等人格贬损，hate 可判。按现行 v2 未以群体身份评价的个人目标应为 []；#2750 用户另加 others，已提问这是否仅为个案裁决或调整后续口径。完整 group 在该问题回应前留 null，候选 [] / others。"
+    },
+    {
+      "object_id": "demo:3177",
+      "before_hate": "n",
+      "before_group": "S,O",
+      "after_hate": "n",
+      "after_group": "-",
+      "note": "参照 #2598、#2701：当前评价的是三从四德等规范、对方的主张与禁言行为，未把女性或反女权参与者的身份本身作为评价单位。取 non-hate + []，不因涉及性别议题就自动加入 Sexism 或 others。"
+    },
+    {
+      "object_id": "demo:3212",
+      "before_hate": "n",
+      "before_group": "S,O",
+      "after_hate": "h",
+      "after_group": "S",
+      "note": "参照 #100、#1158：女拳在本句用作性别贬称，并配合混迹在网络表达贬损，不能只因句子同时描述分布就抹去其轻度贬损。取 hate + Sexism，不再机械把女拳解释成与性别无关的运动角色 others。"
+    },
+    {
+      "object_id": "demo:3281",
+      "before_hate": "?",
+      "before_group": "O",
+      "after_hate": "?",
+      "after_group": "?",
+      "note": "词义检索支持 cjb 有讥讽名不副实、吹嘘的用法；结合编乎可确定负面讥讽，但词义不能决定本句对象。有几个真的、不全是cjb可能指平台上的人，也可能指回答故事等内容：前者倾向 hate + others，后者按内容批评倾向 non-hate + []，两项待明确所指。"
+    },
+    {
+      "object_id": "demo:3372",
+      "before_hate": "n",
+      "before_group": "O",
+      "after_hate": "h",
+      "after_group": "S",
+      "note": "参照 #1158：用女拳这一性别贬称并以女拳知道吗作讥讽，取 hate + Sexism；不能因为没有明写全体女性就只归为运动参与者 others。"
+    },
+    {
+      "object_id": "demo:3492",
+      "before_hate": "?",
+      "before_group": "S",
+      "after_hate": "?",
+      "after_group": "?",
+      "note": "男性与女性已经是实际争论对象，已知类别有 Sexism。微博厕所结合很少男性发言，可能转而贬损女性或平台成员，也可能只贬损平台本身。沿用 #2598、#2701 的对象区分：需先确认是否以平台名影射人群，再确定 hate 以及是否另有社群身份 others；不把平台贬称自动算人群攻击。"
+    },
+    {
+      "object_id": "demo:3519",
+      "before_hate": "?",
+      "before_group": "S",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "÷生、管你是什么玩意儿等是可直接辨认的定向辱骂，已足够判 hate，不必等待具体违法事件来决定有无攻击。女性与男性均是实际性别争论对象；已知 Sexism，是否因个人辱骂另加 others 等待共享范围问题，完整集合暂留 null。"
+    },
+    {
+      "object_id": "demo:3529",
+      "before_hate": "h",
+      "before_group": "S",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "以自身条件非常烂和出卖同性羞辱个人，并用幕刃贬损女性，hate 与 Sexism 已有依据。完整 group 等待是否因个人辱骂另加 others 的共享范围问题，候选 Sexism / Sexism + others。"
+    },
+    {
+      "object_id": "demo:3582",
+      "before_hate": "?",
+      "before_group": "S",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "泼妇男、下作的剑人是对个人的性别化羞辱，参照 #1517、#1729 等裁决可定 hate，已知 Sexism；不再把个体冒犯范围当作 hate 未决理由。group 是否另加 others 等待共享范围问题。"
+    },
+    {
+      "object_id": "demo:3585",
+      "before_hate": "?",
+      "before_group": "S",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "没脊椎还是没脑子是作者已经实施的个人贬损，缺少事情上文不影响此处 hate 判断；老婆是个仙女在本句是性别化讥讽，已知 Sexism。完整 group 等待个人辱骂是否另计 others 的共享范围问题。"
+    }
+  ],
+  "pending_ids": [
+    "demo:2773",
+    "demo:2785",
+    "demo:309",
+    "demo:3194",
+    "demo:3281",
+    "demo:3492",
+    "demo:3519",
+    "demo:3529",
+    "demo:3582",
+    "demo:3585"
+  ],
+  "shared_questions": [
+    {
+      "id": "individual_group_scope",
+      "object_ids": [
+        "demo:2785",
+        "demo:309",
+        "demo:3519",
+        "demo:3529",
+        "demo:3582",
+        "demo:3585"
+      ],
+      "prior_user_case": "demo:2750",
+      "current_policy_rule": "pure individual target without group identity -> []",
+      "status": "awaiting_user_interpretation",
+      "explicitly_asked_example": "demo:309"
+    }
+  ]
+}

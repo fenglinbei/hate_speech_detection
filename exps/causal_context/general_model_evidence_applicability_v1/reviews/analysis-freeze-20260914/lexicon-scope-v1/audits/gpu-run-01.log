@@ -1,0 +1,23 @@
+{"stage": "evidence-loading-fp32-replicas", "conditions": 320, "baselines": 32}
+[HAMI-core Msg(704083:140605742500736:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(704082:140549077498752:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(704083:140605742500736:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:704082 thread=140549077498752 utils.c:160)]: host pid is error!
+[HAMI-core Msg(704082:140549077498752:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(704082:140549077498752:libvgpu.c:880)]: SET_TASK_PID FAILED.
+Traceback (most recent call last):
+  File "/data/liaozijie/hate_speech_detection/scripts/review/run_evidence_lexicon_scope.py", line 235, in <module>
+    if __name__ == '__main__': main()
+                               ^^^^^^
+  File "/data/liaozijie/hate_speech_detection/scripts/review/run_evidence_lexicon_scope.py", line 228, in main
+    elif args.command == 'run': execute(args.plan, args.run)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/liaozijie/hate_speech_detection/scripts/review/run_evidence_lexicon_scope.py", line 72, in execute
+    pool = PersistentNumericPool(plan['runtime_parent_plan'], plan['config']['runtime'], plan['config']['execution']['device_indices'], ROOT)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/evidence_label_calibration_execution.py", line 295, in __init__
+    ready = self._collect(self._workers, "ready", timeout=600)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/evidence_label_calibration_execution.py", line 336, in _collect
+    raise PackageError(f"numeric worker failed or returned stale work: {result}")
+diagnostics.general_model_package.PackageError: numeric worker failed or returned stale work: {'kind': 'error', 'physical_gpu_index': 1, 'error_type': 'ModelRegistryError', 'error': 'model source lease file changed: /data/liaozijie/hate_speech_detection/models/base/Qwen3-8B/model-00001-of-00005.safetensors', 'traceback': 'Traceback (most recent call last):\n  File "/data/liaozijie/hate_speech_detection/src/diagnostics/evidence_label_calibration_execution.py", line 223, in _worker_main\n    runner = NumericRunner(parent_plan, runtime, "cuda:0", Path(root))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_numeric_kernel_v2.py", line 17, in __init__\n    super().__init__(Path(parent_plan["package_path"]), device, root)\n  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_runtime.py", line 193, in __init__\n    with verified_model_source_lease(contract, source_names=("checkpoint", "tokenizer")) as sources:\n  File "/data/liaozijie/hate_speech_detection/src/model/stage1_registry.py", line 641, in __enter__\n    _capture_source_lease_signature(\n  File "/data/liaozijie/hate_speech_detection/src/model/stage1_registry.py", line 487, in _capture_source_lease_signature\n    raise ModelRegistryError(f"model source lease file changed: {path}")\nmodel.stage1_registry.ModelRegistryError: model source lease file changed: /data/liaozijie/hate_speech_detection/models/base/Qwen3-8B/model-00001-of-00005.safetensors\n'}

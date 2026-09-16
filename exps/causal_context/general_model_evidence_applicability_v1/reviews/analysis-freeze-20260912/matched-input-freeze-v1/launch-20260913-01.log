@@ -1,0 +1,81 @@
+{"stage": "evidence-loading-fp32-replicas", "conditions": 36, "baselines": 4}
+[HAMI-core Msg(3120392:140102996941696:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(3120395:139824288709504:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(3120394:140576308743040:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(3120393:140657812069248:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(3120392:140102996941696:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(3120394:140576308743040:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(3120395:139824288709504:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:3120393 thread=140657812069248 utils.c:160)]: host pid is error!
+[HAMI-core Msg(3120393:140657812069248:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(3120393:140657812069248:libvgpu.c:880)]: SET_TASK_PID FAILED.
+[HAMI-core Msg(3120394:140576308743040:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(3120395:139824288709504:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(3120392:140102996941696:libvgpu.c:878)]: Initialized
+[HAMI-core Msg(3120395:139824288709504:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:3120394 thread=140576308743040 utils.c:160)]: host pid is error!
+[HAMI-core Msg(3120394:140576308743040:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(3120394:140576308743040:libvgpu.c:880)]: SET_TASK_PID FAILED.
+[HAMI-core ERROR (pid:3120395 thread=139824288709504 utils.c:160)]: host pid is error!
+[HAMI-core Msg(3120395:139824288709504:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(3120395:139824288709504:libvgpu.c:880)]: SET_TASK_PID FAILED.
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:02<00:11,  2.89s/it]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:04<00:16,  4.00s/it]Loading checkpoint shards:  20%|██        | 1/5 [00:03<00:14,  3.70s/it]Loading checkpoint shards:  20%|██        | 1/5 [00:04<00:16,  4.19s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:07<00:11,  3.96s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:14,  4.77s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:11<00:08,  4.16s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:14,  4.90s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:14,  4.82s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:15<00:04,  4.09s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:16<00:00,  2.65s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:16<00:00,  3.22s/it]
+Loading checkpoint shards:  60%|██████    | 3/5 [00:13<00:09,  4.73s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:13<00:09,  4.72s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:14<00:09,  4.90s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:16<00:03,  3.74s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:16<00:00,  2.43s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:16<00:00,  3.26s/it]
+Loading checkpoint shards:  80%|████████  | 4/5 [00:15<00:03,  3.53s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:15<00:00,  2.29s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:15<00:00,  3.14s/it]
+Loading checkpoint shards:  80%|████████  | 4/5 [00:15<00:03,  3.56s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:16<00:00,  3.20s/it]
+{"stage": "numeric-pool-ready", "device_indices": [0, 1, 2, 3], "runtime_sha256": "72585d05e1e913cf852a18316a5ea09b45dfcd1fa54070bce401acab2817e703"}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r0", "blocks": 4}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 3.01}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 3.01}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 3.06}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 3.1}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r0", "check": "historical_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r1", "blocks": 4}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 0.92}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 0.94}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 1.04}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 1, "expected_blocks": 1, "elapsed_seconds": 1.12}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "cf26561c5fd242ea661fcdea427ad3549b182586bf6c6e63ab923185bf9b2eb5"}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-r0", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r0", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.81}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r0", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.82}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r0", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.26}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r0", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.44}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-r0", "check": "raw_baseline_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-r1", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r1", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.82}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r1", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.82}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r1", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.3}
+{"stage": "scoring-v2", "pass_name": "matched-b1-r1", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.46}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "64177b308f9a587789abce1a55d8cfff394300c22f38b6bcbab68cc6af9e6bcc"}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-padding", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-padding", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 9.46}
+{"stage": "scoring-v2", "pass_name": "matched-b1-padding", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 9.49}
+{"stage": "scoring-v2", "pass_name": "matched-b1-padding", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.59}
+{"stage": "scoring-v2", "pass_name": "matched-b1-padding", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.68}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-padding", "check": "padding", "max_abs_error": 8.7738037109375e-05, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "d2591621705702da94e987156e7874dac681fcb1f0c6d687d4209c52faf0e4ed"}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-prefix", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-prefix", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 40.44}
+{"stage": "scoring-v2", "pass_name": "matched-b1-prefix", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 40.77}
+{"stage": "scoring-v2", "pass_name": "matched-b1-prefix", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 47.68}
+{"stage": "scoring-v2", "pass_name": "matched-b1-prefix", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 48.0}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-prefix", "check": "prefix", "max_abs_error": 4.57763671875e-05, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "e148bd431c3a29bbb7df715d02f0f344fab2630c3dba6a1158f7c6ce31793dbe"}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-members", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-members", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 9.01}
+{"stage": "scoring-v2", "pass_name": "matched-b1-members", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 9.21}
+{"stage": "scoring-v2", "pass_name": "matched-b1-members", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.76}
+{"stage": "scoring-v2", "pass_name": "matched-b1-members", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 10.81}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-members", "check": "members", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "95a90d74a620573c061649b5e9bc5433a4ccd2ec39ab3fbb52f5cfd009dc0585"}
+{"stage": "evidence-pass-start", "pass_name": "matched-b1-replica", "blocks": 36}
+{"stage": "scoring-v2", "pass_name": "matched-b1-replica", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.97}
+{"stage": "scoring-v2", "pass_name": "matched-b1-replica", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 8.97}
+{"stage": "scoring-v2", "pass_name": "matched-b1-replica", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 11.13}
+{"stage": "scoring-v2", "pass_name": "matched-b1-replica", "completed_blocks": 9, "expected_blocks": 9, "elapsed_seconds": 11.28}
+{"stage": "evidence-pass-verified", "pass": "matched-b1-replica", "check": "replica", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "d01d837f796343603be2b812c7dcaaa2a1e35205647f2cdda88d494dda1bda32"}
+{"stage": "evidence-scoring-complete", "blocks": 36, "candidates": 72}
+[HAMI-core Msg(3120393:140657812069248:multiprocess_memory_limit.c:455)]: Calling exit handler 3120393
+[HAMI-core Msg(3120394:140576308743040:multiprocess_memory_limit.c:455)]: Calling exit handler 3120394
+[HAMI-core Msg(3120395:139824288709504:multiprocess_memory_limit.c:455)]: Calling exit handler 3120395
+[HAMI-core Msg(3120392:140102996941696:multiprocess_memory_limit.c:455)]: Calling exit handler 3120392
+{"status": "verified", "passes": 8, "blocks": 36, "candidates": 72, "model_forward_executed_by_check": false}
+{"schema_version": "evidence-matched-input-results/v1", "status": "complete", "plan_id": "evidence-matched-inputs-ef718c3f899e9fbef3ff16ddfee9ab9665bb5dd3933a7c8aea72eb0c3eb742ee", "cases": 2, "contexts": 36, "candidates": 72, "condition_mode_rows": 144, "contrast_mode_rows": 256, "primary_score": "answer_sum", "numeric_policy": {"E8": 0.00067138671875, "epsilon": 0.0013427734375, "padding_extra": 64, "reference_abs_tolerance": 0.0001, "repeat_abs_tolerance": 0.0001, "replica_shift": 1}, "primary_prediction_counts": {"non-hate": 10, "hate": 26}, "new_human_judgments": 0, "mechanism_ready": false}

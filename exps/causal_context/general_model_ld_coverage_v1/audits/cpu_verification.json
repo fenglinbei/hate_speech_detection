@@ -1,0 +1,53 @@
+{
+  "schema_version": "merged-lexicon-cpu-verification/v1",
+  "date": "2026-09-06",
+  "plan_id": "gmlcoverage-64e2986d5de1d9c9ff0ebc9c2d72944208b833ca9aacf115ec71a14403e0c6f4",
+  "plan_sha256": "31eb78cb942a6d929a04cd74c32b302d848ae4c7f73c782a37ae48033af3359d",
+  "before_gpu_start": {
+    "new_registration_package_execution_analysis_tests": 53,
+    "new_tests_passed": true,
+    "statistics_and_inherited_execution_regression_tests": 66,
+    "regression_tests_passed": true,
+    "counts_are_overlapping_not_additive": true,
+    "original_plan_validation": true,
+    "new_plan_validation": true,
+    "complete_input_blocks": 10288,
+    "complete_candidate_boundary_checks": 174896,
+    "boundary_queries": ["2312", "612", "4239", "5975"]
+  },
+  "post_start_read_only_regression_confirmation": {
+    "command": "env PYTHONPATH=src .conda/stage1-p0/bin/python -m unittest discover -s src/tests -p 'test_general_model*.py' -q",
+    "tests": 292,
+    "seconds": 41.102,
+    "exit_code": 0,
+    "passed": true,
+    "test_scope": "synthetic and fixture-based CPU tests; separate sandboxed test process",
+    "frozen_sources_changed": false,
+    "note": "Sandbox CUDA availability probing reported OS error 304. The suite completed successfully; the separate authorized GPU experiment was not modified."
+  },
+  "input_review_receipt": "input_review.json",
+  "input_review_sha256": "67fd67eff7708400c8e0cd3aa40c66ec6245691cad8f6784fa239c6923535f8d",
+  "independent_audit_and_report_tests": {
+    "command": "env PYTHONPATH=src .conda/stage1-p0/bin/python -m unittest discover -s exps/causal_context/general_model_ld_coverage_v1/audits -p 'test_*.py' -q",
+    "tests": 32,
+    "seconds": 32.203,
+    "exit_code": 0,
+    "passed": true,
+    "scope": "synthetic data only; no actual query gold or unfinished scientific analysis",
+    "main_suite_plus_audit_suite_distinct_tests": 324
+  },
+  "scientific_results_claimed": false,
+  "boundary_metadata_audit_followup": {
+    "tests": 39,
+    "seconds": 32.921,
+    "exit_code": 0,
+    "passed": true,
+    "main_suite_plus_current_audit_suite_distinct_tests": 331,
+    "new_real_geometry_tests": 7,
+    "audit_source_sha256": "055a05b2e959b0f2118800c319c769c25fedbdef560b6ed9c6da984c07cfc4d7",
+    "raw_records_or_frozen_sources_changed": false,
+    "numerical_thresholds_changed": false,
+    "note": "The unchanged v2 scorer records boundary pass rows with legacy cohort=dev. The new independent geometry checker verifies this exact mapping and the registered pass/query matrix without changing any row."
+  },
+  "test_data_access_authorized": false
+}

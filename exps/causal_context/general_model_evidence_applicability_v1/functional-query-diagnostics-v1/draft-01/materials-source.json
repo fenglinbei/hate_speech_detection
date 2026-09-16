@@ -1,0 +1,257 @@
+{
+  "schema_version": "evidence-functional-query-materials/v1-draft",
+  "status": "ai_draft_pending_human_review",
+  "authorization": {
+    "user_request_verbatim": "好的，那可以先准备一份8 条功能诊断查询草案、适用性与标签的分开审核表、紧凑的输入矩阵，以及预先写明的判读标准",
+    "scope": "Prepare local draft texts, separate review tables, a compact proposed matrix and pre-outcome interpretation criteria.",
+    "material_preparation": true,
+    "gpu_execution_in_this_stage": false,
+    "individual_human_adoption": false,
+    "online_writeback": false
+  },
+  "parent_query_id": "3169",
+  "task": "hate",
+  "target_entry": "lex-0419",
+  "target_sense": "lex-0419:sense:01",
+  "original_definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+  "preferences_snapshot_id": "cf158ae3d22aadf1bff45ff5398c3de415c16fc02963f18d0fdc7918f3aa5ed1",
+  "new_query_model_results_seen": false,
+  "author_exposure": "Assistant has seen the 3169 discovery history, prior lexicon results, existing examples and adjudication preferences. This is a purpose-built diagnostic, not blind natural-sample selection.",
+  "original_dataset_references_for_new_queries": null,
+  "formal_input_freeze": false,
+  "mechanism_ready": false,
+  "queries": [
+    {
+      "query_id": "FD-3169-Q01",
+      "query_family": "A",
+      "cell": "L0",
+      "text": "他看完那段小品，忍不住嘿嘿地笑了两声。",
+      "ai_applicability": {
+        "query_fit": "wrong_sense",
+        "reading": "ordinary_laughter",
+        "sense_location": "current_narration",
+        "evidence": "嘿嘿地笑了两声",
+        "reason": "嘿嘿修饰笑声，不是对人群的称呼；合理的原义项不适用于这次出现。",
+        "uncertainty": null,
+        "policy_anchors": ["P04", "P19"]
+      },
+      "ai_label": {
+        "hate": "non-hate",
+        "attack_severity": 0,
+        "author_stance": "叙述他人看小品后的笑声",
+        "actual_target": "没有被贬损对象",
+        "attack_proposition": null,
+        "evidence": "看完那段小品，忍不住嘿嘿地笑了两声",
+        "reason": "可见文本只有笑声叙述，没有贬损、排斥或人格攻击。",
+        "policy_anchors": ["P01", "P04", "P10"]
+      },
+      "design_limitations": ["与A/L1相比少了一段个人辱骂，因此长度也不同；不把两句直接分差解释为纯立场因果效应。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q02",
+      "query_family": "A",
+      "cell": "L1",
+      "text": "他看完那段小品，忍不住嘿嘿地笑了两声；这个混蛋真让人恶心。",
+      "ai_applicability": {
+        "query_fit": "wrong_sense",
+        "reading": "ordinary_laughter",
+        "sense_location": "current_narration",
+        "evidence": "嘿嘿地笑了两声",
+        "reason": "笑声用法没有因后半句的人格辱骂变成种族称呼。",
+        "uncertainty": null,
+        "policy_anchors": ["P02", "P19"]
+      },
+      "ai_label": {
+        "hate": "hate",
+        "attack_severity": 2,
+        "author_stance": "作者自行实施个人辱骂",
+        "actual_target": "前半句中的他；没有种族或性别身份依据",
+        "attack_proposition": "称此人为混蛋并表达对其人格的厌恶",
+        "evidence": "这个混蛋真让人恶心",
+        "reason": "攻击来自独立的个人侮辱。按已接受的非0严重度映射拟为hate，不从笑声词义推出标签。",
+        "policy_anchors": ["P01", "P02", "P05", "P15"]
+      },
+      "design_limitations": ["个人攻击与群体攻击不是完全相同的命题类型。", "A/L1增加攻击分句，也增加长度和回答前位置。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q03",
+      "query_family": "A",
+      "cell": "G0",
+      "text": "有人把黑人叫作“嘿嘿”，我反对用这种称呼贬低他们。",
+      "ai_applicability": {
+        "query_fit": "valid_sense",
+        "reading": "group_designation_in_reported_usage",
+        "sense_location": "reported_other_speaker",
+        "evidence": "把黑人叫作“嘿嘿”",
+        "reason": "句内明示被报告称呼的所指是黑人。义项能解释他人的称呼，不意味着当前作者认可该用法。",
+        "uncertainty": null,
+        "policy_anchors": ["P09", "P19", "P23"]
+      },
+      "ai_label": {
+        "hate": "non-hate",
+        "attack_severity": 0,
+        "author_stance": "明确反对借称呼贬低人群",
+        "actual_target": "被他人用称呼贬低的黑人；当前作者在为其辩护",
+        "attack_proposition": null,
+        "evidence": "我反对用这种称呼贬低他们",
+        "reason": "否定的是贬低行为，没有另行辱骂任何人；不能把被反对的用法记作作者攻击。",
+        "policy_anchors": ["P01", "P09", "P19"]
+      },
+      "design_limitations": ["所指和反对立场都很明确，可能存在天花板；无新增收益不能证明词条在其他查询上不必要。", "与A/G1仅将反对替换为赞同。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q04",
+      "query_family": "A",
+      "cell": "G1",
+      "text": "有人把黑人叫作“嘿嘿”，我赞同用这种称呼贬低他们。",
+      "ai_applicability": {
+        "query_fit": "valid_sense",
+        "reading": "group_designation_in_reported_usage",
+        "sense_location": "reported_usage_endorsed_by_current_author",
+        "evidence": "把黑人叫作“嘿嘿”",
+        "reason": "句内明示被称呼人群；当前作者又明确认可贬低用法。",
+        "uncertainty": null,
+        "policy_anchors": ["P09", "P11", "P19"]
+      },
+      "ai_label": {
+        "hate": "hate",
+        "attack_severity": 2,
+        "author_stance": "明确赞同借称呼贬低黑人",
+        "actual_target": "黑人群体",
+        "attack_proposition": "认可用该群体称呼贬低黑人",
+        "evidence": "我赞同用这种称呼贬低他们",
+        "reason": "作者对群体贬损明确表态认可，已经超出单纯报告称呼。",
+        "policy_anchors": ["P01", "P09", "P15", "P19"]
+      },
+      "design_limitations": ["黑人和贬低命题均明写，词条不是识别攻击的唯一信息来源。", "明确赞同的措辞为人工功能诊断，不代表自然分布中的常见表达。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q05",
+      "query_family": "B",
+      "cell": "L0",
+      "text": "听到朋友讲的趣事，我靠在椅背上嘿嘿地笑起来。",
+      "ai_applicability": {
+        "query_fit": "wrong_sense",
+        "reading": "ordinary_laughter",
+        "sense_location": "current_author_self_description",
+        "evidence": "嘿嘿地笑起来",
+        "reason": "描述作者的笑声，没有群体称呼的语法或指向。",
+        "uncertainty": null,
+        "policy_anchors": ["P04", "P19"]
+      },
+      "ai_label": {
+        "hate": "non-hate",
+        "attack_severity": 0,
+        "author_stance": "自述听趣事后发笑",
+        "actual_target": "没有被贬损对象",
+        "attack_proposition": null,
+        "evidence": "听到朋友讲的趣事，我靠在椅背上嘿嘿地笑起来",
+        "reason": "自述发笑，不含针对朋友或其他人的攻击命题。",
+        "policy_anchors": ["P01", "P04", "P10"]
+      },
+      "design_limitations": ["与A套更换了叙述人称、措辞及长度；两套作为分别报告的稳健性材料。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q06",
+      "query_family": "B",
+      "cell": "L1",
+      "text": "听到朋友讲的趣事，我靠在椅背上嘿嘿地笑起来；对面那个人就是个混蛋。",
+      "ai_applicability": {
+        "query_fit": "wrong_sense",
+        "reading": "ordinary_laughter",
+        "sense_location": "current_author_self_description",
+        "evidence": "我靠在椅背上嘿嘿地笑起来",
+        "reason": "笑的是作者，被辱骂的是对面那个人；两者都不能把笑声改读为人群称呼。",
+        "uncertainty": null,
+        "policy_anchors": ["P02", "P19"]
+      },
+      "ai_label": {
+        "hate": "hate",
+        "attack_severity": 2,
+        "author_stance": "作者在自述之外实施个人辱骂",
+        "actual_target": "对面那个人；不补造其身份，也不把朋友自动当作该人",
+        "attack_proposition": "直接称对面那个人为混蛋",
+        "evidence": "对面那个人就是个混蛋",
+        "reason": "独立的个人侮辱按当前严重度映射拟为hate，不能被前半句普通笑声覆盖。",
+        "policy_anchors": ["P01", "P02", "P05", "P15"]
+      },
+      "design_limitations": ["A套辱骂发笑者，B套辱骂另一人；不把两套差异称为单纯同义改写。", "新增辱骂分句也改变长度。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q07",
+      "query_family": "B",
+      "cell": "G0",
+      "text": "看到“那些嘿嘿就该被赶出去”这句话，我明确反对这种排斥。",
+      "ai_applicability": {
+        "query_fit": "valid_sense",
+        "reading": "group_designation_in_quotation",
+        "sense_location": "quoted_other_speaker",
+        "evidence": "那些嘿嘿就该被赶出去",
+        "reason": "那些和被赶出去使嘿嘿处于人群称呼位置；拟按已审语料中的黑人辱称义解释。",
+        "uncertainty": "本文没有明写黑人。必须另审该具体称呼是否有充分依据指向原义项的人群；不能把设定意图或词典存在当作确认。",
+        "policy_anchors": ["P09", "P11", "P19", "P23"]
+      },
+      "ai_label": {
+        "hate": "non-hate",
+        "attack_severity": 0,
+        "author_stance": "明确反对引文中的排斥",
+        "actual_target": "被引文排斥的人群；具体种族所指单独审核",
+        "attack_proposition": null,
+        "evidence": "我明确反对这种排斥",
+        "reason": "当前作者反对引文，不把被反对的排斥计入其攻击；即使具体群体所指未决，hate任务也可单独裁决。",
+        "policy_anchors": ["P01", "P09", "P19"]
+      },
+      "design_limitations": ["这是隐式所指分支，与A套明示黑人构成诊断层次，不是同信息量复述。", "若人审query_fit未决，本行保留但不进入适用性分层结论；不由hate标签补填适用性。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    },
+    {
+      "query_id": "FD-3169-Q08",
+      "query_family": "B",
+      "cell": "G1",
+      "text": "看到“那些嘿嘿就该被赶出去”这句话，我明确赞同这种排斥。",
+      "ai_applicability": {
+        "query_fit": "valid_sense",
+        "reading": "group_designation_in_quotation",
+        "sense_location": "quoted_usage_endorsed_by_current_author",
+        "evidence": "那些嘿嘿就该被赶出去",
+        "reason": "拟按人群称呼及原义项解释，作者赞同不改变被引词的所指。",
+        "uncertainty": "本文没有明写黑人。所指须独立审核，不能因句子明显排斥就把具体种族和义项适用性一并判定。",
+        "policy_anchors": ["P09", "P11", "P19"]
+      },
+      "ai_label": {
+        "hate": "hate",
+        "attack_severity": 3,
+        "author_stance": "明确认可引文的群体排斥",
+        "actual_target": "引文中的那群人；具体种族所指单独审核",
+        "attack_proposition": "认可把这群人赶出去",
+        "evidence": "我明确赞同这种排斥",
+        "reason": "当前作者明确认可排斥。拟判hate；人审仍须核对任务对象范围和所指是否影响标签，若影响则保留未决。",
+        "policy_anchors": ["P01", "P09", "P17"]
+      },
+      "design_limitations": ["排斥命题本身强，去掉词条仍正确不证明模型识别了黑人所指。", "当前只做hate读出，不据此宣称种族目标提取正确或词条必要。"],
+      "human_applicability": null,
+      "human_label": null,
+      "human_text_adoption": null
+    }
+  ]
+}

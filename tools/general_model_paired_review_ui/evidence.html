@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>证据适用性 · AI 辅助人工裁决</title>
+  <link rel="stylesheet" href="/review-base.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/evidence/evidence.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-leading">
+      <button id="sidebar-toggle" class="icon-button mobile-tablet-only" type="button" aria-label="打开案例队列">☰</button>
+      <div class="brand-mark" aria-hidden="true">阅</div>
+      <div><p class="eyebrow">Evidence Applicability</p><h1>证据适用性人工裁决</h1></div>
+    </div>
+    <div class="topbar-status"><div class="top-progress"><span id="top-progress-text">读取进度…</span><div class="meter"><span id="progress-bar"></span></div></div><span id="save-state" class="save-state" data-state="idle" role="status" aria-live="polite">正在连接</span></div>
+    <div class="topbar-actions"><span id="reviewer-name" class="reviewer-label"></span><button id="guidelines" class="quiet-button" type="button">怎么审核</button><details class="top-action-menu"><summary class="quiet-button">导出</summary><div class="top-action-menu-panel"><button id="export-json" class="quiet-button" type="button">下载 JSON</button><button id="export-csv" class="quiet-button" type="button">下载 CSV</button></div></details></div>
+  </header>
+  <div class="workflow-strip"><span id="step-materials" class="workflow-step active"><b>1</b>核对材料与 AI 初稿</span><span class="workflow-arrow">→</span><span id="step-comparison" class="workflow-step"><b>2</b>对照原标注和结果</span><span class="workflow-note">AI 辅助人工裁决 · 逐项核对后确认</span></div>
+  <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+  <div class="workbench">
+    <aside id="item-sidebar" class="case-sidebar">
+      <div class="sidebar-head"><div><p class="section-kicker">Discovery 审核队列</p><strong id="sidebar-progress">等待载入</strong></div><button id="sidebar-close" class="icon-button mobile-tablet-only" type="button" aria-label="关闭案例队列">×</button></div>
+      <label class="search-field"><span>搜索编号或查询内容</span><input id="item-search" maxlength="100" autocomplete="off" placeholder="搜索案例…"></label>
+      <div id="item-filters" class="filter-tabs" role="group" aria-label="审核状态"><button type="button" data-filter="all" class="active">全部</button><button type="button" data-filter="open">待完成</button><button type="button" data-filter="confirmed">已确认</button><button type="button" data-filter="stale">需重核</button></div>
+      <small id="search-status" class="search-status"></small><nav id="item-list" class="case-list" aria-label="案例列表"></nav>
+      <div class="sidebar-footer"><span class="reserve-dot"></span><span>仅载入授权的 discovery 案例<br><small>AI 初稿不会计入人工完成数</small></span></div>
+    </aside>
+    <main class="source-pane" id="source-pane">
+      <div class="case-toolbar"><div><p id="item-position" class="section-kicker">准备材料</p><h2 id="item-id">正在读取案例</h2></div><div class="case-nav"><button id="previous-item" class="icon-button" type="button" aria-label="上一条案例" title="上一条 [">←</button><button id="next-item" class="icon-button" type="button" aria-label="下一条案例" title="下一条 ]">→</button></div></div>
+      <section class="material-card query-card"><div class="card-head"><strong>当前查询</strong><span class="count-label">全文</span></div><blockquote id="query-content" class="query-content">等待载入…</blockquote><p class="section-hint">两个任务分别判断；“未决”与“无类别”不同。核对完全部材料后开放本例原标注与模型结果。</p></section>
+      <section id="policy-card" class="material-card policy-card hidden" aria-label="当前审核规则"><div class="card-head"><strong id="policy-title">当前审核规则</strong><span id="policy-version" class="count-label"></span></div><details id="policy-details" class="secondary-detail"><summary>规则要点与完整规则 · AI 初稿版本说明</summary><p id="policy-summary" class="section-hint"></p><p id="policy-origin" class="policy-origin"></p><div id="policy-document" class="policy-document"></div></details></section>
+      <div id="case-policy-notice" class="stale-warning hidden" role="status"></div>
+      <div class="material-tabs" role="tablist" aria-label="审核阶段"><button id="tab-materials" role="tab" aria-selected="true" class="active" type="button">材料与初稿 <span id="object-progress" class="tab-lock"></span></button><button id="tab-comparison" role="tab" aria-selected="false" disabled type="button">原标注与结果</button></div>
+      <div id="panel-materials">
+        <div id="object-kinds" class="filter-tabs object-kinds" role="group" aria-label="材料类型"><button data-kind="all" class="active" type="button">全部</button><button data-kind="query" type="button">查询</button><button data-kind="demo" type="button">示例</button><button data-kind="relation" type="button">示例关系</button><button data-kind="lexicon" type="button">词典</button></div>
+        <label class="field object-selector"><span>选择一项材料核对</span><select id="object-select" aria-label="选择审核材料"></select></label>
+        <nav class="object-navigation" aria-label="材料导航"><button id="previous-object" class="secondary-button" type="button" aria-keyshortcuts="Alt+ArrowUp" title="上一材料 · Alt + ↑" disabled><span aria-hidden="true">↑</span> 上一材料 <kbd>Alt ↑</kbd></button><span id="object-position" class="object-position" role="status" aria-live="polite"></span><button id="next-object" class="secondary-button" type="button" aria-keyshortcuts="Alt+ArrowDown" title="下一材料 · Alt + ↓" disabled>下一材料 <span aria-hidden="true">↓</span> <kbd>Alt ↓</kbd></button></nav>
+        <button id="open-batch" type="button" class="secondary-button batch-entry">核对已打开材料 · 批量确认</button>
+        <section id="object-material" class="material-card"></section>
+      </div>
+      <section id="panel-comparison" class="material-card hidden"></section>
+      <div class="source-bottom-note">记录类型 human_with_ai · 确认未决也可完成记录，未决任务仍无硬参考标签</div>
+    </main>
+    <aside class="decision-pane" id="decision-pane">
+      <div class="decision-heading"><div><p id="editor-phase-label" class="section-kicker">第一步 · 核对 AI 预填</p><h2 id="editor-title">等待材料</h2></div><span id="decision-status" class="status-chip" data-state="draft">未开始</span></div>
+      <div id="request-error" class="request-error hidden" role="alert"><strong id="request-error-message"></strong><p id="request-error-details"></p><div class="error-actions"><button id="recover-local" type="button" class="secondary-button hidden">保留草稿，载入最新状态</button><button id="download-draft" type="button" class="quiet-button">下载本地草稿</button></div></div>
+      <div id="resume-notice" class="resume-notice hidden" role="status"></div>
+      <div id="group-policy-notice" class="resource-snapshot policy-recheck-notice hidden" role="status"></div>
+      <div id="reference-notice" class="resource-snapshot hidden"></div>
+      <form id="review-form" class="review-form" novalidate><div id="editor-fields"></div></form>
+      <div id="locked-card" class="locked-card hidden"><strong>这项记录已经确认</strong><p>修改时选择简短原因；先前裁决与版本会保留。</p><button id="reopen" class="secondary-button" type="button">重新打开并修改</button></div>
+      <footer class="decision-footer"><div class="decision-actions"><button id="save-draft" class="secondary-button" type="button">保存草稿</button><button id="primary-action" class="primary-button" type="button">确认此项 · 下一材料</button></div><button id="reveal-comparison" class="secondary-button reveal-button" type="button" disabled>保存材料快照 · 查看结果</button><small>修改后 5 秒自动保存 · Ctrl / ⌘ S 保存<br>Alt ↑ / ↓ 切换材料 · [ ] 切换案例</small></footer>
+    </aside>
+  </div>
+  <nav class="mobile-pane-nav" aria-label="页面分区"><button id="mobile-materials" type="button">阅读材料</button><button id="mobile-decision" type="button">修改与确认</button></nav>
+  <dialog id="guideline-dialog" class="app-dialog guideline-dialog" aria-labelledby="guideline-title"><div class="guide-heading"><div><p class="section-kicker">AI 初稿 → 人类核对 → 明确确认</p><h2 id="guideline-title">常规审核无需手写</h2></div><button id="dismiss-guidelines" class="icon-button" type="button" aria-label="关闭标注说明" autofocus>×</button></div><div class="guide-body"><div id="guideline-policy-note" class="stale-warning hidden"></div><p>先阅读中间全文，核对右侧预填选项和高亮依据。合理就确认此项，不同意直接改选。示例自身、当前查询关系、词典定义、来源位置和查询适配分别记录。</p><p>仇恨三选一。群体类别可多选，另有“无任务类别”和“未决”；不根据仇恨标签自动填群体。改标签后也请核对依据，可以改原因选项、删高亮，或选中原文片段新增依据。</p><p>示例原答案可见；首次查看查询原标注和模型结果，要等全部材料明确确认并保存快照。此前已开放的结果保留可见及暴露记录。确认未决代表完成审核记录，不代表标签已解决。</p><p>共享示例和定义引用已确认的版本。版本变化时显示需重核；确认整例不会代替尚未审核的材料。此前看过原标注或模型结果的经历可在第二步选择记录。</p><p>修改自动保存，失败时保留本地草稿。遇到另一页面更新，先载入最新状态并恢复草稿，核对后手动保存。已确认记录需要选择更正原因才可修改。</p><p>快捷键：Ctrl / ⌘ S 保存；Alt + ↑ / ↓ 切换上一／下一材料，[ 与 ] 切换案例。材料导航沿当前类型筛选顺序，到头停下，不跨案例；离开前先保存草稿。材料快捷键仅在材料阶段、输入控件和弹窗之外生效。只有“其他原因”需要补一句，补充备注始终可选。</p></div><div class="guide-footer"><span>human_with_ai · 单人审核记录</span><button id="close-guidelines" class="primary-button" type="button">知道了，开始核对</button></div></dialog>
+  <dialog id="reopen-dialog" class="app-dialog"><h2>重新打开记录</h2><label class="field"><span>更正原因</span><select id="reopen-reason"><option value="misclick">误选</option><option value="new_evidence">新证据</option><option value="policy_update">规则更新</option><option value="source_issue">来源问题</option><option value="context_missing">关键语境缺失</option><option value="other">其他原因</option></select></label><label id="reopen-note-field" class="field hidden"><span>简短补充</span><textarea id="reopen-note" rows="2"></textarea></label><div class="dialog-actions"><button id="cancel-reopen" class="secondary-button" type="button">取消</button><button id="confirm-reopen" class="primary-button" type="button">保留旧版，重新打开</button></div></dialog>
+  <dialog id="batch-dialog" class="app-dialog guideline-dialog" aria-labelledby="batch-title"><div class="guide-heading"><div><p class="section-kicker">仅限本页已打开的材料</p><h2 id="batch-title">核对全文和字段，逐项勾选</h2></div><button id="dismiss-batch" class="icon-button" type="button" aria-label="关闭批量确认" autofocus>×</button></div><div class="guide-body"><p class="section-hint">下列字段就是本次将提交的裁决。不默认勾选；只采纳你明确勾选的项。需要修改时关闭此窗口，返回对应材料改选。</p><div id="batch-items"></div><p id="batch-error" class="field-error hidden" role="alert"></p></div><div class="guide-footer"><button id="close-batch" class="secondary-button" type="button">返回修改</button><button id="confirm-batch" class="primary-button" type="button" disabled>采纳所选 0 项</button></div></dialog>
+  <script src="/review-core.js"></script><script src="/evidence/evidence.js"></script>
+</body>
+</html>

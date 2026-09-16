@@ -1,0 +1,248 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 8,
+  "review_round": 7,
+  "recorded_at_utc": "2026-09-11T11:46:30.293586+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "task_policies": {
+    "hate_reference": {
+      "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+      "version": "evidence-applicability-annotation-policy/v2"
+    },
+    "current_hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    },
+    "attack_severity": {
+      "version": "evidence-attack-severity-policy/v1",
+      "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "policies/personal-insult-others-v1.json",
+      "sha256": "c26d8033917756cad68fbf68473afd7e7b6ac22eb591e40255ba091d05bc38c8"
+    },
+    {
+      "path": "policies/severity-hate-default-mapping-v1.json",
+      "sha256": "b84a3acf37659291bb75a98db221a2bf8fcc2e612d41c877e5daeceae3838879"
+    },
+    {
+      "path": "severity/pilot-01/calibration-summary.json",
+      "sha256": "c6048311a0bba011da6544a035732eba7df06f025ec125f307c0f866eef8b14b"
+    },
+    {
+      "path": "severity/batch-05/calibration-summary.json",
+      "sha256": "83ed9ad03556d359c0a402636100a6219e0fbfeffcba16b999ba0f2794dfbfb0"
+    },
+    {
+      "path": "severity/batch-06/calibration-summary.json",
+      "sha256": "6a235744dc2dafeb512b154bd6625d61276f18013c76ff06b297626bce9d5dcb"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    },
+    {
+      "path": "discussions/batch-02/user-decisions-01.json",
+      "sha256": "d0448387ebda0d7bde30541382705a3e09f83b64c3897a0f499f6337c2ed6652"
+    },
+    {
+      "path": "discussions/batch-03/user-decisions-01.json",
+      "sha256": "e491c5eabb27b2009d21c4b1f645cca776644d7961b4a5f5b537d60adac6a6f8"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-01.json",
+      "sha256": "691014f254f4af0c35f3e68999c48c16c5ce8ac539fab3c1c45da7101a89e9db"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-02.json",
+      "sha256": "5c58dc695af91b4c8a03e7078f7afe7f3b1e4fb926fd15ec3e1c5ffb0e3c30d9"
+    },
+    {
+      "path": "discussions/batch-05/user-decisions-01.json",
+      "sha256": "f90182e625cb87373177a00e892af92e6871ba10ecd1b031f0fd0ed75b5eee7a"
+    },
+    {
+      "path": "discussions/batch-06/user-decisions-01.json",
+      "sha256": "f854c70401bfcd838126fe777905dd4d1494467bd7d0fc5d3e16b177b4f8465c"
+    },
+    {
+      "path": "severity/batch-04/discussions/user-decisions-01.json",
+      "sha256": "881d191e56b46a676226729917871504a1e352a735ff45f140a93961b51c373f"
+    },
+    {
+      "path": "severity/batch-05/discussions/user-decisions-01.json",
+      "sha256": "199cb95c918ed7a4b59979a614a92fb8a3d3c57a78d96de302993481462312c3"
+    },
+    {
+      "path": "severity/batch-06/discussions/user-decisions-01.json",
+      "sha256": "2cb4524b0d5456def0afd9ea58042e3340b71e6f742e3d8860fa8fcc3767b239"
+    }
+  ],
+  "initial_generation": true,
+  "pre_calibration_annotation_sha256": null,
+  "post_calibration_annotation_sha256": "ddc343fc10062681a6c89b0de0d42c83105bd20936307fb9aac426288e948f7a",
+  "method": "First draft after reading every authorized safe source text, using preceding explicit decisions. Current hate mapping remains separate.",
+  "original_answer_exposure": "Annotator did not read original answers or predictions. Comparison suggestions are generated programmatically only after these drafts exist.",
+  "sense_checks": {
+    "path": "discussions/round-07/sense-checks.json",
+    "sha256": "509aa392fc8d23acb40197fb1bde53ab764adf2f78d78803a2ca16140d8d7496"
+  },
+  "case_notes": [
+    {
+      "object_id": "demo:7350",
+      "note": "按外貌羞辱同性恋受话者并否定其婚恋匹配价值，以丑男美女作实际身份比较，拟 2／LGBTQ、Sexism、others。普通配偶评价没有上升到剥夺基本权利的主张。"
+    },
+    {
+      "object_id": "demo:7394",
+      "note": "只是描述女同题材或其中女性角色与影片系列关系，未出现攻击，拟 0／LGBTQ、Sexism。不从色情题材联想出作者的歧视立场。"
+    },
+    {
+      "object_id": "demo:7434",
+      "note": "主动引用并采纳对中国女性的身体恶臭辱骂，还给受话者命名羞辱，拟 2／Region、Sexism、others。国别与性别均明示；没有肤色或族裔线索，不从主子一词补 Racism。死鱼是身体气味比喻，未将人的地位判成非人。"
+    },
+    {
+      "object_id": "demo:7464",
+      "note": "以爱／艾谐音把同性恋与艾滋绑定，攻击已明确，group 拟 LGBTQ、others（正常人作为对照身份）。分数倾向 2；“正常人”是否同时把同性恋排除于正常人的身份地位之外、达到 3，需校准。"
+    },
+    {
+      "object_id": "demo:7485",
+      "note": "以连续反问把同性恋爱情、婚姻等同于疾病传播，拟 2／LGBTQ。上天堂是疾病污名及冷嘲，未直接主张伤害；植物类比在此讨论繁衍结果，未据植物一词自动判非人化。未见独立个人受话者，不增 others。"
+    },
+    {
+      "object_id": "demo:7519",
+      "note": "为同性恋反驳欺骗和不孝指控，但同时以智商、生活不如意讽刺反同参与者，拟 1／LGBTQ、others。按 #309、#5919 的轻度人格贬评尺度，不由反仇恨主旨覆盖独立攻击。"
+    },
+    {
+      "object_id": "demo:7545",
+      "note": "全文反对种族智力高低论并倡导尊重，但“黑人不聪明很多是教育的原因”可能仍认可群体不聪明的前提。倾向反歧视解释 0；若该前提构成独立污名，候选 2。中国及非洲是迁移经商背景，不据此另加 Region。"
+    },
+    {
+      "object_id": "demo:7556",
+      "note": "开头将攻击其他省份的行为泛化给江浙沪，后续通过事件和人物来源为其背书，拟 2／Region。对山东的动物辱称属于被批评的他人引文，不计成作者新的 3 级攻击；人物职业仅为指认背景，未自动加 others。"
+    },
+    {
+      "object_id": "demo:7611",
+      "note": "直接称具体受话者为废物并羞辱其胆量，拟 2／others。明确个人辱骂，无可确认的专门身份类别。"
+    },
+    {
+      "object_id": "demo:7633",
+      "note": "明确辱骂被指收买的实际人员为下贱二狗子汉奸，拟 2／others。有明确人群角色，区别于 #5865 纯抽象制度资本讨论；国内外只是政治代理关系背景。二狗子是角色辱称，未据字面狗字另升 3。"
+    },
+    {
+      "object_id": "demo:7640",
+      "note": "从贬斥发言转向挖苦受话者语文能力，拟 1／others；按 #5998 的轻度能力讥讽处理。"
+    },
+    {
+      "object_id": "demo:7641",
+      "note": "挖苦受话者自卑与能力，拟 1／others，参照 #309、#5919。也配在此是争论中的轻蔑表达，没有具体剥夺政治权利的行动或制度主张，不自动升 3；字数和反复不改变等级。"
+    },
+    {
+      "object_id": "demo:7661",
+      "note": "只询问发言者是否为女性反串，没有明示侮辱或负面人格判断，拟 0／Sexism。没有把反串本身等同于攻击。"
+    },
+    {
+      "object_id": "demo:7678",
+      "note": "把受话者集合直接称为垃圾并攻击其动机，拟 2／others。未有具体专门群体身份；一般垃圾辱骂不按 #2750 的种族材料低等类比升 3。"
+    },
+    {
+      "object_id": "demo:7694",
+      "note": "辱骂以地域包装优越感的人为傻*，拟 2／others。没有具体地域人群，按 #6224 的边界不因“地域”抽象概念增加 Region；攻击来自定向辱骂，不仅是批评行为。"
+    },
+    {
+      "object_id": "demo:771",
+      "note": "指定三个账号为默狗、默孝子并号召攻击，拟 3／Racism、others；最高分来自明确种族动物辱称和具体个人目标。牛头怪被说明为自己人，未据这个称呼新增身份攻击；冲的上下文是网上账号，没有身体伤害依据，不升 4。"
+    },
+    {
+      "object_id": "demo:7782",
+      "note": "借受教育经历挖苦具体受话者的理解能力，拟 1／others。211 是学历学校身份；警察主持正义是事件判断的反讽，不提供额外地域类别或暴力认可。"
+    },
+    {
+      "object_id": "demo:7819",
+      "note": "对带头者与跟风者分别作逐利、智力侮辱，拟 2／others。角色和明确贬称已足够，不猜测其性别或所属运动。"
+    },
+    {
+      "object_id": "demo:7823",
+      "note": "持续对具体受话者作孤立无亲人及喷粪的人格辱骂，拟 2／others。没有亲人是用于攻击的断言，不是实际伤害或死亡威胁；不因篇幅和反复自动升 3／4。"
+    },
+    {
+      "object_id": "demo:7836",
+      "note": "以外貌俗语和已确认的烂裤裆缩写辱骂女性，拟 2／Sexism。歪瓜裂枣是通用外貌贬称，未建立对象不配为人的命题；没有独立具体个人目标，不机械增 others。"
+    },
+    {
+      "object_id": "demo:7852",
+      "note": "对受话者理智及自我认知作轻度人格贬评，拟 1／others，按 #309 处理。"
+    },
+    {
+      "object_id": "demo:7910",
+      "note": "实际对象是贴吧社群成员，others 明确；中国仅在社群名中，不自动作 Region。大聪明有反讽用法，但“老大聪明了”也可能是字面夸赞，倾向轻度讥讽 1，另候选 0；需与 #6035 不从空缺语境补贬损的标准对齐。"
+    },
+    {
+      "object_id": "demo:7927",
+      "note": "反驳对黑人的攻击时，独立称受话者为 loser、生活失败者，拟 2／Racism、others。Racism 对应实际被辩护对象，最高分来自个人辱骂。"
+    },
+    {
+      "object_id": "demo:7959",
+      "note": "对具体人物使用接盘侠称谓，倾向轻度挖苦 1，others 可确认。词典候选给出婚恋男性义，但公开媒体也将其用于承接投资损失的人；本句没有婚恋线索。Sexism 是否加入待裁定，不能用候选词义补造上下文。"
+    },
+    {
+      "object_id": "demo:796",
+      "note": "自述山东回族身份及遭受歧视的处境，拟 0／Racism、Region。两种身份均参与被歧视的自述，没有作者另行发起的攻击。"
+    },
+    {
+      "object_id": "demo:857",
+      "note": "同性恋身份明确，单靠🤭不应自动赋攻击。卡菲勒可指不信道者，也可能被用作账号称呼；仅凭此句无法确认是否真有宗教身份对象或借同性恋辱人。候选 0／LGBTQ 或 1／LGBTQ、others，倾向 0，分数和完整 group 待定；不延伸成种族隐语。"
+    },
+    {
+      "object_id": "demo:867",
+      "note": "按种族、年龄和外貌贬损交往对象，并以不自重自爱羞辱选择这种伴侣的人，拟 2／Racism、others。others 对应实际参与评价的年龄角色；句内没有明确女性指称，不从倒贴交往自动补 Sexism。"
+    },
+    {
+      "object_id": "demo:877",
+      "note": "认可通过图像让同性恋接受己方的优势地位，但没有提供图片。“优势”可能只是轻度优越感（1），也可能是明确压低性少数地位（2／3）；倾向 2。检索未得到可靠泼图释义，不补造图片攻击形式或身体暴力。"
+    },
+    {
+      "object_id": "demo:924",
+      "note": "明确负面概括中国男性，并将不团结归于基因、与国外人群比较。Region、Sexism 已有依据；基因说是否构成族裔化 Racism，以及普通污名 2 与天生低等 3 的边界待裁定。倾向 3／Racism、Region、Sexism，不因自称我们免除攻击，也不冒认作者真实身份。"
+    },
+    {
+      "object_id": "demo:936",
+      "note": "用洋垃圾贬称排斥外国人，并与国人净土对立，拟 2／Region。“所有洋垃圾”未明确等于所有外国人，也未提出具体基本权利剥夺；通用垃圾辱称不自动升 3。三非作为行为政策背景，不另猜种族。"
+    }
+  ],
+  "pending_ids": [
+    "demo:7464",
+    "demo:7545",
+    "demo:7910",
+    "demo:7959",
+    "demo:857",
+    "demo:877",
+    "demo:924"
+  ],
+  "case_scope_limits": [
+    "No omitted context or unseen images reconstructed.",
+    "Group decisions and scores from prior users retain their explicit per-field scopes.",
+    "The Racism-only ruling for #5615 did not repeal the personal-insult others supplement.",
+    "Nominal source chunks remain 30 records; this review round combines two chunks with separate source identities."
+  ]
+}

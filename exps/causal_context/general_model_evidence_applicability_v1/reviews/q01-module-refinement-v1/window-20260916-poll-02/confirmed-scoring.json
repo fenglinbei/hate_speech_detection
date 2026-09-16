@@ -1,0 +1,146 @@
+{
+  "schema_version": "q01-module-resume-launch-verification/v2",
+  "status": "running_confirmed",
+  "created_at": "2026-09-16T01:05:31.091219+00:00",
+  "config_sha256": "e12b0d29628dbb40135b5f4e0180cb5f1d510618020e9d88c2e6f07e3e9254bd",
+  "amendment_sha256": "3fe4d29f787f203e4a32b121a174c4c929ed46ca3caf53e512c7010bb49d53be",
+  "run_invocation": {
+    "id": "a91d88ef-67f6-4643-af4e-65a74e6ffe03",
+    "started_at": "2026-09-16T01:00:12.891259+00:00",
+    "stop_epoch": null,
+    "through_pass": null,
+    "workers": [
+      {
+        "physical_gpu_index": 0,
+        "pid": 978899
+      },
+      {
+        "physical_gpu_index": 1,
+        "pid": 978900
+      },
+      {
+        "physical_gpu_index": 2,
+        "pid": 978901
+      },
+      {
+        "physical_gpu_index": 3,
+        "pid": 978902
+      }
+    ]
+  },
+  "run_status": "running",
+  "active_pass": "engineering-repeat",
+  "completed_passes": [
+    "engineering-reference"
+  ],
+  "supervisor_pid": 978785,
+  "run_pid": 978794,
+  "owned_processes": "    PID    PPID STAT     ELAPSED COMMAND\n 978785   12345 Ss         05:22 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python3.11 /data/liaozijie/hate_speech_detection/scripts/review/schedule_q01_module_poll_v2.py --config /data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/reviews/q01-module-refinement-v1/window-20260916-poll-02/config.json\n 978794  978785 Ss         05:21 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python /data/liaozijie/hate_speech_detection/scripts/review/run_q01_module_polled_v2.py --config /data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/reviews/q01-module-refinement-v1/window-20260916-poll-02/config.json --config-sha256 e12b0d29628dbb40135b5f4e0180cb5f1d510618020e9d88c2e6f07e3e9254bd\n 978899  978794 Rl         05:18 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=9) --multiprocessing-fork\n 978900  978794 Rl         05:18 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=12) --multiprocessing-fork\n 978901  978794 Rl         05:18 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=15) --multiprocessing-fork\n 978902  978794 Rl         05:18 /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=18) --multiprocessing-fork\n",
+  "gpu_uuid_and_utilization": "0, GPU-09b29c25-c372-62f4-3098-9734013e93c0, 93 %\n1, GPU-9145ca41-4f0b-6f81-9a0b-118cb4596601, 100 %\n2, GPU-278f5973-425f-514a-8a2d-db77f55d481b, 100 %\n3, GPU-6e7d956e-0a22-7fac-a093-130cc1190f38, 100 %\n",
+  "checkpoint_checks": [
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 0,
+      "old_requests": 720,
+      "old_prefix_bytes": 4492562,
+      "old_prefix_sha256": "2f8d23172296290e1b2e88381fa8a48917df0169eaa79cac73df10acc6b48aa3",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 720,
+      "new_complete_requests": 0,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 1,
+      "old_requests": 720,
+      "old_prefix_bytes": 4493134,
+      "old_prefix_sha256": "a6b8a4e63a87e4025e90e0edc28ceb71b0a669b5a812ef671cdb90134b1a7544",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 720,
+      "new_complete_requests": 0,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 2,
+      "old_requests": 720,
+      "old_prefix_bytes": 4492775,
+      "old_prefix_sha256": "073744471ce42047b6b3e6982b13bb6af89b24d150f4d280e1828d85f7d050c1",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 720,
+      "new_complete_requests": 0,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 3,
+      "old_requests": 720,
+      "old_prefix_bytes": 4491887,
+      "old_prefix_sha256": "a54c3d46cd0cbcbff3451cb5d7ac4bd97cbf087e04974bfaf0d00f7ff383c006",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 720,
+      "new_complete_requests": 0,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 0,
+      "old_requests": 444,
+      "old_prefix_bytes": 1995177,
+      "old_prefix_sha256": "53b4e3e612023408bc673a8dc7701d9e1252a4b34b993b485328964cb8756b04",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 679,
+      "new_complete_requests": 235,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 1,
+      "old_requests": 417,
+      "old_prefix_bytes": 1872974,
+      "old_prefix_sha256": "d927a4ba08bf7b7a2c862edf070081c58d9d856d5a4ffc5c644262a2344e57e3",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 639,
+      "new_complete_requests": 222,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 2,
+      "old_requests": 443,
+      "old_prefix_bytes": 1990827,
+      "old_prefix_sha256": "1cac8831319206b558be72244ec931f8ff6a1c0e17a1ab5f02bf6dff521bfc99",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 675,
+      "new_complete_requests": 232,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 3,
+      "old_requests": 407,
+      "old_prefix_bytes": 1825962,
+      "old_prefix_sha256": "fa7aa080e7af8049583c7c7a0fe321c7b65306fb112e21c8b8e027b90292b7b7",
+      "old_prefix_unchanged": true,
+      "complete_requests_at_snapshot": 625,
+      "new_complete_requests": 218,
+      "unique_requests": true,
+      "reference_not_loaded": true
+    }
+  ],
+  "old_reused_partial_requests": 1711,
+  "new_complete_requests": 907,
+  "new_candidate_evaluations": 1814,
+  "run_until_complete": true,
+  "fixed_deadline": null,
+  "mechanism_ready": false,
+  "engineering_fully_accepted": false,
+  "science_results_available": false
+}

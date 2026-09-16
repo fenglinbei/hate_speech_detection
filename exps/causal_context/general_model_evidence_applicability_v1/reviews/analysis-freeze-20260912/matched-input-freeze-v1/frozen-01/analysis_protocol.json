@@ -1,0 +1,47 @@
+{
+  "alternatives": [
+    "generic_demonstration_or_answer_presence",
+    "wording_specificity",
+    "partner_content_and_order",
+    "joint_movement_of_two_examples",
+    "wording_density_and_downstream_positions",
+    "score_definition_sensitivity"
+  ],
+  "analysis_variable": "non_hate_margin = score(non-hate) - score(hate)",
+  "author": "assistant",
+  "case_hypotheses": {
+    "3169": "D1/C1 and D2/C2 negative non-hate-margin differences would support a harmful contribution of the original semantic/cue combination; target changes prevent attribution to 嘿嘿 alone.",
+    "541": "D1/C1 and D2/C2 positive non-hate-margin differences would support a contribution of the preserved topic-plus-countergeneralization semantics within these inputs."
+  },
+  "condition_rows_expected": 144,
+  "contrast_count": 64,
+  "contrast_rows_expected": 256,
+  "interpretation_rules": [
+    "Report both matched variant pairs; discordant directions are wording sensitivity, not a reason to select one.",
+    "Report P0-minus-R partner rewriting separately from P1-minus-P0 position changes.",
+    "Short/long edits do not isolate pure length. Position swaps do not isolate one absolute position.",
+    "No-effect, reverse, near-tie and score-mode-discordant results stay in every report.",
+    "Two exposed discovery cases are not an independent confirmatory cohort; conditions are not independent cases.",
+    "Numerical direction thresholds are not effect-size or statistical significance thresholds.",
+    "Input effects do not establish an internal mechanism or activation-patching readiness."
+  ],
+  "new_human_mechanism_judgments": 0,
+  "numeric_direction": {
+    "base_epsilon": 0.0013427734375,
+    "bound": "epsilon * sum(abs(coefficients))",
+    "is_statistical_interval": false,
+    "unresolved": "abs(effect) <= bound"
+  },
+  "positive_effect_meaning": "greater_support_for_non_hate; both_original_and_reviewed_query_references_are_non_hate",
+  "prediction": "full_two_candidate_argmax; smallest_canonical_ordinal_on_exact_tie",
+  "primary_score": "answer_sum",
+  "reference_handling": "load analysis_references.json only after raw scores are sealed and all gates pass; retain both references",
+  "schema_version": "evidence-matched-analysis-protocol/v1",
+  "score_modes": [
+    "answer_sum",
+    "answer_mean",
+    "total_with_eos",
+    "mean_with_eos"
+  ],
+  "status": "frozen_before_new_scores"
+}

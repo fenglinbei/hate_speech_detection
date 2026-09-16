@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "observed_at": "2026-09-08T08:45:04.866657+00:00",
+  "trigger": "Batch-confirmation dialog oversized checkbox, wrapped text and inaccessible close button",
+  "causes": [
+    "Generic full-width text-input CSS reached checkboxes",
+    "Fixed-height dialog expected an inner form grid but used direct div children"
+  ],
+  "fix": [
+    "Evidence dialogs use three bounded grid rows with an independently scrollable body",
+    "Checkboxes reset to 18x18px; labels retain usable width",
+    "Always-visible top close button, bottom return and Escape; focus returns to opener"
+  ],
+  "release": "/opt/hsd-general-model-paired-review/releases/db224d669a2880b9a5bf8287ee191e3d8619ec0ae105d43ba14f25c1c1a17c8b",
+  "hsd_service": {
+    "MainPID": "1822809",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Tue 2026-09-08 08:42:03 UTC",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "isolated_browser": {
+    "passed": true,
+    "fictional_long_demo_paragraphs": 28,
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1440,
+        1000
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "checks": [
+      "real wheel scrolling to bottom",
+      "controls fully within bounds and hit-test reachable before automatic scrolling",
+      "checkbox/text dimensions and horizontal overflow",
+      "close/return/Escape and focus restoration",
+      "unchanged revision on dismissal",
+      "existing full save/conflict/batch/gating/amendment/export/restart suite"
+    ],
+    "screenshots": "/tmp/evidence-browser-5Ss8zr/screenshots"
+  },
+  "production_readonly_receipt": "batch-dialog-https-readonly-20260908.json",
+  "both_sessions_byte_identical": true,
+  "pdf": {
+    "unchanged": true,
+    "file_hash_count": 244,
+    "service": {
+      "MainPID": "1270223",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Thu 2026-08-20 17:38:12 UTC",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "https": {
+      "certificate_verified": true,
+      "body_sha256": "7a064af6368c926bc3dc8c6ed8c77fc3b273b60aa3de1c014bdc3b4422aa64a3",
+      "bytes": 425
+    }
+  },
+  "source_hashes": {
+    "tools/general_model_paired_review_ui/evidence.css": "53d8716fbbfb924a10abb5bccaa3fb9644b3264d3989d63613d6e90d07fd69a1",
+    "tools/general_model_paired_review_ui/evidence.html": "5a6eed12c3b027d49852386f4cf8aecf119796780f3394ecc964ae04b99e4653",
+    "tools/general_model_paired_review_ui/evidence.js": "7fe4e839c597228a1e2e3e5a1d9c897906c3efad85b13a2e91c2a1a453aebfa8",
+    "tools/general_model_paired_review_ui/test_evidence_browser.cjs": "96654c2f9bec7faa2c99375bc054837d3e6b988fb9ef42e3bbc6475f6ed2f165",
+    "deploy/general_model_paired_review/digitalocean-sgp/update_static_release.py": "f9f6e49047141fb440b9daf12a1b6703acc6bc9260bd87ec5b00ecb28789cfc0",
+    "deploy/general_model_paired_review/digitalocean-sgp/smoke_evidence_readonly.cjs": "28cb30b17ecb0755dd3afe45216613c4c6ad2b6dcd9a0d027e07011aec7eda64"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "evidence-dual-reference-evaluation-config/v1",
+  "analysis_kind": "posthoc-descriptive-discovery-subset",
+  "allow_model_forward": false,
+  "allow_gpu": false,
+  "allow_test_or_reserve_analysis": false,
+  "query_count": 32,
+  "tasks": ["hate", "group"],
+  "conditions": ["C0", "CLnew", "CD", "CLDnew", "CLnewNoCat", "CLDnewNoCat"],
+  "core_conditions": ["C0", "CLnewNoCat", "CD", "CLDnewNoCat"],
+  "prediction_score": "answer_sum",
+  "tie_rule": "smallest-canonical-ordinal",
+  "epsilon": 0.0013427734375,
+  "bootstrap_replicates": 0,
+  "zero_division": 0,
+  "reference_pointer": {
+    "path": "exps/causal_context/general_model_evidence_applicability_v1/analysis-reference-v1/current.json",
+    "sha256": "8691c9569e6c77fc4f0d2edff5ce7c0a2014fe32cff3387fd48f759e8bebb041"
+  },
+  "paired_manifest": {
+    "path": "exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02/manifest.json",
+    "sha256": "4f9b48b76e2102aa49e65deafb55ac6566c798fee346fe1be6e5cd2c5ba771d2"
+  },
+  "paired_export_manifest": {
+    "path": "exps/causal_context/general_model_ld_nolabel_paired_cases_v1/results/paired-cases-02/export_manifest.json",
+    "sha256": "1b3f9b71fb2f36e39e1ce45e06a92744c1aeca2e463861e549d592778ac682ee"
+  },
+  "candidate_math": {
+    "path": "src/diagnostics/general_model_numeric_analysis.py",
+    "sha256": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2"
+  },
+  "raw_scores": {
+    "path": "exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/dev-b1/scores.jsonl",
+    "sha256": "505f8da36596f1493ad4bf6b55985ab527dcfd5157a512a9722c5e1b1dac7eeb"
+  },
+  "raw_manifest": {
+    "path": "exps/causal_context/general_model_ld_nolabel_v1/runs/nolabel-01/dev-b1/manifest.json",
+    "sha256": "6e7faffa2d176bc503360689fa28db6306a35162c512ff9f4f43e0e5330e59b2"
+  }
+}

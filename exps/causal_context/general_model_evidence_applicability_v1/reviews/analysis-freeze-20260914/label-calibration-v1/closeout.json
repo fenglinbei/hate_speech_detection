@@ -1,0 +1,185 @@
+{
+  "completed_at": "2026-09-13T17:07:37.129337+00:00",
+  "derived_checks": [
+    {
+      "max_bound_fraction": 0.004029130428184757,
+      "pass": "calibration-b1-r0",
+      "passed": true,
+      "readouts": 1200
+    },
+    {
+      "max_bound_fraction": 0.0,
+      "pass": "calibration-b1-r1",
+      "passed": true,
+      "readouts": 1200
+    },
+    {
+      "max_bound_fraction": 0.02007575757571348,
+      "pass": "calibration-b1-padding",
+      "passed": true,
+      "readouts": 1200
+    },
+    {
+      "max_bound_fraction": 0.01268939393958135,
+      "pass": "calibration-b1-prefix",
+      "passed": true,
+      "readouts": 1200
+    },
+    {
+      "max_bound_fraction": 0.0,
+      "pass": "calibration-b1-members",
+      "passed": true,
+      "readouts": 1200
+    },
+    {
+      "max_bound_fraction": 0.0,
+      "pass": "calibration-b1-replica",
+      "passed": true,
+      "readouts": 1200
+    }
+  ],
+  "gpu_release": {
+    "all_four_gpus_released": true,
+    "checked_at": "2026-09-13T17:01:31.204163+00:00",
+    "compute_applications": [],
+    "gpus": [
+      {
+        "index": 0,
+        "memory_total_mib": 46068,
+        "memory_used_mib": 0,
+        "utilization_percent": 0,
+        "uuid": "GPU-09b29c25-c372-62f4-3098-9734013e93c0"
+      },
+      {
+        "index": 1,
+        "memory_total_mib": 46068,
+        "memory_used_mib": 0,
+        "utilization_percent": 0,
+        "uuid": "GPU-9145ca41-4f0b-6f81-9a0b-118cb4596601"
+      },
+      {
+        "index": 2,
+        "memory_total_mib": 46068,
+        "memory_used_mib": 0,
+        "utilization_percent": 0,
+        "uuid": "GPU-278f5973-425f-514a-8a2d-db77f55d481b"
+      },
+      {
+        "index": 3,
+        "memory_total_mib": 46068,
+        "memory_used_mib": 0,
+        "utilization_percent": 0,
+        "uuid": "GPU-6e7d956e-0a22-7fac-a093-130cc1190f38"
+      }
+    ]
+  },
+  "human_fields_changed": 0,
+  "independent_input_verification": {
+    "AB_mappings": 72,
+    "ab_layout_pairs": 36,
+    "artifacts_verified": 11,
+    "contexts_checked": 288,
+    "model_forward_executed": false,
+    "original_replays": 36,
+    "probe_replacements": 180,
+    "query_references_parsed": false,
+    "sources_unchanged": 126,
+    "status": "passed",
+    "verifier_sha256": "2a094618301817e90c19c15c31703dbc9241dd4ad0667c0cb88cab1230d166b6"
+  },
+  "independent_numeric_verification": {
+    "all_original_and_reviewed_predictions_checked": true,
+    "contrast_and_probe_directions_checked": 1664,
+    "independent_arithmetic": "stdlib Decimal, 50 decimal digits; explicit probability-space NCC",
+    "max_abs_error_vs_export": 1.4432899320127035e-15,
+    "model_forward_executed": false,
+    "scalar_checks": 4228,
+    "status": "passed",
+    "verifier_sha256": "2a094618301817e90c19c15c31703dbc9241dd4ad0667c0cb88cab1230d166b6"
+  },
+  "old_pointer_changes": 0,
+  "pointer_sha256": "5c9332e38b56363d1b0e6f0b817ae7e12766dc56e5aaa92009a979906662c38a",
+  "production_writes": 0,
+  "run_checks": [
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "9cada4273eac91d2b60d0ec03747265120b2aa6dc6c4396980bdb6655a551492",
+      "max_abs_error": 2.3193959535205977e-06,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "historical_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "04a94a29f43203f1e44f05e8b97890ba855ec90e346cd4fe85a30b1e6c762501",
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "62ccd3131d6aad46e4a5ea3b05786d47e13f236accc5bf6d2148235fe695a1cd",
+      "max_abs_error": 3.6080920580161546e-06,
+      "pass": "calibration-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "raw_baseline_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "calibration-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "0334b1c6b894ecb7502efb654ee6f52119be2211185556c51941fd9e1b4d808d",
+      "max_abs_error": 0.0,
+      "pass": "calibration-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "padding",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "37145917bc1089061892855641927a05372eca94a8f189fd6edcf30fc251150e",
+      "max_abs_error": 0.00023651123046875,
+      "pass": "calibration-b1-padding",
+      "passed": true
+    },
+    {
+      "check": "prefix",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "7058f0d990032a5b5b7f565992332d56606cafab1db809be07ad3fd489bba2d3",
+      "max_abs_error": 9.918212890625e-05,
+      "pass": "calibration-b1-prefix",
+      "passed": true
+    },
+    {
+      "check": "members",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "4f753ef031b77ecd0b597dc1d7aeb2c16b1df3ce10e297052559377690916e3d",
+      "max_abs_error": 0.0,
+      "pass": "calibration-b1-members",
+      "passed": true
+    },
+    {
+      "check": "replica",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "febc5ad0f5c8b46e4d6f5ae0204706a74c259ea431846781b7d8f9016d3e7ea5",
+      "max_abs_error": 0.0,
+      "pass": "calibration-b1-replica",
+      "passed": true
+    }
+  ],
+  "schema_version": "evidence-label-calibration-closeout/v1",
+  "status": "complete"
+}

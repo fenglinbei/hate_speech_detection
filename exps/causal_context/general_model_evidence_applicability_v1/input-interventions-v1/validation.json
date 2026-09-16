@@ -1,0 +1,139 @@
+{
+  "analysis_byte_reproduction": "passed",
+  "created_at": "2026-09-12T05:50:00.523266+00:00",
+  "execution_log_sha256": "0b6eab78204f5a8913a27df0976bed9400d8393c5294bf0b0366955fd18f9af7",
+  "gpu_after": {
+    "query": "nvidia-smi --query-gpu=index,name,memory.used,utilization.gpu --format=csv",
+    "rows": [
+      {
+        "index": 0,
+        "memory_used_mib": 0,
+        "name": "NVIDIA L20",
+        "utilization_percent": 0
+      },
+      {
+        "index": 1,
+        "memory_used_mib": 0,
+        "name": "NVIDIA L20",
+        "utilization_percent": 0
+      },
+      {
+        "index": 2,
+        "memory_used_mib": 0,
+        "name": "NVIDIA L20",
+        "utilization_percent": 0
+      },
+      {
+        "index": 3,
+        "memory_used_mib": 0,
+        "name": "NVIDIA L20",
+        "utilization_percent": 0
+      }
+    ]
+  },
+  "independent_checks": {
+    "case_use_unchanged": 52,
+    "case_use_updated": 12,
+    "condition_score_mode_rows": 104,
+    "human_fields_unchanged": true,
+    "scalar_checks": 7600
+  },
+  "numerical_checks": [
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "57607ec2a09ce2fdf3340f6910a8802d1a9bb9c92766e72220ef5d799d27f886",
+      "max_abs_error": 1.116748313734206e-05,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "historical_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "b8a6e3777a169b5e7fa3caf5de54866dbaf0cc745462ff1fd88d476d0a477993",
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "7c03e8ce2dcd78bbec1f460058c3c5cb0e64eb0adaae4384700efa696cfc437d",
+      "max_abs_error": 1.116748313734206e-05,
+      "pass": "interventions-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "raw_baseline_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "2957acb4d4ebf3a9d789738a10a070f90b9eb3d24c57759c74443bc9b6e1900a",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "padding",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "885d3e32f28ea1464cb56577975e816b91476a7e2cb0293d07e36c64941dcb27",
+      "max_abs_error": 0.000335693359375,
+      "pass": "interventions-b1-padding",
+      "passed": true
+    },
+    {
+      "check": "prefix",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "8ee3f8d9a0c230c06873761cf51b2130734451ddd6d83f2b34a94b34bee777a3",
+      "max_abs_error": 0.000324249267578125,
+      "pass": "interventions-b1-prefix",
+      "passed": true
+    },
+    {
+      "check": "members",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "de72bb129601ca7075741b3e0d5ef11c1111d5891f1d1be0bd85a9ae6eb762ff",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-members",
+      "passed": true
+    },
+    {
+      "check": "replica",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "f3c52d60573192460b6092f08e9d4a703a4a4f3e8a7f7662d00625f38061cd3a",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-replica",
+      "passed": true
+    }
+  ],
+  "plan_id": "evidence-interventions-39035d7716002aa4702da7709e6e0e1d5e764a73698fb1e5db53fd131ab92838",
+  "result_manifest_sha256": "09e8ddca7b3d9d310f1b5d2db9fa01e79d5d6fdb06cef5bb7d9d66dc5d268fba",
+  "run_manifest_sha256": "59af3f682321f7d7bc5c0c0a4b2d6220d0cf7986f2bef9ce4d3f0b0782892acb",
+  "runtime_log_note": "HAMI host-PID/shared-lock warnings retained in the log. All four physical GPU identities verified, all score passes completed, numerical gates passed, and all replicas exited.",
+  "schema_version": "evidence-input-intervention-validation/v1",
+  "score_pass_validation_count": 8,
+  "source_code": {
+    "scripts/review/analyze_evidence_interventions.py": "af31601ff70dae0b371585b88a0d5236455522cf591a1a7669c20d9228015077",
+    "scripts/review/run_evidence_interventions.py": "06e1f0a75f540a85585ee85d2a115d711e31f67bdcabc28751b0787ffc1f2c71",
+    "scripts/review/test_analyze_evidence_interventions.py": "bbc400078baa422613faa20e03c0a5345b99dc46808678485256407fe21e947f",
+    "scripts/review/test_run_evidence_interventions.py": "8074259e769ced5f5ac4ff01eb2afe8c213f5277f72534402a63deba7d11c3db"
+  },
+  "status": "passed",
+  "unit_tests": {
+    "analysis_invariants": 5,
+    "execution_boundaries": 6,
+    "passed": 11
+  }
+}

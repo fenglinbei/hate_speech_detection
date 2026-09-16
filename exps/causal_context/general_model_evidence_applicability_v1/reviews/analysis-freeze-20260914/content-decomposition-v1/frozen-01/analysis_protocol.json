@@ -1,0 +1,259 @@
+{
+  "ab_geometry": "forward/reverse share full token layout; bridge to original changes instruction and label lengths, recorded separately",
+  "ab_mapping_gap": "forward semantic answer_sum margin minus reverse; auxiliary sensitivity measure",
+  "ab_symmetric": "(forward semantic answer_sum margin + reverse semantic answer_sum margin)/2; auxiliary, both components mandatory",
+  "author": "assistant",
+  "authorization": {
+    "future_gpu_launch": "wait for the user to announce an available GPU window",
+    "gpu_execution_this_turn": false,
+    "individual_human_adoption": false,
+    "scope": "prepare wording, perform AI semantic checks, match and freeze inputs, implement and CPU-validate; report wording without waiting",
+    "user_verbatim": "请帮我按这个顺序推进，中间跟我回报一下写好的措辞，不用停止，最后给我交付一个可用于GPU运行的输入以及实现，目前没有到我的GPU窗口，所以先不运行"
+  },
+  "background_unit": "per condition, never one shared prior across all conditions",
+  "groups": [
+    "original_full_label_sum_and_mean",
+    "original_full_label_NCC",
+    "AB_forward_and_reverse"
+  ],
+  "human_material_status": "Assistant-reviewed new texts; no individual human adoption inferred from preparation authorization.",
+  "interpretation": [
+    "Two exposed discovery cases; no independent-sample count or general accuracy estimate.",
+    "541: compare both conditional rule effects, both conditional topic effects and their registered interaction within each wording.",
+    "3169: compare designation and literal-laughter pairs separately; both retain hate, so no attack-presence or pure factorial claim.",
+    "Group designation pairs add 们 in both arms; old-to-new bridges retain that pluralization and downstream token shift.",
+    "Matched total length and external anchors do not align internal semantic token positions or establish identical meanings.",
+    "Neutral continuation versus rule wording and sports versus sexuality remain specific instantiated content contrasts.",
+    "Historical anchors, total input bridges, and primary comparisons are reported separately.",
+    "Keep all original/EOS, NCC/background/single/LOO and both A/B results, including reverse and unresolved effects.",
+    "Correct query references are not inferred from score calibration; no human mechanism or activation-patching readiness."
+  ],
+  "mapping_scope": "system output instruction, every demonstration answer, complete output candidates; preserve other bytes",
+  "mappings": {
+    "ab_forward": {
+      "hate": "A",
+      "non-hate": "B"
+    },
+    "ab_reverse": {
+      "hate": "B",
+      "non-hate": "A"
+    },
+    "original": {
+      "hate": "hate",
+      "non-hate": "non-hate"
+    }
+  },
+  "material_source_sha256": "b5297b61ce3c03d659a4cd1d70b3d22bf649bbf023781772321a75fe4b480f44",
+  "mechanism_ready": false,
+  "ncc_base_score": "answer_mean",
+  "ncc_steps": [
+    "s_y = sum(log p(each token of complete JSON label including quotes)) / number of label tokens; EOS excluded",
+    "q_y = exp(s_y) / sum(exp(s_k)) for each real or probe prompt",
+    "pi_y(c) = arithmetic mean of q_y over the five frozen probes within the same condition c",
+    "q_cal_y = (q_real_y / pi_y) / sum(q_real_k / pi_k)",
+    "NCC margin = log(q_cal_non_hate / q_cal_hate) = original mean margin - log(pi_non_hate/pi_hate)"
+  ],
+  "new_human_fields": 0,
+  "numeric_policy": {
+    "background_error_bound": "epsilon",
+    "base_epsilon": 0.0013427734375,
+    "contrast_bound": "per_margin_bound*sum(abs(coefficients))",
+    "derivation": "B=logit(mean(sigmoid(m_j))) is 1-Lipschitz in sup norm: sum derivatives = mean(p_j*(1-p_j))/(pbar*(1-pbar)) <= 1",
+    "ncc_margin_error_bound": "2*epsilon",
+    "raw_margin_error_bound": "epsilon",
+    "unresolved": "abs(value)<=bound; numerical stability threshold, not statistical significance"
+  },
+  "prediction": "argmax complete semantic candidates; exact tie selects semantic ordinal 0 (hate), flag tie separately",
+  "primary_original_and_ab_score": "answer_sum",
+  "probe_diagnostics": "Five single-probe and five leave-one-out results for every one of the 30 frozen comparisons; no selection after scoring.",
+  "probe_replacement": "replace only query JSON string; retain each condition dictionary, demonstration texts/answers, order and system; no retrieval rerun",
+  "probes": [
+    {
+      "id": "empty",
+      "query_json": "\"\"",
+      "text": ""
+    },
+    {
+      "id": "space",
+      "query_json": "\" \"",
+      "text": " "
+    },
+    {
+      "id": "na",
+      "query_json": "\"N/A\"",
+      "text": "N/A"
+    },
+    {
+      "id": "mask",
+      "query_json": "\"[MASK]\"",
+      "text": "[MASK]"
+    },
+    {
+      "id": "lorem",
+      "query_json": "\"Lorem ipsum\"",
+      "text": "Lorem ipsum"
+    }
+  ],
+  "references": "copy immutable parent reference bytes; load only after all raw and NCC gates pass and raw scores are sealed",
+  "schema_version": "evidence-content-decomposition-protocol/v1",
+  "scientific_design": {
+    "3169": {
+      "cells": [
+        {
+          "condition": "G_H",
+          "content": "original discriminatory proposition/target with 嘿嘿 as group designation"
+        },
+        {
+          "condition": "G_E",
+          "content": "same proposition/target with explicit category designation replacing 嘿嘿"
+        },
+        {
+          "condition": "L_H",
+          "content": "personal insult with 嘿嘿 unambiguously functioning as laughter"
+        },
+        {
+          "condition": "L_O",
+          "content": "same personal insult with another ordinary laughter form"
+        }
+      ],
+      "comparisons_per_template": [
+        {
+          "name": "group_designation_substitution",
+          "terms": {
+            "G_E": -1,
+            "G_H": 1
+          }
+        },
+        {
+          "name": "ordinary_laughter_form_substitution",
+          "terms": {
+            "L_H": 1,
+            "L_O": -1
+          }
+        }
+      ],
+      "conditional_interpretation": {
+        "both_pairs_negative": "consistent with shared written-form association in both tested contexts; not proof of context-free token causation",
+        "group_pair_negative_laughter_pair_small_or_opposite": "prioritize context-dependent designation/interpretation",
+        "neither_pair_stable": "the prior D-minus-C signal may depend on other proposition/target/wording changes"
+      },
+      "design": "two_label_preserving_lexical_pairs_in_distinct_attack_contexts",
+      "illustrative_fragments_not_final_materials": {
+        "G_E": "被黑人玩过的…",
+        "G_H": "被嘿嘿玩过的…",
+        "L_H": "你这个蠢货，居然还嘿嘿地笑…",
+        "L_O": "你这个蠢货，居然还哈哈地笑…"
+      },
+      "limitations": [
+        "both contexts contain an attack; the design does not estimate attack presence versus absence",
+        "the substitutions differ across contexts, so their difference is not a pure factorial interaction",
+        "explicit designation may change clarity/offensiveness; review target/proposition/severity before eligibility",
+        "personal-insult groups may differ from the group-reference pair; only hate is held fixed",
+        "new non-attacking text with a non-hate reference must not inherit the old hate demonstration answer"
+      ],
+      "proposed_correct_and_presented_answer": "hate"
+    },
+    "541": {
+      "cells": [
+        {
+          "condition": "T0R0",
+          "content": "non-sexual affiliation + neutral event continuation"
+        },
+        {
+          "condition": "T1R0",
+          "content": "sexual-orientation affiliation + matched neutral continuation"
+        },
+        {
+          "condition": "T0R1",
+          "content": "non-sexual affiliation + reject individual-to-group generalization"
+        },
+        {
+          "condition": "T1R1",
+          "content": "sexual-orientation affiliation + same rule"
+        }
+      ],
+      "comparisons_per_template": [
+        {
+          "name": "rule_at_T0",
+          "terms": {
+            "T0R0": -1,
+            "T0R1": 1
+          }
+        },
+        {
+          "name": "rule_at_T1",
+          "terms": {
+            "T1R0": -1,
+            "T1R1": 1
+          }
+        },
+        {
+          "name": "topic_at_R0",
+          "terms": {
+            "T0R0": -1,
+            "T1R0": 1
+          }
+        },
+        {
+          "name": "topic_at_R1",
+          "terms": {
+            "T0R1": -1,
+            "T1R1": 1
+          }
+        },
+        {
+          "name": "topic_rule_interaction",
+          "terms": {
+            "T0R0": 1,
+            "T0R1": -1,
+            "T1R0": -1,
+            "T1R1": 1
+          }
+        }
+      ],
+      "controls": [
+        "same person/name, incident and stance within a template; no new insults",
+        "matched category mentions within each topic contrast; common wording skeleton",
+        "second template restates the rule with less lexical overlap with the query",
+        "R0 must not covertly contain the rule; removing a rule is not reversing it into a hateful claim"
+      ],
+      "design": "2x2_topic_by_explicit_countergeneralization",
+      "proposed_correct_and_presented_answer": "non-hate",
+      "rule_0": "neutral event description without explicit or implicit countergeneralization claim",
+      "rule_1": "author explicitly rejects extending evaluation of one individual to the entire group",
+      "topic_0": "a specified non-sexual affiliation such as a sports interest; retain category structure",
+      "topic_1": "sexual orientation identity"
+    }
+  },
+  "scope": {
+    "background": "original R",
+    "bridge_comparisons": 12,
+    "cases": [
+      "541/hate",
+      "3169/hate"
+    ],
+    "historical_anchor_conditions": 10,
+    "historical_comparisons": 4,
+    "main_comparisons": 14,
+    "main_materials": 16,
+    "new_query_controls": "deferred, independent new reference phase",
+    "target_slots": {
+      "3169": 3,
+      "541": 5
+    }
+  },
+  "score_modes": [
+    "answer_sum",
+    "answer_mean",
+    "total_with_eos",
+    "mean_with_eos"
+  ],
+  "source_design_sha256": "a0baa7d6d2e951d7bf29b00eb7e74f172a13c30ceaa858fa49324aba5d7b30e1",
+  "source_method": {
+    "implementation_status": "explicit local normalize-then-average specification; not claimed bit-identical to unavailable author code",
+    "method": "NCC",
+    "title": "Mitigating Label Length Bias in Large Language Models",
+    "url": "https://aclanthology.org/2025.ijcnlp-long.78/"
+  },
+  "status": "frozen_before_new_scores"
+}

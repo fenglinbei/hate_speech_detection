@@ -1,0 +1,331 @@
+{
+  "schema_version": "local-relation-post-decision-notes/v1",
+  "case_summaries_ai": [
+    {
+      "id": "R01",
+      "question_index": 0,
+      "object_ids": [
+        "relation:5086:127"
+      ],
+      "summary": "同题和同一群体不自动使hate规则直接；#5086/#127当前话题均直接，hate规则部分、group规则直接。",
+      "boundary": "group由部分改为直接经过单独一致性复核；原值和原答保留。不可把“同为疾病污名”当作所有hate规则直接的充分条件。",
+      "source": "[原答 raw-replies-01.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-01.json)、[原答 raw-replies-08.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-08.json)",
+      "source_event_ids": [
+        "relation-b01-q0-01",
+        "relation-b01-q0-group-amendment-01"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q0-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-01.json",
+            "sha256": "dfe1ec131c0c7c6026f1eb43c908c9df1a58a23f4b881219c407d29aaabc8347"
+          }
+        },
+        {
+          "event_id": "relation-b01-q0-group-amendment-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-08.json",
+            "sha256": "66d28a29f540966cbe4e797b85295d4a3807d91d863d0b7563b4d84551e02149"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R02",
+      "question_index": 1,
+      "object_ids": [
+        "relation:2011:7545"
+      ],
+      "summary": "同题、相反立场：#2011/#7545的hate规则部分，group规则直接。",
+      "boundary": "立场不照搬；实际黑人种族对象识别可以独立复用。此题未新增两项话题字段的人工裁决。",
+      "source": "[原答 raw-replies-01.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-01.json)",
+      "source_event_ids": [
+        "relation-b01-q1-01"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q1-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-01.json",
+            "sha256": "dfe1ec131c0c7c6026f1eb43c908c9df1a58a23f4b881219c407d29aaabc8347"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R03",
+      "question_index": 2,
+      "object_ids": [
+        "relation:4450:6334"
+      ],
+      "summary": "同属Region且都评价居民，仍可能两项规则均无。",
+      "boundary": "东北居民素质、犯罪与江西婚配彩礼主旨不同；本题只确认规则字段，不将AI话题判断计为用户字段。",
+      "source": "[原答 raw-replies-01.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-01.json)",
+      "source_event_ids": [
+        "relation-b01-q2-01"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q2-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-01.json",
+            "sha256": "dfe1ec131c0c7c6026f1eb43c908c9df1a58a23f4b881219c407d29aaabc8347"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R04",
+      "question_index": 3,
+      "object_ids": [
+        "relation:4450:3701"
+      ],
+      "summary": "跨类别的“负面属性泛化到群体”过于宽泛，不足以支持hate规则关联。",
+      "boundary": "以#4450/#3701为锚点；不是所有跨类别规则都无关联，需指出更具体、可迁移的结构。group规则未由本题确认。",
+      "source": "[原答 raw-replies-01.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-01.json)",
+      "source_event_ids": [
+        "relation-b01-q3-01"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q3-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-01.json",
+            "sha256": "dfe1ec131c0c7c6026f1eb43c908c9df1a58a23f4b881219c407d29aaabc8347"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R05",
+      "question_index": 4,
+      "object_ids": [
+        "relation:3169:3660"
+      ],
+      "summary": "完全同形异义不因字形相同建立话题关系。",
+      "boundary": "#3169的笑声与#3660的黑人代称：hate词义／话题为无；其他关系字段与原句标签另判。",
+      "source": "[原答 raw-replies-02.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-02.json)",
+      "source_event_ids": [
+        "relation-b01-q4-reply02-3660"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q4-reply02-3660",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-02.json",
+            "sha256": "ded5231c27dab76146978e80a24d30d0898754c0dbdb575d67ed393636430a80"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R06",
+      "question_index": 5,
+      "object_ids": [
+        "relation:1128:3081"
+      ],
+      "summary": "询问亲见或亲历的近义问句可以直接关联。",
+      "boundary": "#1128/#3081两句的可见语义功能相近，未交代宾语不妨碍本项直接；不推广为任何问句都相关。",
+      "source": "[原答 raw-replies-02.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-02.json)",
+      "source_event_ids": [
+        "relation-b01-q5-reply02-3081"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q5-reply02-3081",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-02.json",
+            "sha256": "ded5231c27dab76146978e80a24d30d0898754c0dbdb575d67ed393636430a80"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R07",
+      "question_index": 6,
+      "object_ids": [
+        "relation:1292:465",
+        "relation:6037:3194"
+      ],
+      "summary": "泛指“这个计划”或“你的截图”且缺少具体内容时，不能据召回位置建立话题关联。",
+      "boundary": "#1292/#465及#6037/#3194的hate话题均无。这是不足以建立关联，不是证明它们实际指向不同事件。",
+      "source": "[原答 raw-replies-03.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-03.json)",
+      "source_event_ids": [
+        "relation-b01-q6-reply03-465",
+        "relation-b01-q6-reply03-3194"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q6-reply03-465",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-03.json",
+            "sha256": "5739abff33776603c43c23f976f253d19d492e172374131efe419810fe951e04"
+          }
+        },
+        {
+          "event_id": "relation-b01-q6-reply03-3194",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-03.json",
+            "sha256": "5739abff33776603c43c23f976f253d19d492e172374131efe419810fe951e04"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R08",
+      "question_index": 7,
+      "object_ids": [
+        "relation:5086:7248"
+      ],
+      "summary": "示例的语义话题相关与词典对查询的实际词形适配分别判断。",
+      "boundary": "#5086/#7248两项话题直接，但txl未出现在查询中，因此词典风险为可能引入；不以同义词自动满足词典出现标准。",
+      "source": "[原答 raw-replies-04.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-04.json)",
+      "source_event_ids": [
+        "relation-b01-q7-reply04-7248"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q7-reply04-7248",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-04.json",
+            "sha256": "e3b777ea02f0e8412afe7842ca983bbef8f721a46f94df06b1e1c971230fe8ef"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R09",
+      "question_index": 8,
+      "object_ids": [
+        "relation:3898:7319"
+      ],
+      "summary": "多义词已有适配义项时，正常列出的其他义项不自动构成词典风险。",
+      "boundary": "#3898/#7319的反黑词条有适配的种族语义；位置上的错义记录仍保留。",
+      "source": "[原答 raw-replies-05.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-05.json)",
+      "source_event_ids": [
+        "relation-b01-q8-reply05-7319"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q8-reply05-7319",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-05.json",
+            "sha256": "a24fe821a14205cba390d44c3b4a9564a43e27a80576d0d4958c3b7029289557"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R10",
+      "question_index": 9,
+      "object_ids": [
+        "relation:5086:127"
+      ],
+      "summary": "一般定义质量缺陷与当前配对中的词义不适配风险分开。",
+      "boundary": "#5086/#127实际都使用同性恋疾病污名义；本组词典风险未发现，原基佬、染艾定义的修订照常保留。",
+      "source": "[原答 raw-replies-06.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-06.json)",
+      "source_event_ids": [
+        "relation-b01-q9-reply06-127"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q9-reply06-127",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-06.json",
+            "sha256": "5e722d6399c2b402bdcd9dbbcaabbc5e694d17c17d2635f24b58b44b81848890"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R11",
+      "question_index": 10,
+      "object_ids": [
+        "relation:1746:867"
+      ],
+      "summary": "group规则直接不要求示例覆盖查询的完整类别；直接对应一个关键身份判断即可。",
+      "boundary": "#1746/#867为锚点，并促成#5086/#127的明确修订；仍不能仅按标签交集或宽泛负面概括自动判直接。具体传播至其他配对的结果仍为AI。",
+      "source": "[原答 raw-replies-07.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-07.json)、[原答 raw-replies-08.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-08.json)",
+      "source_event_ids": [
+        "relation-b01-q10-reply07-867",
+        "relation-b01-q0-group-amendment-01"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q10-reply07-867",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-07.json",
+            "sha256": "d5e958270aaf8445fdde9b3ca3e8dde04167ff22edd667d7fb3fb9945b0c6fd3"
+          }
+        },
+        {
+          "event_id": "relation-b01-q0-group-amendment-01",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-08.json",
+            "sha256": "66d28a29f540966cbe4e797b85295d4a3807d91d863d0b7563b4d84551e02149"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    },
+    {
+      "id": "R12",
+      "question_index": 11,
+      "object_ids": [
+        "relation:4137:6291"
+      ],
+      "summary": "只有部分身份主题对应时，group话题仍可为部分。",
+      "boundary": "#4137/#6291只有女权／女性维度对应；女同学不等于女同性恋。“关键规则可直接”不改写话题覆盖程度。",
+      "source": "[原答 raw-replies-07.json](/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/resource-reviews-v1/relations/batch-01/discussions/raw-replies-07.json)",
+      "source_event_ids": [
+        "relation-b01-q11-reply07-6291"
+      ],
+      "source_event_references": [
+        {
+          "event_id": "relation-b01-q11-reply07-6291",
+          "source": {
+            "path": "resource-reviews-v1/relations/batch-01/discussions/user-decisions-07.json",
+            "sha256": "d5e958270aaf8445fdde9b3ca3e8dde04167ff22edd667d7fb3fb9945b0c6fd3"
+          }
+        }
+      ],
+      "summary_provenance": "ai_summary_of_explicit_user_answers",
+      "applied_to_other_cases_provenance": "ai_note"
+    }
+  ],
+  "explicit_user_primary_questions_answered": 12,
+  "consistency_followups_answered": 1,
+  "explicitly_amended_fields": [
+    {
+      "object_id": "relation:5086:127",
+      "field": "rule_group",
+      "from": "partial",
+      "to": "direct",
+      "event_id": "relation-b01-q0-group-amendment-01"
+    }
+  ],
+  "unresolved_consistency_questions": [],
+  "note": "AI归纳引用实际字段事件；不将规则复用结果计为人工作答，不修改此前37组线上已确认关系。"
+}

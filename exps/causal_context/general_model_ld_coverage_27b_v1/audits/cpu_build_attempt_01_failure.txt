@@ -1,0 +1,25 @@
+CPU build attempt 01: failed before plan publication
+
+Command:
+env PYTHONPATH=src CUDA_VISIBLE_DEVICES='' /data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python scripts/stage1/general_model_coverage_replication.py build-plan --config config/stage1/general_model_ld_coverage_27b_v1.json
+
+Exit code: 1
+Tool session: 33308
+Last completed logged phase: hashing all registered model source files, including all 18 safetensors shards.
+Failure stage: tokenizer-specific CPU input package construction.
+No plan was published by this attempt. Validation was not started.
+No source edits, query-gold deserialization, or GPU model forward were performed by this attempt.
+
+Traceback (most recent call last):
+  File "/data/liaozijie/hate_speech_detection/scripts/stage1/general_model_coverage_replication.py", line 11, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_coverage_replication.py", line 345, in main
+    build_plan(args.config)
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_coverage_replication.py", line 160, in build_plan
+    contexts, catalog, inventory, eos, pad = build_contexts(
+                                             ^^^^^^^^^^^^^^^
+  File "/data/liaozijie/hate_speech_detection/src/diagnostics/general_model_coverage_replication_package.py", line 154, in build_contexts
+    raise PackageError(f"replication placebo construction failed: {qid}:{task}:{condition}")
+diagnostics.general_model_package.PackageError: replication placebo construction failed: 3072:group:PD
+[HAMI-core Msg(2:140141502598016:multiprocess_memory_limit.c:455)]: Calling exit handler 2

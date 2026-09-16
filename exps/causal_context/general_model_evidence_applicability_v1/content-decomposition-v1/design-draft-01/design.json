@@ -1,0 +1,202 @@
+{
+  "author": "assistant",
+  "case_3169": {
+    "cells": [
+      {
+        "condition": "G_H",
+        "content": "original discriminatory proposition/target with 嘿嘿 as group designation"
+      },
+      {
+        "condition": "G_E",
+        "content": "same proposition/target with explicit category designation replacing 嘿嘿"
+      },
+      {
+        "condition": "L_H",
+        "content": "personal insult with 嘿嘿 unambiguously functioning as laughter"
+      },
+      {
+        "condition": "L_O",
+        "content": "same personal insult with another ordinary laughter form"
+      }
+    ],
+    "comparisons_per_template": [
+      {
+        "name": "group_designation_substitution",
+        "terms": {
+          "G_E": -1,
+          "G_H": 1
+        }
+      },
+      {
+        "name": "ordinary_laughter_form_substitution",
+        "terms": {
+          "L_H": 1,
+          "L_O": -1
+        }
+      }
+    ],
+    "conditional_interpretation": {
+      "both_pairs_negative": "consistent with shared written-form association in both tested contexts; not proof of context-free token causation",
+      "group_pair_negative_laughter_pair_small_or_opposite": "prioritize context-dependent designation/interpretation",
+      "neither_pair_stable": "the prior D-minus-C signal may depend on other proposition/target/wording changes"
+    },
+    "design": "two_label_preserving_lexical_pairs_in_distinct_attack_contexts",
+    "illustrative_fragments_not_final_materials": {
+      "G_E": "被黑人玩过的…",
+      "G_H": "被嘿嘿玩过的…",
+      "L_H": "你这个蠢货，居然还嘿嘿地笑…",
+      "L_O": "你这个蠢货，居然还哈哈地笑…"
+    },
+    "limitations": [
+      "both contexts contain an attack; the design does not estimate attack presence versus absence",
+      "the substitutions differ across contexts, so their difference is not a pure factorial interaction",
+      "explicit designation may change clarity/offensiveness; review target/proposition/severity before eligibility",
+      "personal-insult groups may differ from the group-reference pair; only hate is held fixed",
+      "new non-attacking text with a non-hate reference must not inherit the old hate demonstration answer"
+    ],
+    "proposed_correct_and_presented_answer": "hate"
+  },
+  "case_541": {
+    "cells": [
+      {
+        "condition": "T0R0",
+        "content": "non-sexual affiliation + neutral event continuation"
+      },
+      {
+        "condition": "T1R0",
+        "content": "sexual-orientation affiliation + matched neutral continuation"
+      },
+      {
+        "condition": "T0R1",
+        "content": "non-sexual affiliation + reject individual-to-group generalization"
+      },
+      {
+        "condition": "T1R1",
+        "content": "sexual-orientation affiliation + same rule"
+      }
+    ],
+    "comparisons_per_template": [
+      {
+        "name": "rule_at_T0",
+        "terms": {
+          "T0R0": -1,
+          "T0R1": 1
+        }
+      },
+      {
+        "name": "rule_at_T1",
+        "terms": {
+          "T1R0": -1,
+          "T1R1": 1
+        }
+      },
+      {
+        "name": "topic_at_R0",
+        "terms": {
+          "T0R0": -1,
+          "T1R0": 1
+        }
+      },
+      {
+        "name": "topic_at_R1",
+        "terms": {
+          "T0R1": -1,
+          "T1R1": 1
+        }
+      },
+      {
+        "name": "topic_rule_interaction",
+        "terms": {
+          "T0R0": 1,
+          "T0R1": -1,
+          "T1R0": -1,
+          "T1R1": 1
+        }
+      }
+    ],
+    "controls": [
+      "same person/name, incident and stance within a template; no new insults",
+      "matched category mentions within each topic contrast; common wording skeleton",
+      "second template restates the rule with less lexical overlap with the query",
+      "R0 must not covertly contain the rule; removing a rule is not reversing it into a hateful claim"
+    ],
+    "design": "2x2_topic_by_explicit_countergeneralization",
+    "proposed_correct_and_presented_answer": "non-hate",
+    "rule_0": "neutral event description without explicit or implicit countergeneralization claim",
+    "rule_1": "author explicitly rejects extending evaluation of one individual to the entire group",
+    "topic_0": "a specified non-sexual affiliation such as a sports interest; retain category structure",
+    "topic_1": "sexual orientation identity"
+  },
+  "created_at": "2026-09-13T17:40:28.550920+00:00",
+  "material_preparation": {
+    "complete_texts_status": "not_yet_prepared",
+    "human_review_status": "not_started",
+    "label_change_handling": "exclude from primary label-preserving contrast or register a separate content-plus-answer intervention; never silently mislabel",
+    "position_and_length": [
+      "match complete prompt token count and demo/text/answer/query/generation anchors in each registered contrast",
+      "fix 541 slot 5 and 3169 slot 3; do not also swap neighbors",
+      "if the original token budget prevents natural materials, prepare a shared new budget and a separate original-to-new-background bridge",
+      "no padding with arbitrary repeated punctuation to assert semantic equivalence"
+    ],
+    "required_review_fields": [
+      "correct hate label",
+      "target/proposition and author stance",
+      "intended factor present/absent",
+      "naturalness and unintended change"
+    ],
+    "token_matching_status": "not_yet_checked"
+  },
+  "mechanism_ready": false,
+  "new_freeze_created": false,
+  "new_human_fields": 0,
+  "new_model_forward_executed": false,
+  "next_freeze_contents": [
+    "exact full texts, prompt bytes and token geometry",
+    "review receipts scoped to exact text hashes",
+    "conditions, baseline/bridge choices and comparison coefficients",
+    "three score groups, new-condition probes, numerical gates and interpretation rules"
+  ],
+  "old_pointers_modified": false,
+  "parent_result_plan_id": "evidence-label-calibration-001348b321155b1671c359cfab6cdcdb37bd460aadd81b2c13df4233e8cc5656",
+  "schema_version": "evidence-content-decomposition-design-draft/v1",
+  "scope": {
+    "case_3169_slot": 3,
+    "case_3169_target_demo": "3660",
+    "case_541_slot": 5,
+    "case_541_target_demo": "826",
+    "cases": [
+      "541/hate",
+      "3169/hate"
+    ],
+    "distinct_new_text_count": "pending; reused exact historical texts are not new human adjudications",
+    "main_condition_slots": 16,
+    "new_query_controls": "subsequent separate phase with new IDs, independent references and freeze",
+    "primary_background": "original R background, fixed query/dictionary and other demos",
+    "primary_comparisons_before_bridges": 14,
+    "template_families_per_case": 2
+  },
+  "scoring": {
+    "AB": "both existing mappings separately; do not choose one from previous prediction counts",
+    "classification_reported_separately": true,
+    "epsilon_and_propagation": "inherit existing numeric policy; pair/interaction bounds follow coefficient L1 norm",
+    "main_variable": "score(non-hate)-score(hate), interpreted within each score view",
+    "ncc": "same full-label formula and five probes, recomputed per new condition; retain background/residual/single/leave-one-out",
+    "original_auxiliary": "answer_mean and both EOS modes",
+    "original_primary": "answer_sum",
+    "probe_and_mapping_policy_changes_in_this_phase": false,
+    "retain_three_groups": true
+  },
+  "source_files": {
+    "exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/preferences/preferences.md": "1321c52dae01bb27cc8326d030c710698b9ea5f832d4ba490656406651c88496",
+    "exps/causal_context/general_model_evidence_applicability_v1/ai_reviews/v2-reannotation-20260911/preferences/snapshots/cf158ae3d22aadf1bff45ff5398c3de415c16fc02963f18d0fdc7918f3aa5ed1/preferences.json": "23ebb7c11d657fcb3dba1f6d1a77aba76061ba6e06390a204c7c2957d732fc01",
+    "exps/causal_context/general_model_evidence_applicability_v1/label-calibration-results-v1/INTERPRETATION.md": "aa693d36b9e53d61e1428c3e9714a68985a57ba7e6af32665ad512b2943b5aed",
+    "exps/causal_context/general_model_evidence_applicability_v1/label-calibration-results-v1/current.json": "5c9332e38b56363d1b0e6f0b817ae7e12766dc56e5aaa92009a979906662c38a",
+    "exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260914/label-calibration-v1/frozen-01/analysis_protocol.json": "801478caba2e0ee2ea7efd3d372d8aa6d7a8f8287e4352216c74d4187f9fc2cf",
+    "exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260914/label-calibration-v1/frozen-01/geometry.jsonl": "98f4c2637364d2f1b1b0ba4664e83faccb3bd7541ea4fa29066c195a19de1f85",
+    "exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260914/label-calibration-v1/frozen-01/manifest.json": "8b5f0137a739b4147d11c3350d197a55a720b5f74eb868dc54554aa9bcaddaa9",
+    "exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260914/label-calibration-v1/results-01/comparison-summary.jsonl": "b555d7ef6ef4c68fe13237c3e9bad207c9ff931e3dd37c9bd9f05ebe8bc26407",
+    "exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260914/label-calibration-v1/results-01/manifest.json": "881ef3fbc06a19b3a47f5e2576c79042a54a69b357dee75ed2dc48aa6497fb12"
+  },
+  "status": "design_draft_not_executable",
+  "user_request": "现在开始下一步内容拆分，请跟我说说应该怎么做"
+}

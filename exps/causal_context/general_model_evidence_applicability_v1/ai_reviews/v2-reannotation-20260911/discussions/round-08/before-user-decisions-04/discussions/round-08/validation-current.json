@@ -1,0 +1,41 @@
+{
+  "schema_version": "evidence-expanded-round-validation/v1",
+  "recorded_at_utc": "2026-09-11T12:36:59.903450+00:00",
+  "result": "passed",
+  "review_round": 8,
+  "stage": "current_partial_or_final_discussion",
+  "object_count": 30,
+  "discussion_case_count": 3,
+  "explicit_user_field_counts": {
+    "hate": 3,
+    "group": 7,
+    "attack_severity": 10
+  },
+  "source_exports": [
+    {
+      "path": "discussions/round-08/review.json",
+      "sha256": "688a4b72df74d046637f20a409f5492a8db7b75b549f4f63a496472b1d2f9372"
+    },
+    {
+      "path": "discussions/round-08/review.csv",
+      "sha256": "e1157a098dbea4acff5ff3f767027dee05ed2555005f812e5fcb801e4d0ea250"
+    },
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "571926ababd87fa9064042de685fa8d22435bf547692d4e95f096b7e28d3be71"
+    }
+  ],
+  "preference_snapshot": {
+    "path": "preferences/snapshots/67f52f0bb542bffb2eb511d72b045eabe01943a4e91ad6e76aa3f34bcec183f3/preferences.json",
+    "sha256": "1d5051c5b14a6058d493e2e2a6cfcd9160787d4f3e2d89f5a458a7a51a51e037"
+  },
+  "checks": [
+    "All 30 IDs/texts/evidence spans/versions match the authorized frozen label input; 28 queries and two demos.",
+    "Current JSON and CSV agree; 0/non-hate, 1–4/hate and null/null mapping is exact.",
+    "Separate human field scopes and online-confirmation flags are preserved.",
+    "Each new case refers only to existing preference rule cards and explicit human anchors; old snapshot is bound by hash.",
+    "Frozen bundle, manifest, rules and previous round exports/calibration hashes are preserved; prior master bytes are archived.",
+    "The round exporter rejects a changed preference snapshot before touching output, verified with an isolated fixture."
+  ],
+  "online_material_confirmations_added": 0
+}

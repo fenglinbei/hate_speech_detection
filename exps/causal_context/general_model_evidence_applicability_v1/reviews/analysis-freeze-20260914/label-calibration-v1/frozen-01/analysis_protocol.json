@@ -1,0 +1,104 @@
+{
+  "ab_geometry": "forward/reverse share full token layout; bridge to original changes instruction and label lengths, recorded separately",
+  "ab_mapping_gap": "forward semantic answer_sum margin minus reverse; auxiliary sensitivity measure",
+  "ab_symmetric": "(forward semantic answer_sum margin + reverse semantic answer_sum margin)/2; auxiliary, both components mandatory",
+  "author": "assistant",
+  "authorization": {
+    "scope": "three parallel score groups on existing 36 inputs; five background probes; two A/B mappings; freeze, test, run and analyze",
+    "user_verbatim": "请帮我按这个顺序执行，弄一组新的结果，其中若有任何需要冻结项可以询问我"
+  },
+  "background_unit": "per condition, never one shared prior across all conditions",
+  "groups": [
+    "original_full_label_sum_and_mean",
+    "original_full_label_NCC",
+    "AB_forward_and_reverse"
+  ],
+  "interpretation": [
+    "Compare sign, prediction and probe/mapping stability across score groups; scales differ.",
+    "Retain original, background and residual contrasts so prompt effects on priors remain visible.",
+    "Two exposed discovery cases; 64 contrasts are not independent samples.",
+    "Preserve position partner bridge, two-example swap and wording/length confounds from parent.",
+    "NCC correction is not evidence of a correct annotation or a purely semantic causal effect.",
+    "No new semantic materials, human field decisions or activation-patching readiness."
+  ],
+  "mapping_scope": "system output instruction, every demonstration answer, complete output candidates; preserve other bytes",
+  "mappings": {
+    "ab_forward": {
+      "hate": "A",
+      "non-hate": "B"
+    },
+    "ab_reverse": {
+      "hate": "B",
+      "non-hate": "A"
+    },
+    "original": {
+      "hate": "hate",
+      "non-hate": "non-hate"
+    }
+  },
+  "mechanism_ready": false,
+  "ncc_base_score": "answer_mean",
+  "ncc_steps": [
+    "s_y = sum(log p(each token of complete JSON label including quotes)) / number of label tokens; EOS excluded",
+    "q_y = exp(s_y) / sum(exp(s_k)) for each real or probe prompt",
+    "pi_y(c) = arithmetic mean of q_y over the five frozen probes within the same condition c",
+    "q_cal_y = (q_real_y / pi_y) / sum(q_real_k / pi_k)",
+    "NCC margin = log(q_cal_non_hate / q_cal_hate) = original mean margin - log(pi_non_hate/pi_hate)"
+  ],
+  "new_human_fields": 0,
+  "numeric_policy": {
+    "background_error_bound": "epsilon",
+    "base_epsilon": 0.0013427734375,
+    "contrast_bound": "per_margin_bound*sum(abs(coefficients))",
+    "derivation": "B=logit(mean(sigmoid(m_j))) is 1-Lipschitz in sup norm: sum derivatives = mean(p_j*(1-p_j))/(pbar*(1-pbar)) <= 1",
+    "ncc_margin_error_bound": "2*epsilon",
+    "raw_margin_error_bound": "epsilon",
+    "unresolved": "abs(value)<=bound; numerical stability threshold, not statistical significance"
+  },
+  "prediction": "argmax complete semantic candidates; exact tie selects semantic ordinal 0 (hate), flag tie separately",
+  "primary_original_and_ab_score": "answer_sum",
+  "probe_diagnostics": "all five individual-probe calibrations and five leave-one-out means; same 64 contrasts; no probe selection after scoring",
+  "probe_replacement": "replace only query JSON string; retain each condition dictionary, demonstration texts/answers, order and system; no retrieval rerun",
+  "probes": [
+    {
+      "id": "empty",
+      "query_json": "\"\"",
+      "text": ""
+    },
+    {
+      "id": "space",
+      "query_json": "\" \"",
+      "text": " "
+    },
+    {
+      "id": "na",
+      "query_json": "\"N/A\"",
+      "text": "N/A"
+    },
+    {
+      "id": "mask",
+      "query_json": "\"[MASK]\"",
+      "text": "[MASK]"
+    },
+    {
+      "id": "lorem",
+      "query_json": "\"Lorem ipsum\"",
+      "text": "Lorem ipsum"
+    }
+  ],
+  "references": "copy immutable parent reference bytes; load only after all raw and NCC gates pass and raw scores are sealed",
+  "schema_version": "evidence-label-calibration-protocol/v1",
+  "score_modes": [
+    "answer_sum",
+    "answer_mean",
+    "total_with_eos",
+    "mean_with_eos"
+  ],
+  "source_method": {
+    "implementation_status": "explicit local normalize-then-average specification; not claimed bit-identical to unavailable author code",
+    "method": "NCC",
+    "title": "Mitigating Label Length Bias in Large Language Models",
+    "url": "https://aclanthology.org/2025.ijcnlp-long.78/"
+  },
+  "status": "frozen_before_new_scores"
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "local-explicit-sentence-followup-ai/v1",
+  "records": [
+    {
+      "object_id": "query:4137",
+      "text_sha256": "76aa960f1eb35b9f0c49e384bfd90d01c682e43b35c70a748c1940bc03128c97",
+      "scope": [
+        "attack_severity"
+      ],
+      "values": {
+        "attack_severity": 0
+      },
+      "proposal": {
+        "attack_severity": 0
+      },
+      "status": {
+        "attack_severity": "ai_scored"
+      },
+      "assessment_provenance": "ai_note",
+      "rationale": "用户确认女圈在此按女权理解，并另要求词条标注相应语境中的贬损义；句子联动复核明确判 0：仅描述成员构成，没有具体攻击命题。更新旧 AI 的“女性圈子”解释，保留本句 0 级，hate 按默认映射为 non-hate。LGBTQ、Sexism 仍为既有 AI 类别，未新增用户 group 裁决。",
+      "rule_ids": [
+        "P08",
+        "P19",
+        "P23"
+      ],
+      "quotes": [
+        "女圈",
+        "有不少女同"
+      ],
+      "attack_forms": [],
+      "online_material_confirmed": false,
+      "draft_prepared_after_reply": true,
+      "pre_reply_proposal_source": {
+        "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/female-circle-sentence-question.json",
+        "sha256": "1d12bcc59e421e68b860696f0c8cc886a8e69d52a136066ee8d721a1fbefc830"
+      },
+      "reopen_reason": "新词义依据使旧 AI 中性女性圈子的解释需复查；用户对严重度作出独立裁定。",
+      "reopen_authorization": {
+        "path": "resource-reviews-v1/hits/batch-01/consistency-rechecks/female-circle-sentence-raw-reply.json",
+        "sha256": "4c3613eed960d4a465cba88a89e6d142c926857493f12408835cc999d3857cd1"
+      },
+      "prior_human_score": false
+    }
+  ],
+  "provenance_note": "结构化说明在答复后生成；问题中 0 与 1 的候选及旧 0 级依据预先保存，不声称独立盲标。"
+}

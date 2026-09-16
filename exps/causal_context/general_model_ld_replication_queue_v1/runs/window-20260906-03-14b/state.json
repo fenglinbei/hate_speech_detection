@@ -1,0 +1,55 @@
+{
+  "created_at": "2026-09-06T12:12:04.553374+00:00",
+  "error": "deadline watchdog unexpectedly exited during a job",
+  "error_type": "RuntimeError",
+  "finished_at": "2026-09-06T14:36:06.533137+00:00",
+  "jobs": {
+    "14b-dev": {
+      "status": "queued"
+    },
+    "14b-preflight": {
+      "command": [
+        "/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python",
+        "scripts/stage1/general_model_coverage_replication.py",
+        "preflight",
+        "--plan",
+        "exps/causal_context/general_model_ld_coverage_14b_v1/plan_ref.json",
+        "--output",
+        "exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01"
+      ],
+      "log_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_replication_queue_v1/runs/window-20260906-03-14b/logs/14b-preflight.log",
+      "process": {
+        "pgid": 2539956,
+        "pid": 2539956,
+        "ppid": 2539952,
+        "sid": 2539956,
+        "start_ticks": 340504898,
+        "state": "R"
+      },
+      "started_at": "2026-09-06T12:12:04.657486+00:00",
+      "status": "running"
+    }
+  },
+  "phase": "14b-preflight-resume",
+  "schema_version": "general-model-gpu-queue/v1",
+  "source_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_replication_queue_v1/runs/window-20260906-03-14b/queue_source.py",
+  "source_sha256": "59f969cad8d58bdea817b2dd9d5a01f5de67396237d30931272f3a652272bd3a",
+  "status": "failed",
+  "supervisor": {
+    "pgid": 2539952,
+    "pid": 2539952,
+    "ppid": 2539936,
+    "sid": 2539952,
+    "start_ticks": 340504888,
+    "state": "R"
+  },
+  "wait_reason": null,
+  "watchdog": {
+    "pgid": 2539951,
+    "pid": 2539951,
+    "ppid": 2539936,
+    "sid": 2539951,
+    "start_ticks": 340504888,
+    "state": "R"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schema_version": "evidence-consistency-notes/v1",
+  "notes": [
+    {
+      "id": "C01",
+      "status": "已知政策变化",
+      "case_ids": [
+        "demo:1240",
+        "demo:4392"
+      ],
+      "rule_ids": [
+        "P01",
+        "P02",
+        "P22"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#1240 早期采用 non-hate / []；后续当前映射可由 AI 严重度 1 得到 hate。",
+      "handling": "差异来自用户后来批准的映射，不能写成用户重新裁定 #1240。旧 group 也保留原政策身份。"
+    },
+    {
+      "id": "C02",
+      "status": "用户补充同一对象条件，并明确修订旧例",
+      "case_ids": [
+        "demo:5615",
+        "query:5423",
+        "demo:3742",
+        "demo:7927",
+        "demo:4392",
+        "demo:4810",
+        "demo:2750"
+      ],
+      "rule_ids": [
+        "P02",
+        "P18",
+        "P22",
+        "P24"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "用户先提出种族＋个人优先仅种族；在#3742复核中明确仅当受话者是黑人且个人时适用。#3742、#7927个人攻击对象独立；#4392政治身份独立；#4810另有身份依据，因此均保留others。",
+      "handling": "已提示#5423旧仅Racism与新条件可能冲突，用户明确修订为Racism、others，原2级不变。旧人工group与新值均保留并显式关联；#1746过宽AI合并撤回。#2750等无同一黑人受话者证据的AI复核保留others，不冒充新人工裁决。"
+    },
+    {
+      "id": "C03",
+      "status": "可区分的命题边界",
+      "case_ids": [
+        "demo:924",
+        "query:2011",
+        "demo:2750",
+        "demo:877"
+      ],
+      "rule_ids": [
+        "P12",
+        "P14",
+        "P15",
+        "P16"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#924 含基因表述定 2；#2011 有智力、开化比较也明确判 hate／2／Racism；#2750 垃圾原材料影射定 3；#877 优势地位定 1。",
+      "handling": "不以基因、智商、开化或优势等单词机械升级。#2011 未给解释，因此与“本性低等”的细分边界仍属 AI 归纳；遇到更接近的句子继续对照，不自行改写旧分数。"
+    },
+    {
+      "id": "C04",
+      "status": "用户已区分的自我描述",
+      "case_ids": [
+        "demo:4392",
+        "query:4080",
+        "demo:857"
+      ],
+      "rule_ids": [
+        "P08",
+        "P09",
+        "P19"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#4392 自称包含实际冒犯词被判 1；#4080 自称河南回族处于互联网最底层，被明确判为自嘲处境、未认可身份贬低（0）。",
+      "handling": "按实际用词与所表达的立场区别，不按第一人称统一归 0 或 1。#4080 的 group 仍为 AI 草稿。"
+    },
+    {
+      "id": "C05",
+      "status": "用户已区分的作者立场",
+      "case_ids": [
+        "demo:986",
+        "demo:996",
+        "demo:7232"
+      ],
+      "rule_ids": [
+        "P08",
+        "P09",
+        "P15"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#986 的末句被明确判为作者认可群体污名（2）；#996 被明确判为描述社会处境（0）。此前 #7232 是罗列并反感偏见（0）。",
+      "handling": "按各句作者实际立场区分，未发现需要覆盖旧决定的冲突。仅给分数的 #986／#996 不额外计作 group 裁决。"
+    },
+    {
+      "id": "C06",
+      "status": "本轮校准了词语使用边界",
+      "case_ids": [
+        "demo:3212",
+        "demo:3372",
+        "demo:6074",
+        "query:4189"
+      ],
+      "rule_ids": [
+        "P05",
+        "P08",
+        "P10",
+        "P19"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#3212 的混迹在网络被用户定1；#3372只谈梗定0，与#6074、#4189的无具体攻击/行为批评边界一致。",
+      "handling": "#3372 当前由严重度0映射non-hate；旧hate来自AI，未覆盖旧人工hate。差别有具体措辞与命题依据，不列为用户自相矛盾。"
+    },
+    {
+      "id": "C07",
+      "status": "一般动物骂词与3级的细分边界",
+      "case_ids": [
+        "demo:2685",
+        "demo:3519",
+        "demo:4810",
+        "demo:3845",
+        "demo:2750"
+      ],
+      "rule_ids": [
+        "P15",
+        "P16"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#2685的🐶、#3519的÷生被明确定为2级个人侮辱；#3845的身份动物称谓和#2750垃圾原材料影射仍是3。",
+      "handling": "修正AI按单个动物词直接升3的倾向；一般个人骂词与身份低等影射的区分是当前案例归纳，未获所有动物用词统一规则。遇到更接近的例句继续提示边界。"
+    },
+    {
+      "id": "C08",
+      "status": "已明确补齐长期待定严重度",
+      "case_ids": [
+        "demo:1509",
+        "demo:2004"
+      ],
+      "rule_ids": [
+        "P11",
+        "P20"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "两例原先已有人工hate/group，严重度因未知词或星号而待定；用户现均明确补定2。",
+      "handling": "保存旧null和词义未明的记录，当前严重度与hate映射已完整；不得把新评分解释成老g释义已获查证。"
+    },
+    {
+      "id": "C09",
+      "status": "批评论点与能力辱骂分界",
+      "case_ids": [
+        "demo:2075",
+        "demo:2517",
+        "demo:309",
+        "demo:3585"
+      ],
+      "rule_ids": [
+        "P05",
+        "P14",
+        "P15"
+      ],
+      "assessment_provenance": "ai_note",
+      "observation": "#2075只批评论点为0；#2517明确轻度能力贬评为1，与#309同档；#3585没脊椎没脑子为2。",
+      "handling": "避免见到不懂就追加others或见到能力词就定2；按语境区分论点批评、轻度贬评、明确个人侮辱。"
+    }
+  ]
+}

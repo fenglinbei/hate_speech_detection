@@ -1,0 +1,25 @@
+# 当前严重度到 hate 的默认映射
+
+用户已接受暂行映射：0→non-hate，1–4→hate，null→null。仅活动分值参与映射；旧标签及裁决保留各自政策。
+
+共 180 条：1 条与现有标签层不同，12 条因分数待定无法映射。规则生成的 hate 不新增用户直接裁决。
+
+[JSON](ai_annotations.json) · [CSV](ai_annotations.csv)
+
+## 与现有标签层的差异
+
+- demo:1240：旧值 non-hate（user_discussion）；分数 1 → 当前 hate（rule_mapping_from_ai_score）。
+- demo:1509：旧值 hate（user_discussion）；分数 None → 当前 None（unresolved_severity）。
+- demo:2004：旧值 hate（user_discussion）；分数 None → 当前 None（unresolved_severity）。
+- demo:6469：旧值 hate（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:6631：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:7189：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:7232：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:7464：旧值 hate（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:7545：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:7910：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:857：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:877：旧值 None（ai_note）；分数 None → 当前 None（unresolved_severity）。
+- demo:924：旧值 hate（ai_note）；分数 None → 当前 None（unresolved_severity）。
+
+#4392 的 non-hate 草稿已由用户明确改为 hate，裁决前稿另存于第四批归档；此处与其最新明确裁决对照。其他差异只来自默认映射，没有重写旧裁决。

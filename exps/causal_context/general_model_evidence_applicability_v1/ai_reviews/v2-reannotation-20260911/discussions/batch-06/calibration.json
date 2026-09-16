@@ -1,0 +1,286 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 6,
+  "recorded_at_utc": "2026-09-11T10:35:28.286210+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "task_policies": {
+    "hate_reference": {
+      "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+      "version": "evidence-applicability-annotation-policy/v2"
+    },
+    "current_hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    },
+    "attack_severity": {
+      "version": "evidence-attack-severity-policy/v1",
+      "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "policies/personal-insult-others-v1.json",
+      "sha256": "c26d8033917756cad68fbf68473afd7e7b6ac22eb591e40255ba091d05bc38c8"
+    },
+    {
+      "path": "policies/severity-hate-default-mapping-v1.json",
+      "sha256": "b84a3acf37659291bb75a98db221a2bf8fcc2e612d41c877e5daeceae3838879"
+    },
+    {
+      "path": "severity/pilot-01/calibration-summary.json",
+      "sha256": "c6048311a0bba011da6544a035732eba7df06f025ec125f307c0f866eef8b14b"
+    },
+    {
+      "path": "severity/batch-05/calibration-summary.json",
+      "sha256": "83ed9ad03556d359c0a402636100a6219e0fbfeffcba16b999ba0f2794dfbfb0"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    },
+    {
+      "path": "discussions/batch-02/user-decisions-01.json",
+      "sha256": "d0448387ebda0d7bde30541382705a3e09f83b64c3897a0f499f6337c2ed6652"
+    },
+    {
+      "path": "discussions/batch-03/user-decisions-01.json",
+      "sha256": "e491c5eabb27b2009d21c4b1f645cca776644d7961b4a5f5b537d60adac6a6f8"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-01.json",
+      "sha256": "691014f254f4af0c35f3e68999c48c16c5ce8ac539fab3c1c45da7101a89e9db"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-02.json",
+      "sha256": "5c58dc695af91b4c8a03e7078f7afe7f3b1e4fb926fd15ec3e1c5ffb0e3c30d9"
+    },
+    {
+      "path": "discussions/batch-05/user-decisions-01.json",
+      "sha256": "f90182e625cb87373177a00e892af92e6871ba10ecd1b031f0fd0ed75b5eee7a"
+    }
+  ],
+  "initial_generation": true,
+  "pre_calibration_annotation_sha256": null,
+  "post_calibration_annotation_sha256": "db5bd87d5eeccc87900ed9369033015a41ad7ca394d89dbab6dadeaa95be0d59",
+  "method": "First batch-06 draft directly applies current local supplements and explicit human case anchors. No earlier batch-06 annotations existed. All 30 safe source texts were read.",
+  "original_answer_exposure": "No original answers or predictions read by annotator. Programmatic source-answer comparisons run only after this saved draft.",
+  "dictionary_exposure": {
+    "kind": "unreviewed_sense_candidate_not_human_adjudication",
+    "term": "阿娜",
+    "source_definition_id": "definition:lex-0449:sense:01",
+    "definition_sha256": null,
+    "source_paths": [
+      {
+        "path": "inputs/definitions.jsonl",
+        "sha256": "2514e38e2c54660364ebe5ec803d1793fba9781c714efc043c4d29f12bddfbd5"
+      }
+    ],
+    "use": "Female-slur reading retained only as a discussion candidate; not treated as evidence that the reading applies to this sentence."
+  },
+  "external_sense_checks": [
+    {
+      "term": "上大人",
+      "queries": [
+        "\"上大人\" site:shu.edu.cn"
+      ],
+      "sources": [
+        {
+          "title": "《百年上大画传》—上海大学档案馆",
+          "url": "https://dangan.shu.edu.cn/info/2541/20896.htm",
+          "finding": "校方以“上大人”称学校共同体成员；仅用于词义线索，不决定本句褒贬。"
+        }
+      ]
+    },
+    {
+      "term": "默",
+      "queries": [
+        "\"默\" \"黑人\" 谐音"
+      ],
+      "sources": [
+        {
+          "title": "公开使用者关于默字的讨论",
+          "url": "https://www.reddit.com/r/chonglangTV/comments/qiwoqw",
+          "finding": "讨论中使用者明确以“默（黑犬）”描述中国网络的黑人贬称；仅采纳词语使用证据，不采纳其他评论观点。"
+        }
+      ]
+    },
+    {
+      "term": "阿娜",
+      "queries": [
+        "\"阿娜\" \"称呼\" 网络",
+        "\"鬼母阿娜\" \"称呼\"",
+        "\"阿娜\" \"孙吧\"",
+        "鬼母阿娜",
+        "阿娜 魔兽 女性 贬义",
+        "\"Ana-Mouz\" site:worldofwarcraft.blizzard.com"
+      ],
+      "sources": [
+        {
+          "title": "Monstruosidades Liberadas: detalhes sobre os Chefes de Mundo — Blizzard",
+          "url": "https://worldofwarcraft.blizzard.com/pt-br/news/20307794",
+          "finding": "官方介绍可确认 Ana-Mouz 游戏角色存在；不能据此确认阿娜在本句用于辱女。"
+        },
+        {
+          "title": "魔兽世界鬼母阿娜在哪 — 3DM",
+          "url": "https://ol.3dmgame.com/gl/190713.html",
+          "finding": "游戏说明使用中文角色名鬼母阿娜。没有验证词典所述社会贬称义或本句的适配。"
+        }
+      ],
+      "finding": "未检得足以确认本句性别隐语的可靠使用证据，保留待定。"
+    }
+  ],
+  "case_notes": [
+    {
+      "object_id": "demo:5690",
+      "note": "以性取向贬称称呼具体账号使用者，并讥笑其急切表现，拟 1／LGBTQ、others。#5615 的仅 Racism 是明确个案，未据此撤销仍有效的个人辱骂增补。"
+    },
+    {
+      "object_id": "demo:5708",
+      "note": "以同性恋谐称把对象叫作怪物，按明确非人称谓取 3／LGBTQ、others。未见对词语本身的释义或无害引用。"
+    },
+    {
+      "object_id": "demo:5713",
+      "note": "把黑人后代视为不受欢迎的同国籍成员，并作种族性的文明、道德与素质高低比较，拟 3／Racism。差异明确落在同一国籍内部的种族，不机械补 Region。"
+    },
+    {
+      "object_id": "demo:5734",
+      "note": "作者自行贬损黑人外貌，并辱骂赞美他们的评论者；又实际比较不同国别、种族的待遇，拟 2／Racism、Region、others。无女性角色证据，不补 Sexism。"
+    },
+    {
+      "object_id": "demo:5780",
+      "note": "未展示要反复提起的事件或梗的内容，可见文字没有具体攻击；沿用 #3194、#4744 的证据范围，取 0／[]。"
+    },
+    {
+      "object_id": "demo:5784",
+      "note": "概括与黑人交往的女性无知、崇外，并比较她们对中外伴侣的要求，拟轻度 1／Racism、Region、Sexism。这里是婚恋中的实际国别比较，有别于 #4810 的政治背景提及。"
+    },
+    {
+      "object_id": "demo:5788",
+      "note": "明确把黑人与艾滋病相连，并以垃圾渣滓辱骂被指乱搞的外国人，拟 2／Racism、Region。泛用骂词未像 #2750 一样建立材料本质低等类比；未见独立个人对象，不额外加 others。"
+    },
+    {
+      "object_id": "demo:5819",
+      "note": "直接邀请组队猎杀两个被身份贬称指代的人群，拟 4／Racism、Sexism。“默”的黑犬拆字及黑人贬称用法有外部实例；未见虚构游戏目标或反驳引用语境。"
+    },
+    {
+      "object_id": "demo:5855",
+      "note": "反讽表面断言的实际含义是两地也有同性恋，没有从该推论得到新的污名命题，拟 0／Region、LGBTQ。按 #5416 的方法检查实际含义，不因反讽形式单独赋分。"
+    },
+    {
+      "object_id": "demo:5865",
+      "note": "“被洗脑的傀儡”若指具体人或态度人群，可按明确侮辱取 2／others；若整体仍只批评抽象资本或制度，依 #2598、#2701 应取 0／[]。倾向前者；省略对象及完整 group 待讨论，不只因“犹资”补 Racism。"
+    },
+    {
+      "object_id": "demo:5868",
+      "note": "为东北居民辩护，并描述家乡文化自信；“不太自信”在这里没有人格羞辱或歧视命题，拟 0／Region。"
+    },
+    {
+      "object_id": "demo:5900",
+      "note": "肤色和国家归属实际参与比较，group 拟 Racism、Region。争点是借“小国、被统治”显示优越感的轻度贬损（1），还是仅陈述所理解的差异（0）；缺少被比较的前文，倾向 1，不核实或背书其历史断言。"
+    },
+    {
+      "object_id": "demo:5919",
+      "note": "对受话者有轻度贬评，LGBTQ 也明确参与好恶争论；group 拟 LGBTQ、others。分数倾向 1；是否已构成更强污名（2）或否定平等异议权利（3）待校准，不仅凭“权利”一词直接升 3。"
+    },
+    {
+      "object_id": "demo:5924",
+      "note": "反复把同性恋概括为不知悔改、混乱并染病，拟 2；异性恋也作为比较单位，保留 LGBTQ、others。参照 #5416 的疾病污名而非只看是否显式骂词。"
+    },
+    {
+      "object_id": "demo:5998",
+      "note": "有对对象能力的嘲讽。阿娜可能是特定人的称呼，也可能按未确认词典义项借游戏角色辱女；外部检索只证实角色存在，未证实本句女性义适配。分数候选 1／2／3，倾向 1；group 在 others 与 Sexism、others 间待定。"
+    },
+    {
+      "object_id": "demo:6006",
+      "note": "质疑对男女跨种族关系的双重标准，未另外认可种族污名或个人辱骂，拟 0／Racism、Sexism。“黑哥”等称呼在此没有独立可识别的攻击语气。"
+    },
+    {
+      "object_id": "demo:6035",
+      "note": "“上大人”有上海大学成员的直接使用证据；当前按学校身份取 others，不按学校名称补 Region。“你这样”的具体性质缺失，当前文字没有明确贬损命题，沿用 #4744 取 0。"
+    },
+    {
+      "object_id": "demo:6074",
+      "note": "可能讽刺女权资格或群体双标（轻度 1），也可能只在讨论成员立场、使用网络梗（0）。没有说出被开除的原因，倾向 1，但不凭“开除”推成基本权利排斥；group 拟 Sexism。"
+    },
+    {
+      "object_id": "demo:6083",
+      "note": "对性少数权益参与者作政治代理、淫乱和疾病污名，拟 2／LGBTQ、others。others 对应实际被评价的政治代理角色；“淫虫上脑”是欲望污名，没有单凭虫字或代词升级为非人化。"
+    },
+    {
+      "object_id": "demo:6114",
+      "note": "用猴与香蕉把越南伴侣动物化，并羞辱受话者、比较男女婚恋身份，拟 3／Region、Sexism、others。参照用户 #528 对国民动物辱称的类别处理，不单由越南国籍或动物词额外推出 Racism。"
+    },
+    {
+      "object_id": "demo:615",
+      "note": "中性描述删帖，不含攻击或身份评价，取 0／[]。"
+    },
+    {
+      "object_id": "demo:6183",
+      "note": "可见文本仅叙述某 ID 支持黑人；黑人是支持态度的明确对象，取 Racism，拟 0。“爱狗人士”只是所述 ID，不能据并列提及自行补出黑人是狗的攻击命题。"
+    },
+    {
+      "object_id": "demo:6224",
+      "note": "反驳地位、学历、职业和年龄的思维刻板印象，拟 0／others。虽谈地域偏见，却未给出实际地域人群对象，不机械加 Region；反问中的鼠目寸光不算作者认可的攻击。"
+    },
+    {
+      "object_id": "demo:6263",
+      "note": "八国国民与天津居民构成地域对象。句子可能只是区分居民伤亡与城市存续（0），也可能在轻描淡写、讥讽居民伤亡（1）；倾向 0。可见文本没有明确赞许或号召杀戮，不按消灭一词直接定 4。"
+    },
+    {
+      "object_id": "demo:6282",
+      "note": "把印巴人种概括成因体味而无法接近，拟 2／Racism。外貌赞美不消除后面的身体污名；香港、伊斯坦布尔仅为旅行背景，未另加 Region。"
+    },
+    {
+      "object_id": "demo:6291",
+      "note": "为女性同学辩护，否认自己见到被指控的女拳行为；当前没有另行攻击女性或个人，拟 0／Sexism。不从被否定的词组反推作者认可辱骂。"
+    },
+    {
+      "object_id": "demo:6307",
+      "note": "明确反对地域歧视并质疑带节奏行为，没有独立辱骂，取 0／Region。"
+    },
+    {
+      "object_id": "demo:6413",
+      "note": "描述事件时使用女性、社会角色与个人的贬称，并作女性压制男性的泛化，拟 2／Sexism、others。鲨光男人是被批评的引文；忍耐中爆发未明确认可身体暴力，不据两处词面升 4。事件真伪不作为本次赋分依据。"
+    },
+    {
+      "object_id": "demo:6442",
+      "note": "可见文字只说社会爱护女性，语气符号不足以补出女性特权或其他攻击命题；参照用户对不完整上下文的处理取 0／Sexism。"
+    },
+    {
+      "object_id": "demo:6458",
+      "note": "以个人遭遇为河南居民的整体负面声誉背书，并否定辩护空间，拟 2／Region。有明确地方群体和骗的负面属性，不沿用 #4744 的空目标处理。"
+    }
+  ],
+  "pending_ids": [
+    "demo:5865",
+    "demo:5900",
+    "demo:5919",
+    "demo:5998",
+    "demo:6074",
+    "demo:6263"
+  ],
+  "case_scope_limits": [
+    "#5615 explicit Racism-only decision is not applied as a universal override of the personal-insult-others supplement.",
+    "#5416 actual stigmatizing implication is used as an interpretive example; other irony is evaluated on its own implication.",
+    "#528 supports Region for a national-origin animal slur; the animal token alone is not used to add Racism to #6114."
+  ]
+}

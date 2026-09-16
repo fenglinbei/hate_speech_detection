@@ -1,0 +1,59 @@
+{
+  "schema_version": "coverage-replication-window-close-acceptance/v1",
+  "window_date_local": "2026-09-06",
+  "timezone": "Asia/Shanghai",
+  "hard_deadline_utc": "2026-09-06T02:00:00Z",
+  "queue_status": "stopped",
+  "watchdog_released_at_utc": "2026-09-06T01:55:01.700512+00:00",
+  "deadline_met": true,
+  "stop_signals": ["SIGINT"],
+  "forced_termination_used": false,
+  "gpu_reset_used": false,
+  "remaining_owned_processes": [],
+  "host_proc_confirmed_absent": [
+    {"role": "8b", "pid": 1056529, "start_ticks": 333400845},
+    {"role": "14b", "pid": 1624073, "start_ticks": 336222850},
+    {"role": "supervisor", "pid": 1387759, "start_ticks": 334845083},
+    {"role": "queue-watchdog", "pid": 1387758, "start_ticks": 334845083},
+    {"role": "existing-8b-watchdog", "pid": 1399401, "start_ticks": 334910444}
+  ],
+  "8b_writer_lock_released": true,
+  "14b_writer_lock_released": true,
+  "8b_full_dev_and_independent_all_ci_audit_complete": true,
+  "14b": {
+    "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+    "status": "interrupted",
+    "reason": "reservation-graceful-stop",
+    "complete_preflight_passed": false,
+    "full_dev_started": false,
+    "source_and_input_identities_verified": true,
+    "all_four_sqlite_integrity_checks": "ok",
+    "committed_payload_hashes_finite_readouts_and_geometry_verified": true,
+    "committed_blocks_across_passes": 466,
+    "committed_candidate_scores_across_passes": 7232,
+    "passes": {
+      "regression-b1-r0": {"blocks": 128, "candidates": 2176, "sealed": true},
+      "regression-b1-r1": {"blocks": 128, "candidates": 2176, "sealed": true},
+      "regression-b1-padding": {"blocks": 128, "candidates": 2176, "sealed": true},
+      "regression-b1-prefix": {"blocks": 82, "candidates": 704, "sealed": false, "unfinished_started_blocks": 1}
+    },
+    "independently_recomputed_available_checks": {
+      "reference": {"max_abs_error": 0.000010169911028867773, "limit": 0.0001, "passed": true},
+      "repeat": {"max_abs_error": 0, "limit": 0.0001, "passed": true},
+      "padding": {"max_abs_error": 0.00029754638671875, "limit": 0.0013427734375, "passed": true}
+    },
+    "complete_preflight_report_exists": false
+  },
+  "27b": {"cpu_plan_built_and_validated": true, "gpu_preflight_started": false, "full_dev_started": false},
+  "receipt_sha256": {
+    "queue_state": "97e6b91a657f09d709035c5691858f5f91baa67bd4d7c058038624103932ed8a",
+    "queue_watchdog": "9798397e2712055467a94e7059bc47ddcabb21c69ef97661a53a9318daf835ae",
+    "existing_8b_guard_state": "f7a3caf73ccc309e3c0026162b146ab391ebcd37cd67516fad072745db541d6f",
+    "14b_run_manifest": "0ab0bc8d104a03262bdccbc94d60983836f0e74f6dd3ea9c370f8941c9d23ae4"
+  },
+  "verification_was_cpu_and_read_only": true,
+  "query_gold_read_for_partial_14b_verification": false,
+  "gpu_started_after_deadline": false,
+  "resume_performed": false,
+  "new_gpu_window_authorization_required": true
+}

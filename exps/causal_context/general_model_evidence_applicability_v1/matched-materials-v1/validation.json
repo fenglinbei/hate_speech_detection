@@ -1,0 +1,35 @@
+{
+  "schema_version": "evidence-matched-material-validation/v1",
+  "status": "passed",
+  "manifest_sha256": "cd88b7e34598080cac502aa62627edab620855c5a28ceee37842307842741e78",
+  "unit_tests": {
+    "command": ".conda/stage1-p0/bin/python -m unittest scripts.review.test_prepare_evidence_matched_materials -v",
+    "passed": 6,
+    "scope": ["equal_length_with_moved_query", "equal_length_with_moved_demo_answer", "unchanged_positions_with_changed_answer_or_query_tokens", "changed_prefix", "valid_matched_edit", "ambiguous_target_and_prompt_structure_injection"]
+  },
+  "reconstruction": {
+    "command": ".conda/stage1-p0/bin/python scripts/review/prepare_evidence_matched_materials.py --output exps/causal_context/general_model_evidence_applicability_v1/reviews/analysis-freeze-20260912/matched-materials-v1/prepared-01 --check",
+    "byte_identical": true,
+    "historical_text_and_token_replays": 4,
+    "matched_full_prompt_position_checks": 8,
+    "candidate_boundary_checks": 24
+  },
+  "independent_checks": {
+    "method": "standard-library script, without importing the material builder; parse all full demo blocks, check exact text substitution, answers, human-field emptiness, punctuation and hashes",
+    "passed": true,
+    "source_files_verified": 42,
+    "material_rows": 8,
+    "context_rows": 12,
+    "modified_demo_slots_1_based": {"541": 5, "3169": 3},
+    "full_prompt_tokens": {"541": 918, "3169": 742},
+    "query_block_token_spans_half_open": {"541": [876, 909], "3169": [711, 733]},
+    "all_example_answers_preserved": true,
+    "new_human_values_all_null": true,
+    "punctuation_and_emoji_counts_preserved": true
+  },
+  "authoring_candidates_retained": 22,
+  "new_model_forward_executed": false,
+  "new_human_judgments": 0,
+  "human_semantic_adoption": false,
+  "review_queue_deployed": false
+}

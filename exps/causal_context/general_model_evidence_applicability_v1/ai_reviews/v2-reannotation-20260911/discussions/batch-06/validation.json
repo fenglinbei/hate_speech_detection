@@ -1,0 +1,52 @@
+{
+  "schema_version": "evidence-local-batch-decision-validation/v1",
+  "recorded_at_utc": "2026-09-11T10:54:09.916713+00:00",
+  "result": "passed",
+  "checks": [
+    "isolated real exporter accepts seven scoped decisions and rejects forged hate or group policies without changing real records",
+    "120 mapped records match active scores, authorized text identities, versions and source export hashes",
+    "seven exact user decisions, absent rationale, case-only category override, and updated supporting forms are consistent",
+    "verbatim user message, per-field scopes, text hashes and cross-layer message reference agree",
+    "six exact score replies and two explicit groups retain field-level provenance; only those six local drafts changed",
+    "human counts remain field-specific; combined JSON/CSV and original evidence spans agree for both batches",
+    "frozen selections, receipts, original policies, bundle, parent snapshot and pre-decision archives retain their hashes; prior label references resolve to exact current or preserved historical bytes"
+  ],
+  "scope": "batch-05 and batch-06 user decisions and the current mapping view",
+  "checked_exports": [
+    {
+      "path": "batches/batch-05/review.json",
+      "sha256": "dc8bcdff342500fe65f081dc43c2fc0e85a2f91525b123c01454e936d86cd050"
+    },
+    {
+      "path": "batches/batch-06/review.json",
+      "sha256": "5a3934ae33bb9e754cd28fb6f9e4ad8fdc4beb102f2b1dff1985ed13ef15c673"
+    },
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "1a7f58b1d1dacf696ad2fda445fb8b51fc23939f17a191531d60c3c3b068eae1"
+    }
+  ],
+  "historical_reference_resolutions": [
+    {
+      "original_reference": {
+        "path": "annotations/labels-04.json",
+        "sha256": "b5299959711d8308255469621bef59aeba7e951b24374a391083587ba16d8766"
+      },
+      "resolved_reference": {
+        "path": "discussions/batch-04/before-user-decisions-01/labels-04.json",
+        "sha256": "b5299959711d8308255469621bef59aeba7e951b24374a391083587ba16d8766"
+      },
+      "current_path_sha256": "2ce749a39bcc63713929f2a5c998876444aff41bb5295b235939efda1e33420f",
+      "reason": "The frozen input references the prior label version. Its exact bytes remain archived; the current label path contains later user decisions."
+    }
+  ],
+  "object_count_in_mapping": 120,
+  "human_label_task_counts": {
+    "hate": 33,
+    "group": 42
+  },
+  "human_numeric_scores_recorded": 25,
+  "human_hate_decisions_added_by_mapping": 0,
+  "online_material_confirmations_added": 0,
+  "next_step": "Close this review round after all six batch-06 replies; batch-07 has not been drafted."
+}

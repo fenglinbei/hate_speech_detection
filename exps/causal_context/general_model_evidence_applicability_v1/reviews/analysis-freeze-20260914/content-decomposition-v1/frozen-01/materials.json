@@ -1,0 +1,739 @@
+{
+  "author": "assistant",
+  "authorization": {
+    "future_gpu_launch": "wait for the user to announce an available GPU window",
+    "gpu_execution_this_turn": false,
+    "individual_human_adoption": false,
+    "scope": "prepare wording, perform AI semantic checks, match and freeze inputs, implement and CPU-validate; report wording without waiting",
+    "user_verbatim": "请帮我按这个顺序推进，中间跟我回报一下写好的措辞，不用停止，最后给我交付一个可用于GPU运行的输入以及实现，目前没有到我的GPU窗口，所以先不运行"
+  },
+  "historical_conditions": [
+    "R-A",
+    "R-C1",
+    "R-C2",
+    "R-D1",
+    "R-D2"
+  ],
+  "materials": [
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "中性描述事件；没有关于如何评价其他成员的立场",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "迟到事件及聚会后的行程/照片分享",
+        "target": "小林及其身份类别"
+      },
+      "cell": "T0R0",
+      "condition": "F1-T0R0",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": false,
+        "sexual_orientation_topic": false
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 1,
+      "text": "说说我在昨天聚会上遇到的一件事。小林是篮球迷，昨天参加聚会迟到了。我在门口遇到几位篮球迷，大家聊了聚会的安排。散场后，我把当天的合照发给了他们。",
+      "text_sha256": "dbb7a74bc30e5c5ee735ba18ba30a6986706862bdf9be32a4d6d35c7c09a52e7"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "中性描述事件；没有关于如何评价其他成员的立场",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "迟到事件及聚会后的行程/照片分享",
+        "target": "小林及其身份类别"
+      },
+      "cell": "T1R0",
+      "condition": "F1-T1R0",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": false,
+        "sexual_orientation_topic": true
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 1,
+      "text": "说说我在昨天聚会上遇到的一件事。小林是异性恋，昨天参加聚会迟到了。我在门口遇到几位异性恋，大家聊了聚会的安排。散场后，我把当天的合照发给了他们。",
+      "text_sha256": "90d6e7ebcdd723ac67a4fcd7af91eb4753a3b1c7e7ee2ed91e6e67a2d4a12817"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "明确反对个人到群体的负面泛化",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "反对用迟到事件概括同类别成员",
+        "target": "小林及其身份类别"
+      },
+      "cell": "T0R1",
+      "condition": "F1-T0R1",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": true,
+        "sexual_orientation_topic": false
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 1,
+      "text": "说说我在昨天聚会上遇到的一件事。小林是篮球迷，昨天参加聚会迟到了。我不会因此讨厌所有篮球迷，也不会把这事推到整个群体身上。一个人的具体表现，并不能代表群体中的每一个人。",
+      "text_sha256": "7fcfc155a6f06db3079e3e6b19b68e80c64cc6b199ddda90b789aeb4292a6307"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "明确反对个人到群体的负面泛化",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "反对用迟到事件概括同类别成员",
+        "target": "小林及其身份类别"
+      },
+      "cell": "T1R1",
+      "condition": "F1-T1R1",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": true,
+        "sexual_orientation_topic": true
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 1,
+      "text": "说说我在昨天聚会上遇到的一件事。小林是异性恋，昨天参加聚会迟到了。我不会因此讨厌所有异性恋，也不会把这事推到整个群体身上。一个人的具体表现，并不能代表群体中的每一个人。",
+      "text_sha256": "af7b6e1ad70d3b1930b4db77eabe3971ffec3d6478f1d4b4f55d3a0fd9ca3202"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "中性描述事件；没有关于如何评价其他成员的立场",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "迟到事件及聚会后的行程/照片分享",
+        "target": "小周及其身份类别"
+      },
+      "cell": "T0R0",
+      "condition": "F2-T0R0",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": false,
+        "sexual_orientation_topic": false
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 2,
+      "text": "说说我在昨天聚会上遇到的一件事。小周是篮球迷，这次约饭没有按时到场。饭后，几位篮球迷在餐厅门口等车。小周回去拿了外套，然后和他们一起坐车离开。",
+      "text_sha256": "1810e8a2a8d41f89d12cb508ddaa9ff22d9c5541f96e8adf0d15670ad65625a5"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "中性描述事件；没有关于如何评价其他成员的立场",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "迟到事件及聚会后的行程/照片分享",
+        "target": "小周及其身份类别"
+      },
+      "cell": "T1R0",
+      "condition": "F2-T1R0",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": false,
+        "sexual_orientation_topic": true
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 2,
+      "text": "说说我在昨天聚会上遇到的一件事。小周是异性恋，这次约饭没有按时到场。饭后，几位异性恋在餐厅门口等车。小周回去拿了外套，然后和他们一起坐车离开。",
+      "text_sha256": "a8f9904ad401bb14c57863ce40d80fb3d3c339f50af66f430a20c2a9c2ddacfe"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "明确反对个人到群体的负面泛化",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "反对用迟到事件概括同类别成员",
+        "target": "小周及其身份类别"
+      },
+      "cell": "T0R1",
+      "condition": "F2-T0R1",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": true,
+        "sexual_orientation_topic": false
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 2,
+      "text": "说说我在昨天聚会上遇到的一件事。小周是篮球迷，这次约饭没有按时到场。不能仅凭这一件事就给篮球迷下结论。评价一个人应看他自己的行为，不该连带评价其他成员。",
+      "text_sha256": "fcc7d3ea1a9e910617f02ab8a706763a5838599dedea290d333b1318a8b40557"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 0,
+        "author": "assistant",
+        "author_stance": "明确反对个人到群体的负面泛化",
+        "expected_hate": "non-hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "性取向身份作为聚会参加者的分类，显著性高于日常叙述；篮球迷与异性恋不保证具有相同先验。",
+          "规则对照同时替换中性续文与论证，不能宣称只改变一个抽象逻辑变量。",
+          "统一开头和虚构人物是新共同措辞；旧材料到新材料的桥接单列。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P05",
+          "P08",
+          "P09"
+        ],
+        "proposition": "反对用迟到事件概括同类别成员",
+        "target": "小周及其身份类别"
+      },
+      "cell": "T1R1",
+      "condition": "F2-T1R1",
+      "factors": {
+        "category_mentions": 2,
+        "explicit_countergeneralization": true,
+        "sexual_orientation_topic": true
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "non-hate",
+      "query_id": "541",
+      "target_demo": "826",
+      "target_slot": 5,
+      "task": "hate",
+      "template": 2,
+      "text": "说说我在昨天聚会上遇到的一件事。小周是异性恋，这次约饭没有按时到场。不能仅凭这一件事就给异性恋下结论。评价一个人应看他自己的行为，不该连带评价其他成员。",
+      "text_sha256": "b8d31bda4e1b30fba589934a862925dda819d0df7b06106e97fec98b6399dde2"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可群体相关污名；嘿嘿／黑人均充当指人的群体称呼",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "群体配对共同加“们”，使复数指向明确；相对旧 D 的这一变化另列桥接。",
+          "显式称呼改变指代清晰度；不把结果解释为纯字形效应。",
+          "保留原句省略式结尾及隐含对象，不增写性别、事实或攻击强度。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "proposition": "沿用原句借与黑人发生性关系贬评思想的污名命题",
+        "target": "按与黑人发生性关系而被污名的人；保留原 3660 命题的隐含指向"
+      },
+      "cell": "G_H",
+      "condition": "F1-G_H",
+      "factors": {
+        "attack_context": "group_designation",
+        "contains_attack": true,
+        "surface": "嘿嘿"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 1,
+      "text": "主要是被嘿嘿们玩过的，那思想不是一般的，那得有多么的。。。",
+      "text_sha256": "1f504b96e6b5c85781d5ca8ce4630666c765e8fa7feceed804248aeef9934706"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可群体相关污名；嘿嘿／黑人均充当指人的群体称呼",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "群体配对共同加“们”，使复数指向明确；相对旧 D 的这一变化另列桥接。",
+          "显式称呼改变指代清晰度；不把结果解释为纯字形效应。",
+          "保留原句省略式结尾及隐含对象，不增写性别、事实或攻击强度。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "proposition": "沿用原句借与黑人发生性关系贬评思想的污名命题",
+        "target": "按与黑人发生性关系而被污名的人；保留原 3660 命题的隐含指向"
+      },
+      "cell": "G_E",
+      "condition": "F1-G_E",
+      "factors": {
+        "attack_context": "group_designation",
+        "contains_attack": true,
+        "surface": "黑人"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 1,
+      "text": "主要是被黑人们玩过的，那思想不是一般的，那得有多么的。。。",
+      "text_sha256": "4a5afc04c465ec2bb8eb5ced0c908ca1828de13be3b7d0ff0402f58f85ef3e58"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可句内贬损；笑声修饰受话者正在笑，不把笑声当作被称呼对象",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "本组攻击来自个人辱骂；不把其 group 标签等同于群体代称组。",
+          "两套辱骂命题不同，只在各自嘿嘿/哈哈配对内估计词形差。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P02",
+          "P05",
+          "P15"
+        ],
+        "proposition": "直接称受话者为蠢货并贬评其智力",
+        "target": "受话者个人；不补出种族或性别"
+      },
+      "cell": "L_H",
+      "condition": "F1-L_H",
+      "factors": {
+        "attack_context": "personal_insult_with_literal_laughter",
+        "contains_attack": true,
+        "surface": "嘿嘿"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 1,
+      "text": "你这个蠢货，居然还嘿嘿地笑，真不知道自己到底有多笨。",
+      "text_sha256": "f6d282c26d845683e8a74f762ea299f23dd14bf4e28d32a5e73c347a66192ac0"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可句内贬损；笑声修饰受话者正在笑，不把笑声当作被称呼对象",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "本组攻击来自个人辱骂；不把其 group 标签等同于群体代称组。",
+          "两套辱骂命题不同，只在各自嘿嘿/哈哈配对内估计词形差。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P02",
+          "P05",
+          "P15"
+        ],
+        "proposition": "直接称受话者为蠢货并贬评其智力",
+        "target": "受话者个人；不补出种族或性别"
+      },
+      "cell": "L_O",
+      "condition": "F1-L_O",
+      "factors": {
+        "attack_context": "personal_insult_with_literal_laughter",
+        "contains_attack": true,
+        "surface": "哈哈"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 1,
+      "text": "你这个蠢货，居然还哈哈地笑，真不知道自己到底有多笨。",
+      "text_sha256": "2cbb101085e03dae58436b0ccd056efbf9c62162530e6d25c084f266c4883cfb"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可群体相关污名；嘿嘿／黑人均充当指人的群体称呼",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "群体配对共同加“们”，使复数指向明确；相对旧 D 的这一变化另列桥接。",
+          "显式称呼改变指代清晰度；不把结果解释为纯字形效应。",
+          "保留原句省略式结尾及隐含对象，不增写性别、事实或攻击强度。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "proposition": "沿用原句借与黑人发生性关系贬评思想的污名命题",
+        "target": "按与黑人发生性关系而被污名的人；保留原 3660 命题的隐含指向"
+      },
+      "cell": "G_H",
+      "condition": "F2-G_H",
+      "factors": {
+        "attack_context": "group_designation",
+        "contains_attack": true,
+        "surface": "嘿嘿"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 2,
+      "text": "主要是被嘿嘿们玩过的，那思想就不一般，那得是多么的。。。",
+      "text_sha256": "114259cf117a64b3cc8dc8bad1b879cfde0310925626c04c50d01c53c2c836fe"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可群体相关污名；嘿嘿／黑人均充当指人的群体称呼",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "群体配对共同加“们”，使复数指向明确；相对旧 D 的这一变化另列桥接。",
+          "显式称呼改变指代清晰度；不把结果解释为纯字形效应。",
+          "保留原句省略式结尾及隐含对象，不增写性别、事实或攻击强度。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P11",
+          "P13",
+          "P15"
+        ],
+        "proposition": "沿用原句借与黑人发生性关系贬评思想的污名命题",
+        "target": "按与黑人发生性关系而被污名的人；保留原 3660 命题的隐含指向"
+      },
+      "cell": "G_E",
+      "condition": "F2-G_E",
+      "factors": {
+        "attack_context": "group_designation",
+        "contains_attack": true,
+        "surface": "黑人"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 2,
+      "text": "主要是被黑人们玩过的，那思想就不一般，那得是多么的。。。",
+      "text_sha256": "fa85bf3e0bed6b81059a69183cd858849127df122c29a9795f562623b2ef2dfe"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可句内贬损；笑声修饰受话者正在笑，不把笑声当作被称呼对象",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "本组攻击来自个人辱骂；不把其 group 标签等同于群体代称组。",
+          "两套辱骂命题不同，只在各自嘿嘿/哈哈配对内估计词形差。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P02",
+          "P05",
+          "P15"
+        ],
+        "proposition": "直接称受话者为无耻骗子并贬评其诚实性",
+        "target": "受话者个人；不补出种族或性别"
+      },
+      "cell": "L_H",
+      "condition": "F2-L_H",
+      "factors": {
+        "attack_context": "personal_insult_with_literal_laughter",
+        "contains_attack": true,
+        "surface": "嘿嘿"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 2,
+      "text": "你这个无耻骗子，还在旁边嘿嘿地笑，嘴里没有一句真话。",
+      "text_sha256": "0d7cc958d0d7e620d91af6752befa971f227333837f196078fab91571c281591"
+    },
+    {
+      "ai_review": {
+        "attack_severity": 2,
+        "author": "assistant",
+        "author_stance": "认可句内贬损；笑声修饰受话者正在笑，不把笑声当作被称呼对象",
+        "expected_hate": "hate",
+        "intended_factors_pass": true,
+        "limitations": [
+          "本组攻击来自个人辱骂；不把其 group 标签等同于群体代称组。",
+          "两套辱骂命题不同，只在各自嘿嘿/哈哈配对内估计词形差。"
+        ],
+        "naturalness": "pass_with_limitations",
+        "policy_anchors": [
+          "P01",
+          "P02",
+          "P05",
+          "P15"
+        ],
+        "proposition": "直接称受话者为无耻骗子并贬评其诚实性",
+        "target": "受话者个人；不补出种族或性别"
+      },
+      "cell": "L_O",
+      "condition": "F2-L_O",
+      "factors": {
+        "attack_context": "personal_insult_with_literal_laughter",
+        "contains_attack": true,
+        "surface": "哈哈"
+      },
+      "human_review": {
+        "attack_severity": null,
+        "hate": null,
+        "mechanism": null,
+        "naturalness": null,
+        "status": "no_individual_decision"
+      },
+      "presented_answer": "hate",
+      "query_id": "3169",
+      "target_demo": "3660",
+      "target_slot": 3,
+      "task": "hate",
+      "template": 2,
+      "text": "你这个无耻骗子，还在旁边哈哈地笑，嘴里没有一句真话。",
+      "text_sha256": "2842255d27d2aa5a975edd6128b887a1e380e0f5fe8160bff21dcae2923a7545"
+    }
+  ],
+  "mechanism_ready": false,
+  "new_individual_human_fields": 0,
+  "schema_version": "evidence-content-decomposition-material-source/v1",
+  "status": "ai_reviewed_for_authorized_preparation"
+}

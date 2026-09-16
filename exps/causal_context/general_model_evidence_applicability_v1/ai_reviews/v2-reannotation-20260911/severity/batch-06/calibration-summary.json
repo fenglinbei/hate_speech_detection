@@ -1,0 +1,57 @@
+{
+  "schema_version": "evidence-label-severity-calibration-summary/v1",
+  "recorded_at_utc": "2026-09-11T10:54:09.482392+00:00",
+  "label_batch": 6,
+  "state": "discussion_resolved",
+  "object_count": 30,
+  "human_direct_label_task_counts": {
+    "hate": 0,
+    "group": 2
+  },
+  "human_numeric_scores_recorded": 6,
+  "ai_numeric_score_draft_count": 24,
+  "score_counts": {
+    "0": 15,
+    "1": 4,
+    "2": 7,
+    "3": 3,
+    "4": 1
+  },
+  "open_discussion_ids": [],
+  "source_exports": [
+    {
+      "path": "batches/batch-06/ai_annotations.json",
+      "sha256": "65a7b84e8a5db706cceecbc6378e2bf34df8649b6eaf92748038e651cf852981"
+    },
+    {
+      "path": "severity/batch-06/ai_annotations.json",
+      "sha256": "7e22e2aeef6f90b245c95b4affa95070a905b8b0285b701f6522b5d34d08c49e"
+    },
+    {
+      "path": "batches/batch-06/review.json",
+      "sha256": "5a3934ae33bb9e754cd28fb6f9e4ad8fdc4beb102f2b1dff1985ed13ef15c673"
+    }
+  ],
+  "decision_sources": [
+    {
+      "path": "discussions/batch-06/user-decisions-01.json",
+      "sha256": "f854c70401bfcd838126fe777905dd4d1494467bd7d0fc5d3e16b177b4f8465c"
+    },
+    {
+      "path": "severity/batch-06/discussions/user-decisions-01.json",
+      "sha256": "2cb4524b0d5456def0afd9ea58042e3340b71e6f742e3d8860fa8fcc3767b239"
+    }
+  ],
+  "mapping_context": {
+    "path": "hate_mapping_context.json",
+    "sha256": "12edd5107278c2bed5f4473db429f56c69f36d67b043c1de8e7aa234230361fc"
+  },
+  "case_scope_limits": [
+    "Only #5865 and #5998 contain explicit group decisions; four score-only replies do not independently confirm group.",
+    "All six current hate results are rule-derived from user scores, not new explicit human hate decisions.",
+    "#5998 resolves the present personal-target reading without certifying or rejecting the candidate slang definition for other contexts.",
+    "#6263 concerns the stance of the quoted text, not verification of its historical assertion."
+  ],
+  "next_step": "Close this review round after the six replies. Batch 07 has not been drafted.",
+  "online_material_confirmations_added": 0
+}

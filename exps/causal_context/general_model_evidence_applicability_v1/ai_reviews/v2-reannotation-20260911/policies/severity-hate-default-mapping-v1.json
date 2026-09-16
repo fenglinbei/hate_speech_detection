@@ -1,0 +1,39 @@
+{
+  "schema_version": "evidence-local-task-policy/v1",
+  "task": "hate",
+  "status": "user_accepted_temporary_default",
+  "recorded_at_utc": "2026-09-11T08:14:47.055420+00:00",
+  "review_kind": "human_policy_confirmation",
+  "confirmed_by": "liaozijie",
+  "confirmation_text": "改为hate，且暂时先用默认非0严重度即是hate的映射",
+  "confirmation_source": "explicit_user_message_in_current_task",
+  "confirmation_sha256": "c9d6352e642579ed67be033574906366b01610f8f9e989c6ef0d5f10c86efaef",
+  "effective_policy": {
+    "version": "evidence-severity-hate-default-mapping/v1",
+    "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+  },
+  "document": {
+    "path": "docs/research/annotation-guidelines/evidence-severity-hate-default-mapping-v1.md",
+    "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+  },
+  "base_hate_policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "severity_policy": {
+    "version": "evidence-attack-severity-policy/v1",
+    "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+  },
+  "mapping": {
+    "0": "non-hate",
+    "1": "hate",
+    "2": "hate",
+    "3": "hate",
+    "4": "hate"
+  },
+  "null_result": null,
+  "scope": "local current view of existing scored materials and subsequent batches; historical labels preserved",
+  "online_policy_modified": false,
+  "human_case_decisions_added": 0,
+  "online_material_confirmations_added": 0
+}

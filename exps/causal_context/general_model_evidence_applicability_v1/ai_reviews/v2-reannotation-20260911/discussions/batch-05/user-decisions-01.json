@@ -1,0 +1,293 @@
+{
+  "schema_version": "evidence-discussion-user-decisions/v1",
+  "batch": 5,
+  "recorded_at_utc": "2026-09-11T10:24:20.969291+00:00",
+  "policy": {
+    "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+    "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+  },
+  "task_policies": {
+    "hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "source_message": "#4810 hate / 2 / Racism、Sexism、others 美国佬为政治代理指控不参与讨论\n#5113 non-hate / 0 / LGBTQ、Sexism、others 仅为客观描述事件，主体是那个”男的“，并未直接攻击同性恋群体\n#528 hate / 3 / Region、Sexism 使用明确辱称，且没证据表明是无害讨论\n#5365 non-hate / 0 / Sexism、others 只在谈网络梗和生活选择\n#5394 hate / 3 / LGBTQ、others 只是表达漠视、未认可伤害，没到达预定程度\n#5416 hate / 2 / LGBTQ、others 归谬得到”男同最会传播艾滋病“带有污名化意，且整体带有阴阳怪气\n#5615 hate / 2 / Racism",
+  "source_message_sha256": "c46e614c77e64a3d724b87e78b841813917df4c9e18e1cf712e92bcce461ccee",
+  "scope": "seven explicit hate/group decisions; severity scores saved separately, no implied global group amendment",
+  "pre_discussion_annotation_sha256": "7d2e9280c5d6b2aadbecfc8afa16cc85396c098ee6fbd27499097ab105450ca0",
+  "mapping_context": {
+    "path": "hate_mapping_context.json",
+    "sha256": "12edd5107278c2bed5f4473db429f56c69f36d67b043c1de8e7aa234230361fc"
+  },
+  "records": [
+    {
+      "object_id": "demo:4810",
+      "text_sha256": "746ae65f7c8cd0f9d57f9653dbc8471de73e80872e9f9812155a08ffee02492e",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#4810 hate / 2 / Racism、Sexism、others 美国佬为政治代理指控不参与讨论",
+      "rationale": "美国佬为政治代理指控不参与讨论",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Racism",
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:5113",
+      "text_sha256": "91d9a3073d5c40c5a0b405a64c2df8f9372dcffbafa1f4afba3ebc13f3978676",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#5113 non-hate / 0 / LGBTQ、Sexism、others 仅为客观描述事件，主体是那个”男的“，并未直接攻击同性恋群体",
+      "rationale": "仅为客观描述事件，主体是那个”男的“，并未直接攻击同性恋群体",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "non-hate",
+        "group": [
+          "LGBTQ",
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:528",
+      "text_sha256": "a9a4f33cda5f7f33f4d25f2183ad56ebafe6bd6ee03a0fc929e4d06314abfad3",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#528 hate / 3 / Region、Sexism 使用明确辱称，且没证据表明是无害讨论",
+      "rationale": "使用明确辱称，且没证据表明是无害讨论",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Region",
+          "Sexism"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:5365",
+      "text_sha256": "37ed5c8edd34e03a561be3dd3bd74d81c5ecbcb908671f1f598eb81a01f0e30e",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#5365 non-hate / 0 / Sexism、others 只在谈网络梗和生活选择",
+      "rationale": "只在谈网络梗和生活选择",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "non-hate",
+        "group": [
+          "Sexism",
+          "others"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:5394",
+      "text_sha256": "72441af11180e1ad12555196e4f9a5f18f52b21a6cf0e33e0a3bf0ef8a451f7d",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#5394 hate / 3 / LGBTQ、others 只是表达漠视、未认可伤害，没到达预定程度",
+      "rationale": "只是表达漠视、未认可伤害，没到达预定程度",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "LGBTQ",
+          "others"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:5416",
+      "text_sha256": "625fb8421547f1a7d047540bd35b3c7ae2e0c90cec7ae72b98e46165346e2fde",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#5416 hate / 2 / LGBTQ、others 归谬得到”男同最会传播艾滋病“带有污名化意，且整体带有阴阳怪气",
+      "rationale": "归谬得到”男同最会传播艾滋病“带有污名化意，且整体带有阴阳怪气",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "LGBTQ",
+          "others"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "demo:5615",
+      "text_sha256": "f4410871c97523236809f604c1cba57eaa9a006d1dcd4b99b286fdde9a682e98",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_message_in_current_task",
+      "source_excerpt": "#5615 hate / 2 / Racism",
+      "rationale": "",
+      "rationale_provenance": "not_provided",
+      "online_material_confirmation_added": false,
+      "values": {
+        "hate": "hate",
+        "group": [
+          "Racism"
+        ]
+      },
+      "scope": [
+        "hate",
+        "group"
+      ],
+      "mode": "explicit_hate_group",
+      "task_policies": {
+        "hate": {
+          "version": "evidence-severity-hate-default-mapping/v1",
+          "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+        },
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      },
+      "case_scope_note": {
+        "status": "explicit_case_value_overrides_prior_ai_group",
+        "previous_ai_group": [
+          "Racism",
+          "others"
+        ],
+        "current_group": [
+          "Racism"
+        ],
+        "general_rule_amendment_inferred": false,
+        "explanation_source": "ai_provenance_note; user supplied values without a rationale"
+      }
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

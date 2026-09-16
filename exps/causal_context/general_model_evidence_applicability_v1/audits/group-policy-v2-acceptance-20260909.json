@@ -1,0 +1,173 @@
+{
+  "schema_version": "evidence-group-policy-v2-acceptance/v1",
+  "status": "accepted",
+  "observed_at": "2026-09-08T17:16:51.523946+00:00",
+  "policy": {
+    "version": "evidence-applicability-annotation-policy/v2",
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "parent_policy": {
+      "version": "evidence-applicability-annotation-policy/v1",
+      "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a"
+    },
+    "approval": {
+      "reviewer_id": "liaozijie",
+      "confirmed_at": "2026-09-08T16:48:05.067209+00:00",
+      "statement": "好，接受这版草案",
+      "accepted_draft_sha256": "f79f8c4fbf5dc1ba22b5d3aa706312c941fc42c84a6de51d90c6ffb598d77712"
+    }
+  },
+  "release": {
+    "release_dir": "/tmp/hsd-group-policy-v2-final-20260909/release",
+    "archive": "/tmp/hsd-group-policy-v2-final-20260909/release.tar.gz",
+    "file_count": 59,
+    "payload_file_count": 58,
+    "case_count": 32,
+    "initial_case_count": 12,
+    "source_manifest_sha256": "4f9b48b76e2102aa49e65deafb55ac6566c798fee346fe1be6e5cd2c5ba771d2",
+    "release_manifest_sha256": "e87d2f10e8f469ecdc95e3527f84832ef1c2c4d9997dd669e393669c263abd1e",
+    "archive_sha256": "af7a61fe2b2324f6d2954ae07c04f7b2736a34b3eb2791e3049e0a6f6dffa5a3",
+    "archive_bytes": 1477283,
+    "verification": {
+      "status": "ok",
+      "python": "3.10.12",
+      "case_count": 32
+    }
+  },
+  "deployment_receipt": "group-policy-v2-deployment-20260909.json",
+  "session_retention": {
+    "prior_confirmed_cases_preserved": 1,
+    "prior_confirmed_materials_preserved": 39,
+    "prior_drafts_preserved": true,
+    "prior_events_and_snapshots_preserved": true,
+    "hate_confirmations_preserved": true,
+    "human_confirmations_added_by_migration": 0,
+    "new_group_reference_cases": 0,
+    "unaffected_material_confirmations_current": 9,
+    "old_paired_unchanged": true,
+    "records_restored_from_backup": false
+  },
+  "source_integrity": {
+    "frozen_bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+    "original_manifest_sha256": "4f9b48b76e2102aa49e65deafb55ac6566c798fee346fe1be6e5cd2c5ba771d2",
+    "ai_drafts_regenerated": false,
+    "reserve_body_read": false,
+    "new_model_scoring": false
+  },
+  "validation": {
+    "store_and_policy_tests": 20,
+    "http_tests": 2,
+    "deployment_tests": 8,
+    "existing_browser_suite": "passed",
+    "policy_migration_browser_suite": "passed",
+    "independent_hate_invalidation_regression": "passed",
+    "independent_shared_reference_and_repeated_save_regression": "passed",
+    "production_readonly": {
+      "status": "passed",
+      "auth_required": {
+        "/evidence/": 401,
+        "/api/evidence/bootstrap": 401,
+        "/evidence/evidence.js": 401,
+        "/api/health": 401
+      },
+      "reviewer_id": "liaozijie",
+      "evidence": {
+        "confirmed_count": 0,
+        "confirmed_object_count": 9,
+        "item_count": 32,
+        "needs_group_recheck_count": 632,
+        "object_count": 1072
+      },
+      "policy": {
+        "version": "evidence-applicability-annotation-policy/v2",
+        "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+        "original_ai_policy": "evidence-applicability-annotation-policy/v1",
+        "affected_group_objects": 632,
+        "confirmations_added_by_migration": 0
+      },
+      "old_confirmed": 3,
+      "revision_unchanged": true,
+      "post_requests": 0,
+      "javascript_errors": 0,
+      "batch_layouts": [
+        {
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        },
+        {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        },
+        {
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "header_visible": true,
+          "footer_visible": true,
+          "overflow": false,
+          "checkbox_widths": [
+            18
+          ]
+        }
+      ],
+      "screenshots": "/tmp/hsd-group-policy-v2-production-20260909"
+    }
+  },
+  "shared_server": {
+    "pdf_before_after_identical": true,
+    "pdf_file_hash_count": 244,
+    "pdf_service": {
+      "MainPID": "1270223",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Thu 2026-08-20 17:38:12 UTC",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "pdf_https": {
+      "certificate_verified": true,
+      "body_sha256": "7a064af6368c926bc3dc8c6ed8c77fc3b273b60aa3de1c014bdc3b4422aa64a3",
+      "bytes": 425
+    },
+    "nginx_changed": false,
+    "pdf_restarted": false
+  },
+  "service": {
+    "MainPID": "1827076",
+    "NRestarts": "0",
+    "ExecMainStartTimestamp": "Tue 2026-09-08 17:15:38 UTC",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "session_at_activation": {
+    "paired": {
+      "sha256": "feb6b4e86c444cf5ea0732a8cac30016a10e195505513799875dcd37f4ba1654",
+      "revision": "6be5e44c00fcc425132c4a63372a2d71c6501b8e64a720c7f270a01088807961",
+      "record_count": 32,
+      "confirmed_count": 3,
+      "confirmed_object_count": 0
+    },
+    "evidence": {
+      "sha256": "1a61afda1bc211964b09753f9b34bbb75532ca288f9cfe15e13361ead178a95f",
+      "revision": "8edbd7d3fb51b689163c2c81eaa3f3cfc44df3205d07e2e0f8aa32fb1c806c82",
+      "record_count": 32,
+      "confirmed_count": 1,
+      "confirmed_object_count": 39
+    }
+  }
+}

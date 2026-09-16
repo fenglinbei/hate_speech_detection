@@ -1,0 +1,867 @@
+{
+  "audit_passed": true,
+  "audit_source_sha256": "49155317172ef9ffb0f7efd958684ed5094bfec5d4cd885064392370f7f22654",
+  "checks": {
+    "all_112_payload_hashes": true,
+    "context_candidate_and_prefix_association": true,
+    "math_fsum_and_eos": true,
+    "prefix_and_dynamic_batch_differences_recomputed": true,
+    "target_minus_normalizer": true
+  },
+  "formal_preflight_pass_claimed": false,
+  "gpu_used_for_audit": false,
+  "limitations": [
+    "Four diagnostic contexts cover three distinct query IDs, selected because previous numerical failures were observed.",
+    "Only four group candidates are probed; hate batch-four duplicates the same two candidates rather than pairing two queries.",
+    "Prefix probes inspect one registered answer position, not the complete per-token candidate universe.",
+    "Saved hidden-state max/rms values are summarized; full hidden vectors are not stored for independent recomputation.",
+    "These diagnostics guide execution-profile selection but do not replace the full regression and validation gates."
+  ],
+  "profiles": {
+    "bf16-head-fp32": {
+      "checked_records": 116,
+      "comparisons": {
+        "prefix/dynamic/probe_log_normalizer": {
+          "above_005": 44,
+          "above_1e4": 44,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "non-hate",
+            "difference": -0.8223075866699219,
+            "padding": "dynamic",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.8223075866699219,
+          "median_abs": 0.11706161499023438,
+          "n": 44
+        },
+        "prefix/dynamic/probe_logprob": {
+          "above_005": 39,
+          "above_1e4": 40,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.6727752685546875,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.6727752685546875,
+          "median_abs": 0.3747901916503906,
+          "n": 44
+        },
+        "prefix/dynamic/probe_target_logit": {
+          "above_005": 44,
+          "above_1e4": 44,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.220367431640625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.220367431640625,
+          "median_abs": 0.5135154724121094,
+          "n": 44
+        },
+        "prefix/fixed/probe_log_normalizer": {
+          "above_005": 6,
+          "above_1e4": 6,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.30434417724609375,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.30434417724609375,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/fixed/probe_logprob": {
+          "above_005": 0,
+          "above_1e4": 3,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.003173828125,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.003173828125,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/fixed/probe_target_logit": {
+          "above_005": 6,
+          "above_1e4": 6,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.30751800537109375,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.30751800537109375,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/probe_log_normalizer": {
+          "above_005": 50,
+          "above_1e4": 50,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "non-hate",
+            "difference": -0.8223075866699219,
+            "padding": "dynamic",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.8223075866699219,
+          "median_abs": 0.0460662841796875,
+          "n": 88
+        },
+        "prefix/probe_logprob": {
+          "above_005": 39,
+          "above_1e4": 43,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.6727752685546875,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.6727752685546875,
+          "median_abs": 0.0,
+          "n": 88
+        },
+        "prefix/probe_target_logit": {
+          "above_005": 50,
+          "above_1e4": 50,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.220367431640625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.220367431640625,
+          "median_abs": 0.1980743408203125,
+          "n": 88
+        },
+        "versus_dynamic_b1/answer_sum": {
+          "above_005": 60,
+          "above_1e4": 65,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-27",
+            "difference": -3.324249267578125,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 3.324249267578125,
+          "median_abs": 0.24691390991210938,
+          "n": 88
+        },
+        "versus_dynamic_b1/token_logprob": {
+          "above_005": 226,
+          "above_1e4": 274,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": 1.8559074401855469,
+            "padding": "fixed",
+            "record_id": "3531:group:PD",
+            "target_position": 1
+          },
+          "max_abs": 1.8559074401855469,
+          "median_abs": 0.0,
+          "n": 854
+        }
+      },
+      "first_nonzero_saved_hidden_layer": "layer_00",
+      "gpu_device": "cuda:2",
+      "profile": {
+        "allow_bf16_reduced_precision_reduction": false,
+        "allow_tf32": false,
+        "dtype": "bfloat16",
+        "head_fp32": true
+      },
+      "saved_hidden_state_maxima_vs_prefix_reference": {
+        "embedding": 0.0,
+        "layer_00": 0.015625,
+        "layer_01": 0.03125,
+        "layer_02": 0.015625,
+        "layer_03": 0.0625,
+        "layer_04": 0.125,
+        "layer_05": 0.25,
+        "layer_06": 0.25,
+        "layer_07": 0.25,
+        "layer_08": 0.375,
+        "layer_09": 0.25,
+        "layer_10": 0.375,
+        "layer_11": 0.5,
+        "layer_12": 0.5,
+        "layer_13": 0.5,
+        "layer_14": 0.25,
+        "layer_15": 0.5,
+        "layer_16": 0.5,
+        "layer_17": 0.5,
+        "layer_18": 0.75,
+        "layer_19": 0.75,
+        "layer_20": 1.0,
+        "layer_21": 1.25,
+        "layer_22": 1.25,
+        "layer_23": 1.5,
+        "layer_24": 1.5,
+        "layer_25": 1.5,
+        "layer_26": 2.0,
+        "layer_27": 2.0,
+        "layer_28": 2.0,
+        "layer_29": 3.0,
+        "layer_30": 4.0,
+        "layer_31": 4.0,
+        "layer_32": 4.0,
+        "layer_33": 6.0,
+        "layer_34": 8.0,
+        "layer_35": 24.0,
+        "lm_head_input": 2.0
+      },
+      "source_files": 28
+    },
+    "bf16-no-reduced": {
+      "checked_records": 116,
+      "comparisons": {
+        "prefix/dynamic/probe_log_normalizer": {
+          "above_005": 33,
+          "above_1e4": 34,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "non-hate",
+            "difference": -0.8624515533447266,
+            "padding": "dynamic",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.8624515533447266,
+          "median_abs": 0.25,
+          "n": 44
+        },
+        "prefix/dynamic/probe_logprob": {
+          "above_005": 33,
+          "above_1e4": 34,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.75,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.75,
+          "median_abs": 0.2361774444580078,
+          "n": 44
+        },
+        "prefix/dynamic/probe_target_logit": {
+          "above_005": 36,
+          "above_1e4": 36,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.25,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.25,
+          "median_abs": 0.5,
+          "n": 44
+        },
+        "prefix/fixed/probe_log_normalizer": {
+          "above_005": 6,
+          "above_1e4": 6,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.36850547790527344,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.36850547790527344,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/fixed/probe_logprob": {
+          "above_005": 3,
+          "above_1e4": 3,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.0064945220947265625,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.0064945220947265625,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/fixed/probe_target_logit": {
+          "above_005": 6,
+          "above_1e4": 6,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "non-hate",
+            "difference": 0.375,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.375,
+          "median_abs": 0.0,
+          "n": 44
+        },
+        "prefix/probe_log_normalizer": {
+          "above_005": 39,
+          "above_1e4": 40,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "non-hate",
+            "difference": -0.8624515533447266,
+            "padding": "dynamic",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.8624515533447266,
+          "median_abs": 0.0,
+          "n": 88
+        },
+        "prefix/probe_logprob": {
+          "above_005": 36,
+          "above_1e4": 37,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.75,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.75,
+          "median_abs": 0.0,
+          "n": 88
+        },
+        "prefix/probe_target_logit": {
+          "above_005": 42,
+          "above_1e4": 42,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": -1.25,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.25,
+          "median_abs": 0.0,
+          "n": 88
+        },
+        "versus_dynamic_b1/answer_sum": {
+          "above_005": 65,
+          "above_1e4": 65,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-27",
+            "difference": -3.619415283203125,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 3.619415283203125,
+          "median_abs": 0.37534141540527344,
+          "n": 88
+        },
+        "versus_dynamic_b1/token_logprob": {
+          "above_005": 196,
+          "above_1e4": 241,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-02",
+            "difference": 1.875,
+            "padding": "fixed",
+            "record_id": "3531:group:PD",
+            "target_position": 1
+          },
+          "max_abs": 1.875,
+          "median_abs": 0.0,
+          "n": 854
+        }
+      },
+      "first_nonzero_saved_hidden_layer": "layer_00",
+      "gpu_device": "cuda:1",
+      "profile": {
+        "allow_bf16_reduced_precision_reduction": false,
+        "allow_tf32": false,
+        "dtype": "bfloat16",
+        "head_fp32": false
+      },
+      "saved_hidden_state_maxima_vs_prefix_reference": {
+        "embedding": 0.0,
+        "layer_00": 0.015625,
+        "layer_01": 0.03125,
+        "layer_02": 0.015625,
+        "layer_03": 0.0625,
+        "layer_04": 0.125,
+        "layer_05": 0.25,
+        "layer_06": 0.25,
+        "layer_07": 0.25,
+        "layer_08": 0.375,
+        "layer_09": 0.25,
+        "layer_10": 0.375,
+        "layer_11": 0.5,
+        "layer_12": 0.5,
+        "layer_13": 0.5,
+        "layer_14": 0.25,
+        "layer_15": 0.5,
+        "layer_16": 0.5,
+        "layer_17": 0.5,
+        "layer_18": 0.75,
+        "layer_19": 0.75,
+        "layer_20": 1.0,
+        "layer_21": 1.25,
+        "layer_22": 1.25,
+        "layer_23": 1.5,
+        "layer_24": 1.5,
+        "layer_25": 1.5,
+        "layer_26": 2.0,
+        "layer_27": 2.0,
+        "layer_28": 2.0,
+        "layer_29": 3.0,
+        "layer_30": 4.0,
+        "layer_31": 4.0,
+        "layer_32": 4.0,
+        "layer_33": 6.0,
+        "layer_34": 8.0,
+        "layer_35": 24.0,
+        "lm_head_input": 2.0
+      },
+      "source_files": 28
+    },
+    "bf16-original": {
+      "checked_records": 116,
+      "comparisons": {
+        "prefix/dynamic/probe_log_normalizer": {
+          "above_005": 31,
+          "above_1e4": 31,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": 0.75,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 0.75,
+          "median_abs": 0.1214742660522461,
+          "n": 44
+        },
+        "prefix/dynamic/probe_logprob": {
+          "above_005": 36,
+          "above_1e4": 38,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": -2.75,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 2.75,
+          "median_abs": 0.2925224304199219,
+          "n": 44
+        },
+        "prefix/dynamic/probe_target_logit": {
+          "above_005": 35,
+          "above_1e4": 35,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": -2.0,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 2.0,
+          "median_abs": 0.375,
+          "n": 44
+        },
+        "prefix/fixed/probe_log_normalizer": {
+          "above_005": 23,
+          "above_1e4": 23,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "non-hate",
+            "difference": -0.6065940856933594,
+            "padding": "fixed",
+            "record_id": "7648:hate:CL"
+          },
+          "max_abs": 0.6065940856933594,
+          "median_abs": 0.089996337890625,
+          "n": 44
+        },
+        "prefix/fixed/probe_logprob": {
+          "above_005": 26,
+          "above_1e4": 27,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-15",
+            "difference": -1.875,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.875,
+          "median_abs": 0.3125,
+          "n": 44
+        },
+        "prefix/fixed/probe_target_logit": {
+          "above_005": 25,
+          "above_1e4": 25,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-15",
+            "difference": -1.625,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 1.625,
+          "median_abs": 0.3125,
+          "n": 44
+        },
+        "prefix/probe_log_normalizer": {
+          "above_005": 54,
+          "above_1e4": 54,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": 0.75,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 0.75,
+          "median_abs": 0.089996337890625,
+          "n": 88
+        },
+        "prefix/probe_logprob": {
+          "above_005": 62,
+          "above_1e4": 65,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": -2.75,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 2.75,
+          "median_abs": 0.2925224304199219,
+          "n": 88
+        },
+        "prefix/probe_target_logit": {
+          "above_005": 60,
+          "above_1e4": 60,
+          "largest": {
+            "batch_size": 1,
+            "candidate_id": "group-14",
+            "difference": -2.0,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 2.0,
+          "median_abs": 0.375,
+          "n": 88
+        },
+        "versus_dynamic_b1/answer_sum": {
+          "above_005": 71,
+          "above_1e4": 72,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "group-27",
+            "difference": -2.8744049072265625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 2.8744049072265625,
+          "median_abs": 0.7473316192626953,
+          "n": 88
+        },
+        "versus_dynamic_b1/token_logprob": {
+          "above_005": 234,
+          "above_1e4": 262,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "group-14",
+            "difference": 2.25,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD",
+            "target_position": 1
+          },
+          "max_abs": 2.25,
+          "median_abs": 0.0,
+          "n": 854
+        }
+      },
+      "first_nonzero_saved_hidden_layer": "layer_00",
+      "gpu_device": "cuda:0",
+      "profile": {
+        "allow_bf16_reduced_precision_reduction": true,
+        "allow_tf32": false,
+        "dtype": "bfloat16",
+        "head_fp32": false
+      },
+      "saved_hidden_state_maxima_vs_prefix_reference": {
+        "embedding": 0.0,
+        "layer_00": 0.03125,
+        "layer_01": 0.0625,
+        "layer_02": 0.0625,
+        "layer_03": 0.0625,
+        "layer_04": 0.125,
+        "layer_05": 0.25,
+        "layer_06": 0.25,
+        "layer_07": 0.25,
+        "layer_08": 0.375,
+        "layer_09": 0.25,
+        "layer_10": 0.375,
+        "layer_11": 0.75,
+        "layer_12": 0.75,
+        "layer_13": 0.75,
+        "layer_14": 0.5,
+        "layer_15": 0.5,
+        "layer_16": 0.75,
+        "layer_17": 0.75,
+        "layer_18": 0.75,
+        "layer_19": 1.0,
+        "layer_20": 1.0,
+        "layer_21": 1.0,
+        "layer_22": 1.25,
+        "layer_23": 1.5,
+        "layer_24": 1.5,
+        "layer_25": 1.5,
+        "layer_26": 2.0,
+        "layer_27": 2.0,
+        "layer_28": 3.0,
+        "layer_29": 4.0,
+        "layer_30": 4.0,
+        "layer_31": 4.0,
+        "layer_32": 6.0,
+        "layer_33": 8.0,
+        "layer_34": 16.0,
+        "layer_35": 24.0,
+        "lm_head_input": 2.625
+      },
+      "source_files": 28
+    },
+    "fp32": {
+      "checked_records": 116,
+      "comparisons": {
+        "prefix/dynamic/probe_log_normalizer": {
+          "above_005": 0,
+          "above_1e4": 0,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "group-02",
+            "difference": 8.7738037109375e-05,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 8.7738037109375e-05,
+          "median_abs": 1.52587890625e-05,
+          "n": 44
+        },
+        "prefix/dynamic/probe_logprob": {
+          "above_005": 0,
+          "above_1e4": 10,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.000522613525390625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.000522613525390625,
+          "median_abs": 1.1444091796875e-05,
+          "n": 44
+        },
+        "prefix/dynamic/probe_target_logit": {
+          "above_005": 0,
+          "above_1e4": 10,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.0004940032958984375,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.0004940032958984375,
+          "median_abs": 2.6702880859375e-05,
+          "n": 44
+        },
+        "prefix/fixed/probe_log_normalizer": {
+          "above_005": 0,
+          "above_1e4": 0,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -8.7738037109375e-05,
+            "padding": "fixed",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 8.7738037109375e-05,
+          "median_abs": 9.5367431640625e-06,
+          "n": 44
+        },
+        "prefix/fixed/probe_logprob": {
+          "above_005": 0,
+          "above_1e4": 10,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.000522613525390625,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.000522613525390625,
+          "median_abs": 9.5367431640625e-06,
+          "n": 44
+        },
+        "prefix/fixed/probe_target_logit": {
+          "above_005": 0,
+          "above_1e4": 12,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.0004940032958984375,
+            "padding": "fixed",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.0004940032958984375,
+          "median_abs": 1.9073486328125e-05,
+          "n": 44
+        },
+        "prefix/probe_log_normalizer": {
+          "above_005": 0,
+          "above_1e4": 0,
+          "largest": {
+            "batch_size": 2,
+            "candidate_id": "group-02",
+            "difference": 8.7738037109375e-05,
+            "padding": "dynamic",
+            "record_id": "1322:group:CD"
+          },
+          "max_abs": 8.7738037109375e-05,
+          "median_abs": 1.430511474609375e-05,
+          "n": 88
+        },
+        "prefix/probe_logprob": {
+          "above_005": 0,
+          "above_1e4": 20,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.000522613525390625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.000522613525390625,
+          "median_abs": 1.1444091796875e-05,
+          "n": 88
+        },
+        "prefix/probe_target_logit": {
+          "above_005": 0,
+          "above_1e4": 22,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.0004940032958984375,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.0004940032958984375,
+          "median_abs": 2.288818359375e-05,
+          "n": 88
+        },
+        "versus_dynamic_b1/answer_sum": {
+          "above_005": 0,
+          "above_1e4": 27,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.00054168701171875,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD"
+          },
+          "max_abs": 0.00054168701171875,
+          "median_abs": 3.0517578125e-05,
+          "n": 88
+        },
+        "versus_dynamic_b1/token_logprob": {
+          "above_005": 0,
+          "above_1e4": 41,
+          "largest": {
+            "batch_size": 4,
+            "candidate_id": "group-02",
+            "difference": -0.000522613525390625,
+            "padding": "dynamic",
+            "record_id": "3531:group:PD",
+            "target_position": 1
+          },
+          "max_abs": 0.000522613525390625,
+          "median_abs": 0.0,
+          "n": 854
+        }
+      },
+      "first_nonzero_saved_hidden_layer": "layer_00",
+      "gpu_device": "cuda:3",
+      "profile": {
+        "allow_bf16_reduced_precision_reduction": false,
+        "allow_tf32": false,
+        "dtype": "float32",
+        "head_fp32": false
+      },
+      "saved_hidden_state_maxima_vs_prefix_reference": {
+        "embedding": 0.0,
+        "layer_00": 8.106231689453125e-06,
+        "layer_01": 1.049041748046875e-05,
+        "layer_02": 1.1444091796875e-05,
+        "layer_03": 1.239776611328125e-05,
+        "layer_04": 1.33514404296875e-05,
+        "layer_05": 1.52587890625e-05,
+        "layer_06": 1.9073486328125e-05,
+        "layer_07": 2.6702880859375e-05,
+        "layer_08": 2.6702880859375e-05,
+        "layer_09": 3.0517578125e-05,
+        "layer_10": 3.0517578125e-05,
+        "layer_11": 1.9073486328125e-05,
+        "layer_12": 2.6702880859375e-05,
+        "layer_13": 3.814697265625e-05,
+        "layer_14": 3.4332275390625e-05,
+        "layer_15": 3.814697265625e-05,
+        "layer_16": 4.1961669921875e-05,
+        "layer_17": 3.4332275390625e-05,
+        "layer_18": 4.112720489501953e-05,
+        "layer_19": 6.866455078125e-05,
+        "layer_20": 7.2479248046875e-05,
+        "layer_21": 0.000102996826171875,
+        "layer_22": 9.799003601074219e-05,
+        "layer_23": 0.000156402587890625,
+        "layer_24": 0.0001373291015625,
+        "layer_25": 0.00016021728515625,
+        "layer_26": 0.000213623046875,
+        "layer_27": 0.00022172927856445312,
+        "layer_28": 0.00029397010803222656,
+        "layer_29": 0.000396728515625,
+        "layer_30": 0.00042724609375,
+        "layer_31": 0.00030517578125,
+        "layer_32": 0.00048828125,
+        "layer_33": 0.00067138671875,
+        "layer_34": 0.0010986328125,
+        "layer_35": 0.005126953125,
+        "lm_head_input": 0.0003261566162109375
+      },
+      "source_files": 28
+    }
+  },
+  "query_gold_read": false,
+  "schema_version": "independent-numeric-four-profile-summary/v1",
+  "scientific_effects_computed": false,
+  "source_manifest_sha256": {
+    "bf16-head-fp32": "8946df4a17b959b25e09924e56079b66d918c9c64f7d54451545dad5a5ac7c6d",
+    "bf16-no-reduced": "6358f0bc39ca8e836b83affa857acbd15bdaba5b7766b02a5d34b04e8e5c4395",
+    "bf16-original": "1bc3b6e2e38680cb47a8fe436815b7581faa46f9f1be056965945ba499a811d3",
+    "fp32": "9fde80f7658e0b9831e1e81f09af1e47ac8a420d1f31bdf6d6f0fd7ee6a6d1ef"
+  }
+}

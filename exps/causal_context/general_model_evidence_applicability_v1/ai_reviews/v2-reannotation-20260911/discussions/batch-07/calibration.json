@@ -1,0 +1,246 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 7,
+  "review_round": 7,
+  "recorded_at_utc": "2026-09-11T11:46:30.293586+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "task_policies": {
+    "hate_reference": {
+      "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+      "version": "evidence-applicability-annotation-policy/v2"
+    },
+    "current_hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    },
+    "attack_severity": {
+      "version": "evidence-attack-severity-policy/v1",
+      "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "policies/personal-insult-others-v1.json",
+      "sha256": "c26d8033917756cad68fbf68473afd7e7b6ac22eb591e40255ba091d05bc38c8"
+    },
+    {
+      "path": "policies/severity-hate-default-mapping-v1.json",
+      "sha256": "b84a3acf37659291bb75a98db221a2bf8fcc2e612d41c877e5daeceae3838879"
+    },
+    {
+      "path": "severity/pilot-01/calibration-summary.json",
+      "sha256": "c6048311a0bba011da6544a035732eba7df06f025ec125f307c0f866eef8b14b"
+    },
+    {
+      "path": "severity/batch-05/calibration-summary.json",
+      "sha256": "83ed9ad03556d359c0a402636100a6219e0fbfeffcba16b999ba0f2794dfbfb0"
+    },
+    {
+      "path": "severity/batch-06/calibration-summary.json",
+      "sha256": "6a235744dc2dafeb512b154bd6625d61276f18013c76ff06b297626bce9d5dcb"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    },
+    {
+      "path": "discussions/batch-02/user-decisions-01.json",
+      "sha256": "d0448387ebda0d7bde30541382705a3e09f83b64c3897a0f499f6337c2ed6652"
+    },
+    {
+      "path": "discussions/batch-03/user-decisions-01.json",
+      "sha256": "e491c5eabb27b2009d21c4b1f645cca776644d7961b4a5f5b537d60adac6a6f8"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-01.json",
+      "sha256": "691014f254f4af0c35f3e68999c48c16c5ce8ac539fab3c1c45da7101a89e9db"
+    },
+    {
+      "path": "discussions/batch-04/user-decisions-02.json",
+      "sha256": "5c58dc695af91b4c8a03e7078f7afe7f3b1e4fb926fd15ec3e1c5ffb0e3c30d9"
+    },
+    {
+      "path": "discussions/batch-05/user-decisions-01.json",
+      "sha256": "f90182e625cb87373177a00e892af92e6871ba10ecd1b031f0fd0ed75b5eee7a"
+    },
+    {
+      "path": "discussions/batch-06/user-decisions-01.json",
+      "sha256": "f854c70401bfcd838126fe777905dd4d1494467bd7d0fc5d3e16b177b4f8465c"
+    },
+    {
+      "path": "severity/batch-04/discussions/user-decisions-01.json",
+      "sha256": "881d191e56b46a676226729917871504a1e352a735ff45f140a93961b51c373f"
+    },
+    {
+      "path": "severity/batch-05/discussions/user-decisions-01.json",
+      "sha256": "199cb95c918ed7a4b59979a614a92fb8a3d3c57a78d96de302993481462312c3"
+    },
+    {
+      "path": "severity/batch-06/discussions/user-decisions-01.json",
+      "sha256": "2cb4524b0d5456def0afd9ea58042e3340b71e6f742e3d8860fa8fcc3767b239"
+    }
+  ],
+  "initial_generation": true,
+  "pre_calibration_annotation_sha256": null,
+  "post_calibration_annotation_sha256": "a4c34a11fd5eea557e693056e777dc266fc36c28f5b2eec4b0d7122594222059",
+  "method": "First draft after reading every authorized safe source text, using preceding explicit decisions. Current hate mapping remains separate.",
+  "original_answer_exposure": "Annotator did not read original answers or predictions. Comparison suggestions are generated programmatically only after these drafts exist.",
+  "sense_checks": {
+    "path": "discussions/round-07/sense-checks.json",
+    "sha256": "509aa392fc8d23acb40197fb1bde53ab764adf2f78d78803a2ca16140d8d7496"
+  },
+  "case_notes": [
+    {
+      "object_id": "demo:6469",
+      "note": "以求黑的改写挖苦与黑人交往者；Racism 可见，但没有性别线索。倾向轻度讥讽 1；“与黑长存”若承接死亡或严重不幸，可能类似 #5394 的冷漠取 3。原句未给出此事件，不把死亡读法当成事实，也不推为暴力认可。"
+    },
+    {
+      "object_id": "demo:649",
+      "note": "讨论回族是否受到歧视及其处境，当前“强势”没有展开明确贬损。参照 #5900 不仅凭强弱、优势的描述补出攻击，拟 0／Racism。关外只是例外范围，唐山条约只是所引事件，不另计 Region，也不认证事件真伪。"
+    },
+    {
+      "object_id": "demo:6493",
+      "note": "赞美女性识破“嘿人那些手段”，把黑人概括成惯用可疑手段者，拟 1／Racism、Sexism。未补出手段的具体内容，也未把仅泛指的对象记成独立个人辱骂。"
+    },
+    {
+      "object_id": "demo:6525",
+      "note": "只描述电视节目宣传黑人，未出现对黑人或观众的贬损命题，参照 #4744、#5780 取 0／Racism。频道名本身不是被评价的人群。"
+    },
+    {
+      "object_id": "demo:6553",
+      "note": "以人数说明反驳力度，未把地域群体归为人格或能力低等，拟 0／Region。语气本身不足以补出具体辱骂。"
+    },
+    {
+      "object_id": "demo:6554",
+      "note": "争论犹太人、黑奴及不同国家的历史联系，没有另行认可的身份贬损，拟 0／Racism、Region。国家作为实施历史行为的主体参与讨论；奴隶经历为描述，非作者认可伤害，不核实其历史断言。"
+    },
+    {
+      "object_id": "demo:6624",
+      "note": "针对具体男性反同吧主辱骂，并明确挑衅线下打架，拟 4／Sexism、others；最高分来自身体暴力威胁。反对反同者不抵消独立攻击；未实际评价同性恋本身，不因反同吧一词另加 LGBTQ。重庆仅为会面地点。"
+    },
+    {
+      "object_id": "demo:6629",
+      "note": "直接对受话者作女性私生活和婚配价值羞辱，eg 与 lkd 采用用户已确认的用法，拟 2／Sexism、others。公交车为性污名比喻，没有据物品词单独升为 3。"
+    },
+    {
+      "object_id": "demo:6631",
+      "note": "黑人与本国人参与比较，已知类别 Racism、Region。可能只是反讽网络欺凌行为（0），也可能在贬评欺软怕硬的人（1，另有 others）。倾向 1；“收拾”在网络语境下未明确身体伤害，不能升为 4。"
+    },
+    {
+      "object_id": "demo:6644",
+      "note": "把中国女性的地位和对男性的态度概括为不合理，形成明确的性别及国别污名，拟 2／Region、Sexism。虽宣称破坏原则，未明说女性天生低等或要求剥夺某项基本权利，不仅凭夸张语升 3。"
+    },
+    {
+      "object_id": "demo:6658",
+      "note": "描述眼界优势与女性择偶意愿，未见具体贬损，拟 0／Sexism。“他们”的国籍种族均未在句中给出，不补 Racism 或 Region。"
+    },
+    {
+      "object_id": "demo:6764",
+      "note": "中性转述不同性别对同性婚姻的支持倾向，拟 0／LGBTQ、Sexism。外国学家只是来源背景，不据此增 Region，也不将未查证调查写成事实认证。"
+    },
+    {
+      "object_id": "demo:6835",
+      "note": "讨论女性挣钱、男性参与者及人面对自身利益的行为，未明确将女性称作骗子或人格低等，拟 0／Sexism。拳头是一般利害比喻，不是认可身体暴力；B站为场景。"
+    },
+    {
+      "object_id": "demo:6852",
+      "note": "借小仙女称谓和婚恋比较挖苦部分中国女性，拟 1／Region、Sexism。被转述的配不上并非作者另行对男性背书；仍有作者自己的轻度女性贬称。"
+    },
+    {
+      "object_id": "demo:6931",
+      "note": "批评辱骂南方人的同时，以地域隐称和族裔混血说法回讽另一群体，拟 1／Racism、Region。“瑞典人”代东北人已有外部用例，“和族”与混血构成族裔维度；未直接断言混血天生低等。马来猴子是被批评的他人辱称，不把它按作者新动物化直接计 3。"
+    },
+    {
+      "object_id": "demo:6989",
+      "note": "“素质大跌眼镜”对具体客户作轻度人格贬评，拟 1。倾向仅 others：河南信阳和女性可能只是指认背景；若身份本身参与负面评价，应另纳 Region／Sexism。完整 group 待裁定，不能由身份词齐全自动并入。"
+    },
+    {
+      "object_id": "demo:7133",
+      "note": "反讽举报者为正义的小腐女，对女性兴趣社群作轻度贬评，拟 1／Sexism、others。腐女是兴趣身份，不能据此断定本人为性少数；未加 LGBTQ。"
+    },
+    {
+      "object_id": "demo:7161",
+      "note": "以小仙女的谐音称呼具体对象并挖苦其心虚，拟 1／Sexism、others。只采用可见轻度讽刺，不补造事情败露的具体性质。"
+    },
+    {
+      "object_id": "demo:717",
+      "note": "反击他人用语时独立对女性受话者作人格和私生活辱骂，拟 2／Sexism、others。烂裤裆沿用用户 #1729 已明确的性污名含义。微博仅是说法来源背景。"
+    },
+    {
+      "object_id": "demo:718",
+      "note": "对与男性发生性行为的可能性作逻辑争论，当前没有独立攻击命题，拟 0／Sexism。受话者性别和性取向未给出，不靠猜测另纳 LGBTQ。"
+    },
+    {
+      "object_id": "demo:7188",
+      "note": "以疾病犯罪污名把黑人整体类比为致命雷区，为身份歧视和排斥辩护，拟 3／Racism。最高分来自整个人群被当作内在危险物；“支持你踩过去”是挖苦和漠视，未明确认可对人实施身体伤害，不升 4。所谓统计未获得事实认证。"
+    },
+    {
+      "object_id": "demo:7189",
+      "note": "可见对象涉及女同性恋及婚配者。可能是普通祝愿或议论（0，LGBTQ、Sexism），也可能把娶女同当作不幸来挖苦受话者（1，并加 others）。倾向 1；无前文，保留分数及完整类别待定。"
+    },
+    {
+      "object_id": "demo:72",
+      "note": "以反智、幕刃辱骂女性及具体账号，并动员攻击其主页，拟 2／Sexism、others。句内明确是网上主页，屠字未建立身体伤害主张；未凭一个暴力字升 4。"
+    },
+    {
+      "object_id": "demo:7212",
+      "note": "明确鼓动扇与黑人交往的女性耳光，并正当化针对黑人的过度对待，拟 4／Racism、Sexism；身体暴力的明确对象为女性，不把最高分无区分地传给全部提及对象。"
+    },
+    {
+      "object_id": "demo:7232",
+      "note": "地域、性别和小市民角色都成为所列评价单位，group 拟 Region、Sexism、others。全文可能在罗列并厌烦这些偏见（0），也可能自己认可这些负面概括（2）；倾向前者，缺少明示的引用或立场标记，待校准。"
+    },
+    {
+      "object_id": "demo:7235",
+      "note": "使用女拳贬称并讽刺给人分等级，拟轻度 1／Sexism；类似已确认的低强度女权贬评，未见词语释义或纯粹无害谈论的证据。"
+    },
+    {
+      "object_id": "demo:7247",
+      "note": "仅要求看外貌，未作具体贬损，依可见文字取 0／[]。不从未知上下文补造外貌羞辱。"
+    },
+    {
+      "object_id": "demo:7248",
+      "note": "明确反对绞杀和疾病化，倡导安全性教育与社会包容，拟 0／LGBTQ、Sexism、others。异性恋及直男直女是实际比较和辩护对象；山村只提供行为类比场景，不增 Region。没有将被反驳的暴力命题计入攻击。"
+    },
+    {
+      "object_id": "demo:7253",
+      "note": "普遍贬低白人外貌并以黄种人作优越比较，拟 2／Racism。明显外貌污名不自动等同于否认人的地位或基本权利，未升 3。"
+    },
+    {
+      "object_id": "demo:7319",
+      "note": "作者自述参与反黑占领社群并斥责为黑人辩护，认可种族敌意，拟 2／Racism。“你还洗”在此是对辩护行为的批评，未另立个人辱骂项；没有明示身体伤害。"
+    }
+  ],
+  "pending_ids": [
+    "demo:6469",
+    "demo:6631",
+    "demo:6989",
+    "demo:7189",
+    "demo:7232"
+  ],
+  "case_scope_limits": [
+    "No omitted context or unseen images reconstructed.",
+    "Group decisions and scores from prior users retain their explicit per-field scopes.",
+    "The Racism-only ruling for #5615 did not repeal the personal-insult others supplement.",
+    "Nominal source chunks remain 30 records; this review round combines two chunks with separate source identities."
+  ]
+}

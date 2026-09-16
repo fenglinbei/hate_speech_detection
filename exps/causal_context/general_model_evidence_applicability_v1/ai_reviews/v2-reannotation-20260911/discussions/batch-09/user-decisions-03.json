@@ -1,0 +1,108 @@
+{
+  "schema_version": "evidence-discussion-user-decisions/v1",
+  "batch": 9,
+  "review_round": 8,
+  "recorded_at_utc": "2026-09-11T12:36:59.559510+00:00",
+  "policy": {
+    "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+    "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+  },
+  "task_policies": {
+    "hate": {
+      "version": "evidence-severity-hate-default-mapping/v1",
+      "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17"
+    },
+    "group": {
+      "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+      "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+    }
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "parent_session": {
+    "revision": "c503ee0151cf5670d89fedd80429b340889191a1bea60a096e952dc2680100f0",
+    "sha256": "7da6ec67f6d8f6026734a48a221fbbc5d5245a30e8927b1894a63fdddfe5cac6"
+  },
+  "scope": "Only explicit reply fields; severity and mapped hate keep separate provenance.",
+  "pre_discussion_annotation_sha256": "5ea8025522ceba037d720440c74aa5c2a63e2a93d9db717212004c8fe69ec168",
+  "mapping_context": {
+    "path": "hate_mapping_context.json",
+    "sha256": "12edd5107278c2bed5f4473db429f56c69f36d67b043c1de8e7aa234230361fc"
+  },
+  "records": [
+    {
+      "object_id": "query:4189",
+      "text_sha256": "af45026e0d61a76faf22e2b4cbd6390326da20961dcb49d5ab69d1167e236516",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "discussions/round-08/received-replies-04.json",
+        "sha256": "c1f1d93530f8ceb2965cead85255a691937bbae5a698b2db5606ac7f06e48eb2"
+      },
+      "source_reply_index": 0,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_gxy3ngcaXdDlbLxFx3NGfMcd",
+        8
+      ],
+      "rationale": "0／Sexism",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Sexism"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_group",
+      "task_policies": {
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    },
+    {
+      "object_id": "query:5423",
+      "text_sha256": "8732377d904a110c0f4abdb9c63465b6f37385afdd364fcc5fb46ded9f32e0e3",
+      "base_version": 0,
+      "review_kind": "human_with_ai",
+      "adjudicator": "liaozijie",
+      "review_process": "single_review",
+      "source": "explicit_user_reply_in_current_task",
+      "source_reply_reference": {
+        "path": "discussions/round-08/received-replies-04.json",
+        "sha256": "c1f1d93530f8ceb2965cead85255a691937bbae5a698b2db5606ac7f06e48eb2"
+      },
+      "source_reply_index": 1,
+      "question_item_id": [
+        "request_user_input_async",
+        "call_gxy3ngcaXdDlbLxFx3NGfMcd",
+        9
+      ],
+      "rationale": "2 / Racism",
+      "rationale_provenance": "user_verbatim",
+      "online_material_confirmation_added": false,
+      "values": {
+        "group": [
+          "Racism"
+        ]
+      },
+      "scope": [
+        "group"
+      ],
+      "mode": "explicit_group",
+      "task_policies": {
+        "group": {
+          "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1",
+          "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d"
+        }
+      }
+    }
+  ],
+  "online_material_confirmations_added": 0
+}

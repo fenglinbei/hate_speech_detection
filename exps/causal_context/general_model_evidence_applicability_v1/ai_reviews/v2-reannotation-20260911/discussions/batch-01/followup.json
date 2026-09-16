@@ -1,0 +1,107 @@
+{
+  "schema_version": "evidence-ai-followup/v1",
+  "recorded_at_utc": "2026-09-10T21:22:26.159752+00:00",
+  "review_kind": "ai_note",
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "source_exposure": {
+    "demo:1224": "User explicitly requested original annotation lookup after independent draft.",
+    "demo:1509": "Original answer read after draft; not used as evidence of slang meaning."
+  },
+  "original_sources": {
+    "demo:1224": {
+      "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+      "demo_id": "1224",
+      "original_answer": {
+        "group": [
+          "Sexism"
+        ],
+        "hate": "hate"
+      },
+      "original_quadruples": [
+        {
+          "argument": "接这盘，一辈子抬不起头",
+          "hateful": "hate",
+          "target": "那个男的",
+          "targeted_group": [
+            "Sexism"
+          ]
+        }
+      ],
+      "text": "内卷是有底线的，你本科毕业再怎么卷，即使在家待业也不会去扫大街。那个男的接这盘，一辈子抬不起头。",
+      "text_sha256": "82083d5a91dc80f1b08c3e26f16fa801ff21d710bf7744f042dbf375af416dab"
+    },
+    "demo:1509": {
+      "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+      "demo_id": "1509",
+      "original_answer": {
+        "group": [
+          "Racism",
+          "Sexism"
+        ],
+        "hate": "hate"
+      },
+      "original_quadruples": [
+        {
+          "argument": "都不是找那种老g吗",
+          "hateful": "hate",
+          "target": "EG",
+          "targeted_group": [
+            "Racism",
+            "Sexism"
+          ]
+        }
+      ],
+      "text": "EG都不是找那种老g吗。优秀的别人看不上",
+      "text_sha256": "b526768028c21d218c27d1344b36809a8e7fedf27cb380546e23481b81e9cfad"
+    }
+  },
+  "slang_search": {
+    "term": "老g",
+    "queries": [
+      "\"老g\" \"eg\"",
+      "\"老G\" \"外国人\"",
+      "\"老g\" \"老狗\"",
+      "\"老g\" \"洋人\"",
+      "\"EG都不是找\"",
+      "\"老g\" \"easy girl\"",
+      "\"老g\" \"意思\" -荣光 -GRE -电竞 -游戏 -github",
+      "\"老g\" \"媚外\"",
+      "\"老g\" \"eg\" \"女生\"",
+      "\"老g\" \"国女\""
+    ],
+    "status": "not_verified",
+    "conclusion": "未找到能与该句对应、足以确认释义的来源；不将猜测或其他语境的同形词当成本句释义。",
+    "example_non_supporting_result": {
+      "url": "https://i.ifeng.com/c/8CFzY16xNOL",
+      "title": "美国港口崩了 义乌的圣诞树赶不上圣诞节",
+      "assessment": "此文只是以客户代号产生称呼，与待标句的性污名语境不对应。"
+    },
+    "label_effect": "保留用户已裁定 hate + Sexism；词义未证实单列，不新增未裁定类别。"
+  },
+  "remaining_question": {
+    "object_id": "demo:1224",
+    "task": "group",
+    "candidates": [
+      [
+        "Sexism",
+        "others"
+      ],
+      [
+        "Sexism"
+      ]
+    ],
+    "ai_hate": "hate",
+    "user_decision_pending": false,
+    "resolved_by": "user-decisions-02.json",
+    "final_values": {
+      "hate": "hate",
+      "group": [
+        "Sexism"
+      ]
+    }
+  }
+}

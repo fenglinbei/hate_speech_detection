@@ -1,0 +1,31 @@
+{
+  "schema_version": "local-sentence-followup-question/v1",
+  "object_id": "query:4137",
+  "question_index": 0,
+  "question_text_verbatim": "句子联动复核 · #4137：“女圈有不少女同”。\n旧 AI 判 0／non-hate／LGBTQ、Sexism，理由是把“女圈”理解成中性的女性圈子。你现在明确该词在此按“女权”理解，并要求释义注明贬损。\n参照 #3212“混迹”带轻度贬损判 1，以及 #3372 使用“女拳”但只谈梗判 0，这句应因贬称取 1，还是仅描述成员构成、仍取 0？group 暂保留 LGBTQ、Sexism；本次只校准严重度。",
+  "allowed_user_fields": [
+    "attack_severity"
+  ],
+  "prior_values": {
+    "hate": "non-hate",
+    "attack_severity": 0,
+    "group": [
+      "LGBTQ",
+      "Sexism"
+    ]
+  },
+  "prior_provenance": {
+    "hate": "rule_mapping_from_ai_score",
+    "attack_severity": "ai_note",
+    "group": "ai_note"
+  },
+  "candidate_severities_ai": [
+    1,
+    0
+  ],
+  "status": "awaiting_reply",
+  "trigger": {
+    "path": "resource-reviews-v1/lexicon-additions/female-circle-v1.json",
+    "sha256": "950824fc55b84abb8ae269da3d637f0741a3d7ad01ed21c4c24d953ac19d1416"
+  }
+}

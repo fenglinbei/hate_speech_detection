@@ -1,0 +1,61 @@
+{
+  "schema_version": "general-model-ld-numeric-closeout/v1",
+  "recorded_at_utc": "2026-09-05T02:23:43Z",
+  "plan_id": "gmlnum3-790a36db6bddb6f6898ecef5781deb6e3c02946ba6bebf93b41204c8876d6e17",
+  "run": "numeric-04",
+  "passed": true,
+  "plan_validate": {
+    "exit_code": 0,
+    "valid": true,
+    "blocks": 7716,
+    "production_batch_size": 1,
+    "E8": 0.00067138671875,
+    "epsilon": 0.0013427734375
+  },
+  "terminal_reentry": {
+    "exit_code": 0,
+    "status": "complete",
+    "analysis_published": true,
+    "gpu_workers_started": false,
+    "checked_manifest_hashes_unchanged": true,
+    "before_and_after_sha256": {
+      "run_manifest": "4dda7adcaf179d1e07988cc93301a9df3fd52f43b88fee8d16a78cef127bdead",
+      "preflight_report": "0c7e35e96ff6686b555de74c923390749b16aa9b89ecba5c4347081343b0404b",
+      "raw_manifest": "1fa6f4863a6d6cf91e1d810642c9c3812d1f31aa92f9061a6f5be01751055424",
+      "analysis_manifest": "c1784bcda640f0beebe5c64a02d5a411b4eb73b16199fade9cd17474357410a3",
+      "report_manifest": "5c0226d6a5a3a220638a4d1b1db5595084af3aab87bfc687f4f4db5bb41dc747"
+    }
+  },
+  "gpu_release": {
+    "query": "nvidia-smi --query-compute-apps=pid,gpu_uuid,process_name,used_gpu_memory --format=csv,noheader",
+    "compute_application_rows": 0,
+    "checked_before_and_after_terminal_reentry": true,
+    "hami_exit_message_not_a_compute_application": true
+  },
+  "independent_full_audit_sha256": "3ada40094496fd9dd387cf13246b82c0d6a0435ac924a69ecc7c835103d2593b",
+  "eos_paired_change_check": {
+    "source": "runs/numeric-04/analysis/analysis.json",
+    "analysis_sha256": "13c02ec2383e12c3c6d29b17d95e21d7c1c4f34b07e580dbf4e18a99faf6e2bb",
+    "source_field": "per_query[].tasks[task].contrasts[contrast][score_mode + '/margin/' + label]",
+    "comparison": "total_with_eos contrast minus answer_sum contrast for the same query, task and label",
+    "jq_filter": "[.per_query[] as $q | $q.tasks | to_entries[] as $t | $t.value.contrasts | to_entries[] as $c | $c.value as $v | $v | to_entries[] | select(.key | startswith(\"answer_sum/margin/\")) | (.key | ltrimstr(\"answer_sum/\")) as $metric | {query_id:$q.query_id, task:$t.key, contrast:$c.key, metric:$metric, delta:($v[\"total_with_eos/\" + $metric] - .value), bound:(if $c.key==\"LxD\" then 0.00537109375 else 0.002685546875 end)} | .absolute_difference=(.delta|fabs)] | {paired_readouts:length, maximum:max_by(.absolute_difference), above_numerical_band:(map(select(.absolute_difference>.bound))|length), task_maxima:(group_by(.task)|map({task:.[0].task,maximum:max_by(.absolute_difference)}))}",
+    "paired_readouts": 30864,
+    "max_absolute_difference": 0.00045394806787157904,
+    "largest": {
+      "query_id": "6993",
+      "task": "group",
+      "contrast": "LD",
+      "label": "LGBTQ",
+      "signed_difference": 0.00045394806787157904
+    },
+    "hate_max_absolute_difference": 0.000049591064453125,
+    "ordinary_numerical_band": 0.002685546875,
+    "interaction_numerical_band": 0.00537109375,
+    "comparisons_above_corresponding_band": 0,
+    "interpretation": "Descriptive sensitivity of registered paired readouts; not a new acceptance gate, bootstrap endpoint or additive EOS-only group margin."
+  },
+  "git_diff_check": {
+    "exit_code": 0
+  },
+  "scope": "Completed Qwen3-8B full-dev numerical measurement only; no test, other model or internal intervention was started."
+}

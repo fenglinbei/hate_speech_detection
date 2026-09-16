@@ -1,0 +1,49 @@
+{
+  "schema_version": "evidence-expanded-round-validation/v1",
+  "recorded_at_utc": "2026-09-11T12:03:03.700419+00:00",
+  "result": "passed",
+  "stage": "after_all_12_replies",
+  "review_round": 7,
+  "object_count": 60,
+  "discussion_case_count": 0,
+  "explicit_user_field_counts": {
+    "hate": 0,
+    "group": 6,
+    "attack_severity": 11
+  },
+  "source_exports": [
+    {
+      "path": "discussions/round-07/review.json",
+      "sha256": "8a1504d2ee775c8650990588e2c6c174cd1096660f3929e297ad2abbfa80751d"
+    },
+    {
+      "path": "discussions/round-07/review.csv",
+      "sha256": "c5ac508ff2f34befdaed0497618c1c966d907621b43ae8fdcaf48738a074b0a1"
+    },
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "f31b16c9d4d6415090b1204ed8b22fb8a246373f232135e18f03bca16e1e6907"
+    }
+  ],
+  "calibration_summary": {
+    "path": "discussions/round-07/calibration-summary.json",
+    "sha256": "cf4435d62f57a395148af1a9737099c691bac10cae5998ed98b1652a10786371"
+  },
+  "initial_validation": {
+    "path": "discussions/round-07/validation.json",
+    "sha256": "c9f70a8811c075d229acb48a133182c4ef7c17cea63a2f8192fd7472466e98a8"
+  },
+  "pre_decision_archive": {
+    "path": "discussions/round-07/before-user-decisions-01/manifest.json",
+    "sha256": "904c0a7592555215cdcb56077e22ccb6f92741830923cb55c93969a1e8bba9be"
+  },
+  "checks": [
+    "All 12 responses match exact saved replies; 11 scores and six group fields retain separate provenance.",
+    "#7959 severity remains AI and no direct human hate decisions are added by mapping.",
+    "Combined JSON/CSV, evidence spans, and the 180-record current mapping agree.",
+    "The other 48 case records remain unchanged; prior source inputs, policies, calibration receipts and snapshot hashes are preserved.",
+    "All discussion flags and candidate scores are resolved; cumulative counts are hate 33, group 48, explicit severity 36.",
+    "The initial isolated round exporter checks remain recorded in the linked initial validation; no online session was written."
+  ],
+  "online_material_confirmations_added": 0
+}

@@ -1,0 +1,105 @@
+{
+  "baseline_conditions": 12,
+  "candidate_scores": 412,
+  "case_use_rows": 64,
+  "conditions": 26,
+  "edited_conditions": 14,
+  "epsilon": 0.0013427734375,
+  "mechanism_ready": false,
+  "new_human_decisions": 0,
+  "numerical_checks": [
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "57607ec2a09ce2fdf3340f6910a8802d1a9bb9c92766e72220ef5d799d27f886",
+      "max_abs_error": 1.116748313734206e-05,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "historical_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "b8a6e3777a169b5e7fa3caf5de54866dbaf0cc745462ff1fd88d476d0a477993",
+      "max_abs_error": 0.0,
+      "pass": "regression-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "same_logits_reference",
+      "limit": 0.0001,
+      "manifest_sha256": "7c03e8ce2dcd78bbec1f460058c3c5cb0e64eb0adaae4384700efa696cfc437d",
+      "max_abs_error": 1.116748313734206e-05,
+      "pass": "interventions-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "raw_baseline_replay",
+      "limit": 0.0013427734375,
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-r0",
+      "passed": true
+    },
+    {
+      "check": "repeat",
+      "limit": 0.0001,
+      "manifest_sha256": "2957acb4d4ebf3a9d789738a10a070f90b9eb3d24c57759c74443bc9b6e1900a",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-r1",
+      "passed": true
+    },
+    {
+      "check": "padding",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "885d3e32f28ea1464cb56577975e816b91476a7e2cb0293d07e36c64941dcb27",
+      "max_abs_error": 0.000335693359375,
+      "pass": "interventions-b1-padding",
+      "passed": true
+    },
+    {
+      "check": "prefix",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "8ee3f8d9a0c230c06873761cf51b2130734451ddd6d83f2b34a94b34bee777a3",
+      "max_abs_error": 0.000324249267578125,
+      "pass": "interventions-b1-prefix",
+      "passed": true
+    },
+    {
+      "check": "members",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "de72bb129601ca7075741b3e0d5ef11c1111d5891f1d1be0bd85a9ae6eb762ff",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-members",
+      "passed": true
+    },
+    {
+      "check": "replica",
+      "limit": 0.0013427734375,
+      "manifest_sha256": "f3c52d60573192460b6092f08e9d4a703a4a4f3e8a7f7662d00625f38061cd3a",
+      "max_abs_error": 0.0,
+      "pass": "interventions-b1-replica",
+      "passed": true
+    }
+  ],
+  "population": "six_preselected_discovery_cases_not_a_population_estimate",
+  "prediction_changes": 5,
+  "primary_arm_comparisons": 14,
+  "production_writes": 0,
+  "protocols": 12,
+  "queries": 6,
+  "right_to_wrong": 1,
+  "schema_version": "evidence-input-intervention-analysis/v1",
+  "score_modes": [
+    "answer_sum",
+    "answer_mean",
+    "total_with_eos",
+    "mean_with_eos"
+  ],
+  "wrong_to_right": 4
+}

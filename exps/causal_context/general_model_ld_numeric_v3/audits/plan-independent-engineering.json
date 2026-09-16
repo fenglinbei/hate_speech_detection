@@ -1,0 +1,91 @@
+{
+  "E8_inherited": 0.00067138671875,
+  "applicable_challenges": [
+    "padding",
+    "prefix",
+    "members",
+    "replica"
+  ],
+  "audit_passed": true,
+  "audit_source_sha256": {
+    "exps/causal_context/general_model_ld_numeric_v1/audits/independent_full_dev_audit.py": "683d78d5aafe9663c7bae4d5459cab19d55554c95a502b1a20f6c1401956ec98",
+    "exps/causal_context/general_model_ld_numeric_v1/audits/independent_numeric_audit.py": "7b68622c1c5404afbcf3b60ab5ecc65c7bd61b6c2d596d805d7df94b0d321d31",
+    "exps/causal_context/general_model_ld_numeric_v3/audits/independent_fallback_plan_audit.py": "058407a29d2fae7c1c0267bfff940e8f1b777d9d39c1e7522a9554a3f51f73a2"
+  },
+  "audited_at_utc": "2026-09-04T21:25:51.052935+00:00",
+  "checks": {
+    "all_source_current_and_all_layer_snapshots": true,
+    "complete_failure_source_hash_inventory": true,
+    "exact_frame_catalog_tokens_and_separate_eos": true,
+    "fallback_config_and_protocol_snapshots": true,
+    "gold_after_raw_seal_only_and_test_disallowed": true,
+    "inherited_epsilon_not_recalibrated": true,
+    "recursive_plan_and_reference_hashes": true,
+    "scientific_config_and_candidate_order_unchanged": true,
+    "source_actual_runtime_and_regression_calibration_hashes": true,
+    "source_failure_still_failed_no_dev_or_analysis": true
+  },
+  "epsilon_inherited": 0.0013427734375,
+  "full_parent_config_scope_sha256": "3fa8ab30ea978d1440090dfb57ef802998d9e034a67529007953ef4791984f95",
+  "limitations": [
+    "This verifies registration and source binding, not successful execution of the new fallback.",
+    "Physical batch-one geometry and actual runtime equality require the new sealed passes.",
+    "The additional 24 queries are previously exposed fallback revalidation, not a new unseen cohort.",
+    "No claim is made that the original batch-four six-challenge validation passed."
+  ],
+  "not_applicable": [
+    "batch-four",
+    "tail-size-two",
+    "within-batch-row-position"
+  ],
+  "parent_effective_semantic_sha256": "cb3efbe1d0bbf38cf1587cbaf0ca08ff6259f7189d724966f8156f1aee9b7659",
+  "parent_plan_id": "gmlnum2-9442ed0ab175496139742e93998dc6641c56ad8df07ad9f653f37c418fd35209",
+  "plan_file_sha256": "1fa729179d38f9cd8c8d0afd28e758945b8c1b6a5f226aeb12f7e3279d378cfa",
+  "plan_id": "gmlnum3-790a36db6bddb6f6898ecef5781deb6e3c02946ba6bebf93b41204c8876d6e17",
+  "plan_ref_sha256": "8454caeed5c133cbb967e6890b904ae9dbe3159f637518f4deaab677c4952ea5",
+  "previous_independent_failure_audit_sha256": "28a7b8bf7809d0cb660c80c61352ad0f2d381c6465c9bc5667c72ff72a1b2f3b",
+  "production": {
+    "batch_size": 1,
+    "blocks": 7716,
+    "candidates": 131172,
+    "dtype": "float32",
+    "physical_gpu_indices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "queries": 643,
+    "raw_path": "dev-b1"
+  },
+  "schema_version": "independent-fallback-plan-audit/v1",
+  "scope": {
+    "gold_read": false,
+    "gpu_used": false,
+    "new_run_scores_read": false,
+    "scientific_effects_computed": false,
+    "test_content_read": false
+  },
+  "source_calibration_sha256": "082b41d30c11ad77e1f3683d58edd6ad77eefff8b2e06260d46aec6a5a899e7d",
+  "source_failed_run": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_numeric_v2/runs/numeric-03",
+  "source_failure_bound_files": 137,
+  "source_files_checked": 15,
+  "source_runtime_identity_sha256": "983ead5bc67e89e1c330a1ce7f136c6f7da7f8cfe3453282009b6cb9e614572e",
+  "source_sha256": {
+    "scripts/stage1/general_model_numeric.py": "7b032ca8c8ddb0ad711b8485d1185e9e993d7e8be0acd1c61c69e0de4050b787",
+    "scripts/stage1/general_model_numeric_v2.py": "648e4d2b2e0a21d4c4f1eec4ea8350ce8fab050f83dcc821368930882cde8589",
+    "scripts/stage1/general_model_numeric_v3.py": "eefe63c66d2bc74f3a986f23cdd4dd40b5724cc525ca81395560c02d807d5cfe",
+    "src/diagnostics/general_model_numeric.py": "36d7d1e15226e4d4c9df4b3f3fc4ee11161085c2584444133210030dd0b64649",
+    "src/diagnostics/general_model_numeric_analysis.py": "bb065874179afc5c0af610b24e451838732d87318fa62ea679e5a2ce6409e2f2",
+    "src/diagnostics/general_model_numeric_kernel.py": "668862ca2bdfe6b555d56e66ee02b8179262d1cb6e39b51acf07fd5dd5ca4a3f",
+    "src/diagnostics/general_model_numeric_kernel_v2.py": "58abb51a4d74a0ac124578de340151f31d480b7be5069ef415a454dcc53287c8",
+    "src/diagnostics/general_model_numeric_pool.py": "d86fe474b7cd5c9187cf5f77813734d9bb9151debdd838b686e85f2fc9fb8cc5",
+    "src/diagnostics/general_model_numeric_v2.py": "66a23d017e395f5a6845023a953fe3398ea7dc74578361ee22938edf5c43f12f",
+    "src/diagnostics/general_model_numeric_v3.py": "97f07bb96a7fb7e14a4b91e26edd62e3095271350e9879d4f1bf431d57945259",
+    "src/metrics/stage1_statistics.py": "7901ef873dfb5682ec8d0dda81da937aa7fe9ee930ace8eb50699f8ee981d84d",
+    "src/tests/test_general_model_numeric_kernel_v2.py": "2fb43b19e9bdd76dffd9bf7615ffa46fab28e41d4dbb14d777824c94238fcd2c",
+    "src/tests/test_general_model_numeric_pool.py": "c22fcda10d2e120715a0d7d4d301008a222f48c4c945c2ba45618b499aee4a0c",
+    "src/tests/test_general_model_numeric_v2.py": "7bc420ab92b2ce362ad0d523633b8e32a321a734d9317add4c904d48b2db6585",
+    "src/tests/test_general_model_numeric_v3.py": "67d061c934c108e7fa76b46dc2971d4a95c18f90b15ec0b9989781112a93a2d8"
+  }
+}

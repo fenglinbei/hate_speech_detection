@@ -1,0 +1,84 @@
+{
+  "schema_version": "local-relation-validation/v1",
+  "validated_at": "2026-09-11T17:24:01.661724+00:00",
+  "snapshot_id": "28cd3f73e884e1decd10f3a04a7425e2a90acfe024694948c735b61124ea9f6f",
+  "checks": {
+    "export_check_passed": true,
+    "authorized_relations": 283,
+    "prior_confirmations_reference_only": 37,
+    "frozen_input_files_hashes_verified": 39,
+    "raw_reply_text_request_object_and_field_bindings_verified": true,
+    "amendment_preserves_prior_value": true,
+    "evidence_unicode_spans_verified": true,
+    "occurrence_source_and_fit_snapshot_verified": true,
+    "parent_snapshot_hash_unchanged": true,
+    "immutable_ai_bundle_hash_unchanged": true,
+    "sentence_definition_hit_preferences_and_added_lexicon_context_hashes_unchanged": true,
+    "online_session_writes": 0
+  },
+  "unit_tests": {
+    "command": "python -m unittest discover -s scripts/review -p test_relation_reviews.py",
+    "tests_passed": 8,
+    "status": "passed",
+    "synthetic_events": "isolated temporary directories or in-memory only"
+  },
+  "code": {
+    "scripts/review/export_relation_reviews.py": "aa1c027cf85ae8b041733414fe40a30330b953e7d1b83be1f2bae916819c9093",
+    "scripts/review/test_relation_reviews.py": "d7d31f320535a42809c6f28ebfed595e2940e63572e8aac0473a795794de0c27"
+  },
+  "status": {
+    "relations_total": 283,
+    "relations_selected": 283,
+    "relations_not_started": 0,
+    "relations_ai_only": 271,
+    "relations_user_participated": 12,
+    "explicit_human_fields": {
+      "topic_hate": 6,
+      "topic_group": 3,
+      "rule_hate": 4,
+      "rule_group": 4,
+      "lexicon_risk": 3
+    },
+    "explicit_human_field_events": 21,
+    "questions_pending": 0,
+    "relations_awaiting_reply": 0,
+    "unresolved_fields": {
+      "topic_hate": 0,
+      "topic_group": 0,
+      "rule_hate": 0,
+      "rule_group": 0,
+      "lexicon_risk": 0
+    },
+    "value_counts": {
+      "topic_hate": {
+        "direct": 134,
+        "none": 56,
+        "partial": 93
+      },
+      "topic_group": {
+        "direct": 142,
+        "none": 93,
+        "partial": 48
+      },
+      "rule_hate": {
+        "direct": 36,
+        "none": 75,
+        "partial": 172
+      },
+      "rule_group": {
+        "direct": 120,
+        "none": 78,
+        "partial": 85
+      },
+      "lexicon_risk": {
+        "no": 160,
+        "yes": 123
+      }
+    },
+    "prior_relationship_confirmations_referenced": 37,
+    "online_material_confirmations_added": 0
+  },
+  "notes": [
+    "记录的是本地输出与冻结参照的验证，未将本地进度当作实时线上人审进度。"
+  ]
+}

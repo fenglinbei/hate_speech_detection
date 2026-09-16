@@ -1,0 +1,576 @@
+{
+  "schema_version": "q01-module-final-closeout/v1",
+  "status": "complete",
+  "created_at": "2026-09-16T06:23:59.098749+00:00",
+  "plan_id": "q01-module-595e22271060b4e3a94f0cd5371c2cae7e201cb4adc6cd5eacb0ad7e1d1d05a5",
+  "run_manifest_sha256": "9391a4058b39872ee9de0a306c5ccd8b4956132f22b85c81d4c7be0572ed2ad1",
+  "results_manifest_sha256": "4ac7ced8fd4848453ec7e74776ef1e23d8c99a6a849422da8fa91205498e9e84",
+  "completed_passes": 12,
+  "passes": [
+    {
+      "pass_id": "engineering-reference",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 5760,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0001,
+          "max_error": 3.3418916984828684e-06,
+          "name": "same_logits_fp64",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 5760,
+      "prompt_only_captures": 752,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0001,
+          "max_error": 0.0,
+          "name": "repeat",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "engineering-padding",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 5760,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.000244140625,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.000293731689453125,
+          "name": "padding",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.000244140625,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "engineering-prefix",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 22880,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 4.57763671875e-05,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 4.57763671875e-05,
+          "name": "prefix",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "engineering-member_order",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 5760,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "member_order",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "engineering-replica",
+      "candidate_evaluations": 5760,
+      "scoring_forwards": 5760,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "replica",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "registered_engineering_expectations",
+          "passed": true,
+          "requests": 2784
+        },
+        {
+          "limit": 0.0,
+          "max_error": 0.0,
+          "name": "physical_producer_rotation",
+          "passed": true,
+          "requests": 2880
+        }
+      ],
+      "derived": null
+    },
+    {
+      "pass_id": "science-reference",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 5440,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0001,
+          "max_error": 3.923486218582184e-06,
+          "name": "same_logits_fp64",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": {
+          "bound": 0.0001,
+          "error": 2.068081315087511e-06,
+          "key": [
+            "4593282eaa0b8bd14c3e28fabbc917a74096395dac82b61ba9809bf38d4903de",
+            "ab_forward/total_with_eos",
+            "K",
+            "arm",
+            "A",
+            "patched"
+          ]
+        },
+        "max_bound_fraction": 0.02068081315087511,
+        "passed": true,
+        "readouts": 70848
+      }
+    },
+    {
+      "pass_id": "science-repeat",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 5440,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0001,
+          "max_error": 0.0,
+          "name": "repeat",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": null,
+        "max_bound_fraction": 0.0,
+        "passed": true,
+        "readouts": 70848
+      }
+    },
+    {
+      "pass_id": "science-padding",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 5440,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.000244140625,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.000244140625,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0003204345703125,
+          "name": "padding",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 3.0517578125e-05,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": {
+          "bound": 0.0013427734375,
+          "error": 0.0003204345703125,
+          "key": [
+            "6e6a1a763ce0921d72846338df391bbe300d4448a0dc52a7d8d62d900a519eff",
+            "ab_forward/answer_sum",
+            "R",
+            "arm",
+            "A",
+            "patched"
+          ]
+        },
+        "max_bound_fraction": 0.23863636363636365,
+        "passed": true,
+        "readouts": 70848
+      }
+    },
+    {
+      "pass_id": "science-prefix",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 21760,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 4.57763671875e-05,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 4.57763671875e-05,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 5.7220458984375e-05,
+          "name": "prefix",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 4.57763671875e-05,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": {
+          "bound": 0.0013427734375,
+          "error": 4.9591064453125e-05,
+          "key": [
+            "9b10c258106413c81c19a63021e129fa188fdfd6c9ae730482f52f271e49b56c",
+            "ab_forward/answer_sum",
+            "R",
+            "arm",
+            "A",
+            "patched"
+          ]
+        },
+        "max_bound_fraction": 0.036931818181818184,
+        "passed": true,
+        "readouts": 70848
+      }
+    },
+    {
+      "pass_id": "science-member_order",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 5440,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "member_order",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": null,
+        "max_bound_fraction": 0.0,
+        "passed": true,
+        "readouts": 70848
+      }
+    },
+    {
+      "pass_id": "science-replica",
+      "candidate_evaluations": 5440,
+      "scoring_forwards": 5440,
+      "prompt_only_captures": 384,
+      "gates": [
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "historical_replay",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "phase_bridge",
+          "passed": true
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "replica",
+          "passed": true
+        },
+        {
+          "limit": 0.0,
+          "max_error": 0.0,
+          "name": "physical_producer_rotation",
+          "passed": true,
+          "requests": 2720
+        },
+        {
+          "limit": 0.0013427734375,
+          "max_error": 0.0,
+          "name": "parent_block_benchmark",
+          "passed": true,
+          "requests": 320
+        }
+      ],
+      "derived": {
+        "failures": [],
+        "largest": null,
+        "max_bound_fraction": 0.0,
+        "passed": true,
+        "readouts": 70848
+      }
+    }
+  ],
+  "candidate_evaluations": 67200,
+  "scoring_forward_calls": 100640,
+  "prompt_only_capture_calls": 4976,
+  "extra_prompt_only_captures_due_to_resume": 368,
+  "old_reused_partial_requests": 1711,
+  "checkpoint_prefix_checks": [
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 0,
+      "prefix_bytes": 4492562,
+      "prompt_only_captures": 96,
+      "requests": 720,
+      "scores_sha256": "2f8d23172296290e1b2e88381fa8a48917df0169eaa79cac73df10acc6b48aa3",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 1,
+      "prefix_bytes": 4493134,
+      "prompt_only_captures": 96,
+      "requests": 720,
+      "scores_sha256": "a6b8a4e63a87e4025e90e0edc28ceb71b0a669b5a812ef671cdb90134b1a7544",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 2,
+      "prefix_bytes": 4492775,
+      "prompt_only_captures": 96,
+      "requests": 720,
+      "scores_sha256": "073744471ce42047b6b3e6982b13bb6af89b24d150f4d280e1828d85f7d050c1",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-reference",
+      "physical_gpu_index": 3,
+      "prefix_bytes": 4491887,
+      "prompt_only_captures": 96,
+      "requests": 720,
+      "scores_sha256": "a54c3d46cd0cbcbff3451cb5d7ac4bd97cbf087e04974bfaf0d00f7ff383c006",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 0,
+      "prefix_bytes": 1995177,
+      "prompt_only_captures": 96,
+      "requests": 444,
+      "scores_sha256": "53b4e3e612023408bc673a8dc7701d9e1252a4b34b993b485328964cb8756b04",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 1,
+      "prefix_bytes": 1872974,
+      "prompt_only_captures": 96,
+      "requests": 417,
+      "scores_sha256": "d927a4ba08bf7b7a2c862edf070081c58d9d856d5a4ffc5c644262a2344e57e3",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 2,
+      "prefix_bytes": 1990827,
+      "prompt_only_captures": 96,
+      "requests": 443,
+      "scores_sha256": "1cac8831319206b558be72244ec931f8ff6a1c0e17a1ab5f02bf6dff521bfc99",
+      "old_prefix_unchanged": true
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "physical_gpu_index": 3,
+      "prefix_bytes": 1825962,
+      "prompt_only_captures": 96,
+      "requests": 407,
+      "scores_sha256": "fa7aa080e7af8049583c7c7a0fe321c7b65306fb112e21c8b8e027b90292b7b7",
+      "old_prefix_unchanged": true
+    }
+  ],
+  "analysis_reconstruction_passed": true,
+  "independent_decimal_audit_passed": true,
+  "fixed_ncc_equals_original_mean_comparisons": 164,
+  "selected_units": [
+    {
+      "layer": 35,
+      "module": "attention",
+      "role": "pre_answer",
+      "selected_for": [
+        "C"
+      ]
+    },
+    {
+      "layer": 34,
+      "module": "mlp",
+      "role": "pre_answer",
+      "selected_for": [
+        "I"
+      ]
+    }
+  ],
+  "secondary_exception_rows": 36,
+  "gpu_forward_executed_by_this_audit": false,
+  "mechanism_ready": false,
+  "artifacts": {
+    "independent-final-decimal-audit.json": "93af8c86f741d6bb43765e98d2f5db09cba9a2181105645a0315b496abf009b2",
+    "independent_final_decimal_audit.py": "7814ba9f07cd43983cecffe832b138ed65210ecdf25c343bf44c0d439c400d43",
+    "resource-release-final-01.json": "e42fd2dd719acd3ac019ba17ef154bcd69f6d1f2936b75e4e18d67c561009cae",
+    "final-analysis-reconstruction-01.log": "59554124242936e8329cac85d7e08b2c76926215436f22a11986d7f22ee99994",
+    "build_final_review_01.py": "3e1e4d5d28b4ec7e170412153cdddb14b33c90b7b51e861254610e6f299ea622"
+  }
+}

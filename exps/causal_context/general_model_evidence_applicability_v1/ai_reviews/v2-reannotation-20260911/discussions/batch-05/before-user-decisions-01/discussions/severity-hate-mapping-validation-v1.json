@@ -1,0 +1,37 @@
+{
+  "schema_version": "evidence-local-mapping-validation/v1",
+  "recorded_at_utc": "2026-09-11T08:31:10.895590+00:00",
+  "result": "passed",
+  "checks": [
+    "changed export scripts parse successfully",
+    "0, all positive grades, null, and invalid score types",
+    "base policies, immutable bundle/input/snapshot, pilot receipt and prior label exports retain original hashes",
+    "90 mapped cases preserve historical decisions, score provenance, scope and object versions",
+    "joined JSON/CSV, human field counts, exact evidence spans and pending queues agree",
+    "isolated candidate/null, no mutation, mismatched text and reference hash rejection"
+  ],
+  "mapping_context": {
+    "path": "hate_mapping_context.json",
+    "sha256": "12edd5107278c2bed5f4473db429f56c69f36d67b043c1de8e7aa234230361fc"
+  },
+  "checked_exports": [
+    {
+      "path": "severity/hate-mapping-v1/ai_annotations.json",
+      "sha256": "a3990e1268877d9a1d2984ea501a841652d3d1b19dfd3ce57768ec004c22dadd"
+    },
+    {
+      "path": "batches/batch-04/review.json",
+      "sha256": "766e08919fb0b256036a5948c6b5b976c624f278b1f907e10d0611a7f3ac21fc"
+    },
+    {
+      "path": "batches/batch-05/review.json",
+      "sha256": "2eba366ccc0c9ff1068e20f4d199dc442143da16e6320747563de98cab35255e"
+    }
+  ],
+  "object_count": 90,
+  "human_direct_hate_decisions_added_this_turn": 1,
+  "human_hate_decisions_added_by_mapping": 0,
+  "human_numeric_score_decisions_added_this_turn": 0,
+  "online_material_confirmations_added": 0,
+  "next_step": "Pause for the seven batch-05 questions; do not begin batch-06 before discussion."
+}

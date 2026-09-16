@@ -1,0 +1,1511 @@
+{
+  "schema_version": "evidence-adjudication-rule-cards/v1",
+  "recorded_at_utc": "2026-09-11T12:20:49.790437+00:00",
+  "author": "assistant",
+  "rules": [
+    {
+      "id": "P01",
+      "situation": "严重度与 hate 的当前映射",
+      "guidance": "暂按 0→non-hate，1–4→hate；严重度待定时当前 hate 也待定。",
+      "limits": "映射产生的 hate 是规则派生值；旧 hate 保留原政策和来源。接受映射不是逐条人工确认。",
+      "anchors": [
+        {
+          "object_id": "demo:4392",
+          "fields": {
+            "hate": "hate"
+          }
+        }
+      ],
+      "keywords": [
+        "hate",
+        "映射",
+        "0",
+        "非0",
+        "历史值"
+      ],
+      "status": "explicit_user_rule",
+      "summary_provenance": "ai_note",
+      "acceptance_source": "policies/severity-hate-default-mapping-v1.json"
+    },
+    {
+      "id": "P02",
+      "situation": "个人辱骂与 others",
+      "guidance": "已成立的个人辱骂通常计入 others；与种族攻击指向同一黑人受辱者时，个人辱骂这一项按新优先级 P24 处理。",
+      "limits": "先确认具体个人辱骂；行为批评、单纯提人或纯群体攻击不自动加 others。旧增补自分块 03 起生效，种族／个人合并优先级随后由 P24 修订。",
+      "anchors": [
+        {
+          "object_id": "demo:1517",
+          "fields": {
+            "group": [
+              "LGBTQ",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:6989",
+          "fields": {
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:7959",
+          "fields": {
+            "group": [
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "个人",
+        "辱骂",
+        "others",
+        "行为"
+      ],
+      "status": "explicit_user_rule",
+      "summary_provenance": "ai_note",
+      "acceptance_source": "policies/personal-insult-others-v1.json"
+    },
+    {
+      "id": "P03",
+      "situation": "严重度量表及待定",
+      "guidance": "使用 0–4 有序量表；按作者实际认可的攻击命题取最高有据等级。确实不能判时记 null。",
+      "limits": "不是出现某个词就机械升级，也不是对标注者冒犯感打分。量表原文的独立 hate 条款已由 P01 的临时映射覆盖。",
+      "anchors": [
+        {
+          "object_id": "demo:309",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:2750",
+          "fields": {
+            "attack_severity": 3
+          }
+        },
+        {
+          "object_id": "demo:2800",
+          "fields": {
+            "attack_severity": 3
+          }
+        }
+      ],
+      "keywords": [
+        "严重度",
+        "量表",
+        "null",
+        "作者立场"
+      ],
+      "status": "explicit_user_rule",
+      "summary_provenance": "ai_note",
+      "acceptance_source": "policies/attack-severity-v1.json"
+    },
+    {
+      "id": "P04",
+      "situation": "缺失上下文但文字无攻击",
+      "guidance": "仅有上下文不全，不足以补出歧视或攻击；可见句子没有贬损命题时可判 0／non-hate。",
+      "limits": "区别于已出现攻击而关键所指或程度无法确定；后者可保留待定。不能以缺失上下文替已明确辱称编造无害解释。",
+      "anchors": [
+        {
+          "object_id": "demo:43",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Region"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4744",
+          "fields": {
+            "attack_severity": 0,
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:3194",
+          "fields": {
+            "hate": "non-hate",
+            "group": []
+          }
+        },
+        {
+          "object_id": "query:1160",
+          "fields": {
+            "attack_severity": 0,
+            "group": []
+          }
+        }
+      ],
+      "keywords": [
+        "上下文",
+        "证据",
+        "缺失",
+        "无攻击"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P05",
+      "situation": "行为批评与人格贬损",
+      "guidance": "区分“这项行为／说法有问题”与直接贬评人的人格或能力；前者可为 0，后者即使轻也可能为 1。",
+      "limits": "“素质”“这道理都不懂”等词不独立定性。#6989 只评行为，#2075 只批评论点而为0；#309 轻度人格贬评、#2517 智力不足的个人能力贬评均为1。须看句内实际指向。",
+      "anchors": [
+        {
+          "object_id": "demo:6631",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Racism",
+              "Region"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:6989",
+          "fields": {
+            "attack_severity": 0,
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:309",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:5919",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "query:1160",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "query:4189",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:2075",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "LGBTQ",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:2517",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "行为批评",
+        "人格",
+        "素质",
+        "扯淡",
+        "能力"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P06",
+      "situation": "身份只作地名、背景或类比",
+      "guidance": "身份类别需实际进入本句的评价／讨论单位；地点背景或行为选择类比不自动增类。",
+      "limits": "#1224 的学历职业类比不另加 others；#4810 美国佬按政治代理背景处理。不能仅因有国家、性别词便扩大 group。",
+      "anchors": [
+        {
+          "object_id": "demo:1456",
+          "fields": {
+            "hate": "non-hate",
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:1224",
+          "fields": {
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4810",
+          "fields": {
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7959",
+          "fields": {
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "query:2011",
+          "fields": {
+            "group": [
+              "Racism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "地名",
+        "身份背景",
+        "类比",
+        "职业",
+        "学历",
+        "政治代理"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P07",
+      "situation": "抽象政治、资本与制度",
+      "guidance": "仅谈制度、资本或抽象政治机制，未实际评价具体人群／个人时可为 0／[]。",
+      "limits": "#2701 犹太财阀、#5865 犹资在该句按抽象对象处理；并不意味着任何涉及犹太人的指控均排除 Racism。",
+      "anchors": [
+        {
+          "object_id": "demo:2598",
+          "fields": {
+            "hate": "non-hate",
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:2701",
+          "fields": {
+            "hate": "non-hate",
+            "group": []
+          }
+        },
+        {
+          "object_id": "demo:5865",
+          "fields": {
+            "attack_severity": 0,
+            "group": []
+          }
+        }
+      ],
+      "keywords": [
+        "资本",
+        "制度",
+        "犹资",
+        "犹太财阀",
+        "政治"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P08",
+      "situation": "中性身份讨论与普通提问",
+      "guidance": "性取向、性别、地域等可以是中性讨论对象；没有攻击命题时取 0，不因保留 group 就判 hate。",
+      "limits": "反过来 non-hate 也不要求 group=[]；是否保留身份类别另按对象范围判断。",
+      "anchors": [
+        {
+          "object_id": "demo:1180",
+          "fields": {
+            "hate": "non-hate",
+            "group": [
+              "LGBTQ"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:159",
+          "fields": {
+            "hate": "non-hate",
+            "group": [
+              "Region"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1859",
+          "fields": {
+            "hate": "non-hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5365",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:6074",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:857",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "LGBTQ"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5900",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:6263",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:996",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "query:1292",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Racism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "中性",
+        "讨论",
+        "性取向",
+        "网络梗",
+        "提问",
+        "地域"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P09",
+      "situation": "报道、转述及反驳偏见",
+      "guidance": "判断作者对转述内容的立场；客观报告、罗列并反感偏见、整体反驳偏见可为 0。",
+      "limits": "报告他人骂法后若又认可负面概括，仍计攻击（#986＝2）；不能抽出被反驳的偏见充作作者立场。反歧视表述中的独立个人辱骂也需另计。",
+      "anchors": [
+        {
+          "object_id": "demo:5113",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "LGBTQ",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7232",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:7545",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:3882",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:986",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:996",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "query:4080",
+          "fields": {
+            "attack_severity": 0
+          }
+        }
+      ],
+      "keywords": [
+        "引用",
+        "转述",
+        "报道",
+        "反歧视",
+        "反驳",
+        "整体立场"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P10",
+      "situation": "轻度讽刺也可构成攻击",
+      "guidance": "确认有轻蔑、挖苦或轻度贬义后，可进入轻度攻击；未要求出现粗口。",
+      "limits": "表达强硬、表情、笑话格式本身不足以确定攻击；须能指出实际挖苦命题。#3281／#3492 只列已确认 hate/group，不把提案中的示例分数算成人工评分。",
+      "anchors": [
+        {
+          "object_id": "demo:100",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3281",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3492",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:6469",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:7189",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "LGBTQ",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7910",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "query:1160",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "demo:1660",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:2759",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:3212",
+          "fields": {
+            "attack_severity": 1
+          }
+        }
+      ],
+      "keywords": [
+        "讽刺",
+        "阴阳怪气",
+        "挖苦",
+        "大聪明",
+        "德行",
+        "平台"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P11",
+      "situation": "隐语与缩写按本句解释",
+      "guidance": "已有文本用法支持辱称时，不凭未经支持的其他释义把攻击消解；仍按本句证据确定所指。",
+      "limits": "这是个案取义倾向，不是“无法证明无害就一律仇恨”的通则。#5998 阿娜仅确认个人能力讥讽；#7959 接盘侠缺少婚恋性别依据。",
+      "anchors": [
+        {
+          "object_id": "demo:1158",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1509",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1729",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1815",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1915",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Racism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5998",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7959",
+          "fields": {
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:857",
+          "fields": {
+            "group": [
+              "LGBTQ"
+            ]
+          }
+        },
+        {
+          "object_id": "query:2297",
+          "fields": {
+            "group": [
+              "LGBTQ"
+            ]
+          }
+        },
+        {
+          "object_id": "query:4189",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "query:61",
+          "fields": {
+            "attack_severity": 2,
+            "group": [
+              "Sexism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "隐语",
+        "缩写",
+        "BBC",
+        "老g",
+        "lkd",
+        "接盘侠",
+        "阿娜"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P12",
+      "situation": "没有足够依据时不增种族类别",
+      "guidance": "地域、国籍、基因或不明暗指，并不自动成立独立种族判断；按实际所指决定是否增 Racism。",
+      "limits": "#924 明确裁定一般污名 2 / Region、Sexism；若新句直接提出种族层级或本性低等，需重新比较命题。",
+      "anchors": [
+        {
+          "object_id": "demo:2298",
+          "fields": {
+            "group": [
+              "Region",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:924",
+          "fields": {
+            "attack_severity": 2,
+            "group": [
+              "Region",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5998",
+          "fields": {
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "query:61",
+          "fields": {
+            "group": [
+              "Sexism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "Racism",
+        "Region",
+        "种族",
+        "基因",
+        "国籍",
+        "暗指"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P13",
+      "situation": "句内隐含性别身份",
+      "guidance": "性别不必总以“男／女”明写；句内含义能确定评价对象时可计 Sexism。",
+      "limits": "不把词典常见义或缺失图片当成句内证据。仅有婚恋联想的 #7959 不增 Sexism。",
+      "anchors": [
+        {
+          "object_id": "demo:3652",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "Racism",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3660",
+          "fields": {
+            "attack_severity": 2,
+            "group": [
+              "Racism",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7959",
+          "fields": {
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "query:3898",
+          "fields": {
+            "group": [
+              "Racism",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "query:61",
+          "fields": {
+            "group": [
+              "Sexism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "隐含",
+        "性别",
+        "女性",
+        "Sexism"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P14",
+      "situation": "1 级：轻度人格贬评、优越感",
+      "guidance": "轻度人格／能力贬评、挖苦或轻度优越感可以定 1；明确指向人格也不自动升级到 2。",
+      "limits": "#877 优势地位、#2517 智力不足的人在各自语境均定1；#3585 没脊椎没脑子定2。轻度人格/能力评价与明确侮辱须比较具体用法，不能仅靠类别词。",
+      "anchors": [
+        {
+          "object_id": "demo:309",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:3742",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4392",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5919",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:7910",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:877",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "query:7244",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "query:7646",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:2517",
+          "fields": {
+            "attack_severity": 1,
+            "group": [
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "1级",
+        "轻度",
+        "人格",
+        "优越感",
+        "优势"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P15",
+      "situation": "2 级：明确侮辱、一般污名与疾病类比",
+      "guidance": "明确个人侮辱、疾病污名、一般身份负面概括、借归谬实际表达污名可定2；仍须按具体表达校准。",
+      "limits": "“正常人”的对照或“基因”的措辞，不单独把程度升到 3；需比较是否已认定本性低等或严重排斥。",
+      "anchors": [
+        {
+          "object_id": "demo:5416",
+          "fields": {
+            "attack_severity": 2,
+            "group": [
+              "LGBTQ",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7464",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:924",
+          "fields": {
+            "attack_severity": 2,
+            "group": [
+              "Region",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:5615",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:4810",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:986",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "query:2011",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "query:5423",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:1509",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:2004",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:2685",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:3519",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:3585",
+          "fields": {
+            "attack_severity": 2
+          }
+        }
+      ],
+      "keywords": [
+        "2级",
+        "艾",
+        "爱",
+        "疾病",
+        "艾滋",
+        "归谬",
+        "一般污名"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P16",
+      "situation": "3 级：本性低等、非人化与严重辱称",
+      "guidance": "垃圾原材料影射群体本身低等、用动物性别称谓指人等，已有 3 级裁决锚点。",
+      "limits": "#2685 的🐶、#3519 的÷生均被用户定2，说明动物字样或谐写不自动等于3级。#3845 的具体身份动物称谓、#2750 的原材料低等影射仍为3。#2011 智力/开化比较为2；上述差异按案例保存，不外推所有同词文本。",
+      "anchors": [
+        {
+          "object_id": "demo:2750",
+          "fields": {
+            "attack_severity": 3,
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3845",
+          "fields": {
+            "attack_severity": 3,
+            "group": [
+              "Racism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:528",
+          "fields": {
+            "attack_severity": 3,
+            "group": [
+              "Region",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "query:2011",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "query:2297",
+          "fields": {
+            "attack_severity": 3,
+            "group": [
+              "LGBTQ"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:2685",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:3519",
+          "fields": {
+            "attack_severity": 2
+          }
+        }
+      ],
+      "keywords": [
+        "3级",
+        "动物",
+        "公的",
+        "垃圾材料",
+        "低等",
+        "非人化",
+        "辱称"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P17",
+      "situation": "身体伤害认可与讽刺、冷漠",
+      "guidance": "出现杀死、诛之、死亡等词不自动为 4；需判断是否真正认可身体伤害。",
+      "limits": "#2180=2、#2800=3 的数值由用户确认，具体解释部分仍为 AI 归纳；#5394 明确理由是漠视而未认可伤害。#2773 只确认了 hate/group，未直接确认严重度。",
+      "anchors": [
+        {
+          "object_id": "demo:2180",
+          "fields": {
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:2800",
+          "fields": {
+            "attack_severity": 3
+          }
+        },
+        {
+          "object_id": "demo:5394",
+          "fields": {
+            "attack_severity": 3
+          }
+        },
+        {
+          "object_id": "demo:2773",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Racism",
+              "Region"
+            ]
+          }
+        },
+        {
+          "object_id": "query:3898",
+          "fields": {
+            "attack_severity": 3
+          }
+        }
+      ],
+      "keywords": [
+        "4级",
+        "暴力",
+        "身体伤害",
+        "诛之",
+        "杀死",
+        "死亡",
+        "奴役"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P18",
+      "situation": "多类别与个人辱骂并存",
+      "guidance": "分别记录实际参与评价的身份类别；个人辱骂产生的 others 一般并列，但与种族攻击指向同一黑人受辱者时遵循 P24 的优先级。",
+      "limits": "不能把整句最高严重度分配给所有被提及身份；不能因为受话者属于某群体便断定每句均有独立个人辱骂。",
+      "anchors": [
+        {
+          "object_id": "demo:1517",
+          "fields": {
+            "group": [
+              "LGBTQ",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:2101",
+          "fields": {
+            "group": [
+              "LGBTQ",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:2750",
+          "fields": {
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3492",
+          "fields": {
+            "group": [
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4810",
+          "fields": {
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7189",
+          "fields": {
+            "group": [
+              "LGBTQ",
+              "Sexism",
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "多标签",
+        "并集",
+        "others",
+        "个人",
+        "群体"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P19",
+      "situation": "谈词语与实际使用辱称",
+      "guidance": "区分纯谈网络梗／生活选择，与用词对人实施贬损；词的冒犯性和使用方式共同判断。",
+      "limits": "#3212 混迹在网络被认定有轻度贬损1；#3372 与#6074只谈梗无具体攻击命题为0。#4392自称仍有实际冒犯词为1，不能一律将自称或谈梗视为无害。",
+      "anchors": [
+        {
+          "object_id": "demo:5365",
+          "fields": {
+            "attack_severity": 0,
+            "group": [
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4392",
+          "fields": {
+            "attack_severity": 1,
+            "hate": "hate",
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:528",
+          "fields": {
+            "attack_severity": 3,
+            "group": [
+              "Region",
+              "Sexism"
+            ]
+          }
+        },
+        {
+          "object_id": "query:4080",
+          "fields": {
+            "attack_severity": 0
+          }
+        },
+        {
+          "object_id": "query:7244",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:3212",
+          "fields": {
+            "attack_severity": 1
+          }
+        },
+        {
+          "object_id": "demo:3372",
+          "fields": {
+            "attack_severity": 0
+          }
+        }
+      ],
+      "keywords": [
+        "词义",
+        "讨论词语",
+        "自称",
+        "自嘲",
+        "网络梗",
+        "辱称"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P20",
+      "situation": "词义不全与严重度能否独立判断",
+      "guidance": "不补造未知隐语或星号的内容；若其余可见表达已足以判断攻击强度，可以据此定级。严重度先前待定时保留历史hate/group。",
+      "limits": "#1509、#2004 经本轮明确回复均补为2级；前者老g义仍未查明，后者不得还原不存在的隐藏词。不能把未知词自动当无害，也不能用旧hate标签替代分级依据。",
+      "anchors": [
+        {
+          "object_id": "demo:1509",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism"
+            ],
+            "attack_severity": 2
+          }
+        },
+        {
+          "object_id": "demo:2004",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Region",
+              "others"
+            ],
+            "attack_severity": 2
+          }
+        }
+      ],
+      "keywords": [
+        "待定",
+        "严重度",
+        "星号",
+        "老g",
+        "历史hate"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P21",
+      "situation": "网络社群及平台使用者",
+      "guidance": "若实际贬评社群成员或平台使用者，可归 others；有性别评价时另外保留 Sexism。",
+      "limits": "机构／平台名字本身不等于人群攻击；必须能定位对使用者的评价。",
+      "anchors": [
+        {
+          "object_id": "demo:179",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3281",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3492",
+          "fields": {
+            "hate": "hate",
+            "group": [
+              "Sexism",
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "平台",
+        "知乎",
+        "编乎",
+        "微博",
+        "厕所",
+        "社群",
+        "贴吧"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P22",
+      "situation": "保留个案及来源限制",
+      "guidance": "没有解释的个案裁决原样保留；不能从单条标签反推出未获确认的新总规则。",
+      "limits": "#5615/#5423早期只保留个案；后续合并优先级经同一对象条件补充，#5423已明确修订。不得把后来解释倒写为早期理由；显式修订与无解释冲突分开记录。",
+      "anchors": [
+        {
+          "object_id": "demo:5615",
+          "fields": {
+            "hate": "hate",
+            "attack_severity": 2,
+            "group": [
+              "Racism"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:1240",
+          "fields": {
+            "hate": "non-hate",
+            "group": []
+          }
+        },
+        {
+          "object_id": "query:5423",
+          "fields": {
+            "group": [
+              "Racism"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "个案",
+        "冲突",
+        "例外",
+        "来源",
+        "历史",
+        "修订"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P23",
+      "situation": "仇恨相关术语的提及",
+      "guidance": "术语有阴谋论或冒犯背景，不足以单独确定本句正在实施攻击；仍判断可见句子的用法。",
+      "limits": "#1292 明确判 0／Racism，理由是仅提及、无明确攻击；不能据此认证阴谋真实，也不能把该个案推广为所有同类指控无害。",
+      "anchors": [
+        {
+          "object_id": "query:1292",
+          "fields": {
+            "group": [
+              "Racism"
+            ],
+            "attack_severity": 0
+          }
+        }
+      ],
+      "keywords": [
+        "凯勒奇计划",
+        "阴谋论",
+        "词义背景",
+        "仅提及",
+        "作者立场"
+      ],
+      "status": "ai_case_synthesis",
+      "summary_provenance": "ai_note"
+    },
+    {
+      "id": "P24",
+      "situation": "种族与个人辱骂：同一黑人受辱对象才合并",
+      "guidance": "用户已补充：受话者本身是黑人，且种族与个人辱骂指向同一人时，个人辱骂这一项才并入Racism；不同受辱对象须保留独立others。",
+      "limits": "仅同句共现不适用。#3742、#7927个人攻击对象独立，均保留others；#5423受辱者未被证明是黑人，经明确复核改为Racism、others。#4392政治身份独立，#4810有独立身份依据，也保留others。不根据“护黑”补受话者种族，不自动外推所有族群或改变严重度。",
+      "anchors": [
+        {
+          "object_id": "demo:5615",
+          "fields": {
+            "group": [
+              "Racism"
+            ]
+          }
+        },
+        {
+          "object_id": "query:5423",
+          "fields": {
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:3742",
+          "fields": {
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4392",
+          "fields": {
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:4810",
+          "fields": {
+            "group": [
+              "Racism",
+              "Sexism",
+              "others"
+            ]
+          }
+        },
+        {
+          "object_id": "demo:7927",
+          "fields": {
+            "group": [
+              "Racism",
+              "others"
+            ]
+          }
+        }
+      ],
+      "keywords": [
+        "Racism",
+        "个人辱骂",
+        "others",
+        "优先级",
+        "合并",
+        "冲突",
+        "同一对象",
+        "黑人受话者",
+        "目标分离",
+        "护默"
+      ],
+      "status": "explicit_user_rule",
+      "summary_provenance": "ai_note",
+      "acceptance_source": "policies/racism-personal-same-target-v1.json",
+      "earlier_acceptance_source": "policies/racism-personal-priority-v1.json"
+    }
+  ],
+  "updated_at_utc": "2026-09-11T13:45:29.987890+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "review_kind": "ai_note",
+  "input_scope": "authorized_query_and_resource_texts_only",
+  "model_revision": "not_exposed",
+  "generator": "resource_ai_drafts_a",
+  "batch_context": "16 sanitized cases; no query Gold, demo original answers, predictions or sample buckets",
+  "input_file": "exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part1.jsonl",
+  "input_sha256": "b487af3a9c593d805100d67d1b39c3fc16a2d0ee647ad37829a59ce03907a1da",
+  "policy_file": "docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md",
+  "policy_sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+  "output_file": "exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/resource_drafts_a.jsonl",
+  "output_sha256": "c602870f361e32033c046ea4e77a0f0a4ad858a559c5ab43f1a03e5c1ad18030",
+  "authoring_script_sha256": "362a3bb49ac6402f997abb4830133c4d2775c3982baa5ac638037da226db04b8",
+  "case_count": 16,
+  "row_count": 406,
+  "kind_counts": {
+    "relation": 160,
+    "definition": 82,
+    "hit": 164
+  },
+  "generation_method": "The language-model agent read only the frozen policy and assigned sanitized resource cases. Each relation, definition and occurrence was individually considered and recorded in manually authored indexed tuples. Python expanded schema and exact Unicode evidence spans, checked object coverage and serialized rows; it did not infer semantic labels from keywords.",
+  "actual_delegated_task_prompt": "Generate AI resource applicability drafts for authorized first16discovery cases, exactly406 required objects. Workspace /data/liaozijie/hate_speech_detection. Read ONLY docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v1.md and exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_inputs/resource_cases_part1.jsonl. These sanitizedcaseinputs contain query text, demos text, definitions and required_drafts array of id/kind/source span metadata; no Gold, source answers, predictions, buckets. Do not read other experimentdata or otherAIoutputs. Analyze EACH required object substantively using only these texts; no automatic keywordlabelheuristics. Output exps/causal_context/general_model_evidence_applicability_v1/preparation/ai_outputs/resource_drafts_a.jsonl exactly406 rows {id,values,provenance:{review_kind:'ai_note',input_scope:'authorized_query_and_resource_texts_only',model_revision:'not_exposed',generator:'resource_ai_drafts_a',batch_context:'16 sanitized cases; no query Gold, demo original answers, predictions or sample buckets'}}. For kind relation values={topic_hate,topic_group,rule_hate,rule_group:each direct|partial|none|unclear,lexicon_risk:yes|no|unclear,evidence:[{source:'query'|'demo',start,end,text}],note:briefChinese}; decide topicandspecificjudgmentrule independently and taskindependent. lexiconrisk when introduced_entry_ids notempty assess wronglymatched/unrelated definitions toquery (notcausalclaim). For definition values={definition_verdict:reasonable|too_narrow|other_problem|uncertain,issues:[valid_sense|substring_mismatch|wrong_sense|overly_narrow_definition|uncertain|not_rendered|provenance_mismatch],evidence:[{source:'text',...}],note}; only definitionitselfquality not occurrence. For hit values={source_fit:valid_sense|wrong_sense|substring_mismatch|uncertain|not_rendered,query_fit:applicable|inapplicable|uncertain,issues:[sameallowed],evidence:[{source:'text'|'query'|'definition',...}],note}. Source hit rawtext=case.query if source_kind=query else demos[source_id]; definition=definitions[sense_id].text. raw_span isverifiedmatch position; examine substring context: validmatcherdoesnotimplycorrectsense, e.g 笑声嘿 inside嘲黑人义 or lettersinsideword. Even appropriatedemosense can beinapplicablequery. All hits actuallyrendered andpositionverified; no need provenance_mismatch absentrealreason. Use exact rawspan as source:'text' evidence; optionalqueryquote. Computeoffsets Pythonstr.index/check. Definitionsentry_ID mayhave multiple senses eachjudgedseparately. Can manuallyauthorcompactpercase tuplelists andexpandwithPython, but consider everyobject. Persist actualprompt/provenance summary andinputfile/policyhash. Do NOT human-confirm anything or alterotherfiles. Need efficientcompletion, reportcounts andvalidateIDs/evidence.",
+  "input_exclusions": [
+    "query Gold",
+    "demo original answers",
+    "model predictions",
+    "sample buckets",
+    "reserve cases",
+    "other AI outputs"
+  ],
+  "validation": {
+    "exact_required_id_order": true,
+    "unique_ids": 406,
+    "evidence_span_validation": "all nonempty evidence quotes satisfy Python Unicode code-point half-open bounds and exact raw_text[start:end] equality",
+    "empty_evidence_reason": "One definition (lex-new-b5bb7feeffb85985:sense:01) has an empty text, so no fabricated evidence span was emitted.",
+    "human_confirmation_actions": 0
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schema_version": "evidence-ai-batch-calibration/v1",
+  "batch": 2,
+  "recorded_at_utc": "2026-09-10T21:32:09.955976+00:00",
+  "review_kind": "ai_note",
+  "human_label_decisions_added": 0,
+  "online_material_confirmations_added": 0,
+  "policy": {
+    "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+    "version": "evidence-applicability-annotation-policy/v2"
+  },
+  "bundle_sha256": "a541349cdd248032f56fad1bb2618abc9569fbe1548f3c4864691e6850d7f3b4",
+  "reference_sources": [
+    {
+      "path": "provenance/human-reference.json",
+      "sha256": "4b25be7bc02f1844f14a1a62e8f83897325eed83ad874749698ae9dcab5480fb"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-01.json",
+      "sha256": "465a785f37c559f14109244b40d864b427f859e063e151f0af47847cea963989"
+    },
+    {
+      "path": "discussions/batch-01/user-decisions-02.json",
+      "sha256": "643c30ab324528e662d3756c50233ec7b7d730a8ec5c8173c0bffb1e75f55a3b"
+    }
+  ],
+  "pre_calibration_annotation_sha256": "3a5dfca842699b74bf3724cfe4fde1f64444f4562ae1f687165e52af4eb8e4b3",
+  "post_calibration_annotation_sha256": "ca24b182d2076c995f6870fa31129420d47183419f4fc6d67147c099af8f7a4b",
+  "method": "All 30 source texts reread; previous human decisions used as case-specific analogies; new labels remain AI suggestions.",
+  "original_answer_exposure": "No new source answer or prediction read by annotator for this calibration. Programmatic comparisons follow saved drafts.",
+  "changes": [
+    {
+      "object_id": "demo:2101",
+      "before_hate": "h",
+      "before_group": "?",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "将撑同者尤其女性概括为不可能公正，hate 可确定。Sexism 与支持者身份 others 明确；前面的两个群体是否同时指同性恋与非同性恋并构成隔离式评价，会决定是否再纳入 LGBTQ，完整 group 待裁定。"
+    },
+    {
+      "object_id": "demo:2218",
+      "before_hate": "?",
+      "before_group": "D",
+      "after_hate": "n",
+      "after_group": "D",
+      "note": "参照第一批不补造缺失攻击的处理：作者说没见过，并将新疆居民的刻板印象明确归给朋友的转述；当前文本未见作者另行认可该命题，不把省略的回复假设成攻击。取 non-hate + Region。"
+    },
+    {
+      "object_id": "demo:2298",
+      "before_hate": "h",
+      "before_group": "?",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "明确接受歧视并贬损外国人及公知，hate 可确定。依既有 demo:2129 将被实际评价的外国身份映射 Region，另有公知／身体气味等身份 others；待讨论的是自称种族歧视者是否足以再加入 Racism，而非重复询问国籍映射。"
+    },
+    {
+      "object_id": "demo:2349",
+      "before_hate": "n",
+      "before_group": "?",
+      "after_hate": "n",
+      "after_group": "R,D,S",
+      "note": "反对物化女性，并为女性与黑人、外国伴侣的恋爱选择辩护；这几类身份直接参与被辩护的关系，取 Racism + Region + Sexism。后半句按可指认行为批评处理，不借其中法律断言补事实。"
+    },
+    {
+      "object_id": "demo:2445",
+      "before_hate": "n",
+      "before_group": "?",
+      "after_hate": "n",
+      "after_group": "S",
+      "note": "表达自身经历、未诋毁男性及接受不同意见，取 non-hate + Sexism。跟我不是一个圈子在这里说明说话者与对方的经历差别，没有另给一个具体社群施加评价，因而不补其他类别或制造未决。"
+    },
+    {
+      "object_id": "demo:25",
+      "before_hate": "?",
+      "before_group": "D",
+      "after_hate": "h",
+      "after_group": "D",
+      "note": "参照用户对 demo:1517 的裁决：反对地域辱骂不覆盖另行将具体博主说成有病的定向辱骂，句级取 hate。河南居民是被辩护的地域身份；博主在本句按具体行为人指认，未按职业身份评价，group 取 Region。"
+    },
+    {
+      "object_id": "demo:2517",
+      "before_hate": "?",
+      "before_group": "-",
+      "after_hate": "h",
+      "after_group": "-",
+      "note": "智力不足的人加上比如现在，构成对当前对话者的定向智力贬损；参照 demo:1517，取 hate，强度不同于 demo:1240 的这货。这里不据修辞辱骂推定真实残障群体，也未按其他身份评价，group 为 []。"
+    },
+    {
+      "object_id": "demo:255",
+      "before_hate": "?",
+      "before_group": "?",
+      "after_hate": "h",
+      "after_group": "S",
+      "note": "作者对普信男作正面比较，同时主动使用婊子、对社会危害最大等定向贬损；否认这是荡妇羞辱不消除实际贬损。男性已是明确性别评价单位；另一批人按又当又立行为指认，不补未出现的身份类别，取 hate + Sexism。"
+    },
+    {
+      "object_id": "demo:2682",
+      "before_hate": "n",
+      "before_group": "?",
+      "after_hate": "n",
+      "after_group": "D,S,O",
+      "note": "解释男女数量差异与未婚男性选择外国伴侣、反驳双标指责，未见攻击。性别、婚姻状态与实际参与择偶比较的中外身份分别映射 Sexism、others、Region，取 non-hate + Region + Sexism + others。"
+    },
+    {
+      "object_id": "demo:2685",
+      "before_hate": "?",
+      "before_group": "S,O",
+      "after_hate": "h",
+      "after_group": "S,O",
+      "note": "以女汉奸贬损带性别维度的政治身份群体，并用狗的表情辱骂发帖者。参照用户对国内女权的德行和定向辱骂的处理，hate 已可判定；性别与政治角色分别为 Sexism、others。"
+    },
+    {
+      "object_id": "demo:2701",
+      "before_hate": "n",
+      "before_group": "R,O",
+      "after_hate": "n",
+      "after_group": "?",
+      "note": "本句只说犹太财阀支持某事，未给出攻击命题，hate 取 non-hate。group 待讨论：若只是交代支持来源，按身份背景取 []；若犹太财阀已成为实际群体评价单位，则取 Racism + others。我倾向前一种，但需与你对齐。"
+    },
+    {
+      "object_id": "demo:2750",
+      "before_hate": "?",
+      "before_group": "?",
+      "after_hate": "h",
+      "after_group": "?",
+      "note": "连乐色都不如是作者实施的定向贬损，参照第一批个人辱骂裁决可定 hate。后续黑色袋子最便宜、是垃圾材料的类比倾向于种族影射，但原句没有直接出现黑人；完整 group 待确认取 Racism，还是仍不足以认定身份、按 []。"
+    }
+  ],
+  "pending_ids": [
+    "demo:2101",
+    "demo:2180",
+    "demo:2298",
+    "demo:2598",
+    "demo:2701",
+    "demo:2750"
+  ]
+}

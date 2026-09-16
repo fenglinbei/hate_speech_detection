@@ -1,0 +1,25 @@
+{
+  "schema_version": "evidence-preference-maintenance/v1",
+  "recorded_at_utc": "2026-09-11T12:20:49.790437+00:00",
+  "authorization": [
+    {
+      "text": "可以根据每次裁决偏好维护一个规则偏好表，使得下次遇到类似案例可复查以及人类可读",
+      "source": "explicit_user_message_in_current_task"
+    },
+    {
+      "text": "在复核的时候，如果我的决定与之前的出现冲突，也可以告知我",
+      "source": "explicit_user_message_in_current_task"
+    }
+  ],
+  "workflow": [
+    "新一轮起草前读取当前表，并在该轮记录所用不可变快照。",
+    "按正文、对象、实际命题、作者立场和适用政策比较；共享关键词只用于找候选，不自动认定冲突。",
+    "收录每次明确回复的实际字段、原话或已接受建议、源文件哈希；未回答字段保持 AI 来源。",
+    "发现可能差异时同时展示前后案例、具体字段、相似点和可能区分条件，请用户说明个案边界或修订口径。",
+    "用户决定修改时另建有来源的修订记录，保留旧决定；不自动把新回复推广到所有旧样本。",
+    "每轮疑点处理完成后更新规则卡和一致性记录，运行导出脚本；新案例未分类时列入待整理清单。",
+    "每次刷新按内容哈希生成不可变快照，当前入口指向最新版本；该表不代替正式政策或线上材料确认。"
+  ],
+  "semantic_comparison": "human-assisted, not a reliable automatic contradiction detector",
+  "source_scope": "本地当前任务已登记的字段裁决；不含未查看的线上新增决定或模型预测"
+}

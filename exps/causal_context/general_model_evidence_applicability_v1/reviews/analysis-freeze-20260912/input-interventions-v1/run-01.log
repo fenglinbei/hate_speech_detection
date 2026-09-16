@@ -1,0 +1,823 @@
+{"stage": "evidence-loading-fp32-replicas", "conditions": 26, "baselines": 12}
+[HAMI-core Msg(109934:139801401613184:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(109933:140133725801344:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(109931:140494994176896:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(109932:139681522584448:libvgpu.c:856)]: Initializing.....
+[HAMI-core Msg(109934:139801401613184:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(109933:140133725801344:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core Msg(109931:140494994176896:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:109932 thread=139681522584448 utils.c:160)]: host pid is error!
+[HAMI-core Msg(109932:139681522584448:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(109932:139681522584448:libvgpu.c:880)]: SET_TASK_PID FAILED.
+[HAMI-core Msg(109933:140133725801344:utils.c:32)]: unified_lock locked, waiting 1 second...
+[HAMI-core ERROR (pid:109934 thread=139801401613184 utils.c:160)]: host pid is error!
+[HAMI-core Msg(109934:139801401613184:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(109934:139801401613184:libvgpu.c:880)]: SET_TASK_PID FAILED.
+[HAMI-core Msg(109931:140494994176896:libvgpu.c:878)]: Initialized
+[HAMI-core ERROR (pid:109933 thread=140133725801344 utils.c:160)]: host pid is error!
+[HAMI-core Msg(109933:140133725801344:libvgpu.c:878)]: Initialized
+[HAMI-core Warn(109933:140133725801344:libvgpu.c:880)]: SET_TASK_PID FAILED.
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:03<00:15,  3.88s/it]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:04<00:16,  4.11s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:08<00:12,  4.19s/it]Loading checkpoint shards:  20%|██        | 1/5 [00:04<00:16,  4.10s/it]Loading checkpoint shards:  20%|██        | 1/5 [00:04<00:17,  4.39s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:11<00:07,  3.60s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:15,  5.04s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:14<00:03,  3.48s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:14<00:00,  2.27s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:14<00:00,  2.92s/it]
+Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:14,  4.88s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:09<00:14,  4.81s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:12<00:08,  4.20s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:12<00:08,  4.15s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:15<00:03,  3.57s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:15<00:00,  3.14s/it]
+Loading checkpoint shards:  60%|██████    | 3/5 [00:12<00:08,  4.08s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:14<00:03,  3.03s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:14<00:00,  2.84s/it]
+Loading checkpoint shards:  80%|████████  | 4/5 [00:13<00:02,  2.59s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:13<00:00,  2.62s/it]
+{"stage": "numeric-pool-ready", "device_indices": [0, 1, 2, 3], "runtime_sha256": "8b2c54df914ff50c1acb2fd37f3d5d6e82df51808fc1c086f8531eae4b7b1cda"}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r0", "blocks": 12}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 20.64}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 27.24}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 27.87}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r0", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 47.96}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r0", "check": "historical_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "regression-b1-r1", "blocks": 12}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 19.29}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 25.87}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 26.38}
+{"stage": "scoring-v2", "pass_name": "regression-b1-r1", "completed_blocks": 3, "expected_blocks": 3, "elapsed_seconds": 46.66}
+{"stage": "evidence-pass-verified", "pass": "regression-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "b8a6e3777a169b5e7fa3caf5de54866dbaf0cc745462ff1fd88d476d0a477993"}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-r0", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r0", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 39.39}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r0", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 50.35}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r0", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 71.7}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r0", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 81.22}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-r0", "check": "raw_baseline_replay", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-r1", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r1", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 39.52}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r1", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 50.52}
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:117875)
+[HAMI-core Warn(109931:140485840975424:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109931:117875)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:117875)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:117875)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:117875)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:117875)
+[HAMI-core Warn(109931:140485840975424:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:501)]: Owner proc dead (117875), try fix
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:109931)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109931)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109931)
+[HAMI-core Warn(109934:139792006112832:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:118508)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:118508)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:118508)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:118508)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109934:118508)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:118508)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:118508)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109934:139801401613184:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:0)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109934)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109934)
+[HAMI-core Warn(109933:140124329207360:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109932:109933)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:497)]: Lock shrreg timeout, try fix (109933:109933)
+[HAMI-core Warn(109933:140133725801344:multiprocess_memory_limit.c:501)]: Owner proc dead (109933), try fix
+[HAMI-core Warn(109932:139672146118208:multiprocess_memory_limit.c:508)]: Fail to lock shrreg in 300 seconds
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r1", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 81.59}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-r1", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 94.07}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-r1", "check": "repeat", "max_abs_error": 0.0, "limit": 0.0001, "passed": true, "manifest_sha256": "2957acb4d4ebf3a9d789738a10a070f90b9eb3d24c57759c74443bc9b6e1900a"}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-padding", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-padding", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 42.87}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-padding", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 53.4}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-padding", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 78.48}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-padding", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 93.4}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-padding", "check": "padding", "max_abs_error": 0.000335693359375, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "885d3e32f28ea1464cb56577975e816b91476a7e2cb0293d07e36c64941dcb27"}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-prefix", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-prefix", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 129.43}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-prefix", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 160.34}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-prefix", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 225.92}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-prefix", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 269.66}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-prefix", "check": "prefix", "max_abs_error": 0.000324249267578125, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "8ee3f8d9a0c230c06873761cf51b2130734451ddd6d83f2b34a94b34bee777a3"}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-members", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-members", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 38.97}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-members", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 49.42}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-members", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 70.75}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-members", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 85.13}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-members", "check": "members", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "de72bb129601ca7075741b3e0d5ef11c1111d5891f1d1be0bd85a9ae6eb762ff"}
+{"stage": "evidence-pass-start", "pass_name": "interventions-b1-replica", "blocks": 26}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-replica", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 41.06}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-replica", "completed_blocks": 7, "expected_blocks": 7, "elapsed_seconds": 49.2}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-replica", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 76.43}
+{"stage": "scoring-v2", "pass_name": "interventions-b1-replica", "completed_blocks": 6, "expected_blocks": 6, "elapsed_seconds": 78.83}
+{"stage": "evidence-pass-verified", "pass": "interventions-b1-replica", "check": "replica", "max_abs_error": 0.0, "limit": 0.0013427734375, "passed": true, "manifest_sha256": "f3c52d60573192460b6092f08e9d4a703a4a4f3e8a7f7662d00625f38061cd3a"}
+{"stage": "evidence-scoring-complete", "blocks": 26, "candidates": 412}
+[HAMI-core Msg(109931:140494994176896:multiprocess_memory_limit.c:455)]: Calling exit handler 109931
+[HAMI-core Msg(109932:139681522584448:multiprocess_memory_limit.c:455)]: Calling exit handler 109932
+[HAMI-core Msg(109934:139801401613184:multiprocess_memory_limit.c:455)]: Calling exit handler 109934
+[HAMI-core Msg(109933:140133725801344:multiprocess_memory_limit.c:455)]: Calling exit handler 109933

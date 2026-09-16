@@ -1,5 +1,17 @@
 # NoCat 配对案例人工复核工作台
 
+新增的 **[证据适用性 AI 辅助裁决](https://hsd.fenglin.pro/evidence/)** 已于 2026-09-08 上线。
+新模式覆盖 32 discovery 的 1,072 项 AI 初稿，先用选择题核对材料，再对照原标注和结果；
+使用独立会话，原模式记录保持不变。[执行与验收说明](../../exps/causal_context/general_model_evidence_applicability_v1/execution-status.md)。
+2026-09-09 已启用 [group 范围 v2](../../docs/research/annotation-guidelines/evidence-applicability-annotation-policy-v2.md)：
+旧 AI 初稿仍标记 v1，既有决定保留，group 单独核对；修改 hate 或共同依据需显式重新打开。
+新规则与原标注不同而已裁决时，group 可选择“规则变化（已裁决）”；导出保留逐任务规则及可用性。
+材料选择器提供“上一材料 / 下一材料”，按当前类型筛选的顺序切换，首尾不循环、不跨案例。
+`Alt + ↑` / `Alt + ↓` 对应材料切换；原 `[ ]` 仍切换案例，`Ctrl / ⌘ S` 保存。
+输入控件、输入法组合及弹窗内不触发材料快捷键。切换前保存未保存的草稿，失败或冲突时保留当前材料与编辑；
+切换材料不等于人工确认。
+下文仍描述原 paired 模式。
+
 复用现有 WP3 人审工作台的三栏布局与共享组件：左侧固定案例队列，中间查询/词典/示例/预测材料，右侧人工记录。默认按冻结顺序复核首批12条，可切换全部32条discovery；16条reserve不进入工作台。
 
 ## 访问与续审

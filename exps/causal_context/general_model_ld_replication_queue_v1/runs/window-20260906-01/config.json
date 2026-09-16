@@ -1,0 +1,111 @@
+{
+  "graceful_stop_at": "2026-09-06T01:55:00Z",
+  "hard_deadline": "2026-09-06T02:00:00Z",
+  "hard_release_margin_seconds": 5,
+  "interrupt_grace_seconds": 120,
+  "phases": [
+    {
+      "jobs": [
+        {
+          "command": [
+            "/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python",
+            "scripts/stage1/general_model_coverage_replication.py",
+            "preflight",
+            "--plan",
+            "exps/causal_context/general_model_ld_coverage_14b_v1/plan_ref.json",
+            "--output",
+            "exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01"
+          ],
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "id": "14b-preflight",
+          "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": [
+            "preflight_passed"
+          ]
+        },
+        {
+          "command": [
+            "/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python",
+            "scripts/stage1/general_model_coverage_replication.py",
+            "preflight",
+            "--plan",
+            "exps/causal_context/general_model_ld_coverage_27b_v1/plan_ref.json",
+            "--output",
+            "exps/causal_context/general_model_ld_coverage_27b_v1/runs/replication-01"
+          ],
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "id": "27b-preflight",
+          "plan_id": "gmlrep-ddb99ece34fd821c743f497140d65db255c2d675d9e6df199f9c2f1aabc647c5",
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_27b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": [
+            "preflight_passed"
+          ]
+        }
+      ],
+      "name": "preflights"
+    },
+    {
+      "jobs": [
+        {
+          "command": [
+            "/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python",
+            "scripts/stage1/general_model_coverage_replication.py",
+            "dev",
+            "--plan",
+            "exps/causal_context/general_model_ld_coverage_14b_v1/plan_ref.json",
+            "--output",
+            "exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01"
+          ],
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "id": "14b-dev",
+          "plan_id": "gmlrep-b64f97a77578d0c5e1f91adc1b4c509df409d3f56c04c4329b2ca6ed8718f2d5",
+          "requires_success": [
+            "14b-preflight",
+            "27b-preflight"
+          ],
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_14b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": [
+            "complete"
+          ]
+        },
+        {
+          "command": [
+            "/data/liaozijie/conda/accelerate-fc-mrec-clean/bin/python",
+            "scripts/stage1/general_model_coverage_replication.py",
+            "dev",
+            "--plan",
+            "exps/causal_context/general_model_ld_coverage_27b_v1/plan_ref.json",
+            "--output",
+            "exps/causal_context/general_model_ld_coverage_27b_v1/runs/replication-01"
+          ],
+          "cwd": "/data/liaozijie/hate_speech_detection",
+          "id": "27b-dev",
+          "plan_id": "gmlrep-ddb99ece34fd821c743f497140d65db255c2d675d9e6df199f9c2f1aabc647c5",
+          "requires_success": [
+            "14b-preflight",
+            "27b-preflight"
+          ],
+          "result_manifest": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_27b_v1/runs/replication-01/run_manifest.json",
+          "success_statuses": [
+            "complete"
+          ]
+        }
+      ],
+      "name": "full-dev"
+    }
+  ],
+  "poll_seconds": 1,
+  "schema_version": "general-model-gpu-queue/v1",
+  "terminate_grace_seconds": 30,
+  "wait_for": {
+    "manifest_path": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_v1/runs/coverage-01/run_manifest.json",
+    "plan_id": "gmlcoverage-64e2986d5de1d9c9ff0ebc9c2d72944208b833ca9aacf115ec71a14403e0c6f4",
+    "process": {
+      "pid": 1056529,
+      "start_ticks": 333400845
+    },
+    "required_status": "complete",
+    "writer_lock": "/data/liaozijie/hate_speech_detection/exps/causal_context/general_model_ld_coverage_v1/runs/coverage-01/.writer.lock"
+  }
+}

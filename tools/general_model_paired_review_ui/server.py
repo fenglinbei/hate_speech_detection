@@ -29,6 +29,7 @@ from tools.general_model_paired_review_ui.store import (  # noqa: E402
     ReviewConflict,
     ReviewError,
 )
+from tools.general_model_paired_review_ui.evidence_store import EvidenceReviewStore  # noqa: E402
 
 
 EXPERIMENT = REPOSITORY_ROOT / "exps/causal_context/general_model_ld_nolabel_paired_cases_v1"
@@ -39,7 +40,9 @@ DEFAULT_SESSION = EXPERIMENT / "reviews/paired-cases-02/session.json"
 class PairedWebService(OperationWebService):
     """Reuse origin/token checks and common assets, with a separate review store."""
 
-    def __init__(self, *, data_dir: Path, session_path: Path, reviewer_id: str) -> None:
+    def __init__(self, *, data_dir: Path, session_path: Path, reviewer_id: str,
+                 evidence_bundle: Path | None = None, evidence_session: Path | None = None,
+                 evidence_policy: Path | None = None) -> None:
         self.store = PairedReviewStore(
             data_dir=data_dir, session_path=session_path, reviewer_id=reviewer_id,
         )
@@ -47,10 +50,34 @@ class PairedWebService(OperationWebService):
         self.session_token = secrets.token_urlsafe(32)
         self.allowed_hosts: set[str] = set()
         self.allowed_origins: set[str] = set()
+        if bool(evidence_bundle) != bool(evidence_session):
+            raise ReviewError("证据审核包和独立会话路径须同时提供。")
+        if evidence_policy is not None and evidence_bundle is None:
+            raise ReviewError("独立规则修订需要已配置证据审核包及会话。")
+        self.evidence_store = EvidenceReviewStore(
+            bundle_path=evidence_bundle, session_path=evidence_session, reviewer_id=reviewer_id,
+            policy_path=evidence_policy,
+        ) if evidence_bundle else None
+
+    def evidence_bootstrap(self) -> dict:
+        if self.evidence_store is None:
+            raise ReviewError("证据审核模式尚未配置。")
+        return {**self.evidence_store.bootstrap(), "session_token": self.session_token}
 
 
 class PairedRequestHandler(OperationRequestHandler):
     service: PairedWebService
+
+    def _asset(self, name: str) -> None:
+        evidence_assets = {"evidence.html": "text/html", "evidence.js": "text/javascript",
+                           "evidence_core.js": "text/javascript", "evidence.css": "text/css"}
+        if name not in evidence_assets:
+            return super()._asset(name)
+        path = self.service.asset_root / name
+        if not path.is_file() or path.is_symlink():
+            self._error(HTTPStatus.NOT_FOUND, "review UI asset missing")
+            return
+        self._send(HTTPStatus.OK, path.read_bytes(), evidence_assets[name] + "; charset=utf-8")
 
     def log_message(self, format_string: str, *args: object) -> None:
         sys.stderr.write("[paired-human-review] " + (format_string % args) + "\n")
@@ -85,12 +112,20 @@ class PairedRequestHandler(OperationRequestHandler):
         try:
             if path in {"/", "/index.html"}:
                 self._asset("index.html")
+            elif path in {"/evidence", "/evidence/"} and self.service.evidence_store:
+                self._asset("evidence.html")
+            elif path in {"/evidence/evidence.js", "/evidence/evidence.css", "/evidence/evidence_core.js"} and self.service.evidence_store:
+                self._asset(path.rsplit("/", 1)[1])
             elif path in {"/app.js", "/core.js", "/styles.css", "/review-base.css", "/review-core.js"}:
                 self._asset(path[1:])
             elif path == "/api/health":
                 self._json(HTTPStatus.OK, {"status": "ok", "stage": "paired-human-review"})
             elif path == "/api/bootstrap":
                 self._json(HTTPStatus.OK, self.service.bootstrap())
+            elif path == "/api/evidence/bootstrap":
+                self._json(HTTPStatus.OK, self.service.evidence_bootstrap())
+            elif path.startswith("/api/evidence/items/") and self.service.evidence_store:
+                self._json(HTTPStatus.OK, self.service.evidence_store.item_state(path.removeprefix("/api/evidence/items/")))
             elif path.startswith("/api/items/"):
                 self._json(HTTPStatus.OK, self.service.store.item_state(path.removeprefix("/api/items/")))
             elif path.startswith("/api/prompt/"):
@@ -123,6 +158,9 @@ class PairedRequestHandler(OperationRequestHandler):
             common = {"session_token", "expected_revision"}
             if not isinstance(payload.get("expected_revision"), str):
                 raise ReviewError("请求缺少记录版本。")
+            if path.startswith("/api/evidence/"):
+                self._evidence_post(path, payload, common)
+                return
             if path == "/api/export":
                 if set(payload) != common | {"format"} or payload["format"] not in {"json", "csv"}:
                     raise ReviewError("导出格式不正确。")
@@ -160,15 +198,48 @@ class PairedRequestHandler(OperationRequestHandler):
         except OSError:
             self._error(HTTPStatus.INTERNAL_SERVER_ERROR, "保存失败，当前页面中的草稿仍保留。")
 
+    def _evidence_post(self, path: str, payload: dict, common: set[str]) -> None:
+        store = self.service.evidence_store
+        if store is None:
+            raise ReviewError("证据审核模式尚未配置。")
+        action = path.removeprefix("/api/evidence/").replace("-", "_")
+        if action == "export":
+            if set(payload) != common | {"format"} or payload["format"] not in {"json", "csv"}:
+                raise ReviewError("导出格式不正确。")
+            snapshot = store.snapshot(payload["expected_revision"])
+            csv_format = payload["format"] == "csv"
+            self._send(HTTPStatus.OK, store.export_csv(snapshot) if csv_format else canonical_bytes(snapshot),
+                       "text/csv; charset=utf-8" if csv_format else "application/json; charset=utf-8",
+                       disposition='attachment; filename="evidence-review.' + payload["format"] + '"')
+            return
+        fields = {
+            "save_object": {"object_id", "object_version", "values"},
+            "confirm_object": {"object_id", "object_version", "values"},
+            "reopen_object": {"object_id", "object_version", "reason"},
+            "confirm_batch": {"objects"}, "reveal": set(),
+            "save_assessment": {"assessment"}, "confirm": {"assessment"}, "reopen": {"reason"},
+            "save_exposure": {"prior_exposure"},
+        }
+        optional = {"prior_exposure"} if "prior_exposure" in payload else set()
+        if action not in fields or set(payload) != common | {"item_id"} | fields[action] | optional or not isinstance(payload.get("item_id"), str):
+            raise ReviewError("证据审核请求字段不正确。")
+        result = store.mutate(expected_revision=payload["expected_revision"], item_id=payload["item_id"],
+                              action=action, **{k: payload[k] for k in fields[action] | optional})
+        result["bootstrap"]["session_token"] = self.service.session_token
+        self._json(HTTPStatus.OK, result)
+
 
 def create_server(
     *, data_dir: Path, session_path: Path, reviewer_id: str,
     host: str = "127.0.0.1", port: int = 8772, public_origin: str | None = None,
+    evidence_bundle: Path | None = None, evidence_session: Path | None = None,
+    evidence_policy: Path | None = None,
 ) -> ThreadingHTTPServer:
     _loopback_host(host)
     if not 0 <= port <= 65535:
         raise ReviewWebError("port must be in 0..65535")
-    service = PairedWebService(data_dir=data_dir, session_path=session_path, reviewer_id=reviewer_id)
+    service = PairedWebService(data_dir=data_dir, session_path=session_path, reviewer_id=reviewer_id,
+                               evidence_bundle=evidence_bundle, evidence_session=evidence_session, evidence_policy=evidence_policy)
     handler = type("BoundPairedReviewHandler", (PairedRequestHandler,), {"service": service})
     server = ThreadingHTTPServer((host, port), handler)
     server.daemon_threads = True
@@ -184,6 +255,9 @@ def main() -> int:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8772)
     parser.add_argument("--public-origin", default=None)
+    parser.add_argument("--evidence-bundle", type=Path)
+    parser.add_argument("--evidence-session", type=Path)
+    parser.add_argument("--evidence-policy", type=Path)
     args = parser.parse_args()
     authority_marker = args.session_file.with_name(args.session_file.name + ".remote-authority.json")
     if authority_marker.exists() or authority_marker.is_symlink():
@@ -198,6 +272,8 @@ def main() -> int:
     server = create_server(
         data_dir=args.data_dir, session_path=args.session_file, reviewer_id=args.reviewer_id,
         host=args.host, port=args.port, public_origin=args.public_origin,
+        evidence_bundle=args.evidence_bundle, evidence_session=args.evidence_session,
+        evidence_policy=args.evidence_policy,
     )
     print(json.dumps({
         "url": "http://127.0.0.1:" + str(server.server_address[1]) + "/",
