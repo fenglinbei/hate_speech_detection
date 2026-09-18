@@ -1,0 +1,73 @@
+{
+  "passes": [
+    {
+      "pass_id": "historical-bridge",
+      "request_order": "forward",
+      "padding": "none",
+      "inputs": "bridge",
+      "prompt_forwards": 84
+    },
+    {
+      "pass_id": "engineering-reference",
+      "request_order": "forward",
+      "padding": "none",
+      "inputs": "new",
+      "prompt_forwards": 36
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "request_order": "forward",
+      "padding": "none",
+      "inputs": "new",
+      "prompt_forwards": 36
+    },
+    {
+      "pass_id": "engineering-left-padding",
+      "request_order": "forward",
+      "padding": "left_to_next_strict_multiple_of_16",
+      "inputs": "new",
+      "prompt_forwards": 36
+    },
+    {
+      "pass_id": "engineering-right-padding",
+      "request_order": "forward",
+      "padding": "right_to_next_strict_multiple_of_16",
+      "inputs": "new",
+      "prompt_forwards": 36
+    },
+    {
+      "pass_id": "engineering-reverse-request-order",
+      "request_order": "reverse",
+      "padding": "none",
+      "inputs": "new",
+      "prompt_forwards": 36
+    },
+    {
+      "pass_id": "science",
+      "request_order": "forward",
+      "padding": "none",
+      "inputs": "new",
+      "prompt_forwards": 36
+    }
+  ],
+  "acceptance": {
+    "historical_bridge_max_absolute_margin_difference": 0.0,
+    "repeat_and_reverse_order_max_margin_difference": 0.0,
+    "padding_max_abs_margin_difference_cap": 0.001,
+    "full_vocab_logprob_identity_max_abs_error": 1e-10,
+    "new_margin_bound": "max(0.000001, 2*max(new-input engineering margin differences))",
+    "historical_bound": "Retain each original physical score and its original qualification receipt/bound.",
+    "bridge_meaning": "All 84 reused margins must reproduce exactly on the original UUID/runtime. No bridge score replaces an original endpoint; no transport allowance is added.",
+    "science_replay": "All 36 production margins must agree with engineering-reference within the new bound.",
+    "failure_action": "Stop and preserve evidence; no automatic retry, threshold relaxation or historical rescore substitution.",
+    "not_qualified": [
+      "another GPU UUID",
+      "batch size >1",
+      "KV reuse",
+      "different runtime/dtype/kernel",
+      "statistical significance",
+      "practical importance",
+      "independent confirmation"
+    ]
+  }
+}

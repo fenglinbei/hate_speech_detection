@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "checked_at": "2026-09-18T03:30:10.832983+00:00",
+  "per_process_devices_match_all_bindings": true,
+  "compute_process_csv": "GPU-09b29c25-c372-62f4-3098-9734013e93c0, 1809052, /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python, 32996\nGPU-9145ca41-4f0b-6f81-9a0b-118cb4596601, 1811622, /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python, 29240\nGPU-278f5973-425f-514a-8a2d-db77f55d481b, 1811622, /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python, 29240\nGPU-6e7d956e-0a22-7fac-a093-130cc1190f38, 1814266, /data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python, 38596\n",
+  "aggregate_gpu_csv": "0, GPU-09b29c25-c372-62f4-3098-9734013e93c0, NVIDIA L20, 46068, 100117, 100\n1, GPU-9145ca41-4f0b-6f81-9a0b-118cb4596601, NVIDIA L20, 46068, 28907, 49\n2, GPU-278f5973-425f-514a-8a2d-db77f55d481b, NVIDIA L20, 46068, 0, 99\n3, GPU-6e7d956e-0a22-7fac-a093-130cc1190f38, NVIDIA L20, 46068, 0, 100\n",
+  "runtime_identities": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-glm4-9b-chat-01/runtime-identity.json",
+      "bytes": 535,
+      "sha256": "2ef36f92aba224619a61f4377b32911e2b357b232a0bc233358e991be5bfdcb0"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-qwen3-14b-01/runtime-identity.json",
+      "bytes": 1499,
+      "sha256": "793d883894a0ca4bdae6dc4d29803bd30b8462223f8a111c2c94addbbca68767"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-qwen3-8b-01/runtime-identity.json",
+      "bytes": 535,
+      "sha256": "6d6d634aca3391e0a85fdcd698dc90454fb2d1fa6a3943199c2aa228e5b783ed"
+    }
+  ],
+  "observed_telemetry_caveat": "Aggregate NVML used-memory is misattributed across CUDA_VISIBLE_DEVICES logical indices while the three processes coexist; GPU0 total can exceed capacity and GPU2/3 can report zero. Torch properties also report total_memory=0. Per-process NVML UUIDs and memory agree with the bound allocations; every worker separately verifies CUDA UUIDs and FP32 tensor placement. Preserve these readings; do not use aggregate memory to estimate per-model usage. The frozen idle gate is unchanged."
+}

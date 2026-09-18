@@ -1,0 +1,50 @@
+{
+  "schema_version": "research-result-archive-verification/v1",
+  "status": "passed",
+  "scope": "Publication bytes, structured file parsing, included frozen source references and archive navigation; no repeated scientific computation.",
+  "worktree_checks": {
+    "utf8_files": 463,
+    "json_files": 295,
+    "jsonl_records": 8844,
+    "jsonl_files": 35,
+    "python_sources": 38,
+    "included_reference_occurrences": 10949
+  },
+  "included_reference_unique_pins": 448,
+  "unarchived_reference_occurrences": {
+    "model_or_environment": 181,
+    "external_machine_dependency": 130,
+    "raw_run_record": 19820,
+    "runtime_log_or_control": 1,
+    "external_training_checkpoint": 32
+  },
+  "errors": [],
+  "credential_pattern_scan": "passed",
+  "new_gpu_run": false,
+  "scientific_or_human_fields_modified": false,
+  "unit_tests": "Not rerun: frozen research implementation is unchanged; prior test and numerical audit receipts are included.",
+  "base_commit": "9cc4e078bc4eec05b8439e595be419bc19498cbb",
+  "archive_inventory_files": 463,
+  "archive_inventory_bytes": 89256837,
+  "staged_bytes_verification": {
+    "status": "passed",
+    "inventory_files": 463,
+    "inventory_bytes": 89256837,
+    "method": "Git index blobs compared byte-for-byte with worktree files; every archive inventory size and SHA256 matched.",
+    "scope": "All 463 inventoried delivery files. Archive documentation is bound by the Git commit; this receipt does not hash itself."
+  },
+  "whitespace_check": {
+    "status": "passed",
+    "command": "git diff --cached --check",
+    "preserved_frozen_source_exception": {
+      "path": "scripts/review/prepare_cross_term_behavior_discrimination_v1.py",
+      "line": 402,
+      "sha256": "29fc8384baae69c2ad935bc3ea4c727ae9f24a6693e379bc0ae3b3718153179f",
+      "reason": "Existing trailing whitespace is part of the frozen source hash. The file is exempted through .gitattributes, with no source edit."
+    }
+  },
+  "verification_program": {
+    "reused_from": "docs/research/results-20260916/verify.py",
+    "byte_identical": true
+  }
+}

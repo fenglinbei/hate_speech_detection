@@ -1,0 +1,321 @@
+{
+  "schema_version": "cross-model-applicability-material-draft/v1",
+  "status": "ai_draft_pending_human_review",
+  "created_date": "2026-09-18",
+  "task_protocol": "task-applicability-scoring/v1",
+  "author": "assistant",
+  "human_adoption": null,
+  "original_gold": null,
+  "target_model_outputs_seen": false,
+  "prior_related_results_seen": true,
+  "split": "development_only",
+  "conservative_dependency_cluster": "CMAD-DEV-C01",
+  "dependency_note": "增加第二种示例构造：无攻击的词语解释前景加有攻击固定锚点。两种构造仍共享双义项、查询用法与任务参考的对应及矩阵，不把四个词项当四个独立构造簇。",
+  "design_addition": "S7_metalinguistic_foreground_with_attack_anchor",
+  "families": [
+    {
+      "family_id": "CMAD-JSC",
+      "term": "寄生虫",
+      "contrast": "实际寄生生物／对人不劳动、靠他人供养的贬称",
+      "query_template_group": "JSC-biological-observation-vs-dependence-insult",
+      "demo_template_group": "JSC-word-explanation-plus-attack-anchor",
+      "senses": [
+        {
+          "id": "JSC-L1",
+          "usage": "literal",
+          "raw_text": "寄生虫：寄生在其他生物体内或体表、依靠宿主获取营养的虫类。",
+          "information": "实际在其他生物体内或体表寄生、从宿主获取营养的虫类身份。",
+          "source_span": "寄生在其他生物体内或体表、依靠宿主获取营养的虫类",
+          "ai_quality": "accepted",
+          "human_quality": null
+        },
+        {
+          "id": "JSC-L2",
+          "usage": "figurative",
+          "raw_text": "寄生虫：用来贬低一个人，指其自己不劳动，依靠他人供养而生活。",
+          "information": "对人不劳动、靠他人供养生活的贬损性评价。",
+          "source_span": "自己不劳动，依靠他人供养而生活",
+          "ai_quality": "accepted",
+          "human_quality": null
+        }
+      ],
+      "neutral": {
+        "id": "JSC-N",
+        "raw_text": "寄生虫：这个词由“寄”“生”和“虫”三个汉字组成，书写时按这三个字的顺序排列。",
+        "purpose": "词形与资料格式对照；不是心理中性、严格长度匹配或生物学释义。",
+        "human_text_adoption": null
+      },
+      "queries": [
+        {
+          "id": "JSC-Q1",
+          "usage": "literal",
+          "raw_text": "显微镜下面能看见这种寄生虫。",
+          "sense_span": "寄生虫",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "描述观察到的生物，没有对人的贬损或伤害主张。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "JSC-Q2",
+          "usage": "literal",
+          "raw_text": "老师让我们在图上标出寄生虫的位置。",
+          "sense_span": "寄生虫",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "讲述图示作业，未将该词用于贬低人。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "JSC-Q3",
+          "usage": "figurative",
+          "raw_text": "你就知道伸手要钱，真是个寄生虫。",
+          "sense_span": "真是个寄生虫",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "作者以不劳动、依赖他人的贬称直接侮辱对方；不据虫类比喻自动升级为3级。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "JSC-Q4",
+          "usage": "figurative",
+          "raw_text": "他自己什么都不干，就靠别人养着，活脱脱一个寄生虫。",
+          "sense_span": "活脱脱一个寄生虫",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "作者认可对人的侮辱性归类，超出中性的生活状况描述。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        }
+      ],
+      "foreground_demos": [
+        {
+          "id": "JSC-D-L-P",
+          "usage": "literal",
+          "word": "present",
+          "raw_text": "这里的“寄生虫”说的是靠宿主获取营养的虫子，不是在说哪个人。",
+          "sense_span": "靠宿主获取营养的虫子",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "JSC-D-L-A",
+          "usage": "literal",
+          "word": "absent",
+          "raw_text": "这里说的是那种寄生在别的动物身上、靠宿主获取营养的虫子，不是在说哪个人。",
+          "sense_span": "寄生在别的动物身上、靠宿主获取营养的虫子",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。无词形版本是可见的描述性解释，仍有语义信息及共享字词。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "JSC-D-F-P",
+          "usage": "figurative",
+          "word": "present",
+          "raw_text": "“寄生虫”用来骂人时，意思是那个人不干活、靠别人养。",
+          "sense_span": "那个人不干活、靠别人养",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "JSC-D-F-A",
+          "usage": "figurative",
+          "word": "absent",
+          "raw_text": "“不干活、只靠别人养的懒人”这种说法，是在贬低一个人。",
+          "sense_span": "不干活、只靠别人养的懒人",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。无词形版本是可见的描述性解释，仍有语义信息及共享字词。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        }
+      ],
+      "anchor_demo": {
+        "id": "JSC-D-ANCHOR",
+        "raw_text": "你这人真恶心，专挑信任你的人骗。",
+        "attack_span": "你这人真恶心",
+        "ai_label": "有",
+        "ai_severity": 2,
+        "ai_rationale": "作者直接贬损对方的人格，不仅是在说明或批评行为。",
+        "human_label": null,
+        "human_severity": null,
+        "human_text_adoption": null
+      }
+    },
+    {
+      "family_id": "CMAD-MT",
+      "term": "木头",
+      "contrast": "实际木材／对人迟钝、不灵活的贬称",
+      "query_template_group": "MT-material-state-vs-response-insult",
+      "demo_template_group": "MT-word-explanation-plus-attack-anchor",
+      "senses": [
+        {
+          "id": "MT-L1",
+          "usage": "literal",
+          "raw_text": "木头：砍伐后的树木或供加工使用的木材。",
+          "information": "实际由树木取得、可锯切加工的木材身份。",
+          "source_span": "砍伐后的树木或供加工使用的木材",
+          "ai_quality": "accepted",
+          "human_quality": null
+        },
+        {
+          "id": "MT-L2",
+          "usage": "figurative",
+          "raw_text": "木头：用来贬低一个人，指其反应迟钝、不灵活或不开窍。",
+          "information": "对人反应迟钝、不灵活或不开窍的贬损性评价。",
+          "source_span": "反应迟钝、不灵活或不开窍",
+          "ai_quality": "accepted",
+          "human_quality": null
+        }
+      ],
+      "neutral": {
+        "id": "MT-N",
+        "raw_text": "木头：这个词由“木”和“头”两个汉字组成，书写时按这两个字的顺序排列。",
+        "purpose": "词形与资料格式对照；不宣称心理中性、严格长度匹配或提供查询义项。",
+        "human_text_adoption": null
+      },
+      "queries": [
+        {
+          "id": "MT-Q1",
+          "usage": "literal",
+          "raw_text": "这块木头太厚了，锯子切不动。",
+          "sense_span": "木头",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "说明实际材料的厚度和加工困难，没有贬损人。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "MT-Q2",
+          "usage": "literal",
+          "raw_text": "仓库里还剩几根木头，做个架子够了。",
+          "sense_span": "木头",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "说明材料存量和用途，没有作者认可的人身攻击。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "MT-Q3",
+          "usage": "figurative",
+          "raw_text": "你是块木头吗？说半天一点反应都没有。",
+          "sense_span": "你是块木头吗",
+          "ai_label": "有",
+          "ai_severity": 1,
+          "ai_rationale": "以反问轻蔑地贬低对方反应迟钝，不是仅报告其暂未回复；1／2级边界待审。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        },
+        {
+          "id": "MT-Q4",
+          "usage": "figurative",
+          "raw_text": "这么简单的意思都听不懂，你真是个木头。",
+          "sense_span": "你真是个木头",
+          "ai_label": "有",
+          "ai_severity": 1,
+          "ai_rationale": "轻蔑地将对方概括为迟钝、不开窍，建议轻度贬损；1／2级边界待审。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null
+        }
+      ],
+      "foreground_demos": [
+        {
+          "id": "MT-D-L-P",
+          "usage": "literal",
+          "word": "present",
+          "raw_text": "这里的“木头”指的是做家具用的木材，不是在说人。",
+          "sense_span": "做家具用的木材",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "MT-D-L-A",
+          "usage": "literal",
+          "word": "absent",
+          "raw_text": "这里说的是从树干上锯下来、做家具用的料，不是在说人。",
+          "sense_span": "从树干上锯下来、做家具用的料",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。无词形版本是可见的描述性解释，仍有语义信息及共享字词。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "MT-D-F-P",
+          "usage": "figurative",
+          "word": "present",
+          "raw_text": "“木头”拿来形容人时，通常是在嫌对方迟钝、不开窍。",
+          "sense_span": "对方迟钝、不开窍",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        },
+        {
+          "id": "MT-D-F-A",
+          "usage": "figurative",
+          "word": "absent",
+          "raw_text": "“迟钝、不开窍”拿来概括一个人时，是带着贬低意味的说法。",
+          "sense_span": "迟钝、不开窍",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "作者解释一种说法的含义或用法，没有在当前句中以该评价指认并攻击具体对象；提及贬称不等于实施贬损。无词形版本是可见的描述性解释，仍有语义信息及共享字词。",
+          "human_label": null,
+          "human_severity": null,
+          "human_text_adoption": null,
+          "metalinguistic": true
+        }
+      ],
+      "anchor_demo": {
+        "id": "MT-D-ANCHOR",
+        "raw_text": "你个没良心的，帮过你的人你都能卖了。",
+        "attack_span": "你个没良心的",
+        "ai_label": "有",
+        "ai_severity": 2,
+        "ai_rationale": "作者直接以没良心贬损对方的人格；卖了在此是出卖而非新增暴力主张。",
+        "human_label": null,
+        "human_severity": null,
+        "human_text_adoption": null
+      }
+    }
+  ]
+}

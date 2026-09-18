@@ -1,0 +1,103 @@
+{
+  "schema_version": "cross-term-next-token-qualification-plan/v1",
+  "status": "prepared_pending_implementation_and_runtime_binding",
+  "readout_source": "same prompt-only full-vocabulary next-token logits vector",
+  "passes": [
+    {
+      "pass_id": "engineering-reference",
+      "request_order": "forward",
+      "padding": "none",
+      "prompt_forwards": 120,
+      "dtype": "float32",
+      "batch_size": 1,
+      "use_cache": false,
+      "candidate_evaluations": 240,
+      "prompt_source": "model-inputs.jsonl"
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "request_order": "forward",
+      "padding": "none",
+      "prompt_forwards": 120,
+      "dtype": "float32",
+      "batch_size": 1,
+      "use_cache": false,
+      "candidate_evaluations": 240,
+      "prompt_source": "model-inputs.jsonl"
+    },
+    {
+      "pass_id": "engineering-left-padding",
+      "request_order": "forward",
+      "padding": "left_to_next_strict_multiple_of_16",
+      "prompt_forwards": 120,
+      "dtype": "float32",
+      "batch_size": 1,
+      "use_cache": false,
+      "candidate_evaluations": 240,
+      "prompt_source": "model-inputs.jsonl"
+    },
+    {
+      "pass_id": "engineering-right-padding",
+      "request_order": "forward",
+      "padding": "right_to_next_strict_multiple_of_16",
+      "prompt_forwards": 120,
+      "dtype": "float32",
+      "batch_size": 1,
+      "use_cache": false,
+      "candidate_evaluations": 240,
+      "prompt_source": "model-inputs.jsonl"
+    },
+    {
+      "pass_id": "engineering-reverse-request-order",
+      "request_order": "reverse",
+      "padding": "none",
+      "prompt_forwards": 120,
+      "dtype": "float32",
+      "batch_size": 1,
+      "use_cache": false,
+      "candidate_evaluations": 240,
+      "prompt_source": "model-inputs.jsonl"
+    }
+  ],
+  "engineering_prompt_forwards": 600,
+  "engineer_reference_use": "Exact 120 inputs cover the actual input envelope. Engineering may record raw scores but must not read target references or emit scientific effect/correctness analysis before the qualification receipt is sealed.",
+  "padding_contract": {
+    "pad_token_id": 151643,
+    "masked_positions_attention": 0,
+    "position_ids": "max(cumsum(attention_mask)-1,0)",
+    "score_position": "last index with attention_mask==1, separately per example",
+    "right_padding_not_equivalent_to_last_tensor_index": true,
+    "max_padded_tokens": 672,
+    "truncation": "error"
+  },
+  "acceptance": {
+    "finite_full_vocab_logits": true,
+    "complete_exact_input_inventory": 120,
+    "repeat_and_reverse_order_max_margin_difference": 0.0,
+    "padding_max_abs_margin_difference_cap": 0.001,
+    "margin_error_bound_formula": "max(0.000001,2*maximum_absolute_margin_difference_across_all_engineering_variants_and_all_120_inputs)",
+    "margin_error_bound_before_qualification": null,
+    "cap_explanation": "A new prospective engineering envelope for this next-token scorer, not a reused Q01 tolerance or practical-effect threshold.",
+    "full_vocab_logprob_identity_max_abs_error": 1e-10,
+    "failure_action": "Stop, preserve scores and diagnose. Do not relax thresholds after observed outcomes; any method change needs a new version."
+  },
+  "production": {
+    "prompt_forwards": 120,
+    "candidate_evaluations": 240,
+    "batch_size": 1,
+    "padding": "none",
+    "use_cache": false,
+    "dtype": "float32",
+    "all_120_replay_against_engineering_reference": "must agree within the sealed margin error bound before analysis",
+    "qualification_receipt_required": true,
+    "raw_score_seal_before_reference_join": true
+  },
+  "not_qualified_by_this_plan": [
+    "Batch sizes greater than one",
+    "KV-prefix reuse",
+    "Other GPU UUIDs",
+    "A different attention implementation, dtype or runtime",
+    "Independent scientific replication"
+  ],
+  "gpu_numerical_acceptance_performed": false
+}

@@ -1,0 +1,3060 @@
+{
+  "schema_version": "cross-term-behavior-review-feedback/v1",
+  "decision_id": "CTD2-review-20260917-01",
+  "recorded_at_utc": "2026-09-17T09:01:28.098184+00:00",
+  "source": "explicit_user_message_in_current_task",
+  "user_message_verbatim": "S1–S4及36条关系按建议接受",
+  "authorship_of_proposals": "ai",
+  "review_kind": "human_with_ai",
+  "adoption": "bulk",
+  "bound_draft_manifest": {
+    "path": "docs/research/experiment-plans/cross-term-behavior-discrimination-v1/draft-01/draft-manifest.json",
+    "bytes": 4845,
+    "sha256": "51d5028484f3f5d2efb259157b9fb35c3fe9636deaa752de78fa109a23a6ade9"
+  },
+  "bound_review_entry": {
+    "path": "docs/research/experiment-plans/cross-term-behavior-discrimination-v1/draft-01/REVIEW.md",
+    "bytes": 15819,
+    "sha256": "6fa2541bfcce12563fd11069aab14ff9333342fb72819ff60b4eb0d27ec299bc"
+  },
+  "bound_interpretation_plan": {
+    "path": "docs/research/experiment-plans/cross-term-behavior-discrimination-v1/draft-01/INTERPRETATION-PLAN.md",
+    "bytes": 8454,
+    "sha256": "0b684e42c0f457bb0d0d2a1586233dd253b0799e6a8a39fc17905f9ef332ac96"
+  },
+  "bound_analysis_plan": {
+    "path": "docs/research/experiment-plans/cross-term-behavior-discrimination-v1/draft-01/analysis-plan.json",
+    "bytes": 108707,
+    "sha256": "fada56411594c09cbd7d37d0cbb0c1e700a6317048ac90db3901693703a1ead2"
+  },
+  "scope": "S1-S4 and all 36 new relation proposals, with their exact information, spans, rationales and limitations; separate adoption/input-design freeze, preserving original draft and historical results.",
+  "scope_decisions": [
+    {
+      "scope_id": "S1",
+      "title": "实验范围与新增条件",
+      "reviewed_text": "## S1：实验范围与新增条件\n\n把两个异词示例包X-A/X-B在所有12条查询上的‘空词典／真实词典’补齐。总共48个异词条件：12个历史空词典条件复用，36个新增。与72个同词／无示例锚组成120条件核心；旧N的36条件独立保留，合计156个不同输入。所有查询均保留，包括原本正确和没有明显变化的条目。\n\n| 查询 | 已采纳全文 | 参考／等级 | 本轮新增 |\n|---|---|---|---|\n| G1 | 借钱的时候说得好听，现在装死不还，你这种人真是垃圾。 | 有／2 | 4个 |\n| G2 | 出门的时候顺手把门口那袋垃圾带下去。 | 无／0 | 2个 |\n| G3 | 他欠钱没还，你就说这事，别一口一个垃圾。 | 无／0 | 4个 |\n| G4 | 你把垃圾扔别人家门口，是不是没脑子？ | 有／1 | 2个 |\n| J1 | 北京户口了不起啊？瞧把你这京巴给牛的。 | 有／2 | 4个 |\n| J2 | 我家那只京巴一听见开饭，跑得比谁都快。 | 无／0 | 2个 |\n| J3 | 北京人怎么了？别动不动就拿京巴骂人。 | 无／0 | 4个 |\n| J4 | 这明明是只京巴，非说是博美，你眼瞎啊？ | 有／1 | 2个 |\n| B1 | 她就是辆公交车，你还真把她当宝了？ | 有／2 | 4个 |\n| B2 | 公交车到站了，咱们下车吧。 | 无／0 | 2个 |\n| B3 | 她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。 | 无／0 | 4个 |\n| B4 | 公交车上这么多人，你还堵着门，有病吧？ | 有／1 | 2个 |\n\nG1/G3/J1/J3/B1/B3：每条新增空+X-A、L+X-A、空+X-B、L+X-B。其余六条：每条新增L+X-A、L+X-B。完整ID在[new-conditions.tsv](new-conditions.tsv)。\n\n| 包／来源 | 已采纳示例全文 | 答案／等级 |\n|---|---|---|\n| X-A-01 | 纸箱就堆在楼梯口，别人怎么走，有病吧？ | 有／1 |\n| X-A-02 | 纸箱就堆在楼梯口，挪开点，别挡着别人。 | 无／0 |\n| X-B-01 | 当初说得挺能耐，真遇上事你就是个废物。 | 有／2 |\n| X-B-02 | 事情没办成可以再想办法，别张嘴就骂他废物。 | 无／0 |\n\n两个包始终先有后无，各1条；词典独立指定，不随示例重新检索。模型只看到原任务、词典正文、示例正文与答案、查询；看不到查询参考或关系审核。\n\n",
+      "adoption": "bulk",
+      "decision": "accepted_as_proposed"
+    },
+    {
+      "scope_id": "S2",
+      "title": "语义联系——异词不等于完全无关",
+      "reviewed_text": "## S2：语义联系——异词不等于完全无关\n\n**重点建议：‘垃圾’↔指人‘废物’只按部分语义联系partial处理。** 可迁移的是无用／低价值评价，不是完整同义或作者认可。建议涉及下方4条D→query语义边，以及2条L→demo义项边。其他跨词项语义值建议none。若你认为具体词典义项不应据这部分联系迁移，请指出相应边及理由；草案未将这些值当作已采纳事实。\n\n| 编号 | 词典全文 | 示例 | sense_fit建议 | 理由与边界 |\n|---|---|---|---|---|\n| LD01 | 垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。 | CTDD-X-A-01 | none | 示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD02 | 垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。 | CTDD-X-A-02 | none | 示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD03 | 垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。 | CTDD-X-B-01 | partial | 指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。 不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。 |\n| LD04 | 垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。 | CTDD-X-B-02 | partial | 指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。 不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。 |\n| LD05 | 京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。 | CTDD-X-A-01 | none | 示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD06 | 京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。 | CTDD-X-A-02 | none | 示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD07 | 京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。 | CTDD-X-B-01 | none | 示例中的‘废物’不承载这条词典所指定的京巴义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD08 | 京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。 | CTDD-X-B-02 | none | 示例中的‘废物’不承载这条词典所指定的京巴义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD09 | 公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。 | CTDD-X-A-01 | none | 示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD10 | 公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。 | CTDD-X-A-02 | none | 示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD11 | 公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。 | CTDD-X-B-01 | none | 示例中的‘废物’不承载这条词典所指定的公交车义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n| LD12 | 公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。 | CTDD-X-B-02 | none | 示例中的‘废物’不承载这条词典所指定的公交车义项或所指。 仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。 |\n\nX-A的纸箱与三条词典均无对应义项；X-B的废物不承载北京地域或女性性污名义项。词形维度全部为absent，只指垃圾／京巴／公交车这三个指定词形不共现。\n\n",
+      "adoption": "bulk",
+      "decision": "accepted_as_proposed"
+    },
+    {
+      "scope_id": "S3",
+      "title": "示例规则与查询的逐条关系",
+      "reviewed_text": "## S3：示例规则与查询的逐条关系\n\n每条规则先固定‘信息是什么’，再判断对应位置。下面的partial必须有明确可迁移部分；none只排除该命名规则。不同答案不自动意味着partial，同一答案也不意味着direct。\n\n| 规则编号／来源 | 本轮固定的具体规则 |\n|---|---|\n| R-A-01／X-A-01 | 对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。 |\n| R-A-02／X-A-02 | 要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。 |\n| R-B-01／X-B-01 | 先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。 |\n| R-B-02／X-B-02 | 先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。 |\n\n| 编号 | 查询 | 来源 | 语义建议 | 规则建议 | 规则理由 |\n|---|---|---|---|---|---|\n| DQ01 | G1 | CTDD-X-A-01 | none | partial | 借款不还的行为指责与‘你这种人真是垃圾’的人身贬损可分开定位，对应源中通行抱怨与另加辱骂的区分。 |\n| DQ02 | G1 | CTDD-X-A-02 | none | none | 目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。 |\n| DQ03 | G1 | CTDD-X-B-01 | partial | direct | 源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。 |\n| DQ04 | G1 | CTDD-X-B-02 | partial | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ05 | G3 | CTDD-X-A-01 | none | none | 目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。 |\n| DQ06 | G3 | CTDD-X-A-02 | none | partial | 目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。 |\n| DQ07 | G3 | CTDD-X-B-01 | partial | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ08 | G3 | CTDD-X-B-02 | partial | direct | 源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。 |\n| DQ09 | J1 | CTDD-X-A-01 | none | none | 目标围绕户口身份轻蔑和地域辱称，没有同样可分离的具体行为抱怨加口语辱骂结构；疑问语气本身不足以建立迁移。 |\n| DQ10 | J1 | CTDD-X-A-02 | none | none | 目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。 |\n| DQ11 | J1 | CTDD-X-B-01 | none | direct | 源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。 |\n| DQ12 | J1 | CTDD-X-B-02 | none | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ13 | J3 | CTDD-X-A-01 | none | none | 目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。 |\n| DQ14 | J3 | CTDD-X-A-02 | none | partial | 目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。 |\n| DQ15 | J3 | CTDD-X-B-01 | none | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ16 | J3 | CTDD-X-B-02 | none | direct | 源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。 |\n| DQ17 | B1 | CTDD-X-A-01 | none | none | 目标实施性污名辱称，并反问听者为何珍视她；后半句不能据形式认作源中面向行为实施者的独立口语辱骂。 |\n| DQ18 | B1 | CTDD-X-A-02 | none | none | 目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。 |\n| DQ19 | B1 | CTDD-X-B-01 | none | direct | 源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。 |\n| DQ20 | B1 | CTDD-X-B-02 | none | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ21 | B3 | CTDD-X-A-01 | none | none | 目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。 |\n| DQ22 | B3 | CTDD-X-A-02 | none | partial | 目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。 |\n| DQ23 | B3 | CTDD-X-B-01 | none | partial | 可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。 |\n| DQ24 | B3 | CTDD-X-B-02 | none | direct | 源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。 |\n\n**优先核对四类边界：**\n\n- G1←X-A-01：建议partial，迁移行为批评与额外人身贬损的区分，具体辱骂形式不同。旧G1←同词A-01采用较窄结构而为none，其范围问题已在旧AI观察中标记，旧值保留。\n- J1/B1←X-A-01：建议none；不能仅凭反问形式，补造与源相同的行为抱怨加独立口语辱骂结构。\n- G3/J3/B3←X-A-02：建议partial，迁移‘劝阻行为本身不自动是攻击’，但它没有示范如何处理被反对的辱称。旧同词A-02的较窄范围评级保持原样。\n- X-B对同一立场分支建议direct，对相反立场分支建议partial；后者只迁移辱称识别与作者立场分开的判断步骤，不迁移示例结论。\n\n新关系与旧字段范围可能不同，因此本轮继续不按direct/none作二元因果分组，也不把同词和异词两包当成只改变词面一个因素。每条完整片段、限制和身份见[relation-review.md](relation-review.md)。\n\n",
+      "adoption": "bulk",
+      "decision": "accepted_as_proposed"
+    },
+    {
+      "scope_id": "S4",
+      "title": "预先解释范围",
+      "reviewed_text": "## S4：预先解释范围\n\n- J2在L+异词包下变对，只能先称该组合修复；还要看L效应的交互，才能区分是否仅由D整体抬高分数。\n- 异词包也有效，说明这组材料下同词共现不是达到该结果的必要条件；不能直接证明通用规则是唯一原因。\n- 同词包更有效，说明具体内容组合有差别；词义、措辞、长度及按文本选择标签等解释仍需另行区分。\n- 反对辱称文本改善时，必须同时报告实施辱称及独立口语辱骂的有攻击文本有无损失，防止把普遍偏向无当规则修复。\n- 垃圾家族与废物示例的候选部分语义联系单独列出，不与京巴／公交车混称‘语义完全无关’。\n- 保留反向、未决和无明显变化结果。没有预设实用等效阈值，不把小差异或数值未决称为等效、无影响或统计不显著。\n- 本轮仍是三个已暴露且共享构造的开发词项；稳定误用也可成为后续研究对象，新家族确认和内部实验另立设计。\n\n完整公式与分岔条件见[INTERPRETATION-PLAN.md](INTERPRETATION-PLAN.md)。\n\n**回复方式：**可以直接回复‘S1–S4及36条关系按建议接受’，也可以只列异议，例如‘DQxx的rule_fit改为……，因为……’。本页交付不代表已审核、已冻结或已运行。\n",
+      "adoption": "bulk",
+      "decision": "accepted_as_proposed"
+    }
+  ],
+  "relation_decisions": [
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L01-X-A-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L01-X-A-01-review01",
+      "review_id": "LD01",
+      "source_id": "CTD-L01",
+      "target_id": "CTDD-X-A-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 34,
+              "text": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "垃圾"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L01-X-A-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L01-X-A-02-review01",
+      "review_id": "LD02",
+      "source_id": "CTD-L01",
+      "target_id": "CTDD-X-A-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 34,
+              "text": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "垃圾"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L01-X-B-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L01-X-B-01-review01",
+      "review_id": "LD03",
+      "source_id": "CTD-L01",
+      "target_id": "CTDD-X-B-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "partial",
+          "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+          "source_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "无用"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "rationale": "指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。",
+          "limitation": "不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "垃圾"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L01-X-B-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L01-X-B-02-review01",
+      "review_id": "LD04",
+      "source_id": "CTD-L01",
+      "target_id": "CTDD-X-B-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "partial",
+          "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+          "source_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "无用"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "rationale": "指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。",
+          "limitation": "不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "垃圾"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L02-X-A-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L02-X-A-01-review01",
+      "review_id": "LD05",
+      "source_id": "CTD-L02",
+      "target_id": "CTDD-X-A-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 37,
+              "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "京巴"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L02-X-A-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L02-X-A-02-review01",
+      "review_id": "LD06",
+      "source_id": "CTD-L02",
+      "target_id": "CTDD-X-A-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 37,
+              "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "京巴"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L02-X-B-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L02-X-B-01-review01",
+      "review_id": "LD07",
+      "source_id": "CTD-L02",
+      "target_id": "CTDD-X-B-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 37,
+              "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "rationale": "示例中的‘废物’不承载这条词典所指定的京巴义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "京巴"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L02-X-B-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L02-X-B-02-review01",
+      "review_id": "LD08",
+      "source_id": "CTD-L02",
+      "target_id": "CTDD-X-B-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+          "source_spans": [
+            {
+              "start": 3,
+              "end": 37,
+              "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "rationale": "示例中的‘废物’不承载这条词典所指定的京巴义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "京巴"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L03-X-A-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L03-X-A-01-review01",
+      "review_id": "LD09",
+      "source_id": "CTD-L03",
+      "target_id": "CTDD-X-A-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+          "source_spans": [
+            {
+              "start": 4,
+              "end": 48,
+              "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 3,
+              "text": "公交车"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L03-X-A-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L03-X-A-02-review01",
+      "review_id": "LD10",
+      "source_id": "CTD-L03",
+      "target_id": "CTDD-X-A-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+          "source_spans": [
+            {
+              "start": 4,
+              "end": 48,
+              "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "rationale": "示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 3,
+              "text": "公交车"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L03-X-B-01",
+      "adopted_relation_id": "CTD2-LD-CTD-L03-X-B-01-review01",
+      "review_id": "LD11",
+      "source_id": "CTD-L03",
+      "target_id": "CTDD-X-B-01",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+          "source_spans": [
+            {
+              "start": 4,
+              "end": 48,
+              "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "rationale": "示例中的‘废物’不承载这条词典所指定的公交车义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 3,
+              "text": "公交车"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-LD-CTD-L03-X-B-02",
+      "adopted_relation_id": "CTD2-LD-CTD-L03-X-B-02-review01",
+      "review_id": "LD12",
+      "source_id": "CTD-L03",
+      "target_id": "CTDD-X-B-02",
+      "accepted_fields": [
+        "/sense_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "sense_fit": {
+          "value": "none",
+          "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+          "source_spans": [
+            {
+              "start": 4,
+              "end": 48,
+              "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "rationale": "示例中的‘废物’不承载这条词典所指定的公交车义项或所指。",
+          "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 3,
+              "text": "公交车"
+            }
+          ],
+          "target_spans": [],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-G1",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-G1-review01",
+      "review_id": "DQ01",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-G1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 26,
+              "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+            }
+          ],
+          "rationale": "借款不还的行为指责与‘你这种人真是垃圾’的人身贬损可分开定位，对应源中通行抱怨与另加辱骂的区分。",
+          "limitation": "仅共享行为批评与额外对人贬损的区分；口语责问与人格辱称的具体识别不同。与旧G1←同词A-01的窄范围none并列保存，不修改旧值。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "attack_presence",
+              "referent_binding"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-G1",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-G1-review01",
+      "review_id": "DQ02",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-G1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 26,
+              "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+            }
+          ],
+          "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+          "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-G1",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-G1-review01",
+      "review_id": "DQ03",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-G1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "partial",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+          "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 26,
+              "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+            }
+          ],
+          "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-G1",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-G1-review01",
+      "review_id": "DQ04",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-G1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "partial",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+          "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 26,
+              "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 23,
+              "end": 25,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-G3",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-G3-review01",
+      "review_id": "DQ05",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-G3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 20,
+              "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+            }
+          ],
+          "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+          "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-G3",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-G3-review01",
+      "review_id": "DQ06",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-G3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 6,
+              "end": 19,
+              "text": "你就说这事，别一口一个垃圾"
+            }
+          ],
+          "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+          "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "attack_presence",
+              "author_stance"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-G3",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-G3-review01",
+      "review_id": "DQ07",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-G3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "partial",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+          "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 20,
+              "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-G3",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-G3-review01",
+      "review_id": "DQ08",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-G3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "partial",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+          "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "sense_interpretation"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 20,
+              "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+            }
+          ],
+          "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "垃圾"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 17,
+              "end": 19,
+              "text": "垃圾"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-J1",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-J1-review01",
+      "review_id": "DQ09",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-J1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+            }
+          ],
+          "rationale": "目标围绕户口身份轻蔑和地域辱称，没有同样可分离的具体行为抱怨加口语辱骂结构；疑问语气本身不足以建立迁移。",
+          "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-J1",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-J1-review01",
+      "review_id": "DQ10",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-J1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+            }
+          ],
+          "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+          "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-J1",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-J1-review01",
+      "review_id": "DQ11",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-J1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+            }
+          ],
+          "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-J1",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-J1-review01",
+      "review_id": "DQ12",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-J1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-J3",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-J3-review01",
+      "review_id": "DQ13",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-J3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 18,
+              "text": "北京人怎么了？别动不动就拿京巴骂人。"
+            }
+          ],
+          "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+          "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-J3",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-J3-review01",
+      "review_id": "DQ14",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-J3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 7,
+              "end": 17,
+              "text": "别动不动就拿京巴骂人"
+            }
+          ],
+          "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+          "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "attack_presence",
+              "author_stance"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-J3",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-J3-review01",
+      "review_id": "DQ15",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-J3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 18,
+              "text": "北京人怎么了？别动不动就拿京巴骂人。"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-J3",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-J3-review01",
+      "review_id": "DQ16",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-J3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 18,
+              "text": "北京人怎么了？别动不动就拿京巴骂人。"
+            }
+          ],
+          "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "京巴"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 13,
+              "end": 15,
+              "text": "京巴"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-B1",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-B1-review01",
+      "review_id": "DQ17",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-B1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "text": "她就是辆公交车，你还真把她当宝了？"
+            }
+          ],
+          "rationale": "目标实施性污名辱称，并反问听者为何珍视她；后半句不能据形式认作源中面向行为实施者的独立口语辱骂。",
+          "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-B1",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-B1-review01",
+      "review_id": "DQ18",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-B1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "text": "她就是辆公交车，你还真把她当宝了？"
+            }
+          ],
+          "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+          "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-B1",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-B1-review01",
+      "review_id": "DQ19",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-B1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "text": "她就是辆公交车，你还真把她当宝了？"
+            }
+          ],
+          "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-B1",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-B1-review01",
+      "review_id": "DQ20",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-B1-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 17,
+              "text": "她就是辆公交车，你还真把她当宝了？"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 4,
+              "end": 7,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-01-B3",
+      "adopted_relation_id": "CTD2-DQ-X-A-01-B3-review01",
+      "review_id": "DQ21",
+      "source_id": "CTDD-X-A-01",
+      "target_id": "CTD-B3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "none",
+          "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 25,
+              "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+            }
+          ],
+          "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+          "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-A-02-B3",
+      "adopted_relation_id": "CTD2-DQ-X-A-02-B3-review01",
+      "review_id": "DQ22",
+      "source_id": "CTDD-X-A-02",
+      "target_id": "CTD-B3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘纸箱’指普通物品。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 2,
+              "text": "纸箱"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+          "source_spans": [
+            {
+              "start": 9,
+              "end": 18,
+              "text": "挪开点，别挡着别人"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 14,
+              "end": 24,
+              "text": "别张口就叫人家公交车"
+            }
+          ],
+          "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+          "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "attack_presence",
+              "author_stance"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-01-B3",
+      "adopted_relation_id": "CTD2-DQ-X-B-01-B3-review01",
+      "review_id": "DQ23",
+      "source_id": "CTDD-X-B-01",
+      "target_id": "CTD-B3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "partial",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 19,
+              "text": "当初说得挺能耐，真遇上事你就是个废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 25,
+              "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+            }
+          ],
+          "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+          "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    },
+    {
+      "draft_relation_id": "CTD2-DQ-X-B-02-B3",
+      "adopted_relation_id": "CTD2-DQ-X-B-02-B3-review01",
+      "review_id": "DQ24",
+      "source_id": "CTDD-X-B-02",
+      "target_id": "CTD-B3-v2",
+      "accepted_fields": [
+        "/semantic_reference_fit",
+        "/rule_fit",
+        "/lexical_overlap"
+      ],
+      "values": {
+        "semantic_reference_fit": {
+          "value": "none",
+          "information": "‘废物’用于表达对人的无用／低价值评价。",
+          "source_spans": [
+            {
+              "start": 18,
+              "end": 20,
+              "text": "废物"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+          "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+          "decision_relevance": {
+            "value": "background",
+            "steps": [],
+            "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+          }
+        },
+        "rule_fit": {
+          "value": "direct",
+          "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+          "source_spans": [
+            {
+              "start": 0,
+              "end": 21,
+              "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+            }
+          ],
+          "target_spans": [
+            {
+              "start": 0,
+              "end": 25,
+              "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+            }
+          ],
+          "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+          "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+          "decision_relevance": {
+            "value": "task_relevant",
+            "steps": [
+              "author_stance",
+              "attack_presence"
+            ],
+            "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+          }
+        },
+        "lexical_overlap": {
+          "comparison": "exact_unicode_literal",
+          "focal_forms": [
+            "公交车"
+          ],
+          "value": "absent",
+          "shared_forms": [],
+          "source_spans": [],
+          "target_spans": [
+            {
+              "start": 21,
+              "end": 24,
+              "text": "公交车"
+            }
+          ],
+          "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+        }
+      },
+      "review_mode": "bulk_acceptance_not_individual_question_answer"
+    }
+  ],
+  "input_conditions_accepted": [
+    "CTDJ-G1-absent-none",
+    "CTDJ-G1-L-none",
+    "CTDJ-G1-absent-same_A",
+    "CTDJ-G1-L-same_A",
+    "CTDJ-G1-absent-same_B",
+    "CTDJ-G1-L-same_B",
+    "CTD2-G1-absent-other_A",
+    "CTD2-G1-L-other_A",
+    "CTD2-G1-absent-other_B",
+    "CTD2-G1-L-other_B",
+    "CTDJ-G2-absent-none",
+    "CTDJ-G2-L-none",
+    "CTDJ-G2-absent-same_A",
+    "CTDJ-G2-L-same_A",
+    "CTDJ-G2-absent-same_B",
+    "CTDJ-G2-L-same_B",
+    "CTDJ-G2-absent-other_A",
+    "CTD2-G2-L-other_A",
+    "CTDJ-G2-absent-other_B",
+    "CTD2-G2-L-other_B",
+    "CTDJ-G3-absent-none",
+    "CTDJ-G3-L-none",
+    "CTDJ-G3-absent-same_A",
+    "CTDJ-G3-L-same_A",
+    "CTDJ-G3-absent-same_B",
+    "CTDJ-G3-L-same_B",
+    "CTD2-G3-absent-other_A",
+    "CTD2-G3-L-other_A",
+    "CTD2-G3-absent-other_B",
+    "CTD2-G3-L-other_B",
+    "CTDJ-G4-absent-none",
+    "CTDJ-G4-L-none",
+    "CTDJ-G4-absent-same_A",
+    "CTDJ-G4-L-same_A",
+    "CTDJ-G4-absent-same_B",
+    "CTDJ-G4-L-same_B",
+    "CTDJ-G4-absent-other_A",
+    "CTD2-G4-L-other_A",
+    "CTDJ-G4-absent-other_B",
+    "CTD2-G4-L-other_B",
+    "CTDJ-J1-absent-none",
+    "CTDJ-J1-L-none",
+    "CTDJ-J1-absent-same_A",
+    "CTDJ-J1-L-same_A",
+    "CTDJ-J1-absent-same_B",
+    "CTDJ-J1-L-same_B",
+    "CTD2-J1-absent-other_A",
+    "CTD2-J1-L-other_A",
+    "CTD2-J1-absent-other_B",
+    "CTD2-J1-L-other_B",
+    "CTDJ-J2-absent-none",
+    "CTDJ-J2-L-none",
+    "CTDJ-J2-absent-same_A",
+    "CTDJ-J2-L-same_A",
+    "CTDJ-J2-absent-same_B",
+    "CTDJ-J2-L-same_B",
+    "CTDJ-J2-absent-other_A",
+    "CTD2-J2-L-other_A",
+    "CTDJ-J2-absent-other_B",
+    "CTD2-J2-L-other_B",
+    "CTDJ-J3-absent-none",
+    "CTDJ-J3-L-none",
+    "CTDJ-J3-absent-same_A",
+    "CTDJ-J3-L-same_A",
+    "CTDJ-J3-absent-same_B",
+    "CTDJ-J3-L-same_B",
+    "CTD2-J3-absent-other_A",
+    "CTD2-J3-L-other_A",
+    "CTD2-J3-absent-other_B",
+    "CTD2-J3-L-other_B",
+    "CTDJ-J4-absent-none",
+    "CTDJ-J4-L-none",
+    "CTDJ-J4-absent-same_A",
+    "CTDJ-J4-L-same_A",
+    "CTDJ-J4-absent-same_B",
+    "CTDJ-J4-L-same_B",
+    "CTDJ-J4-absent-other_A",
+    "CTD2-J4-L-other_A",
+    "CTDJ-J4-absent-other_B",
+    "CTD2-J4-L-other_B",
+    "CTDJ-B1-absent-none",
+    "CTDJ-B1-L-none",
+    "CTDJ-B1-absent-same_A",
+    "CTDJ-B1-L-same_A",
+    "CTDJ-B1-absent-same_B",
+    "CTDJ-B1-L-same_B",
+    "CTD2-B1-absent-other_A",
+    "CTD2-B1-L-other_A",
+    "CTD2-B1-absent-other_B",
+    "CTD2-B1-L-other_B",
+    "CTDJ-B2-absent-none",
+    "CTDJ-B2-L-none",
+    "CTDJ-B2-absent-same_A",
+    "CTDJ-B2-L-same_A",
+    "CTDJ-B2-absent-same_B",
+    "CTDJ-B2-L-same_B",
+    "CTDJ-B2-absent-other_A",
+    "CTD2-B2-L-other_A",
+    "CTDJ-B2-absent-other_B",
+    "CTD2-B2-L-other_B",
+    "CTDJ-B3-absent-none",
+    "CTDJ-B3-L-none",
+    "CTDJ-B3-absent-same_A",
+    "CTDJ-B3-L-same_A",
+    "CTDJ-B3-absent-same_B",
+    "CTDJ-B3-L-same_B",
+    "CTD2-B3-absent-other_A",
+    "CTD2-B3-L-other_A",
+    "CTD2-B3-absent-other_B",
+    "CTD2-B3-L-other_B",
+    "CTDJ-B4-absent-none",
+    "CTDJ-B4-L-none",
+    "CTDJ-B4-absent-same_A",
+    "CTDJ-B4-L-same_A",
+    "CTDJ-B4-absent-same_B",
+    "CTDJ-B4-L-same_B",
+    "CTDJ-B4-absent-other_A",
+    "CTD2-B4-L-other_A",
+    "CTDJ-B4-absent-other_B",
+    "CTD2-B4-L-other_B"
+  ],
+  "comparison_ids_accepted": [
+    "CTD2-G1-E_A",
+    "CTD2-G1-I_A",
+    "CTD2-G1-K_A",
+    "CTD2-G1-D_empty_A",
+    "CTD2-G1-D_L_A",
+    "CTD2-G1-X_minus_same_empty_A",
+    "CTD2-G1-E_B",
+    "CTD2-G1-I_B",
+    "CTD2-G1-K_B",
+    "CTD2-G1-D_empty_B",
+    "CTD2-G1-D_L_B",
+    "CTD2-G1-X_minus_same_empty_B",
+    "CTD2-G1-X_B_minus_A_absent",
+    "CTD2-G1-X_B_minus_A_L",
+    "CTD2-G2-E_A",
+    "CTD2-G2-I_A",
+    "CTD2-G2-K_A",
+    "CTD2-G2-D_empty_A",
+    "CTD2-G2-D_L_A",
+    "CTD2-G2-X_minus_same_empty_A",
+    "CTD2-G2-E_B",
+    "CTD2-G2-I_B",
+    "CTD2-G2-K_B",
+    "CTD2-G2-D_empty_B",
+    "CTD2-G2-D_L_B",
+    "CTD2-G2-X_minus_same_empty_B",
+    "CTD2-G2-X_B_minus_A_absent",
+    "CTD2-G2-X_B_minus_A_L",
+    "CTD2-G3-E_A",
+    "CTD2-G3-I_A",
+    "CTD2-G3-K_A",
+    "CTD2-G3-D_empty_A",
+    "CTD2-G3-D_L_A",
+    "CTD2-G3-X_minus_same_empty_A",
+    "CTD2-G3-E_B",
+    "CTD2-G3-I_B",
+    "CTD2-G3-K_B",
+    "CTD2-G3-D_empty_B",
+    "CTD2-G3-D_L_B",
+    "CTD2-G3-X_minus_same_empty_B",
+    "CTD2-G3-X_B_minus_A_absent",
+    "CTD2-G3-X_B_minus_A_L",
+    "CTD2-G4-E_A",
+    "CTD2-G4-I_A",
+    "CTD2-G4-K_A",
+    "CTD2-G4-D_empty_A",
+    "CTD2-G4-D_L_A",
+    "CTD2-G4-X_minus_same_empty_A",
+    "CTD2-G4-E_B",
+    "CTD2-G4-I_B",
+    "CTD2-G4-K_B",
+    "CTD2-G4-D_empty_B",
+    "CTD2-G4-D_L_B",
+    "CTD2-G4-X_minus_same_empty_B",
+    "CTD2-G4-X_B_minus_A_absent",
+    "CTD2-G4-X_B_minus_A_L",
+    "CTD2-J1-E_A",
+    "CTD2-J1-I_A",
+    "CTD2-J1-K_A",
+    "CTD2-J1-D_empty_A",
+    "CTD2-J1-D_L_A",
+    "CTD2-J1-X_minus_same_empty_A",
+    "CTD2-J1-E_B",
+    "CTD2-J1-I_B",
+    "CTD2-J1-K_B",
+    "CTD2-J1-D_empty_B",
+    "CTD2-J1-D_L_B",
+    "CTD2-J1-X_minus_same_empty_B",
+    "CTD2-J1-X_B_minus_A_absent",
+    "CTD2-J1-X_B_minus_A_L",
+    "CTD2-J2-E_A",
+    "CTD2-J2-I_A",
+    "CTD2-J2-K_A",
+    "CTD2-J2-D_empty_A",
+    "CTD2-J2-D_L_A",
+    "CTD2-J2-X_minus_same_empty_A",
+    "CTD2-J2-E_B",
+    "CTD2-J2-I_B",
+    "CTD2-J2-K_B",
+    "CTD2-J2-D_empty_B",
+    "CTD2-J2-D_L_B",
+    "CTD2-J2-X_minus_same_empty_B",
+    "CTD2-J2-X_B_minus_A_absent",
+    "CTD2-J2-X_B_minus_A_L",
+    "CTD2-J3-E_A",
+    "CTD2-J3-I_A",
+    "CTD2-J3-K_A",
+    "CTD2-J3-D_empty_A",
+    "CTD2-J3-D_L_A",
+    "CTD2-J3-X_minus_same_empty_A",
+    "CTD2-J3-E_B",
+    "CTD2-J3-I_B",
+    "CTD2-J3-K_B",
+    "CTD2-J3-D_empty_B",
+    "CTD2-J3-D_L_B",
+    "CTD2-J3-X_minus_same_empty_B",
+    "CTD2-J3-X_B_minus_A_absent",
+    "CTD2-J3-X_B_minus_A_L",
+    "CTD2-J4-E_A",
+    "CTD2-J4-I_A",
+    "CTD2-J4-K_A",
+    "CTD2-J4-D_empty_A",
+    "CTD2-J4-D_L_A",
+    "CTD2-J4-X_minus_same_empty_A",
+    "CTD2-J4-E_B",
+    "CTD2-J4-I_B",
+    "CTD2-J4-K_B",
+    "CTD2-J4-D_empty_B",
+    "CTD2-J4-D_L_B",
+    "CTD2-J4-X_minus_same_empty_B",
+    "CTD2-J4-X_B_minus_A_absent",
+    "CTD2-J4-X_B_minus_A_L",
+    "CTD2-B1-E_A",
+    "CTD2-B1-I_A",
+    "CTD2-B1-K_A",
+    "CTD2-B1-D_empty_A",
+    "CTD2-B1-D_L_A",
+    "CTD2-B1-X_minus_same_empty_A",
+    "CTD2-B1-E_B",
+    "CTD2-B1-I_B",
+    "CTD2-B1-K_B",
+    "CTD2-B1-D_empty_B",
+    "CTD2-B1-D_L_B",
+    "CTD2-B1-X_minus_same_empty_B",
+    "CTD2-B1-X_B_minus_A_absent",
+    "CTD2-B1-X_B_minus_A_L",
+    "CTD2-B2-E_A",
+    "CTD2-B2-I_A",
+    "CTD2-B2-K_A",
+    "CTD2-B2-D_empty_A",
+    "CTD2-B2-D_L_A",
+    "CTD2-B2-X_minus_same_empty_A",
+    "CTD2-B2-E_B",
+    "CTD2-B2-I_B",
+    "CTD2-B2-K_B",
+    "CTD2-B2-D_empty_B",
+    "CTD2-B2-D_L_B",
+    "CTD2-B2-X_minus_same_empty_B",
+    "CTD2-B2-X_B_minus_A_absent",
+    "CTD2-B2-X_B_minus_A_L",
+    "CTD2-B3-E_A",
+    "CTD2-B3-I_A",
+    "CTD2-B3-K_A",
+    "CTD2-B3-D_empty_A",
+    "CTD2-B3-D_L_A",
+    "CTD2-B3-X_minus_same_empty_A",
+    "CTD2-B3-E_B",
+    "CTD2-B3-I_B",
+    "CTD2-B3-K_B",
+    "CTD2-B3-D_empty_B",
+    "CTD2-B3-D_L_B",
+    "CTD2-B3-X_minus_same_empty_B",
+    "CTD2-B3-X_B_minus_A_absent",
+    "CTD2-B3-X_B_minus_A_L",
+    "CTD2-B4-E_A",
+    "CTD2-B4-I_A",
+    "CTD2-B4-K_A",
+    "CTD2-B4-D_empty_A",
+    "CTD2-B4-D_L_A",
+    "CTD2-B4-X_minus_same_empty_A",
+    "CTD2-B4-E_B",
+    "CTD2-B4-I_B",
+    "CTD2-B4-K_B",
+    "CTD2-B4-D_empty_B",
+    "CTD2-B4-D_L_B",
+    "CTD2-B4-X_minus_same_empty_B",
+    "CTD2-B4-X_B_minus_A_absent",
+    "CTD2-B4-X_B_minus_A_L"
+  ],
+  "new_material_text_or_query_reference_decisions": 0,
+  "old_relation_revisions": 0,
+  "old_AI_scope_observations_newly_adjudicated": 0,
+  "new_GPU_schedule_or_device_decision": false,
+  "execution_scope_note": "This reply adopts the reviewed design; it does not specify a new runtime, bridge qualification or GPU allocation. Prior session authorization is preserved separately."
+}

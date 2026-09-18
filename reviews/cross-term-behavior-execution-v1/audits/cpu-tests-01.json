@@ -1,0 +1,52 @@
+{
+  "status": "pass",
+  "tests": 10,
+  "process_exit_code": 0,
+  "log": {
+    "path": "reviews/cross-term-behavior-execution-v1/audits/cpu-tests-01.log",
+    "bytes": 4827,
+    "sha256": "fe73679ec0c2913ab0f4532fb55e2b79afa1114c68004c916ede0c6db0572441"
+  },
+  "implementation": [
+    {
+      "path": "src/diagnostics/cross_term_behavior_execution_v1.py",
+      "bytes": 39694,
+      "sha256": "65a8ddcf3efbc04d6a1d02e69239d4edf67f85fd0504b2c1352865202ccb1141"
+    },
+    {
+      "path": "src/diagnostics/cross_term_behavior_gpu_v1.py",
+      "bytes": 6870,
+      "sha256": "b86fdbd606a363d5193847d5c085ff55292ba11f89835070fe84593500f89289"
+    },
+    {
+      "path": "scripts/review/run_cross_term_behavior_v1.py",
+      "bytes": 7190,
+      "sha256": "242056bdc9aba3c1665ec56ea1a1611f5f54a3f5b9ec028c43a24365a7520696"
+    },
+    {
+      "path": "scripts/review/test_cross_term_behavior_v1.py",
+      "bytes": 18091,
+      "sha256": "7233cd1c36b039b4c7b9b26bed666a3262272477efcf03af3af6acd33fda6689"
+    },
+    {
+      "path": "scripts/review/audit_cross_term_behavior_v1.py",
+      "bytes": 12365,
+      "sha256": "8e927a195d09595ca7b4b913e15c5c68183f83ed0c6c29c5c0553c0be952a3ef"
+    }
+  ],
+  "CPU_only": true,
+  "full_synthetic_worker_lifecycle": {
+    "forward_calls": 300,
+    "checkpoint_at": 88,
+    "saved_requests_reused": 88,
+    "historical_endpoints_preserved": 84,
+    "new_endpoints": 36,
+    "comparisons": 168,
+    "independent_raw_vector_checks": 384,
+    "result_bytes_reconstructed": true
+  },
+  "tiny_random_CPU_Qwen3_test": true,
+  "real_8B_weights_loaded": false,
+  "new_GPU_forward_performed": false,
+  "note": "Synthetic scoring and release receipts existed only in TemporaryDirectory and were removed. CPU test process imported the host HAMI library with empty CUDA visibility; no CUDA model was loaded."
+}

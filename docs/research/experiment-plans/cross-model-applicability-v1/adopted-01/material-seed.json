@@ -1,0 +1,596 @@
+{
+  "schema_version": "cross-model-applicability-material-draft/v1",
+  "status": "first_batch_bulk_adopted",
+  "created_date": "2026-09-18",
+  "task_protocol": "task-applicability-scoring/v1",
+  "author": "assistant",
+  "human_adoption": {
+    "decision_id": "CMAD-review-01",
+    "authorship": "ai",
+    "review_kind": "human_with_ai",
+    "adoption": "bulk",
+    "decision_ref": {
+      "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+      "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+    },
+    "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+  },
+  "original_gold": null,
+  "target_model_outputs_seen": false,
+  "prior_related_results_seen": true,
+  "split": "development_only",
+  "conservative_dependency_cluster": "CMAD-DEV-C01",
+  "dependency_note": "两个词项家族共用双义项及固定作者辱骂的示例构造策略；自然改写不独立。保守登记为一个共享构造簇，不用两家族或八查询估计总体独立样本量。",
+  "families": [
+    {
+      "family_id": "CMAD-HP",
+      "term": "花瓶",
+      "contrast": "插花器物／对人只有外表缺乏能力的贬称",
+      "query_template_group": "HP-object-state-vs-person-evaluation",
+      "demo_template_group": "HP-reject-accusation-plus-independent-insult",
+      "senses": [
+        {
+          "id": "HP-L1",
+          "usage": "literal",
+          "raw_text": "花瓶：用来插花或摆放花枝的瓶状器物，通常作为室内陈设。",
+          "information": "实际可插花、盛水、搬放的瓶状器物身份。",
+          "source_span": "用来插花或摆放花枝的瓶状器物",
+          "ai_quality": "accepted",
+          "human_quality": "accepted",
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-L2",
+          "usage": "figurative",
+          "raw_text": "花瓶：用来贬低一个人，指其只有好看的外表，却缺乏实际能力或作用。",
+          "information": "对人只有外表、缺乏实际能力或作用的贬损性评价。",
+          "source_span": "只有好看的外表，却缺乏实际能力或作用",
+          "ai_quality": "accepted",
+          "human_quality": "accepted",
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "neutral": {
+        "id": "HP-N",
+        "raw_text": "花瓶：这个词由“花”和“瓶”两个汉字组成，书写时按这两个字的顺序排列。",
+        "purpose": "词形与资料格式对照；不宣称心理中性、严格长度匹配或提供查询义项。",
+        "human_text_adoption": true,
+        "human_adoption": {
+          "decision_id": "CMAD-review-01",
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+            "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+          },
+          "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+        }
+      },
+      "queries": [
+        {
+          "id": "HP-Q1",
+          "usage": "literal",
+          "raw_text": "这束花太高了，得换个深一点的花瓶。",
+          "sense_span": "花瓶",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "评价插花器物是否合用，没有针对人的贬损或伤害主张。",
+          "human_label": "无",
+          "human_severity": 0,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-Q2",
+          "usage": "literal",
+          "raw_text": "客厅那个花瓶裂了，先别往里面倒水。",
+          "sense_span": "花瓶",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "描述实际器物状态并提醒停止倒水，没有作者认可的人身攻击。",
+          "human_label": "无",
+          "human_severity": 0,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-Q3",
+          "usage": "figurative",
+          "raw_text": "你除了长得好看还有什么用？就是个花瓶。",
+          "sense_span": "就是个花瓶",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "当前作者直接以花瓶贬低对方的能力和作用，不只是讨论工作行为。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-Q4",
+          "usage": "figurative",
+          "raw_text": "她在组里就是个花瓶，什么活都干不了。",
+          "sense_span": "就是个花瓶",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "当前作者认可对人的贬称并概括其没有能力。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "foreground_demos": [
+        {
+          "id": "HP-D-L-P",
+          "usage": "literal",
+          "word": "present",
+          "raw_text": "你嘴怎么这么贱？我只是把客厅的花瓶搬到柜子上，你就到处说我偷东西。",
+          "sense_span": "客厅的花瓶搬到柜子上",
+          "attack_span": "你嘴怎么这么贱",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "花瓶是被搬放的实物；作者另行直接辱骂听者嘴贱，二元答案为有。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-D-L-A",
+          "usage": "literal",
+          "word": "absent",
+          "raw_text": "你嘴怎么这么贱？我只是把客厅里插花用的瓶子搬到柜子上，你就到处说我偷东西。",
+          "sense_span": "插花用的瓶子",
+          "attack_span": "你嘴怎么这么贱",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "以可见描述指插花器物，未出现完整词形花瓶；独立辱骂保留。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-D-F-P",
+          "usage": "figurative",
+          "word": "present",
+          "raw_text": "你嘴怎么这么贱？她有自己的成绩，你却到处说她是个花瓶。",
+          "sense_span": "她是个花瓶",
+          "attack_span": "你嘴怎么这么贱",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "花瓶是被反对的对人贬称；作者同时独立辱骂听者，所以仍为有。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "HP-D-F-A",
+          "usage": "figurative",
+          "word": "absent",
+          "raw_text": "你嘴怎么这么贱？她有自己的成绩，你却到处说她只有长相、没什么真本事。",
+          "sense_span": "只有长相、没什么真本事",
+          "attack_span": "你嘴怎么这么贱",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "以可见描述表达只有外表缺乏能力的评价，作者反对该评价但保留独立辱骂。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "anchor_demo": {
+        "id": "HP-D-ANCHOR",
+        "raw_text": "雨停了我再去取快递，你不用等我。",
+        "ai_label": "无",
+        "ai_severity": 0,
+        "ai_rationale": "只说明日常安排，没有人身贬损或伤害主张。",
+        "human_label": "无",
+        "human_severity": 0,
+        "human_text_adoption": true,
+        "human_adoption": {
+          "decision_id": "CMAD-review-01",
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+            "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+          },
+          "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+        }
+      }
+    },
+    {
+      "family_id": "CMAD-XC",
+      "term": "小丑",
+      "contrast": "正常逗趣表演角色／对人可笑和自以为是的贬称",
+      "query_template_group": "XC-performer-activity-vs-person-ridicule",
+      "demo_template_group": "XC-public-disruption-plus-independent-insult",
+      "senses": [
+        {
+          "id": "XC-L1",
+          "usage": "literal",
+          "raw_text": "小丑：以滑稽的装扮和表演逗人发笑的角色或演员。",
+          "information": "实际以滑稽扮相进行逗趣表演的角色或演员身份。",
+          "source_span": "以滑稽的装扮和表演逗人发笑的角色或演员",
+          "ai_quality": "accepted",
+          "human_quality": "accepted",
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-L2",
+          "usage": "figurative",
+          "raw_text": "小丑：用来嘲讽一个人，指其言行可笑、爱出风头或自以为是。",
+          "information": "对人言行可笑、自以为是等的贬损性评价，不指认其真实表演职业。",
+          "source_span": "言行可笑、爱出风头或自以为是",
+          "ai_quality": "accepted",
+          "human_quality": "accepted",
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "neutral": {
+        "id": "XC-N",
+        "raw_text": "小丑：这个词由“小”和“丑”两个汉字组成，书写时按这两个字的顺序排列。",
+        "purpose": "词形与资料格式对照；不宣称心理中性、严格长度匹配或提供查询义项。",
+        "human_text_adoption": true,
+        "human_adoption": {
+          "decision_id": "CMAD-review-01",
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+            "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+          },
+          "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+        }
+      },
+      "queries": [
+        {
+          "id": "XC-Q1",
+          "usage": "literal",
+          "raw_text": "生日会上，小丑正在给孩子们拧气球。",
+          "sense_span": "小丑",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "正常称述表演角色和活动；提到人或职业不构成攻击。",
+          "human_label": "无",
+          "human_severity": 0,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-Q2",
+          "usage": "literal",
+          "raw_text": "游乐园新来的小丑一出场，孩子们就围了过去。",
+          "sense_span": "小丑",
+          "ai_label": "无",
+          "ai_severity": 0,
+          "ai_rationale": "描述演员出场及观众反应，没有贬损。",
+          "human_label": "无",
+          "human_severity": 0,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-Q3",
+          "usage": "figurative",
+          "raw_text": "你还真把自己当回事了？在大家眼里就是个小丑。",
+          "sense_span": "就是个小丑",
+          "ai_label": "有",
+          "ai_severity": 1,
+          "ai_rationale": "当前作者以小丑轻蔑地嘲讽对方；建议1级，若审核为2级也仍对应有。",
+          "human_label": "有",
+          "human_severity": 1,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-Q4",
+          "usage": "figurative",
+          "raw_text": "别再出来丢人了，你就是个自以为是的小丑。",
+          "sense_span": "自以为是的小丑",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "当前作者直接贬损对方的人格和言行；1／2级边界需审核，二元答案均为有。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "foreground_demos": [
+        {
+          "id": "XC-D-L-P",
+          "usage": "literal",
+          "word": "present",
+          "raw_text": "小丑在台上给孩子们表演，你就在台下故意起哄捣乱，你这人真他妈缺德。",
+          "sense_span": "小丑在台上给孩子们表演",
+          "attack_span": "你这人真他妈缺德",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "小丑是正常表演者；作者独立以缺德贬损听者，不仅批评行为。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-D-L-A",
+          "usage": "literal",
+          "word": "absent",
+          "raw_text": "那个涂着花脸的滑稽演员在台上给孩子们表演，你就在台下故意起哄捣乱，你这人真他妈缺德。",
+          "sense_span": "涂着花脸的滑稽演员",
+          "attack_span": "你这人真他妈缺德",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "可见描述提供实际滑稽表演角色信息，未出现小丑；独立辱骂保留。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-D-F-P",
+          "usage": "figurative",
+          "word": "present",
+          "raw_text": "人家在台上认真发言，你就在台下喊他小丑，你这人真他妈缺德。",
+          "sense_span": "喊他小丑",
+          "attack_span": "你这人真他妈缺德",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "小丑是被反对的嘲讽性称呼；作者同时独立贬损听者。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        },
+        {
+          "id": "XC-D-F-A",
+          "usage": "figurative",
+          "word": "absent",
+          "raw_text": "人家在台上认真发言，你就在台下喊他是个自以为是、惹人笑话的家伙，你这人真他妈缺德。",
+          "sense_span": "自以为是、惹人笑话的家伙",
+          "attack_span": "你这人真他妈缺德",
+          "ai_label": "有",
+          "ai_severity": 2,
+          "ai_rationale": "以可见描述表达嘲讽人的意义；作者反对这项嘲讽，但另行辱骂听者。",
+          "human_label": "有",
+          "human_severity": 2,
+          "human_text_adoption": true,
+          "human_adoption": {
+            "decision_id": "CMAD-review-01",
+            "authorship": "ai",
+            "review_kind": "human_with_ai",
+            "adoption": "bulk",
+            "decision_ref": {
+              "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+              "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+            },
+            "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+          }
+        }
+      ],
+      "anchor_demo": {
+        "id": "XC-D-ANCHOR",
+        "raw_text": "活动改到周六下午了，已经买的票还可以用。",
+        "ai_label": "无",
+        "ai_severity": 0,
+        "ai_rationale": "说明活动安排和票务效力，没有人身贬损或伤害主张。",
+        "human_label": "无",
+        "human_severity": 0,
+        "human_text_adoption": true,
+        "human_adoption": {
+          "decision_id": "CMAD-review-01",
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-model-applicability-v1/feedback-01.json",
+            "sha256": "c229c9520bfe71dcf93ed89fa315835601390d3b73132662b7af27a6ad81d18f"
+          },
+          "recorded_at": "2026-09-17T18:10:11.377352+00:00"
+        }
+      }
+    }
+  ]
+}

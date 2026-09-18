@@ -1,0 +1,70 @@
+{
+  "schema_version": "cross-term-behavior-execution-preparation-selector/v1",
+  "updated_at_utc": "2026-09-17T14:03:33.485009+00:00",
+  "status": "CPU_execution_preparation_complete_stopped_before_GPU_binding",
+  "user_instruction_verbatim": "请开始下一步，直至GPU任务需求前停止，目前GPU暂未空闲",
+  "prepared_directory": "reviews/cross-term-behavior-execution-v1/prepared-01",
+  "manifest": {
+    "path": "reviews/cross-term-behavior-execution-v1/prepared-01/manifest.json",
+    "bytes": 50756,
+    "sha256": "9acc64f352086603b56a42aac4dd39d370d84f7acb27819774235967265075dd"
+  },
+  "delivery": {
+    "path": "reviews/cross-term-behavior-execution-v1/DELIVERY.md",
+    "bytes": 3892,
+    "sha256": "48304bb136dad3d19f28fae02216e2f8e785d6043e8e1311cd76f56d33696205"
+  },
+  "scientific_input_manifest": {
+    "path": "docs/research/experiment-plans/cross-term-behavior-discrimination-v1/frozen-01/manifest.json",
+    "bytes": 5717,
+    "sha256": "9e0e03ac66b4815c95d6466041cf4d886e3a7bf2bf4f1a814f862df88fe0b722"
+  },
+  "cpu_tests": {
+    "path": "reviews/cross-term-behavior-execution-v1/audits/cpu-tests-01.json",
+    "bytes": 1833,
+    "sha256": "7e8863cffaa953986a84180ec760c6e6ec778392f5c9617a0f92f267b8732f8b"
+  },
+  "cpu_validation": {
+    "path": "reviews/cross-term-behavior-execution-v1/audits/validation-01.json",
+    "bytes": 763,
+    "sha256": "8b2698b3d344747f83d97b5ae698bb0083aea3052f7a871c7932bd148677e689"
+  },
+  "independent_audit": {
+    "path": "reviews/cross-term-behavior-execution-v1/audits/preparation-01-independent.json",
+    "bytes": 633,
+    "sha256": "d573655e31a451fc5f578eb8ab667af484ea9fc32813a91c51d5243298c1aaf9"
+  },
+  "software_and_weight_identity_frozen": true,
+  "actual_GPU_allocation": null,
+  "GPU_numerical_qualification": false,
+  "new_GPU_forwards": 0,
+  "GPU_executor_started": false,
+  "GPU_job_scheduled": false,
+  "idle_polling_created": false,
+  "required_future_GPU": {
+    "index": 0,
+    "uuid": "GPU-09b29c25-c372-62f4-3098-9734013e93c0",
+    "name": "NVIDIA L20",
+    "total_mib": 46068,
+    "driver": "580.105.08"
+  },
+  "future_budget": {
+    "historical_bridge_forwards": 84,
+    "new_engineering_forwards": 180,
+    "new_science_forwards": 36,
+    "total_prompt_forwards": 300,
+    "candidate_values": 600,
+    "new_scientific_conditions": 36,
+    "reused_scientific_conditions": 84,
+    "core_conditions": 120,
+    "registered_comparisons": 168,
+    "additional_generation_forwards": 0
+  },
+  "prior_review_and_result_selectors_unchanged": true,
+  "next_step": "Await a new authorized GPU window; bind the original idle device, bridge historical scores, qualify and score new inputs, release worker, then analyze on CPU.",
+  "final_closeout": {
+    "path": "reviews/cross-term-behavior-execution-v1/audits/final-closeout-01.json",
+    "bytes": 1098,
+    "sha256": "83b82c44b451b0cbbd745b588cc2a302f0aea2d2f8cdd56ccee1358ef5f205c6"
+  }
+}

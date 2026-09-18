@@ -1,0 +1,136 @@
+--- /data/liaozijie/hate_speech_detection/scripts/review/run_cross_model_applicability_v1.py
++++ /data/liaozijie/hate_speech_detection/scripts/review/run_cross_model_applicability_utf8_v1.py
+@@ -1,9 +1,15 @@
+ #!/usr/bin/env python3
+-"""CPU preparation/validation and explicit, separately bound GPU stages."""
++"""UTF-8-only continuation with explicitly verified, immutable engineering imports.
++
++Derived from the frozen v1 runner; numerical/model/scientific code is unchanged.
++Failed source runs remain terminal. A new run may reference their fully audited
++engineering receipts under a separate source-pinned amendment and binding.
++"""
+ from __future__ import annotations
+ 
+ import argparse
+ import fcntl
++from functools import lru_cache
+ import gc
+ import json
+ import os
+@@ -18,23 +24,72 @@
+ sys.path[:0]=[str(ROOT/'src'),str(ROOT)]
+ from diagnostics import cross_model_applicability_execution_v1 as c
+ 
++c.require(sys.flags.utf8_mode == 1, 'Launch this amendment with PYTHONUTF8=1')
++
++
++def validate_amendment(bound):
++    b=c.read(bound)
++    c.require('runtime_amendment' in b and 'engineering_import' in b,'Explicit I/O amendment and import binding required')
++    c.verify(b['runtime_amendment']);m=c.read(b['runtime_amendment']['path'])
++    c.require(m['required_python_utf8_mode']==1,'Unexpected I/O amendment')
++    for source in m['sources']:c.verify(source)
++    c.require(m['entry_point']==c.info(Path(__file__).resolve()),'Amended entry point differs')
++    c.verify(b['engineering_import'])
++    return b
++
++
++@lru_cache(maxsize=8)
++def imported_engineering(run):
++    run=Path(run)
++    b=validate_amendment(run/'binding.json');m=c.read(b['engineering_import']['path'])
++    for key in ['source_state','source_binding','source_identity','numerical_closeout']:
++        c.verify(m[key])
++    state=c.read(m['source_state']['path'])
++    c.require(state['status']=='failed' and state['error_type']=='UnicodeDecodeError' and
++              state['owned_worker_absent'] and state['worker_exit_code']==1,'Import is restricted to the documented released I/O failure')
++    c.require(m['prepared_manifest']==b['prepared_manifest'] and m['model_key']==b['model_key']=='glm4-9b-chat','Import science/model differs')
++    parent=c.read(m['source_binding']['path'])
++    c.require(parent['allocation']==b['allocation'] and parent['runtime_versions']==b['runtime_versions'],'Import allocation/runtime differs')
++    c.require(state['run_id']==m['source_run_id'] and state['new_forwards']==2700,'Source invocation coverage differs')
++    c.require(c.read(m['numerical_closeout']['path'])['qualification_arithmetic']['status']=='pass','Unqualified imported numerical arithmetic')
++    source=Path(m['source_directory']).resolve();entries={}
++    for r in m['records']:
++        stage,rid=r['stage'],r['request_id']
++        c.require(stage in [p[0] for p in c.PASSES] and '/' not in rid and '\\' not in rid,'Illegal imported request')
++        c.require(Path(r['receipt']['path'])==source/'scores'/stage/(rid+'.json') and
++                  Path(r['vector']['path'])==source/'vectors'/stage/(rid+'.npy'),'Import escaped its original run')
++        c.require((stage,rid) not in entries,'Duplicate imported request')
++        entries[stage,rid]=r
++    c.require(len(entries)==2700 and all(sum(stage==name for stage,_ in entries)==540 for name,_,_ in c.PASSES),'Incomplete engineering import')
++    return m,entries
++
+ 
+ def paths(run,stage,rid):
+     c.require('/' not in rid and '\\' not in rid and rid not in ['.','..'],'Unsafe request ID')
++    _,entries=imported_engineering(str(Path(run).resolve()))
++    if (stage,rid) in entries:
++        entry=entries[stage,rid]
++        return Path(entry['receipt']['path']),Path(entry['vector']['path'])
+     return run/'scores'/stage/(rid+'.json'),run/'vectors'/stage/(rid+'.npy')
+ 
+ 
+ def check_record(run,stage,request,binding_sha,profile,bound=None,identity=None):
+     import numpy as np
+     rp,vp=paths(run,stage,request['request_id']);r=c.read(rp)
+-    c.require(r['binding_sha256']==binding_sha and r['model_key']==profile['model_key'],'Receipt binding differs')
++    imported,entries=imported_engineering(str(Path(run).resolve()))
++    entry=entries.get((stage,request['request_id']))
++    expected_binding=imported['source_binding']['sha256'] if entry else binding_sha
++    if entry:
++        c.verify(entry['receipt']);c.require(r['raw_logits']==entry['vector'],'Imported vector identity differs')
++    c.require(r['binding_sha256']==expected_binding and r['model_key']==profile['model_key'],'Receipt binding differs')
+     for key in ['request_id','condition_id','prompt_sha256','input_ids_sha256']:
+         c.require(r[key]==request[key],'Receipt input identity differs')
+     c.require(r['pass_id']==stage and r['candidate_tokens']==profile['candidate_tokens'],'Pass/candidate identity differs')
+     from diagnostics.cross_model_applicability_models_v1 import prepared_input
+     padding=next((padding for name,padding,_ in c.PASSES if name==stage),'none')
+     c.require(r['prepared_input']==prepared_input(request['input_ids'],profile['pad_token_id'],padding),'Padding/answer-position receipt differs')
+-    c.require(r['physical_score_id']==f"{c.read(run/'state.json')['run_id']}:{stage}:{request['request_id']}",'Physical score identity differs')
++    producer_run=imported['source_run_id'] if entry else c.read(run/'state.json')['run_id']
++    c.require(r['physical_score_id']==f"{producer_run}:{stage}:{request['request_id']}",'Physical score identity differs')
+     c.require(Path(r['raw_logits']['path'])==vp.resolve(),'Unexpected vector path')
+     c.verify(r['raw_logits']);c.verify(r['producer_identity'])
+     if identity is not None:c.require(c.read(r['producer_identity']['path'])==identity,'Producer runtime changed')
+@@ -90,6 +145,7 @@
+ def worker(prepared,bound,run,invocation,phase):
+     from diagnostics import cross_model_applicability_models_v1 as models
+     prepared,run=Path(prepared),Path(run)
++    validate_amendment(bound)
+     plan,profiles,requests=c.check_prepared(prepared,weights=True)
+     b=c.read(bound);c.verify(b['prepared_manifest'])
+     c.require(b['prepared_manifest']==c.info(prepared/'manifest.json'),'Bound preparation differs')
+@@ -192,7 +248,7 @@
+                 if n%24==0 or n==len(profile['production_ids']):update(pass_completed=n,new_forwards=new_forwards,reused_requests=reused)
+             seal_or_check(run/'production-seal.json',{'model_key':profile['model_key'],'records':production,
+                 'qualification':c.info(run/'qualification.json'),'binding_sha256':binding_sha})
+-        lease_check();c.check_prepared(prepared,weights=True)
++        lease_check();c.check_prepared(prepared,weights=True);validate_amendment(bound)
+         update(status='complete_releasing' if phase=='full' else 'qualified_releasing')
+     except Paused as e:update(status='paused',reason=str(e))
+     except BaseException as e:
+@@ -208,6 +264,7 @@
+ 
+ def supervise(prepared,bound,run,phase,resume):
+     prepared,bound,run=Path(prepared).resolve(),Path(bound).resolve(),Path(run).resolve()
++    validate_amendment(bound)
+     c.require(run.parent==c.WORK and run.name.startswith('run-'),'Dedicated new experiment run directory required')
+     c.check_prepared(prepared);b=c.read(bound);c.verify(b['prepared_manifest'])
+     c.require(b['prepared_manifest']==c.info(prepared/'manifest.json'),'Binding points to another preparation')
+@@ -233,7 +290,7 @@
+         invocation=str(uuid.uuid4());state['invocations'].append({'id':invocation,'controller_pid':os.getpid(),'started_at':c.now()})
+         state.update(status='launching',phase=phase,owned_worker_absent=False)
+         c.atomic(run/'state.json',state,replace=True)
+-        env=dict(os.environ,CUDA_VISIBLE_DEVICES=','.join(a['uuid'] for a in b['allocation']),CUBLAS_WORKSPACE_CONFIG=':4096:8',
++        env=dict(os.environ,PYTHONUTF8='1',CUDA_VISIBLE_DEVICES=','.join(a['uuid'] for a in b['allocation']),CUBLAS_WORKSPACE_CONFIG=':4096:8',
+                  HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',PYTHONDONTWRITEBYTECODE='1',PYTHONHASHSEED='0')
+         cmd=[sys.executable,str(Path(__file__).resolve()),'_worker','--prepared',str(prepared),'--bound',str(bound),
+              '--run',str(run),'--phase',phase,'--invocation',invocation]
+@@ -258,6 +315,7 @@
+ 
+ def check_run(prepared,run):
+     prepared,run=Path(prepared),Path(run)
++    validate_amendment(run/'binding.json')
+     plan,profiles,requests=c.check_prepared(prepared)
+     b=c.read(run/'binding.json');state=c.read(run/'state.json')
+     c.require(state['status'] in ['qualified','complete'] and state['owned_worker_absent'] and state['worker_exit_code']==0,'Unfinished or unreleased run')

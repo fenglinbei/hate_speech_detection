@@ -1,0 +1,712 @@
+{
+  "purpose": "schema_fixture_only",
+  "authorship": "assistant",
+  "human_adoption": false,
+  "scientific_material": false,
+  "records": [
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-LQ-direct",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_query",
+      "source": {
+        "material_id": "fixture-lexicon-fruit",
+        "kind": "lexicon_sense",
+        "raw_text": "苹果：苹果树的果实，可食用。",
+        "text_sha256": "117ec5dd57cd5ffcad9bb6c6827461ec09af539496aa424f5a2cdb3bce174bc1",
+        "sense_id": "fixture-lexicon-fruit-sense"
+      },
+      "target": {
+        "material_id": "fixture-query-fruit",
+        "kind": "query",
+        "raw_text": "这个苹果很甜。",
+        "text_sha256": "ab65fc3bf9dd1372f5cd557a87010dfa6edafc490432011535f1ef225caae718",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "仅为 AI 格式样例的质量建议，无人工采纳。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "direct",
+        "information": "苹果的水果义。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 14,
+            "text": "苹果：苹果树的果实，可食用。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 7,
+            "text": "这个苹果很甜。"
+          }
+        ],
+        "rationale": "查询在评价一个水果的味道。",
+        "limitation": null,
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "苹果"
+        ],
+        "value": "present",
+        "shared_forms": [
+          "苹果"
+        ],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "苹果"
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 2,
+            "end": 4,
+            "text": "苹果"
+          }
+        ],
+        "rationale": "按指定字面串机械计算，不表示义项适用。"
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-LQ-none",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_query",
+      "source": {
+        "material_id": "fixture-lexicon-fruit",
+        "kind": "lexicon_sense",
+        "raw_text": "苹果：苹果树的果实，可食用。",
+        "text_sha256": "117ec5dd57cd5ffcad9bb6c6827461ec09af539496aa424f5a2cdb3bce174bc1",
+        "sense_id": "fixture-lexicon-fruit-sense"
+      },
+      "target": {
+        "material_id": "fixture-query-brand",
+        "kind": "query",
+        "raw_text": "这家苹果门店的服务很周到。",
+        "text_sha256": "650a611a1bb42eb9d473caab9e79230fd9a9492df1e6a87945d80667701dfa28",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "仅为 AI 格式样例的质量建议，无人工采纳。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "苹果的水果义。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 14,
+            "text": "苹果：苹果树的果实，可食用。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 13,
+            "text": "这家苹果门店的服务很周到。"
+          }
+        ],
+        "rationale": "查询中的门店语境指向品牌，水果义不解释这个位置。",
+        "limitation": "限于当前门店位置，不评价定义自身质量。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "苹果"
+        ],
+        "value": "present",
+        "shared_forms": [
+          "苹果"
+        ],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "苹果"
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 2,
+            "end": 4,
+            "text": "苹果"
+          }
+        ],
+        "rationale": "按指定字面串机械计算，不表示义项适用。"
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-LD-direct",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "fixture-lexicon-fruit",
+        "kind": "lexicon_sense",
+        "raw_text": "苹果：苹果树的果实，可食用。",
+        "text_sha256": "117ec5dd57cd5ffcad9bb6c6827461ec09af539496aa424f5a2cdb3bce174bc1",
+        "sense_id": "fixture-lexicon-fruit-sense"
+      },
+      "target": {
+        "material_id": "fixture-demo-fruit",
+        "kind": "demo",
+        "raw_text": "我刚吃了一个苹果。",
+        "text_sha256": "b5125c611a0a230aeefb32a37339b498989f45f448aae07751811a8a414174e7",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "仅为 AI 格式样例的质量建议，无人工采纳。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "direct",
+        "information": "苹果的水果义。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 14,
+            "text": "苹果：苹果树的果实，可食用。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 9,
+            "text": "我刚吃了一个苹果。"
+          }
+        ],
+        "rationale": "示例描述食用一个水果。",
+        "limitation": null,
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "苹果"
+        ],
+        "value": "present",
+        "shared_forms": [
+          "苹果"
+        ],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "苹果"
+          },
+          {
+            "start": 3,
+            "end": 5,
+            "text": "苹果"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 6,
+            "end": 8,
+            "text": "苹果"
+          }
+        ],
+        "rationale": "按指定字面串机械计算，不表示义项适用。"
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-DQ-dimensions",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "fixture-demo-region",
+        "kind": "demo",
+        "raw_text": "别因他来自那个地方就否定他的能力。",
+        "text_sha256": "810282d21100233b59aab5bee835b4a92ef856e2d2ba29be7a27ab0fddc6d6f0",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "fixture-query-sex",
+        "kind": "query",
+        "raw_text": "别因她是女性就否定她的能力。",
+        "text_sha256": "bb43821ac7349aa9e19314a5e6f1aa8c18861e158961ead1f354640efc65b0b9",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "仅为 AI 格式样例的质量建议，无人工采纳。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "地域来源这一具体身份信息。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "别因他来自那个地方就否定他的能力。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 14,
+            "text": "别因她是女性就否定她的能力。"
+          }
+        ],
+        "rationale": "地域身份信息不解释查询的性别所指。",
+        "limitation": null,
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "反对仅因身份概括个人能力的判断规则。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "别因他来自那个地方就否定他的能力。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 14,
+            "text": "别因她是女性就否定她的能力。"
+          }
+        ],
+        "rationale": "两句均明确反对以身份否定个人能力。",
+        "limitation": null,
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "generalization_scope"
+          ],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "地方"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 7,
+            "end": 9,
+            "text": "地方"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "按指定字面串机械计算，不表示义项适用。"
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-DQ-partial-unclear",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "fixture-demo-quotation",
+        "kind": "demo",
+        "raw_text": "她说“那人真笨”，但没说明是在引用谁。",
+        "text_sha256": "871a86ea115a1a71ff639792a9d4bbde2963de074f6e40c9096bbaef70a56788",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "fixture-query-quotation",
+        "kind": "query",
+        "raw_text": "“那人真笨”是她的原话吗？",
+        "text_sha256": "e7b0ad988adcb1dba36e148969e30881965203b7247584ca384936720c6beb61",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "unknown",
+        "rationale": "这是未解决的格式示例，不提供已采纳的示例答案。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "partial",
+        "information": "被引用片段的字面内容。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "她说“那人真笨”，但没说明是在引用谁。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 13,
+            "text": "“那人真笨”是她的原话吗？"
+          }
+        ],
+        "rationale": "可对应被引用命题，无法确认二者是否同一实际说话事件。",
+        "limitation": "仅对应命题内容，不迁移说话者身份。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "quotation_scope"
+          ],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "rule_fit": {
+        "value": "unclear",
+        "information": "当前作者与所引攻击的认可关系。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "她说“那人真笨”，但没说明是在引用谁。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 13,
+            "text": "“那人真笨”是她的原话吗？"
+          }
+        ],
+        "rationale": "说明字段如何记录缺失的说话来源。",
+        "limitation": "缺少来源信息，不能假设双方引用关系相同。",
+        "decision_relevance": {
+          "value": "unclear",
+          "steps": [],
+          "rationale": "用于说明字段取值；不推断模型已使用该信息。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "那人真笨"
+        ],
+        "value": "present",
+        "shared_forms": [
+          "那人真笨"
+        ],
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 7,
+            "text": "那人真笨"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 1,
+            "end": 5,
+            "text": "那人真笨"
+          }
+        ],
+        "rationale": "按指定字面串机械计算，不表示义项适用。"
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "fixture-DQ-unreviewed",
+      "family_id": "schema-fixture-only",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "fixture-demo-fruit",
+        "kind": "demo",
+        "raw_text": "我刚吃了一个苹果。",
+        "text_sha256": "b5125c611a0a230aeefb32a37339b498989f45f448aae07751811a8a414174e7",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "fixture-query-brand",
+        "kind": "query",
+        "raw_text": "这家苹果门店的服务很周到。",
+        "text_sha256": "650a611a1bb42eb9d473caab9e79230fd9a9492df1e6a87945d80667701dfa28",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": null,
+        "value": null,
+        "rationale": null,
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "ai_note",
+          "adoption": "none",
+          "accepted_fields": [],
+          "decision_ref": null,
+          "recorded_at": null,
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": null,
+        "information": null,
+        "source_spans": [],
+        "target_spans": [],
+        "rationale": null,
+        "limitation": null,
+        "decision_relevance": {
+          "value": null,
+          "steps": [],
+          "rationale": null
+        }
+      },
+      "rule_fit": {
+        "value": null,
+        "information": null,
+        "source_spans": [],
+        "target_spans": [],
+        "rationale": null,
+        "limitation": null,
+        "decision_relevance": {
+          "value": null,
+          "steps": [],
+          "rationale": null
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [],
+        "value": null,
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [],
+        "rationale": null
+      },
+      "presentation_refs": [],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": null,
+        "exposure": {
+          "target_model_outputs_seen": false,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "cross-model-applicability-launch/v1",
+  "created_at": "2026-09-18T03:24:21.002519+00:00",
+  "prepared": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/prepared-01/manifest.json",
+    "bytes": 5046,
+    "sha256": "fb51dd21999638155066ba77f4dfcaa47a6e941e29c3463f8784371390e57293"
+  },
+  "artifacts": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/launch-01/README.md",
+      "bytes": 2033,
+      "sha256": "65b7347a07937d928a000d7bb35b1f38797013e6a003c13cb1436723ffe13293"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/launch-01/authorization.json",
+      "bytes": 1252,
+      "sha256": "cd515bb7939840974ebaf30fd190f741061542da2f5362493b5294c18a0dce8a"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/launch-01/cpu-input-audit.json",
+      "bytes": 1628,
+      "sha256": "d7e869dee9b4a2f6668e888d650ae86948a91318632966382843e48813944174"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/launch-01/preparation-selector.json",
+      "bytes": 1058,
+      "sha256": "e40d8f85bfc1458b27571d39180d598ff39e5d44da543437585d1db767bb6448"
+    }
+  ],
+  "models": [
+    {
+      "model_key": "qwen3-8b",
+      "binding": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/bound-qwen3-8b-01.json",
+        "bytes": 785,
+        "sha256": "0e5dfd9d953a5a535be147b64a7dce0a52afba2ed866e49febb497b5f152795e"
+      },
+      "run_directory": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-qwen3-8b-01",
+      "run_id": "4f37f816-072f-474b-b855-565021d7471f",
+      "initial_invocation": {
+        "controller_pid": 1808980,
+        "id": "2ace2fd5-4654-47ce-89aa-e775acd0841c",
+        "started_at": "2026-09-18T03:20:31.973307+00:00",
+        "worker_pid": 1809052
+      }
+    },
+    {
+      "model_key": "qwen3-14b",
+      "binding": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/bound-qwen3-14b-01.json",
+        "bytes": 886,
+        "sha256": "669e13b7514148d6edf462b0c58ea14f94e6b2a2d82bd1cfdd2f77e88da9edb1"
+      },
+      "run_directory": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-qwen3-14b-01",
+      "run_id": "20e20a27-a7cd-41a4-9530-edbe0033db7e",
+      "initial_invocation": {
+        "controller_pid": 1811607,
+        "id": "93d8907e-0247-426c-9194-14324fcc0c81",
+        "started_at": "2026-09-18T03:22:03.826500+00:00",
+        "worker_pid": 1811622
+      }
+    },
+    {
+      "model_key": "glm4-9b-chat",
+      "binding": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/bound-glm4-9b-chat-01.json",
+        "bytes": 789,
+        "sha256": "bd17c26df1e22f69d07467ed2b675d076f05593f52458ea00fa9cb88311ab9f4"
+      },
+      "run_directory": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-glm4-9b-chat-01",
+      "run_id": "9b4f3f40-21d6-41e3-ba94-26fa857efa71",
+      "initial_invocation": {
+        "controller_pid": 1814247,
+        "id": "4e6c4140-00db-4b7d-b88b-100ff875cb8b",
+        "started_at": "2026-09-18T03:23:37.146775+00:00"
+      }
+    }
+  ],
+  "initial_phase": "engineering",
+  "full_authorized_only_after_qualification_check_and_release": true,
+  "live_state": "Read each run_directory/state.json; this manifest is the immutable launch receipt."
+}

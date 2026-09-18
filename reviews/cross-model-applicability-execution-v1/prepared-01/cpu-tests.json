@@ -1,0 +1,45 @@
+{
+  "status": "pass",
+  "tests": 9,
+  "failures": 0,
+  "errors": 0,
+  "details": {
+    "synthetic_legacy_analysis": {
+      "conditions": 156,
+      "queries": 12,
+      "core_comparisons": 168,
+      "external_N_conditions": 36
+    },
+    "synthetic_analysis_expressions": 1152,
+    "independent_Decimal_precision": 60,
+    "readout_max_absolute_error": 1.7763568394002505e-15,
+    "tiny_random_CPU_models": [
+      {
+        "architecture": "qwen3",
+        "native_selected_max_error": 5.960464477539063e-08,
+        "padding_max_error": 5.960464477539063e-08,
+        "tiny_checkpoint_reload_exact": true
+      },
+      {
+        "architecture": "chatglm",
+        "native_selected_max_error": 1.1175870895385742e-08,
+        "padding_max_error": 1.862645149230957e-09,
+        "tiny_checkpoint_reload_exact": true
+      }
+    ],
+    "pretrained_research_model_weights_loaded": false,
+    "CPU_frozen_token_records": 1620,
+    "synthetic_lifecycle": {
+      "engineering_requests": 80,
+      "production_requests": 16,
+      "extra_generation_forwards": 16,
+      "checkpoint_requests_reused": 3,
+      "prefix_receipts_unchanged": true,
+      "tampered_position_rejected": true,
+      "resource_release_was_a_synthetic_fixture": true
+    }
+  },
+  "research_pretrained_model_forward_calls": 0,
+  "GPU_forward_calls": 0,
+  "scope": "CPU tiny random models and synthetic fixtures only; not GPU numerical qualification."
+}

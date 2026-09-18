@@ -1,0 +1,5503 @@
+{
+  "status": "ai_proposals_awaiting_human_review",
+  "human_adoption": false,
+  "records": [
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L01-X-A-01",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L01",
+        "kind": "lexicon_sense",
+        "raw_text": "垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "text_sha256": "9c936721d24b8ac1284aaa7bd37ddc12e7c10d90bb3242148c4c465a30a5dcb8",
+        "sense_id": "CTD-L01:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 34,
+            "text": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "垃圾"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_A",
+          "prompt_sha256": "68e1c28052df39c5a73443c93af2e23733d71388a7382f58419a54b3e87bdb50",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_A",
+          "prompt_sha256": "d201e223229653f6c6556d8a98182dbedc1b962705272f501f67dd6a724a885a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G2-absent-other_A",
+          "prompt_sha256": "b0a9f9ab872117ff4d9200f4237101a423444d40b9d70ff73a2dae27f4475584",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G2-L-other_A",
+          "prompt_sha256": "894b2f4ecda6769af55acfbeda73fd7b270898d091b9e60c3d5b8a0baacfd706",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-absent-other_A",
+          "prompt_sha256": "9e9b801126903e571bef37f57fa5842edf161555d695b31c63b55330c01b6719",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_A",
+          "prompt_sha256": "09513480a237f59a824ee0ef46d87486aff0973518b8cf08819c5a5614217da4",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G4-absent-other_A",
+          "prompt_sha256": "c69f0d932ec0ff4bdf018fac4d3eedfbb30e7d0bc28744d10e373320047155f4",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G4-L-other_A",
+          "prompt_sha256": "b7c0cfafa9ee342e9c86e65652295e0da964d8f7b6580d0987f212a12be72f36",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L01-X-A-02",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L01",
+        "kind": "lexicon_sense",
+        "raw_text": "垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "text_sha256": "9c936721d24b8ac1284aaa7bd37ddc12e7c10d90bb3242148c4c465a30a5dcb8",
+        "sense_id": "CTD-L01:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 34,
+            "text": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的垃圾义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "垃圾"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_A",
+          "prompt_sha256": "68e1c28052df39c5a73443c93af2e23733d71388a7382f58419a54b3e87bdb50",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_A",
+          "prompt_sha256": "d201e223229653f6c6556d8a98182dbedc1b962705272f501f67dd6a724a885a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G2-absent-other_A",
+          "prompt_sha256": "b0a9f9ab872117ff4d9200f4237101a423444d40b9d70ff73a2dae27f4475584",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G2-L-other_A",
+          "prompt_sha256": "894b2f4ecda6769af55acfbeda73fd7b270898d091b9e60c3d5b8a0baacfd706",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-absent-other_A",
+          "prompt_sha256": "9e9b801126903e571bef37f57fa5842edf161555d695b31c63b55330c01b6719",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_A",
+          "prompt_sha256": "09513480a237f59a824ee0ef46d87486aff0973518b8cf08819c5a5614217da4",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G4-absent-other_A",
+          "prompt_sha256": "c69f0d932ec0ff4bdf018fac4d3eedfbb30e7d0bc28744d10e373320047155f4",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G4-L-other_A",
+          "prompt_sha256": "b7c0cfafa9ee342e9c86e65652295e0da964d8f7b6580d0987f212a12be72f36",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L01-X-B-01",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L01",
+        "kind": "lexicon_sense",
+        "raw_text": "垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "text_sha256": "9c936721d24b8ac1284aaa7bd37ddc12e7c10d90bb3242148c4c465a30a5dcb8",
+        "sense_id": "CTD-L01:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "partial",
+        "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "source_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "无用"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "rationale": "指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。",
+        "limitation": "不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "垃圾"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_B",
+          "prompt_sha256": "dd96da8fcbaeab2eb16249f20da1b18cde193989adc512d63af3ff11acbf5d60",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_B",
+          "prompt_sha256": "81d18418395746445c4df3fa5d7adb56ca6480334818e80304d78b3978890edd",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G2-absent-other_B",
+          "prompt_sha256": "df8f797a9ba669c5a8bf57eccb412ea47f155c3e3ef834c4fd88a8a8467efb71",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G2-L-other_B",
+          "prompt_sha256": "b7eb2e82ce20c32e11f1674e17690087b70c700568c8294732ab7643ab7b6fba",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-absent-other_B",
+          "prompt_sha256": "82d9eeb7d7274b91252db6f9f137132ef04233521e9cf3eb8ec44d2b07ee9e4c",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_B",
+          "prompt_sha256": "04d8fa5a95dc1f246a1a587f055e2ee7868aafbbc8c26fe9cae74e13719ba429",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G4-absent-other_B",
+          "prompt_sha256": "b5d2a3af339c77c9ce4b42fb57e4116f45bad1ddd6383ad85697f18e00f86784",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G4-L-other_B",
+          "prompt_sha256": "f9642f31b7e7316485a485b8934129939dbbacbe7df08774cfb88e023b3eed34",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L01-X-B-02",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L01",
+        "kind": "lexicon_sense",
+        "raw_text": "垃圾：用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "text_sha256": "9c936721d24b8ac1284aaa7bd37ddc12e7c10d90bb3242148c4c465a30a5dcb8",
+        "sense_id": "CTD-L01:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "partial",
+        "information": "用来贬称人，表达说话者认为对方毫无价值、无用或令人反感的评价。",
+        "source_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "无用"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "rationale": "指人‘废物’与该释义的‘无用／无价值’评价有可指出的部分语义联系。",
+        "limitation": "不是完整同义替换，也没有字面命中；只能迁移无用／低价值评价部分，不能由词典推断作者认可。此跨词义项联系待人审。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "垃圾"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_B",
+          "prompt_sha256": "dd96da8fcbaeab2eb16249f20da1b18cde193989adc512d63af3ff11acbf5d60",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_B",
+          "prompt_sha256": "81d18418395746445c4df3fa5d7adb56ca6480334818e80304d78b3978890edd",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G2-absent-other_B",
+          "prompt_sha256": "df8f797a9ba669c5a8bf57eccb412ea47f155c3e3ef834c4fd88a8a8467efb71",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G2-L-other_B",
+          "prompt_sha256": "b7eb2e82ce20c32e11f1674e17690087b70c700568c8294732ab7643ab7b6fba",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-absent-other_B",
+          "prompt_sha256": "82d9eeb7d7274b91252db6f9f137132ef04233521e9cf3eb8ec44d2b07ee9e4c",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_B",
+          "prompt_sha256": "04d8fa5a95dc1f246a1a587f055e2ee7868aafbbc8c26fe9cae74e13719ba429",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-G4-absent-other_B",
+          "prompt_sha256": "b5d2a3af339c77c9ce4b42fb57e4116f45bad1ddd6383ad85697f18e00f86784",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G4-L-other_B",
+          "prompt_sha256": "f9642f31b7e7316485a485b8934129939dbbacbe7df08774cfb88e023b3eed34",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L02-X-A-01",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L02",
+        "kind": "lexicon_sense",
+        "raw_text": "京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "text_sha256": "949459d087f3629bb03ca1f20e43896f1805d7dabc905177e14094f1e5a92131",
+        "sense_id": "CTD-L02:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 37,
+            "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "京巴"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_A",
+          "prompt_sha256": "13cc1c6e101e4c6141a156a38f59714ce0b2c67c050d0a48b1f9d87f7ec39a88",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_A",
+          "prompt_sha256": "5243f986005acaf4758664e86981be5c145253d1edcaeb72a00d15f9c1df57d8",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J2-absent-other_A",
+          "prompt_sha256": "5579d38a7fb242cee4e8b319d1f84aa30b08c98ded276c9d214d8a55ac07f3f8",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J2-L-other_A",
+          "prompt_sha256": "82dc63c48dd38b125b789251238b6c789a5f45a485243e97168ec3f1593d1b6f",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-absent-other_A",
+          "prompt_sha256": "4130c40ba18a5ecbb4b524299076ecce673ec03618f99bca677361afe4d0c0fc",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_A",
+          "prompt_sha256": "4f29e0c421a634f74f3888c9c363165fbfbec2529cf036b31b7a719512f52522",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J4-absent-other_A",
+          "prompt_sha256": "69d8049d46e1da531698693903950a60b16bfbcbeb4ed14494849649c5243903",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J4-L-other_A",
+          "prompt_sha256": "9727df16b6616f128cc36c8c133b87c5c0ca7097771333a24943454d8a689505",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L02-X-A-02",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L02",
+        "kind": "lexicon_sense",
+        "raw_text": "京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "text_sha256": "949459d087f3629bb03ca1f20e43896f1805d7dabc905177e14094f1e5a92131",
+        "sense_id": "CTD-L02:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 37,
+            "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的京巴义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "京巴"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_A",
+          "prompt_sha256": "13cc1c6e101e4c6141a156a38f59714ce0b2c67c050d0a48b1f9d87f7ec39a88",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_A",
+          "prompt_sha256": "5243f986005acaf4758664e86981be5c145253d1edcaeb72a00d15f9c1df57d8",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J2-absent-other_A",
+          "prompt_sha256": "5579d38a7fb242cee4e8b319d1f84aa30b08c98ded276c9d214d8a55ac07f3f8",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J2-L-other_A",
+          "prompt_sha256": "82dc63c48dd38b125b789251238b6c789a5f45a485243e97168ec3f1593d1b6f",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-absent-other_A",
+          "prompt_sha256": "4130c40ba18a5ecbb4b524299076ecce673ec03618f99bca677361afe4d0c0fc",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_A",
+          "prompt_sha256": "4f29e0c421a634f74f3888c9c363165fbfbec2529cf036b31b7a719512f52522",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J4-absent-other_A",
+          "prompt_sha256": "69d8049d46e1da531698693903950a60b16bfbcbeb4ed14494849649c5243903",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J4-L-other_A",
+          "prompt_sha256": "9727df16b6616f128cc36c8c133b87c5c0ca7097771333a24943454d8a689505",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L02-X-B-01",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L02",
+        "kind": "lexicon_sense",
+        "raw_text": "京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "text_sha256": "949459d087f3629bb03ca1f20e43896f1805d7dabc905177e14094f1e5a92131",
+        "sense_id": "CTD-L02:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 37,
+            "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "rationale": "示例中的‘废物’不承载这条词典所指定的京巴义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "京巴"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_B",
+          "prompt_sha256": "1e29046097bd93e90e66f2250d28e3707162a64c8696a6c1d667691c0ffa9213",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_B",
+          "prompt_sha256": "5b00872e892221932da0bb388f9a4c82831d9d97a053c13bb432041b2867d78a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J2-absent-other_B",
+          "prompt_sha256": "433468ca8df582ee524ac48ab306ca72eba84b1122822fb78c218afc8841587c",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J2-L-other_B",
+          "prompt_sha256": "650c3d6d21c6bb08f7c8bc004fd67c51f7d81693df76eac2ccc9c0410280d404",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-absent-other_B",
+          "prompt_sha256": "739145acc2868df6149e4009e5b686a3ecb034197b0badfad0be6e690e566d3e",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_B",
+          "prompt_sha256": "b4f45f72f962fbf317fe6560e49b2f6c9507e7a08c5a8c984ab227c52b56c83c",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J4-absent-other_B",
+          "prompt_sha256": "c2b230d377b5174136296a2b9c235cbe908d35da6b6d4bfc3e3ec87d2342fd49",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J4-L-other_B",
+          "prompt_sha256": "82095af94814c52cc7878df9bc82e4d8eb00be1155a00825663331fc4b92deb2",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L02-X-B-02",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L02",
+        "kind": "lexicon_sense",
+        "raw_text": "京巴：在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "text_sha256": "949459d087f3629bb03ca1f20e43896f1805d7dabc905177e14094f1e5a92131",
+        "sense_id": "CTD-L02:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。",
+        "source_spans": [
+          {
+            "start": 3,
+            "end": 37,
+            "text": "在地域贬损语境中，用作对北京人的侮辱性称呼，借犬类名称贬损被指称者。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "rationale": "示例中的‘废物’不承载这条词典所指定的京巴义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "京巴"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_B",
+          "prompt_sha256": "1e29046097bd93e90e66f2250d28e3707162a64c8696a6c1d667691c0ffa9213",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_B",
+          "prompt_sha256": "5b00872e892221932da0bb388f9a4c82831d9d97a053c13bb432041b2867d78a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J2-absent-other_B",
+          "prompt_sha256": "433468ca8df582ee524ac48ab306ca72eba84b1122822fb78c218afc8841587c",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J2-L-other_B",
+          "prompt_sha256": "650c3d6d21c6bb08f7c8bc004fd67c51f7d81693df76eac2ccc9c0410280d404",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-absent-other_B",
+          "prompt_sha256": "739145acc2868df6149e4009e5b686a3ecb034197b0badfad0be6e690e566d3e",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_B",
+          "prompt_sha256": "b4f45f72f962fbf317fe6560e49b2f6c9507e7a08c5a8c984ab227c52b56c83c",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-J4-absent-other_B",
+          "prompt_sha256": "c2b230d377b5174136296a2b9c235cbe908d35da6b6d4bfc3e3ec87d2342fd49",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J4-L-other_B",
+          "prompt_sha256": "82095af94814c52cc7878df9bc82e4d8eb00be1155a00825663331fc4b92deb2",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L03-X-A-01",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L03",
+        "kind": "lexicon_sense",
+        "raw_text": "公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "text_sha256": "28a7b7988fdfc4e863b265f81b71af751fc42be415b623ab9bf6f7e4d6319d7e",
+        "sense_id": "CTD-L03:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "source_spans": [
+          {
+            "start": 4,
+            "end": 48,
+            "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 3,
+            "text": "公交车"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_A",
+          "prompt_sha256": "389531fb2f1db43ab7c424c60145337aed5dee4bb3b3ab8007a5181fdaae1e74",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_A",
+          "prompt_sha256": "1f3916c0aa06af9b7631804de389182d38d4df3a57a52015936111ab25bca958",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B2-absent-other_A",
+          "prompt_sha256": "d3940b8d3cd332c731bf007b428e76da2726f06bfd93e637fe842ac0b7faac71",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B2-L-other_A",
+          "prompt_sha256": "8549d14237661c1257a158288f666b52f3cefd7feef69b2300f7935ed21b1f83",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-absent-other_A",
+          "prompt_sha256": "21b863078f009e5eb003ec0fe2888d129d9f3598210304c6a86e945afcf6ccef",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_A",
+          "prompt_sha256": "d61f4f9dc79214675cde1a310da0f161731ef2c171124451647e0e896f1806ad",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B4-absent-other_A",
+          "prompt_sha256": "4c5ef413516449d694009e8ef93d150814225152e44ecc992fa92c6bafe24085",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B4-L-other_A",
+          "prompt_sha256": "71200ee4805bbd890d51df8a7c05460728c9718233d33c9aff997a68b3986f76",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L03-X-A-02",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L03",
+        "kind": "lexicon_sense",
+        "raw_text": "公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "text_sha256": "28a7b7988fdfc4e863b265f81b71af751fc42be415b623ab9bf6f7e4d6319d7e",
+        "sense_id": "CTD-L03:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "source_spans": [
+          {
+            "start": 4,
+            "end": 48,
+            "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "rationale": "示例中的‘纸箱’不承载这条词典所指定的公交车义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 3,
+            "text": "公交车"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_A",
+          "prompt_sha256": "389531fb2f1db43ab7c424c60145337aed5dee4bb3b3ab8007a5181fdaae1e74",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_A",
+          "prompt_sha256": "1f3916c0aa06af9b7631804de389182d38d4df3a57a52015936111ab25bca958",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B2-absent-other_A",
+          "prompt_sha256": "d3940b8d3cd332c731bf007b428e76da2726f06bfd93e637fe842ac0b7faac71",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B2-L-other_A",
+          "prompt_sha256": "8549d14237661c1257a158288f666b52f3cefd7feef69b2300f7935ed21b1f83",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-absent-other_A",
+          "prompt_sha256": "21b863078f009e5eb003ec0fe2888d129d9f3598210304c6a86e945afcf6ccef",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_A",
+          "prompt_sha256": "d61f4f9dc79214675cde1a310da0f161731ef2c171124451647e0e896f1806ad",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B4-absent-other_A",
+          "prompt_sha256": "4c5ef413516449d694009e8ef93d150814225152e44ecc992fa92c6bafe24085",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B4-L-other_A",
+          "prompt_sha256": "71200ee4805bbd890d51df8a7c05460728c9718233d33c9aff997a68b3986f76",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L03-X-B-01",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L03",
+        "kind": "lexicon_sense",
+        "raw_text": "公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "text_sha256": "28a7b7988fdfc4e863b265f81b71af751fc42be415b623ab9bf6f7e4d6319d7e",
+        "sense_id": "CTD-L03:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "source_spans": [
+          {
+            "start": 4,
+            "end": 48,
+            "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "rationale": "示例中的‘废物’不承载这条词典所指定的公交车义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 3,
+            "text": "公交车"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_B",
+          "prompt_sha256": "7034f162384ad3b22afa2f628be2b1a6caee95de31166d45f30913637404c505",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_B",
+          "prompt_sha256": "554fb6e922ae59ae919d97e2881f54995f4374c7e8be3526cca8079663855d32",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B2-absent-other_B",
+          "prompt_sha256": "09df7f5353f89a20ed67a61fe979d800a190163c5a7d1ab7aa964d8f860c0dd5",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B2-L-other_B",
+          "prompt_sha256": "be954824d9861424a4fe546c63e4ccf55d14880f09ee0b106cbf3665d6ce596a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-absent-other_B",
+          "prompt_sha256": "75717515616bb0e803810624e77a6eae4e8cc3fd1aef1d4c95d3409104b42633",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_B",
+          "prompt_sha256": "fd1cb24a76f5b367d430ce6ad9a884238ad949d47b7cfc08f7fe17bad0129144",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B4-absent-other_B",
+          "prompt_sha256": "0dfe7fedba01e5b144ebf1bc0b796d0aa85949a26692412f259a0f859e7758cd",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B4-L-other_B",
+          "prompt_sha256": "af065cd5a9ccd65e0a9604525c165d31796b15e7673a3fff6dad0372fd5e6bf1",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-LD-CTD-L03-X-B-02",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "lexicon_to_demo",
+      "source": {
+        "material_id": "CTD-L03",
+        "kind": "lexicon_sense",
+        "raw_text": "公交车：在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "text_sha256": "28a7b7988fdfc4e863b265f81b71af751fc42be415b623ab9bf6f7e4d6319d7e",
+        "sense_id": "CTD-L03:sense:pejorative-01"
+      },
+      "target": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "definition_quality",
+        "reviewed_answer": null,
+        "value": "accepted",
+        "rationale": "复用本轮已采纳的完全相同释义；本条L→demo适用关系仍为新AI建议。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-materials-v1/feedback-01.json",
+            "sha256": "0fb7aaf977aad70a8669dc34333b29b681426ac09cb78116e80b4f4392ed5b69"
+          },
+          "recorded_at": "2026-09-17T02:39:43.134119+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": {
+        "value": "none",
+        "information": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。",
+        "source_spans": [
+          {
+            "start": 4,
+            "end": 48,
+            "text": "在性别贬损语境中，用交通工具比喻女性与多人发生过性关系，以此污名化她；这是说话者的指控。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "rationale": "示例中的‘废物’不承载这条词典所指定的公交车义项或所指。",
+        "limitation": "仅排除该具体义项；示例中的普通名词、辱称判断或作者立场规则仍可能另有作用。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "semantic_reference_fit": null,
+      "rule_fit": null,
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 3,
+            "text": "公交车"
+          }
+        ],
+        "target_spans": [],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_B",
+          "prompt_sha256": "7034f162384ad3b22afa2f628be2b1a6caee95de31166d45f30913637404c505",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_B",
+          "prompt_sha256": "554fb6e922ae59ae919d97e2881f54995f4374c7e8be3526cca8079663855d32",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B2-absent-other_B",
+          "prompt_sha256": "09df7f5353f89a20ed67a61fe979d800a190163c5a7d1ab7aa964d8f860c0dd5",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B2-L-other_B",
+          "prompt_sha256": "be954824d9861424a4fe546c63e4ccf55d14880f09ee0b106cbf3665d6ce596a",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-absent-other_B",
+          "prompt_sha256": "75717515616bb0e803810624e77a6eae4e8cc3fd1aef1d4c95d3409104b42633",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_B",
+          "prompt_sha256": "fd1cb24a76f5b367d430ce6ad9a884238ad949d47b7cfc08f7fe17bad0129144",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTDJ-B4-absent-other_B",
+          "prompt_sha256": "0dfe7fedba01e5b144ebf1bc0b796d0aa85949a26692412f259a0f859e7758cd",
+          "source_present": false,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B4-L-other_B",
+          "prompt_sha256": "af065cd5a9ccd65e0a9604525c165d31796b15e7673a3fff6dad0372fd5e6bf1",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-G1",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G1-v2",
+        "kind": "query",
+        "raw_text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。",
+        "text_sha256": "35786c9edcdb1f8748e7fa06ddf6ab90e420fab2e6d605d8b6fd06fee420ee8f",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 26,
+            "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+          }
+        ],
+        "rationale": "借款不还的行为指责与‘你这种人真是垃圾’的人身贬损可分开定位，对应源中通行抱怨与另加辱骂的区分。",
+        "limitation": "仅共享行为批评与额外对人贬损的区分；口语责问与人格辱称的具体识别不同。与旧G1←同词A-01的窄范围none并列保存，不修改旧值。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "attack_presence",
+            "referent_binding"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_A",
+          "prompt_sha256": "68e1c28052df39c5a73443c93af2e23733d71388a7382f58419a54b3e87bdb50",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_A",
+          "prompt_sha256": "d201e223229653f6c6556d8a98182dbedc1b962705272f501f67dd6a724a885a",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-G1",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G1-v2",
+        "kind": "query",
+        "raw_text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。",
+        "text_sha256": "35786c9edcdb1f8748e7fa06ddf6ab90e420fab2e6d605d8b6fd06fee420ee8f",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 26,
+            "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+          }
+        ],
+        "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+        "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_A",
+          "prompt_sha256": "68e1c28052df39c5a73443c93af2e23733d71388a7382f58419a54b3e87bdb50",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_A",
+          "prompt_sha256": "d201e223229653f6c6556d8a98182dbedc1b962705272f501f67dd6a724a885a",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-G1",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G1-v2",
+        "kind": "query",
+        "raw_text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。",
+        "text_sha256": "35786c9edcdb1f8748e7fa06ddf6ab90e420fab2e6d605d8b6fd06fee420ee8f",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "partial",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+        "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 26,
+            "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+          }
+        ],
+        "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_B",
+          "prompt_sha256": "dd96da8fcbaeab2eb16249f20da1b18cde193989adc512d63af3ff11acbf5d60",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_B",
+          "prompt_sha256": "81d18418395746445c4df3fa5d7adb56ca6480334818e80304d78b3978890edd",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-G1",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G1-v2",
+        "kind": "query",
+        "raw_text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。",
+        "text_sha256": "35786c9edcdb1f8748e7fa06ddf6ab90e420fab2e6d605d8b6fd06fee420ee8f",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "partial",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+        "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 26,
+            "text": "借钱的时候说得好听，现在装死不还，你这种人真是垃圾。"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 23,
+            "end": 25,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G1-absent-other_B",
+          "prompt_sha256": "dd96da8fcbaeab2eb16249f20da1b18cde193989adc512d63af3ff11acbf5d60",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G1-L-other_B",
+          "prompt_sha256": "81d18418395746445c4df3fa5d7adb56ca6480334818e80304d78b3978890edd",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-G3",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G3-v2",
+        "kind": "query",
+        "raw_text": "他欠钱没还，你就说这事，别一口一个垃圾。",
+        "text_sha256": "536442e7d8efc451376fdbe1c57c2b3e46c1033f1ffb63e14d2b68b48151b9ac",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 20,
+            "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+          }
+        ],
+        "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+        "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G3-absent-other_A",
+          "prompt_sha256": "9e9b801126903e571bef37f57fa5842edf161555d695b31c63b55330c01b6719",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_A",
+          "prompt_sha256": "09513480a237f59a824ee0ef46d87486aff0973518b8cf08819c5a5614217da4",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-G3",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G3-v2",
+        "kind": "query",
+        "raw_text": "他欠钱没还，你就说这事，别一口一个垃圾。",
+        "text_sha256": "536442e7d8efc451376fdbe1c57c2b3e46c1033f1ffb63e14d2b68b48151b9ac",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘垃圾’的具体指人贬损义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 6,
+            "end": 19,
+            "text": "你就说这事，别一口一个垃圾"
+          }
+        ],
+        "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+        "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "attack_presence",
+            "author_stance"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G3-absent-other_A",
+          "prompt_sha256": "9e9b801126903e571bef37f57fa5842edf161555d695b31c63b55330c01b6719",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_A",
+          "prompt_sha256": "09513480a237f59a824ee0ef46d87486aff0973518b8cf08819c5a5614217da4",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-G3",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G3-v2",
+        "kind": "query",
+        "raw_text": "他欠钱没还，你就说这事，别一口一个垃圾。",
+        "text_sha256": "536442e7d8efc451376fdbe1c57c2b3e46c1033f1ffb63e14d2b68b48151b9ac",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "partial",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+        "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 20,
+            "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G3-absent-other_B",
+          "prompt_sha256": "82d9eeb7d7274b91252db6f9f137132ef04233521e9cf3eb8ec44d2b07ee9e4c",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_B",
+          "prompt_sha256": "04d8fa5a95dc1f246a1a587f055e2ee7868aafbbc8c26fe9cae74e13719ba429",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-G3",
+      "family_id": "CTD-family-01",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-G3-v2",
+        "kind": "query",
+        "raw_text": "他欠钱没还，你就说这事，别一口一个垃圾。",
+        "text_sha256": "536442e7d8efc451376fdbe1c57c2b3e46c1033f1ffb63e14d2b68b48151b9ac",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "partial",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "源中‘废物’和目标指人‘垃圾’共享无用／低价值评价这一部分；语义联系不因反对立场而消失。",
+        "limitation": "不宣称完全同义，也不能从该联系推出作者认可辱称；认可或反对单独在规则维度判断。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "sense_interpretation"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 20,
+            "text": "他欠钱没还，你就说这事，别一口一个垃圾。"
+          }
+        ],
+        "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "垃圾"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 17,
+            "end": 19,
+            "text": "垃圾"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-G3-absent-other_B",
+          "prompt_sha256": "82d9eeb7d7274b91252db6f9f137132ef04233521e9cf3eb8ec44d2b07ee9e4c",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-G3-L-other_B",
+          "prompt_sha256": "04d8fa5a95dc1f246a1a587f055e2ee7868aafbbc8c26fe9cae74e13719ba429",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L01-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-J1",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J1-v2",
+        "kind": "query",
+        "raw_text": "北京户口了不起啊？瞧把你这京巴给牛的。",
+        "text_sha256": "be11ace768af641f01cf56bf9e5cb78a36efd4fa5c5cd80ca5b73d425259acf7",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+          }
+        ],
+        "rationale": "目标围绕户口身份轻蔑和地域辱称，没有同样可分离的具体行为抱怨加口语辱骂结构；疑问语气本身不足以建立迁移。",
+        "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_A",
+          "prompt_sha256": "13cc1c6e101e4c6141a156a38f59714ce0b2c67c050d0a48b1f9d87f7ec39a88",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_A",
+          "prompt_sha256": "5243f986005acaf4758664e86981be5c145253d1edcaeb72a00d15f9c1df57d8",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-J1",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J1-v2",
+        "kind": "query",
+        "raw_text": "北京户口了不起啊？瞧把你这京巴给牛的。",
+        "text_sha256": "be11ace768af641f01cf56bf9e5cb78a36efd4fa5c5cd80ca5b73d425259acf7",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+          }
+        ],
+        "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+        "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_A",
+          "prompt_sha256": "13cc1c6e101e4c6141a156a38f59714ce0b2c67c050d0a48b1f9d87f7ec39a88",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_A",
+          "prompt_sha256": "5243f986005acaf4758664e86981be5c145253d1edcaeb72a00d15f9c1df57d8",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-J1",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J1-v2",
+        "kind": "query",
+        "raw_text": "北京户口了不起啊？瞧把你这京巴给牛的。",
+        "text_sha256": "be11ace768af641f01cf56bf9e5cb78a36efd4fa5c5cd80ca5b73d425259acf7",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+          }
+        ],
+        "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_B",
+          "prompt_sha256": "1e29046097bd93e90e66f2250d28e3707162a64c8696a6c1d667691c0ffa9213",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_B",
+          "prompt_sha256": "5b00872e892221932da0bb388f9a4c82831d9d97a053c13bb432041b2867d78a",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-J1",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J1-v2",
+        "kind": "query",
+        "raw_text": "北京户口了不起啊？瞧把你这京巴给牛的。",
+        "text_sha256": "be11ace768af641f01cf56bf9e5cb78a36efd4fa5c5cd80ca5b73d425259acf7",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "北京户口了不起啊？瞧把你这京巴给牛的。"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J1-absent-other_B",
+          "prompt_sha256": "1e29046097bd93e90e66f2250d28e3707162a64c8696a6c1d667691c0ffa9213",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J1-L-other_B",
+          "prompt_sha256": "5b00872e892221932da0bb388f9a4c82831d9d97a053c13bb432041b2867d78a",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-J3",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J3-v2",
+        "kind": "query",
+        "raw_text": "北京人怎么了？别动不动就拿京巴骂人。",
+        "text_sha256": "162e64bc0d6cdd686f12923f311296977dda2fa47a8b3911812106ac5d51598d",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 18,
+            "text": "北京人怎么了？别动不动就拿京巴骂人。"
+          }
+        ],
+        "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+        "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J3-absent-other_A",
+          "prompt_sha256": "4130c40ba18a5ecbb4b524299076ecce673ec03618f99bca677361afe4d0c0fc",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_A",
+          "prompt_sha256": "4f29e0c421a634f74f3888c9c363165fbfbec2529cf036b31b7a719512f52522",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-J3",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J3-v2",
+        "kind": "query",
+        "raw_text": "北京人怎么了？别动不动就拿京巴骂人。",
+        "text_sha256": "162e64bc0d6cdd686f12923f311296977dda2fa47a8b3911812106ac5d51598d",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 7,
+            "end": 17,
+            "text": "别动不动就拿京巴骂人"
+          }
+        ],
+        "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+        "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "attack_presence",
+            "author_stance"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J3-absent-other_A",
+          "prompt_sha256": "4130c40ba18a5ecbb4b524299076ecce673ec03618f99bca677361afe4d0c0fc",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_A",
+          "prompt_sha256": "4f29e0c421a634f74f3888c9c363165fbfbec2529cf036b31b7a719512f52522",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-J3",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J3-v2",
+        "kind": "query",
+        "raw_text": "北京人怎么了？别动不动就拿京巴骂人。",
+        "text_sha256": "162e64bc0d6cdd686f12923f311296977dda2fa47a8b3911812106ac5d51598d",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 18,
+            "text": "北京人怎么了？别动不动就拿京巴骂人。"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J3-absent-other_B",
+          "prompt_sha256": "739145acc2868df6149e4009e5b686a3ecb034197b0badfad0be6e690e566d3e",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_B",
+          "prompt_sha256": "b4f45f72f962fbf317fe6560e49b2f6c9507e7a08c5a8c984ab227c52b56c83c",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-J3",
+      "family_id": "CTD-family-02",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-J3-v2",
+        "kind": "query",
+        "raw_text": "北京人怎么了？别动不动就拿京巴骂人。",
+        "text_sha256": "162e64bc0d6cdd686f12923f311296977dda2fa47a8b3911812106ac5d51598d",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘京巴’的具体地域义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 18,
+            "text": "北京人怎么了？别动不动就拿京巴骂人。"
+          }
+        ],
+        "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "京巴"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 13,
+            "end": 15,
+            "text": "京巴"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-J3-absent-other_B",
+          "prompt_sha256": "739145acc2868df6149e4009e5b686a3ecb034197b0badfad0be6e690e566d3e",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-J3-L-other_B",
+          "prompt_sha256": "b4f45f72f962fbf317fe6560e49b2f6c9507e7a08c5a8c984ab227c52b56c83c",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L02-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-B1",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B1-v2",
+        "kind": "query",
+        "raw_text": "她就是辆公交车，你还真把她当宝了？",
+        "text_sha256": "d814e7ce6d82a50f667651549d01183b42fcbda1e64f4e99d80d6e840740a93a",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "她就是辆公交车，你还真把她当宝了？"
+          }
+        ],
+        "rationale": "目标实施性污名辱称，并反问听者为何珍视她；后半句不能据形式认作源中面向行为实施者的独立口语辱骂。",
+        "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_A",
+          "prompt_sha256": "389531fb2f1db43ab7c424c60145337aed5dee4bb3b3ab8007a5181fdaae1e74",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_A",
+          "prompt_sha256": "1f3916c0aa06af9b7631804de389182d38d4df3a57a52015936111ab25bca958",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-B1",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B1-v2",
+        "kind": "query",
+        "raw_text": "她就是辆公交车，你还真把她当宝了？",
+        "text_sha256": "d814e7ce6d82a50f667651549d01183b42fcbda1e64f4e99d80d6e840740a93a",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "她就是辆公交车，你还真把她当宝了？"
+          }
+        ],
+        "rationale": "目标没有要求对方调整行为而未增加人身贬损的对应请求；不能仅凭同为陈述／对话认定规则适用。",
+        "limitation": "不把所有无攻击示例合成一条规则，也不据查询与示例答案异同评级。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_A",
+          "prompt_sha256": "389531fb2f1db43ab7c424c60145337aed5dee4bb3b3ab8007a5181fdaae1e74",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_A",
+          "prompt_sha256": "1f3916c0aa06af9b7631804de389182d38d4df3a57a52015936111ab25bca958",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-B1",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B1-v2",
+        "kind": "query",
+        "raw_text": "她就是辆公交车，你还真把她当宝了？",
+        "text_sha256": "d814e7ce6d82a50f667651549d01183b42fcbda1e64f4e99d80d6e840740a93a",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "她就是辆公交车，你还真把她当宝了？"
+          }
+        ],
+        "rationale": "源和目标都把贬损性称呼作为当前作者对人的攻击；具体词义不同，但作者绑定的判断分支相同。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_B",
+          "prompt_sha256": "7034f162384ad3b22afa2f628be2b1a6caee95de31166d45f30913637404c505",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_B",
+          "prompt_sha256": "554fb6e922ae59ae919d97e2881f54995f4374c7e8be3526cca8079663855d32",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-B1",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B1-v2",
+        "kind": "query",
+        "raw_text": "她就是辆公交车，你还真把她当宝了？",
+        "text_sha256": "d814e7ce6d82a50f667651549d01183b42fcbda1e64f4e99d80d6e840740a93a",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 17,
+            "text": "她就是辆公交车，你还真把她当宝了？"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 4,
+            "end": 7,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B1-absent-other_B",
+          "prompt_sha256": "7034f162384ad3b22afa2f628be2b1a6caee95de31166d45f30913637404c505",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B1-L-other_B",
+          "prompt_sha256": "554fb6e922ae59ae919d97e2881f54995f4374c7e8be3526cca8079663855d32",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-01-B3",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-01",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，别人怎么走，有病吧？",
+        "text_sha256": "f5379c1f18ff928dbab2eb8bce1c963867a9e60f3ae9ddbb8f7fa0e20cb36137",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B3-v2",
+        "kind": "query",
+        "raw_text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。",
+        "text_sha256": "5c31465a2db8ada33350e53d7410c0fbf066fcee361c99098f3bbf821816e222",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "none",
+        "information": "对具体行为的抱怨与另加的人身贬损分开判断；此示例以普通物件场景加面向行为实施者的口语辱骂呈现。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "纸箱就堆在楼梯口，别人怎么走，有病吧？"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 25,
+            "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+          }
+        ],
+        "rationale": "目标在劝阻他人辱称，未另加源中那种作者实施的口语辱骂；不能把被反对的词归到作者名下。",
+        "limitation": "none只针对这里命名的结构；不意味着示例整体无用或模型不会受它影响。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B3-absent-other_A",
+          "prompt_sha256": "21b863078f009e5eb003ec0fe2888d129d9f3598210304c6a86e945afcf6ccef",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_A",
+          "prompt_sha256": "d61f4f9dc79214675cde1a310da0f161731ef2c171124451647e0e896f1806ad",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-A-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-A-02-B3",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-A-02",
+        "kind": "demo",
+        "raw_text": "纸箱就堆在楼梯口，挪开点，别挡着别人。",
+        "text_sha256": "a5981a26cf337532360923e9af996928b2bb639e612bfb17d8deb66ac251b5de",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B3-v2",
+        "kind": "query",
+        "raw_text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。",
+        "text_sha256": "5c31465a2db8ada33350e53d7410c0fbf066fcee361c99098f3bbf821816e222",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘纸箱’指普通物品。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "纸箱"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘纸箱’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "要求别人调整行为且未增加人身贬损，不自动构成人身攻击；此示例展示调整物品摆放的请求。",
+        "source_spans": [
+          {
+            "start": 9,
+            "end": 18,
+            "text": "挪开点，别挡着别人"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 14,
+            "end": 24,
+            "text": "别张口就叫人家公交车"
+          }
+        ],
+        "rationale": "目标明确要求对方停止用辱称骂人；‘行为劝阻本身不自动构成攻击’可迁移，但源示例没有被反对的辱称，不能完成目标的立场绑定。",
+        "limitation": "只迁移劝阻／请求的性质，识别被反对辱称及作者立场仍需另判。旧同词A-02采用更窄的普通所指结构，旧值保留。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "attack_presence",
+            "author_stance"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B3-absent-other_A",
+          "prompt_sha256": "21b863078f009e5eb003ec0fe2888d129d9f3598210304c6a86e945afcf6ccef",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_A",
+          "prompt_sha256": "d61f4f9dc79214675cde1a310da0f161731ef2c171124451647e0e896f1806ad",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-A-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-01-B3",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-01",
+        "kind": "demo",
+        "raw_text": "当初说得挺能耐，真遇上事你就是个废物。",
+        "text_sha256": "ccf5d18c49b04a378607284c67dbd58922bca797f5c87c384c0c7702ae26d60e",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B3-v2",
+        "kind": "query",
+        "raw_text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。",
+        "text_sha256": "5c31465a2db8ada33350e53d7410c0fbf066fcee361c99098f3bbf821816e222",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "有",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 16,
+            "end": 18,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "partial",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示作者直接实施辱称的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 19,
+            "text": "当初说得挺能耐，真遇上事你就是个废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 25,
+            "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+          }
+        ],
+        "rationale": "可迁移‘识别辱称，再判断是否由当前作者认可’的两步区分；源与目标处在相反立场分支，示例结论不能直接迁移。",
+        "limitation": "只迁移辱称与作者立场的区分；源展示的认可／反对结论不适用于目标的相反立场。不是因为标签不同才判partial。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B3-absent-other_B",
+          "prompt_sha256": "75717515616bb0e803810624e77a6eae4e8cc3fd1aef1d4c95d3409104b42633",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_B",
+          "prompt_sha256": "fd1cb24a76f5b367d430ce6ad9a884238ad949d47b7cfc08f7fe17bad0129144",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-B-01"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    },
+    {
+      "schema_version": "evidence-applicability-relation/v1",
+      "task_protocol": "task-applicability-scoring/v1",
+      "relation_id": "CTD2-DQ-X-B-02-B3",
+      "family_id": "CTD-family-03",
+      "supersedes": null,
+      "relation_kind": "demo_to_query",
+      "source": {
+        "material_id": "CTDD-X-B-02",
+        "kind": "demo",
+        "raw_text": "事情没办成可以再想办法，别张嘴就骂他废物。",
+        "text_sha256": "d2f638ea7bc7607b68aa70951f8cbb120d35ff41e8973bd82749cec017b7f4ef",
+        "sense_id": null
+      },
+      "target": {
+        "material_id": "CTD-B3-v2",
+        "kind": "query",
+        "raw_text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。",
+        "text_sha256": "5c31465a2db8ada33350e53d7410c0fbf066fcee361c99098f3bbf821816e222",
+        "sense_id": null
+      },
+      "source_quality": {
+        "kind": "demo_answer_reliability",
+        "reviewed_answer": "无",
+        "value": "accepted",
+        "rationale": "本条示例的正文及其当前任务答案已获用户整批采纳；它与查询的适用关系仍是AI意见。",
+        "provenance": {
+          "authorship": "ai",
+          "review_kind": "human_with_ai",
+          "adoption": "bulk",
+          "accepted_fields": [
+            "/source/raw_text",
+            "/source_quality/value",
+            "/source_quality/reviewed_answer"
+          ],
+          "decision_ref": {
+            "path": "docs/research/experiment-plans/cross-term-demos-v1/feedback-01.json",
+            "sha256": "fdee4e14f4027e7ab119da6dca8bb144f0ff16d891256e9f783bef6b6ace19c2"
+          },
+          "recorded_at": "2026-09-17T02:55:04.717582+00:00",
+          "exposure": {
+            "target_model_outputs_seen": false,
+            "original_gold_seen": false,
+            "ai_notes_seen": true,
+            "prior_related_results_seen": true
+          }
+        }
+      },
+      "sense_fit": null,
+      "semantic_reference_fit": {
+        "value": "none",
+        "information": "‘废物’用于表达对人的无用／低价值评价。",
+        "source_spans": [
+          {
+            "start": 18,
+            "end": 20,
+            "text": "废物"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "源中的‘废物’不能提供目标‘公交车’的具体性污名义项／所指信息。",
+        "limitation": "共同贬义或同为有／无不是具体词义对应；规则迁移另审。",
+        "decision_relevance": {
+          "value": "background",
+          "steps": [],
+          "rationale": "此项具体信息没有目标对应位置；不排除其他任务示范或上下文作用。"
+        }
+      },
+      "rule_fit": {
+        "value": "direct",
+        "information": "先识别对人的贬损性称呼，再绑定当前作者的使用／反对立场；此示例展示明确劝阻辱称且未另行攻击的分支。",
+        "source_spans": [
+          {
+            "start": 0,
+            "end": 21,
+            "text": "事情没办成可以再想办法，别张嘴就骂他废物。"
+          }
+        ],
+        "target_spans": [
+          {
+            "start": 0,
+            "end": 25,
+            "text": "她跟谁谈过恋爱是她自己的事，别张口就叫人家公交车。"
+          }
+        ],
+        "rationale": "源和目标都明确劝阻他人的辱称且未另行发起攻击；需把被反对称呼与当前作者立场分开。",
+        "limitation": "规则direct不提供地域／性别等具体词义，不允许复制示例标签；目标是否另有攻击仍单独检查。",
+        "decision_relevance": {
+          "value": "task_relevant",
+          "steps": [
+            "author_stance",
+            "attack_presence"
+          ],
+          "rationale": "指定信息涉及这些判题环节；不声称模型未知或已经使用。"
+        }
+      },
+      "lexical_overlap": {
+        "comparison": "exact_unicode_literal",
+        "focal_forms": [
+          "公交车"
+        ],
+        "value": "absent",
+        "shared_forms": [],
+        "source_spans": [],
+        "target_spans": [
+          {
+            "start": 21,
+            "end": 24,
+            "text": "公交车"
+          }
+        ],
+        "rationale": "复用预先确定的研究词形；未共现不等于全文无共享词，也不等于语义完全无关。"
+      },
+      "presentation_refs": [
+        {
+          "condition_id": "CTD2-B3-absent-other_B",
+          "prompt_sha256": "75717515616bb0e803810624e77a6eae4e8cc3fd1aef1d4c95d3409104b42633",
+          "source_present": true,
+          "target_present": true
+        },
+        {
+          "condition_id": "CTD2-B3-L-other_B",
+          "prompt_sha256": "fd1cb24a76f5b367d430ce6ad9a884238ad949d47b7cfc08f7fe17bad0129144",
+          "source_present": true,
+          "target_present": true
+        }
+      ],
+      "introduced_lexicon_relation_ids": [
+        "CTD2-LD-CTD-L03-X-B-02"
+      ],
+      "provenance": {
+        "authorship": "ai",
+        "review_kind": "ai_note",
+        "adoption": "none",
+        "accepted_fields": [],
+        "decision_ref": null,
+        "recorded_at": "2026-09-17T08:07:28.631749+00:00",
+        "exposure": {
+          "target_model_outputs_seen": true,
+          "original_gold_seen": false,
+          "ai_notes_seen": true,
+          "prior_related_results_seen": true
+        }
+      }
+    }
+  ],
+  "exposure_note": "Prior target-query outputs have been seen. The 36 new combinations have no model outputs; target_model_outputs_seen is conservatively true, not reset."
+}

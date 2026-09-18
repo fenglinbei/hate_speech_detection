@@ -1,0 +1,105 @@
+{
+  "schema_version": "cross-model-applicability-execution/glm-content-boundary-v1",
+  "scientific_manifest": {
+    "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/cross-model-applicability-v1/frozen-01/manifest.json",
+    "bytes": 5965,
+    "sha256": "90714b751b5467936c0b9de4028b831353c33d2de904b21fabf1b8febd81868c"
+  },
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "model_keys": [
+    "glm4-9b-chat"
+  ],
+  "passes": [
+    {
+      "pass_id": "reference",
+      "padding": "none",
+      "reverse": false
+    },
+    {
+      "pass_id": "repeat",
+      "padding": "none",
+      "reverse": false
+    },
+    {
+      "pass_id": "left_padding",
+      "padding": "left",
+      "reverse": false
+    },
+    {
+      "pass_id": "right_padding",
+      "padding": "right",
+      "reverse": false
+    },
+    {
+      "pass_id": "reverse_order",
+      "padding": "none",
+      "reverse": true
+    }
+  ],
+  "acceptance": {
+    "repeat_and_order_margin_cap": 0.0,
+    "padding_margin_cap": 0.001,
+    "logprob_identity_cap": 1e-10,
+    "margin_bound_floor": 1e-06,
+    "margin_bound_multiplier": 2,
+    "policy": "New qualification per model and exact allocation. These preset engineering ceilings do not inherit any historical measured error bound."
+  },
+  "format": {
+    "max_new_tokens": 8,
+    "exact_single_candidate_then_native_eos": true,
+    "all_16_must_pass": true,
+    "legal_mass": "Report every value; no unregistered filtering or accuracy gate.",
+    "first_vector": "Reuse engineering-reference full-vocabulary vector; count subsequent forwards separately."
+  },
+  "budget": {
+    "by_model": [
+      {
+        "model_key": "glm4-9b-chat",
+        "engineering_inputs": 540,
+        "engineering_forwards": 2700,
+        "production_forwards": 540,
+        "format_probes": 16,
+        "format_extra_forward_cap": 112
+      }
+    ],
+    "engineering_forwards": 2700,
+    "new_scientific_forwards": 540,
+    "prompt_forward_total_without_generation": 3240,
+    "format_extra_forward_cap": 112,
+    "reused_old_8b_scientific_inputs": 0,
+    "old_GLM_diagnostic_forwards_not_reused": 1358
+  },
+  "runtime": {
+    "sampling": false,
+    "seed": 0,
+    "deterministic_algorithms": true,
+    "cublas_workspace_config": ":4096:8",
+    "tf32": false,
+    "CPU_or_disk_offload": false,
+    "checkpoint_boundary": "one committed request",
+    "failed_run_retry": false,
+    "terminal_run_restart": false
+  },
+  "phases": [
+    "engineering",
+    "full"
+  ],
+  "full_requires_all_engineering_and_format_gates": true,
+  "legacy_8b": "Its 156 engineering replays are diagnostic bridges only; never replace old scientific endpoints or their bounds.",
+  "reference_join": "Only after raw production seal and owned worker exit. Scorer parses input/profile/plan files only.",
+  "allocation": null,
+  "GPU_qualification": false,
+  "boundary_amendment": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/prepared-glm-content-boundary-01/amendment.json",
+    "bytes": 3165,
+    "sha256": "89b638653435dcfeec245268bd2cd3e7b5bb8ca30633d2977cd70de1042f0e78"
+  }
+}

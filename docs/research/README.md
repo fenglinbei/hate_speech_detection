@@ -1,5 +1,11 @@
 # 研究文档
 
+## 最新成果
+
+- [2026-09-18 成果归档](results-20260918/README.md)：跨词两轮行为实验、Qwen3-8B／14B 与 GLM-4-9B-Chat 三模型结果、完整表格、冻结输入及独立审计的阅读入口；附字节清单和只读校验命令。
+- [正确参考信息的选择性利用：内部干预研究路线](experiment-plans/internal-reference-utilization-roadmap-20260918.md)：后续研究目标与路线讨论，尚未启动新的材料或内部干预实验。
+- [2026-09-16 成果归档](results-20260916/README.md)：此前标注、输入对照及 Q01 内部干预结果。
+
 ## 实验计划
 
 - [`experiment-plans/general-model-evidence-applicability-audit-controls-v1.md`](experiment-plans/general-model-evidence-applicability-audit-controls-v1.md)：**当前接续工作：证据适用性联合审核**。沿用冻结的 32 条 discovery；[规则 v2](annotation-guidelines/evidence-applicability-annotation-policy-v2.md)已于 2026-09-09 确认并上线，明确 group 对象和 others 范围，hate 规则沿用 v1。旧 AI 初稿与人审决定保留，受影响 group 等待人类重核。[执行记录](../../exps/causal_context/general_model_evidence_applicability_v1/README.md)登记工作台及验收进度；[交互设计](annotation-guidelines/evidence-applicability-assisted-review-design-v1.md)保留批准时的提案身份。

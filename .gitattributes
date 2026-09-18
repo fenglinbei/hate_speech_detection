@@ -2,3 +2,16 @@
 # CSV line endings and copied source whitespace are part of recorded hashes.
 exps/causal_context/general_model_evidence_applicability_v1/** -text -whitespace
 exps/causal_context/general_model_ld_*/** -text -whitespace
+
+# Cross-term/cross-model freezes, results and source pins (2026-09-18 archive).
+docs/research/experiment-plans/cross-*/** -text -whitespace
+docs/research/experiment-plans/task-*/** -text -whitespace
+reviews/cross-*/** -text -whitespace
+src/diagnostics/cross_*_v1.py -text
+scripts/review/*cross_model_applicability*_v[12].py -text
+scripts/review/*cross_term*_v1.py -text
+scripts/review/prepare_cross_model_utf8_amendment_v1.py -text
+scripts/review/prepare_glm_content_boundary_v1.py -text
+scripts/review/verify_cross_model_upstream_v1.py -text
+# The frozen preparer contains recorded trailing whitespace; preserve its hash.
+scripts/review/prepare_cross_term_behavior_discrimination_v1.py -whitespace

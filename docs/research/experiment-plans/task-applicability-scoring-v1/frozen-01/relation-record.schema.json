@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hsd:evidence-applicability-relation:v1",
+  "title": "One directed evidence applicability relation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_protocol", "relation_id", "family_id", "supersedes", "relation_kind", "source", "target", "source_quality", "sense_fit", "semantic_reference_fit", "rule_fit", "lexical_overlap", "presentation_refs", "introduced_lexicon_relation_ids", "provenance"],
+  "properties": {
+    "schema_version": {"const": "evidence-applicability-relation/v1"},
+    "task_protocol": {"const": "task-applicability-scoring/v1"},
+    "relation_id": {"$ref": "#/$defs/nonempty"},
+    "family_id": {"$ref": "#/$defs/nonempty"},
+    "supersedes": {"$ref": "#/$defs/nullableText"},
+    "relation_kind": {"enum": ["lexicon_to_query", "lexicon_to_demo", "demo_to_query"]},
+    "source": {"$ref": "#/$defs/material"},
+    "target": {"$ref": "#/$defs/material"},
+    "source_quality": {"$ref": "#/$defs/quality"},
+    "sense_fit": {"oneOf": [{"$ref": "#/$defs/fit"}, {"type": "null"}]},
+    "semantic_reference_fit": {"oneOf": [{"$ref": "#/$defs/fit"}, {"type": "null"}]},
+    "rule_fit": {"oneOf": [{"$ref": "#/$defs/fit"}, {"type": "null"}]},
+    "lexical_overlap": {"$ref": "#/$defs/overlap"},
+    "presentation_refs": {"type": "array", "items": {"$ref": "#/$defs/presentation"}},
+    "introduced_lexicon_relation_ids": {"type": "array", "items": {"$ref": "#/$defs/nonempty"}, "uniqueItems": true},
+    "provenance": {"$ref": "#/$defs/provenance"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"relation_kind": {"const": "demo_to_query"}}},
+      "then": {"properties": {"sense_fit": {"type": "null"}, "semantic_reference_fit": {"$ref": "#/$defs/fit"}, "rule_fit": {"$ref": "#/$defs/fit"}, "source": {"properties": {"kind": {"const": "demo"}}}, "target": {"properties": {"kind": {"const": "query"}}}, "source_quality": {"properties": {"kind": {"const": "demo_answer_reliability"}}}}},
+      "else": {"properties": {"sense_fit": {"$ref": "#/$defs/fit"}, "semantic_reference_fit": {"type": "null"}, "rule_fit": {"type": "null"}, "source": {"properties": {"kind": {"const": "lexicon_sense"}}}, "source_quality": {"properties": {"kind": {"const": "definition_quality"}}}, "introduced_lexicon_relation_ids": {"maxItems": 0}}}
+    },
+    {"if": {"properties": {"relation_kind": {"const": "lexicon_to_query"}}}, "then": {"properties": {"target": {"properties": {"kind": {"const": "query"}}}}}},
+    {"if": {"properties": {"relation_kind": {"const": "lexicon_to_demo"}}}, "then": {"properties": {"target": {"properties": {"kind": {"const": "demo"}}}}}}
+  ],
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1},
+    "nullableText": {"oneOf": [{"$ref": "#/$defs/nonempty"}, {"type": "null"}]},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "span": {
+      "type": "object", "additionalProperties": false,
+      "required": ["start", "end", "text"],
+      "properties": {"start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}, "text": {"$ref": "#/$defs/nonempty"}}
+    },
+    "spans": {"type": "array", "items": {"$ref": "#/$defs/span"}, "uniqueItems": true},
+    "material": {
+      "type": "object", "additionalProperties": false,
+      "required": ["material_id", "kind", "raw_text", "text_sha256", "sense_id"],
+      "properties": {"material_id": {"$ref": "#/$defs/nonempty"}, "kind": {"enum": ["query", "demo", "lexicon_sense"]}, "raw_text": {"$ref": "#/$defs/nonempty"}, "text_sha256": {"$ref": "#/$defs/sha256"}, "sense_id": {"$ref": "#/$defs/nullableText"}},
+      "allOf": [{"if": {"properties": {"kind": {"const": "lexicon_sense"}}}, "then": {"properties": {"sense_id": {"$ref": "#/$defs/nonempty"}}}, "else": {"properties": {"sense_id": {"type": "null"}}}}]
+    },
+    "decisionRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/nonempty"}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["authorship", "review_kind", "adoption", "accepted_fields", "decision_ref", "recorded_at", "exposure"],
+      "properties": {
+        "authorship": {"enum": ["ai", "human", "mixed"]},
+        "review_kind": {"enum": ["ai_note", "human_with_ai", "human_authored"]},
+        "adoption": {"enum": ["none", "individual", "bulk"]},
+        "accepted_fields": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^/[^\\s]+$"}},
+        "decision_ref": {"oneOf": [{"$ref": "#/$defs/decisionRef"}, {"type": "null"}]},
+        "recorded_at": {"oneOf": [{"type": "string", "format": "date-time"}, {"type": "null"}]},
+        "exposure": {
+          "type": "object", "additionalProperties": false,
+          "required": ["target_model_outputs_seen", "original_gold_seen", "ai_notes_seen", "prior_related_results_seen"],
+          "properties": {"target_model_outputs_seen": {"type": "boolean"}, "original_gold_seen": {"type": "boolean"}, "ai_notes_seen": {"type": "boolean"}, "prior_related_results_seen": {"type": "boolean"}}
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"adoption": {"const": "none"}}}, "then": {"properties": {"accepted_fields": {"maxItems": 0}, "decision_ref": {"type": "null"}}}, "else": {"properties": {"accepted_fields": {"minItems": 1}, "decision_ref": {"$ref": "#/$defs/decisionRef"}, "recorded_at": {"type": "string", "format": "date-time"}, "review_kind": {"enum": ["human_with_ai", "human_authored"]}}}},
+        {"if": {"properties": {"review_kind": {"const": "ai_note"}}}, "then": {"properties": {"adoption": {"const": "none"}}}}
+      ]
+    },
+    "quality": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "reviewed_answer", "value", "rationale", "provenance"],
+      "properties": {"kind": {"enum": ["definition_quality", "demo_answer_reliability"]}, "reviewed_answer": {"enum": ["有", "无", null]}, "value": {"enum": ["accepted", "disputed", "unknown", null]}, "rationale": {"$ref": "#/$defs/nullableText"}, "provenance": {"$ref": "#/$defs/provenance"}},
+      "allOf": [
+        {"if": {"properties": {"value": {"type": "null"}}}, "then": {"properties": {"rationale": {"type": "null"}}}, "else": {"properties": {"rationale": {"$ref": "#/$defs/nonempty"}}}},
+        {"if": {"properties": {"kind": {"const": "definition_quality"}}}, "then": {"properties": {"reviewed_answer": {"type": "null"}}}},
+        {"if": {"properties": {"kind": {"const": "demo_answer_reliability"}, "value": {"enum": ["accepted", "disputed"]}}}, "then": {"properties": {"reviewed_answer": {"enum": ["有", "无"]}}}}
+      ]
+    },
+    "relevance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["value", "steps", "rationale"],
+      "properties": {
+        "value": {"enum": ["task_relevant", "background", "unclear", null]},
+        "steps": {"type": "array", "uniqueItems": true, "items": {"enum": ["sense_interpretation", "referent_binding", "author_stance", "quotation_scope", "generalization_scope", "attack_presence", "severity_boundary"]}},
+        "rationale": {"$ref": "#/$defs/nullableText"}
+      },
+      "allOf": [
+        {"if": {"properties": {"value": {"const": "task_relevant"}}}, "then": {"properties": {"steps": {"minItems": 1}}}},
+        {"if": {"properties": {"value": {"enum": ["background", null]}}}, "then": {"properties": {"steps": {"maxItems": 0}}}},
+        {"if": {"properties": {"value": {"type": "null"}}}, "then": {"properties": {"rationale": {"type": "null"}}}, "else": {"properties": {"rationale": {"$ref": "#/$defs/nonempty"}}}}
+      ]
+    },
+    "fit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["value", "information", "source_spans", "target_spans", "rationale", "limitation", "decision_relevance"],
+      "properties": {"value": {"enum": ["direct", "partial", "none", "unclear", null]}, "information": {"$ref": "#/$defs/nullableText"}, "source_spans": {"$ref": "#/$defs/spans"}, "target_spans": {"$ref": "#/$defs/spans"}, "rationale": {"$ref": "#/$defs/nullableText"}, "limitation": {"$ref": "#/$defs/nullableText"}, "decision_relevance": {"$ref": "#/$defs/relevance"}},
+      "allOf": [
+        {"if": {"properties": {"value": {"type": "null"}}}, "then": {"properties": {"information": {"type": "null"}, "rationale": {"type": "null"}, "limitation": {"type": "null"}, "source_spans": {"maxItems": 0}, "target_spans": {"maxItems": 0}, "decision_relevance": {"properties": {"value": {"type": "null"}}}}}, "else": {"properties": {"information": {"$ref": "#/$defs/nonempty"}, "rationale": {"$ref": "#/$defs/nonempty"}, "decision_relevance": {"properties": {"value": {"enum": ["task_relevant", "background", "unclear"]}}}}}},
+        {"if": {"properties": {"value": {"enum": ["direct", "partial", "none"]}}}, "then": {"properties": {"source_spans": {"minItems": 1}, "target_spans": {"minItems": 1}}}},
+        {"if": {"properties": {"value": {"enum": ["partial", "unclear"]}}}, "then": {"properties": {"limitation": {"$ref": "#/$defs/nonempty"}}}}
+      ]
+    },
+    "overlap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["comparison", "focal_forms", "value", "shared_forms", "source_spans", "target_spans", "rationale"],
+      "properties": {"comparison": {"const": "exact_unicode_literal"}, "focal_forms": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}}, "value": {"enum": ["present", "absent", "unclear", null]}, "shared_forms": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonempty"}}, "source_spans": {"$ref": "#/$defs/spans"}, "target_spans": {"$ref": "#/$defs/spans"}, "rationale": {"$ref": "#/$defs/nullableText"}},
+      "allOf": [
+        {"if": {"properties": {"value": {"enum": ["present", "absent"]}}}, "then": {"properties": {"focal_forms": {"minItems": 1}, "rationale": {"$ref": "#/$defs/nonempty"}}}},
+        {"if": {"properties": {"value": {"const": "present"}}}, "then": {"properties": {"shared_forms": {"minItems": 1}}}},
+        {"if": {"properties": {"value": {"enum": ["absent", "unclear", null]}}}, "then": {"properties": {"shared_forms": {"maxItems": 0}}}},
+        {"if": {"properties": {"value": {"enum": ["unclear", null]}}}, "then": {"properties": {"focal_forms": {"maxItems": 0}, "source_spans": {"maxItems": 0}, "target_spans": {"maxItems": 0}}}},
+        {"if": {"properties": {"value": {"type": "null"}}}, "then": {"properties": {"rationale": {"type": "null"}}}},
+        {"if": {"properties": {"value": {"const": "unclear"}}}, "then": {"properties": {"rationale": {"$ref": "#/$defs/nonempty"}}}}
+      ]
+    },
+    "presentation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["condition_id", "prompt_sha256", "source_present", "target_present"],
+      "properties": {"condition_id": {"$ref": "#/$defs/nonempty"}, "prompt_sha256": {"$ref": "#/$defs/sha256"}, "source_present": {"type": "boolean"}, "target_present": {"type": "boolean"}}
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "glm-content-boundary-amendment/v1",
+  "recorded_at": "2026-09-18T03:37:32.730754+00:00",
+  "parent_preparation": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/prepared-01/manifest.json",
+    "bytes": 5046,
+    "sha256": "fb51dd21999638155066ba77f4dfcaa47a6e941e29c3463f8784371390e57293"
+  },
+  "scientific_text_and_design_freeze": {
+    "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/cross-model-applicability-v1/frozen-01/manifest.json",
+    "bytes": 5965,
+    "sha256": "90714b751b5467936c0b9de4028b831353c33d2de904b21fabf1b8febd81868c"
+  },
+  "reason": "The native generation prefix ends at assistant151337, before empty metadata newline198. All 16 preselected first tokens were newline198. Candidate scoring must occur at the native answer-content boundary.",
+  "old_prefix_suffix": "<|assistant|>",
+  "new_prefix_suffix": "<|assistant|>\n",
+  "added_tokens_per_prompt": [
+    198
+  ],
+  "all_540_GLM_inputs_receive_identical_boundary_rule": true,
+  "task_messages_materials_labels_relations_candidates_and_scoring_math_changed": false,
+  "existing_Qwen_inputs_runs_and_qualifications_changed": false,
+  "existing_frozen_GLM_token_records_preserved_as_original_generation_prefixes": true,
+  "new_GPU_qualification_required": true,
+  "old_GLM_scores_eligible_for_science": false,
+  "post_engineering_format_exposure": true,
+  "query_reference_join_performed": false,
+  "old_run": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-glm4-9b-chat-01",
+  "old_release": {
+    "bytes": 849,
+    "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/run-glm4-9b-chat-01/release-4e6c4140-00db-4b7d-b88b-100ff875cb8b.json",
+    "sha256": "1674afff904bca905ed9c8b7ea5f9eff31db0cdbe4bc49cb03b7d651d068374d"
+  },
+  "diagnostic_sources": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/audits/format-first-token-01.json",
+      "bytes": 12137,
+      "sha256": "ae1ca4598744fcf42b61a34121d40f4def8f5e256e204678aa4cd1c3ba71af4c"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/audits/glm-format-prefix-inspection-01.json",
+      "bytes": 1606,
+      "sha256": "b1070b6596bb55464bd468945a0825a424e7d7afc8bc3624273bed508c868fb6"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/cross-model-applicability-execution-v1/audits/glm-header-stop-01.json",
+      "bytes": 591,
+      "sha256": "93943cd4cfe2e27f3e9e8267f184b6b77f7625ed5d450f2dd1be9a1ff945f250"
+    }
+  ],
+  "native_grammar_sources": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/models/base/GLM-4-9B-Chat/tokenization_chatglm.py",
+      "bytes": 8987,
+      "sha256": "2153872bcd8c50a05f88170dcdf0a2bf8175883804a76162e5b8c8f269609235"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/models/base/GLM-4-9B-Chat/tokenizer_config.json",
+      "bytes": 6151,
+      "sha256": "24fe6f10f57828538ebb6bd313ee619d459ac7f77a00789d7c6b2860038548a2"
+    }
+  ]
+}

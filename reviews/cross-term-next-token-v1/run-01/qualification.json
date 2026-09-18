@@ -1,0 +1,49 @@
+{
+  "status": "pass",
+  "engineering_requests": 600,
+  "unique_inputs": 120,
+  "max_margin_differences": {
+    "engineering-repeat": 0.0,
+    "engineering-left-padding": 0.000225067138671875,
+    "engineering-right-padding": 0.000225067138671875,
+    "engineering-reverse-request-order": 0.0
+  },
+  "max_log_probability_identity_error": 0.0,
+  "margin_error_bound": 0.00045013427734375,
+  "bound_meaning": "engineering reproducibility envelope, not a statistical confidence interval",
+  "binding_sha256": "e44740d59501e84e34818459ea556fd4f81c6ff0b73030689c1a6c6f363cdb0e",
+  "frozen_manifest_sha256": "3fcb4793f42a62f15d66bef4294907c61c3919c8d0c543606682377292e5cbfb",
+  "pass_receipts": [
+    {
+      "pass_id": "engineering-reference",
+      "receipt_inventory_sha256": "ccbf83ee3eb50beac5a8a59b3f84bcadc9922405e3dd3edd80b03669efad9b56"
+    },
+    {
+      "pass_id": "engineering-repeat",
+      "receipt_inventory_sha256": "e95ee1d75d5cec07864945c4f295ffeac75c551da190ec21ed6c3fee7bef84dc"
+    },
+    {
+      "pass_id": "engineering-left-padding",
+      "receipt_inventory_sha256": "372a519b086bbfb73fc2f38189f678f7595e79d5851334cf41f7ce1c17aa8762"
+    },
+    {
+      "pass_id": "engineering-right-padding",
+      "receipt_inventory_sha256": "ffdbe21285835e5bed22bcfd2f2ec98e333f5ce8ff093c8cc1466f26f00818e2"
+    },
+    {
+      "pass_id": "engineering-reverse-request-order",
+      "receipt_inventory_sha256": "acc2857a11a6e96ebaaac95b6129887db215a146fc05dc70944f14633f00f0ce"
+    }
+  ],
+  "qualification_policy": {
+    "finite_full_vocab_logits": true,
+    "complete_exact_input_inventory": 120,
+    "repeat_and_reverse_order_max_margin_difference": 0.0,
+    "padding_max_abs_margin_difference_cap": 0.001,
+    "margin_error_bound_formula": "max(0.000001,2*maximum_absolute_margin_difference_across_all_engineering_variants_and_all_120_inputs)",
+    "margin_error_bound_before_qualification": null,
+    "cap_explanation": "A new prospective engineering envelope for this next-token scorer, not a reused Q01 tolerance or practical-effect threshold.",
+    "full_vocab_logprob_identity_max_abs_error": 1e-10,
+    "failure_action": "Stop, preserve scores and diagnose. Do not relax thresholds after observed outcomes; any method change needs a new version."
+  }
+}

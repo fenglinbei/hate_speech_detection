@@ -1,5 +1,755 @@
 # Human Review Workbenches
 
+## Three-model cross-term experiment COMPLETE, audited and released (2026-09-18)
+
+NEW docs/research/experiment-plans/cross-model-applicability-results-v1/current.json
+is the authoritative completed-result selector. It selects the three completed
+Qwen8B/14B run-01 and GLM run-03 results, comparison-01 and the assistant-authored
+interpretation-01/INTERPRETATION.md. Final closeout manifest SHA256
+c53f0ef6882d0d84f48cf97e3ddc506ab0385d8279c73bb4eb3eaf9871ad33f6.
+GLM full finished at12:20:28 Asia/Shanghai. All16 owned controller/worker PIDs
+are absent; final NVML shows four idle cards, zero memory/utilization and no
+compute processes. Never restart completed runs or old GLM01/02 diagnostics.
+The paused/failed GLM history and all original code/freezes/selectors remain.
+
+Final three-model numerical and16/16-format qualification passes unchanged
+standards. Repeat/order and logprob-identity errors are0; padding maxima are
+0.000225067138671875 (8B),0.000148773193359375 (14B),0.0000362396240234375 (GLM).
+Separate margin bounds are twice those values. All production replays pass.
+Independent60-digit Decimal audits cover9564 primary atoms and3792 newly
+computed expression values AND bounds, directions and classification transitions;
+primary/expression arithmetic errors are0. Complete analysis reconstruction and
+the3960-model-expression/1620-prediction cross-model table audit pass. The extra
+168 old8B expressions preserve historical results. All156 old8B replays are
+exactly equal; retain their original heterogeneous bounds and physical IDs.
+Actual forwards10970 =8100 valid engineering +1464 science +1358 superseded
+header diagnostics +48 format. GLM03 reused the2700 immutable GLM02 engineering
+records with original producers under the pinned UTF8 amendment; no re-forwards
+were needed. Both the header and I/O amendments and new audit/report scripts are
+now source-pinned. Do not edit them in place. All final analysis was CPU-only.
+
+Science scope remains TWO naturalistic primary families and TWO explanatory
+supplementary families, not four homogeneous primary families; one conservative
+dependency cluster and no independent confirmation. Each model classifies all
+192 naturalistic conditions consistently with the bulk-adopted references. The
+208 primary comparisons have93 directions shared by all three and115 with an
+opposing model; Qwen8B-vs14B alone has127 same/81 opposite. I has only13/64 shared
+directions. Most dictionary E effects reduce reference-aligned margins, but N
+often does too and L-minus-N is mixed. Preserve general-context explanations;
+do not call margin changes demonstrated classification damage/repair or a shared
+semantic/glyph gate. Supplementary reference-consistent counts are179/185/188
+of192 (8B/14B/GLM); all failures and comparisons remain separate from primary.
+
+All12 legacy queries and36 external N rows are retained. J2 core consistency is
+8/10,10/10,10/10; B4 is10/10,7/10,6/10; B3/J3 remain2/10 for each model. Do not
+select only J2 or claim larger models uniformly improve. The report recommends
+CPU material design that separates word sense, author attack stance and rule
+fit, and addresses the observed classification ceiling before mechanism targets.
+No new materials, confirmation set or internal intervention has been started.
+Human reference fields and AI/bulk-adoption provenance remain unchanged. Run
+state reference-join=false describes the scoring worker; analysis joined only
+after each raw seal and normal final worker release, as recorded by result audits.
+
+## UTF-8 I/O amendment and new GLM continuation; Qwen production running (2026-09-18)
+
+NEW cross-model-applicability-execution-v1/execution-03.json is authoritative.
+Both original Qwen runs passed2700 numerical records,16/16 full format probes,
+normal exit and independent CPU/Decimal checks, and now run phase full (workers
+1881563/1881714). All156 historical8B replays are exactly equal to original
+science; original endpoints and individual bounds remain authoritative.
+
+GLM run-02 completed all2700 engineering forwards, then failed at JSON read
+with UnicodeDecodeError because the process default text encoding was ASCII.
+It is TERMINAL FAILED and released; do not restart it. CPU reconstruction of
+every record/vector/producer passes the unchanged numerical gates: repeat/order0,
+padding max0.0000362396240234375, bound0.000072479248046875. Format was still pending.
+
+Separate utf8-io-amendment-01 manifest SHA256
+abca0687d2a3da2b04ba1486ba565f66db5f75e14e1296fd1ebc09a068d98fb5 pins
+run_cross_model_applicability_utf8_v1.py and its preparation script. They must not
+be edited. PYTHONUTF8=1 is mandatory for the amended entry point, including CPU
+check/analyze. Forced C locale reproduces the old read failure; UTF8 mode fixes
+it on identical bytes. Numerical/model code, science input and tolerances are
+unchanged. The2700-record import preserves old physical score IDs, original
+absolute vectors and producer files, validates their hashes and same allocation,
+and only permits engineering imports from this documented released I/O failure.
+All2700 imported records reconstruct; wrong prefixes are rejected; production
+paths point to the NEW run. The CPU fixture is explicitly synthetic, no GPU work.
+
+GLM now selects bound-glm4-9b-chat-03.json and run-glm4-9b-chat-03, initial
+engineering worker1893699 on original GPU3. This is a NEW run, not a restart of
+failed run-02. It reuses the2700 audited records and only adds format forwards
+before qualification; science still requires full format, normal exit and CPU
+check. Use --prepared prepared-glm-content-boundary-01 with the UTF8 entry point.
+The previous GLM01/02, all original code and freezes remain unchanged. GLM
+score auditing uses the separately added audit_cross_model_applicability_scores_v2.py;
+preserve v1 because earlier Qwen audit receipts already pin it. Read selected
+state.json/gpu.log files for progress; do not duplicate controllers.
+
+## GLM native content boundary corrected in separate freeze; Qwen unchanged (2026-09-18)
+
+NEW cross-model-applicability-execution-v1/execution-02.json supersedes the
+launch-time execution-01 selection for GLM only. Qwen3-8B/14B continue their
+original run-01 directories and prepared-01. GLM now uses
+prepared-glm-content-boundary-01 (manifest SHA256
+5b632c68a0bebb1510e1f7e85ea42025e1f415ea0f7d61f94e8f26f8cedf2f9a),
+bound-glm4-9b-chat-02.json and run-glm4-9b-chat-02 on the same GPU3. New GLM
+engineering worker1841160 has started. Read the selected run states; do not
+duplicate executors. The unchanged v1 runner accepts --prepared for this new
+freeze; always provide the amended prepared path for GLM02 run/check/analyze.
+
+The old GLM native generation prefix ended at assistant token151337. Native
+build_single_message and complete chat-template rendering require newline198
+between the empty assistant metadata and answer content. All16 predetermined
+old first-token probes were that newline. The old input therefore scored at a
+header boundary. This is not evidence about task-label accuracy. A separate
+source-pinned prepare_glm_content_boundary_v1.py appends exactly that one token
+to all540 GLM inputs;1080 full native completed-answer reconstructions pass.
+Task messages, materials, IDs, labels, relations, candidates, FP32 adapters,
+arithmetic, tolerances and probe selection are unchanged. Preserve original
+scientific token files as historical native generation prefixes. The correction
+is explicitly post-engineering-format exposure and needs fresh GPU qualification.
+Never edit the new manifest, proofs, amendment or pinned preparation script.
+
+Old run-glm4-9b-chat-01 stopped normally through STOP at03:35:11 UTC with1358
+committed diagnostic forwards:540reference,540repeat,278left-padding. Its worker
+exited0 and was released. It is PAUSED BUT SUPERSEDED: do not resume or repurpose
+it. No production or query-reference join occurred. Retain its first-token
+diagnostics and audits/glm-original-boundary-closeout-01.json. All prior freezes
+and code remain immutable. The score-audit script is a separate CPU-only reader;
+it does not replace or modify the frozen scorer.
+
+NVML aggregate used-memory is misattributed across logical GPU indices while
+models coexist; torch properties report total_memory=0. Per-process NVML UUIDs
+and memory match actual bindings and CUDA identities; evidence is in
+audits/gpu-placement-01.json. Preserve the anomalous readings. Do not bypass
+the unchanged idle checks or alter the container/driver environment. If those
+checks require all workers to exit before a next phase can bind, wait for release.
+
+## Cross-model GPU window authorized; three engineering runs started (2026-09-18)
+
+The user now explicitly said "GPU已空闲，可以开始下一步". This supersedes the
+CPU-only stopping point below. Authorization is recorded in the NEW
+reviews/cross-model-applicability-execution-v1/launch-01/authorization.json
+(SHA256 cd515bb7939840974ebaf30fd190f741061542da2f5362493b5294c18a0dce8a).
+All four NVIDIA L20 cards were verified idle through host NVML, with no compute
+processes. Allocation is Qwen3-8B on GPU0, Qwen3-14B on GPU1/2, GLM-4-9B-Chat on
+GPU3. No new deadline was specified. Actual bound files pin UUIDs and runtime;
+all earlier scientific/preparation freezes and selectors remain unchanged.
+
+NEW cross-model-applicability-execution-v1/execution-01.json selects launch-01,
+manifest SHA256 785f3187d53d223223658b7509f321946d4b67592f235f36135d95bd1c3d72a2.
+All three engineering controllers have started. Run directories are
+run-qwen3-8b-01, run-qwen3-14b-01 and run-glm4-9b-chat-01; initial workers are
+1809052, 1811622 and 1814266, respectively. Qwen8B has committed scores and
+Qwen14B has loaded its weights. Read each NEW run's state.json and gpu.log for
+live status; do not duplicate any executor. Engineering is not yet qualified.
+Only a qualified, normally released
+run may advance to full using the same binding, after CPU check. Failed/complete
+runs are terminal, and failures must not trigger automatic retries or relaxed
+criteria. Scientific reference joins still require complete raw seals and normal
+worker exit. Preserve other users' processes and all historical runs.
+
+## Cross-model second batch adopted; science freeze and CPU runtime ready (2026-09-18)
+
+The user explicitly accepted the additional JSC/MT dataset after the explanation
+of its role: "好的，理解了，审核结果是这组数据都可以通过，可以继续下一步".
+NEW cross-model-applicability-v1/feedback-02.json records24 additional materials,
+120 relations and S7-S8 under the clarified supplementary interpretation. All48
+original materials and240 relations are now bulk adopted, retaining AI authorship,
+original Gold=null and disputed displayed answers for label swaps. No individual
+adjudication is invented. draft-01,draft-02,adopted-01 and previous pinned code
+remain immutable; newly adopted relation IDs end in -adopt02 with supersedes.
+
+NEW scientific frozen-01 manifest SHA256
+90714b751b5467936c0b9de4028b831353c33d2de904b21fabf1b8febd81868c
+preserves all384 new inputs,156 legacy inputs and all native token records byte
+for byte. Scope is TWO naturalistic primary development families HP/XC plus TWO
+explanatory supplementary families JSC/MT, not four homogeneous primary families.
+The original four-naturalistic-family budget is still unmet; do not silently add
+materials or count the supplement toward it. All1152 expressions remain; only208
+naturalistic readouts have primary priority. Both strata and all exceptions must
+be reported separately; no pooled A/B primary mean, no confirmation claim, still
+one conservative dependency cluster. This is a scientific-input freeze, not GPU
+numerical acceptance or an allocation/runtime-layout freeze.
+
+NEW cross-model-applicability-execution-v1/current.json selects
+reviews/cross-model-applicability-execution-v1/prepared-01, manifest SHA256
+fb51dd21999638155066ba77f4dfcaa47a6e941e29c3463f8784371390e57293.
+Start at its README.md. New pinned code: cross_model_applicability_{models,
+execution}_v1.py and run/test/audit_cross_model_applicability_*_v1.py; the separate
+freeze_cross_model_applicability_v1.py is also pinned. Never edit these in place.
+CPU check/audit are read-only; code changes require another version/amendment.
+
+Native Qwen/GLM adapters select the last VALID hidden state before the LM head,
+including right padding; all floating model tensors/logits must be FP32, eager
+attention, batch1, no KV cache, no CPU/disk offload or quantization. GLM's local
+GenerationMixin incompatibility is avoided with direct native forward and manual
+greedy format diagnostics, not by modifying its source or upgrading weights.
+Nine CPU tests pass: tiny random native models, tiny safetensor reloads, pad/answer
+positions,60-digit Decimal arithmetic, physical-alias cancellation, strict gates,
+paused checkpoint reuse and full synthetic lifecycle, stratified new analysis,
+all12 legacy queries/168 comparisons and36 external N rows. Native-vs-selected
+CPU max errors are5.96e-8 Qwen and1.12e-8 GLM. No research pretrained weights or
+GPU forward were loaded; CPU fixture releases are explicitly synthetic.
+
+1620 scoring input records are reference-free and match frozen tokens exactly.
+Per model:540 engineering inputs x5passes; new production384 for8B and540 each
+for14B/GLM, with legacy production first on the two new models. Total8100
+engineering +1464 scientific =9564 prompt-only forwards;16 fixed format probes
+per model add at most336 forwards. The156 old8B engineering replays cannot
+replace old scientific endpoints/bounds. Each model needs its own actual-device
+qualification; no old measured bound is inherited. Repeat/order cap0, padding
+cap0.001, bound=max(1e-6,2*observed max),16/16 exact-label-then-EOS format gate.
+Science comparisons keep raw/ref-aligned effects, bounds, ties, repairs/damage.
+
+No bound file, GPU run, queue or idle polling exists. GPU allocation is null and
+actual CUDA/VRAM/throughput checks remain pending; an unprivileged nvidia-smi
+probe could not access the driver, which does not establish host GPU occupancy.
+In a newly authorized GPU window, bind the actual idle UUID(s), run engineering,
+then check. Default run is engineering-only; full is explicit. Qualified runs
+may advance to full, explicit paused runs may resume the same binding/runtime;
+failed/complete runs must not restart. STOP pauses at committed-request boundaries.
+Reference joins require raw seals plus normal owned-worker exit. Preserve all
+historical selectors, GPU runs and other users' processes. No confirmation set
+or internal-mechanism experiment was started.
+
+## Cross-model first batch adopted; four-term CPU expansion delivered (2026-09-18)
+
+The user explicitly said "待审核项我都过了一遍，没什么问题，可以开始下一步".
+NEW cross-model-applicability-v1/feedback-01.json records bulk adoption of all
+draft-01 pending S1-S6,24 original materials and120 relation proposals. The
+separate adopted-01 material-review freeze preserves AI authorship, exact text,
+labels, severity, scopes and limitations; no individual question/answer review
+or original Gold is invented. Swapped displayed answers remain disputed; their
+human reference is the correct answer to the original text. Original draft-01,
+its null human fields and four pinned scripts remain immutable. The previous
+current selector is preserved under adopted-01/previous-selector.json.
+
+NEW current.json selects draft-02, manifest SHA256
+eda2b3e724fe6b090cd3a89093a81ef2d93cfdc6587add1426e850d2210f0ae6,
+and separately binds adopted-01/manifest.json SHA256
+1d8a177c80bf84bca60885ffd1ba5110769e1731a1d984ef969e6a5f2b09c686.
+Read draft-02/REVIEW.md; ADDITIONAL-MATERIALS.md and ADDITIONAL-RELATIONS.md show
+only new items. 寄生虫/木头 add8 queries,24 original materials,120 relations and
+192 inputs; ALL additions and S7-S8 are pending review, not covered by the prior
+user message. Combined scope:4 lexical families,16 queries,384 inputs,240
+relations,1152 linear readouts. The first192 messages and all156 legacy inputs
+are exact original bytes. First-batch adopted relation IDs carry -adopt01 and
+supersedes; source-quality prose preserves pre-adoption AI wording and current
+adoption is given by provenance. No historical experiment selector was changed.
+
+New construction B uses neutral word explanations as foreground demos (无) and
+a fixed attack anchor (有). It changes foreground labels, wording and ordered
+labels relative to construction A; report each stratum and all queries, not a
+pure causal construction/order effect. Semantic information can be direct while
+the specific word-explanation rule is none for these targets; never infer rule
+fit from answer equality. Two construction strata still conservatively share
+CMAD-DEV-C01; four terms are not four independent confirmation clusters. All
+queries still align ordinary sense with nonattack and derogatory sense with
+attack. No new confirmation sample, model prediction or internal intervention.
+
+CPU checks pass:1620 native prompts,3240 candidate continuation boundaries,
+5120 relation bindings,1152 exact nonadditive-field expression checks and320
+additive-null interaction checks. All1044 first-batch/legacy tokenized records
+are unchanged. Original full23-shard hashes are reused; metadata is rehashed and
+shard size/mtime checked, not another full weight hash audit. CUDA remained
+uninitialized and no weights or forwards were loaded. Accepted models remain
+Qwen3-8B,Qwen3-14B,local GLM-4-9B-Chat with the original GLM implementation caveat.
+
+Preserve both new manifests and their pinned preparation/checker scripts.
+Use check_cross_model_applicability_expansion_v1.py for read-only verification.
+Full scientific/runtime freeze, model forward adapters, output compliance,
+numerical GPU qualification and allocation are still pending. No GPU executor,
+queue or idle poll was started. Next: review only the new materials/relations and
+S7-S8, then freeze full inputs and prepare versioned runtime adapters. Do not
+restart terminal experiments or another user's training under this CPU request.
+
+## Cross-model A-route CPU draft delivered; human review pending (2026-09-18)
+
+NEW `docs/research/experiment-plans/cross-model-applicability-v1/current.json`
+selects draft-01 and its hashed review manifest. Start at REVIEW.md. The user
+authorized CPU design and the first sample package only. This is NOT a scientific
+or execution freeze: all new human fields are null and eligible_for_GPU=false.
+Do not launch, queue or resume GPU work under this request. All old selectors,
+freezes, result references and human decisions remain unchanged.
+
+The AI draft contains 花瓶/小丑,8queries,4senses,10original demos,2N controls,
+192new inputs (120core/72auxiliary),120relation proposals and576expressions.
+There are24original material-review rows; label-swapped variants keep original
+references and have disputed displayed-answer quality. D four cells manipulate
+the narrowly named semantic_reference_fit, not a combined applicability score.
+Low-overlap demos are descriptive paraphrases, not semantically unrelated terms.
+Fixed independent insults preserve demo label composition but introduce a scope
+limitation; S2/S3/S4 require review. Two lexical families conservatively share ONE
+construction cluster, all designated development; no target outcomes have been
+seen and no confirmation set is established.
+
+Qwen3-8B, Qwen3-14B and local GLM-4-9B-Chat are proposed, not yet human-frozen.
+All23local weight shards were hashed and match public official commits;8B also
+matches its old freeze. GLM's generation_config/tokenizer_config/tokenization
+code/modeling code differ from the checked upstream commit; local files are
+preserved and pinned. Do not silently replace them.1044CPU prompt reconstructions
+and2088single-token boundaries pass, including all156old8B bytes/token sequences.
+An independently implemented CPU checker validates2560relation bindings,
+576expressions and160exact additive-null interactions. No model tensors were
+loaded, CUDA was not initialized, and no model forward or GPU qualification ran.
+
+Preserve delivered draft bytes and four manifest-pinned preparation/audit scripts.
+Writers refuse an existing manifest. Use check_cross_model_applicability_draft_v1.py
+for read-only verification; revisions/adoption require separate versions. Review
+does not imply all models behave alike or that fields are already human-adopted.
+
+## Cross-term second behavioral run, audits and interpretation complete (2026-09-18)
+
+NEW `docs/research/experiment-plans/cross-term-behavior-results-v1/current.json`
+selects prepared-01/bound-01/run-01/results-01 and the separately hashed assistant
+interpretation under `reviews/cross-term-behavior-execution-v1/interpretation-01`.
+TERMINAL COMPLETE: never restart this run. Earlier preparation/execution selectors
+are historical; all scientific/material/reference/human fields remain unchanged.
+
+Original GPU0 alone completed300 prompt-only forwards/600candidate values:
+84historical bridge +180new engineering +36new science. Controller launch was
+00:03:53 and completion00:07:21 Asia/Shanghai,207.93seconds. Worker675587 exited
+normally; controller675235 is absent too. Final inventory found all four GPUs
+at zero memory/utilization and no compute process. Bridge, repeat, both padding
+variants, reverse order and science replay all have exactly0 margin difference.
+The new36-input bound takes the preset1e-6 floor; original84 endpoints retain
+their original physical IDs,qualification references and0.00045013427734375 bound.
+This is not a changed tolerance or precision. All120 classifications and168
+expressions are resolved, with no ties/unresolved rows. Full CPU reconstruction
+and exact analysis bytes pass. Independent60-digit Decimal audit verifies384raw
+vector margins (300new evaluations +84old endpoints),120predictions and168
+expression values AND bounds, with zero expression error. No new generation.
+
+For the SAME12 queries, absent/L correct counts are none9/8, same_A9/10,
+same_B11/11, other_A9/8, other_B9/9. J2 L+none m=-10.785946 becomes-1.642616
+with other_A (still wrong) or+10.232662 with other_B (repair). Both moderate
+the negative L increment: E0=-33.251907,E_A=-26.161196,E_B=-16.422789;
+I_A=+7.090712,I_B=+16.829119. L remains adverse under either package, and
+other_A+L damages its otherwise correct no-L counterpart. B's D_empty=+4.189489
+and D_L=+21.018608 must both be retained. K_A=-21.188265,K_B=-14.718592:
+correct labels do not make same/other effects equivalent. The two J2 repair
+comparison rows share one other_B+L endpoint, not two independent repaired cases.
+Demo occurrence of 京巴 is not necessary for this J2 classification outcome;
+do not infer abstract sense gating or complete removal of the L effect.
+
+G3/J3/B3 remain wrong under all other_A/B x absent/L conditions. Same_B's J3/B3
+repairs do not transfer to these other_B materials; G3 remains correct only in
+the historical same_A+L condition. Under L, both other packages worsen all three
+anti-insult margins relative to no demos. G1/J1/B1,G4/J4/B4 retain attack labels
+and G2/B2 stay correct, but their continuous margins change. Reference-aligned
+E_A/E_B directions are4/8 and3/9 positive/negative; I_A/I_B9/3 and5/7;
+K_A/K_B3/9 and4/8. Preserve all adverse and secondary rows. These are3exposed
+terms,138comparisons containing new endpoints and30all-old comparisons, with
+old36N conditions kept externally; no new confirmation family/internal intervention.
+
+The specifically authorized lj G-LLaVA training was stopped via its verified
+launcher3844994 SIGTERM, not broad process matching. All associated training
+PIDs exited; its original interactive shell remained. checkpoint-5500 retained
+matching files,sizes,mtimes,small-file hashes and archive structure. No extra
+checkpoint or restore test was performed; progress after5500 was unsaved.
+Do not auto-resume that training. Stop and release receipts are under launch-01;
+the earlier running entry below is historical. Read INTERPRETATION.md together
+with all scores/comparisons and the immutable CPU/result audit receipts.
+
+## Cross-term second behavioral GPU execution authorized and started (2026-09-18)
+
+The user authorized GPU execution and explicitly confirmed stopping lj's G-LLaVA
+training PIDs3845199–3845202. Only its verified DeepSpeed launcher3844994 received
+SIGTERM as UID1003. Launcher/workers exited, checkpoint-5500's file sizes/mtimes,
+small-file hashes and archive inventories remained unchanged. No new checkpoint
+was forced; training after step5500 was not saved. The original training stays
+stopped; do not restart it without authorization. Evidence is under
+`reviews/cross-term-behavior-execution-v1/launch-01/stop-{before,signal,after}.json`.
+
+NEW `cross-term-behavior-execution-v1/execution-01.json` selects the unchanged
+prepared-01, bound-01.json (SHA256
+4caf5af9a15dcaf959109a496f903968636d88cc9587b0ed2bfe811a24e7a90e), and NEW run-01.
+All four GPUs were idle at binding. Controller675235 launched worker675587 on
+original GPU0 at2026-09-18 00:03:53 Asia/Shanghai, invocation
+59b21399-bb2d-4055-a9aa-ebdf956b57d0. Initial state was loading_model. Read the
+NEW run_manifest.json/gpu.log for current progress; do not duplicate executors.
+No fixed deadline was imposed. Source/weights revalidation passed before launch.
+The earlier CPU-only instruction below is superseded by the new explicit launch
+authorization; its selector and delivery remain historical and unchanged.
+
+## Cross-term second behavioral CPU execution preparation complete; stop before GPU (2026-09-17)
+
+The latest user instructed "请开始下一步，直至GPU任务需求前停止，目前GPU暂未空闲".
+NEW `docs/research/experiment-plans/cross-term-behavior-execution-v1/current.json`
+selects `reviews/cross-term-behavior-execution-v1/prepared-01`, manifest SHA256
+`9acc64f352086603b56a42aac4dd39d370d84f7acb27819774235967265075dd`.
+Read the adjacent DELIVERY.md. CPU preparation, implementation and independent
+audits are complete; actual allocation is null and GPU numerical qualification
+is PENDING. No bound file, real run, executor, queue or idle polling was created.
+Do not launch or schedule GPU work under this CPU-only instruction. A new usable
+window authorization is needed. All older freezes, selectors and human fields
+remain unchanged; never restart any terminal run.
+
+The new source-pinned cross_term_behavior_* implementation reuses the unchanged
+first-round native FP32 scorer and FP64 math. Do not edit its five pinned files
+or prepared-01. Future binding requires the SAME GPU 0/L20 UUID
+GPU-09b29c25-c372-62f4-3098-9734013e93c0 and original driver/runtime/weights;
+only that one card is required. All 84 historical core inputs are replayed first
+and their primary margins must reproduce exactly (maximum difference 0).
+Bridge scores never replace old physical endpoints or become new scientific cases.
+Then 36 new inputs receive five engineering passes (180 forwards) and one science
+pass (36). Total 300 prompt-only forwards /600 candidate values; no new generation.
+Repeat/order difference must be 0, padding cap stays 0.001, and new bound is
+max(0.000001,2*new engineering maximum). Old bounds/qualification identities remain
+original. Failure stops; no tolerance relaxation, substitution or automatic retry.
+
+Ten CPU tests pass, including tiny random CPU Qwen3 and the actual worker driven
+by synthetic logits: pause at 88, reuse all 88 saved requests, finish exactly 300
+forwards, preserve bytes, detect corruption/producer changes, and reconstruct the
+120-condition/168-expression analysis. Synthetic records only existed in /tmp.
+Full first-round CPU reconstruction passed; 16,381,516,776 weight bytes were hashed
+without loading 8B tensors. Independent audit verifies 234 artifact/source hashes,
+120 tokenizer reconstructions,240 bare-answer boundaries,84 historical margins,
+and60-digit Decimal checks of1,176 synthetic expressions AND bounds plus840
+predictions (max expression error0). These are not GPU numerical acceptance.
+
+Use scripts/review/run_cross_term_behavior_v1.py prepare|validate|bind|run|
+resume-check|check|analyze; only future bind inventories hardware and run loads
+weights. The worker never parses reference-bearing design/analysis files.
+Reference joining is allowed only after bridge/engineering/science seals and
+owned-worker release. Preserve all168 registered comparisons,138 with new endpoints
+and30 all-old, and external36 N conditions. This remains three exposed development
+terms, not pure semantics/rule-fit causation, independent confirmation or mechanism.
+The scientific-review selector below stays historical with respect to CPU runtime
+preparation; its material and adoption status are still authoritative.
+
+## Cross-term second behavioral review adopted and input design frozen (2026-09-17)
+
+The user explicitly accepted "S1–S4及36条关系按建议接受". The selector
+`docs/research/experiment-plans/cross-term-behavior-discrimination-v1/current.json`
+now selects frozen-01 and feedback-01.json. Manifest SHA256 is
+`9e0e03ac66b4815c95d6466041cf4d886e3a7bf2bf4f1a814f862df88fe0b722`.
+All 36 new relations (96 dimension fields) and S1–S4 are bulk adopted, retaining
+AI authorship and exposure. There are zero pending new relations. Garbage/废物's
+four D semantic partials and two L-to-demo partials are adopted within their
+exact scopes. D rule counts remain 6 direct / 10 partial / 8 none.
+
+The frozen core is 36 new unscored inputs + 84 historical inputs, with all
+36 old N conditions retained externally. All new prompt bytes, prior materials
+and 168 comparison formulas match the review draft. Eight supporting files are
+byte-identical copies. CPU checks cover 120 prompts / 240 answer boundaries,
+36 schema records, 504 appearances and 192 context bindings. An independent
+adoption audit checks every accepted field, old/new identity and source hash.
+The 138 comparisons with new endpoints and 30 already-exposed comparisons retain
+their different exposure; none are new independent confirmation families.
+
+Preserve draft-01, its blank human template, selector-history/draft-01.json,
+the new frozen package and source-pinned freezer, all old relations and the
+11 old AI scope observations. This reply did not re-adjudicate historical labels
+or create a binary rule-fit causal grouping. New runtime binding, historical
+numerical bridging and new-input GPU qualification are still pending. No new
+model forward occurred. Prior session authorization remains separately recorded;
+do not restart terminal first-round/Q01 runs. The draft-delivery note below is
+historical and no longer describes the active adoption state.
+
+## Cross-term second behavioral draft delivered for review (2026-09-17)
+
+`docs/research/experiment-plans/cross-term-behavior-discrimination-v1/current.json`
+selects draft-01, a review draft, NOT an adopted scientific or execution freeze.
+The user requested the next deliverable and its review queue. Start at REVIEW.md.
+All 12 query texts, 3 definitions and 16 demo texts/answers are exact prior sources.
+The core has 120 conditions: 84 historical inputs and 36 new, unscored inputs.
+The old 36 N conditions remain external, for 156 unique inputs across both stages.
+No weights or GPU forward were used; do not restart the completed first run.
+
+There are 24 new D-to-query and 12 new L-to-X-demo AI relation proposals, with
+all human fields null. Garbage/废物 has four proposed partial D semantic links
+and two partial L-to-demo links; these need review and are not adopted facts.
+New D rule proposals count 6 direct/10 partial/8 none. Specific scopes, opposite
+stance limitations and old-scope differences are explicit. Preserve the old84
+relations, old12 L-to-query edges and11 AI observations; no binary rule-fit
+causal grouping or pure same/other-word manipulation is claimed.
+
+CPU checks reconstruct all120 inputs/240 bare-answer boundaries,36 new schema
+records,504 presence rows and192 context bindings. Independent checks cover54
+artifact hashes, the exact input/relation sets,84 historical score identities
+and1,176 exact Fraction formula evaluations. Of168 proposed comparisons,138
+contain new endpoints and30 use only already-exposed endpoints. These are
+dependent development readouts, not independent confirmation or new results.
+The draft manifest is51d5028484f3f5d2efb259157b9fb35c3fe9636deaa752de78fa109a23a6ade9.
+Preserve this review snapshot and its pinned preparer; put feedback, changes,
+adoption and eventual runtime binding in separate versions. New GPU qualification
+and historical numerical bridging remain future work after review.
+
+## Cross-term next-token GPU run and independent result audit complete (2026-09-17)
+
+NEW authoritative selector:
+`docs/research/experiment-plans/cross-term-next-token-v1/current.json` selects
+`reviews/cross-term-next-token-v1/frozen-01/run-01/results-01` through separate
+paths and the hashed assistant interpretation under `interpretation-01`.
+The run completed at 12:30:37 Asia/Shanghai. Controller 3506906 and worker 3507209
+are absent; the worker exited normally. Exit and final host checks show all four
+GPUs at zero memory/utilization. TERMINAL COMPLETE: do not restart this run.
+Only GPU0 was used; no parallel replica/other-GPU numerical claim was made.
+
+All 600 engineering +120 science prompt-only forwards completed (1,440 main
+candidate values), plus 24 forwards for 12 free-generation baseline diagnostics.
+All 12 generated answers strictly meet the one-character format. Both candidates
+share one stored full-vocabulary FP32 vector per main request. Repeat, reversed
+request order and science-to-reference maximum margin differences are zero.
+Left/right padding maxima are both 0.000225067138671875 under the unchanged0.001
+cap; the sealed global margin bound is0.00045013427734375. All120 classifications
+and252 expression directions are resolved; no ties or numerical-unresolved rows.
+
+Eight CPU implementation tests, the22-source/120-input audit, final raw-vector
+reconstruction and analysis reconstruction pass. Independent60-digit Decimal
+checks cover720 raw vectors/1,440 candidate logits, all252 expression values AND
+bounds and120 predictions/correctness states; margin/expression/bound differences
+are zero. The3,600 long-double auxiliary checks have max error about6.01e-15.
+All24 generation step vectors/prefixes/greedy choices were independently checked.
+Preserve original preparation, all new source-pinned code/freezes and raw records.
+
+For the SAME12 queries, absent/L/N correct-condition counts are9/8/9 with no D,
+9/10/9 with same_A and11/11/10 with same_B. All errors occur on G3/J3/B3 or J2.
+The three explicit anti-insult queries G3/J3/B3 are wrong in the empty baseline.
+Same_B repairs J3/B3, but G3 only repairs under same_A+L in this frame. On J2,
+L alone changes m from+22.4659614563 to−10.7859458923 (damage); it stays correct
+when L is added under same_A or same_B. These are correlated development arms,
+not independent rescued cases or a pure rule-applicability causal effect.
+
+N is demonstrably not inert: under same_B it reduces reference-aligned margins
+for all12 queries and damages J3 (+5.8747406006 to−10.3005523682). J3's same_B+L
+margin remains correct at+1.0763130188, so L−N is a repair relative to N while L
+still worsens its margin relative to the empty lexicon slot. Do not count this
+as repair of the no-lexicon case or infer benefit from L−N alone. Other_A/B each
+score6/6 on the SIX ordinary/separate-insult queries whose baseline was already
+6/6; never rank those against the full12-query arms.
+
+Read INTERPRETATION.md plus all scores/comparisons/query-overview TSVs. Original
+Gold stays null, earlier human decisions and11 AI relation-scope observations
+are unchanged. All materials are now outcome-exposed development material;
+no new query, confirmation set, internal intervention or mechanism claim was
+created. run_manifest's analysis_reference_join_performed=false describes the
+GPU worker; the separate sealed CPU results perform the subsequent reference
+join. The earlier running snapshot below is historical.
+
+## Cross-term GPU scorer bound and running (2026-09-17)
+
+The user authorized implementation/binding and free use of four idle GPUs.
+The new execution preserves the prepared SINGLE-GPU protocol on physical GPU 0,
+UUID GPU-09b29c25-c372-62f4-3098-9734013e93c0 (NVIDIA L20); GPUs 1/2/3 are unused.
+`docs/research/experiment-plans/cross-term-next-token-v1/current.json` selects
+`reviews/cross-term-next-token-v1/frozen-01`, manifest SHA256
+`3fcb4793f42a62f15d66bef4294907c61c3919c8d0c543606682377292e5cbfb`, and run-01.
+All new source-pinned cross_term_next_token_*_v1 files, math preparation and
+earlier freezes are immutable. Five weight shards were freshly fully hashed;
+runtime versions, critical model code, tokenizer and physical GPU are bound.
+
+Eight CPU tests pass, including a random tiny CPU Qwen3 position/padding test,
+checkpoint reconstruction/corruption, non-overwrite and engineering gate failure.
+The actual worker loaded the full checkpoint without missing/unexpected keys,
+verified all floating tensors FP32 on its bound device and eager attention.
+At 12:25 Asia/Shanghai engineering-reference had 45/120 records. Controller PID
+3506906 and worker PID3507209 belong to this run; invocation is
+30a81074-4557-4e90-9c39-c4af72eeea30. Read run_manifest.json and gpu.log for current
+state; do not duplicate or restart another executor. This is a server process.
+
+Five engineering passes cover all 120 prompts before a bound is sealed; then
+120 production forwards and 12 free-generation diagnostic prompts execute.
+Every main request preserves a full FP32 vocabulary vector, input/mask/positions,
+the shared candidate forward, producer identity and an atomic receipt. Query
+references are not parsed in the worker. Failed/completed runs reject restarts;
+explicit paused resumes require the same binding and reuse every valid receipt.
+Creating STOP under the owned run directory pauses at a record boundary. Old Q01
+controllers and their completed runs must not be restarted. GPU access requires
+the approved host execution context; sandbox NVML cannot access the driver.
+
+## Cross-term relation adoption frozen; next-token execution preparation complete (2026-09-17)
+
+The user accepted the four discussed rule-fit corrections, confirmed no further
+questions about the remaining reviewed relations, and authorized freeze/next step.
+NEW `docs/research/experiment-plans/cross-term-joint-v1/current.json` selects
+`frozen-01`, manifest SHA256
+`a493e250fe071bd45dd5fa2e4174c58b3ffdfba41570074c4fafcc5aef3cf8ad`.
+Its feedback-01.json binds the exact reply and all 84 field-scoped bulk decisions.
+G4 <- CTDD-G-B-01 is now rule partial; J2 <- CTDD-X-A-01, J2 <- CTDD-X-A-02,
+and B2 <- CTDD-X-A-01 are rule none. All four semantic/reference values remain
+none. The other 80 values are preserved, with AI authorship, exposure and original
+source-quality provenance. D-to-query rule counts are 17 direct/17 partial/38 none;
+12 L-to-demo edges are also adopted, and 12 old adopted L-to-query edges are reused.
+Do not modify this new frozen package or any preceding draft/source freeze.
+
+Read rule-calibration.md, relation-review.md and rule-review-audit.json together.
+The accepted calibration requires specific matching judgment structures; common
+task requirements, ordinary nouns, label agreement/disagreement or grade differences
+alone do not establish rule fit. Post-adoption full-table AI review flags 11 remaining
+scope-comparability observations. These are AI comments, NOT new human decisions or
+replacement values. Do not silently change the adopted records. No rule-fit binary
+causal grouping is registered; all conditions remain in fixed-D input comparisons.
+
+The 120 full prompts and token IDs are byte-identical to the reviewed draft; 252
+comparison formulas are unchanged (108 fixed-D, 72 interactions, 72 D diagnostics).
+New relation IDs, linked L-to-demo IDs and 432 presence rows are consistent. CPU
+adoption/schema/source/input/contrast checks pass; the local tokenizer rechecked all
+240 bare answer boundaries. No weights or GPU forward were used. Scientific input
+design is fixed, but numerical runtime/execution is not yet frozen or qualified.
+
+NEW `docs/research/experiment-plans/cross-term-execution-prep-20260917-v1` is the
+next-step CPU preparation, manifest SHA256
+`4633d723939534c7e189b774fabed0a05641f1cf49b8e00b1ed5d7c2a46a011b`.
+Its model-inputs.jsonl excludes query references and review metadata; analysis-plan
+is separate and forbidden to the scoring phase. The pure CPU next_token_math.py
+is NOT a model forward executor. Independent 60-digit Decimal checks of 120
+synthetic readouts/720 scalars and all 252 expression values AND bounds pass;
+max scalar error is about 5.01e-16, expression and bound differences are zero.
+Tie/unqualified/repair/alias-cancellation and four invalid-input checks pass.
+
+The proposed single-GPU FP32 eager batch-1/no-cache qualification covers every
+input with reference, repeat, left/right padding and reverse request order: 600
+engineering plus 120 production prompt forwards, 1,440 candidate values. Twelve
+strict free-generation diagnostic prompts are extra. This is a prospective
+engineering plan, not GPU acceptance: the bound is still null and old Q01
+tolerances are not inherited. Before any model run, implement/source-pin the new
+prompt-only forward wrapper and receipt/checkpoint checks, bind verified weights,
+runtime and physical allocation, then execute the engineering gate. No GPU job or
+new window was started. Current preparation does not require or imply a new human
+review of already adopted material. Earlier selectors below remain historical.
+
+## Sixteen D sources adopted; joint design and relation review prepared (2026-09-17)
+
+The user approved all sixteen exact demos and asked to proceed. NEW
+`docs/research/experiment-plans/cross-term-demos-v1/current.json` selects
+`frozen-01`, manifest SHA256
+`39b7466f61cf28e7ff270220a5f63cce93525c41cefe60e5d22ee6ff487feeaf`.
+`feedback-01.json` preserves the exact reply and per-demo text/grade/answer scope.
+Active references are `demos[].human_review`: eight grade-0, four grade-1 and
+four grade-2 cases, with eight 有/eight 无. Keep AI authorship, original proposals
+and null original Gold. This reply adopts source quality, NOT the sixty draft
+applicability ratings or an execution matrix. The source freeze/validator is
+immutable; source-quality adoption and relation provenance stay separate.
+
+`docs/research/experiment-plans/cross-term-joint-design-20260917-v1/README.md`
+and `relation-review.md` are the next reviewable design. It reuses all twelve
+accepted queries and all sixteen demos without rewriting text. Eighty-four AI
+edges comprise 72 D→query and 12 L→demo; source quality is adopted, applicability
+is not. D rule proposals count 18 direct/18 partial/36 none, with exact scopes.
+Twelve already adopted L→query edges remain external immutable references.
+L is assigned independently of D. Per-condition presence records distinguish
+actual candidate L from absent/N slots; linked L→demo IDs do not imply exposure
+in every condition or a D-triggered retrieval.
+
+The design has 120 unique candidate inputs (108 full same-term contexts plus 12
+retained other-term diagnostics). Sixty are new versus the earlier unique frame;
+66 old condition aliases point to 60 inputs. The primary proposed contrasts hold
+D text/answers/order fixed while changing L/orthographic/absent content. A/B is
+retained as a whole-bundle diagnostic, not pure rule-applicability causation.
+There are 108 fixed-D contrasts, 72 lexicon interactions and 72 D diagnostics.
+Using `.conda/stage1-p0/bin/python`, CPU tokenization checks all 120 prompts and
+240 bare-answer boundaries, with 30 exact old-D message bridges. Length is
+572–661 tokens; L-minus-N is -1, 5 or 6, so length matching is NOT established.
+An independent visible-input/adoption/comparison audit passes. No weights were
+loaded, no GPU forward was run, and no numerical acceptance or practical effect
+threshold is inherited. Relationship/design review and a separate input/runtime
+freeze remain before execution. Preserve all preceding drafts and selectors.
+
+## Cross-term material review frozen; D construction draft started (2026-09-17)
+
+`docs/research/experiment-plans/cross-term-materials-v1/current.json` selects
+`frozen-01`, manifest SHA256
+`0f3b4222baf0ea6488e39ea32c33dbd551332f405acad26a42622679b2639df2`.
+The user explicitly confirmed G1=2 and G4/J4/B4=1, identified their shared oral
+insult mode, accepted the remaining v2 material, and requested freeze/next step.
+`feedback-01.json` preserves the exact reply and per-object scope. Twelve query
+references, three definitions, three candidate form controls and twelve L→query
+relations are adopted. Active grades are 2 for G1/J1/B1, 1 for G4/J4/B4, and 0
+for the six other queries. Named grade decisions and bulk adoption are distinct.
+Original AI proposals, text authorship, null original Gold and both drafts remain.
+
+The three oral-insult queries share a new dependency/calibration group. This is
+scoped to those exact sentences; historical #3585 remains 2 and the frozen 0–4
+task protocol is unchanged. Preserve the new freeze and its validator in place;
+use a new version for changes. CPU material/hash/adoption/schema checks pass.
+N inertness/length and a complete input/execution freeze remain unqualified.
+No online review, old reannotation exports or historical selectors were changed.
+
+`docs/research/experiment-plans/cross-term-demos-draft-20260917-v1/README.md`
+starts the next stage with G2/G4/J2/J4/B2/B4, sixteen new AI demos, eight balanced
+有→无 packs and thirty candidate D-only conditions (L absent). Forty-eight D→query
+edges include 12 direct, 12 partial and 24 none rule proposals; twelve candidate
+L→demo edges are separate and not presented. Source quality of the exact frozen
+definitions is reused, but all new demo human fields and new relation adoption
+remain empty. Sixty schema/span checks and thirty visible-preview reconstructions
+pass. Fifty-four comparisons are proposals, not registered tests. A/B bundles
+also change positive-example severity (1/2), stance and construction; shared
+有病吧 and reused X packs remain explicit confounds. Do not call this a clean
+causal applicability design or infer relationships from answer agreement. No
+model forward or GPU task was started. Review this draft before further freezing.
+
+## Cross-term natural-expression revision prepared (2026-09-17)
+
+`docs/research/experiment-plans/cross-term-materials-draft-20260917-v2/README.md`
+is the latest review draft. At the user's request for natural whole utterances,
+all 12 queries now use conversational scenes, with new `-v2` material/relation
+IDs and explicit links to v1. Six existing reviewed cases provide exact wording
+references with source hashes and separate historical grade provenance. These
+rewrites remain synthetic AI drafts, not original corpus cases or human adoption.
+
+G4/J4/B4 use littering, dog-breed disagreement and a blocked bus door, with
+没脑子/眼瞎/有病吧 respectively. B4's AI grade proposal changes from 2 to 1;
+its proposed binary label stays 有. J1 and B4 severity boundaries still need
+review. Added context and wording are not across-query minimal pairs, and the
+same shared construction dependency remains. No new independent family exists.
+
+All 12 revised relations pass the frozen schema, exact span and text-hash checks;
+the 36 proposed conditions and 36 comparisons point to the revised queries.
+All human fields and original Gold remain null. Lexicon/control texts, v1 draft,
+frozen protocol, online review and experiment selectors are unchanged. No model
+forward, prompt-frame freeze or execution was performed. Preserve both drafts.
+
+## First cross-term material draft prepared (2026-09-17)
+
+`docs/research/experiment-plans/cross-term-materials-draft-20260917-v1/README.md`
+contains the user-requested first draft: 垃圾, 京巴 and 公交车; 12 new synthetic
+queries, 3 new single-sense definition wordings, 3 form-control proposals and
+36 proposed conditions with demos absent. All labels, grades, definitions and
+12 schema-valid lexicon-to-query relations are AI drafts. Every new human field
+and original Gold remains null; there has been no material adoption or GPU run.
+
+These terms were exposed in historical review and share construction templates;
+they are development/calibration material, not independent confirmation families.
+京巴's old definition mixed dog and insult senses; the new wording selects the
+regional insult sense and needs its own review. N controls describe spelling;
+they are not meaning-free or length-matched, and no full prompt frame is frozen.
+The draft manifest binds the completed protocol and historical preference/source
+snapshots. Old source adoption states are not copied onto new wordings. Preserve
+the frozen protocol, previous drafts and all real human records when revising.
+
+## New task, applicability and primary-scoring protocol frozen (2026-09-16)
+
+The user explicitly authorized freezing the scoring specification and the
+previously proposed applicability fields, and closing this protocol stage.
+`docs/research/experiment-plans/task-applicability-scoring-v1/current.json`
+selects `frozen-01`, manifest SHA256
+`d8b8f3a53f0b0be5d3e8726e2b53b93f5a4c16e88e59c4a5d826235c34750fa4`.
+This is a COMPLETED normative protocol freeze, not a scientific material or
+execution freeze. Preserve the new frozen files and all historical sources.
+
+The model task is byte-identical to the approved v2 prompt: full severity 0–4
+anchors, 0→无 and 1–4→有, with one bare character as the final answer. The
+relation schema separates source quality, lexicon-to-query/demo sense fit,
+demo semantic/reference and rule fit, literal overlap, task relevance and
+review/exposure provenance. Partial, unclear, unreviewed and structurally
+inapplicable values remain distinct. No material-level human decisions arose.
+
+Primary m is next-token z无−z有, IDs 42192/18830, using one shared prompt-only
+forward; no quotes, EOS, length normalization or NCC. Exact ties, numerical
+unresolved and unqualified scores are separate. Run-specific error bounds
+require a pre-science qualification receipt; no old Q01 acceptance is inherited.
+The CPU receipt verifies 10 artifacts, 13 prior sources, 5 tokenizer files,
+6 relation fixtures, 6 invalid-record rejections, 8 prompts/16 answer boundaries
+and synthetic arithmetic/bound propagation. No weights or GPU forward were used.
+Fixtures are not scientific materials. Next is material construction/review,
+then a separate input/execution freeze. Earlier discussion/review drafts keep
+their historical pending status; use this new entry for current protocol state.
+All old experiment selectors and online human fields remain unchanged.
+
 ## Q01 six-module run and result verification complete (2026-09-16)
 
 NEW `q01-module-refinement-results-v1/current.json` selects frozen-01/run-01/

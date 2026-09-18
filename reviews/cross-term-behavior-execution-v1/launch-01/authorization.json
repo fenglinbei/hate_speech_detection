@@ -1,0 +1,18 @@
+{
+  "recorded_at_utc": "2026-09-17T16:02:21.871354+00:00",
+  "GPU_launch_authorization": "可以启动GPU运行了，现有进程先帮我安全停掉",
+  "specific_stop_authorization": "是，授权停止这组 lj 训练",
+  "selected_GPU": 0,
+  "fixed_deadline": null,
+  "preparation_manifest": {
+    "path": "reviews/cross-term-behavior-execution-v1/prepared-01/manifest.json",
+    "bytes": 50756,
+    "sha256": "9acc64f352086603b56a42aac4dd39d370d84f7acb27819774235967265075dd"
+  },
+  "stop_implementation": {
+    "path": "reviews/cross-term-behavior-execution-v1/launch-01/stop_authorized_training.py",
+    "bytes": 6714,
+    "sha256": "4c6aa8303ffa3513e18e52b78b72bcd0e210d4748ef0c3609dcb7bf720a8613f"
+  },
+  "scope": "Stop only the identified lj G-LLaVA training after checkpoint checks; execute the frozen single-GPU 300-forward behavior experiment, release the worker, and complete CPU verification/analysis. Do not restart historical runs or resume lj training automatically."
+}
