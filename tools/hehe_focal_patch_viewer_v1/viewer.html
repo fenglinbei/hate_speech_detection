@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>查询位置表示替换 · 第二阶段</title>
+<style>
+body{margin:0;background:#f3f6f9;color:#15364c;font:15px/1.65 system-ui,sans-serif}main{max-width:1260px;margin:auto;padding:24px}h1{font-size:25px;margin:0 0 8px}h2{font-size:19px}a{color:#007582}section{background:white;border:1px solid #d5e0e8;border-radius:10px;padding:20px;margin:16px 0}.controls{display:flex;gap:16px;flex-wrap:wrap}label{display:grid;font-size:13px;gap:5px}select,button{font:inherit;color:#15364c;border:1px solid #b5cbd7;border-radius:5px;padding:7px;background:white}button{cursor:pointer}#status{background:#e6f1f2;padding:10px;border-radius:5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 monospace;max-height:480px;overflow:auto}svg{width:100%;height:auto;min-width:320px}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px}th,td{padding:7px 10px;border-bottom:1px solid #e1e8ed;text-align:right}th:first-child,td:first-child{text-align:left}.na{color:#738894}#notes{font-size:13px;color:#476474}.swatch{display:inline-block;width:15px;height:3px;vertical-align:middle;margin:0 5px 0 18px}.intro{color:#527184;margin:4px 0 18px}#summary{margin:10px 0}details{margin:10px 0}#legend{font-size:13px}#bounds{font-size:12px;color:#527184}@media(max-width:600px){main{padding:12px}section{padding:12px}h1{font-size:21px}}
+</style><main>
+<h1>查询位置表示替换</h1><p class="intro">第二阶段 · 四个既有输入 · 全36层双向干预</p>
+<p><a href="/">注意力实验首页</a> · <a href="REPORT.html" id="reportlink">实验报告</a> · <a href="results.json" download>完整JSON</a> · <a href="all-interventions.tsv" download>全部干预TSV</a></p>
+<div id="status"></div>
+<section><div class="controls">
+<label>查询<select id="query"><option value="Q01">Q01 · #3169 普通聊天</option><option value="Q02">Q02 · #3660 攻击</option></select></label>
+<label>替换方向<select id="recipient"><option value="D01">D02 普通义 → D01 原释义</option><option value="D02">D01 原释义 → D02 普通义</option></select></label>
+<label>纵轴<select id="metric"><option value="delta_m">原始 Δm</option><option value="m">替换后 m</option><option value="donor_gap_fraction">donor-gap 比例</option><option value="reference_aligned_delta">参考方向 Δm</option><option value="donor_state_l2">供体与接收方状态 L2</option></select></label>
+</div><p id="summary"></p><div id="legend"><span class="swatch" style="background:#007c85"></span>嘿嘿位置<span class="swatch" style="background:#ba6836"></span>前置位置</div>
+<div class="scroll" id="plot"></div><p id="bounds"></p><button id="export">导出当前 SVG</button></section>
+<section><h2>焦点效应减去前置效应</h2><p class="intro">同层的两种替换后 m 直接相减；共享的接收方基线抵消。</p><div class="scroll" id="contrast"></div></section>
+<section><h2>逐层端点</h2><div class="scroll"><table id="values"><thead><tr><th>层</th><th>位置</th><th>m</th><th>Δm</th><th>比例</th><th>输出</th><th>翻转</th><th>转变</th></tr></thead><tbody></tbody></table></div></section>
+<section><h2>位置与完整接收方输入</h2><div id="geometry"></div><details><summary>展开完整 prompt</summary><pre id="prompt"></pre></details></section>
+<section><h2>读数解释</h2><ul id="notes"></ul></section>
+</main><script id="data" type="application/json">__DATA_JSON__</script>
+<script>
+'use strict';
+const DATA=JSON.parse(document.getElementById('data').textContent),$=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg',number=x=>x==null?'NA':Number(x).toFixed(6),colors={focal:'#007c85',pre:'#ba6836',contrast:'#765a9f'};
+function node(name,attrs={},text=''){const e=document.createElementNS(NS,name);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text)e.textContent=text;return e}
+function chart(host,series,metric,title){
+  host.replaceChildren();const svg=node('svg',{viewBox:'0 0 1120 390',role:'img','aria-label':title});
+  svg.append(node('rect',{width:1120,height:390,fill:'white'}));svg.append(node('text',{x:68,y:22,fill:'#15364c','font-size':15},title));
+  const vals=series.flatMap(s=>s.rows.map(r=>r[metric])).filter(v=>v!=null&&Number.isFinite(v));
+  let lo=Math.min(0,...vals),hi=Math.max(0,...vals);if(lo===hi){lo-=1;hi+=1}const gap=(hi-lo)*.08;lo-=gap;hi+=gap;
+  const X=l=>68+l/(DATA.layers-1)*1020,Y=v=>335-(v-lo)/(hi-lo)*285;
+  for(let i=0;i<=5;i++){const v=lo+(hi-lo)*i/5,y=Y(v);svg.append(node('line',{x1:68,y1:y,x2:1088,y2:y,stroke:'#e4ebef'}));svg.append(node('text',{x:60,y:y+4,'text-anchor':'end',fill:'#527184','font-size':11},v.toFixed(3)))}
+  svg.append(node('line',{x1:68,y1:Y(0),x2:1088,y2:Y(0),stroke:'#7a929f','stroke-dasharray':'4 3'}));
+  for(const l of [...new Set([0,5,10,15,20,25,30,DATA.layers-1])].filter(l=>l<DATA.layers))svg.append(node('text',{x:X(l),y:358,'text-anchor':'middle',fill:'#527184','font-size':12},String(l)));
+  svg.append(node('text',{x:570,y:380,'text-anchor':'middle',fill:'#527184','font-size':12},'替换的 decoder 块（从0开始）'));
+  for(const s of series){let path='',open=false;for(const r of s.rows){const v=r[metric];if(v==null){open=false;continue}path+=(open?' L':' M')+X(r.layer)+' '+Y(v);open=true}svg.append(node('path',{d:path,stroke:colors[s.group],fill:'none','stroke-width':2}));for(const r of s.rows){const v=r[metric];if(v==null)continue;const dot=node('circle',{cx:X(r.layer),cy:Y(v),r:3.1,fill:colors[s.group],'data-layer':r.layer,'data-group':s.group,'data-value':v,'data-job':r.job_id||''});dot.append(node('title',{},'层 '+r.layer+' · '+s.label+' · '+number(v)));svg.append(dot)}}
+  if(!vals.length)svg.append(node('text',{x:550,y:195,'text-anchor':'middle',fill:'#738894'},'NA · 无测量值或比例分母未分辨'));
+  host.append(svg);
+}
+function draw(writeHash=true){
+  const q=$('query').value,d=$('recipient').value,req=DATA.requests.find(r=>r.query_id===q&&r.dictionary_id===d),metric=$('metric').value;
+  const all=DATA.effects.filter(e=>e.recipient===req.request_id),base=DATA.baselines.find(s=>s.request_id===req.request_id),donor=DATA.baselines.find(s=>s.query_id===q&&s.dictionary_id!==d);
+  $('summary').textContent=base?'接收方 '+base.raw_prediction+'，m='+number(base.m)+'；供体 '+donor.raw_prediction+'，m='+number(donor.m)+'；参考 '+base.reference:'真实材料已固定；尚无GPU测量。';
+  const geom=req.patch_position_sets;$('geometry').textContent=Object.entries(geom).map(([g,ps])=>(g==='focal'?'嘿嘿位置':'前置位置')+'：'+ps.map(p=>p+'「'+req.token_text[p]+'」').join('、')).join('；');$('prompt').textContent=req.prompt_text;
+  chart($('plot'),['focal','pre'].map(g=>({group:g,label:g==='focal'?'嘿嘿位置':'前置位置',rows:all.filter(e=>e.group===g)})),metric,$('metric').selectedOptions[0].textContent);
+  const pairs=DATA.position_differences.filter(e=>e.recipient===req.request_id);chart($('contrast'),[{group:'contrast',label:'焦点减前置',rows:pairs}],'delta_m','m(焦点替换) − m(前置替换)');
+  $('bounds').textContent=DATA.margin_error_bound==null?'未测量的格子显示NA，不当作零。':'单端点工程界 ±'+DATA.margin_error_bound+'；Δm与焦点减前置的界 ±'+(2*DATA.margin_error_bound)+'。完整比例范围见JSON；不是置信区间。';
+  const tbody=$('values').tBodies[0];tbody.replaceChildren();
+  for(let layer=0;layer<DATA.layers;layer++)for(const g of ['focal','pre']){const e=all.find(x=>x.layer===layer&&x.group===g),tr=document.createElement('tr');tr.dataset.layer=layer;tr.dataset.group=g;
+    const values=[layer,g==='focal'?'嘿嘿':'前置',e?number(e.m):'NA',e?number(e.delta_m):'NA',e?number(e.donor_gap_fraction):'NA',e?e.prediction:'NA',e?(e.flip===null?'NA':e.flip?'是':'否'):'NA',e?e.transition:'NA'];
+    values.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(v==='NA')td.className='na';if(e&&i>=2&&i<=4)td.dataset.value=e[['m','delta_m','donor_gap_fraction'][i-2]]??'';tr.append(td)});tbody.append(tr)}
+  if(writeHash)history.replaceState(null,'','#query='+q+'&recipient='+d+'&metric='+metric);
+  window.HFP.current={request_id:req.request_id,metric,rows:all.length};
+}
+window.HFP={DATA,draw,current:null};$('status').textContent=DATA.status;
+for(const note of DATA.notes){const li=document.createElement('li');li.textContent=note;$('notes').append(li)}
+function loadHash(){const p=new URLSearchParams(location.hash.slice(1));for(const id of ['query','recipient','metric'])if([...$(id).options].some(o=>o.value===p.get(id)))$(id).value=p.get(id);draw(false)}
+for(const id of ['query','recipient','metric'])$(id).addEventListener('change',()=>draw());addEventListener('hashchange',loadHash);
+$('export').addEventListener('click',()=>{const blob=new Blob([new XMLSerializer().serializeToString($('plot').firstChild)],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=HFP.current.request_id+'-'+HFP.current.metric+'.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+loadHash();
+</script></html>

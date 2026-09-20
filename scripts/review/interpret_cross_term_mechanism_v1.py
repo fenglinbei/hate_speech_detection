@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Readable CPU-only interpretation; immutable results are linked, never edited."""
+import json
+import hashlib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+WORK = ROOT / 'reviews/cross-term-mechanism-v1'
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def info(path):
+    raw = path.read_bytes()
+    return {'path': str(path), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def main():
+    audit = read(WORK / 'result-audit-02.json')
+    assert audit['status'] == 'pass'
+    data = read(WORK / 'results-01/results.json')
+    refs = {r['query_id']: r['reference'] for r in data['baselines']}
+    native = {r['request_id']: r for r in data['baselines']}
+    effects = {e['job_id']: e for e in data['effects']}
+    bound = data['margin_error_bound']
+    upstream = [e for e in data['effects'] if e['condition'] == 'upstream']
+    configurations = {}
+    for recipient in ['D01', 'D02']:
+        for condition in ['upstream', 'preceding', 'restore-L26-attention', 'restore-L28-mlp', 'restore-joint']:
+            rows = [e for e in data['effects'] if e['recipient'].endswith(recipient) and e['condition'] == condition]
+            assert len(rows) == 12
+            configurations[recipient + '/' + condition] = {
+                'correct': sum(e['prediction'] == refs[e['query_id']] for e in rows),
+                'repaired_cases': [e['query_id'] for e in rows if e['transition'] == 'repair'],
+                'damaged_cases': [e['query_id'] for e in rows if e['transition'] == 'damage'],
+                'correct_by_family': {family: sum(e['prediction'] == refs[e['query_id']] for e in rows if e['query_id'].startswith(family)) for family in 'JGB'},
+            }
+    magnitude_gaps = [abs(e['delta_m']) - abs(effects[e['job_id'].replace('upstream', 'preceding')]['delta_m']) for e in upstream]
+    restorations = data['restoration_contrasts']
+    metrics = {
+        'native_correct': {d: sum(r['raw_reference_correct'] for r in native.values() if r['dictionary_id'] == d) for d in ['D00', 'D01', 'D02']},
+        'uniform_configurations': configurations,
+        'focal_exceeds_paired_preceding': sum(x > 0 for x in magnitude_gaps),
+        'focal_exceeds_paired_preceding_beyond_four_margin_bounds': sum(x > 4 * bound for x in magnitude_gaps),
+        'minimum_absolute_effect_gap': min(magnitude_gaps),
+        'maximum_absolute_preceding_effect': max(abs(e['delta_m']) for e in data['effects'] if e['condition'] == 'preceding'),
+        'upstream_toward_donor': sum(e['delta_m'] * e['donor_gap'] > 0 for e in upstream),
+        'upstream_away_from_donor_cases': [e['job_id'] for e in upstream if e['delta_m'] * e['donor_gap'] < 0],
+        'restoration_reduced': sum(r['absolute_effect_reduced'] for r in restorations),
+        'restoration_increased': sum(r['absolute_effect_increased'] for r in restorations),
+        'restoration_unresolved': sum(not r['absolute_effect_reduced'] and not r['absolute_effect_increased'] for r in restorations),
+        'joint_reduced_vs_both_singles': sum(r['absolute_reduced_vs_A'] and r['absolute_reduced_vs_B'] for r in data['joint_contrasts']),
+        'distinct_repaired_queries_all_endpoints': sorted({e['query_id'] for e in data['effects'] if e['transition'] == 'repair'}),
+        'margin_error_bound': bound,
+        'scope': 'Descriptive counts on related development cases; not independent accuracy estimation or statistical confidence',
+    }
+    assert metrics['native_correct'] == {'D00': 8, 'D01': 8, 'D02': 8}
+    assert metrics['focal_exceeds_paired_preceding_beyond_four_margin_bounds'] == 24
+    assert metrics['distinct_repaired_queries_all_endpoints'] == ['J01']
+    assert configurations['D01/upstream']['correct'] == 9 and not configurations['D01/upstream']['damaged_cases']
+    assert [metrics['restoration_reduced'], metrics['restoration_increased'], metrics['restoration_unresolved']] == [56, 12, 4]
+    out = WORK / 'interpretation-01'
+    assert not out.exists(), 'Do not overwrite an interpretation'
+    out.mkdir()
+    (out / 'analysis-summary.json').write_text(json.dumps(metrics, ensure_ascii=False, indent=2))
+    j01 = native['ctm-J01-D01']; j03 = native['ctm-J03-D01']
+    selected = effects['J01-D01-upstream']; selected_j03 = effects['J03-D01-upstream']
+    text = f'''本轮已在“京巴”的普通犬种句中复现：加入贬损义会导致误判，把第17层目标词的内部状态换成普通义条件下的状态，可以修复输出。不过，“垃圾”和“公交车”没有出现同样的标签修复；固定的后续分支效应也没有在所有语境中复现。
+
+这轮比较京巴、垃圾、公交车各4条查询，共12条。每组分别为普通用法、直接攻击、反对辱称，以及普通用法但全文另有攻击，参考答案依次为无／有／无／有。每条查询配无词典D00、已审核贬损义D01、普通义D02三个条件，只提供当前词条，不提供示例。G03沿用本轮审核的“作者反对概括贬损、参考无”，未改原文或沿用其历史hate标签。
+
+最有辨识力的是京巴组的两条对照：
+
+| 查询及含义 | 参考 | 无词典 | 贬损义 | 普通义 | 贬损义＋第17层普通义状态替换 |
+|---|---|---|---|---|---|
+| J01：我家那只京巴一听见开饭，跑得比谁都快。 | 无 | 无 | 有，误判 | 无 | 无，修复 |
+| J03：北京人怎么了？别动不动就拿京巴骂人。 | 无 | 有，误判 | 无 | 有，误判 | 无，保留正确 |
+
+因此，普通义不是对所有语境都更好的词典。它帮助模型理解普通犬种，却没有帮助模型处理反对辱称的立场。贬损义在这两条查询上的作用方向恰好相反。三个原生条件都答对8/12，但答对的具体案例不同，不能只看总数。
+
+表中最后一列使用同一配置：保留贬损义prompt，把普通义条件下第17层查询目标词的完整向量放进来，再继续推理。这叫激活替换，检验这些内部状态是否足以改变输出；层号均从0开始。该配置在京巴组得到4/4正确，全12条由8/12变为9/12，新增修复只有J01，没有新增错误。所有120个端点中出现的3个“修复”也是J01在三种相关配置下的结果，不是3条独立复现。J03替换后距离判定边界很近，仍不能据此承诺换一种表达也稳定正确。
+
+分数m是“无”的logit减去“有”的logit，正数偏无、负数偏有，并非概率。J01由{j01['m']:+.3f}变为{selected['m']:+.3f}，明显跨过0；J03由{j03['m']:+.3f}变为{selected_j03['m']:+.3f}，尚未跨过0。工程误差界约{bound:.6f}，能分辨本次变化；这不是统计置信区间，也不代表语言改写下的稳健性。
+
+“垃圾”和“公交车”补充了另一类情况。G03（反对概括贬损）、B01（用公交车速度作比较）及B03（反对辱称）在无词典时就已误判，换两种释义及本轮固定干预也没有修好。因此，这些错误不能全部归因于本轮加入的贬损义。垃圾的普通用法G01始终正确；三组直接攻击与“全文另有攻击”的6条查询也始终正确。完整原文、来源和每个条件见[完整结果报告](../results-01/REPORT.md)。
+
+从机制上看，目标词位置确实值得关注：24个释义方向中，目标词替换对最终分数的影响绝对值都超过紧邻前置位置的替换，而且差异超过本轮工程误差界。但其中只有19个方向朝供体的最终分数移动，另5个反向。较大的位置效应不等于复制供体结论，也不等于修复。前置对照只匹配token数量，没有匹配词性或向量范数，不能据此把差异全归于词义内容。
+
+J03尤其说明了“词典有效”和“这个固定位置足以转移作用”的区别：两种释义的原生分数相差约18.05，而第17层目标词替换只改变约0.50或0.28，均未翻转输出。这表明所测的单处替换没有转移大部分输出差距；尚不能据此确定剩余差距由哪个位置、哪一层承担。
+
+为检查后续处理，本轮还在上述替换之后，把答案前第26层注意力分支、第28层MLP分支单独或共同恢复为接收方原生向量。注意力分支指输出投影之后的整个向量，不是热图中的注意力权重；MLP是逐位置的前馈变换。若恢复能削弱替换效应，说明这一分支在当前干预背景下参与了变化。
+
+J01上，单独恢复两处分别移除约34.7%和22.1%的上游效应；联合恢复移除49.7%，分数回到−0.093，再次误判。这支持原先关注的两处分支也参与这条京巴案例的变化，但仍有约一半分数效应残留，不能当作完整或唯一通路。更广泛地，72个恢复对比中，56个削弱上游效应、12个增强、4个在工程界内无法分清；联合恢复只有14/24比两个单独恢复都更强。此前“嘿嘿”中较整齐的模式，在本轮呈现了明确的例外。
+
+[京巴条件差距图](../results-01/figures-J/condition-gaps.png)、[干预最终效应图](../results-01/figures-J/endpoint-effects.png)和[全部轨迹](../results-01/figures-J/remaining-trajectories.png)保留36层，并展示注意力、MLP及RMS归一化的影响。答案方向投影使用最终输出头读取中间状态，观察其偏向，不表示该层已完成判断。图中各面板纵轴独立，不能凭视觉高度跨案例比较；效应图的纵轴是相对原生分数的变化，柱子为正也不保证最终分数已越过0。
+
+当前更合适的结论是：固定目标词状态与后续分支的干预证据已经扩展到“嘿嘿”之外，但它的方向、强度和纠错能力依赖语境。第17层普通义状态替换值得作为后续固定候选保留；这12条材料中仍有3条未修复，既有“嘿嘿”迁移中的T01也未被同类替换修复，因此还不是通用修复。若继续，优先回答一个较小的问题：京巴J01与J03的差异能否在保持同一规则的新同类语境中复现。先检验这一边界，再决定是否探索其他位置或层。
+
+本轮包含5条此前审核的AI构造和7条真实语料，具有已知开发暴露；12条查询与双向条件不是独立大样本。贬损义、普通义长度不同，供体和接收方按相同查询token映射但绝对位置不同，仍有前缀长度和位置混杂。已保留所有案例、反向结果、未翻转及增强效应，未重新搜索层或注意力头。
+
+运行与复核已完成：单张L20共1476次前向，首次阶段开始到最后GPU释放约22.5分钟；192项自身控制与156个“单token有／无后结束”端点通过。全部进程已退出。独立审计复核1476个完整词表向量、1128份轨迹、293760个汇总数值及960处分支证明。原审计在8处结束符续算的比较对象上停止，CPU恢复改用同一因果前缀下已保存的右填充对照，仍逐字节重建向量；原失败、7项回归检查及处理依据均保留。没有修改原始数据、运行门槛或进行GPU重跑；详见[审计恢复说明](../recovery-01/README.md)和[独立审计](../result-audit-02.json)。本轮未部署网站。
+
+[完整表格与全部图](../results-01/REPORT.md) · [本页统计依据](analysis-summary.json) · [完整36份prompt](../prepared-01/ALL-PROMPTS.md) · [执行记录](../run-01/state.json)
+'''
+    (out / 'REPORT.md').write_text(text)
+    paths = [WORK / 'results-01/manifest.json', WORK / 'results-01/results.json', WORK / 'result-audit-02.json',
+             WORK / 'process-release-check.json', WORK / 'run-01/state.json', Path(__file__)]
+    (out / 'manifest.json').write_text(json.dumps({'artifacts': [info(p) for p in sorted(out.iterdir()) if p.is_file()],
+                                                  'sources': [info(p) for p in paths]}, ensure_ascii=False, indent=2))
+    print(json.dumps({'status': 'pass', 'report': str(out / 'REPORT.md'), 'statistics': metrics}, ensure_ascii=False))
+
+
+if __name__ == '__main__':
+    main()

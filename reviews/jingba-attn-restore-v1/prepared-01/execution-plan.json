@@ -1,0 +1,114 @@
+{
+  "schema_version": "jingba-attn-restore-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "input_count": 18,
+  "cross_count": 36,
+  "self_count": 48,
+  "patch_layer": 17,
+  "layers": 36,
+  "position_mode": "focal_and_preceding",
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "donor_source": "fresh same-run native block outputs",
+  "capture": {
+    "position": "pre_answer",
+    "sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "all_layers": true,
+    "RMS_scale_retained": true,
+    "unchanged_before_or_at_patch_layer": true
+  },
+  "restoration_sites": [
+    [
+      26,
+      "attention"
+    ]
+  ],
+  "restoration_source": "fresh recipient-native after-o_proj output at original pre-answer position",
+  "joint_boundary_reference": null,
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "all 18 native and 36 cross endpoints",
+    "failure_policy": "terminal; no automatic retry"
+  },
+  "budget": {
+    "native_engineering": 108,
+    "true_prefixes": 18,
+    "self_controls": 48,
+    "cross_engineering": 216,
+    "production_native_replay": 18,
+    "production_cross_replay": 36,
+    "usual_format_continuations": 54,
+    "usual_total": 498,
+    "maximum_total": 822
+  },
+  "GPU_time_constraint": {
+    "confirmed": false,
+    "deadline_unix": null,
+    "reason": "User authorized execution; bind a separate decision to the sealed manifest before inventory"
+  },
+  "GPU_execution_authorized": false,
+  "all_cases_and_directions_retained": true,
+  "independent_confirmation": false,
+  "new_case_extension": false,
+  "no_new_layer_or_head_search": true,
+  "condition_scope": {
+    "native": [
+      "D00",
+      "D01",
+      "D02"
+    ],
+    "interventions": [
+      "D01->D02",
+      "D02->D01"
+    ]
+  },
+  "token_mapping": "Exact same query token IDs and relative offsets; separate donor and recipient absolute positions.",
+  "fixed_primary_rule": "Restore layer26 attention to fresh recipient-native after fixed layer17 focal cross patch; all six cases and both directions retained.",
+  "paired_context_check": "Compare J08-minus-J10 upstream effect with residual effect after restoration; raw difference and shared-score-correct bound, all36 layers.",
+  "primary_evaluation": "Absolute attenuation of upstream m effect for each case/direction; J05/J06 four directions evaluated together without selecting successes.",
+  "prior_comparators": {
+    "work": "/data/liaozijie/hate_speech_detection/reviews/jingba-context-v1",
+    "native_endpoints": 18,
+    "U_P_endpoints": 24,
+    "fresh_replay_required": true
+  },
+  "continuation_audit_policy": "Exact same-job unappended or already-qualified right-padded before-vector match, inherited prior v2; installed vector always exact native source; no tolerance relaxation.",
+  "interpretation": "Six newly authored related development texts of one term; unequal definition lengths and positional shifts retained, not a pure semantic variable or independent confirmation."
+}

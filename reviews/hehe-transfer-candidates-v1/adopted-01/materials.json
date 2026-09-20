@@ -1,0 +1,302 @@
+{
+  "queries": [
+    {
+      "query_id": "T01",
+      "source_id": "cold_train_2640",
+      "corpus": "cold",
+      "text": "山东人莫名自豪一把，嘿嘿",
+      "text_sha256": "39c96dadcd337b07bf6fa3f6ef6641d9cb86732f567e9c30196b112b00db2993",
+      "role": "ordinary_replication",
+      "source_file": "data/cold/std/train.json",
+      "record_index_zero_based": 374,
+      "source_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "山东人莫名自豪一把，嘿嘿",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "decision": "accept",
+      "selection_note_from_draft": "自述地域身份与自豪，嘿嘿是笑声；未见对人的贬损。来自COLD。",
+      "new_severity_adjudication": null,
+      "historical_exposure": {
+        "prior_material_hits_within_scanned_scope": [],
+        "historical_corpus_copies": [],
+        "human_seen_predictions_history": "unknown; not reconstructed"
+      }
+    },
+    {
+      "query_id": "T02",
+      "source_id": "cold_train_3562",
+      "corpus": "cold",
+      "text": "看到有人拿老实举例，我还是挺高兴的，因为我也想用老实举例来着，嘿嘿。",
+      "text_sha256": "c322e7a91258997e43d5486647a5f922e799b1c6c2b800316ce4fbf71b88b377",
+      "role": "ordinary_replication",
+      "source_file": "data/cold/std/train.json",
+      "record_index_zero_based": 2001,
+      "source_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "看到有人拿老实举例，我还是挺高兴的，因为我也想用老实举例来着，嘿嘿。",
+          "targeted_group": "non-hate",
+          "hateful": "non-hate"
+        }
+      ],
+      "decision": "accept",
+      "selection_note_from_draft": "对举例表达高兴，嘿嘿是笑声；未见对人的贬损。来自COLD。",
+      "new_severity_adjudication": null,
+      "historical_exposure": {
+        "prior_material_hits_within_scanned_scope": [],
+        "historical_corpus_copies": [],
+        "human_seen_predictions_history": "unknown; not reconstructed"
+      }
+    },
+    {
+      "query_id": "T03",
+      "source_id": 7050,
+      "corpus": "main",
+      "text": "你去帮你的嘿嘿打工吧",
+      "text_sha256": "26d39928e14a203c37dedf2e8b2e573917525aca7ecddbfd5cc854bbf5538551",
+      "role": "group_reference_candidate_with_inherited_label",
+      "source_file": "data/full/std/train.json",
+      "record_index_zero_based": 4933,
+      "source_quadruples": [
+        {
+          "target": "嘿嘿",
+          "argument": "帮你的嘿嘿打工",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "decision": "accept",
+      "selection_note_from_draft": "语法上较像人群指代，最接近旧Q02；但原文不明说对象或贬损性质，不能把数据标签当成缺失上文。",
+      "new_severity_adjudication": null,
+      "historical_exposure": {
+        "prior_material_hits_within_scanned_scope": [],
+        "historical_corpus_copies": [
+          {
+            "file": "data/v1/raw/test.json",
+            "id": 7050
+          }
+        ],
+        "human_seen_predictions_history": "unknown; not reconstructed"
+      }
+    },
+    {
+      "query_id": "T04",
+      "source_id": "cold_train_9078",
+      "corpus": "cold",
+      "text": "我并没有瞧不起少数民族，就是瞧不起某个把中国拖入痛苦深渊的种族，旗装，嘿嘿，最适合满人大姑娘抽烟袋的时候穿",
+      "text_sha256": "40da97362206ccdf9adc78c667251ae7813febd8395aa31a21a14daf82ffc8a2",
+      "role": "boundary_attack_outside_focal_laughter",
+      "source_file": "data/cold/std/train.json",
+      "record_index_zero_based": 2462,
+      "source_quadruples": [
+        {
+          "target": "NULL",
+          "argument": "我并没有瞧不起少数民族，就是瞧不起某个把中国拖入痛苦深渊的种族，旗装，嘿嘿，最适合满人大姑娘抽烟袋的时候穿",
+          "targeted_group": "Racism",
+          "hateful": "hate"
+        }
+      ],
+      "decision": "accept",
+      "selection_note_from_draft": "嘿嘿可作讥笑；瞧不起某个种族、把中国拖入痛苦深渊是独立的群体贬损。检验普通义是否错误覆盖全文攻击证据。",
+      "new_severity_adjudication": null,
+      "historical_exposure": {
+        "prior_material_hits_within_scanned_scope": [],
+        "historical_corpus_copies": [],
+        "human_seen_predictions_history": "unknown; not reconstructed"
+      }
+    }
+  ],
+  "dictionaries": [
+    {
+      "dictionary_id": "D01",
+      "name": "原释义",
+      "definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+      "component_order": [
+        "original"
+      ],
+      "provenance": "Exact previous original definition",
+      "new_human_decision": null
+    },
+    {
+      "dictionary_id": "D02",
+      "name": "普通义",
+      "definition": "'嘿嘿'是模拟笑声的中文写法，可用于轻松聊天、调侃或打趣等表达。",
+      "component_order": [
+        "ordinary"
+      ],
+      "provenance": "Exact accepted L05; AI authorship retained",
+      "inherited_adoption": {
+        "item_id": "L05",
+        "proposal_sha256": "a0b1fb3bb63189d520f5f5de97ebf53123f1911ed67a35703946d0806d2aa806",
+        "decision": "accept",
+        "review_kind": "explicit_bulk_acceptance",
+        "feedback": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/case-content-replacement-v1/feedback-01.json",
+          "bytes": 1290,
+          "sha256": "f7bf93d9ec3a0a97a144595c4b8d4ffcba1ead0a8813c4372015515eb774c298"
+        },
+        "AI_authorship_retained": true,
+        "new_individual_adjudication": false
+      },
+      "new_human_decision": null
+    }
+  ],
+  "base_lexicon": [
+    {
+      "category": "Sexism",
+      "definition": "[1] 在某些情况下被用来指代那些自私自利、双标、让人厌恶的女性。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0031",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism"
+          ],
+          "definition": "在某些情况下被用来指代那些自私自利、双标、让人厌恶的女性。",
+          "sense_id": "lex-0031:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        31
+      ],
+      "term": "仙女",
+      "variants": []
+    },
+    {
+      "category": "Sexism",
+      "definition": "[1] 在部分粗俗语境中可借与“妓”的近音贬损女性或指称性工作者；应描述说话者的用法，不能把对女性的道德指控当作事实。“嫁鸡随鸡”等普通表达不套用该义项。",
+      "freeze_selection_source": "user_batch_default_accept",
+      "lexicon_id": "lex-0104",
+      "match_policy": {
+        "exclude_any": [
+          {
+            "pattern": "嫁鸡随鸡",
+            "rule_id": "marriage-proverb",
+            "target": "context"
+          }
+        ],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism"
+          ],
+          "definition": "在部分粗俗语境中可借与“妓”的近音贬损女性或指称性工作者；应描述说话者的用法，不能把对女性的道德指控当作事实。“嫁鸡随鸡”等普通表达不套用该义项。",
+          "sense_id": "lex-0104:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        104
+      ],
+      "term": "鸡",
+      "variants": []
+    },
+    {
+      "category": "Racism",
+      "definition": "[1] '嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0419",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Racism"
+          ],
+          "definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+          "sense_id": "lex-0419:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        419
+      ],
+      "term": "嘿嘿",
+      "variants": []
+    },
+    {
+      "category": "others",
+      "definition": "[1] 'fw'发音为'废物'拼音缩写，比喻没有用或妨碍自己的人（指责人的话）。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0486",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "others"
+          ],
+          "definition": "'fw'发音为'废物'拼音缩写，比喻没有用或妨碍自己的人（指责人的话）。",
+          "sense_id": "lex-0486:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        486
+      ],
+      "term": "fw",
+      "variants": []
+    },
+    {
+      "category": "Sexism, others",
+      "definition": "[1] '剑人'是'贱人'的中文谐音，指卑贱的人，多用于辱骂妇女。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0493",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism",
+            "others"
+          ],
+          "definition": "'剑人'是'贱人'的中文谐音，指卑贱的人，多用于辱骂妇女。",
+          "sense_id": "lex-0493:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        493
+      ],
+      "term": "剑人",
+      "variants": []
+    },
+    {
+      "category": "others",
+      "definition": "[1] 在网络语境下，“tm”常作为“他妈”的谐音替代，用于表达愤怒或调侃，属于低俗用语。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0663",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "others"
+          ],
+          "definition": "在网络语境下，“tm”常作为“他妈”的谐音替代，用于表达愤怒或调侃，属于低俗用语。",
+          "sense_id": "lex-0663:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        663
+      ],
+      "term": "tm",
+      "variants": []
+    }
+  ],
+  "with_demos": false
+}

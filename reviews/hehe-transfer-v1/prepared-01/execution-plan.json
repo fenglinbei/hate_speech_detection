@@ -1,0 +1,96 @@
+{
+  "schema_version": "hehe-transfer-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "input_count": 8,
+  "cross_count": 40,
+  "self_count": 64,
+  "patch_layer": 17,
+  "layers": 36,
+  "position_mode": "focal_and_preceding",
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "donor_source": "fresh same-run native block outputs",
+  "capture": {
+    "position": "pre_answer",
+    "sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "all_layers": true,
+    "RMS_scale_retained": true,
+    "unchanged_before_or_at_patch_layer": true
+  },
+  "restoration_sites": [
+    [
+      26,
+      "attention"
+    ],
+    [
+      28,
+      "mlp"
+    ]
+  ],
+  "restoration_source": "fresh recipient-native branch at original pre-answer position",
+  "joint_boundary_reference": "U before layer26 attention; A-only before layer28 MLP",
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "all eight native and forty cross endpoints",
+    "failure_policy": "terminal; no automatic retry"
+  },
+  "budget": {
+    "native_engineering": 48,
+    "true_prefixes": 8,
+    "self_controls": 64,
+    "cross_engineering": 240,
+    "production_native_replay": 8,
+    "production_cross_replay": 40,
+    "usual_format_continuations": 48,
+    "usual_total": 456,
+    "maximum_total": 744
+  },
+  "GPU_time_constraint": {
+    "confirmed": true,
+    "deadline_unix": null,
+    "policy": "freshly idle single L20, run to completion, no new cutoff",
+    "authorization_basis": "Current explicit launch instruction and persistent permission to use the four GPUs as needed."
+  },
+  "all_cases_and_directions_retained": true,
+  "independent_confirmation": false,
+  "new_case_extension": true,
+  "no_new_layer_or_head_search": true,
+  "interpretation": "Fixed-layer transfer on four selected new texts; conditional restoration, not a unique natural semantic path."
+}

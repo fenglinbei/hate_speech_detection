@@ -1,0 +1,17 @@
+{
+  "status": "resolved_CPU_reader_precision_issue",
+  "new_GPU_forwards": 0,
+  "first_attempt": "The new independent reader initially used a 60-digit Decimal context inherited from the previous audit. Exact equality of a bound sum failed.",
+  "cause": "The unchanged binary64 1e-6 floor needs 72 decimal places for its exact expansion; summing at precision60 rounded by -1.5625E-67 relative to the saved exact doubled bound.",
+  "independent_confirmation": "Fraction(saved_comparison_bound)==2*Fraction(margin_error_bound) passed exactly.",
+  "resolution": "New unsealed reader uses Decimal precision120; all nine expression values, bounds, directions and transitions now compare exactly.",
+  "scientific_input_changed": false,
+  "scoring_or_capture_changed": false,
+  "qualification_gate_changed": false,
+  "result_bytes_changed": false,
+  "final_reader": {
+    "path": "/data/liaozijie/hate_speech_detection/scripts/review/audit_hehe_sense_context_results_v1.py",
+    "bytes": 12559,
+    "sha256": "985dad73e4429cc8048898ddce2eb3cd6cb14d7b2c9b4e2eecda00a0269bc513"
+  }
+}

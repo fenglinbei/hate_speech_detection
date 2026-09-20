@@ -15,3 +15,24 @@ scripts/review/prepare_glm_content_boundary_v1.py -text
 scripts/review/verify_cross_model_upstream_v1.py -text
 # The frozen preparer contains recorded trailing whitespace; preserve its hash.
 scripts/review/prepare_cross_term_behavior_discrimination_v1.py -whitespace
+
+# 2026-09-21 completed attention/intervention archive: preserve frozen bytes.
+docs/research/experiment-plans/case-*/** -text -whitespace
+docs/research/experiment-plans/hehe-*/** -text -whitespace
+docs/research/experiment-plans/jingba-*/** -text -whitespace
+reviews/case-*/** -text -whitespace
+reviews/hehe-*/** -text -whitespace
+reviews/jingba-*/** -text -whitespace
+src/diagnostics/case_*_v*.py -text -whitespace
+src/diagnostics/hehe_*_v*.py -text -whitespace
+src/diagnostics/jingba_*_v*.py -text -whitespace
+src/diagnostics/cross_term_mechanism*_v*.py -text -whitespace
+scripts/review/*case_attention*_v*.* -text -whitespace
+scripts/review/*case_content_replacement*_v*.* -text -whitespace
+scripts/review/*hehe*_v*.* -text -whitespace
+scripts/review/*jingba*_v*.* -text -whitespace
+scripts/review/*cross_term_mechanism*_v*.* -text -whitespace
+tools/case_attention_viewer_v1/** -text -whitespace
+tools/case_content_replacement_viewer_v1/** -text -whitespace
+tools/hehe_*_viewer_v1/** -text -whitespace
+deploy/case_attention/** -text -whitespace

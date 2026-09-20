@@ -1,0 +1,59 @@
+{
+  "schema_version": "hehe-focal-patching-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "position_mode": "pre",
+  "input_count": 4,
+  "primary_count": 144,
+  "cross_count": 288,
+  "self_count": 288,
+  "layers": 36,
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "donor_source": "fresh same-run native block outputs; never stage1 scores/states",
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "four baselines and every cross-patched endpoint",
+    "failure_policy": "terminal failure; retain all records, no filtering"
+  },
+  "budget": {
+    "native_engineering": 24,
+    "true_prefixes": 4,
+    "self_controls": 288,
+    "cross_engineering": 1440,
+    "production_native_replay": 4,
+    "production_cross_replay": 288,
+    "usual_format_continuations": 292,
+    "usual_total": 2340,
+    "maximum_total": 4092
+  },
+  "all_layers_and_directions_retained": true,
+  "independent_confirmation": false,
+  "GPU_qualified": false,
+  "GPU_time_constraint": {
+    "confirmed": true,
+    "deadline_unix": null,
+    "deadline_basis": "The question asked whether to retain idle-single-card/run-to-completion or provide a new deadline; user authorized available hardware and supplied no new deadline. No explicit new time cutoff is invented.",
+    "allocation_policy": "one freshly verified idle card; other cards remain available"
+  }
+}

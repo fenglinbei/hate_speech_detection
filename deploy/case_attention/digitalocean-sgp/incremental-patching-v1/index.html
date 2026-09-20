@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>案例注意力 · 实验对照</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head>
+<body>
+<header><div><p class="eyebrow">实验观察台 · Qwen3-8B</p><h1>案例注意力与内容对照</h1><p>保留原始材料，在不同条件下查看模型的注意力分布。</p></div><span class="badge">36 层 · 32 头 · 有 / 无</span></header>
+<p class="patchingEntry" style="margin:0;padding:12px 24px;background:#e6f1f2"><a id="patching" href="reports/patching/">新结果：查询“嘿嘿”表示替换 · 全36层与前置位置对照 →</a></p>
+<div class="controls">
+ <div class="primary">
+  <label>实验轮次<select id="round" disabled></select></label>
+  <label>查询<select id="query"></select></label>
+  <label>干预类型<select id="group"></select></label>
+  <label class="wide">当前条件<select id="condition"></select></label>
+ </div>
+ <div class="secondary">
+  <div class="tabs" role="group" aria-label="注意力视图"><button id="tabLayers" class="active" aria-pressed="true">逐层热图</button><button id="tabMean" aria-pressed="false">36 层平均</button></div>
+  <label>读取位置<select id="role"></select></label>
+  <label>读数<select id="metric"><option value="mass">片段注意力总质量</option><option value="density">每可见 token 平均</option></select></label>
+  <label>注意力头<select id="head"></select></label>
+  <label id="layerLabel">原文着色层<select id="layer"></select></label>
+ </div>
+ <details id="comparisonOptions"><summary>片段范围与条件对比 <span id="compareBadge"></span></summary><div class="secondary">
+  <label>片段层级<select id="parts"><option value="whole">完整示例 / 词条</option><option value="parts">正文 / 答案 / 释义</option></select></label>
+  <label>显示范围<select id="scope"><option value="references">示例和词典</option><option value="all">全部上下文</option></select></label>
+  <label class="wide">对比条件<select id="compare"></select></label><button id="baseline">与本轮同条件基线比较</button>
+  <label>对比位置<select id="compareRole"></select></label>
+  <label>对齐方式<select id="alignment"><option value="material">按材料 ID</option><option value="slot">按示例槽位</option></select></label>
+  <label>色标上限<select id="ceiling"><option>1</option><option>0.3</option><option selected>0.1</option><option>0.03</option><option>0.01</option></select></label>
+  <label>平均图排序<select id="sort"><option value="prompt">原文顺序</option><option value="attention">注意力大小</option></select></label>
+ </div></details>
+ <div class="loadline"><span id="message" role="status" aria-live="polite">正在读取实验目录…</span><button id="retry" hidden>重试加载</button></div>
+</div>
+<div class="workspace">
+ <aside>
+  <section class="panel"><h2>当前输入</h2><p id="conditionTitle"></p><div id="score" class="score"></div><p id="delta"></p><p id="geometry" class="muted"></p><p id="scopeNote" class="muted"></p><p><button id="resetCompare">清除对比</button></p><a id="report" href="reports/">本轮完整报告与数据</a><p><a id="mechanism" href="#" hidden>本轮机制读数与层间表示</a></p></section>
+  <section class="panel"><h2>如何理解</h2><p id="meanNote">每行是一层，列是原文中的参考片段。</p><p>注意力大小没有“有 / 无”的方向，也不等于对答案的因果贡献。</p><p>灰色或空白表示材料不可见、未提供或尚未加载，不代表测得零注意力。</p><p>质量使用整个可见上下文的分母，不会按筛选后的片段重新归一化。密度不可相加。</p><p id="scienceScope">条件共享端点，不能当成独立确认。</p><div id="roundNotes"></div><details><summary>平均与误差口径</summary><p>36 层平均为等权算术平均。选择“全部头平均”时，再平均 32 个头。查询整体位置沿用原实验的位置平均定义。</p><p>片段汇总与层平均计算使用原始 FP64 数据。逐层 token 着色沿用 FP32 展示副本，平均 token 着色使用 FP64。数值界限是工程复现包络，不是统计置信区间。</p><p>换序比较会改变位置、距离和上下文；按材料和按槽位的对齐回答不同问题。</p></details></section>
+ </aside>
+ <main>
+  <section class="panel"><div class="sectionTop"><div><h2 id="chartTitle">层 × 参考片段</h2><p id="readout" class="caption"></p></div><button id="export">导出 SVG</button></div><p id="scale" class="caption"></p><div id="chart" class="chart"></div><p id="chartNote" class="caption"></p></section>
+  <div class="two"><section class="panel"><h2 id="headtitle">片段的注意力头分布</h2><div id="headchart" class="chart small"></div></section><section class="panel"><h2>完整输入材料</h2><div id="materials" class="fulltext"></div></section></div>
+  <section class="panel"><div class="sectionTop"><h2 id="promptTitle">完整 prompt · token 着色</h2><button id="copyPrompt">复制完整原文</button></div><p class="caption">着色始终显示当前条件的原始权重；条件差值只用于片段视图。多个 token 覆盖同一字符时取均值。</p><div id="prompt" class="fulltext prompt"></div></section>
+ </main>
+</div>
+</body></html>

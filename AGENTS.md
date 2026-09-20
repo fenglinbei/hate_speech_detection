@@ -1,5 +1,1689 @@
 # Human Review Workbenches
 
+## Jingba layer26 attention restoration COMPLETE (2026-09-21)
+
+NEW jingba-attn-restore-v1/results-current.json selects prepared-01/run-01/results-01.
+Closeout e2f69271c919ab45fa064832bcebbcc35d788c3c0be754abc49f9c58832cff53;
+results manifest ca3d4ca90710aa8d8d56f806dd07bc58b2571ac84f85676b8df193e576da43ea.
+Terminal COMPLETE, never restart. GPU0 alone498forwards (444engineering including
+54format,54production); final release2026-09-21 01:37:40.265763 Asia/Shanghai.
+First phase start to release384.996890s; phase sum315.940675s. Controller2729483
+and workers2729855/2737058 exit0 and absent by fresh host check; all4 GPUs zero
+memory/utilization/no compute PIDs. No failed gate, GPU retry or source mutation.
+
+Only new scientific configuration: U=fixed zero-based17 focal 京巴 patch followed
+by R=pre-answer26 attention full after-o_proj output restored to fresh recipient N.
+J05–J10 exact existing18prompts, both directions;12U/12P/12R,48selfs,all36layers.
+Independent120digit/longdouble audit passes498full vectors,444margin records,
+54normalizations,372trajectories,264earlyguards,96restoration boundaries,
+80784summary scalars,120branch proofs and2paired-context contrasts. All12 format
+before-vectors match same-job unappended exactly; inherited v2 fallback unused.
+Fresh margin bound1e-6, probe3.0517578125e-5. Fresh18N+24U/P full vectors,
+42trajectories and18native banks exactly equal preceding round; no old substitution.
+
+R reduces absolute U effect in9/12 directions, increases3: J07 forward and bothJ10.
+J05 fractions forward/reverse5.0%/9.3%; J06 9.1%/4.6% (see exact data).
+J08 effects−.488094→−.304245 and+1.011650→+.634956 (~37%reduction).
+J10−.048225→−.058304 /+.118000→+.136578, small absolute amplification.
+J08−J10 response gap−.439869→−.245941 and+.893650→+.498379, shrinking44.0876%/
+44.2311%. Differences already present before26; residual gaps/later28/32/35 changes
+remain. Conditional context-dependent branch contribution, not mediation shares,
+unique natural path or correct stance understanding. Labels all unchanged: J05/J06
+correct无, J07/J08 erroneous有, J09/J10 correct有. No new universal repair evidence.
+
+Public README links interpretation-02/REPORT.md and sealed results-01/REPORT.md.
+Interpretation02 corrects one J08-direction sentence in preserved interpretation01;
+no numerical/figure/science change. document-check-01 verifies artifact pins,
+readable figures, links, numbers and12old scientific/site selectors unchanged.
+No website publication, head/layer scan or new experiment authorized by completion.
+
+## Jingba layer26 attention restoration CPU SEALED; GPU authorized (2026-09-21)
+
+Controller2729483 in owned host exec29865 started2026-09-21 01:31 Asia/Shanghai;
+engineering worker2729855 on GPU0 UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0.
+Fresh inventory all4 zero memory/utilization and no compute processes. Preparation
+manifest2ec15e7a6e24b277a50505102ca0d02f11ee79eae0bf006fc1a5c5ba43ce5add.
+Read new run states before any action; engineering/check/full/check in progress.
+
+Latest user explicitly requests J05–J10: fixed layer17 focal patch then restore
+pre-answer layer26 attention branch to recipient-native; all4 GPUs available.
+NEW reviews/jingba-attn-restore-v1/prepared-01 is sealed, see public current.json
+and execution-decision-01.json bound to its manifest. All sources immutable now.
+No new deadline. Read launch-01/state.json and run-01/state.json FIRST if present;
+never duplicate or restart terminal runs. Single freshly idle L20 planned.
+
+18 existing prompts identical to jingba-context-v1; no new texts/labels/definitions.
+N18, U12/P12 fresh comparators; only new configuration R12 restores full attention
+after-o_proj output before residual addition at original pre-answer position26.
+36 native-self+12 conditional-self,54format endpoints,all36trajectories/RMS;
+498usual/822maximum forwards. No28MLP/joint/head/layer scan or website work.
+J08/J10 pre-specified CU/CR response differences retain both directions; N cancels
+in CR-CU, bound4epsilon. J05/J06 four directions evaluated together, all cases kept.
+Layer numbers zero-based. Not norm-matched preceding controls or pure stance pair.
+
+11tinyCPU capture tests,4actual-controller synthetic lifecycle (498forwards audited),
+4launcher,6new audit regressions,7saved continuation regressions and independent
+18input/36boundary/18prefix/84job audit pass. All131sourcepins exact. Synthetic
+checks/synthetic-01 is never scientific evidence. Installed/before vector source
+proofs retain prior v2 exact same-job continuation comparator, no relaxed gates.
+After normal release, independent120digit/longdouble audit must check all results,
+18N+24U/P exact historical full-vector/state/trajectory replay, then host process
+release and scientific closeout. No old scores substituted. Old runs terminal.
+
+## Six new Jingba contexts COMPLETE; all GPU processes released (2026-09-21)
+
+User authorized “全部通过，可以开始实验，当前GPU空闲”. NEW
+jingba-context-v1/results-current.json selects prepared-01/run-01/results-01.
+Closeout manifest ed886bf0144e12290659ac7c81ce681c45f2b11fe15c98496154bc711439711b;
+results manifest f5e147a2b2b614518c93f2fb789a186b11bcef44ddeed544735701e50ad6ff5f.
+Terminal COMPLETE; never restart. GPU0 alone378forwards (336engineering including
+42format,42production). Final release2026-09-21 00:41:27.641167 Asia/Shanghai;
+first phase start to release267.312s, phase sum233.829s. Controller2656209 and
+workers2656578/2661505 exit0 and absent by host process check. Fresh all4devices
+zero memory/utilization and no compute PIDs. No failures, retries or gate changes.
+
+J05/J06 pets, J07/J08 oppose slur, references无; J09/J10 implement/endorse attack,
+references有. All six newly authored and human-adopted, not corpus/independent
+confirmation. All18 D00/D01/D02 prompts exact approved previews. Native counts
+all4/6; primary D02→D01 fixed17 focal U still4/6, no repairs/damages. All24 cross
+endpoints (both directions,U/P) no label flips. J07/J08 wrong even without dictionary.
+Ordinary J05/J06 D01 m+9.079/+7.141→U+14.103/+12.296, delta+5.024/+5.155 vs
+P+.262/+.159; reverse−1.142/−2.424. Thus score-pattern extension, NOT new label
+repair replication. Prior J03 correct opposition behavior not robustly reproduced.
+
+All12 focal absolute effects exceed paired preceding effects beyond engineering
+bound; P not norm/wordclass matched. J10 both directions oppose donor-native gap.
+J08/J10 shared prefix through京巴: true-prefix AND full-input focal states exactly
+equal all36layers under each condition. Identical local changes produce different
+final effects: forward−.488094/−.048225, reverse+1.011650/+.118000. Subsequent text,
+length and positions differ; not pure stance identification or correct understanding.
+Ordinary positive23MLP/26attention/28MLP responses retained, also29/32/35 changes.
+J06L35MLP net+2.905 decomposes+.095 branch/+2.809 residual RMS rescaling; no new
+restoration or head intervention, not unique mediation path. All36layers preserved.
+
+Independent120digit/longdouble audit passes378full vectors,336margin records,
+42normalizations,276trajectories,168earlyguards,58752summary scalars,24effects,
+24selfs,42format endpoints,3shared-prefix comparisons. Fresh margin bound1e-6,
+probe-logit bound3.0517578125e-5. Original code/sources/gates unchanged after seal.
+Old11scientific+website selectors unchanged; no website publication.
+
+Public README links separate CPU interpretation-01/REPORT.md (paired-context
+response plot, full36layers) and immutable results-01/REPORT.md. Interpretation is
+post-release explanation only, no new conditions/forwards. document-check-01.json
+verifies links, pinned artifacts and inspected figures. Next-step suggestions are
+NOT new execution authorization. Preserve all old terminal states and materials.
+
+
+## Six new Jingba contexts CPU SEALED; GPU authorized (2026-09-21)
+
+Controller2656209 in owned host exec26729 started2026-09-21 00:37 Asia/Shanghai,
+worker2656578, singleGPU0 UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0.
+Fresh inventory all4 zero memory/util/no compute PIDs. Preparation manifest
+d6bc8d8aee6c1e346b0f6fb47105b5da88dbeef08ee84a32be063a4ee6bbd5a5.
+launch-01/read states first; active engineering then check/full/check.
+
+Latest user: “全部通过，可以开始实验，当前GPU空闲”. All J05–J10 texts and
+proposed references accepted verbatim, J05–J08无/J09–J10有. Adoption at
+reviews/jingba-context-candidates-v1/adopted-01; old draft remains immutable.
+Six new AI constructions, not corpus cases or independent population confirmation.
+J08/J10 share exact prefix through京巴; subsequent stance/text/length differs.
+
+New jingba-context-v1/prepared-01 sealed; see current.json and manifest. All new
+sources immutable after seal. 18 inputs D00/D01/D02, 24 cross endpoints fixed
+zero-based17 focal U / equal-count immediately preceding P, both D01↔D02 directions,
+24 native-self controls,42 format endpoints,all36 trajectories/RMS. No26/28
+restorations, head or layer scan. Fixed primary D02→D01 U applied to all six.
+D00 native only; donor/recipient absolute positions mapped separately (18token
+shift); P not norm/wordclass matched or presumed zero. No gold in model inputs.
+
+11 tiny CPU capture tests,4 actual-controller synthetic lifecycle tests including
+378-vector independent120-digit audit,4 actual-launcher mocks and independent
+18-input/36-boundary/18-prefix/48-job audit pass. checks/synthetic-01 is CPU
+SYNTHETIC, never scientific evidence or publication. No test failure/gate relaxation.
+New execution-decision-01.json records latest user quote bound to prepared manifest;
+no new deadline. Fresh idle single L20 launch planned immediately; normally378,
+maximum630 forwards. Read launch-01/state.json and run-01/state.json FIRST if they
+exist; never duplicate or restart a failed/completed run. STOP at commit boundary,
+launch CANCEL before binding/between phases; manage only owned processes.
+Old scientific/site selectors remain unchanged; no website work authorized here.
+
+
+## Six new Jingba queries DRAFTED for review only (2026-09-21)
+
+Latest user: “没问题，那就先新增6条京巴查询，请制作一下候选给我审核”.
+NEW docs/research/experiment-plans/jingba-context-candidates-v1/current.json selects
+reviews/jingba-context-candidates-v1/draft-01/REVIEW.md; manifest SHA256
+6907e17cfff5f2ce07ec858e485e961dd6029fcbe112cb67499eeb5e4fc08b5f.
+This selects a CANDIDATE draft, NOT adoption/results/GPU authorization. All six
+are new assistant-authored constructions; no new real-corpus search or target-
+model output screening. J05/J06 ordinary dog proposed无; J07/J08 oppose slur
+proposed无; J09 author uses slur/J10 explicitly endorses others' slur proposed有.
+Every human_decision/adopted_reference remains null; no severity/support-field
+adjudication. User requested review, so do not automatically adopt or execute.
+
+J07/J09 form stance-A with person/punctuation/suffix differences; not a strict
+single-factor pair. J08/J10 share exact text and full prompt token prefix through
+京巴 under each D00/D01/D02, with rejection/endorsement in the suffix. This is a
+causal-prefix input property, not a measured FP32 state identity or a new result.
+J06 mentions北京 in a literal-pet context; preserve this design. New texts extend
+oldJ01–J04 as J05–J10; dependent AI constructions, not independent population
+confirmation or claims about training exposure. Keep whole texts and failures.
+
+Two previously adopted Jingba definitions/current task are unchanged; no demos,
+one current term, single有/无.18full prompt PREVIEWS/36answer boundaries/18focal
+prefixes and3paired-prefix checks pass on CPU tokenizer only; no torch/model
+weights/GPU inventory/inference/wait/schedule/site action. Focal京巴=2tokens;
+D01/D02 positions differ18. Equal-count immediate pre-tokens preview:
+J05楼下/那只,J06家/里的,J07/J09叫/他,J08/J10网友/叫. Not norm/wordclass matched.
+Build script and draft are pinned; verification-01.json checks18source/artifact
+pins,34oldselectors unchanged and exact candidate/prompt content. No head scan
+or new run protocol/runtime implemented. All prior GPU experiments remain terminal.
+
+## Cross-term mechanism COMPLETE; GPU released, audited, no website publication (2026-09-20)
+
+NEW cross-term-mechanism-v1/results-current.json selects prepared-01/run-01/
+results-01 and interpretation-01/REPORT.md. Closeout03 manifest SHA256
+d027f195ca27b66cc2f9fdfa56fd7a3164d9ab62e2684af1ff39a090e62672fd;
+results manifest89b6c2d8c9476b4e0c3b87f33a180f746dcece30188ec931a87aa6921dc5e2c1.
+Terminal COMPLETE: NEVER restart. GPU0 alone1476forwards (1320engineering incl156
+format;156production), final release2026-09-20 23:19:56.712823 Asia/Shanghai.
+First-phase start to final release1352.717166s (~22.5min), phase sum1039.445s.
+Controller2520702 and workers2521304/2546882 exited0; host release check proves
+all absent and all4 devices0memory/0util/no compute processes at23:23. No signals.
+
+All192self controls,156label/EOS endpoints, repeat/reverse/hook/production replay
+pass. Fresh margin bound0.00014495849609375, probe0.000213623046875; padding has
+small nonzero FP32 differences, inherited caps unchanged. Independent120digit/
+longdouble audit02 passes1476full vectors,1320margin records,175normalizations,
+1128trajectories,912earlyguards,768restorationboundaries,293760summary scalars,
+960branch proofs,120effects/72restoration/24joint contrasts. All142prepared source
+pins exact; scientific inputs/runtime/raw/results immutable, no GPU retry.
+
+CPU audit v1 failed only at8/96 format-continuation discarded-before hashes:
+appending a label changes computation shape, these8 match same-job right-padding
+vectors EXACTLY (also left), remaining88 match unappended. New auditor v2 retains
+all numerical/execution gates, exact hashes/norms, same-query/job/source/order and
+864nonformat proof policy; it explicitly supersedes the erroneous format-only
+comparator assumption.7 saved-telemetry regression tests pass incl wrong donors,
+joint boundaries, prefixes, norms and disallowed fallback. No approximate hash
+acceptance or arbitrary-case comparator. Original failure/log/source preserved;
+read recovery-01/README.md and result-audit-02.json. Initial test startup naming
+error retained. Closeout v2 preflight then caught recovery manifest self-reference;
+old manifest preserved, manifest-02 built before opening, closeout v3 changes only
+that metadata reference/output directory. recovery-01/closeout-note-01.md records
+it. No scientific selector existed before successful closeout03. New recovery/
+interpretation/closeout sources pinned separately; sealed old sources untouched.
+
+Native D00/D01/D02 each8/12 correct, but J01/J03 swap: J01ordinary dog无 goes
+无/有/无; J03rejectslur无 goes有/无/有. G03/B01/B03 wrong even D00, no dictionary
+or fixed intervention repair. All6 direct/other-attack queries remain有/correct.
+Uniform D02->D01 layer17 focal U gives9/12 (京巴4/4), only J01 repaired, no added
+damage. J01 N-6.866451->U+6.597324; A+1.926086,B+3.615398,AB-.093357. J03 U+.102795
+remains correct but near boundary (N+.606007). A/B/AB remove34.7/22.1/49.7% ofJ01U.
+Three repaired endpoints U/A/B are ONE query, not three replications. No universal
+repair:3cases remain wrong; previousheheT01 also resisted same-kindU.
+
+All24 focal directions exceed paired preceding absolute effects beyond4bounds;
+maxabsP.166687,min magnitude gap.002071.19Umove toward donor,5away.72restorations:
+56absolute reductions,12increases,4unresolved; joint stronger than both singles
+14/24, so previous uniformhehe branch pattern does NOT fully transfer. Keep all
+directions/36layers/RMS/compensation, position-length confounding and non-norm-
+matched controls. Twelve development cases (5oldAI/7real), not independent proof.
+Readable report explains condition meanings, marginal J03, controls and exceptions;
+full sealed report/tables/figures retained. Original scientific/website selectors
+unchanged; no site publication or further scan/run authorized by this closeout.
+
+## Cross-term GPU COMPLETE/released; CPU audit recovery in progress (2026-09-20)
+
+NEVER restart launch-01/run-01. All1476 forwards completed normally on GPU0.
+Final release23:19:56 Asia/Shanghai; controller2520702 and workers2521304/2546882
+exited0, host process-release-check.json proves all absent, all4 GPUs0memory/0util.
+results-01 is now sealed; prepared sources, raw records and results are immutable.
+Original independent result audit stopped at format-continuation before_sha256;
+preserve result-audit-console-01.log and exit1. All preceding numerical/trajectory
+checks passed. Diagnosis:8 of96 format restoration before hashes differ from
+unappended cross-probe, but EXACTLY match same-job cross-left AND cross-right
+saved trajectory vectors; differences occur for B02-D02(length612),G01-D01(640).
+Installed restoration hashes and156 exact-label/EOS runtime gates all pass.
+CPU-only recovery must use a new auditor version, retaining exact checks and all
+numerical thresholds; allow only same-job original/right-padding causal-prefix
+comparators for appended format diagnostics, never arbitrary-vector matching.
+Non-format before-vector checks stay unchanged. Add regression tests, record
+comparison contexts and preserve original failure. No GPU replay, site deployment
+or new scientific selector until independent audit and closeout are complete.
+
+## Cross-term mechanism GPU explicitly authorized and launch-01 active (2026-09-20)
+
+Latest user: “GPU已空闲，可以启动实验”. This NEW permission supersedes the
+previous CPU-only restriction for this new run; no new deadline was specified.
+execution-decision-01.json binds unchanged prepared-01 manifest
+c0e0aaef853da73ab657b634eb0d45a46608664c5b266b89ce4b50464a5eb1e0.
+Decision SHA256aab9c9b539a226ac9ea2b456f2a200fe0b8f6923ce4e848380e6d40f29f267d9.
+Read launch-01/state.json and run-01/state.json FIRST; never start a duplicate.
+Source-pinned scripts/review/launch_cross_term_mechanism_v1.py runs in host exec
+65692, controller2520702; execution-console-01.log records phase events. Initial
+host inventory22:56:57 Asia/Shanghai shows all4 L20zero memory/util/no processes;
+launcher selects one freshly idle card and rechecks at binding. Do not signal
+unrelated processes. Authorized pipeline engineering/check/full/check, then CPU
+analysis, independent120digit audit, report and host process-release verification,
+scientific closeout. No website publication in this run. Expected1476forwards,
+all36inputs/120cross/192self/156format gates unchanged, no new layer/head search.
+Cancellation: launch-01/CANCEL before binding/between phases, run-01/STOP during
+worker commits. Failed/completed stages are terminal; no automatic retry. Old
+completed runs and old scientific/website selectors remain immutable.
+
+
+## Cross-term mechanism CPU SEALED; GPU explicitly NOT authorized (2026-09-20)
+
+Latest user accepted G03 proposed无 (author criticizes the generalization; preserve
+no quotation marks/explicit我反对), all other references and ordinary definitions,
+and all three families: user shorthand京 means displayed京巴, plus垃圾/公交车.
+User explicitly requested preparation through GPU-before-execution only:
+“下一步如果没有待冻结项，可以推进至GPU执行前，暂不启动GPU任务”.
+This supersedes all earlier GPU permissions FOR THIS NEW RUN. No GPU inventory,
+binding, checkpoint load, wait/controller/timer, inference or website work occurred.
+No launch-01/run-01/.locks exists. Do not start or schedule anything automatically.
+No remaining material/label freeze question; future execution needs explicit user
+steering, then a new execution decision bound to the prepared manifest.
+
+NEW docs/research/experiment-plans/cross-term-mechanism-v1/current.json selects
+reviews/cross-term-mechanism-v1/prepared-01, manifest SHA256
+c0e0aaef853da73ab657b634eb0d45a46608664c5b266b89ce4b50464a5eb1e0.
+All preparation, new source files and sources are immutable after this seal.
+Materials adopted in cross-term-mechanism-candidates-v1/adopted-01; draft-01 remains
+untouched. Candidate selector now points to adoption, not scientific results.
+Read PREPARATION.md, PROTOCOL.md, ALL-PROMPTS.md and EXECUTION-GUIDE.md.
+
+12 texts J01–J04/G01–G04/B01–B04, each family references无/有/无/有. G02 current有
+and G03 current无 differ from source non-hate/hate by explicit current-task adoption;
+source labels preserved. J01–J04 and B03 are previously adopted AI constructions,
+7 others exact corpus texts; B02 inherits demo:6629 human有/2 and prior exposure.
+Do not claim unseen/independent confirmation or reopen approved labels. No new
+severity/group/support-field adjudication. Source/history/proposed drafts retained
+separately from current adopted references; old T03 inheritance rule not generalized.
+
+36 prompts =12 x D00 none/D01 reviewed pejorative/D02 ordinary. Current task and
+Qwen3-8B single有/无 then EOS, only current term in dictionary, no demos. Leading
+term+colon of adopted dictionary sentence is losslessly split into existing fields;
+definition body exact. D00 native baseline only. D01<->D02 fixed zero-based17
+query focal/full-block and equal-count immediate preceding positions; 26attention
+(after o_proj) and28MLP pre-answer restoration separately AND jointly from fresh
+recipient-native vectors. 120 cross endpoints,120 native-self+72 conditional-self,
+156 format endpoints; full36 trajectories/attention+MLP/RMS/probes. All cases and
+both directions retained, no head/layer scan. Capture mechanism inherited unchanged.
+
+Crucial new geometry: 京巴2tokens,垃圾/公交车1. D01/D02 positions differ by18/6/17.
+New runtime/auditor use job.donor_positions separately from recipient positions,
+with exact query-token-ID and relative-offset mapping; no padding prose to match
+lengths. Keep length/position confounding and non-norm-matched preceding controls.
+Positions for each case are listed in PREPARATION.md and positions.json. D00 has
+no cross donor jobs. Report keeps D01-D00,D02-D00,D02-D01 gaps and increments.
+
+11 tiny random native CPU tests,6 actual-controller synthetic lifecycle/full
+independent numeric audit tests,4 actual-launcher synthetic tests all pass. Input
+independent audit:36prompts/72boundaries/36prefixes/312jobs; all142sourcepins exact.
+Synthetic1476forwards audit:1128trajectories,912earlyguards,768restore boundaries,
+293760summary scalars,960branch proofs. CUDA never initialized, no research weights
+loaded. checks/synthetic-02 is CLEARLY CPU SYNTHETIC, not scientific results and
+must never be deployed as results. Source input-audit-02 stopped on an initial
+ledger while its refresh was still running; preserve log/ordering-note. Ordered
+input-audit-03 and final ledger pass. No numerical gate relaxed. Initial builder
+short_id/material_id lookup fixed before adoption output; development note retained.
+
+New future launcher scripts/review/launch_cross_term_mechanism_v1.py requires
+separate explicit execution decision BEFORE inventory/wait; binding AND direct
+worker also reject missing authorization before weight verification/loading.
+Future fresh-idle single L20 plan: engineering/check/full/check, all terminal
+failures stop without retry, CANCEL before binding/between phases, STOP for worker
+commit boundaries. No old-run restart. Normally1476forwards, budget max2412;
+estimate20–30min singleL20 plus5–15minCPU analysis/audit (not measured this run).
+Future result audit/closeout and all old-selector preservation checks prepared.
+No new scientific result selector, new predictions, general-repair claim or site
+publication. New run permission must be recorded separately without changing sealed
+prepared sources. All prior completed experiments remain terminal.
+
+
+## Cross-term mechanism candidates prepared; no new GPU run (2026-09-20)
+
+Latest user authorized candidate search: “可以开始词条扩展，那接下来请帮我找找候选”.
+NEW docs/research/experiment-plans/cross-term-mechanism-candidates-v1/current.json
+selects reviews/cross-term-mechanism-candidates-v1/draft-01/REVIEW.md. This is a
+candidate selector, not input adoption, scientific freeze or GPU launch. Proposed
+first batch is 京巴+垃圾,4 queries each; 公交车 has4 backup candidates, not automatic.
+No new predictions, model loading, GPU inventory/controller or website work.
+
+J01–J04 reuse previously human-adopted AI texts CTD-J2/J1/J3/J4-v2; inherited labels
+无/有/无/有 remain authoritative. Do not call them real-corpus or unseen examples.
+G01 cold_train_6794_1 ordinary waste proposed无; G02 main#7685 fit “他是个什么垃圾？”
+proposed有 under current personal-attack task despite source non-hate; G03
+cold_train_1338_1 proposed无 for criticism of quoted generalization, stance needs
+review; G04 cold_train_2914_1 ordinary waste plus other regional attack proposed有.
+All4 G references/new material adoption remain pending. T03 prior original-label
+adoption applies only to that old case, not to G02/G03 or all source annotations.
+If G03 cannot be determined, retain uncertainty; old adopted AI G3 is an explicit
+backup, never relabelled a real source. Ordinary definitions for2 primary/1 backup
+terms are new drafts. Pejorative definitions reuse prior reviewed single senses,
+not verbatim base dictionary entries (京巴 mixed sense/公交车2 senses/垃圾 person+object).
+
+J2 historical8B without dictionary m+22.465961/无; with reviewed pejorative
+definition m-10.785946/有; with two alternative same-term demo packs m+24.249472/
++21.851265 both无. Other two models did not reproduce this J2 label flip. Old
+ordinary garbage/bus examples stayed无; quoted-rejection errors often predate
+dictionary addition. These are exposed development scores, not new results or
+proof that selected real queries share the behavior. Do not select new results
+afterward to manufacture transfer. Main research goal remains selective internal
+reference use followed by a fixed inference rule and separate task validation.
+
+Search retained363 unique raw texts across7 listed families from main fit/dev5808
+andCOLDtrain25726. Preliminary scan used originalmaintrain6424;616 calibration
+rows were then excluded from candidates. Four calibration IDs matching terms were
+seen in preliminary inspection and are disclosed, not asserted unseen. No test or
+COLDval/test used for new candidate expansion. Raw京巴 hit in“东京巴黎” is a
+cross-word match and unusable. Main#7244 has multiple regional insults and prior
+human有; not a clean single-term case. COLD rawCSV absent; adapter source labels
+are not current-task adoption.26 material inventories/1072 review records checked;
+absence of hits is bounded exposure evidence, not proof of independence.
+
+B01 realcold12278 proposed无; B02 realmain#6629 inherits existingdemo human有/2,
+other support fields were not all reviewed; B03 oldAI CTD-B3-v2 inherits无; B04
+realcold2265_1 proposed有. Other observed real bus quotation also contains author's
+own attack; do not force it into无. Candidate documents preserve full texts and
+limitations, no new references have been adopted. CPU source/doc audit passes40
+source hashes,12 exact texts,6 definitions,144 historical model-condition records
+and10 links. Old scientific artifacts/selectors unchanged; all completed GPU runs
+remain terminal. Next action depends on candidate/material selection, not automatic
+rerun or head/layer search.
+
+## New-case transfer COMPLETE; all GPU processes released (2026-09-20)
+
+User authorized “可以接入并启动运行”. NEW hehe-transfer-v1/results-current.json
+selects prepared-01/run-01/results-01. Closeout manifest SHA256
+86e2bbca2dc48b3fc6cbad8082eb01f6aa5bdfd9077e46de7762ab95d28e0025;
+results manifest d6ac93fc0ba2d1958d06a3b1d332a10973d8cbb16d4b7979701034f60800ea38.
+Terminal COMPLETE: never restart. GPU0 completed456 forwards (408 engineering
+including48 format,48 production). Final release2026-09-20 13:53:36.176036
+Asia/Shanghai; first phase start to last release491.435s, phase sum388.012s.
+Controller1707525 and workers1707819/1716785 exited0 and are absent by fresh host
+check; all4 devices0memory/0util/no compute processes. No signals or unrelated
+process changes. No failed gate, retry or post-freeze scientific source change.
+
+All64 self controls,48 label/EOS endpoints, repeat/reverse/padding/prefix/hook and
+production replay checks pass. Fresh margin bound1e-6, probe bound2.288818359375e-5.
+Independent120-digit/extended-precision audit checks456 full vectors,408 margins,
+48 normalizations,352 trajectories,304 early guards,256 restoration boundaries,
+320 branch proofs,90,576 summary scalars,40 effects,24 restoration and8 joint
+contrasts. Historical replay is inapplicable to these new texts; no old-score
+substitution. All13 prior scientific/website selectors unchanged; no publication.
+
+T01/T02 ordinary-laughter cases: D01有/D02无; native D02-D01 margins+29.361355/
++37.248848. T03 (#7050, explicit original-label有 inheritance) remains有 under both,
+gap+7.600422: NOT another Q02 label-flip replication. T04 attack-outside-laughter
+boundary remains有 under both, gap+1.077017. All8 fixed-layer17 focal directions
+move toward donor margin and exceed paired preceding effects (maxabs.275097,
+no pre flips). T01 ordinary->original+11.647472 no repair; reverse-25.619526 damages.
+T02 ordinary->original+33.079491 repairs; reverse-17.661129 no flip. T03/T04 none
+flip. Retain directional differences and unequal state norms; pre controls are
+equal-token adjacent positions, not norm/wordclass matched or presumed zero.
+
+All24 separate/joint restorations reduce absolute upstream effects; all8 joint
+reductions exceed either single. Joint removes18.8–46.8%, leaves53.2–81.2%, and is
+less than the two single fractions' sum on this score scale. Not accuracy, pure
+mediation shares, universal layers or unique pathway. Native T03 layer26 attention
+andMLP changes partly cancel; retain all36 layers, late compensation and RMS.
+T01/T02 reproduce native23-MLP/26-attention/28-MLP expansion;23 has no direct
+restoration intervention here. Eight directions are not eight independent cases.
+
+Public README links interpretation-01/REPORT.md and full results-01/REPORT.md.
+Interpretation is a separate CPU document; sealed science/results remain immutable.
+Figures inspected; independent panel axes must be stated in explanations. New
+fixed17/26/28 experiment is complete; no additional material/layer/head scan or
+website deployment is pending in this authorization.
+
+## New-case transfer CPU SEALED; GPU engineering running (2026-09-20)
+
+User explicitly said “可以接入并启动运行”. NEW hehe-transfer-v1/current.json
+selects prepared-01, manifest SHA256
+37447d7375697e225cfcc2bb9a154a1543cd539065a968c0a59d3ba5f3148ce8.
+All new inputs/runtime/report/audit/test/closeout sources are pinned and immutable.
+10 tiny-native CPU hook tests,4 actual-controller synthetic lifecycle/analysis
+tests and independent8input/16answer/8prefix/104job audit pass. No gates relaxed.
+Eight exact adopted T01–T04 x D01/D02 prompts,8 focal+8 preceding+16 single+8 joint
+endpoints,40 native-self+24 conditional-self controls,48 format endpoints,all36
+trajectories/RMS. Usual456 forwards,max744. Source capture is inherited unchanged;
+new runtime differs only in the input module and worker CLI. T03 reference有 is
+explicit original-label inheritance; T04 boundary remains separate.
+
+Source-pinned launch-01/launch.py in owned host exec5858, controller1707525,
+engineering worker1707819, single GPU0 UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0.
+Fresh host inventory found all4 cards0memory/0util/no compute processes. Controller
+started2026-09-20 13:45:11 Asia/Shanghai. Read launch-01/state.json and run-01/state.json
+FIRST; never launch a duplicate. Current user authorization has no new deadline.
+Launch pipeline engineering/check/full/check; then CPU analysis,independent120digit
+audit,report inspection,host process release and scientific closeout. Run STOP for
+owned worker; launch CANCEL before binding. Failed/complete states are terminal.
+Never signal unrelated processes, restart old runs or change sealed source/gates.
+13 old science/website selectors pinned in launch-01/parent-selectors.json; site
+publication is outside this new run. Post-release sources must be joined only
+after normal GPU exit; results-01 and report do not yet exist at this note.
+
+## Four new hehe cases ADOPTED; CPU inputs checked (2026-09-20)
+
+Latest user: “T01到04都可以纳入，T03可以按照原标签判断”. T01/T02 references
+are 无; T03/T04 are 有. T03 explicitly inherits main-corpus #7050 hate label;
+do not re-open this material/label choice or claim a new severity/semantic/group
+adjudication. T01 cold_train_2640, T02 cold_train_3562 are ordinary-laughter cases;
+T04 cold_train_9078 is an attack-outside-laughter boundary, not another Q02 replicate.
+B01/B02 remain excluded. Preserve corpus provenance and historical exposure limits.
+
+NEW docs/research/experiment-plans/hehe-transfer-v1/current.json selects immutable
+reviews/hehe-transfer-candidates-v1/adopted-01, manifest SHA256
+9e7a737f73e1e8da4ca4a9ad1479045ee94764489d4545555fc04b4de1076544.
+Eight exact T01–T04 x D01/D02 prompts match draft preview hashes; current task,
+fixed six-term dictionary, no demos. CPU source/label/task/answer-boundary/prefix/
+token-alignment checks pass. References are separate from scorer inputs. Carry
+forward displayed equal-count immediately preceding query positions: commas for
+T01/T02/T04, “你的” for T03; not norm/wordclass matched or presumed zero controls.
+
+This turn completed material adoption and CPU inputs only: no GPU inventory,
+allocation, model load, forwards, new runtime qualification or site deployment.
+Fixed17 focal/pre,26-attention/28-MLP separate/joint restoration and all36 trajectory
+plan recorded in design.json; the new scientific runner still needs implementation
+and qualification. No pending material approval. Keep four cases/both directions
+regardless of initial outputs; never substitute old scores or restart old runs.
+
+## Joint26+28 restoration COMPLETE (2026-09-20)
+
+NEW hehe-joint-restore-v1/results-current.json selects prepared-01/run-01/results-01
+and results-01/REPORT.md. Closeout manifest SHA256
+ca96c06f5d42752b8aa945e473c7d6d2d0519360f73c5520591f0deda2a8d642;
+results manifest9f308d1dbf37d32751049ef14990facb8dbb0e7b3b79326db1979bf522de61f8.
+Terminal COMPLETE, never restart. GPU0 alone192 forwards (172 engineering incl20
+format,20 production), final release2026-09-20 12:20:41.610530 Asia/Shanghai.
+First phase start to release241.172s; phase sum193.264s. Controller1582450 and
+workers1582742/1586950 all absent by fresh host check, workers/controller exit0.
+Final all4 GPUs0memory/0util/no compute PIDs. No task-owned GPU process remains.
+
+All28 self controls,20 exact-label/EOS endpoints, hook/repeat/reverse/padding/
+prefix/production replay checks pass. Fresh margin bound1e-6, probe bound
+1.9019473398884656e-5. Independent120-digit/longdouble audit passes192 full vectors,
+172 margin records,20 distinct normalizations,148 trajectories,124 early guards,
+128 restoration boundaries,160 branch proofs and36,720 summary scalars. FourN
+plus12U/A/B full vectors AND trajectories exactly equal previous single-restoration
+round; all values freshly recomputed, no old-score substitution. No failed gate,
+GPU retry or source change after freeze. Main endpoint/interaction figures viewed.
+
+Four joint fractions (Q01 ordinary->original,reverse; Q02 ordinary->original,
+reverse):56.8007%,33.0253%,51.3268%,37.3510%. All joint effects smaller in absolute
+value than both singles; extra reduction vs stronger single9.445–12.439 percentage
+points. All smaller than single fractions' sum: oriented interaction fractions
+13.7303%,2.7861%,9.7548%,5.5038%. Raw I=AB-A-B+U:+3.141006,-.277874,+1.526466,
+-1.215839. Joint m=-10.598850,+18.054184,-12.981377,-3.268429. Same labels as singles:
+Q01 forward repair undone; Q02 reverse repair retained. Lack of further label flip
+does not erase score effects. Residual upstream effect43.2–67.0% remains.
+Joint before26 equalsU; before28MLP equalsA, both installed vectors come fromN.
+Interaction projection first nonzero at28MLP (boundary follows intervention setup),
+then nonmonotone32–35 changes; do not claim a unique serial path or additive shares.
+
+This round added ONLY joint26+28 configuration on same4prompts, retained all36
+trajectories/RMS and fresh comparators. No head scan, new material or further run.
+All old science/website selectors unchanged, live remains incremental04; no new
+publication. Public README gives outcome-oriented interpretation; sealed report/
+data/source artifacts remain immutable. Latest GPU authorization had no deadline.
+
+## Joint26+28 restoration authorized and CPU sealed (2026-09-20)
+
+Latest user explicitly approved “两处联合恢复” and all4 GPUs available now.
+NEW hehe-joint-restore-v1/current.json selects prepared-01, manifest SHA256
+e55a4be083244f210d5605d3be1e21f87a7357a2f392d87cba0fc8f4a5f9c656.
+All new scientific/test/auditor/report/closeout sources are sealed and immutable.
+9 tiny-native CPU checks and4 synthetic lifecycle/contrast checks pass; independent
+4prompt/8boundary/4prefix/44job audit passes. Same Q01/Q02 x D01/D02 inputs;
+only new scientific configuration is joint pre-answer layer26 attention+28MLP
+restoration after layer17 focal cross patch. Fresh N/U/A/B comparators retained.
+16 cross endpoints,28 selfs,20 label/EOS gates; usual192/max312 forwards.
+Joint boundary: before26 equalsU; before28MLP equalsA-only, notU. Both installed
+vectors come from fresh recipient-native N. All36 trajectories/RMS retained.
+Primary interaction I=mAB-mA-mB+mU; five-score interval preserves sharedU.
+No new texts/labels/head scans/deadline. Old runs/timer remain terminal.
+
+New launch-01/launch.py is source-pinned. Read its state and run-01/state before
+any action; never create duplicate controller or restart a failed/completed run.
+Fresh host inventory at launch preparation finds all4 L20 zero memory/utilization
+and no compute PIDs. Use one freshly idle card; do not touch unrelated processes.
+Controller1582450 in owned exec30210 started engineering2026-09-20 12:16:40
+Asia/Shanghai; worker1582742, GPU0 only UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0.
+Binding3f32bb6f3df428e4f0e39bdf00dd72000cb90a9ab2a7907a4b39a46be3055a38.
+Launch pipeline engineering/check/full/check; then CPU analyze, independent120digit
+audit, report review, exact host process-release check, scientific closeout.
+No website deployment in this round; preserve every old selector and artifact.
+
+## Single-branch restoration COMPLETE; report copy-scope recovery (2026-09-20)
+
+hehe-branch-restore-v1/results-current.json now selects immutable prepared-01 /
+run-01 / results-01 and report-02/REPORT.md. Closeout manifest SHA256
+edd1641d3b4ae4a2fc2870ab2cda9aa6abc448833c55bd835ce53073837c560f.
+Terminal COMPLETE, never restart the timer/launcher/worker. Schedule10:35 fired;
+GPU0 alone ran152 forwards (136 engineering incl16 format;16 production), normal
+release10:38:34.569331 Asia/Shanghai. First phase start to release199.747s;
+phase sum168.865s. Controllers/workers exit0. Host read-only check proves owned
+PIDs889821/1465351/1465596/1468289/1469398/1469853/1469932 all absent.
+
+Independent audit passes152 full vectors,116 trajectories,92 early guards,
+64 restoration boundaries,80 installation proofs and22,032 summary scalars.
+All20 self controls,16 label/EOS gates and repeat/reverse/padding/replays pass;
+trajectory invariance and score differences0. Fresh margin bound1e-6, probe
+bound1.9019473398884656e-5. Four native full vectors and four upstream full vectors
+plus trajectories exactly equal prior bridge endpoints, no old-score substitution.
+
+Original scheduler safely stopped after the scientific audit: report_v1 iterated
+all shared filenames and erroneously compared newly authored REPORT.md with the
+older results report. All19 actual copied JSON/TSV/figures already byte-identical.
+Preserve schedule-01 failed terminal state/log/exit and partial report-01. New
+report_hehe_branch_restore_v2 verifies the explicit full copied-asset inventory;
+2 regression tests reject omitted/corrupt copies while permitting authored prose.
+Report02 adds outcome-specific explanation; data/figures unchanged. New closeout
+v2 completes CPU-only recovery, schedule-current now points to resolved completion.
+Recovery sources and originals are pinned in recovery-01; no GPU restart or
+numerical gate change. Report02 manifest093d91557ae1f48be7f22b2f12bee5dbe9c0200859e12e4d45f1694e440d91df.
+
+All8 component/direction restorations reduce the layer17 intervention effect.
+Fractions26-attention/28-MLP: Q01 ordinary->original46.6%/23.9%; Q01 reverse
+12.2%/23.6%; Q02 ordinary->original41.3%/19.8%; Q02 reverse24.9%/17.9%.
+Q01 repair margin+2.395 becomes-8.271/-3.073 (both return有). Q02 repaired
+margin-11.520 becomes-6.016/-7.556 (both remain有). Other directions do not flip.
+Q01 had smaller decision margin; absence of a Q02 flip is not absence of effect.
+Later net projection differences exceed immediate restoration deltas for26 in
+all4 directions;28 attenuates in3, but Q01 reverse amplifies. Keep nonmonotone
+32–35 responses/RMS terms, directional asymmetry and both references.
+
+This supports conditional component roles under the fixed layer17 patch, not
+unique natural semantic paths or additive mediation shares. Suggested next
+minimal JOINT26+28 restoration (same4prompts/directions) is NOT implemented or
+run. No head scan or new material authorized by this result-analysis request.
+Old science/site selectors unchanged; live website remains incremental04 and
+neither bridge nor restoration results have been newly published in this turn.
+
+## Single-branch restoration scheduled for10:35; GPU NOT started (2026-09-20)
+
+Latest steering: “先做好运行前准备，预计要到10:30之后才有空闲gpu，可以设置个定时任务”.
+CPU preparation remains sealed at hehe-branch-restore-v1/prepared-01, manifest
+4a561f388191bfb90d100fe06d89678e31a62d59f1b8347de9d1b8692485bb3e.
+Prior launch-01 was cancelled before binding at03:32:30 Asia/Shanghai;
+controller871818 exited0 and is absent. No scientific run/binding/model load.
+Never restart that wait or any old completed experiment.
+
+NEW docs/research/experiment-plans/hehe-branch-restore-v1/schedule-current.json
+selects schedule-01. Its detached host timer PID889821 is identity-recorded in
+owner.json/registration.json/verification-01.json and waits until
+2026-09-20T10:35:00+08:00 (Asia/Shanghai), then uses source-pinned launch-02.
+Read schedule-01/state.json FIRST; never create a duplicate timer/controller.
+User authorized scheduling after10:30;10:35 adds5min. No new stop deadline.
+Timer/config/supplemental report+closeout sources are pinned in source-pins.json;
+3 CPU scheduler checks pass (time gate,cancel,ordered pipeline,failure,no duplicate).
+
+There is no callable application automation_update tool. at/cron are unavailable;
+systemd user bus is unavailable and system manager reports offline. User was told
+this is a SERVER one-shot background timer, not an application scheduled-task row.
+It requires this server/process to remain running; completion is saved locally,
+not an automatically posted chat notification. No API key or messaging connection.
+
+At due time, freshly idle single L20 only; if busy, wait45s between checks. Pipeline:
+launch-02 GPU engineering/check/full/check -> CPU analyze results-01 -> independent
+120-digit audit result-audit-01.json -> report-01 -> scientific closeout selector.
+Each step stops on failure, no automatic retries. Reports/old site/science selectors
+remain unchanged now. Cancellation: create schedule-01/CANCEL; scheduler requests
+only this launch's CANCEL or run-01/STOP. It never signals unrelated processes.
+Expected152 forwards, GPU3–6min, total10–15min excluding resource waiting.
+
+Scientific scope: four original prompts, layer17 focal upstream cross patch;
+separate layer26 attention-after-o_proj or layer28 MLP pre-answer restoration to
+fresh recipient-native vector. Four upstream+8 nested endpoints,12 native-self+
+8 conditional-self controls, all36 trajectories/RMS terms,16 label/EOS gates.
+Frozen CPU tests8+3 and independent prompt/token/job audit pass. No joint/head scan.
+New report and closeout sources were added before scheduling, pinned separately.
+Keep original sealed sources immutable; if an audit/transport issue appears,
+preserve it and fix only in a new version without GPU restart or gate relaxation.
+
+## Single-branch restoration CPU sealed; waiting for GPU (2026-09-20)
+
+User accepted “好，可以按这个做法试试”. New hehe-branch-restore-v1/current.json
+selects prepared-01, manifest SHA256
+4a561f388191bfb90d100fe06d89678e31a62d59f1b8347de9d1b8692485bb3e.
+Four exact Q01/Q02 x D01/D02 inputs; four layer17 focal upstream patches plus
+8 separate pre-answer restorations (layer26 attention after o_proj OR layer28 MLP,
+whole vector before residual addition). No joint restoration/new text/label/head
+scan. Fresh recipient-native branch sources, all36 trajectories and RMS terms.
+12 native-self plus8 upstream-conditional-self controls; usually152 forwards,
+maximum248 including all16 label/EOS endpoints. Original numerical gates retained.
+Tiny native CPU8 and actual-controller synthetic lifecycle3 tests pass, independent
+4 prompt/8 boundary/4 prefix/32 intervention-geometry audit passes. Scientific,
+test and audit sources are now pinned and immutable; no completed old run restarts.
+
+Host controller871818 in owned exec32357 runs source-pinned launch-01/launch.py.
+Read launch-01/state.json before any action; do not launch another controller.
+At03:27 Asia/Shanghai all4 devices had unrelated compute PIDs851516/851514/851513/
+851515 and100% utilization. Controller checks every45s and will bind one freshly
+idle >=44000MiB card, then engineering/check/full/check. No binding or model load
+at the initial check. User was informed and asked when occupancy would end.
+Existing four-GPU authorization persists, no new deadline. CANCEL before binding
+stops this wait; run-01/STOP applies once the new run exists. Never signal unrelated
+processes. All old scientific/site selectors remain unchanged.
+
+## Layer17 bridge trajectories COMPLETE (2026-09-20)
+
+`docs/research/experiment-plans/hehe-bridge-v1/results-current.json` selects
+prepared-01/run-01/results-01 and report-01/REPORT.md. Closeout manifest SHA256
+5c702f2d0070830dc4f6e987fe2f1ba3f809b02e2890fc71b7f0728554ef7bda.
+Terminal COMPLETE: never restart. User explicitly accepted the minimal layer17
+bridge measurement and four GPUs usable; one freshly idle GPU0 was used, no new
+deadline. Four unchanged Q01/Q02 x D01/D02 inputs, 8 cross configurations at layer17
+(focal/preceding, both directions), 8 self controls, all36 pre-answer trajectories.
+No new texts, labels, head interventions or finer branch interventions.
+
+108 forwards (96 engineering including12 format,12 production), normal GPU release
+2026-09-20 00:11:31.163128 Asia/Shanghai. First controller-phase start to final
+release132.736s; phases120.926s. Controller691595 and workers691876/693862 absent;
+both workers exit0. Final four GPUs all zero memory/utilization, no compute PIDs.
+All12 label/EOS gates and8 selfs pass. Repeat/reverse/left/right/replay trajectory
+errors0. All early-state guards pass; pre-answer0..17 and layer18 entry unchanged.
+Fresh margin bound1e-6, candidate probe bound1.52587890625e-5, no relaxed gates.
+Independent120-digit scores/extended-precision normalization audit checks108 full
+vectors,80 trajectory files,56 early guards and12,096 summary values. All12 fresh
+endpoint full-vocabulary vectors equal prior focal-patching endpoints, without
+old-score substitution. CPU report-test02 failed because worker Popen mock caught
+fc-list; preserved failure and unsealed snapshot, corrected mock scope, full test03
+passes. Scientific code/gates unchanged by that test fix.
+
+All four focal directions first show resolved pre-answer probe changes at layer18
+after attention; tiny early responses can oppose the final direction. Layer23 MLP,
+26 attention,28 MLP incremental responses align with final delta in all four focal
+directions; pre controls at these sites abs<.008. Preserve layer21 reverse responses,
+29/32 compensation and35 RMS scaling; not a monotone/unique three-module path.
+Final deltas Q01 ordinary->original+22.876492 repairs, reverse-9.973671 no flip;
+Q02 ordinary->original+15.648319 no flip, reverse-22.090942 repairs. Layer17 preceding
+controls max abs.060915, all no flip, not norm-matched controls. This connects the
+early intervention to downstream readouts but does not prove necessary mediation
+by specific branches. Suggested further26-attention/28-MLP restoration is unrun.
+
+All new scientific, audit, report and closeout sources are pinned. Report01 data/TSVs
+are byte-identical to results01; only display/explanation adds normalization plots
+and fixes crowded16/17 ticks. Old science and website selectors were unchanged at
+scientific closeout; live site still selected incremental-20260919-04 at that time.
+
+## 常驻偏好：结果回报与研究报告的写法（用户确认，2026-09-19）
+
+适用于本项目今后的结果回报、研究报告、图表解读及网站上的研究说明。
+用户希望“通俗一点点，但不用太通俗，适当添加解释”：保留专业性，补足理解所需的背景，
+让读者能读懂结果及其意义，而不只是看到术语、编号和数值。
+
+- 开头用一两句话说明目前发现了什么，并区分已经得到支持的结论与尚待验证的联系。
+- 简短交代比较对象：查询/条件编号代表什么、改变了什么、参考答案是什么；正文应能独立阅读。
+- 专业术语首次出现时，保留名称并解释“它测量什么、回答什么问题”。例如，答案方向投影是
+  用最终输出头读取中间状态，观察其偏向“有”还是“无”；这不表示该层已作出最终决定。
+  说明激活替换时，交代把哪种条件、哪个位置的内部状态放入另一种运行，再观察什么变化。
+- 解释结果时连接“观察到什么—支持怎样的理解—还有哪一环未验证”。把注意力权重、
+  中间投影、最终输出和干预效应区分清楚；简化语言不能扩大因果结论，也不能省略反例。
+- 正文只列支撑理解的关键数字，配上方向和实际含义；例如正向差值是否代表修复，取决于
+  参考答案。公式先给直观解释，再按需展开。完整数表、推导、校验及工程记录放入附录或链接。
+- 图表说明交代条件、测量位置、层号起算方式、坐标含义及原始值/差值；归一化等会影响
+  解释的处理，要说明其影响。可以用简短表格帮助比较，避免堆叠曲线而缺少文字解读。
+- 下一步围绕一个明确的待回答问题，解释为什么做、不同结果会怎样改变判断。保持简洁、
+  连贯、适度技术化，避免过度拟人化、幼稚类比或只有笼统的“不能证明因果”提示。
+
+这一偏好用于后续新撰写的说明；已封存报告、数据和源文件仍遵守原有不可变要求。
+
+## Focal patching and website increment04 COMPLETE (2026-09-19)
+
+`deploy/case_attention/digitalocean-sgp/current.json` selects deployed and verified
+incremental-20260919-04 at https://hsd.fenglin.pro/. New entry is
+https://hsd.fenglin.pro/reports/patching/ ; report REPORT.html in that directory.
+Release manifest SHA256ad94deed70330b52c94fa8664ab695404c3d47ffc179d59ab4596a4ce69179be;
+deployment closeout SHA256b3404c879418ea364b106dfe17dd66eec05c16b13193dc711a5871c5b88a2f52.
+Read deployments/20260919-04/README.md and closeout.json. Stage,activation,cleanup,
+scientific execution and all final checks are COMPLETE; never repeat them.
+
+9818 inherited files remain byte-identical;15 new assets/gzip pass. Old127 attention
+conditions, JS/CSS/catalog and scientific data unchanged; homepage adds only a
+navigation link. New standalone page contains4 existing prompts,288 cross patches,
+288 self controls and144 focal-minus-pre contrasts, not288 independent samples.
+Local HTTP and actual HTTPS browser suites each verify77510values (74198 old,
+3312 new), all layers/directions/prompts, NA,SVG,deep links,mobile and13 downloads.
+Both complete checklists match; original cache limits remain. The local child
+checker URL-presence label“actual HTTPS”is clarified in a preserved transport
+receipt; local parent base is loopback HTTP, live parent base actual HTTPS.
+Ordinary-DNS TLS/auth/body checks8/8 also pass. No numeric checks were waived.
+
+Only hsd static root switched and Nginx gracefully reloaded. Active config SHA256
+4886ad48ddcfd666578a720c176b5958d570e1a06054b76338d393e9ccd8d866.
+249 protected hashes, original login, both human sessions, review/PDF PID/start/
+restart counts and PDF HTTPS response unchanged. Temporary plaintext removed;
+owned preview576202 stopped with exact identity and documented pidfd ENOSYS
+fallback, browsers exited0. Preview exec11729 exited143 after intended SIGTERM;
+its earlier BrokenPipe log is a local client disconnect during browser activity,
+not failed numerical verification. Only this2,017,280-byte duplicate upload was
+removed; old releases/local archive retained, server free5748285440bytes. No owned
+GPU, browser, preview or deployment process remains. Receipts and delivered sources
+are pinned; future changes require new versions. Rollback only restores prior
+Nginx root to03 after active hash check; never roll back human data/restart PDF.
+
+Scientific results-current.json selects closeout manifest
+ef719ebc1b1f56f4c7a61ee2b6420dbb2f3e54648fa2e1ace10e204820eba80d.
+Single GPU0 completed2340 forwards, normal release22:40:10.491900 Asia/Shanghai,
+1354.180s first phase start to final release. All292 format gates,288 self/8 final-
+layer zeros, repeat/reverse/padding/native/production replays pass. Fresh score
+bound1e-6. Independent120-digit margin/expression and extended-precision full-
+vocabulary audit pass; raw references joined only after release. No old runs or
+labels changed; scientific sources/preparation/results/report remain immutable.
+
+In these fixed inputs, strongest focal patch effects cluster at0-based16–18.
+Q01 ordinary→original repairs16/17 (peak delta+24.170292 at16); reverse Q01 has
+no flip (peak-13.337856). Q02 original→ordinary repairs16/17/18 (peak-22.090942
+at17); reverse Q02 shifts+15.648319 but does not flip. Preceding-position controls
+never flip, largest|delta|0.106960. Keep all36 layers, both directions, state-norm
+differences and nonzero/opposite effects. This supports the specific intervention,
+not a unique natural semantic pathway, specific attention head or confirmation set.
+
+## Focal patching increment04 activated; live browser checks in progress (2026-09-19)
+
+Remote stage and activation both PASSED. Never repeat either. hsd now serves
+incremental-20260919-04, manifest ad94deed70330b52c94fa8664ab695404c3d47ffc179d59ab4596a4ce69179be,
+Nginx SHA4886ad48ddcfd666578a720c176b5958d570e1a06054b76338d393e9ccd8d866.
+9818 inherited files and15 new assets/gzip pass; only homepage navigation changes.
+249 protected hashes, both review sessions, review/PDF PID/start/restarts and PDF
+HTTPS match before/after.5 exact remote receipts fetched via tar stream without
+any activation retry. Ordinary-DNS TLS/auth/body checks8/8 pass.
+
+Local complete browser passes77510values (74198legacy +3312patching), all old
+regressions, new4inputs/36layers/both directions, deep links, SVG,mobile,report/
+downloads. Its child patching receipt descriptively labels any --url as“actual
+HTTPS”, including local loopback HTTP. Preserve browser-local-01/transport-
+clarification.json: authoritative parent base is http://127.0.0.1:41387/;
+no assertions changed and no actual-HTTPS claim for that local run. Actual live
+checks are now running in owned exec22856 via runtime/run_browser.py live.
+On success, pinned finalize.py cleanup then closeout (host context) requires
+identical full numeric/check lists, all protected receipts and normal browser exit.
+Local deployment selector remains03 until live checks pass. Existing source pins
+and releases are immutable; no GPU remains or may be restarted.
+
+Temporary0600 hosting-01/runtime/credential.json and owned preview576202 remain;
+cleanup only those exact owned resources and this2,017,280-byte duplicate archive
+/tmp/hsd-patching-incremental-20260919-04.tar. Old releases/local archive remain.
+Scientific terminal results/readout findings and provenance are detailed below.
+
+## Focal patching COMPLETE; incremental website validation underway (2026-09-19)
+
+NEW hehe-focal-patching-v1/results-current.json selects immutable results-01,
+report-01 and closeout-01 manifest ef719ebc1b1f56f4c7a61ee2b6420dbb2f3e54648fa2e1ace10e204820eba80d.
+Terminal COMPLETE, never restart. GPU0 completed2340 forwards (2048 engineering,
+292 production); workers540024/567143 exited0 and controller539592 absent.
+Final release22:40:10.491900 Asia/Shanghai, first start to release1354.180s,
+phases1145.154/189.893s. Final all4 cards0memory/0util, no compute processes.
+All292 exact-label/EOS gates pass; score repeat/reverse/padding/replay differences0,
+288 self and8 final-layer controls exact zero. Fresh margin/state bounds1e-6.
+No retry, STOP, signal fallback, GPU analysis or old-run restart.
+
+Independent audit covers2340 full vectors,2048 margin records,284 distinct
+extended-precision full-vocabulary normalizations,288 effects/ratios/intervals,
+144 position differences,288 self and8 final-layer zeros. Margins/expressions
+use120-digit Decimal. Actual scientific browser checks3312values/all4prompts,
+36layers/both directions, Unicode,NA,SVG,mobile,cold deep link. First browser call
+used a relative file path and failed before load; corrected invocation uses an
+absolute path and UNCHANGED pinned source/assertions. Preserve invocation note.
+
+Focal effects concentrate around layers16–18 (zero-based), unlike adopted preceding
+controls (largest |delta-m|0.106960, no flips). Q01 ordinary→original repairs at16/17;
+layer16 delta+24.170292, ratio0.534559, matched pre delta-0.018194. Reverse Q01
+does not flip (largest delta-13.337856). Q02 original→ordinary repairs at16/17/18;
+layer17 delta-22.090942, ratio0.708742, matched pre-0.028992. Q02 ordinary→original
+has positive delta up to15.648319 but no flip; this direction damages margin.
+Keep directional asymmetry, all layers/negative results, and norm differences.
+This is causal intervention evidence for these fixed token sets, not a pure-sense
+variable, unique internal path, attention head or independent confirmation sample.
+
+New incremental-patching-v1 release candidate04 is source-pinned. Package manifest
+ad94deed70330b52c94fa8664ab695404c3d47ffc179d59ab4596a4ce69179be;
+2,017,280-byte delta SHA3bba2c80153cadefd4aa2739a32a9c7769c5ab2e24a1e00561e8b85dc21271c7.
+9818 inherited files exact,15 new assets (plus gzip); old127 attention conditions
+retain scripts/catalog/data. Only homepage navigation changes, new reports/patching/
+and REPORT.html. Local preview owner576202 on127.0.0.1:41387, host PID/start/argv
+recorded. Local full browser and package audit underway; no remote mutation yet.
+Temporary0600 credential remains, remove after checks. Source-pinned runtime
+deployment.py uses exact5-file tar receipt transfer; finalize.py includes exact
+ownership ENOSYS fallback. Run only stage→activate→external/live checks→cleanup→
+closeout after corresponding gates. Existing03 remains active until activation;
+local selector changes only after full actual HTTPS/protected-services checks.
+
+## Focal patching stage2 sealed and GPU running (2026-09-19)
+
+NEW docs/research/experiment-plans/hehe-focal-patching-v1/current.json selects
+prepared-01, manifest SHA2563e8f2dc0dcc662eaa58752f87f4a9bde76523e64148804544a889b2411c83925.
+All stage2 capture/input/runtime/report/CLI/auditor/browser files in its source
+ledger are now immutable. CPU tiny-native5 and lifecycle3 tests, independent4
+prompt/8boundary/4prefix/576intervention audit, browser3311-value synthetic check
+pass; no real GPU before the freeze. User explicitly adopted preceding controls
+and all4 idle cards usable; no new cutoff. Prior completed windows do not apply.
+
+launch-01/launch.py is source-pinned and owns engineering/check/full/check.
+Binding b350789595fa8427e40c3ca1a0cba45a5142dda8d598b063d67f314fb4f1ec67;
+GPU0 alone UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0. Controller539592 and
+engineering worker540024 started2026-09-19 22:17:36 Asia/Shanghai, hostPID context.
+Read run-01/state.json, gpu.log and launch-01/state.json; do not start duplicates.
+Expected2340 forwards; terminal failures must not be automatically retried.
+Explicit stop is run-01/STOP. Only exactly identified owned processes may receive
+signals. Fresh qualification/all292 format gates remain pending while running.
+
+New incremental-patching-v1 and hosting-01/runtime are unsealed CPU release work.
+Candidate incremental-20260919-04 inherits03, adds reports/patching/ and only one
+homepage navigation link. All127 old attention conditions/scripts/data stay exact.
+No remote mutation yet. New stage2 references only join after raw seal and normal
+GPU exit. Report/audit/browser/scientific closeout must pass before packaging.
+Temporary mode0600 hosting-01/runtime/credential.json recovered ONLY from exact
+direct ancestor user credential; provenance recorded and auth401/200 checks pass.
+Never print/publish credential; remove after final checks. Server free5754163200.
+Use checked tar stream to fetch5 activation receipts; do not use remote scp /.
+Use exact-owned-process pidfd ENOSYS fallback from prior lesson. Preserve all old
+runs/releases/scientific artifacts and protected review/PDF services/sessions.
+
+## Focal patching stage2 explicitly authorized; CPU preparation in progress (2026-09-19)
+
+User accepted the proposed next stage, then selected preceding position controls:
+Q01 回/个 at795/796 (two focal 嘿嘿 tokens797/798); Q02 被 at795 (focal796).
+GPU reply is “4卡均空闲，可按需使用”. No new cutoff was supplied. Use one freshly
+verified idle L20, run through completion after CPU/fresh GPU qualification, then
+continue the authorized incremental publication to hsd.fenglin.pro. No repeated
+material/run/publication permission is needed. This new authorization supersedes
+the old stage2-deferred notes below; all OLD runs/releases remain terminal.
+
+New reviews/hehe-focal-patching-v1/adopted-01/adoption.json and prepared-01 record
+four unchanged Q01/Q02 × D01/D02 prompts,144 focal/144 preceding-position cross
+patches,288 self controls,36 layers and both directions. Single-layer complete
+decoder-block-output transplant only, no answer-position patch. Fresh same-run
+donors/baselines only. Stage2 code prefix hehe_focal_patch_*_v1 is new; old sources
+are immutable. prepared-01 is still unsealed while CPU checks finish. No stage2
+GPU inventory/binding/checkpoint load/forward yet. Normally2340 forwards, maximum
+4092 format-bound, about1.5GB raw. Keep unchanged score gates, exact full-vector
+self/repeat/reverse/replay and final-layer zero, native-state prefix/padding checks,
+all292 endpoint format gates, post-release reference joining, all negative results.
+Read prepared-01/PROTOCOL.md. All layers remain, ratios unclipped and near-zero
+denominators NA; Q02 reference alignment reverses raw m. Position controls are
+not assumed zero, and activation transplant does not identify a unique path.
+
+## Hehe presentation stage1 and website increment COMPLETE (2026-09-19)
+
+`deploy/case_attention/digitalocean-sgp/current.json` now selects deployed and
+verified `incremental-20260919-03` at https://hsd.fenglin.pro/. Fourth-round entry:
+`#round=presentation&request=hpm-Q01-D04&mode=mean&parts=parts&ceiling=0.01`.
+Report `/reports/presentation/`; mechanism `/reports/presentation/mechanism.html`.
+Release manifest SHA256acfe6e0c51bfa7ea8e5629143ed68e9e224dc3318f78fea8396e47e7725a5a7b;
+closeout SHA256cfe0ce5de55d67d0ca43493628f1612848728349655e8c2c0d9aba8589e88e9f.
+Read deployments/20260919-03/README.md and closeout.json for receipts. Never repeat
+stage, activation, completed scientific runs, or cleanup.
+
+Original109 conditions remain, plus18 new measurements, total127. All8400 inherited
+files are byte-identical;710 new assets/gzip pass. CPU audit verifies127 exact
+prompt/score records,1,432,704 aggregate means and2,897,280 new token means. Local
+and actual HTTPS browser suites each pass74,198 values and all63 checks, including
+all18 new conditions,56,412 mechanism values, old3-round regressions, NA/differences,
+32 heads/36 layers, deep links, reports/PDF, Unicode, mobile andSVG. No numeric
+checks or tolerances were waived. Complete local/live checklists match;3 bounded
+cache telemetry counts differ by1 due rapid-selection network timing. Independent
+browser-equivalence.json validates all exact checklist fields and original cache
+limits separately. Preserve all pinned versions/notes; do not edit them.
+
+Only hsd Nginx root changed and Nginx gracefully reloaded. New config SHA256
+3148d7abd1ba3a3ec395e2fe300293b3436cb6a47cc9fb2c5b48f1d4f3ee5cc5.
+249 protected hashes, login, both authoritative review sessions, review/PDF
+PIDs/start times/restarts and PDF HTTPS response match before/after. Ordinary-DNS
+TLS/auth/body checks pass. Temporary plaintext credential removed; owned preview
+403066 and local/live browser workers absent. Old-kernel os.pidfd_open returned
+ENOSYS after credential removal; source-pinned finalize_v4 used the sealed helper's
+documented fallback, rechecking exact PID/start ticks/argv immediately before
+SIGTERM. No unrelated process signaled. Only387194880-byte duplicate upload was
+removed; old releases/local archive retained, server free5762674688 bytes.
+
+First staging guard stopped before any remote action on absolute-path versus
+basename representation; v2 corrects only that check. Activation itself passed;
+subsequent scp remote /. receipt fetch failed, and source-pinned recover_receipts.py
+read the5 exact existing receipts without reactivation. These transport/platform
+notes and cache-comparison refinement remain in deployment receipts. No task-owned
+preview/browser/deployment process remains. Rollback restores only previous-nginx.conf
+for incremental-20260919-02 after verifying active config hash, then nginx -t/reload;
+never roll back human sessions or restart review/PDF services.
+
+Scientific results-current.json selects immutable prepared-01/run-01/results-01,
+report-01, and closeout manifest53a0106e50cca373c0b66f8b7003a0e786a0c8560b0d4204b115e703a21f73c3.
+GPU0 alone completed162 forwards (108 full engineering,18 prefix,18 format,18 science),
+both workers exited0 and controller380988/workers381645,388322 absent. Released
+20:29:09.432587 Asia/Shanghai, elapsed331.936s. Independent120-digit audit and real
+scientific browser passed. D03-D06 all retainQ01有/Q02有/Q03无; paragraph order has
+negative raw delta-m, sentence order positive in all3 queries. Q01D06 ordinary
+attention density slightly exceeds original, while its source-output norm is lower.
+These diagnostics do not establish a causal internal path. Stage2 activation
+patching remains deferred until stage1 interpretation; do not launch automatically.
+
+## Hehe presentation stage1 audited and sealed; website package ready (2026-09-19)
+
+NEW docs/research/experiment-plans/hehe-presentation-mechanism-v1/results-current.json
+selects results-01/report-01 with closeout-01 manifest SHA256
+53a0106e50cca373c0b66f8b7003a0e786a0c8560b0d4204b115e703a21f73c3.
+Terminal COMPLETE: never restart. GPU0 completed162 forwards, both workers exited0,
+controller/worker PIDs380988/381645/388322 absent. Final release20:29:09.432587
+Asia/Shanghai; phases185.103/92.867s, elapsed331.936s. Final all4 cards used0/util0,
+no compute processes. Stage2 remains deferred until interpretation, not automatic.
+
+Independent120-digit audit passes162 absolute vectors,126 margins,18 predictions,
+24 expressions,5,170,176 aggregates,104,302,080 FP32 display values,8,976 FP64 summary
+values and39,313,332 mechanism scalar checks. Real browser passes210,636 attention,
+56,412 mechanism values and75,168 NA cells, exact JSON, SVG/mobile and differences.
+Report script/figures/data and scientific closeout are pinned; do not edit them.
+Four dual-sense D03-D06 forms retainQ01有/Q02有/Q03无. Paragraph orderD04-D03 has
+negative raw delta-m for all3 queries; sentenceD06-D05 has positive raw delta-m.
+Q01D06 ordinary density exceeds original slightly, but its source output norm is
+smaller. These diagnostic outputs do not establish causal internal paths.
+
+User authorized completion and incremental deployment to hsd.fenglin.pro. New
+incremental-presentation-v1 sources/runtime are pinned in hosting-01/deployment-source-pins.json.
+Candidate incremental-20260919-03 preserves8400 inherited files and adds18 measured
+conditions to109 old, total127. Package manifest SHA256
+acfe6e0c51bfa7ea8e5629143ed68e9e224dc3318f78fea8396e47e7725a5a7b;
+387194880-byte delta SHA2565e1cfb1207cfe5752a2daa5ebeb0e43d93ad167147599650410f436ebc75ef30.
+CPU release audit passes127 full records,1,432,704 mean aggregates and2,897,280 new
+token means. Local browser passes74,198 values, all18 new conditions, mechanism,
+old3-round regressions, deep links, downloads, mobile and SVG. Candidate sources
+and runtime are pinned. First stage guard stopped before any remote action because
+previous selector stores an absolute release path. Preserved v1/failure notes;
+new runtime/deployment_v2.py normalizes only the basename with all hashes/checks
+unchanged, paired finalize_v2.py includes supplemental source pins. Use v2 below.
+
+387194880-byte upload completed to/tmp/hsd-presentation-incremental-20260919-03.tar.
+Remote stage and activation PASSED; never repeat either. Site now serves release03,
+new Nginx SHA2563148d7abd1ba3a3ec395e2fe300293b3436cb6a47cc9fb2c5b48f1d4f3ee5cc5.
+249 protected hashes, login, both review sessions, review/PDF identities/restarts
+and PDF HTTPS match. Activation wrapper failed only when scp rejected remote /.
+receipt download AFTER success. New source-pinned runtime/recover_receipts.py read
+five exact existing receipts using a checked tar stream; local before/after equal.
+receipt-recovery.json preserves the transport issue; no deployment was repeated.
+
+Ordinary-DNS TLS/auth verification runs in owned exec27109; complete live browser
+in exec9943 (browser-live-01). Preview owner403066 on127.0.0.1:34751 remains.
+Temporary0600 credential remains; after both checks pass, use finalize_v2.py cleanup
+then closeout, preserving old releases and deleting only the duplicate upload.
+Final selector still points to02 until full HTTPS/browser/protected checks pass.
+No repeated permission needed. Remote preservation requirements below apply.
+
+## Hehe presentation stage1 GPU COMPLETE; audit and increment underway (2026-09-19)
+
+User explicitly requested wait for occupancy to end, run through completion, then
+incrementally deploy results and report to hsd.fenglin.pro. No deadline supplied;
+no further run/material/publication permission is needed. Stage2 stays deferred.
+NEW launch-02/authorization.json and source-pinned launch.py record this scope.
+GPU0 became idle and was freshly bound to unchanged prepared-01; other processes
+were never stopped. execution-01.json records binding and new run-01. Controller
+380988 launched engineering worker381645 and production worker388322 in host PID
+context. Both workers exited0; run-01/state.json is terminal COMPLETE after162
+forwards (108 engineering full,18 prefix,18 format,18 science). Never restart.
+Controller may still be finishing CPU complete-check; read launch-02/state.json.
+
+All old margin/attention qualification maxima are0; new floors1e-6 and1e-7 remain.
+Mechanism reconstruction max scaled1.2414178950933626e-6; probe max absolute
+1.52587890625e-5, probe error bound3.0517578125e-5. All preregistered gates passed.
+Source decomposition/early projections remain diagnostic, not causal paths.
+New results-01 CPU analysis is running; independent numerical/browser audits,
+report-01 and scientific closeout are pending. No scientific old selectors changed.
+
+NEW deploy/case_attention/digitalocean-sgp/incremental-presentation-v1 contains
+unsealed deployment work; do not edit earlier pinned releases. Planned parent is
+incremental-20260919-02, manifest f441b364ec767a5aabf8ea2924b50bf84656891c2b0e9e655b664a0dcc679976,
+Nginx09f4b0e53933031752badeca3774c5c7a166fb03e97009320b4260f57f60af40.
+New release incremental-20260919-03 does not yet exist remotely. Root application
+will retain109 old conditions plus18 new measurements, total127. Add new mechanism
+page/report; inherit old scientific assets byte-for-byte. Existing SSH/TLS/basic
+auth checked. Server free bytes6716731392 at precheck. No remote write performed.
+
+Temporary mode0600 credential recovered ONLY from an explicit user answer in
+direct ancestor task; hosting-01/runtime/credential-provenance.json has identifiers.
+The value is in hosting-01/runtime/credential.json, never logs/artifacts. Remove
+after verification or abandoned deployment. This file is not a scientific source.
+Host new local preview/browser only as needed; record exact ownership and clean
+after final checks. Require complete local/real HTTPS browser checks, all protected
+review/PDF files/session/identity preservation, and source pins before selector
+update. Preserve failed attempts if any; never relax scientific or numerical gates.
+
+## Hehe presentation/mechanism CPU ready; GPUs occupied (2026-09-19)
+
+User accepted “没问题，可以按照这一轮实现，草案/D03~D06/推荐的机制探索方式都没问题”.
+NEW docs/research/experiment-plans/hehe-presentation-mechanism-v1/current.json
+selects reviews/hehe-presentation-mechanism-v1/prepared-01, manifest SHA256
+a79c3ec43f6ea3c6f30d00284959781a4381a2da4a4264624c34e18f0a4bf1a4.
+Read public README.md and prepared-01/PROTOCOL.md, ALL-PROMPTS.md. Preparation,
+sources and test receipts are sealed; never edit them. Old experiments/site remain
+terminal and unchanged. No new scientific GPU inference has run.
+
+18 inputs = 9 new Q01/Q02/Q03 by D04/D05/D06 plus 9 exact old D01/D02/D03 inputs
+for fresh intermediate-state measurement, not restart of an old run or old score
+substitution. D04 reverses complete paragraphs. D05/D06 are accepted one-sentence
+original-first/ordinary-first versions. D03/D04 equal length; D05/D06 equal length
+and one token longer. Sentence components own20/18 tokens, scaffold6; paragraph
+components21/21, boundary1. Keep attention mass and visible-token density. There
+are24 dependent comparisons including three order-by-expression interactions.
+Native task/single-token 有/无, inherited references and AI authorship remain.
+
+NEW hehe_presentation_{inputs,capture,runtime,report}_v1 and CLI collect all native
+attention roles plus individual-token block pre/mid/post states, attention/MLP
+outputs, fixed-final-norm output-head probes, per-head source-group AV and O
+outputs, and source mass. Groups partition all keys without renormalization.
+Native tensors are not modified. Sources identify key locations, not independent
+semantic causal paths. Q03 focal tokens cannot read later rejection. New numerical
+mechanism gates are preregistered; original margin/attention gates are unchanged.
+
+Independent CPU reconstruction passes18 prompts,36 label boundaries,18 prefixes,
+414 spans,18 source partitions and144 Fraction checks. Nine native/synthetic CPU
+tests pass, including tiny random Qwen3/GQA manual reconstruction, no-op hooks,
+padding/prefix/future invariance, self/last-layer patch controls, and actual new
+controller/worker162-forward synthetic pause/reuse/terminal/corruption lifecycle.
+Browser checks18 real prompts and43,560 synthetic mechanism values, NA, SVG and
+mobile. Node12 failure and sandbox browser-launch refusal are retained in
+development-01; identical suite with Node22 in host context passed. No gate waived.
+
+GPU binding attempt launch-01 closed without allocation: GPU0 was occupied and
+fresh NVML then found compute processes/nonzero utilization on all four devices.
+No bound file or run directory exists; no model loaded, worker or watchdog started.
+availability-current.json selects this closed attempt and execution-tools-01.
+The optional question about a new deadline received no response; the stated
+completion-and-release assumption is recorded honestly as interpretation, not a
+new explicit user reply. A further availability question asks for a free card and
+time window. Do not ask for material approval again. Prior expired01:00/45min
+windows do not carry over. Continue with a new launch-02, fresh availability and
+device binding when hardware permits; never stop unrelated existing processes.
+
+Stage1 normally162 forwards, maximum270; estimated10–20min, reserve30min/20GB on
+one freshly idle >=44000MiB L20. New hook overhead is not GPU-qualified yet. Use
+host PID/proc context; engineering/check/full/check and normal worker release
+remain required. STOP applies only to a future new run. Reports/references join
+only after raw seal and normal release. Supplemental real-result browser auditor
+is source-pinned in execution-tools-01; syntax passed, real-data check pending.
+
+Stage2 method accepted but deliberately not automatic: Q01/Q02 D01↔D02 focal
+decoder-block-output patch,36 layers/two directions =144 main interventions plus
+self and equal-size other-query controls. Primitive is CPU-tested and patch-plan
+registered. Interpret stage1 before a separate stage2 run; preserve last-layer
+structural zero and do not treat null focal patches as exclusion of other routes.
+
+## Hehe website increment COMPLETE (2026-09-19)
+
+`deploy/case_attention/digitalocean-sgp/current.json` selects the deployed and
+verified `incremental-20260919-02` at https://hsd.fenglin.pro/. Third-round entry:
+`#round=hehe&request=hsc-Q01-D03&mode=mean&parts=parts&ceiling=0.01`.
+Release manifest SHA256 f441b364ec767a5aabf8ea2924b50bf84656891c2b0e9e655b664a0dcc679976;
+closeout SHA256 9a4aac72473b2eb75e4f582c04caed36ebed5552f10b53ac3fa5b0b07e2ce366.
+Read deployments/20260919-02/README.md and closeout.json for all receipts.
+
+The new9 Q01/Q02/Q03 × D01/D02/D03 conditions coexist with the original12 and
+replacement88, totaling109. All7,680 inherited files are byte-identical;363 new
+assets and their gzip hashes pass. Both D03 definition components and boundary
+remain separate. All36 layers/32 heads, mean, mass/density, differences, sorting,
+SVG, prompt display, reports and downloads work. No scientific inputs, labels,
+scores, frozen sources or GPU runs changed. Never restart completed experiments.
+
+CPU checks cover all109 prompt/score records,1,289,088 independent aggregate means
+and1,435,392 new token means. Local and live HTTPS suites each verify13,042 values,
+all9 new conditions, Unicode, NA, differences, deep links, reports, SVG and mobile.
+The first live segment passed10,648 values, then a legacy cold deep link exceeded
+180 seconds. Its failure record remains. The separately pinned v2 continuation
+uses600-second network waits and identical numerical assertions; it passes the
+remaining2,394 values and all outstanding deep links/downloads. The combined
+checklist exactly matches the complete local suite. A local-only v1 continuation
+omitted opening the options panel; preserve its source/failure and cleanup record.
+Its exact owned browser was stopped after v2 passed. No checks were waived.
+
+Only the hsd Nginx root changed and Nginx was gracefully reloaded. Current config
+SHA256 09f4b0e53933031752badeca3774c5c7a166fb03e97009320b4260f57f60af40.
+Existing login, both authoritative review sessions,249 protected hashes, review/
+PDF PIDs/start times/restarts and PDF HTTPS response are identical before/after.
+Temporary plaintext credential and owned preview are removed. Only this upload's
+191,016,960-byte duplicate archive was removed; old releases and local archives
+remain. Server free bytes after cleanup6717165568. No task-owned preview/browser
+or deployment process remains. Delivered implementation, continuation sources and
+receipts are pinned; do not edit them. New changes require a new release.
+
+The receipt's previous-nginx.conf rolls back to incremental-20260919-01 after
+checking the active config hash; never roll back human review sessions or restart
+PDF/review services for a page rollback. NA is not zero; means retain original
+denominators; attention does not establish causal use. This remains exploratory.
+
+## Hehe website increment prepared; remote staging in progress (2026-09-19)
+
+User explicitly requested “帮我把新结果也增量部署到hsd.fenglin.pro”. No further
+publication approval is needed. New display/deployment sources are in
+deploy/case_attention/digitalocean-sgp/incremental-hehe-v1; never edit the prior
+incremental-content-v1 sources or any scientific freeze/result. Scientific GPU
+runs remain terminal; this work is CPU/static release only.
+
+Candidate incremental-20260919-02 uses hosting artifacts at
+reviews/hehe-sense-context-v1/hosting-01/prepared. Release manifest SHA256
+f441b364ec767a5aabf8ea2924b50bf84656891c2b0e9e655b664a0dcc679976;
+191,016,960-byte delta archive SHA256
+ef4ecaf5cfe0c9df77afb7b531a067a7f6fd130ceb499eabadbf99510e1678b0.
+Parent is incremental-20260919-01, manifest78f2e2d5056ed557f79858045dcf4c555e57e4e854aa63385e17419ff93a83f9,
+Nginx config38151c0010e6a0a0d03c241f72fab4f12c1c878e5d0d4c8865f918840525901e.
+All7,680 inherited files and363 new assets/gzip pass local hash checks;109 prompt/
+score records and1,289,088 independently recomputed means match. New token means
+check1,435,392 values. Local browser checks13,042 values, all9 new conditions,
+old regressions, component NA, differences, deep links, downloads and mobile.
+
+Upload completed to /tmp/hsd-hehe-incremental-20260919-02.tar; remote staging via
+/tmp/hsd-hehe-deploy-20260919-02.py PASSED all7,680 inherited and363 new assets.
+Remote staging-receipt.json exists; disk_free6526783488. Activation PASSED; new
+Nginx hash09f4b0e53933031752badeca3774c5c7a166fb03e97009320b4260f57f60af40.
+249 protected file hashes, both review sessions, review/PDF PIDs/start/restarts and
+PDF HTTPS match exactly. Ordinary-DNS TLS/auth/body checks also pass. First live
+browser segment passed10,648 values with no page errors, then a cold legacy deep
+link exceeded its180-second network wait. Preserve browser-live-01/failure.json.
+New pinned check_browser_continuation_v2.cjs retains exact value assertions and
+uses600-second network waits; its local continuation passes the remaining2,394
+values and all deep links/downloads. Its local checklist plus the first live
+segment exactly matches the full13,042-value local suite. Live continuation now
+runs in owned exec session26723, output browser-continuation-live-02. A prior
+local-only continuation forgot to open the options panel and is waiting to time
+out in session22614; preserve that source/attempt, do not use it as evidence.
+On live success, runtime/merge_browser_receipts.py verifies and joins disjoint
+checks; cleanup.py then removes only owned temporary resources, and closeout.py
+seals receipts and updates the selector. Local preview session54468 remains.
+Read
+activation-receipt.json and remote-receipts; never duplicate stage or activation.
+Local selector remains old until full live browser checks pass. Local receipt is NEW
+deployments/20260919-02. Only activate after stage succeeds, then real HTTPS
+browser checks and protected-service/session/PDF preservation are required.
+
+Existing credential was recovered only from a direct ancestor task's explicit
+user message; temporary mode0600 hosting-01/runtime/credential.json. Value never
+printed or put in artifacts. Authenticated/unauthenticated existing HTTPS tests
+passed. Remove this plaintext after final checks. Owned loopback preview PID4030815
+on127.0.0.1:33789; exact PID/start/command recorded in runtime/preview-owner.json.
+Stop only this preview after final checks. Preserve all old releases and user data;
+only this upload's duplicate /tmp archive may be removed after success.
+
+## Hehe sense/context COMPLETE, audited and released (2026-09-19)
+
+NEW docs/research/experiment-plans/hehe-sense-context-v1/results-current.json
+selects prepared-01/run-01/results-01 and report-01/REPORT.md. Closeout manifest
+SHA256 0bc1bec325b92063148fc0a8c28e3c4eb3cc72ce8dacc7a085cdd0baf580738e.
+Terminal COMPLETE: never restart. User authorized run-until-completion with no
+deadline. GPU0 alone completed81 forwards:54 complete-prompt engineering,9 prefixes,
+9 format and9 science. Engineering/full controllers3987798/3992146 and workers
+3987891/3992339 are absent; both workers exited0. Final release was2026-09-19
+13:49:04.704054 Asia/Shanghai. The two phases took114.157s; elapsed first start to
+last release223.973s, including phase gap/check/scheduling. Final NVML showed all
+four cards zero memory/utilization and no compute processes. No retry, STOP or
+signal fallback occurred. All subsequent work was CPU; live websites are unchanged.
+
+All9 exact-label-then-EOS gates pass. Hook,repeat,reverse,left/right padding,prefix
+and production replay differences are0. Fresh bounds use unchanged floors:
+margin1e-6, attention mass1e-7; no old bound substitution or tolerance relaxation.
+Independent120-digit Decimal audit checks81 absolute vectors,63 margins,all9
+predictions and9 expression values/bounds/directions/transitions. Reconstructs
+2,515,968 aggregate elements (max error1.66534e-15),6,552 Decimal aggregate samples
+(max6.40623e-16),51,674,112 FP32 display values and4,368 FP64 summary values.
+Real browser checks9 files/13 configurations/33,840 cells, component/condition/role
+differences,NA,Unicode andSVG. Initial new-reader60-digit bound check rounded the
+exact binary64 1e-6 expansion by1.5625e-67; Fraction equality proved no result
+error and precision120 resolves it. Preserve audits/result-audit-notes-01.json.
+New result/browser auditors and report script are source-pinned; do not edit them.
+
+Q01 outputs D01/D02/D03 = 有/无/有, margins-20.481339/+24.734024/-12.312939.
+Q02 = 有/无/有, margins-20.597908/+10.571320/-20.321224; reference有 means signed
+reference-aligned delta is the opposite of rawΔm. Q03 = 无/无/无, margins
++10.855965/+21.782015/+8.515823. Ordinary definition repairs Q01 but damages Q02;
+dual definition does not repair Q01. Preserve Q03 D03-minus-D01 negativeΔm
+-2.340141 and all9 contrasts. The2 exact historical Q01 input replays have equal
+fresh margins, no old score substitution. D03 original definition has higher
+36-layer/32-head mean mass/density than ordinary in all3 queries at both focal
+and pre-answer roles, yet Q03 predicts无. Attention rank alone is not output
+direction or an internal causal path. Q03's later rejection is not visible at
+its focal position. Both component spans own21 tokens; boundary owns1 and stays
+separate. All3 D03 lexicon-end means equal as expected for identical prefixes.
+
+Scope remains two exposed real sources and one adopted AI-derived text, no new
+confirmation set or head intervention. Nine dependent conditions are not a
+benchmark accuracy sample. D03 length/order/repetition and Q02/Q03 quotation/
+stance/length differences remain. Prior freezes, adoption provenance, completed
+experiments and their selectors are unchanged. Current.json still identifies
+immutable preparation; results-current.json is the authoritative completion.
+
+## Hehe sense/context GPU execution authorized and started (2026-09-19)
+
+User now explicitly authorized “现在可以直接开始，直至运行结束”. NEW
+reviews/hehe-sense-context-v1/launch-01/authorization.json records run-until-completion
+with no user deadline. This supersedes the pending-window stopping point below;
+neither the old completed experiment's 01:00 cutoff nor the proposed15-minute
+reservation is a current limit. No further material/run permission is needed.
+
+NEW docs/research/experiment-plans/hehe-sense-context-v1/execution-01.json selects
+launch-01/bound-01.json and run-01, using immutable prepared-01. Launch manifest
+SHA256 6379449c02f965c78b316afd4f6f77534eac48affe0ef9e0a285da7f6ce73871;
+binding SHA256 8857266386a9641569f77a6f36b8f4ca80e01a16e44deb433144a45cdd9d49e0.
+All four cards were freshly idle; only GPU0/L20 UUID
+GPU-09b29c25-c372-62f4-3098-9734013e93c0 is allocated. Engineering controller3987798
+and worker3987891 started in host context. Read run-01/state.json and gpu.log;
+do not duplicate executors or restart failed/complete runs.
+
+The unchanged pinned CLI is supervised in explicit engineering/check/full/check
+phases. Full requires qualification, normal owned-worker exit and CPU check. No
+time-based window wrapper is used because this authorization has no cutoff.
+An explicit stop uses run-01/STOP; signal only exactly verified owned processes.
+Fresh numerical/format qualification is pending. References remain excluded from
+workers and join only after raw seal and final normal release. All nine science
+inputs, prior freezes/experiments and live sites are unchanged.
+
+## Hehe sense/context adopted and CPU execution ready (2026-09-19)
+
+User explicitly accepted “Q02、Q03、D03通过”. NEW feedback-01.json and
+adopted-01/adoption.json record all three accepted items; Q03 is adopted 无/0
+with AI authorship and named bulk-adoption provenance, not a new individual
+human-authored annotation. Q01/Q02 inherit their reviewed 无/有 references.
+Adoption manifest SHA256
+a687f2889688921bbc043939023aa6561076d93f3568f46550c0332f9651d085.
+The original review draft and blank historical feedback remain unchanged.
+
+NEW docs/research/experiment-plans/hehe-sense-context-v1/current.json selects
+reviews/hehe-sense-context-v1/prepared-01, manifest SHA256
+6698db68913e51e8d90808540b2b84f415a0b30652d0bd0295f9ae405fabac27.
+Read its README.md and the public README.md. All nine scientific inputs remain
+byte-identical to the reviewed draft: Q01/Q02/Q03 by D01/D02/D03, L only, no demos,
+same Qwen3-8B/latest task/single-token answers. All nine contrasts and all six
+readout axes remain; demos_end is structural NA. D03's two definition components
+can be displayed separately without changing scoring inputs or denominators.
+Parent/child spans overlap. Raw m=z无-z有; Q02 reference alignment uses -m.
+Length/order/quotation/stance confounds and exploratory source exposure remain.
+
+Seven native/synthetic CPU tests pass, including tiny random CPU Qwen3, read-only
+capture, padding/prefix invariance, aggregation, and the new controller/worker's
+81-forward synthetic pause/resume/terminal/corruption lifecycle. Independent audit
+reconstructs nine prompts,18 answer boundaries,nine prefixes,189 span bounds and
+54 exact Fraction contrast checks. Real local browser checks pass all nine Unicode
+prompts,36-layer axes,NA,definition components and SVG. No research pretrained
+weights, GPU inventory/probe/binding/forward or live-site change occurred.
+
+Watchdog CPU checks pass STOP/owned termination/stale identity/unrelated survival,
+plus six authorization scenarios. Imported sandbox tests exposed a PID namespace
+versus /proc mismatch (live child PID6 absent); this failure and cleanup are retained
+in watchdog-cpu-test.json. Same test passed in host context. Future execution must
+use host PID/proc visibility; never bypass exact ownership verification. Existing
+ownership/stop logic and numerical gates are unchanged. New source-pinned adoption,
+inputs/runtime/report/CLI/watchdog/auditor/test/viewer files must not be edited.
+
+GPU is NOT started, allocated or numerically qualified. No current GPU window is
+recorded; the previous experiment's 01:00 deadline has expired. Continue from this
+freeze after obtaining the new availability/deadline; no repeat material approval
+is needed. Usually81 forwards (54 full engineering +9 prefixes +9 format +9 science),
+maximum135; estimated5–10min on one idle >=44000MiB L20, reserve15min and8GB disk.
+Fresh binding, weights/runtime checks, format/numerical qualification and normal
+worker release are required; raw references join only after complete raw seal.
+STOP/TERM/KILL offsets remain120/60/20s before the future deadline. All old runs
+remain terminal and all previous scientific/deployment selectors are untouched.
+
+## Hehe sense/context nine-input review draft prepared (2026-09-19)
+
+NEW docs/research/experiment-plans/hehe-sense-context-v1/current.json selects
+reviews/hehe-sense-context-v1/draft-01. Start at REVIEW.md; ALL-PROMPTS.md contains
+all nine full native prompts. Manifest SHA256
+b3c3d5eeb49697a1ffc38b748e1850d61ad10caf95996f17c7dcb6588b78c7ff.
+This is a REVIEW DRAFT, not adoption or execution preparation. Preserve the draft
+and its two source-pinned prepare/audit_hehe_sense_context_v1.py scripts. Future
+feedback and edits belong in separate versions; all previous selectors stay intact.
+
+The user requested adding simultaneous original/ordinary definitions to the small
+design and receiving the complete materials for review. Qwen3-8B/latest task,
+single-token 有/无, L only: three queries by three dictionary versions. Q01 is exact
+3169 (inherited 无); Q02 is exact previously reviewed demo3660 used as a query
+(inherited 有); Q03 is an assistant-authored quotation/rejection of full Q02 with
+proposed 无, NOT human adopted. Q02 selection, Q03 text/reference and D03 composition
+are the three pending items. Do not request re-adjudication of inherited labels.
+
+D03 joins unchanged original then accepted L05 paragraphs with one newline inside
+the same 嘿嘿 entry. The other five entries and their order stay fixed; no demos or
+category fields are displayed. D01/D02 have21 owned definition tokens; D03 has43
+and shifts downstream positions by22 tokens. Dual-sense comparisons include length,
+order and repetition effects. Q02 also contains sexual-history denigration, and
+Q03 changes quotation/stance/length; neither isolates a pure sense-selection path.
+Two exposed real sources plus one derived text are exploratory, not independent
+confirmation. Keep AI authorship and inherited human provenance separate.
+
+Independent CPU audit passes9 native prompts,18 label boundaries,9 exact prefixes
+(3 unique),189 span bounds, token ownership, component partitions and9 contrasts.
+Single-sense outside-definition tokens and role positions match; Q01 D01/D02 are
+exact historical L inputs (no old scores reused). Model inputs exclude references;
+all new human fields remain null. No torch, weights, GPU probe/bind/poll/forward or
+executor was used. Existing completed experiments remain terminal; future runtime
+preparation and fresh numerical/format qualification are still outstanding.
+
+## Attention website incremental release and 36-layer mean COMPLETE (2026-09-19)
+
+`deploy/case_attention/digitalocean-sgp/current.json` now selects the deployed
+`incremental-20260919-01` at https://hsd.fenglin.pro/. Release manifest SHA256
+78f2e2d5056ed557f79858045dcf4c555e57e4e854aa63385e17419ff93a83f9.
+The original 12 conditions and the content-replacement 88 conditions coexist;
+912 old data files are inherited byte-for-byte. No scientific inputs, labels,
+scores, frozen sources or GPU runs changed. Never restart completed experiments.
+
+The UI adds 36-layer equal means from sealed FP64 attention, preserving role
+and head axes; single-head/all-32-head, mass/density, condition/readout differences,
+material/slot alignment, sorting and SVG remain available. Means never renormalize
+over the displayed subset. NA is not zero; attention does not establish causation.
+Original FP32 layer display bytes and FP64 aggregates are unchanged. Bounded
+browser caches replace full-tensor allocations. New mean views fetch one mean
+file rather than all 36 layers; old tabs and old data URLs remain compatible.
+
+CPU checks cover 20,778,048 mean token values, 1,219,200 independently recomputed
+aggregate means, all 100 prompt/score records and 3,387 new files/gzip hashes.
+Local and authenticated HTTPS browser checks each verify 10,648 values, plus
+Unicode, missingness, differences, order alignment, downloads, fast switching,
+deep links and mobile layout. Read deployments/20260919-01/README.md and its
+closeout.json for receipts and source pins. Do not edit pinned delivered files;
+future changes belong in a new release, preserving this one.
+
+Only the hsd Nginx root changed and Nginx was gracefully reloaded. Existing login,
+both authoritative review sessions, 249 protected file hashes, review/PDF service
+PIDs/start times/restart counts and PDF HTTPS response all match before/after.
+The temporary plaintext credential and owned local preview were removed. Only
+this upload's duplicate archive was cleaned; old releases and local archives
+remain. New config SHA256 is
+38151c0010e6a0a0d03c241f72fab4f12c1c878e5d0d4c8865f918840525901e.
+The deployment receipt's previous-nginx.conf rolls back to layers-20260918-03;
+never roll back human sessions or restart PDF/review services for a page rollback.
+
+## Content replacement COMPLETE, audited and released before 01:00 (2026-09-19)
+
+NEW docs/research/experiment-plans/case-content-replacement-v1/results-current.json
+selects prepared-01/run-01/results-01 and report-02/REPORT.md. Closeout manifest
+SHA256 18c79eac818fb278ef0254028b71e0f9bfc422d7c1d256e236d4628f11351e88.
+Terminal COMPLETE: never restart this run. All original drafts, adoption records,
+freezes, selectors, prior experiments and human references remain unchanged.
+
+GPU0 alone completed832 forwards:528 complete-prompt engineering,128 prefixes,
+88 format continuations and88 science. Final worker2932377 exited normally at
+2026-09-19 00:14:20.866804 Asia/Shanghai, before the authorized01:00 deadline.
+The original engineering worker2912387 also exited0. All7 registered owners,
+including watchdog2912304, are absent; final00:16:03 NVML showed all four cards
+at zero memory/utilization and no compute processes. No STOP, signal fallback,
+retry or GPU analysis occurred. Supervisor including CPU checks took1194.445s.
+
+All88 exact-label-then-EOS probes pass. Hook, repeat, reverse and production
+replay score/attention errors are0. Padding margin maximum0.00018310546875 gives
+new margin bound0.0003662109375; attention mass bound0.00007667524947881573.
+No gates changed. Independent60-digit Decimal audit covers832 absolute vectors,
+616 margins,88 predictions and258 expression values/bounds/directions/transitions.
+All margin directions/predictions are resolved. Independent reconstruction covers
+39,762,432 attention aggregate values;103,548 Decimal samples have maximum error
+1.06583e-15, FP64 reconstruction maximum2.22045e-15. Real browser checks pass
+13 input files/14 configurations/48,384 cells, material/slot alignment and SVG.
+
+#3169 L05 ordinary 嘿嘿 changes L m -20.481339 to+24.734024 and LD -20.041424
+to+1.620178; both repair the reference classification. L06 paraphrase effects
+are-0.395405/-0.997803, and nonfocal L07+0.247980/+0.685925. This is content
+intervention evidence in these fixed prompts, not proof of an internal path.
+#541 A01 #2129 label flip moves D/LD margins+7.067593/+7.732040 without repair;
+A02 #4041 has a larger D effect+8.937767 despite lower baseline attention.
+L01 男同 effects+1.605270/+0.883732 do not support literal zero dictionary effect.
+All38 #541 conditions remain有;12/50 #3169 conditions are无. These designed
+condition counts are not independent samples or a benchmark accuracy estimate.
+
+Order O01/O02/O03 shifts high answer attention toward the swapped early slot;
+retain O04's exception. In541/LD, #2129 mean answer mass0.33796%→0.07485%,
+#1289 0.06401%→0.25842%, while margin changes only-0.005566. In3169/LD O04,
+#3660 retains similar mass0.16474%→0.16757%. Neither pure position nor pure
+semantic matching is established. D/O03 repairs3169; LD/O03 does not. Preserve
+all opposite directions and all8 body/label interactions, including B02's D/LD
+sign difference. This remains two exposed exploratory cases, no head intervention
+or independent confirmation; all258 comparisons and88 endpoints are retained.
+
+report-02 only improves plot glyphs/labels, common row axes, display of existing
+numerical bounds and abbreviation explanations. Its metrics.json and all-inputs.tsv
+are byte-identical to report-01; both report scripts/manifests are source-pinned
+and must not be edited. New result auditor, real-browser auditor and closeout
+are pinned too. Read closeout-01/README.md for entry points and CPU viewer access.
+
+## Content replacement accepted; new bounded GPU run started (2026-09-18)
+
+User accepted revised L06 (“没问题，可以通过”) and then changed the timeout:
+“超时守护定到1:00前即可”. All44 items are now explicitly adopted; preserve
+AI authorship and bulk-adoption provenance. Latest deadline supersedes the
+earlier relative45min guard: GPU release before2026-09-19 01:00 Asia/Shanghai,
+STOP00:58, owned worker TERM00:59, emergency KILL00:59:40 only if needed.
+No repeated execution permission is needed. Only exact owned processes may stop.
+
+NEW case-content-replacement-v1/current.json selects prepared-01, manifest SHA256
+5e661b57701cfcd7b69c6ba90d7b69463e10526b559195de2a2dd8b1a754cddb.
+NEW execution-01.json selects launch-01/bound-01.json and run-01. Binding SHA256
+85a2e75fd181072a324dbd766fdf651a715d90562a7119c409aeb2d6cf813751.
+All four cards were freshly idle at binding; only GPU0/L20 UUID
+GPU-09b29c25-c372-62f4-3098-9734013e93c0 is allocated. The watchdog has started.
+Read the new run's state.json/gpu.log and launch-01/window-state.json; do not
+duplicate executors or restart terminal runs. Old case-attention stays complete.
+
+feedback-02.json records L06 acceptance. Execute revision-01's token-checked
+ASCII quote text; the chat response had typographic quotes. The display/input
+normalization is explicitly disclosed and preserves approved equal-token control.
+Only L06 L/LD inputs changed from draft-01;86 original input records are exact.
+adoption.json is authoritative for44 adopted items, including B01 edited-text有.
+material-proposals.json/inputs.jsonl retain construction-time blank human fields;
+the worker uses reference-free scoring-inputs.jsonl, not review/reference files.
+
+All88 native prompts/176 answer boundaries/128 prefixes/3340 spans and258
+expressions pass independent CPU reconstruction;624 Fraction direction checks
+and8 additive-null checks pass. Seven native/synthetic CPU tests pass, including
+the actual new controller/worker lifecycle with832 synthetic forwards and safe
+pause/reuse/corruption/terminal checks. Watchdog ownership/stop checks pass.
+Browser validates88 full Unicode prompts, head/layer axes and SVG export with
+temporary synthetic data. No research pretrained forward occurred in CPU checks.
+New case_content_replacement_{inputs,runtime,report}_v1 modules, runner, watchdog,
+CPU tests/auditor and viewer are pinned; never edit prepared-01 or pinned files.
+
+Actual numerical/format GPU qualification is pending. Production requires all
+unchanged gates, all88 exact-label/EOS probes, normal worker exit and CPU check.
+Expected832 forwards =528 engineering +128 prefixes +88 format +88 science;
+format worst-case1360. Fresh baseline scores and new bounds only; no old score
+substitution or tolerance relaxation. No automatic retry after failure. Raw
+reference joining waits for completed raw seal and normal owned-worker release.
+
+## Case replacement:43 items accepted; revised L06 awaits confirmation (2026-09-18)
+
+NEW case-content-replacement-v1/current.json links feedback-01.json and
+reviews/case-content-replacement-v1/revision-01/REVIEW.md. User said
+“L06改写幅度太小了，其他都可以通过”:43 original items are explicitly bulk
+accepted, including B01 edited text/proposed有 label. Preserve AI authorship;
+no new individual review is invented. Original draft-01 and pinned scripts stay
+immutable. L06 revision2 is “用'嘿嘿'这一谐音形式代替'黑黑'，作为侮辱黑人群体的称呼。”
+and remains pending human confirmation. CPU candidate checks give L813/LD1162
+native tokens,21 owned definition tokens,20 changed token IDs versus original
+(old proposal changed1); all six roles and outside-definition tokens unchanged.
+No weights/GPU were used. The revision packet is a proposal/feedback overlay,
+not a complete new88-input scientific/execution freeze. After acceptance assemble
+and independently verify it, then prepare a new executor/binding and fresh GPU
+qualification. User explicitly reiterated that accepting the rewritten result
+permits GPU execution; do not ask for that permission again. Retain45min safe
+stop. Do not run before L06 confirmation or restart any completed old run.
+
+## Case content-replacement data draft delivered; human review pending (2026-09-18)
+
+NEW docs/research/experiment-plans/case-content-replacement-v1/current.json
+selects reviews/case-content-replacement-v1/draft-01. Start at REVIEW.md.
+Manifest SHA256 8d4b83581bafa55dd338bdaf7d72f52cc912d02ec7b6b10bfecca62af14db077.
+This is an immutable REVIEW DRAFT, not adopted science or execution preparation.
+Preserve it and the two pinned prepare/audit_case_content_replacement_v1.py
+scripts; feedback, changes and adoption require separate versions. All historical
+selectors, references, materials, results and terminal runs remain unchanged.
+
+The user requested this round's data and an item-by-item review document, saying
+it may run after approval. That conditional authorization persists; do not ask
+again for the same authorization once review passes. NOW stop before GPU: all
+44 items (S01-S08,A01-A20,L01-L08,B01-B04,O01-O04) have null human decisions.
+No bind, run, model load, GPU probe, queue or idle poll was started. For a future
+accepted run, retain the earlier maximum45-minute window and safe stop, record
+new actual start/deadline and verify current idle hardware; the old window ended.
+
+88 unique inputs:8 exact historical C0/D/L/LD baselines,40 individual demo-answer
+flips,16 definition variants,16 body/answer crossed variants,8 same-label whole
+demo swaps. There are258 dependent contrast expressions, not258 independent
+samples. Qwen3-8B and latest frozen task/single-token 有18830/无42192 unchanged.
+Baseline demo label composition is5有/5无 for541 and7有/3无 for3169. Flips are
+intentionally inconsistent displayed answers; never overwrite original references.
+Only two exposed exploratory queries, no new confirmation set or head intervention.
+
+Eight AI definition proposals keep headwords fixed:男同/变态 and嘿嘿/仙女 each
+ordinary-sense and paraphrase variants. Meaning equivalence is pending review;
+nonfocal entries are not guaranteed irrelevant controls. Body B02-B04 preserve
+reviewed real4009/7880/717 bytes. B01 edits real5734 by deleting“还有”and“关键”
+to replace2129 at equal native length; its proposed有 label is NOT human-adopted.
+Complete source and edited text are both shown. B04 changes end-punctuation
+boundary ownership (touching tokens17→16), despite identical total length and
+readout positions; keep boundary buckets and recompute semantic owners. Swaps
+retain label sequence but move intermediate spans; do not call them pure position
+mechanism isolation. All four 2x2 body cells and opposite-direction results remain.
+
+Independent CPU reconstruction passes88 prompts,176 candidate boundaries,
+128 prefix proofs,3340 spans,40 exact one-token flips,258 expressions and624
+exact Fraction direction checks plus8 additive-null interactions. All88 total
+lengths and all six role positions match their baselines. Full88 native prompt
+files, provenance, review checklist, blank feedback template and comparison/input
+ledgers are supplied. No torch/model tensors or CUDA were loaded. Existing weight
+hash inventory is reused with metadata/stat checks, not a new full weight audit.
+
+New runtime adapter/scientific freeze/device binding and fresh GPU qualification
+remain AFTER adoption; the old executor requires exactly12 inputs and cannot run
+this draft. Fresh baseline scores and fresh numerical bounds are required. Planned
+832 usual/1360 maximum forwards (528 engineering,128 prefixes,88 science,format
+extra88 usual/616 max);20-35min estimate on one idle L20,38.9GB raw attention,
+60GB disk suggested.45min is a hard budget, not a completion guarantee. Do not
+restart the completed original case-attention run or relax qualification gates.
+
+## Case-attention CPU interpretation added; no new GPU inference (2026-09-18)
+
+NEW case-attention-v1/interpretation-current.json selects interpretation-01 with
+manifest SHA2561748f5346fbaa99dcd81a4234917e7123ff6c53a01371f5c57504fa67395faa0.
+All completed-result selectors, raw results and prior reports remain unchanged.
+Preserve the new interpretation/metrics and their two source-pinned scripts.
+This is explicitly post-hoc CPU description of two exposed cases, not confirmation.
+All12 conditions/72 role summaries and all-head maps remain;8 LD/LDC target-entry
+maps reconstruct exactly from raw arrays. No new material, reference or forward.
+
+At query_focal, matching 男同/嘿嘿 entries rank first in BOTH mass and density
+in all8 dictionary-containing inputs. LD matched-entry masses (demos_end,
+query_focal,pre_answer) are0.56694/3.74497/0.20959% (#541) and
+0.67839/3.59432/0.41473% (#3169), averaging36layers/32heads. This is association,
+not proof of semantic applicability, information flow, forgetting or causal use.
+Post-hoc LD/query_focal peaks are layer22/head22 at73.5353% and layer23/head10
+at85.4477% (zero-based); they are candidates only, not established causal heads.
+The first template token has40.3065/42.5421% mean pre_answer mass. Keep original
+denominators, density views and all heads; whole spans overlap component buckets.
+
+#3169 has whole-package-induced flips; #541 is already reference-inconsistent at
+C0. Keep nonadditivity distinct from repair and retain opposite category effects.
+The supplement aligns LD attention with LD-minus-D margin effects; the prior
+report's LD attention paired with L-minus-C0 is a cross-condition illustration,
+not one matched contrast. Suggested single-entry/length/order controls and head
+interventions are proposals only and have not started. Never restart complete runs.
+
+## Real #541/#3169 attention COMPLETE, audited and released within window (2026-09-18)
+
+NEW docs/research/experiment-plans/case-attention-v1/results-current.json selects
+run-01/results-01 and report-01/REPORT.md. Closeout manifest SHA256
+1728ff0224405b9901966493a1f3becdf67b2dbe9d8bdeebdf5e727262c1171b.
+Terminal COMPLETE: never restart this run. All prior selectors/freezes remain.
+GPU0 alone completed110 forwards (86 numerical engineering +12 format +12
+production). Two phases and post-release checks took186.60s, about3m7s; final
+worker exited normally at18:48:09 Asia/Shanghai, before19:22:32 window end.
+All7 owned PIDs are absent; final NVML shows four idle cards and no compute
+processes. No STOP, signal fallback or retry occurred. Subsequent work was CPU.
+
+All original gates pass. Hook logits, repeat/order margin+attention, and all
+production replays differ by0. Padding margin max0.000091552734375; margin bound
+0.00018310546875. Attention element max0.000013738870620727539, rowL1 max
+0.000029901814584484362, mass bound0.000059803629168968725. Format12/12 exact
+single-label-then-EOS. Independent CPU audit checks4,128,768 aggregate elements,
+14,308 60-digit Decimal aggregate values and all12 scores/14 comparisons;
+score/comparison errors0, Decimal aggregate rounding max1.42e-15. Browser loads
+all12 actual arrays, verifies axes/stage subtraction/structural NA and SVG export.
+Pinned new audit scripts and report manifests must not be edited in place.
+
+Both query references are 无. #541 predicts 有 under all6 conditions. #3169 is
+无 only under C0, and 有 under D/L/LD/LC/LDC. No numerical unresolved outputs.
+The positive #3169 LxD score nonadditivity (+29.411722) is NOT a repair: LD remains
+m=-20.041424. Category raises #541 margins but lowers #3169 margins; retain all
+conditions and adverse rows. Latest task/prompt differs from historical cards.
+
+The viewer preserves all36 layers/32 heads and6 roles; static LD/LDC figures show
+lexicon_end/demos_end/pre_answer with shared scales and NA for future material.
+Stage changes also change target state, location and visible context. Small final
+attention is not proof of no effect; large attention is not a causal contribution.
+These are two exposed exploratory cases, with no confirmation or intervention.
+Open results-01/index.html and load sibling *.view.json files for interactive
+viewing; report-01 contains PNG/PDF figures, complete scores links and provenance.
+
+## Real #541/#3169 attention GPU window authorized; bounded execution started (2026-09-18)
+
+The user explicitly authorized GPU use for at most 45 minutes and safe stop on
+timeout. NEW case-attention-v1/execution-01.json selects launch-01, bound-01.json
+and run-01. Launch manifest SHA256
+443d0e2fdaa4c2e7d9811206f3529eb932338f2ee84ba79e4b0f57bf528f22a4.
+All four cards were freshly verified idle; only GPU0 / L20 UUID
+GPU-09b29c25-c372-62f4-3098-9734013e93c0 is allocated. The conservative window
+starts at18:37:32 Asia/Shanghai (including setup) and ends at19:22:32 today.
+
+The separately pinned run_case_attention_window_v1.py supervises engineering,
+post-release CPU check, then full only if qualified and time remains. STOP is
+requested at19:20:32; verified owned workers receive TERM at19:21:32 and only
+if still alive emergency KILL at19:22:12. Exact PID/starttime/command ownership
+is checked; unrelated processes are never signaled. The CPU watchdog tests pass.
+Read launch-01/window-state.json and run-01/state.json/gpu.log; do not duplicate
+executors or restart terminal failures/completions. Preserve partial committed
+records on pause; no automatic retries or gate relaxation. Scientific inputs,
+model/capture code, preparation freeze and all historical experiments remain
+unchanged. The CPU-only stopping point below is superseded only for this window.
+
+## Real #541/#3169 attention implementation ready; STOP BEFORE GPU (2026-09-18)
+
+NEW docs/research/experiment-plans/case-attention-v1/current.json selects
+reviews/case-attention-v1/prepared-01, manifest SHA256
+75ba702c5a19154f22bd4f9f2d3f537c819292b67d441247945cce83b9439850.
+Read its README.md, MATERIALS.md and the adjacent public PROTOCOL.md. The user
+authorized CPU implementation only and explicitly requested stopping before GPU.
+No GPU bind, run, queue or idle polling exists for this experiment. Prior completed
+runs and their GPU authorization do not start this new experiment automatically.
+
+Qwen3-8B, 36 layers/32 query heads; latest frozen task instruction and bare
+single-token 有/无. Two original real queries, all ten original demos per case,
+and exact original 2/6 dictionary entries, six conditions each, 12 inputs.
+User explicitly selected reviewed demo answers: 2430 有→无, 7611 无→有,
+7640 无→有, 6035 有→无 versus original data. Original text/labels and human/AI
+provenance remain; no new individual severity adjudication is invented.
+
+Read-only native eager hooks record pre_answer, lexicon_end (before demo header),
+demos_end (before query header), query_end, query_all and query_focal. Boundary
+prefixes are exact token prefixes without closing/retemplating messages. Future
+keys are structural NA, not scientific zeros. Retain all heads, original softmax
+denominators, FP64 target-row means/mass/density and boundary-token buckets.
+Stage differences change target state, position and visible keys; they are not
+pure causal dictionary/demo interactions. This is two exposed exploratory cases.
+
+Seven CPU checks pass, including tiny random native Qwen3, exact read-only logits,
+padding/prefix/future-invariance checks, Decimal aggregation and actual controller/
+worker with synthetic telemetry pause/resume, 110 forwards and post-release
+12-score/14-comparison analysis. Independent CPU audit reconstructs 12 prompts,
+24 answer boundaries, 14 prefixes and 350 spans. Browser verifies full Unicode
+material, axes, stage comparison and SVG export; all synthetic data stayed in /tmp.
+No research pretrained weights or GPU forward loaded; CUDA remains uninitialized.
+
+Pinned NEW case_attention_*_v1 modules, run/test/audit scripts and viewer must not
+be edited after this freeze. Future GPU engineering is 72 full +14 prefix forwards,
+format adds normally12/max84; full adds12 (normally110/max182 total). One actual
+idle >=44000MiB GPU is bound later, with fresh weight/runtime/device checks.
+Use run_case_attention_v1.py bind|run|check|analyze; new runs engineering-only,
+qualified normally released runs advance explicitly to full. STOP pauses;
+failed/complete are terminal. Do not relax gates or inherit old measured bounds.
+Query references join only after raw seal and normal worker release. Estimated
+10–20 minutes on one L20 including CPU checks/report; reserve30 minutes and8GB disk.
+
 ## Three-model cross-term experiment COMPLETE, audited and released (2026-09-18)
 
 NEW docs/research/experiment-plans/cross-model-applicability-results-v1/current.json

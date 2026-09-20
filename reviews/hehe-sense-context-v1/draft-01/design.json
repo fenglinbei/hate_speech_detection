@@ -1,0 +1,59 @@
+{
+  "status": "review_draft_not_execution_freeze",
+  "model_key": "qwen3-8b",
+  "unique_scientific_inputs": 9,
+  "queries": [
+    "Q01",
+    "Q02",
+    "Q03"
+  ],
+  "dictionaries": [
+    "D01",
+    "D02",
+    "D03"
+  ],
+  "with_demos": false,
+  "task_source": {
+    "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/task-applicability-scoring-v1/frozen-01/model-task.txt",
+    "bytes": 2231,
+    "sha256": "8c13c3bac99d830563496e1f6616d8fb0b00bba0e29897a083029260ad408363"
+  },
+  "candidate_tokens": {
+    "有": 18830,
+    "无": 42192
+  },
+  "primary_metric": "m=z[42192]-z[18830]",
+  "paired_comparisons": 9,
+  "reference_aligned_margin": {
+    "Q01": "m",
+    "Q02": "-m",
+    "Q03": "m only if proposed 无 is adopted"
+  },
+  "attention_plan": {
+    "layers": 36,
+    "heads": 32,
+    "primary_role": "pre_answer",
+    "auxiliary_roles": [
+      "lexicon_end",
+      "query_focal",
+      "query_end",
+      "query_all"
+    ],
+    "demos_end": "structural NA: no demonstrations",
+    "aggregates": [
+      "mass",
+      "density"
+    ],
+    "future_capture_qualification_pending": true
+  },
+  "limitations": [
+    "D03 changes information, length, positions, term repetition, and ordering together; no equal-length or reverse-order dual control.",
+    "D01 and D02 preserve within-query length; contexts are not length-matched minimal pairs.",
+    "Q02 contains additional sexual-history denigration; correct 有 does not establish correct 嘿嘿 sense selection.",
+    "Q03 changes quotation and stance wording and length; it derives from Q02 and is not an independent sample.",
+    "Two previously exposed real sources and one assistant rewrite; no independent confirmation, population accuracy or statistical significance claim.",
+    "No no-dictionary baseline in these nine cells; estimate dictionary-version effects within the registered prompts.",
+    "Attention is descriptive; no internal causal mechanism intervention is proposed in this draft."
+  ],
+  "future_execution": "After review, separate adoption and runtime preparation with fresh numerical/format qualification and a valid GPU window; never restart old runs."
+}

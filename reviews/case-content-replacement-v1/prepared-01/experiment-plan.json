@@ -1,0 +1,77 @@
+{
+  "status": "material_review_draft_not_execution_freeze",
+  "GPU_qualified": false,
+  "allocation": null,
+  "auto_launch_or_poll": false,
+  "model": "qwen3-8b",
+  "model_profile_source": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/case-attention-v1/prepared-01/model-profile.json",
+    "bytes": 3835,
+    "sha256": "69ec8164217c1a6a1e89247e1cee9f15a323ea6db1149f4ae2ed91ac6edd3033"
+  },
+  "compute_dtype": "float32",
+  "attention": "eager",
+  "review_required": true,
+  "query_ids": [
+    "541",
+    "3169"
+  ],
+  "scope": "two exposed exploratory cases; no independent confirmation",
+  "roles": {
+    "pre_answer": "答案前",
+    "lexicon_end": "词典结束／示例前",
+    "demos_end": "示例结束／查询前",
+    "query_end": "查询正文末尾",
+    "query_all": "查询正文各位置平均",
+    "query_focal": "查询词形位置平均"
+  },
+  "query_reference_join_during_worker": false,
+  "candidate_tokens": {
+    "有": 18830,
+    "无": 42192
+  },
+  "primary_margin": "z[42192]-z[18830]",
+  "all_comparisons_reported": true,
+  "fresh_baselines_for_every_variant": true,
+  "attention_summary_proposal": {
+    "primary_descriptive_summary": "pre_answer, mean over all 36 layers and all 32 query heads; both mass and density",
+    "prior_plot_layer_summary": "zero-based layers 18 through 35 inclusive, all 32 heads; exploratory secondary summary fixed before new outcomes",
+    "single_heads": "retain every head; no post-result selection as confirmatory evidence",
+    "order_comparisons": "align by material identity and separately by numbered slot",
+    "body_comparisons": "align by replacement slot with source/replacement identities retained",
+    "boundary_policy": "recompute semantic owners per prompt; save crossing tokens separately; B04 end punctuation changes boundary ownership"
+  },
+  "numerical_acceptance_proposal": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "runtime_implementation_for_new_input_inventory": "pending_after_material_adoption; old runner requires exactly 12 and must not be used on this draft",
+  "new_forward_count": 0,
+  "internal_head_intervention": false,
+  "max_GPU_window_minutes": 45,
+  "budget_estimate": {
+    "unique_prompts": 88,
+    "engineering_full_forwards": 528,
+    "prefix_forwards": 128,
+    "format_extra_forwards_usual": 88,
+    "format_extra_forwards_max": 616,
+    "science_forwards": 88,
+    "usual_total_forwards": 832,
+    "maximum_total_forwards": 1360,
+    "raw_attention_bytes_estimate": 38899685376,
+    "recommended_free_disk_bytes": 60000000000,
+    "total_minutes_estimate": [
+      20,
+      35
+    ],
+    "not_a_new_GPU_measurement": true,
+    "basis": "Previous 12-input attention run: 110 forwards and 186.60 seconds including phase checks; extrapolation with additional attention I/O and audit allowance.",
+    "hard_stop_is_not_a_completion_guarantee": true
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "schema": "hehe-sense-context-materials/v1",
+  "status": "review_draft",
+  "queries": [
+    {
+      "query_id": "Q01",
+      "source_id": "3169",
+      "kind": "real_unchanged",
+      "name": "普通聊天",
+      "text": "我想回个嘿嘿嘿嘿。。。感觉好押韵",
+      "reference": "无",
+      "reference_status": "inherited_human_confirmed",
+      "reference_record_id": "query:3169",
+      "new_human_decision": null,
+      "exposure": "Previously exposed focal query and outcomes",
+      "interpretation": "既有普通聊天原文及无标签；本轮没有新裁决。"
+    },
+    {
+      "query_id": "Q02",
+      "source_id": "3660",
+      "kind": "real_unchanged",
+      "name": "作者实施攻击",
+      "text": "主要是被嘿嘿玩过的，那不是一般的思想，那得多么的。。。",
+      "reference": "有",
+      "reference_status": "inherited_human_confirmed",
+      "reference_record_id": "demo:3660",
+      "new_human_decision": null,
+      "new_role_selection_status": "pending",
+      "exposure": "Previously exposed as a demonstration",
+      "interpretation": "原文及严重度2／有已有审核；改作查询的选用待审。还含性经历贬损线索，不能把有标签完全归于嘿嘿。"
+    },
+    {
+      "query_id": "Q03",
+      "source_id": null,
+      "kind": "assistant_derived",
+      "name": "引用并反对攻击",
+      "text": "有人说：“主要是被嘿嘿玩过的，那不是一般的思想，那得多么的。。。”我不赞同这种说法，不能因为一个人的交往经历就贬低对方。",
+      "reference": null,
+      "proposed_reference": "无",
+      "proposed_severity": 0,
+      "reference_status": "pending",
+      "reference_record_id": null,
+      "new_human_decision": null,
+      "parent_query_id": "Q02",
+      "authorship": "assistant",
+      "exposure": "New assistant rewrite of an exposed source; not independent confirmation",
+      "interpretation": "保留整段Q02引文，批评这种说法并反对按交往经历贬低人；拟判无。正文未解释嘿嘿的义项，未另行辱骂发言者。"
+    }
+  ],
+  "dictionaries": [
+    {
+      "dictionary_id": "D01",
+      "name": "原释义",
+      "definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+      "component_order": [
+        "original"
+      ],
+      "provenance": "Exact previous original definition",
+      "new_human_decision": null
+    },
+    {
+      "dictionary_id": "D02",
+      "name": "普通义",
+      "definition": "'嘿嘿'是模拟笑声的中文写法，可用于轻松聊天、调侃或打趣等表达。",
+      "component_order": [
+        "ordinary"
+      ],
+      "provenance": "Exact accepted L05; AI authorship retained",
+      "inherited_adoption": {
+        "item_id": "L05",
+        "proposal_sha256": "a0b1fb3bb63189d520f5f5de97ebf53123f1911ed67a35703946d0806d2aa806",
+        "decision": "accept",
+        "review_kind": "explicit_bulk_acceptance",
+        "feedback": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/case-content-replacement-v1/feedback-01.json",
+          "bytes": 1290,
+          "sha256": "f7bf93d9ec3a0a97a144595c4b8d4ffcba1ead0a8813c4372015515eb774c298"
+        },
+        "AI_authorship_retained": true,
+        "new_individual_adjudication": false
+      },
+      "new_human_decision": null
+    },
+    {
+      "dictionary_id": "D03",
+      "name": "原释义＋普通义",
+      "definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。\n'嘿嘿'是模拟笑声的中文写法，可用于轻松聊天、调侃或打趣等表达。",
+      "component_order": [
+        "original",
+        "ordinary"
+      ],
+      "separator": "\n",
+      "provenance": "Assistant composition of the two unchanged paragraphs; new combination pending",
+      "new_human_decision": null
+    }
+  ],
+  "base_lexicon": [
+    {
+      "category": "Sexism",
+      "definition": "[1] 在某些情况下被用来指代那些自私自利、双标、让人厌恶的女性。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0031",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism"
+          ],
+          "definition": "在某些情况下被用来指代那些自私自利、双标、让人厌恶的女性。",
+          "sense_id": "lex-0031:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        31
+      ],
+      "term": "仙女",
+      "variants": []
+    },
+    {
+      "category": "Sexism",
+      "definition": "[1] 在部分粗俗语境中可借与“妓”的近音贬损女性或指称性工作者；应描述说话者的用法，不能把对女性的道德指控当作事实。“嫁鸡随鸡”等普通表达不套用该义项。",
+      "freeze_selection_source": "user_batch_default_accept",
+      "lexicon_id": "lex-0104",
+      "match_policy": {
+        "exclude_any": [
+          {
+            "pattern": "嫁鸡随鸡",
+            "rule_id": "marriage-proverb",
+            "target": "context"
+          }
+        ],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism"
+          ],
+          "definition": "在部分粗俗语境中可借与“妓”的近音贬损女性或指称性工作者；应描述说话者的用法，不能把对女性的道德指控当作事实。“嫁鸡随鸡”等普通表达不套用该义项。",
+          "sense_id": "lex-0104:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        104
+      ],
+      "term": "鸡",
+      "variants": []
+    },
+    {
+      "category": "Racism",
+      "definition": "[1] '嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0419",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Racism"
+          ],
+          "definition": "'嘿嘿'是'黑黑'的中文谐音，对黑人群体的侮辱性称呼。",
+          "sense_id": "lex-0419:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        419
+      ],
+      "term": "嘿嘿",
+      "variants": []
+    },
+    {
+      "category": "others",
+      "definition": "[1] 'fw'发音为'废物'拼音缩写，比喻没有用或妨碍自己的人（指责人的话）。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0486",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "others"
+          ],
+          "definition": "'fw'发音为'废物'拼音缩写，比喻没有用或妨碍自己的人（指责人的话）。",
+          "sense_id": "lex-0486:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        486
+      ],
+      "term": "fw",
+      "variants": []
+    },
+    {
+      "category": "Sexism, others",
+      "definition": "[1] '剑人'是'贱人'的中文谐音，指卑贱的人，多用于辱骂妇女。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0493",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "Sexism",
+            "others"
+          ],
+          "definition": "'剑人'是'贱人'的中文谐音，指卑贱的人，多用于辱骂妇女。",
+          "sense_id": "lex-0493:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        493
+      ],
+      "term": "剑人",
+      "variants": []
+    },
+    {
+      "category": "others",
+      "definition": "[1] 在网络语境下，“tm”常作为“他妈”的谐音替代，用于表达愤怒或调侃，属于低俗用语。",
+      "freeze_selection_source": "original_preserved",
+      "lexicon_id": "lex-0663",
+      "match_policy": {
+        "exclude_any": [],
+        "require_any": []
+      },
+      "senses": [
+        {
+          "categories": [
+            "others"
+          ],
+          "definition": "在网络语境下，“tm”常作为“他妈”的谐音替代，用于表达愤怒或调侃，属于低俗用语。",
+          "sense_id": "lex-0663:sense:01"
+        }
+      ],
+      "source_record_indices": [
+        663
+      ],
+      "term": "tm",
+      "variants": []
+    }
+  ],
+  "focal_lexicon_id": "lex-0419",
+  "focal_term": "嘿嘿",
+  "with_demos": false,
+  "dictionary_category_fields_displayed": false,
+  "review_items": [
+    {
+      "item_id": "Q02",
+      "title": "选用真实 #3660 作为攻击查询",
+      "review_scope": "同意该查询用途，并保留已有有标签及性经历贬损的限制；不重新裁定旧标签。",
+      "status": "pending",
+      "human_decision": null,
+      "human_reason": null,
+      "proposal_author": "assistant",
+      "GPU_eligible": false
+    },
+    {
+      "item_id": "Q03",
+      "title": "反驳改写及参考答案",
+      "review_scope": "审核完整新正文和拟议无／0级，并确认引文与作者反对立场的区分。",
+      "status": "pending",
+      "human_decision": null,
+      "human_reason": null,
+      "proposal_author": "assistant",
+      "GPU_eligible": false
+    },
+    {
+      "item_id": "D03",
+      "title": "双义同时提供的具体写法",
+      "review_scope": "同一嘿嘿词条内，原释义在前、普通义在后，以一个换行分隔；两段原文不变。",
+      "status": "pending",
+      "human_decision": null,
+      "human_reason": null,
+      "proposal_author": "assistant",
+      "GPU_eligible": false
+    }
+  ]
+}

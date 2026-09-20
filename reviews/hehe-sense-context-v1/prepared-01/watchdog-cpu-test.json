@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "CPU_only": true,
+  "checks": [
+    "STOP_checkpoint",
+    "owned_termination",
+    "stale_identity_rejected",
+    "unrelated_process_preserved"
+  ],
+  "authorization_gate_checks": [
+    {
+      "scenario": "valid",
+      "passed": true,
+      "real_execution": false
+    },
+    {
+      "scenario": "expired",
+      "passed": true,
+      "real_execution": false
+    },
+    {
+      "scenario": "over_budget",
+      "passed": true,
+      "real_execution": false
+    },
+    {
+      "scenario": "wrong_scope",
+      "passed": true,
+      "real_execution": false
+    },
+    {
+      "scenario": "changed_authorization",
+      "passed": true,
+      "real_execution": false
+    },
+    {
+      "scenario": "existing_run",
+      "passed": true,
+      "real_execution": false
+    }
+  ],
+  "CUDA_initialized": false,
+  "GPU_touched": false,
+  "host_process_identity_verified": true,
+  "prior_sandbox_failure": {
+    "error": "identity(hung.pid) returned None; sandbox namespace child PID 6 was absent from the visible /proc even while child.poll() was None.",
+    "diagnosis": "Sandbox PID namespace and /proc view mismatch. Direct CLI test passed; imported sandbox test reproduced mismatch. Same self_test now passes in host environment.",
+    "owned_fixture_cleanup": "finally killed/reaped hung fixture and terminated/reaped unrelated fixture; graceful fixture exited0.",
+    "production_logic_changed": false,
+    "implication": "Future real GPU window must execute in host process namespace with matching /proc; retain exact identity checks, no fallback to unchecked signaling."
+  },
+  "implementation_snapshot": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/scripts/review/run_hehe_sense_context_window_v1.py",
+      "bytes": 13688,
+      "sha256": "78c0ba1b62e2af290a4f211ba8d1fd2fe5eb284491f82db4992e2837019533c0"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "hehe-presentation-execution/v1",
+  "status": "adopted_cpu_preparation_gpu_pending",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "conditions": [
+    "L"
+  ],
+  "query_ids": [
+    "Q01",
+    "Q02",
+    "Q03"
+  ],
+  "roles": {
+    "pre_answer": "答案前",
+    "lexicon_end": "词典结束／示例前",
+    "demos_end": "示例结束／查询前",
+    "query_end": "查询正文末尾",
+    "query_all": "查询正文各位置平均",
+    "query_focal": "查询词形位置平均"
+  },
+  "layers": 36,
+  "heads": 32,
+  "scope": "Two exposed real source texts and one adopted AI rejection; exploratory and dependent",
+  "attention_capture": "Native eager probabilities, read-only hook, per-head FP64 mean over registered target rows; no renormalization over materials.",
+  "attention_storage_dtype": "float64",
+  "compute_dtype": "float32",
+  "query_reference_join_during_worker": false,
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "passes": [
+    "baseline",
+    "capture",
+    "repeat",
+    "reverse",
+    "left",
+    "right",
+    "prefix"
+  ],
+  "format": {
+    "all_conditions": true,
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8
+  },
+  "budget": {
+    "unique_prompts": 18,
+    "engineering_full_forwards": 108,
+    "prefix_forwards": 18,
+    "production_forwards": 18,
+    "format_extra_forward_max": 126,
+    "usual_if_label_then_eos": 162,
+    "total_forward_max": 270
+  },
+  "allocation": null,
+  "GPU_qualified": false,
+  "auto_launch_or_poll": false,
+  "terminal_restart": false,
+  "references_are_newly_adjudicated": false,
+  "historical_input_replay_claimed": true,
+  "all_materials_adopted": true,
+  "input_count": 18,
+  "all_comparisons_reported": true,
+  "comparison_count": 24,
+  "dictionary_versions": [
+    "D01",
+    "D02",
+    "D03",
+    "D04",
+    "D05",
+    "D06"
+  ],
+  "accepted_review_items": [
+    "D04",
+    "D05",
+    "D06",
+    "mechanism_stage_1",
+    "mechanism_stage_2_method"
+  ],
+  "current_GPU_window": null,
+  "historical_scores_used": false,
+  "reference_provenance": "Q01/Q02 inherited; Q03 named bulk adoption of AI draft",
+  "new_prompts": 9,
+  "remeasured_old_prompts": 9,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "automatic_patch_phase": false,
+  "mechanism_axes": {
+    "state_sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "source_groups": [
+      "definition_original",
+      "definition_ordinary",
+      "definition_scaffold",
+      "query_focal",
+      "query_quote_other",
+      "query_rejection",
+      "query_other",
+      "remainder"
+    ],
+    "targets": "individual focal tokens and pre_answer; state-only boundary positions also retained",
+    "AV_group_mass_dtype": "float64",
+    "native_states_AV_output_dtype": "float32"
+  }
+}

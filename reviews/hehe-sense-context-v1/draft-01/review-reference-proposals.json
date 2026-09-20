@@ -1,0 +1,49 @@
+{
+  "excluded_from_model_inputs": true,
+  "queries": [
+    {
+      "query_id": "Q01",
+      "source_id": "3169",
+      "kind": "real_unchanged",
+      "name": "普通聊天",
+      "text": "我想回个嘿嘿嘿嘿。。。感觉好押韵",
+      "reference": "无",
+      "reference_status": "inherited_human_confirmed",
+      "reference_record_id": "query:3169",
+      "new_human_decision": null,
+      "exposure": "Previously exposed focal query and outcomes",
+      "interpretation": "既有普通聊天原文及无标签；本轮没有新裁决。"
+    },
+    {
+      "query_id": "Q02",
+      "source_id": "3660",
+      "kind": "real_unchanged",
+      "name": "作者实施攻击",
+      "text": "主要是被嘿嘿玩过的，那不是一般的思想，那得多么的。。。",
+      "reference": "有",
+      "reference_status": "inherited_human_confirmed",
+      "reference_record_id": "demo:3660",
+      "new_human_decision": null,
+      "new_role_selection_status": "pending",
+      "exposure": "Previously exposed as a demonstration",
+      "interpretation": "原文及严重度2／有已有审核；改作查询的选用待审。还含性经历贬损线索，不能把有标签完全归于嘿嘿。"
+    },
+    {
+      "query_id": "Q03",
+      "source_id": null,
+      "kind": "assistant_derived",
+      "name": "引用并反对攻击",
+      "text": "有人说：“主要是被嘿嘿玩过的，那不是一般的思想，那得多么的。。。”我不赞同这种说法，不能因为一个人的交往经历就贬低对方。",
+      "reference": null,
+      "proposed_reference": "无",
+      "proposed_severity": 0,
+      "reference_status": "pending",
+      "reference_record_id": null,
+      "new_human_decision": null,
+      "parent_query_id": "Q02",
+      "authorship": "assistant",
+      "exposure": "New assistant rewrite of an exposed source; not independent confirmation",
+      "interpretation": "保留整段Q02引文，批评这种说法并反对按交往经历贬低人；拟判无。正文未解释嘿嘿的义项，未另行辱骂发言者。"
+    }
+  ]
+}

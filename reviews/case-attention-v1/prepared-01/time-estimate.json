@@ -1,0 +1,27 @@
+{
+  "status": "estimate_not_measurement",
+  "hardware_assumption": "one idle NVIDIA L20 48GB, pinned FP32 Qwen3-8B",
+  "expected_total_minutes": [
+    10,
+    20
+  ],
+  "recommended_window_minutes": 30,
+  "includes": [
+    "two model loads/weight checks",
+    "engineering + format",
+    "explicit full phase",
+    "CPU reconstruction and report"
+  ],
+  "excludes": [
+    "waiting for idle GPU",
+    "failure investigation",
+    "authorization wait"
+  ],
+  "scientific_run_forward_count_usual": 110,
+  "forward_count_max": 182,
+  "raw_attention_bytes_estimate": 4466423808,
+  "recommended_free_disk_bytes": 8000000000,
+  "FP32_weight_bytes": 32762941440,
+  "basis": "Earlier completed 8B run: 2716 forwards/1289 s engineering, 384 forwards/291 s full, including phase overhead. New prompts/attention transfer and disk checks differ; no new GPU benchmark.",
+  "first_real_engineering_phase_updates_estimate": true
+}

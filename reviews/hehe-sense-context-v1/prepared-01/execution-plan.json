@@ -1,0 +1,92 @@
+{
+  "schema_version": "hehe-sense-context-execution/v1",
+  "status": "adopted_cpu_preparation_gpu_pending",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "conditions": [
+    "L"
+  ],
+  "query_ids": [
+    "Q01",
+    "Q02",
+    "Q03"
+  ],
+  "roles": {
+    "pre_answer": "答案前",
+    "lexicon_end": "词典结束／示例前",
+    "demos_end": "示例结束／查询前",
+    "query_end": "查询正文末尾",
+    "query_all": "查询正文各位置平均",
+    "query_focal": "查询词形位置平均"
+  },
+  "layers": 36,
+  "heads": 32,
+  "scope": "Two exposed real source texts and one adopted AI rejection; exploratory and dependent",
+  "attention_capture": "Native eager probabilities, read-only hook, per-head FP64 mean over registered target rows; no renormalization over materials.",
+  "attention_storage_dtype": "float64",
+  "compute_dtype": "float32",
+  "query_reference_join_during_worker": false,
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "passes": [
+    "baseline",
+    "capture",
+    "repeat",
+    "reverse",
+    "left",
+    "right",
+    "prefix"
+  ],
+  "format": {
+    "all_conditions": true,
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8
+  },
+  "budget": {
+    "unique_prompts": 9,
+    "engineering_full_forwards": 54,
+    "prefix_forwards": 9,
+    "production_forwards": 9,
+    "format_extra_forward_max": 63,
+    "usual_if_label_then_eos": 81,
+    "total_forward_max": 135
+  },
+  "allocation": null,
+  "GPU_qualified": false,
+  "auto_launch_or_poll": false,
+  "terminal_restart": false,
+  "references_are_newly_adjudicated": false,
+  "historical_input_replay_claimed": true,
+  "all_materials_adopted": true,
+  "input_count": 9,
+  "all_comparisons_reported": true,
+  "comparison_count": 9,
+  "dictionary_versions": [
+    "D01",
+    "D02",
+    "D03"
+  ],
+  "accepted_review_items": [
+    "Q02",
+    "Q03",
+    "D03"
+  ],
+  "current_GPU_window": null,
+  "historical_scores_used": false,
+  "reference_provenance": "Q01/Q02 inherited; Q03 named bulk adoption of AI draft"
+}

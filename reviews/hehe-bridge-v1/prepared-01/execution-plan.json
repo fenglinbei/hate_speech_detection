@@ -1,0 +1,80 @@
+{
+  "schema_version": "hehe-bridge-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "input_count": 4,
+  "cross_count": 8,
+  "self_count": 8,
+  "patch_layer": 17,
+  "layers": 36,
+  "position_mode": "pre",
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "donor_source": "fresh same-run native block outputs",
+  "capture": {
+    "position": "pre_answer",
+    "sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "all_layers": true,
+    "RMS_scale_retained": true,
+    "unchanged_before_or_at_patch_layer": true
+  },
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "all four native and eight cross endpoints",
+    "failure_policy": "terminal; no automatic retry"
+  },
+  "budget": {
+    "native_engineering": 24,
+    "true_prefixes": 4,
+    "self_controls": 8,
+    "cross_engineering": 48,
+    "production_native_replay": 4,
+    "production_cross_replay": 8,
+    "usual_format_continuations": 12,
+    "usual_total": 108,
+    "maximum_total": 180
+  },
+  "GPU_time_constraint": {
+    "confirmed": true,
+    "deadline_unix": null,
+    "description": "四卡可按需使用；本轮无新固定截止。选择一张实时核验的空闲卡。"
+  },
+  "independent_confirmation": false,
+  "interpretation": "State intervention changes downstream trajectories; does not isolate a unique path or prove mediation by a displayed projection."
+}

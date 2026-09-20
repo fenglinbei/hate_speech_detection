@@ -1,0 +1,63 @@
+{
+  "mode": "explicit_phases_until_completion",
+  "phases": [
+    {
+      "phase": "engineering",
+      "command": [
+        "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python",
+        "/data/liaozijie/hate_speech_detection/scripts/review/run_hehe_sense_context_v1.py",
+        "run",
+        "--bound",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/launch-01/bound-01.json",
+        "--prepared",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/prepared-01",
+        "--run",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/run-01"
+      ]
+    },
+    {
+      "phase": "engineering-check",
+      "command": [
+        "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python",
+        "/data/liaozijie/hate_speech_detection/scripts/review/run_hehe_sense_context_v1.py",
+        "check",
+        "--prepared",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/prepared-01",
+        "--run",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/run-01"
+      ]
+    },
+    {
+      "phase": "full",
+      "command": [
+        "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python",
+        "/data/liaozijie/hate_speech_detection/scripts/review/run_hehe_sense_context_v1.py",
+        "run",
+        "--bound",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/launch-01/bound-01.json",
+        "--phase",
+        "full",
+        "--prepared",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/prepared-01",
+        "--run",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/run-01"
+      ]
+    },
+    {
+      "phase": "final-check",
+      "command": [
+        "/data/liaozijie/hate_speech_detection/.conda/stage1-p0/bin/python",
+        "/data/liaozijie/hate_speech_detection/scripts/review/run_hehe_sense_context_v1.py",
+        "check",
+        "--prepared",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/prepared-01",
+        "--run",
+        "/data/liaozijie/hate_speech_detection/reviews/hehe-sense-context-v1/run-01"
+      ]
+    }
+  ],
+  "time_cutoff": null,
+  "automatic_retry": false,
+  "requires_prior_normal_release_and_check": true,
+  "host_PID_proc_visibility_required": true
+}

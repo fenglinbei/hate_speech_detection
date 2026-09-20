@@ -1,0 +1,797 @@
+{
+  "selection_method": "Reviewed, nonstale real texts; same binary label, native-token match, reduced focal/laughter literal overlap; no new model outcome consulted.",
+  "candidate_pool": {
+    "all_records": 1072,
+    "reviewed_demo_records": 280
+  },
+  "records": [
+    {
+      "kind": "demo",
+      "native_task_eligibility": {
+        "group": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+          "policy": {
+            "sha256": "3853739a723368445b29d461f1ed10a4570da3537f3b3fe55077961c35a6a312",
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1+racism-personal-priority.1+same-target.1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        },
+        "hate": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+          "policy": {
+            "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+            "version": "evidence-severity-hate-default-mapping/v1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        }
+      },
+      "record_id": "demo:5734",
+      "review": {
+        "adoption": "explicit_final_batch",
+        "ai_version": "23597e45753651af8d8f803e08e834189da6364fe8762627093e6205e44e4cb6",
+        "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+        "dependency_non_group_versions": {},
+        "dependency_versions": {},
+        "field_diff": {
+          "evidence": {
+            "ai": [
+              {
+                "end": 44,
+                "source": "text",
+                "start": 18,
+                "text": "嘿人评委，看着那血盆大嘴在那一张一张的心里就难受的慌"
+              },
+              {
+                "end": 144,
+                "source": "text",
+                "start": 134,
+                "text": "感情它们喜欢的是外种"
+              }
+            ],
+            "human": []
+          },
+          "expression_types": {
+            "ai": [
+              "identity_attack",
+              "group_attack"
+            ],
+            "human": []
+          },
+          "group": {
+            "ai": [
+              "Racism"
+            ],
+            "human": [
+              "Racism",
+              "Region",
+              "others"
+            ]
+          },
+          "group_original_status": {
+            "ai": "suspected_error",
+            "human": ""
+          },
+          "group_reason": {
+            "ai": "identity_target",
+            "human": "other"
+          },
+          "hate_original_status": {
+            "ai": "accepted",
+            "human": ""
+          },
+          "hate_reason": {
+            "ai": "agreed_attack",
+            "human": "other"
+          },
+          "note": {
+            "ai": "按黑人外貌实施种族侮辱，且以外种贬称跨种族吸引；提及东南亚人被看不起是在质疑他方双重标准。",
+            "human": "本轮最终裁决：严重度 2；0 对应 non-hate，非 0 对应 hate。完整依据与逐字段历史保存在最终采纳记录。本轮未新增原标注对错裁决。"
+          },
+          "stance": {
+            "ai": "supports",
+            "human": "unclear"
+          },
+          "target_types": {
+            "ai": [
+              "group"
+            ],
+            "human": []
+          }
+        },
+        "final_annotation": {
+          "approved_version": 1,
+          "batch_id": "737ccd7c81ade5a7c9617be0e6afb68f4e966028a20c8237b906e038a84f5177",
+          "kind": "demo",
+          "pre_acceptance_field_provenance": {
+            "attack_severity": "ai_note",
+            "group": "ai_note",
+            "hate": "rule_mapping_from_ai_score"
+          },
+          "source_record_sha256": "eb7da045e7b3f10fc3ece02aa53cab0c8e0413bceecb238df2c0362be2e93da5",
+          "source_snapshot": {
+            "path": "sentence-completion-v1/snapshots/bf6acc5fbfa04d5263ec117ead04d701b4b6fc8ca45cfe3994edf0b0ff9d7d5e/current-sentences.json",
+            "sha256": "6b12499e0320d3c93bb2ae154fc677f455240af7499ea29977dc3c5a9c96b3d4"
+          },
+          "supporting_fields_provenance": "ai_adapter_or_retained_local_notes",
+          "task_policies": {
+            "attack_severity": {
+              "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6",
+              "version": "evidence-attack-severity-policy/v1"
+            },
+            "group": {
+              "sha256": "3853739a723368445b29d461f1ed10a4570da3537f3b3fe55077961c35a6a312",
+              "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1+racism-personal-priority.1+same-target.1"
+            },
+            "hate": {
+              "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+              "version": "evidence-severity-hate-default-mapping/v1"
+            }
+          },
+          "unreviewed_supporting_fields": [
+            "stance",
+            "target_types",
+            "expression_types",
+            "hate_original_status",
+            "group_original_status"
+          ],
+          "values": {
+            "attack_severity": 2,
+            "group": [
+              "Racism",
+              "Region",
+              "others"
+            ],
+            "hate": "hate"
+          }
+        },
+        "group_only_recheck": false,
+        "needs_group_recheck": false,
+        "non_group_version": 1,
+        "review_kind": "human_with_ai",
+        "reviewer_id": "liaozijie",
+        "source_version": "e04fd4755a031f1199a44078896ab0c4baf096ce80f9a17a53bd4b52a3c27f30",
+        "status": "confirmed",
+        "task_reviews": {
+          "group": {
+            "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+            "policy": {
+              "sha256": "3853739a723368445b29d461f1ed10a4570da3537f3b3fe55077961c35a6a312",
+              "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1+racism-personal-priority.1+same-target.1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          },
+          "hate": {
+            "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+            "policy": {
+              "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+              "version": "evidence-severity-hate-default-mapping/v1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          }
+        },
+        "updated_at": "2026-09-11T17:41:40.011617+00:00",
+        "values": {
+          "evidence": [],
+          "expression_types": [],
+          "group": [
+            "Racism",
+            "Region",
+            "others"
+          ],
+          "group_original_status": "",
+          "group_reason": "other",
+          "hate": "hate",
+          "hate_original_status": "",
+          "hate_reason": "other",
+          "note": "本轮最终裁决：严重度 2；0 对应 non-hate，非 0 对应 hate。完整依据与逐字段历史保存在最终采纳记录。本轮未新增原标注对错裁决。",
+          "stance": "unclear",
+          "target_types": []
+        },
+        "version": 1
+      },
+      "source": {
+        "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+        "demo_id": "5734",
+        "original_answer": {
+          "group": [
+            "Racism",
+            "Region"
+          ],
+          "hate": "hate"
+        },
+        "original_quadruples": [
+          {
+            "argument": "血盆大嘴",
+            "hateful": "hate",
+            "target": "嘿人",
+            "targeted_group": [
+              "Racism"
+            ]
+          },
+          {
+            "argument": "看不起",
+            "hateful": "hate",
+            "target": "越南缅甸柬埔寨等那旮瘩的老外的",
+            "targeted_group": [
+              "Region"
+            ]
+          }
+        ],
+        "text": "还有现在连某些央视都有嘿人节目，甚至嘿人评委，看着那血盆大嘴在那一张一张的心里就难受的慌，关键评论里没一个反感他们的。只要是老外，不管来自哪里长得如何，下面都是一股脑儿得说帅。眼瞎了么！但有没有发现东南亚的黄皮老外不在此列，相反是看不起越南缅甸柬埔寨等那旮瘩的老外的，感情它们喜欢的是外种？？？",
+        "text_sha256": "42f7fc984f1fa3e635aedb5f1f002f9f37c05f2bd548a573811adb1650af388d"
+      },
+      "source_version": "e04fd4755a031f1199a44078896ab0c4baf096ce80f9a17a53bd4b52a3c27f30",
+      "stale": false
+    },
+    {
+      "kind": "demo",
+      "native_task_eligibility": {
+        "group": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-10T12:38:08+00:00",
+          "policy": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        },
+        "hate": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-10T12:38:08+00:00",
+          "policy": {
+            "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+            "version": "evidence-applicability-annotation-policy/v1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        }
+      },
+      "record_id": "demo:4009",
+      "review": {
+        "adoption": "adopted_unchanged",
+        "ai_version": "6275bbf07d1c46641dba11327fc2bf09c187f87ab78be8780128fa3e8fd42cb9",
+        "confirmed_at": "2026-09-10T12:38:08+00:00",
+        "dependency_non_group_versions": {},
+        "dependency_versions": {},
+        "field_diff": {},
+        "group_only_recheck": false,
+        "needs_group_recheck": false,
+        "non_group_version": 1,
+        "review_kind": "human_with_ai",
+        "reviewer_id": "liaozijie",
+        "source_version": "5a28ffb718d8e759b44d603bab3c956d98d978c4e616b8620d3af10d1d0eb298",
+        "status": "confirmed",
+        "task_reviews": {
+          "group": {
+            "confirmed_at": "2026-09-10T12:38:08+00:00",
+            "policy": {
+              "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+              "version": "evidence-applicability-annotation-policy/v2"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          },
+          "hate": {
+            "confirmed_at": "2026-09-10T12:38:08+00:00",
+            "policy": {
+              "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+              "version": "evidence-applicability-annotation-policy/v1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          }
+        },
+        "updated_at": "2026-09-10T12:38:08+00:00",
+        "values": {
+          "evidence": [
+            {
+              "end": 13,
+              "source": "text",
+              "start": 6,
+              "text": "你对象找找了吗"
+            }
+          ],
+          "expression_types": [
+            "other"
+          ],
+          "group": [],
+          "group_original_status": "accepted",
+          "group_reason": "no_group_target",
+          "hate": "non-hate",
+          "hate_original_status": "accepted",
+          "hate_reason": "no_attack",
+          "note": "普通询问感情近况，未见对个人／群体的贬损评价。",
+          "stance": "neutral",
+          "target_types": [
+            "none"
+          ]
+        },
+        "version": 1
+      },
+      "source": {
+        "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+        "demo_id": "4009",
+        "original_answer": {
+          "group": [],
+          "hate": "non-hate"
+        },
+        "original_quadruples": [
+          {
+            "argument": "找找了吗",
+            "hateful": "non-hate",
+            "target": "你对象",
+            "targeted_group": [
+              "non-hate"
+            ]
+          }
+        ],
+        "text": "想起你来了，你对象找找了吗",
+        "text_sha256": "e0cd9c26fccab4dde9f2d5c1d0e3319981482ee27411e3cda49dedd23dec3f9a"
+      },
+      "source_version": "5a28ffb718d8e759b44d603bab3c956d98d978c4e616b8620d3af10d1d0eb298",
+      "stale": false
+    },
+    {
+      "kind": "demo",
+      "native_task_eligibility": {
+        "group": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-09T12:56:47+00:00",
+          "policy": {
+            "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+            "version": "evidence-applicability-annotation-policy/v2"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        },
+        "hate": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-09T12:56:47+00:00",
+          "policy": {
+            "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+            "version": "evidence-applicability-annotation-policy/v1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        }
+      },
+      "record_id": "demo:7880",
+      "review": {
+        "adoption": "adopted_modified",
+        "ai_version": "72020a4bca43ed741c2d42a3e786cb15fcd52dac89a4d7b6e1b720bb801a4b40",
+        "confirmed_at": "2026-09-09T12:56:47+00:00",
+        "dependency_non_group_versions": {},
+        "dependency_versions": {},
+        "field_diff": {
+          "group": {
+            "ai": null,
+            "human": [
+              "others"
+            ]
+          },
+          "group_original_status": {
+            "ai": "policy_ambiguous",
+            "human": "suspected_error"
+          },
+          "group_reason": {
+            "ai": "individual_scope",
+            "human": "agreed_attack"
+          },
+          "hate": {
+            "ai": null,
+            "human": "hate"
+          },
+          "hate_original_status": {
+            "ai": "policy_ambiguous",
+            "human": "suspected_error"
+          },
+          "hate_reason": {
+            "ai": "individual_scope",
+            "human": "agreed_attack"
+          },
+          "note": {
+            "ai": "以恋爱境遇羞辱争论者；没有清楚扩展至男性群体，纯个人冒犯的hate及others范围未定。",
+            "human": "以恋爱境遇羞辱争论者"
+          }
+        },
+        "group_only_recheck": false,
+        "needs_group_recheck": false,
+        "non_group_version": 3,
+        "review_kind": "human_with_ai",
+        "reviewer_id": "liaozijie",
+        "source_version": "2846896156d2b3fa6f5af2cff9d4ba35c17deb8cbae76c7bc1537af5ec00f0ce",
+        "status": "confirmed",
+        "task_reviews": {
+          "group": {
+            "confirmed_at": "2026-09-09T12:56:47+00:00",
+            "policy": {
+              "sha256": "53be85f067db620137f8e28e1ad8dba4963da0810ba99576ad1138a9ef96cb97",
+              "version": "evidence-applicability-annotation-policy/v2"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 3
+          },
+          "hate": {
+            "confirmed_at": "2026-09-09T12:56:47+00:00",
+            "policy": {
+              "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+              "version": "evidence-applicability-annotation-policy/v1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 3
+          }
+        },
+        "updated_at": "2026-09-09T12:56:47+00:00",
+        "values": {
+          "evidence": [
+            {
+              "end": 14,
+              "source": "text",
+              "start": 0,
+              "text": "没有女人缘的吊丝羡慕嫉妒恨了"
+            }
+          ],
+          "expression_types": [
+            "individual_insult",
+            "behavior_criticism"
+          ],
+          "group": [
+            "others"
+          ],
+          "group_original_status": "suspected_error",
+          "group_reason": "agreed_attack",
+          "hate": "hate",
+          "hate_original_status": "suspected_error",
+          "hate_reason": "agreed_attack",
+          "note": "以恋爱境遇羞辱争论者",
+          "stance": "supports",
+          "target_types": [
+            "individual",
+            "behavior"
+          ]
+        },
+        "version": 3
+      },
+      "source": {
+        "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+        "demo_id": "7880",
+        "original_answer": {
+          "group": [],
+          "hate": "non-hate"
+        },
+        "original_quadruples": [
+          {
+            "argument": "羡慕嫉妒恨",
+            "hateful": "non-hate",
+            "target": "没有女人缘的吊丝",
+            "targeted_group": [
+              "non-hate"
+            ]
+          }
+        ],
+        "text": "没有女人缘的吊丝羡慕嫉妒恨了，乱喷有什么用",
+        "text_sha256": "5fbf07a0df40570b230197f3b86a8d4dcbe9e0be620c901f5675440f7f74c175"
+      },
+      "source_version": "2846896156d2b3fa6f5af2cff9d4ba35c17deb8cbae76c7bc1537af5ec00f0ce",
+      "stale": false
+    },
+    {
+      "kind": "demo",
+      "native_task_eligibility": {
+        "group": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+          "policy": {
+            "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d",
+            "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        },
+        "hate": {
+          "availability": "resolved",
+          "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+          "policy": {
+            "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+            "version": "evidence-severity-hate-default-mapping/v1"
+          },
+          "reference_eligible": true,
+          "reviewer_id": "liaozijie",
+          "stale": false,
+          "status": "confirmed"
+        }
+      },
+      "record_id": "demo:717",
+      "review": {
+        "adoption": "explicit_final_batch",
+        "ai_version": "59923094c9687e9ce4ee795845f3e0a5a41d0869032d3e0ad15c227524c0fe7c",
+        "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+        "dependency_non_group_versions": {},
+        "dependency_versions": {},
+        "field_diff": {
+          "evidence": {
+            "ai": [
+              {
+                "end": 22,
+                "source": "text",
+                "start": 8,
+                "text": "你是微博里的普信女还是烂裤裆"
+              }
+            ],
+            "human": []
+          },
+          "expression_types": {
+            "ai": [
+              "individual_insult"
+            ],
+            "human": []
+          },
+          "group": {
+            "ai": null,
+            "human": [
+              "Sexism",
+              "others"
+            ]
+          },
+          "group_original_status": {
+            "ai": "policy_ambiguous",
+            "human": ""
+          },
+          "group_reason": {
+            "ai": "individual_scope",
+            "human": "other"
+          },
+          "hate": {
+            "ai": null,
+            "human": "hate"
+          },
+          "hate_original_status": {
+            "ai": "policy_ambiguous",
+            "human": ""
+          },
+          "hate_reason": {
+            "ai": "individual_scope",
+            "human": "other"
+          },
+          "note": {
+            "ai": "以性羞辱词回骂个人；个人的性别是攻击依据还是辱骂修辞无法唯一确定，不能直接扩大到女性群体。",
+            "human": "本轮最终裁决：严重度 2；0 对应 non-hate，非 0 对应 hate。完整依据与逐字段历史保存在最终采纳记录。本轮未新增原标注对错裁决。"
+          },
+          "stance": {
+            "ai": "supports",
+            "human": "unclear"
+          },
+          "target_types": {
+            "ai": [
+              "individual"
+            ],
+            "human": []
+          }
+        },
+        "final_annotation": {
+          "approved_version": 1,
+          "batch_id": "737ccd7c81ade5a7c9617be0e6afb68f4e966028a20c8237b906e038a84f5177",
+          "kind": "demo",
+          "pre_acceptance_field_provenance": {
+            "attack_severity": "ai_note",
+            "group": "ai_note",
+            "hate": "rule_mapping_from_ai_score"
+          },
+          "source_record_sha256": "904e3da3355fad3a2b835f28de397dd47564631191c320058a399008ff84a814",
+          "source_snapshot": {
+            "path": "sentence-completion-v1/snapshots/bf6acc5fbfa04d5263ec117ead04d701b4b6fc8ca45cfe3994edf0b0ff9d7d5e/current-sentences.json",
+            "sha256": "6b12499e0320d3c93bb2ae154fc677f455240af7499ea29977dc3c5a9c96b3d4"
+          },
+          "supporting_fields_provenance": "ai_adapter_or_retained_local_notes",
+          "task_policies": {
+            "attack_severity": {
+              "sha256": "bf2e4dfa47e38e207de605b5d79361b5d537babcf10677208f82172b061eb4d6",
+              "version": "evidence-attack-severity-policy/v1"
+            },
+            "group": {
+              "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d",
+              "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1"
+            },
+            "hate": {
+              "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+              "version": "evidence-severity-hate-default-mapping/v1"
+            }
+          },
+          "unreviewed_supporting_fields": [
+            "stance",
+            "target_types",
+            "expression_types",
+            "hate_original_status",
+            "group_original_status"
+          ],
+          "values": {
+            "attack_severity": 2,
+            "group": [
+              "Sexism",
+              "others"
+            ],
+            "hate": "hate"
+          }
+        },
+        "group_only_recheck": false,
+        "needs_group_recheck": false,
+        "non_group_version": 1,
+        "review_kind": "human_with_ai",
+        "reviewer_id": "liaozijie",
+        "source_version": "618588c25c8b0210c1b659abb84fbdad9af46ecbd3ee706c1e1f454cb1b49257",
+        "status": "confirmed",
+        "task_reviews": {
+          "group": {
+            "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+            "policy": {
+              "sha256": "c9af65f3ab260493c9f86e1b6274d3ac09259f3e9beda78989aa8870ea6e1f9d",
+              "version": "evidence-applicability-annotation-policy/v2+personal-insult-others.1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          },
+          "hate": {
+            "confirmed_at": "2026-09-11T17:41:40.011617+00:00",
+            "policy": {
+              "sha256": "dfacc5740e5fb6c15c18d8005622e4cea3401cc123cbfb577564396c8b36de17",
+              "version": "evidence-severity-hate-default-mapping/v1"
+            },
+            "reviewer_id": "liaozijie",
+            "status": "confirmed",
+            "supersedes": {
+              "confirmed_at": null,
+              "policy": {
+                "sha256": "660d973c6248b17068ce44f68ebc4680515e54fd17354bd51650ace7c436557a",
+                "version": "evidence-applicability-annotation-policy/v1"
+              },
+              "reviewer_id": null,
+              "status": "unreviewed",
+              "version": 0
+            },
+            "version": 1
+          }
+        },
+        "updated_at": "2026-09-11T17:41:40.011617+00:00",
+        "values": {
+          "evidence": [],
+          "expression_types": [],
+          "group": [
+            "Sexism",
+            "others"
+          ],
+          "group_original_status": "",
+          "group_reason": "other",
+          "hate": "hate",
+          "hate_original_status": "",
+          "hate_reason": "other",
+          "note": "本轮最终裁决：严重度 2；0 对应 non-hate，非 0 对应 hate。完整依据与逐字段历史保存在最终采纳记录。本轮未新增原标注对错裁决。",
+          "stance": "unclear",
+          "target_types": []
+        },
+        "version": 1
+      },
+      "source": {
+        "dataset_id": "data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843",
+        "demo_id": "717",
+        "original_answer": {
+          "group": [
+            "Sexism"
+          ],
+          "hate": "hate"
+        },
+        "original_quadruples": [
+          {
+            "argument": "微博里的普信女还是烂裤裆",
+            "hateful": "hate",
+            "target": "你",
+            "targeted_group": [
+              "Sexism"
+            ]
+          }
+        ],
+        "text": "一口一个普信男，你是微博里的普信女还是烂裤裆",
+        "text_sha256": "4a3303eecf54bb793d6205f61cb87a143a6030565282d6c731fecf5727625ce0"
+      },
+      "source_version": "618588c25c8b0210c1b659abb84fbdad9af46ecbd3ee706c1e1f454cb1b49257",
+      "stale": false
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "hehe-transfer-material-design/v1",
+  "inputs": 8,
+  "queries": [
+    "T01",
+    "T02",
+    "T03",
+    "T04"
+  ],
+  "dictionary_ids": [
+    "D01",
+    "D02"
+  ],
+  "with_demos": false,
+  "model": "Qwen3-8B",
+  "task": {
+    "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/task-applicability-scoring-v1/frozen-01/model-task.txt",
+    "bytes": 2231,
+    "sha256": "8c13c3bac99d830563496e1f6616d8fb0b00bba0e29897a083029260ad408363"
+  },
+  "layer_numbers_zero_based": true,
+  "carried_forward_mechanism_plan": {
+    "focal_and_preceding_block_output_layer": 17,
+    "restorations_at_pre_answer": {
+      "A": "layer26 attention after o_proj, before residual addition",
+      "B": "layer28 MLP before residual addition",
+      "AB": "both, sources from recipient-native run"
+    },
+    "directions": "D01 into D02 and D02 into D01",
+    "trajectory_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "no_layer_or_head_search": true,
+    "fresh_same_run_sources_required": true
+  },
+  "analysis": {
+    "raw_margin": "z(无)-z(有)",
+    "reference_alignment": {
+      "T01": 1,
+      "T02": 1,
+      "T03": -1,
+      "T04": -1
+    },
+    "groups": {
+      "ordinary_replication": [
+        "T01",
+        "T02"
+      ],
+      "inherited_label_group_reference": [
+        "T03"
+      ],
+      "attack_outside_focal_laughter_boundary": [
+        "T04"
+      ]
+    },
+    "keep_all_four_cases_and_both_directions_regardless_of_predictions": true,
+    "small_denominator_ratios": "NA under inherited numerical gate; retain raw differences",
+    "case_count": 4,
+    "conditions_or_directions_not_independent_samples": true
+  },
+  "execution_runtime_prepared_by_this_command": false,
+  "GPU_started": false
+}

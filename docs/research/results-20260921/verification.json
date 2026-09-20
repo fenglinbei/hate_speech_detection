@@ -1,0 +1,255 @@
+{
+  "schema_version": "research-result-archive-verification/v1",
+  "status": "passed",
+  "scope": "Publication bytes, parsing, frozen references, new navigation and optional index checks; no research computation.",
+  "base_commit": "04c77ccf0cc378c6c7ae34a3b1816faa0a662c20",
+  "archive_inventory_files": 2191,
+  "archive_inventory_bytes": 291986543,
+  "worktree_checks": {
+    "utf8_files": 1938,
+    "python_sources": 184,
+    "json_files": 929,
+    "included_reference_occurrences": 7479,
+    "binary_files": 259,
+    "jsonl_files": 27,
+    "jsonl_records": 731,
+    "navigation_links": 43,
+    "complete_selectors": 12
+  },
+  "included_reference_unique_pins": 2288,
+  "unarchived_reference_occurrences": {
+    "dense_attention_display": 393,
+    "raw_run_record_or_array": 24222,
+    "hosting_bundle_or_private_runtime": 65,
+    "other_local_dependency_outside_archive": 6,
+    "model_or_environment": 356,
+    "external_machine_dependency": 85,
+    "runtime_log_or_control": 23
+  },
+  "other_unarchived_local_paths": [
+    "exps/causal_context/stage1_p0/data/data-1e2fdc07cf916a7faad2a9f6586b0809ff825883d296527ef6b25ea68ab45843/dev.json",
+    "exps/causal_context/stage1_p0/refs/data_ref.json",
+    "exps/causal_context/stage1_p0/refs/train_partition_ref.json",
+    "exps/causal_context/stage1_p0/train_partitions/tpart-dc73828edb28d36b4da72268914bea6b0ee94c2fa0e2bd37762829e6523eeb19/partition.jsonl",
+    "reviews/case-content-replacement-v1/hosting-01/ui-revision-01/ui-patch.tar"
+  ],
+  "historical_references_disclosed": [
+    {
+      "source": "deploy/case_attention/digitalocean-sgp/deployments/20260919-01/payload-release-manifest.json",
+      "path": "deploy/case_attention/digitalocean-sgp/incremental-content-v1/style.css",
+      "expected_sha256": "ec9af38695f49ad88c1b09ba59aba295d7b90e890d52a83449e3e4de4ffee45f",
+      "actual_sha256": "9ed5b8c8ec291ec272bee91ff8a98e1c1f03969babe814bb0f079a309e30e1f6",
+      "expected_bytes": 4678,
+      "actual_bytes": 5182,
+      "reason": "上传初始包的 CSS 来源快照；同期 UI 布局修正包及最终发布来源清单固定了当前 CSS。初始包清单保留。",
+      "evidence": [
+        "deploy/case_attention/digitalocean-sgp/deployments/20260919-01/README.md",
+        "deploy/case_attention/digitalocean-sgp/deployments/20260919-01/ui-package.json",
+        "deploy/case_attention/digitalocean-sgp/deployments/20260919-01/deployment-source-pins.json",
+        "deploy/case_attention/digitalocean-sgp/deployments/20260919-01/closeout.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/input-audit-01.json",
+      "path": "src/diagnostics/cross_term_mechanism_inputs_v1.py",
+      "expected_sha256": "18303be13826d9d2383b0adc254b50c65cb26d62c45361c34c9b7715f25dfdc5",
+      "actual_sha256": "48eecb5ea64bbb40395a8e0e57777503f11fc2ea46ce673851861dcc15512d7e",
+      "expected_bytes": 16132,
+      "actual_bytes": 16233,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/input-audit-01.json",
+      "path": "src/diagnostics/cross_term_mechanism_runtime_v1.py",
+      "expected_sha256": "8d133a9c1de22fad41b54933dcc4ce026bb9eb115b25c76a12d229e482bba88f",
+      "actual_sha256": "d412fdece288b4cfc4e04958d45db733cceccd9090196fd86139e3c9cf0fc1a1",
+      "expected_bytes": 38335,
+      "actual_bytes": 38339,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/input-audit-01.json",
+      "path": "scripts/review/test_cross_term_mechanism_runtime_v1.py",
+      "expected_sha256": "41a2afa98a79bc788bf91129968449673cdc6bb0fd5310f0281b8b58289eb1e0",
+      "actual_sha256": "e325f3ec898cb65410a1bba195f95074d7d117c21ac87abaddb1142942fdac32",
+      "expected_bytes": 16918,
+      "actual_bytes": 18022,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/source-ledger-initial.json",
+      "path": "scripts/review/test_cross_term_mechanism_runtime_v1.py",
+      "expected_sha256": "41a2afa98a79bc788bf91129968449673cdc6bb0fd5310f0281b8b58289eb1e0",
+      "actual_sha256": "e325f3ec898cb65410a1bba195f95074d7d117c21ac87abaddb1142942fdac32",
+      "expected_bytes": 16918,
+      "actual_bytes": 18022,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/source-ledger-initial.json",
+      "path": "src/diagnostics/cross_term_mechanism_inputs_v1.py",
+      "expected_sha256": "18303be13826d9d2383b0adc254b50c65cb26d62c45361c34c9b7715f25dfdc5",
+      "actual_sha256": "48eecb5ea64bbb40395a8e0e57777503f11fc2ea46ce673851861dcc15512d7e",
+      "expected_bytes": 16132,
+      "actual_bytes": 16233,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/checks/source-ledger-initial.json",
+      "path": "src/diagnostics/cross_term_mechanism_runtime_v1.py",
+      "expected_sha256": "8d133a9c1de22fad41b54933dcc4ce026bb9eb115b25c76a12d229e482bba88f",
+      "actual_sha256": "d412fdece288b4cfc4e04958d45db733cceccd9090196fd86139e3c9cf0fc1a1",
+      "expected_bytes": 38335,
+      "actual_bytes": 38339,
+      "reason": "封存前的开发快照；增加启动授权检查和测试后形成最终版本。旧成功回执与初始来源清单保留，不作为最终冻结输入。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/checks/preparation-notes.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-02-ordering-note.json",
+        "reviews/cross-term-mechanism-v1/checks/input-audit-03.json",
+        "reviews/cross-term-mechanism-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/cross-term-mechanism-v1/recovery-01/manifest.json",
+      "path": "reviews/cross-term-mechanism-v1/recovery-01/manifest.json",
+      "expected_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "actual_sha256": "15c3cbaff54ba286ec81e05f96f2b2f6ed15b83112fc5e025dd28618c10fa037",
+      "expected_bytes": 0,
+      "actual_bytes": 3968,
+      "reason": "已披露的旧归档器自引用错误：文件写完前记录了自身空文件哈希。原错误文件保留，manifest-02 与 closeout-03 取代该关闭凭据。",
+      "evidence": [
+        "reviews/cross-term-mechanism-v1/recovery-01/closeout-note-01.md",
+        "reviews/cross-term-mechanism-v1/recovery-01/manifest-02.json",
+        "reviews/cross-term-mechanism-v1/closeout-03/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/hehe-bridge-v1/cpu-development-01/source-ledger-before-test-harness-fix.json",
+      "path": "scripts/review/test_hehe_bridge_runtime_v1.py",
+      "expected_sha256": "e51caab2eef786d6b495225a0a65eed8cccb87804539c483b97e02b752eb765b",
+      "actual_sha256": "59f5fed5d547d94d0b9d47acaf004fac7b0107a705d38c3da4bf0087a57146f2",
+      "expected_bytes": 9539,
+      "actual_bytes": 9806,
+      "reason": "封存前测试工具修订前的来源快照；收窄 Popen mock 范围后最终测试通过，科学实现和门槛未改。",
+      "evidence": [
+        "reviews/hehe-bridge-v1/cpu-development-01/test-harness-fix.json",
+        "reviews/hehe-bridge-v1/cpu-development-01/runtime-test-03.json",
+        "reviews/hehe-bridge-v1/prepared-01/manifest.json"
+      ]
+    },
+    {
+      "source": "reviews/hehe-presentation-mechanism-v1/cpu-closeout-01/closeout.json",
+      "path": "deploy/case_attention/digitalocean-sgp/current.json",
+      "expected_sha256": "227d048f48e7ef250d50e52e30a56fe8fac54e9533fbf0d9f7ebace9795d7d8b",
+      "actual_sha256": "266a60af9eaf3a90d089e96ead957e418008f6ab0539b1def1ae8339a74af07b",
+      "expected_bytes": 450,
+      "actual_bytes": 417,
+      "reason": "当时 CPU 准备收尾记录的网站选择器快照；之后网站继续按已授权发布更新，当前选择器不应回退。",
+      "evidence": [
+        "reviews/hehe-presentation-mechanism-v1/cpu-closeout-01/closeout.json",
+        "deploy/case_attention/digitalocean-sgp/current.json",
+        "deploy/case_attention/digitalocean-sgp/deployments/20260919-04/closeout.json"
+      ]
+    },
+    {
+      "source": "reviews/hehe-presentation-mechanism-v1/development-01/cpu-tests-01.json",
+      "path": "src/diagnostics/hehe_presentation_inputs_v1.py",
+      "expected_sha256": "8abae7178393cce1ce942e28a9d70e16e0fcb0d264a00620b9a00e293377daa7",
+      "actual_sha256": "435f72a4f5797ad27d7306fc993ea812f2560e4a04ca99b3b9b15b0b86766b01",
+      "expected_bytes": 19286,
+      "actual_bytes": 19728,
+      "reason": "封存前 CPU 开发检查记录的实现快照，最终准备清单和 CPU 验收固定了后续输入实现；保留两种历史身份，不将初始快照当作运行版本。",
+      "evidence": [
+        "reviews/hehe-presentation-mechanism-v1/development-01/cpu-tests-01.json",
+        "reviews/hehe-presentation-mechanism-v1/prepared-01/manifest.json",
+        "reviews/hehe-presentation-mechanism-v1/prepared-01/cpu-tests.json",
+        "reviews/hehe-presentation-mechanism-v1/prepared-01/cpu-audit.json"
+      ]
+    }
+  ],
+  "credential_scan_false_positives": [
+    {
+      "path": "deploy/case_attention/digitalocean-sgp/activate_release.py",
+      "line": 146,
+      "kind": "password_literal",
+      "file_sha256": "33a1bda2cd82720bb8ac13a339154cadf8e7f706bf7c6f6a0712c0a6a8bfd3a6",
+      "literal_sha256": "88d24e277abcee9da1ab20c3ee2c6ef43866b7f03ef433a2fbf773d1a28d73b6",
+      "reason": "Deliberately invalid negative-authentication test literal; request is required to return HTTP 401. Actual credentials are read separately and are not included."
+    },
+    {
+      "path": "deploy/case_attention/digitalocean-sgp/incremental-content-v1/deploy.py",
+      "line": 170,
+      "kind": "password_literal",
+      "file_sha256": "7d15fc808a073d8d8e6fc75e3dca1c01cbe232731cc373649e2eea6ab27b3156",
+      "literal_sha256": "88d24e277abcee9da1ab20c3ee2c6ef43866b7f03ef433a2fbf773d1a28d73b6",
+      "reason": "Deliberately invalid negative-authentication test literal; request is required to return HTTP 401. Actual credentials are read separately and are not included."
+    },
+    {
+      "path": "deploy/case_attention/digitalocean-sgp/incremental-hehe-v1/deploy.py",
+      "line": 185,
+      "kind": "password_literal",
+      "file_sha256": "ac3a20721001d997bc526ca9e4e69ba2c0695199a5e407b5c3a49c69b278333c",
+      "literal_sha256": "88d24e277abcee9da1ab20c3ee2c6ef43866b7f03ef433a2fbf773d1a28d73b6",
+      "reason": "Deliberately invalid negative-authentication test literal; request is required to return HTTP 401. Actual credentials are read separately and are not included."
+    },
+    {
+      "path": "deploy/case_attention/digitalocean-sgp/incremental-patching-v1/deploy.py",
+      "line": 191,
+      "kind": "password_literal",
+      "file_sha256": "fb7b6376922f600601597796c8f0779b61365202b821425683d0e1c9166fb061",
+      "literal_sha256": "88d24e277abcee9da1ab20c3ee2c6ef43866b7f03ef433a2fbf773d1a28d73b6",
+      "reason": "Deliberately invalid negative-authentication test literal; request is required to return HTTP 401. Actual credentials are read separately and are not included."
+    },
+    {
+      "path": "deploy/case_attention/digitalocean-sgp/incremental-presentation-v1/deploy.py",
+      "line": 190,
+      "kind": "password_literal",
+      "file_sha256": "52d8fbec0e6619cedadd5fd741b431f4cb722ad8b2f6fbb23a67625bd2d7c40b",
+      "literal_sha256": "88d24e277abcee9da1ab20c3ee2c6ef43866b7f03ef433a2fbf773d1a28d73b6",
+      "reason": "Deliberately invalid negative-authentication test literal; request is required to return HTTP 401. Actual credentials are read separately and are not included."
+    }
+  ],
+  "reference_mismatches": [],
+  "credential_pattern_findings": [],
+  "errors": [],
+  "new_GPU_forwards": 0,
+  "scientific_or_human_fields_modified": false,
+  "scientific_tests": "Not rerun: frozen implementation and prior numerical/test receipts retained.",
+  "staged_bytes_verification": {
+    "status": "passed",
+    "inventory_files": 2191,
+    "method": "Git index blob byte counts and SHA256 equal every inventory record.",
+    "whitespace_check_exit_code": 0,
+    "archive_documents_bound_by_commit": true
+  }
+}

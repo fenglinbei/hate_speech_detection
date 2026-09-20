@@ -1,0 +1,74 @@
+{
+  "status": "pass",
+  "sources": [
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/hehe-presentation-mechanism-v1/hosting-01/browser-local-01/browser.json",
+      "bytes": 23181,
+      "sha256": "e4de900e67b40c6fc8e544a18d7b4598098ba21df0f8e8b74406bf8745103bbe"
+    },
+    {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/hehe-presentation-mechanism-v1/hosting-01/browser-live-01/browser.json",
+      "bytes": 23127,
+      "sha256": "1aad78390bf6e0ebfd17a902321fa3949ba53bf0ff8e8f3a87982a67caac2d95"
+    }
+  ],
+  "source": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/hehe-presentation-mechanism-v1/hosting-01/runtime/check_browser_equivalence.py",
+    "bytes": 2254,
+    "sha256": "032ca90c2d957ea07bd21597cb42ba79dae74b8fa887f4ec1c42676c9db8ecdf"
+  },
+  "checks": 63,
+  "values_each": 74198,
+  "scientific_checklist_exact": true,
+  "cache_limits_unchanged": {
+    "conditions": 4,
+    "layerFiles": 8,
+    "meanFiles": 4
+  },
+  "cache_telemetry_differences": [
+    {
+      "index": 14,
+      "tag": "latest-selection-wins",
+      "local_cache": {
+        "conditions": 4,
+        "layerFiles": 3,
+        "meanFiles": 0
+      },
+      "live_cache": {
+        "conditions": 4,
+        "layerFiles": 4,
+        "meanFiles": 0
+      }
+    },
+    {
+      "index": 15,
+      "tag": "hehe-Q01-D01-mean",
+      "local_cache": {
+        "conditions": 4,
+        "layerFiles": 3,
+        "meanFiles": 1
+      },
+      "live_cache": {
+        "conditions": 4,
+        "layerFiles": 4,
+        "meanFiles": 1
+      }
+    },
+    {
+      "index": 16,
+      "tag": "hehe-Q01-D02-mean",
+      "local_cache": {
+        "conditions": 4,
+        "layerFiles": 2,
+        "meanFiles": 2
+      },
+      "live_cache": {
+        "conditions": 4,
+        "layerFiles": 3,
+        "meanFiles": 2
+      }
+    }
+  ],
+  "scientific_or_browser_value_assertions_relaxed": false,
+  "reason": "Rapid selection may finish an extra stale fetch at different network timing; both retain the correct final selection and satisfy the original bounded cache checks."
+}

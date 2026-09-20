@@ -1,0 +1,2422 @@
+{
+  "cross": [
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T01-D01-upstream"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T01-D01-restore-L26-attention"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T01-D01-restore-L28-mlp"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T01-D01-restore-joint"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        799
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T01-D01-preceding"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T01-D02-upstream"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T01-D02-restore-L26-attention"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T01-D02-restore-L28-mlp"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T01-D02-restore-joint"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        799
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T01-D02-preceding"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T02-D01-upstream"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T02-D01-restore-L26-attention"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T02-D01-restore-L28-mlp"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T02-D01-restore-joint"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        813
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T02-D01-preceding"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T02-D02-upstream"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T02-D02-restore-L26-attention"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T02-D02-restore-L28-mlp"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T02-D02-restore-joint"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        813
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T02-D02-preceding"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T03-D01-upstream"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T03-D01-restore-L26-attention"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T03-D01-restore-L28-mlp"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T03-D01-restore-joint"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        797
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T03-D01-preceding"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T03-D02-upstream"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T03-D02-restore-L26-attention"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T03-D02-restore-L28-mlp"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T03-D02-restore-joint"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        797
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T03-D02-preceding"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T04-D01-upstream"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T04-D01-restore-L26-attention"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T04-D01-restore-L28-mlp"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T04-D01-restore-joint"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        815
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T04-D01-preceding"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "primary",
+      "job_id": "T04-D02-upstream"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "primary",
+      "job_id": "T04-D02-restore-L26-attention"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "primary",
+      "job_id": "T04-D02-restore-L28-mlp"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "primary",
+      "job_id": "T04-D02-restore-joint"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        815
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "position_control",
+      "job_id": "T04-D02-preceding"
+    }
+  ],
+  "self": [
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T01-D01-upstream-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T01-D01-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D01-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T01-D01-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D01-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T01-D01-restore-joint-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D01-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D01",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        799
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T01-D01-preceding-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T01-D02-upstream-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T01-D02-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D02-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T01-D02-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D02-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T01-D02-restore-joint-native-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D01",
+      "layer": 17,
+      "positions": [
+        800
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T01-D02-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T01",
+      "recipient": "htr-T01-D02",
+      "donor": "htr-T01-D02",
+      "layer": 17,
+      "positions": [
+        799
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T01-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T01-D02-preceding-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T02-D01-upstream-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T02-D01-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D01-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T02-D01-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D01-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T02-D01-restore-joint-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D01-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D01",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        813
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T02-D01-preceding-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T02-D02-upstream-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T02-D02-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D02-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T02-D02-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D02-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T02-D02-restore-joint-native-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D01",
+      "layer": 17,
+      "positions": [
+        814
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 824,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 824,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T02-D02-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T02",
+      "recipient": "htr-T02-D02",
+      "donor": "htr-T02-D02",
+      "layer": 17,
+      "positions": [
+        813
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T02-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T02-D02-preceding-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T03-D01-upstream-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T03-D01-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D01-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T03-D01-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D01-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T03-D01-restore-joint-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D01-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D01",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        797
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T03-D01-preceding-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T03-D02-upstream-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T03-D02-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D02-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T03-D02-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D02-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T03-D02-restore-joint-native-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D01",
+      "layer": 17,
+      "positions": [
+        798
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 809,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 809,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T03-D02-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T03",
+      "recipient": "htr-T03-D02",
+      "donor": "htr-T03-D02",
+      "layer": 17,
+      "positions": [
+        797
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T03-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T03-D02-preceding-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T04-D01-upstream-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T04-D01-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D01-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T04-D01-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D01-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T04-D01-restore-joint-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D01-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D01",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        815
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D01-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T04-D01-preceding-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": null,
+      "condition": "upstream",
+      "kind": "self_control",
+      "job_id": "T04-D02-upstream-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "self_control",
+      "job_id": "T04-D02-restore-L26-attention-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L26-attention",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D02-restore-L26-attention-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "self_control",
+      "job_id": "T04-D02-restore-L28-mlp-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-L28-mlp",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D02-restore-L28-mlp-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "recipient_native"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "recipient_native"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "self_control",
+      "job_id": "T04-D02-restore-joint-native-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D01",
+      "layer": 17,
+      "positions": [
+        816
+      ],
+      "group": "focal",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-upstream",
+      "restoration": [
+        {
+          "layer": 26,
+          "branch": "attention",
+          "position": 834,
+          "source": "upstream"
+        },
+        {
+          "layer": 28,
+          "branch": "mlp",
+          "position": 834,
+          "source": "upstream"
+        }
+      ],
+      "condition": "restore-joint",
+      "kind": "conditional_self_control",
+      "job_id": "T04-D02-restore-joint-upstream-self"
+    },
+    {
+      "query_id": "T04",
+      "recipient": "htr-T04-D02",
+      "donor": "htr-T04-D02",
+      "layer": 17,
+      "positions": [
+        815
+      ],
+      "group": "pre",
+      "site": "decoder_block_output",
+      "last_layer_expected_zero": false,
+      "upstream_job_id": "T04-D02-preceding",
+      "restoration": null,
+      "condition": "preceding",
+      "kind": "self_control",
+      "job_id": "T04-D02-preceding-native-self"
+    }
+  ]
+}
