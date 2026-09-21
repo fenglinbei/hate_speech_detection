@@ -1,5 +1,326 @@
 # Human Review Workbenches
 
+## Latest six-round repository archive (2026-09-21)
+
+User explicitly requests pushing latest results to the remote repository.
+New docs/research/results-20260921-afternoon archives six completed rounds since
+4c02aa79e884f22b0f2c4536084f830b37541436: query-scope486,complement594,regions1026,
+dictionary-free756,mixed-demos270,demo-donor378,3510 total existing forwards.
+Includes report/figures/summaries, exact frozen inputs, implementation/tests,
+scientific audit and completion receipts, plus autonomous-window CPU diagnostics.
+New publication manifest/verify/audit retain prior selective-archive policy;
+per-forward arrays/records/logs, synthetic fixture output and private/runtime state
+remain local. Existing frozen research files and prior archive directories are
+unchanged; docs/research/README and this evolving AGENTS entry are navigation/history.
+No new model inference, research rerun, material adoption or website deployment.
+
+## Autonomous research window COMPLETE; all owned GPU processes released (2026-09-21)
+
+Authoritative current goal was autonomous main-plan progress until today16:00
+Asia/Shanghai. Four new bounded rounds completed,2430 real forwards total:
+jingba-query-regions-v1 1026, dictionary-free-donor-v1 756,
+jingba-mixed-demos-v1 270, jingba-demo-donor-v1 378. All terminal COMPLETE;
+NEVER restart. Final GPU release15:32:10.498766, before16:00. Window host proof
+reviews/autonomous-reference-progress-20260921/process-release-check-01.json proves
+all12 controller/worker PIDs absent, all4 GPUs0memory/0util/no compute processes.
+No deadline signals, GPU gate failures, GPU retries or website publication.
+No scheduled next run. Four independent120-digit/longdouble audits and four
+document checks pass; old science/site selectors unchanged. New sources/raw/results
+remain immutable; human references and old corpus/text materials unchanged.
+
+Window report and next-step scope draft:
+reviews/autonomous-reference-progress-20260921/closeout-01/REPORT.md and
+NEXT-STEP.md, selected by public experiment-plans/autonomous-reference-progress-
+20260921/current.json. Existing results-20260921 archive/index remains unchanged.
+Regions closeout5902ffdadcf7f768a894ddc64f2e0391d463bd8b3627762f6566c0227212ce87;
+dictionary-free closeout88840760569b870976ec469a26f67e2a5ffa0f6e907634dc8767ace70a18c48a;
+mixed closeoutb7b46d22d83c9654edccaf1f19e75e71ffc8dbf2b044574de15f792940d16608;
+demo-donor closeout3ac77d45df236a30c8ea44cd9caa854ea67de8e4fced7af15ca7909f754a3638.
+
+Region factorization: all6 bothdirections full2^3 focalU/pre-queryB/post-queryA
+combinations,96cross/no flips. J06 forward IUA+1.577797 dominates IUC+1.721081
+as finite arithmetic, not mediation share. J05IUA−.958897, opposite sign. J06 B+1.305,
+A−2.131, AafterU−.553; no pure Beijing-word conclusion. J07 small total includes
+canceling components. Separate finalRMS CPU diagnostic leaves J06 common-scale
+I1.695546 versus original1.721081; no new causal intervention or universal rule.
+
+Dictionary-free fixed17 rule: all12 J/G/B cases; D00same-query native focal donor
+intoD01, strength1, no gold/scoretrigger/ordinarydefinition requirement. U0 fixesJ01
+(−6.866→+8.090), preservesJ03(+.606→+1.493), though donorD00J03−19.273iswrong.
+8/12→9/12; all12 labels exactly match U2ordinary donor and old fixed+7 baseline.
+G03/B01/B03stillwrong. 48cross/48self,all36layers;60oldendpoints/36banks exact replay.
+This improves donor availability, no added classification superiority/generalrepair.
+
+Mixed correct demos: same6 J05–J10, no dictionary. MP=[J01无,J04有],
+MS=[J03无,J02有], MPS=MPthenMS,MSP=MSthenMP; all four demo texts/answers inherited.
+P/S usage groups are NOT adjudicated universal applicability labels.30native prompts,
+no new internal intervention. M00/MP/MS4of6,MPS/MSP5of6, onlyJ08repaired, no damage.
+J08m MPS+1.677540/MSP+.016209 (pair_no .504), J07stillwrong−6.283/−5.497.
+Two vsfour demos changes count/length; order control preserves label positions but
+changes content position. Allqueries exposed related constructions, no independent proof.
+Initial automatic launch review rejected using stale priorW-onlyscope; samecommand
+re-reviewed with newer authoritative get_goal user authorization then approved.
+See execution-review-history/evidence-01.json; no bypass/sourcechange/GPUretry.
+
+Demo-donor: exact18mixed M00/MPS/MSP prompts; new12U/12P M00→MPS/MSP fixed17,
+24self42format;18oldnative vectors/banks/trajectories exact replay. Audit378vectors,
+336marginrecords,276trajectories,168earlyguards,47736summaryscalars;epsilon1e−6,
+probe1.526001430818269e−5. All24cross labels unchanged; eachmix/U/P remains5of6.
+J07U−1.463211/−1.546082 stillwrong; J08U+3.621655/+1.928268 keepshelp and farther
+fromboundary. J09MSPexception absU.027<absP.073 retained. All12U 11positive/1negative.
+J08/J10 same pre/focalbanks all36underM00/MPS/MSP; identical focal modifications
+yield effects+1.944/+1.912 versus+.614/+.460. Suffix/length/position differ; not pure
+stance understanding. Local patch leaves other reference pathways available.
+
+CPU fixed+7 on mixed MPS/MSP gives6/6, MS5/6, M00/MP4/6. Existing+7not refit.
+Posthoc gold-only offset feasibility: M00 needs >22.529621 forJ07 but <21.539829
+forJ10, impossible; mixing changes relative score structure. This isn't a deployed
+threshold or selective-use proof. score-offset-01 is failed pre-write scratch
+(wrong expected MS+7 count), corrected reproducible score-offset-02 retained.
+Other CPU development failures retained in each checks/development-note; no gates
+relaxed. Public READMEs link separate interpretations; sealed science untouched.
+
+Next recommended priority: freeze native/U/+7 on small new pre-reviewed materials,
+report repairs AND damage/cost, then decide head refinement if U beats cheap baseline.
+Need beneficial/harmful correct-reference controls and applicability review for full
+selectivity claim. NEXT-STEP is a draft only; no new materials or execution pending.
+
+## Current autonomous window: demo-donor CPU sealed, GPU authorized (2026-09-21)
+
+Latest active user goal explicitly authorizes autonomous research decisions and GPU
+work until TODAY16:00 Asia/Shanghai, superseding older experiment-specific scopes.
+Goal quote: “截止到四点，GPU都空闲，你可以利用这段时间逐步推进当前的主要计划，
+自行分析/决策下一步应该做什么”. Do not extend this deadline or restart old runs.
+New jingba-demo-donor-v1 is the bounded fourth run in this window: same J05–J10,
+18 byte-identical M00/MPS/MSP prompts from completed jingba-mixed-demos-v1.
+Fixed zero-based17 M00(no reference) focal京巴 U / equal-count preceding P donors
+into both mixed-example orders;12U12P24self42format,378usual/630max forwards.
+This tests preservation of observed helpful-demo effects; no harmful-demo condition
+is established, so cannot independently prove selective use. No new text/label,
+layer/head scan, threshold tuning or website publication. Existing six refs unchanged.
+All36 trajectories/RMS;18native fullvector/state/trajectory exact historical replay.
+11capture,4actual-controller synthetic378,4launcher,5hostCPUdeadline tests and
+18input/36boundary/18prefix/48job audit passed before seal. CPU failures preserved:
+runtime01 missing summary field;02 stale48self count (correct24);03pass. Sourceledger
+exclusive-write blocked before seal, preserved old ledger; refreshed and input03pass.
+No numerical gate relaxation or GPU retry. See prepared manifest/execution decision.
+Read launch-01/state.json AND run-01/state.json before action; never duplicate.
+Guard STOP15:58, verified ownedworker TERM15:59/KILL15:59:40, controller reaps.
+Regions1026, dictionary-free756 and mixed270 are all terminal COMPLETE and released;
+their independent audits/closeouts pass. New mixed MPS/MSP each5/6 viaJ08 only;
+J08m+1.677540/+.016209, J07stillwrong. Fixed dictionary-free U0 still9/12, same exact
+labels as ordinaryU2 and old+7offset. Interpretations and public links added separately.
+Remaining work: new run audit/release/report plus window synthesis/document checks.
+
+## Dictionary-free donor ACTIVE in authorized window (2026-09-21)
+
+User's autonomous deadline remains today16:00 Asia/Shanghai. NEW dictionary-free-donor-v1
+prepared-01 manifest265d4d435babaf0c4349bee72e2f0268bfeba88164b5a6528936c9ef0416189d.
+Controller3915735 owned host exec88519, GPU0 engineering began14:51:26. Read launch/run
+state before action; never duplicate/restart. Same absolute16:00 guard (STOP15:58,
+TERM15:59/KILL15:59:40 only verifiedownedworkers). Existing regions GPU complete,
+controller3889104/workers3889626/3908591 absent proven; regions CPU audit pending.
+
+Fixed gold-free candidate: all12 adopted cross-term J01–J04/G01–G04/B01–B04, exact
+36 D00/D01/D02 prompts unchanged. NewU0/P0 use D00(no dictionary) native donor into
+D01, layer17 focal/equal-count preceding. Fresh ordinaryD02 U2/P2 comparators.
+36N48cross48self84format756usual/1260max. Rule always focal17 strength1 no gold,
+no score-trigger/no fitted threshold; ordinarydefinition not required by candidate.
+Allcases including failures/J03harmrisk retained. Priorfixed+7CPUbaseline unchanged.
+36N+24oldD02U/P exactfullvector/trajectory and36bank replay required. All36layers.
+11CPUcapture,4synthetic756lifecycle,4launcher,2auditregression,5hostdeadline tests,
+36input/72boundary/36prefix/96job independentaudit pass. Frozen beforeGPU. Development
+failures retained: initialbuilder PROTOCOLspacing; synthetic01emptyjointtable and
+02missingtoken/normreportfields;03pass after fixes, no numericalgate relaxed.
+New raw/results immutable afterseal. Independent120digit/longdouble audit,hostrelease,
+report/closeout required. No newmaterial/head/layer scan or websitepublication.
+Not independent validation or establishedselectiveuse; compare repairs AND damages
+withnativeD01,directD00,ordinarydonor,fixedoffset. Do not tune after outcomes.
+
+## Autonomous window ACTIVE; Jingba region factorization launched (2026-09-21)
+
+Latest user authorizes autonomous progress of main plan with all GPUs until today
+16:00 Asia/Shanghai. This supersedes prior no-next-experiment notes within this window.
+HARD deadline no extension. NEW jingba-query-regions-v1/prepared-01 manifest
+49bb5b05fe7d12f2be2f3503f260a70b9158156b6eb8c364c27d9aad5b5f4531;
+execution decision2c591c442beea1dbaafa29be3ebf2ef597e7fdd473dac53ea1a1eb4f95c65421.
+Read launch-01/state.json AND run-01/state.json before action; never duplicate.
+Controller3889104 owned host exec50125; engineering worker3889626 GPU0 began14:38.
+Fresh all4 idle on bind. Deadline guard STOP15:58, verified owned TERM15:59/KILL15:59:40.
+Single L20. New B=query before focal,A=query after focal,UB,UA at fixed0-based17;
+retain fresh N/U/P/C/W. Same18 prompts/references.96cross96self114format,1026usual.
+All6 bothdirections all36layers; complete2^3 regions; I_UC=I_UB+I_UA+I_UBA, last8eps.
+Prior66endpoints/18banks exact replay required; J05B=P exact fullvector/trajectory.
+12CPUcapture,4synthetic1026lifecycle,4launcher,10audit,5deadlinechecks and independent
+18input/36boundary/18prefix/192job audit passed before seal. Deadline test01 sandbox
+PIDnamespace failure;02 CPUchild readinessrace;03host pass after test-ready handshake.
+Failures retained checks/development-note-01.md; no scientific numerical gate changed.
+CPU finalreadout diagnostic in reviews/autonomous-reference-progress-20260921/readout-01:
+J06 forward I1.721081, common native finalRMS1.695546, scaling.025539, tinyremainder;
+Decimal120/longdouble verified. Algebra only, differs from earlier per-layer35RMS.
+After GPU: independent audit/hostrelease/report/closeout; no website publication.
+Main plan goal includes reusable gold-free intervention and separate taskbenefit,
+not only further local nonadditivity. Use remaining time for evidence-led progress.
+
+## Jingba query complement COMPLETE (2026-09-21)
+
+NEW jingba-query-complement-v1/results-current.json selects prepared-01/run-01/results-01.
+Closeout9abf66356175b655a50e48617af6052f1f05db65af09365c1eec945c5c373e44;
+results manifest e67a7fc24caff05bcf70dc004ddd185b381bd2b55b08b9291ea220ea43fadb5d.
+Terminal COMPLETE, never restart. GPU0 alone594forwards (528engineering including
+66format,66production), final release2026-09-21 14:13:42.663872 Asia/Shanghai.
+First phase start to release426.369942s (~7.1min),phase sum363.389650s. Controller
+3830356 and workers3830799/3840976 exit0 and absent by host check; all4 GPUs zero
+memory/util/no compute PIDs. No failed test/gate,retry,signals or sealed-source edit.
+
+Only new C=whole query minus focal京巴,zero-based17 full block-output. Same18
+J05–J10 prompts; fresh18N/12U/12P/12W/12C,48native-self,66format. U2tokens,C15–23,
+W17–25;U/C disjoint/exhaustive,PsubsetC. Mapped positions differ18;not norm/wordclass
+matched;C mixes pre/post text and punctuation. No new texts/labels/definitions,
+26/28 restoration,head/layer scan or website publication. Previous runs terminal.
+
+Independent120digit/longdouble audit passes594fullvectors,528margin records,
+66normalizations,444trajectories,336earlyguards,102816summaryscalars,12query
+interactions,12scopecontrasts and3prefixpairs. Fresh54 N/U/P/W full vectors and
+trajectories plus18complete nativebanks exactly equal preceding whole-query run.
+No old substitution;131sourcepins exact. Margin bound1e-6,probe3.0517578125e-5.
+I=W-U-C+N bound4epsilon; all12 numerically resolved, not all practically large.
+Documentcheck214pins/22links/6PNGs(3new visuallyinspected),14oldscience/site selectors
+unchanged. PublicREADME links interpretation-01 and immutable full results report.
+
+Forward (D02→D01) eU/eC/eW/I:
+J05 +5.024063/+5.087406/+9.051056/−1.060413;
+J06 +5.154789/−1.575848/+5.300022/+1.721081;
+J07 +.344563/−.687492/−.329533/+.013397;
+J08 −.488094/+1.582916/+.763264/−.331558;
+J09 +.295750/+.159218/+.467190/+.012222;
+J10 −.048225/+.354164/+.228867/−.077072.
+Reverse I: J05−.525038,J06+.104025,J07+.006363,J08−.294254,J09+.012852,J10−.073048.
+J06 conditional C=W−U+.145233 versus standaloneC−1.575848: small extra whole-query
+response hid background dependence, not C having no effect. Does not replicate
+same magnitude inreverse. J07/J09 final effects approximately additive but not
+exact or model-wide linearity; J08/J10 C direction/magnitude helps explain W sign
+relativeU. I signs not universal synergy/suppression or correctness improvements.
+
+All48cross labels unchanged, N/U/C/W/P main4/6, J07/J08 remainwrong even D00; no
+correct-native-donor premise for those failures. FixedCPU+7also4/6,no fitting.
+J06forwardL35MLP incrementI+.911366 decomposes branch−.183049,RMS+1.094388,small
+rounding; retain all36layers and RMS, not newMLPcausal intervention or semantics.
+No universal repair or unique natural path. Any suggested focused followup is
+NOT new execution authorization; new user steering required for new experiments.
+
+## Jingba query complement CPU SEALED; continuation GPU authorized (2026-09-21)
+
+Controller3830356 in owned host exec47312; engineering worker3830799 onGPU0
+UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0. Fresh all4 zero memory/util/no
+compute PIDs. Preparation manifest144e6b747e2ec344d16eb0d2af295e1559a11f2c8283391d24e9d55517b21257.
+Engineering started2026-09-21 14:06 Asia/Shanghai.
+
+Latest user accepts next minimal experiment: “京巴以外的查询位置单独替换”. This is
+new execution authorization in ongoing GPU workflow, no preparation-only limit or
+new deadline. NEW jingba-query-complement-v1/prepared-01 sealed; inspect manifest
+and execution-decision-01.json. Read new launch/run states FIRST if present;
+never duplicate/restart terminal runs. Previous whole-query run remains COMPLETE.
+
+Only new C=existing query_all minus focal京巴 at zero-based17 block output;15–23
+noncontiguous tokens, U2, W17–25. U/C disjoint/exhaustive, P is subsetC. Same18
+J05–J10/D00,D01,D02 prompts and adopted labels. Fresh18N/12U/12P/12W/12C,
+48native-self,66format;usual594/max990forwards. No26/28restoration,head/layer scan,
+new texts,definitions,labels or website. Fresh idle singleL20 planned.
+
+Main I=W-U-C+N=(W-U)-(C-N),bound4epsilon (not6); pairbound2epsilon. Report absolute
+standalone/conditional effects and labels, no presumed linearity/synergy or natural
+mediation shares. All36layers,RMS,token counts/L2 preserved; square-norm partition
+checked independently. C mixes pre/post/focal-excluded positions, not pure stance,
+wordclass or norm matched. Same fixed CPU+7 exposed diagnostic, no refitting.
+
+12tiny nativeCPU hook tests including noncontiguous C and exact U+C=whole state
+composition,4actual-controller synthetic594forward tests,4launcher,9audit regressions
+and18input/36boundary/18prefix/96job audit pass. No failed tests/gate relaxation.
+Synthetic checks/synthetic-01 never scientific evidence. After normal GPU release,
+independent120digit/longdouble audit594vectors/444trajectories/12interactions and
+54old N/U/P/W fullvectors+trajectories,18complete banks exact replay required.
+Host process release and scientific closeout follow. No old-score substitution.
+
+## Jingba whole-query layer17 COMPLETE (2026-09-21)
+
+NEW jingba-query-scope-v1/results-current.json selects prepared-01/run-01/results-01.
+Closeout1726c544f430482dc8f89e0f785b93a265804798437df584dd959036a12eb07a;
+results manifest7f98d664b45ab6696806dfcf171f5e94e5c7ee595f913feb7b650be8bb44d1ba.
+Terminal COMPLETE; never restart. GPU0 alone486forwards (432engineering including
+54format,54production); final release2026-09-21 13:35:07.605865 Asia/Shanghai.
+First phase start to release362.464418s (~6min), phase sum311.417349s. Host check
+controller3769235/workers3769703,3777672 absent; all4 zero memory/util/no compute
+PIDs. Normal exit0, no failed GPU gate/retry/signals or post-seal source changes.
+Initial pre-seal CPU fixture error preserved; fixed only invalid test positions.
+
+Only new configuration W=whole existing query block-output patch at zero-based17,
+versus fresh U=focal京巴 and P=adjacent preceding. Existing J05–J10/18prompts exact,
+12W/12U/12P,36native-self,54format. Wholequery17–25tokens versus U/P2. Capture banks
+expanded toquery_all, true-prefix runs end atquery end; focal-prefix metadata
+retained. J08/J10 focal states still exact across36layers in full/query-prefix.
+Separate mapped donor positions differ18tokens; norms/wordclass not matched.
+No complement-only query condition,26/28 restoration,new texts,head/layer search.
+
+Independent120digit/longdouble audit passes486full vectors,432margin records,
+54normalizations,360trajectories,252earlyguards,80784summary scalars,12scopecontrasts,
+36selfs,54formats and3prefixpairs. Fresh18N+24U/P full vectors and42trajectories
+exactly equal prior jingba-context-v1; expanded18native banks at old positions
+exactly equal old banks. No old substitution. Margin bound1e-6; probe3.0517578125e-5.
+All131sourcepins exact;document-check verifies207pins,21links,3inspectedfigures,
+13oldscience/website selectors unchanged. No website publication.
+
+W closer to donor-native score than U in8/12directions;4farther are bothJ07/J08.
+J05 forward deltaU+5.024063→W+9.051056 (W-U+4.026993), reverse−1.142355→−2.655067.
+J06 forward+5.154789→+5.300022 (only+.145233),reverse−2.424116→−3.213224.
+J07 forward+.344563→−.329533; J08 forward−.488094→+.763264, reverse+1.011650→
++1.436737 (slightly overshoots donor). J10forward−.048225→+.228867,reverse+.118000→
+−.990383. No labels change in any36cross endpoint; N/U/W/P all4/6. J07/J08 wrong
+in D00,D01,D02 and allpatches, hence not a correct donor whose repair failed transfer.
+CPU fixedm+7 likewise4/6; historical exposed cross-term12 check9/12 replicated at
+preparation, no fit on new outputs/new model forwards/independent validation.
+
+Inference: adding query positions outside focal changes effects heterogeneously;
+not single-head/stance localization or universal repair. Wholequery changes more
+positions and larger norms; no complement-only intervention so no interaction
+estimate. W still retains recipient dictionary and other prior states; remaining
+donor gap is not direct dictionary-path share. All36layers/RMS retained. Public
+README links separate interpretation-01/REPORT.md and immutable full results report.
+Suggested complement-only next step is NOT new execution authorization.
+
+## Jingba whole-query layer17 CPU SEALED; GPU authorized (2026-09-21)
+
+Controller3769235 in owned host exec34618; engineering worker3769703 on GPU0
+UUIDGPU-09b29c25-c372-62f4-3098-9734013e93c0. Fresh inventory all4 zero memory/
+utilization and no compute PIDs. Prepared manifest SHA256
+07ddf7f8d86b8eca798cb5f2cdd7c55a57e17aaa22cb99edf2f8ef36af4d9065.
+Launch started2026-09-21 13:28 Asia/Shanghai, engineering13:29.
+
+Latest user authorized continuing accepted configuration and starting GPU, all GPUs
+idle. Referenced conversation is advice, not expanded authorization. NEW
+jingba-query-scope-v1/prepared-01 is immutable after seal. Read its manifest and
+execution-decision-01.json; read launch-01/state.json and run-01/state.json FIRST
+if present, never duplicate or restart terminal runs. No new deadline.
+
+Only new scientific configuration W: replace entire existing query block output
+at zero-based17. Same18 adopted J05–J10 D00/D01/D02 prompts, fresh18N/12U/12P,
+12W,36native-self,54format endpoints; usual486/max810 forwards. No complement-only
+query condition,26/28restoration,head/layer scan,new texts/labels,or website work.
+Whole query17–25tokens vsfocal2; capture bank now entire query and true prefix
+ends at query end. Retain focal-prefix metadata for J08/J10. Absolute donor
+positions mapped separately,18token shift, no norm or wordclass matching.
+CPU-only b+7 is fixed from prior exposed cross-term12 diagnostic9/12; no fitting
+on new outputs or additional model forwards, not independent validation.
+
+11tinyCPU capture,4 actual-controller synthetic lifecycle486forwards,4launcher,
+6independent-audit regression tests and18input/36boundary/18prefix/72job audit pass.
+Initial tiny-fixture positions3/4 were outside declaredquery; fixed to actual
+wholequery5–8 before seal; original failure kept. No research source/gate relaxation.
+Synthetic checks/synthetic-01 NEVER scientific evidence. After engineering/full
+normal release, independently audit all486vectors/360trajectories/12scopecontrasts,
+18N+24U/P exact historical vectors/trajectories,18old-position native-bank subsets,
+host process release and scientific closeout. No old-score substitution.
+
 ## Jingba layer26 attention restoration COMPLETE (2026-09-21)
 
 NEW jingba-attn-restore-v1/results-current.json selects prepared-01/run-01/results-01.

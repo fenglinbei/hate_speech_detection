@@ -1,0 +1,153 @@
+{
+  "schema_version": "jingba-mixed-demos-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "input_count": 30,
+  "cross_count": 0,
+  "self_count": 0,
+  "layers": 36,
+  "patch_layer": null,
+  "position_mode": "native_only",
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "capture": {
+    "position": "pre_answer",
+    "sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "all_layers": true,
+    "RMS_scale_retained": true,
+    "unchanged_before_or_at_patch_layer": true
+  },
+  "restoration_sites": [],
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "all30 native endpoints",
+    "failure_policy": "terminal; no automatic retry"
+  },
+  "budget": {
+    "native_engineering": 180,
+    "true_prefixes": 30,
+    "self_controls": 0,
+    "cross_engineering": 0,
+    "production_native_replay": 30,
+    "production_cross_replay": 0,
+    "usual_format_continuations": 30,
+    "usual_total": 270,
+    "maximum_total": 450
+  },
+  "GPU_execution_authorized": false,
+  "GPU_time_constraint": {
+    "confirmed": false,
+    "deadline_unix": null
+  },
+  "all_cases_retained": true,
+  "independent_confirmation": false,
+  "prior_comparators": {
+    "work": "/data/liaozijie/hate_speech_detection/reviews/jingba-query-regions-v1",
+    "native_vectors": 6
+  },
+  "primary_question": "Do correct mixed demonstrations preserve ordinary and direct-attack queries while resolving opposition-query errors?",
+  "packs": {
+    "M00": [],
+    "MP": [
+      "J01",
+      "J04"
+    ],
+    "MS": [
+      "J03",
+      "J02"
+    ],
+    "MPS": [
+      "J01",
+      "J04",
+      "J03",
+      "J02"
+    ],
+    "MSP": [
+      "J03",
+      "J02",
+      "J01",
+      "J04"
+    ]
+  },
+  "label_sequence_controls": {
+    "MP_MS": [
+      "无",
+      "有"
+    ],
+    "MPS_MSP": [
+      "无",
+      "有",
+      "无",
+      "有"
+    ]
+  },
+  "contrasts": [
+    [
+      "MP",
+      "M00"
+    ],
+    [
+      "MS",
+      "M00"
+    ],
+    [
+      "MPS",
+      "M00"
+    ],
+    [
+      "MSP",
+      "M00"
+    ],
+    [
+      "MS",
+      "MP"
+    ],
+    [
+      "MSP",
+      "MPS"
+    ]
+  ],
+  "scientific_limits": [
+    "P/S indicate usage context, not manually adjudicated universal applicability.",
+    "Two versus four demonstrations changes count and length.",
+    "Mixed order changes content positions while preserving label positions/counts; cannot remove all position effects.",
+    "Six exposed related queries, four exposed examples; no independent task confirmation.",
+    "No dictionary in any prompt; no new internal intervention or head/layer search."
+  ]
+}

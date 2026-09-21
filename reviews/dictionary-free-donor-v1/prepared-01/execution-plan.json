@@ -1,0 +1,124 @@
+{
+  "schema_version": "dictionary-free-donor-execution/v1",
+  "status": "accepted_CPU_preparation",
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "input_count": 36,
+  "cross_count": 48,
+  "self_count": 48,
+  "patch_layer": 17,
+  "layers": 36,
+  "position_mode": "focal_and_preceding",
+  "acceptance": {
+    "margin_repeat_order_hook_cap": 0.0,
+    "margin_padding_prefix_cap": 0.001,
+    "attention_repeat_order_cap": 0.0,
+    "attention_element_cap": 0.0001,
+    "attention_row_l1_cap": 0.001,
+    "attention_row_sum_cap": 2e-06,
+    "margin_bound_floor": 1e-06,
+    "attention_mass_bound_floor": 1e-07
+  },
+  "state_scaled_cap": 0.0001,
+  "mechanism_acceptance": {
+    "exact_repeat_reverse_replay": true,
+    "padding_prefix_scaled_max_cap": 0.0001,
+    "projection_absolute_cap": 0.001,
+    "reconstruction_scaled_max_cap": 0.0001,
+    "floor": 1e-06,
+    "meaning": "Predeclared FP32 numerical engineering limits, not statistical or causal uncertainty."
+  },
+  "query_reference_join_during_worker": false,
+  "old_scores_substituted": false,
+  "donor_source": "fresh same-run native block outputs",
+  "capture": {
+    "position": "pre_answer",
+    "sites": [
+      "pre",
+      "mid",
+      "post"
+    ],
+    "branches": [
+      "attention",
+      "mlp"
+    ],
+    "all_layers": true,
+    "RMS_scale_retained": true,
+    "unchanged_before_or_at_patch_layer": true
+  },
+  "restoration_sites": [],
+  "restoration_source": null,
+  "joint_boundary_reference": null,
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "covers": "all 36 native and 48 cross endpoints",
+    "failure_policy": "terminal; no automatic retry"
+  },
+  "budget": {
+    "native_engineering": 216,
+    "true_prefixes": 36,
+    "self_controls": 48,
+    "cross_engineering": 288,
+    "production_native_replay": 36,
+    "production_cross_replay": 48,
+    "usual_format_continuations": 84,
+    "usual_total": 756,
+    "maximum_total": 1260
+  },
+  "GPU_time_constraint": {
+    "confirmed": false,
+    "deadline_unix": null,
+    "reason": "Autonomous window authorized; bind deadline to sealed manifest before inventory"
+  },
+  "GPU_execution_authorized": false,
+  "all_cases_retained": true,
+  "primary_direction": "D00->D01",
+  "ordinary_donor_comparator": "D02->D01",
+  "independent_confirmation": false,
+  "new_case_extension": false,
+  "prior_comparators": {
+    "work": "/data/liaozijie/hate_speech_detection/reviews/cross-term-mechanism-v1",
+    "native_vectors": 36,
+    "previous_cross_vectors": 24
+  },
+  "CPU_score_shift": {
+    "offset": 7.0,
+    "fit_on_current_results": false,
+    "selected_post_hoc_in_prior_discussion": true
+  },
+  "no_new_layer_or_head_search": true,
+  "condition_scope": {
+    "native": [
+      "D00",
+      "D01",
+      "D02"
+    ],
+    "interventions": [
+      "D00->D01",
+      "D02->D01"
+    ]
+  },
+  "token_mapping": "Exact same query token IDs and relative offsets; separate donor and recipient absolute positions.",
+  "fixed_rule": {
+    "trigger": "single reviewed dictionary term occurs exactly once in query",
+    "donor": "same task/query with dictionary absent D00",
+    "recipient": "original pejorative dictionary D01",
+    "layer_zero_based": 17,
+    "positions": "all tokens spanning exact term in query",
+    "operation": "replace complete block output",
+    "strength": 1.0,
+    "gold_or_human_applicability_used": false,
+    "adaptive_threshold": null,
+    "theoretical_forward_passes": 2,
+    "ordinary_definition_required_for_rule": false
+  },
+  "interpretation": "Twelve selected development texts across three terms; unequal definition lengths and positional shifts retained, not a pure semantic variable or independent confirmation."
+}

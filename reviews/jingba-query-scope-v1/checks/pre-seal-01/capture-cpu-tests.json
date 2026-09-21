@@ -1,0 +1,9 @@
+{
+  "status": "fail",
+  "tests": 11,
+  "CUDA_initialized": false,
+  "research_checkpoint_loaded": false,
+  "failures": [
+    "Traceback (most recent call last):\n  File \"/data/liaozijie/hate_speech_detection/scripts/review/test_jingba_query_scope_capture_v1.py\", line 42, in test_unequal_prefix_lengths_with_mapped_one_and_two_token_donors\n    actual,_,proof,t=cap.forward(self.model,r,0,positions=ps,layer=1,replacement=replacement,trajectory=True)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/hehe_joint_restore_capture_v1.py\", line 23, in forward\n    v,s,p,t = bridge.forward(model,request,pad_token,**kwargs)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/hehe_bridge_capture_v1.py\", line 69, in forward\n    v,s,proof=patcher.forward(model,request,pad_token,positions=positions,observe=observe,\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/hehe_focal_patch_capture_v1.py\", line 50, in forward\n    require(set(ps)<=set(request['roles']['query_all']) and max(ps)<original_length-1,'Patch only query positions before readout')\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/case_attention_inputs_v1.py\", line 30, in require\n    raise ValueError(message)\nValueError: Patch only query positions before readout\n"
+  ]
+}
