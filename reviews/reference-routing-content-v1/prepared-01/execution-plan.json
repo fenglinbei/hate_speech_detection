@@ -1,0 +1,132 @@
+{
+  "schema_version": "reference-routing-content-execution/v1",
+  "status": "CPU_PREPARATION",
+  "protocol": {
+    "path": "/data/liaozijie/hate_speech_detection/docs/research/experiment-plans/reference-routing-content-v1/frozen-01/manifest.json",
+    "bytes": 18619,
+    "sha256": "2dffc823407f2f0dd0a9a33b35449889aba4a492cc4f8cc0f571b7be0dee8892"
+  },
+  "materials": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-materials-v1/adopted-01/manifest.json",
+    "bytes": 2398,
+    "sha256": "ded627767a06be552f41c3ba71b797e7d3eaca7694f22f21312b75a15d9bc1c9"
+  },
+  "user_message": "材料我过了一遍，整体没什么问题，可以开始做GPU运行前准备",
+  "GPU_execution_authorized": false,
+  "runtime_versions": {
+    "torch": "2.6.0",
+    "transformers": "4.55.4",
+    "accelerate": "1.13.0",
+    "safetensors": "0.7.0",
+    "numpy": "1.26.4",
+    "tokenizers": "0.21.4",
+    "tiktoken": "0.12.0"
+  },
+  "budgets": {
+    "stage-a": {
+      "science_score_configurations": 114,
+      "separate_self_controls": 0,
+      "native_true_prefixes": 18,
+      "engineering_six_passes": 684,
+      "production_replay": 114,
+      "usual_format_continuations": 114,
+      "maximum_format_continuations": 798,
+      "usual_total": 930,
+      "maximum_total": 1614,
+      "no_CPU_derived_score_counted_as_forward": true
+    },
+    "development": {
+      "science_score_configurations": 1272,
+      "separate_self_controls": 624,
+      "native_true_prefixes": 336,
+      "engineering_six_passes": 7632,
+      "production_replay": 1272,
+      "usual_format_continuations": 1272,
+      "maximum_format_continuations": 8904,
+      "usual_total": 11136,
+      "maximum_total": 18768,
+      "no_CPU_derived_score_counted_as_forward": true
+    },
+    "confirmation-factor-1": {
+      "science_score_configurations": 648,
+      "separate_self_controls": 624,
+      "native_true_prefixes": 336,
+      "engineering_six_passes": 3888,
+      "production_replay": 648,
+      "usual_format_continuations": 648,
+      "maximum_format_continuations": 4536,
+      "usual_total": 6144,
+      "maximum_total": 10032,
+      "no_CPU_derived_score_counted_as_forward": true
+    },
+    "confirmation-factor-2": {
+      "science_score_configurations": 960,
+      "separate_self_controls": 624,
+      "native_true_prefixes": 336,
+      "engineering_six_passes": 5760,
+      "production_replay": 960,
+      "usual_format_continuations": 960,
+      "maximum_format_continuations": 6720,
+      "usual_total": 8640,
+      "maximum_total": 14400,
+      "no_CPU_derived_score_counted_as_forward": true
+    },
+    "confirmation-factor-4": {
+      "science_score_configurations": 960,
+      "separate_self_controls": 624,
+      "native_true_prefixes": 336,
+      "engineering_six_passes": 5760,
+      "production_replay": 960,
+      "usual_format_continuations": 960,
+      "maximum_format_continuations": 6720,
+      "usual_total": 8640,
+      "maximum_total": 14400,
+      "no_CPU_derived_score_counted_as_forward": true
+    }
+  },
+  "stage_order": [
+    "stage-a",
+    "development",
+    "CPU_calibration_lock",
+    "confirmation"
+  ],
+  "confirmation_gate": "accepted production development data + normal GPU release + immutable calibration lock",
+  "scientific_progression_is_not_GPU_authorization": true,
+  "query_reference_join_during_worker": false,
+  "numerical_caps": {
+    "exact_repeat_reverse_raw_replay": true,
+    "margin_padding_absolute": 0.001,
+    "state_scaled": 0.0001,
+    "projection_absolute": 0.001,
+    "reconstruction_scaled": 0.0001,
+    "attention_element": 0.0001,
+    "attention_row_l1": 0.001,
+    "attention_rowsum": 2e-06,
+    "floor": 1e-06
+  },
+  "margin_bound": "per physical scoring job max(floor,2*max padding and self reconstruction margin errors), newly measured",
+  "self_reconstruction": "AV11 and N_AV00 include full-vector and trajectory tolerances; focal/Q1 self exact",
+  "format": {
+    "exact_label_then_eos": true,
+    "max_new_tokens": 8,
+    "applies": "all science configurations",
+    "original_pre_answer_unchanged_after_append": true,
+    "failure_policy": "terminal retain all; no silent filtering"
+  },
+  "cost": [
+    "forwards",
+    "valid_and_padded_tokens",
+    "same_device_seconds",
+    "peak_allocated_reserved_VRAM",
+    "donor_first_vs_reuse"
+  ],
+  "run_policy": {
+    "single_freshly_idle_GPU_min_MiB": 44000,
+    "batch": 1,
+    "parallel_workers": 1,
+    "no_automatic_retry": true,
+    "terminal_failed_stopped_complete_never_resume": true,
+    "no_fixed_old_deadline_inherited": true,
+    "fresh_execution_decision_required": true
+  }
+}

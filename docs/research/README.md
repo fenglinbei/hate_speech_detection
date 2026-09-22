@@ -10,6 +10,9 @@
 
 ## 实验计划
 
+- [正确参考利用：GPU运行前准备已封存](experiment-plans/reference-routing-content-execution-v1/README.md)：2026-09-22用户整批采纳材料；固定17/18层 A/V、强基线、开发校准／确认隔离及双侧评价已实现，29项CPU测试通过。尚未启动GPU，实际数值资格及开发参数待后续运行。
+- [正确参考利用：原材料审核稿](experiment-plans/reference-routing-content-materials-v1/README.md)：48条查询（24开发＋24确认）、108条示例及576条关系AI建议，附离线三栏工作台。原草案保留原始待审字段；新的整批采纳证据及执行输入另建版本，见上方入口。
+- [正确参考的选择性利用：第18层 A/V 分解与双侧评价 v1](experiment-plans/reference-routing-content-v1/frozen-01/README.md)：**研究设计已冻结**。绑定已有六查询／两混合次序的 A/V 四格，规定24开发＋24确认材料、逐项关系审核、强基线及校准、G与修复／损害、双侧参考贡献和结果分流。新材料采纳、运行实现与 GPU 资格另行绑定；本次仅做 CPU 协议校验。
 - [`experiment-plans/general-model-evidence-applicability-audit-controls-v1.md`](experiment-plans/general-model-evidence-applicability-audit-controls-v1.md)：**当前接续工作：证据适用性联合审核**。沿用冻结的 32 条 discovery；[规则 v2](annotation-guidelines/evidence-applicability-annotation-policy-v2.md)已于 2026-09-09 确认并上线，明确 group 对象和 others 范围，hate 规则沿用 v1。旧 AI 初稿与人审决定保留，受影响 group 等待人类重核。[执行记录](../../exps/causal_context/general_model_evidence_applicability_v1/README.md)登记工作台及验收进度；[交互设计](annotation-guidelines/evidence-applicability-assisted-review-design-v1.md)保留批准时的提案身份。
 - [已采纳的 group 范围修订草案原字节](annotation-guidelines/evidence-applicability-group-scope-v2-draft1.md)：保留批准时文档；当前完整语义以已冻结 v2 为准。
 - [`experiment-plans/general-model-ld-nolabel-paired-cases-v1.md`](experiment-plans/general-model-ld-nolabel-paired-cases-v1.md)：**逐查询配对分析已完成**。643 条 dev、32 条 discovery 与 16 条 reserve 选样已封存；[阶段结果](../../exps/causal_context/general_model_ld_nolabel_paired_cases_v1/RESULTS.md)。

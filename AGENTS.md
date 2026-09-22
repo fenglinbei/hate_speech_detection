@@ -1,5 +1,127 @@
 # Human Review Workbenches
 
+## Reference routing/content CPU preparation SEALED; GPU NOT AUTHORIZED (2026-09-22)
+
+Latest user: “材料我过了一遍，整体没什么问题，可以开始做GPU运行前准备”.
+This authorizes bulk adoption of the delivered draft and pre-GPU preparation only.
+NEW reviews/reference-routing-content-materials-v1/adopted-01 records one exact
+manifest/field-bound bulk adoption, not invented individual UI decisions. Adoption
+manifest ded627767a06be552f41c3ba71b797e7d3eaca7694f22f21312b75a15d9bc1c9.
+48 queries,108 demos,576 relations accepted from draft01 without text/label/fit edits.
+Coarse whole-text stance/attack spans remain coarse; no minimum-sufficient span,
+severity/group decision, independent-sample proof or GPU permission inferred.
+Original draft and its current.json remain the candidate archive; adoption-current.json
+is the new separate adoption pointer. No browser-test record counted as human review.
+
+NEW reviews/reference-routing-content-v1/prepared-01 manifest
+6986e2daa1dedac7761e042889f3833bb673c8b650e838f33b4e40bb5a42aa97 is immutable.
+Public experiment-plans/reference-routing-content-execution-v1/current.json selects it.
+Runtime/code/check sources are now pinned. New fixes require a version, never edit
+sealed sources in place. Source dependencies and51 old selectors protected.
+
+Fixed zero-based17 focal M00 donor,18 same-recipient N/U A/V at original pre-answer;
+AV11 rebuildsU,AV00 restores that branch underU, not wholeN. All36 trajectories and
+per-head actual Q/K/V/scores/A/AV/o_proj captured.42 old N/U/P fullvectors/banks/traces
+must freshly replay. StageA114configs930usual/1614max; development1272configs,
+11136usual/18768max; confirmation QAS1=648configs6144/10032, QAS2or4=960configs
+8640/14400. One confirmation branch only; no parallel GPU workers registered.
+Worker input has no querygold/relations. Exact user materials frozen before dev.
+QAS18–35 allheads querykeys factor1/2/4; offsetsN/U andBstar fit only24dev MPS/MSP.
+Confirmation requires independent audited/released dev and immutable calibration lock.
+G/E/D use exact physical-record coefficient merging; class/term balance, accuracy/AUC,
+repairs/damages/unresolved, subgroup/cost and three separate result decisions retained.
+
+CPU11 native random Qwen3 hook/provenance tests,6 actual scheduler/authorization tests,
+8 evaluation tests,4 pipeline tests passed. Final synthetic scheduler2010forwards is
+NOT science. Fixed17/18 real native tiny36layer CPU checks passed; no Qwen3-8B weights,
+CUDA initialization, real model inference or hardware inventory/launch in this task.
+Pipeline01 fixture relative-path error retained;02 passed after absolute test path
+fix, no runtime guard/gate relaxation. Final receipts in checks, audits/prepared-01-*.
+Original normative protocol/material drafts/historical results/selectors unchanged.
+No actual execution decision, top-level run, calibration fit, website, git push or
+extension of the completed previous-day GPU window. Future launch must be newly
+authorized; default refusal happens before weights, hardware or directory creation.
+
+## Reference routing/content MATERIALS READY FOR HUMAN REVIEW (2026-09-21)
+
+Latest user: “可以开始准备新材料，完成后我来审核”. NEW candidate selector
+docs/research/experiment-plans/reference-routing-content-materials-v1/current.json
+points to reviews/reference-routing-content-materials-v1/draft-01. Candidate manifest
+9ec58f3ff86f951250265c13488b48da64708aab5b074c18576c2d0f0bc4e11e.
+This is an AI review draft, NOT human adoption/input execution freeze/GPU permission.
+All delivered candidate bytes/source files are pinned; revisions require a new version.
+Prior normative protocol and51 previous selectors unchanged. No model inference,
+weight loading, website deployment, remote human-session mutation or git push.
+
+48 new queries D01–D24 development/C01–C24 confirmation, four strata each6 per split,
+12no/12yes proposals each. Known 京巴/垃圾/公交车; new candidate terms鹦鹉/乌龟/狐狸.
+9 reference pools,108 unique demos,576 per-query directed relation suggestions.
+O ordinary/S derogatory/B different-word background; A/I mapping depends on query
+sense. Never infer blanket semantic/rule applicability from these design names.
+AI source_quality accepted is explicitly AI provenance adoption:none, not human.
+relations-unreviewed and review-decisions-blank contain zero human decisions.
+Focal spans exact; some stance/independent-attack spans intentionally cover full text
+as AI review scope and still need human refinement, not minimum sufficient locations.
+
+672 prompt PREVIEWS only, all eligible_for_model_execution:false.384 one-demo
+substitutions preserve complete length and every unchanged token identity/position;
+all13 four-demo conditions/query equal length. Independent audit PASS1152 AI/blank
+schema records,672 prompt reconstructions,1344 answer boundaries,672 donor-query
+token mappings,136 pinned files. No old exact text reuse among17 historical material
+files/185 unique texts; new term zero hits ONLY within that scan, not corpus/training
+novelty. Masked cross-split similarity is review aid, never independence proof.
+
+REVIEW.html reuses WP3/paired CSS and ReviewCore in a self-contained offline three-
+column workbench. Query/demo/relation queues, empty human fields, explicit AI-copy,
+naturalness and label/relation decisions, drafts, confirm/reopen history, version-
+bound JSON export/import. Browser storage is temporary; user must export for delivery.
+Do not treat ephemeral browser-test records as human decisions. Desktop/mobile and
+save/reload/export/wrong-version checks passed in checks/browser-03; initial Node,
+browser-cache and sandbox IPC failures plus wording attempts retained in checks/
+development-note.md. Host browser testing used official approved escalation, disabled
+GPU, temporary contexts; no bypass. Final screenshots inspected. Final CPU audit at
+audits/draft-01-cpu.json. User now reviews materials; do not assume their approval.
+
+## Reference routing/content protocol FROZEN; no new GPU execution (2026-09-21)
+
+User requested the next protocol including layer18 A/V decomposition, material/
+relation review, strong baselines, bilateral evaluation and result decision rules.
+NEW docs/research/experiment-plans/reference-routing-content-v1/current.json
+selects frozen-01. This is a COMPLETED normative research-design freeze, not
+adoption of unwritten materials or an executable/runtime/numerical GPU freeze.
+Preserve this package and its 27 pinned dependencies; validator also protects
+50 historical selectors. No old experiment, human decision or source changed.
+
+All layers ZERO-BASED: fixed17 M00 focal block-output U; at18 pre-answer p, in U
+background, cross A_N/A_U with V_N/V_U from the SAME recipient reference prompt.
+Both-restored00 is not whole N;11 reconstructs U. StageA binds18 old J05–J10
+M00/MPS/MSP inputs,12 factorial pairs,114 registered score configurations including
+self/position controls; actual forward budget awaits runtime freeze. Old42 N/U/P
+must be freshly replayed. No head/layer search. Structural outside-focal per-head
+attention-ratio invariance is a prediction/engineering check, not new model data.
+
+StageB:48 material slots only,24dev/24confirmation, four usage/attack strata;
+confirmation12 known-term/12 new-term-slot queries. All texts, human references,
+relation decisions and family IDs remain unfilled; never infer adoption from this
+protocol acceptance. All materials/splits reviewed before development outputs.
+14 prompt conditions/query, four correct demos with fixed no/yes/no/yes labels;
+single-slot background replacements must preserve full length and unchanged-token
+identities/positions. Semantic/reference fit and rule fit reviewed independently.
+
+N/NOREF/U/+7/CAD.5/QAS/N_CAL/U_CAL fixed. QAS boosts query keys at18–35, allheads,
+pre-answer only, factor1/2/4 dev selection; no PASTA-replication claim. Shareddev
+budget oneoffset each N/U; dev-selected B* and U_CAL candidate locked before confirm.
+Report class-balanced G plus accuracy/AUC/repairs/damages/cost. Bilateral paired E
+separates helpful preservation/harm attenuation; constant offsets cancel E, CAD E
+equals1.5 native E. Practical delta.5 and progression gates are resource heuristics,
+not significance tests. Mechanism/task/bilateral conclusions have separate branches.
+
+CPU contract PASS:18 source prompts,114 config jobs,48 empty review slots,14conditions,
+seven algebra fixtures and88 hashes. No real weights/model inference/hook qualification;
+the CPU toy is not science. See audits/freeze-01-cpu.json and read-only validator.
+Latest G analysis remains reviews/correct-direction-gain-v1/analysis-01, preserved.
+No launch authorization, no extension of completed16:00 window, no website/push.
+
 ## Latest six-round repository archive (2026-09-21)
 
 User explicitly requests pushing latest results to the remote repository.

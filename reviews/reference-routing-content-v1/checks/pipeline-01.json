@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "tests": 4,
+  "CPU_only": true,
+  "hardware_and_process_launch_mocked": true,
+  "real_model_forwards": 0,
+  "failures": [
+    "Traceback (most recent call last):\n  File \"/data/liaozijie/hate_speech_detection/scripts/review/test_reference_routing_content_pipeline_v1.py\", line 66, in test_controller_normal_release_and_terminal_duplicate\n    result=self.controller(root,Process);self.assertTrue(result['synthetic'])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/scripts/review/test_reference_routing_content_pipeline_v1.py\", line 55, in controller\n    return rt.launch(prepared,auth,root/'run-01','stage-a')\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/reference_routing_content_runtime_v1.py\", line 368, in launch\n    c.require(run.parent==c.WORK and not run.exists(),'Use a new isolated run; no restart')\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/case_attention_inputs_v1.py\", line 30, in require\n    raise ValueError(message)\nValueError: Use a new isolated run; no restart\n",
+    "Traceback (most recent call last):\n  File \"/data/liaozijie/hate_speech_detection/scripts/review/test_reference_routing_content_pipeline_v1.py\", line 75, in test_spawn_failure_is_terminal_without_worker\n    with self.assertRaises(OSError):self.controller(root,fail)\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/scripts/review/test_reference_routing_content_pipeline_v1.py\", line 55, in controller\n    return rt.launch(prepared,auth,root/'run-01','stage-a')\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/reference_routing_content_runtime_v1.py\", line 368, in launch\n    c.require(run.parent==c.WORK and not run.exists(),'Use a new isolated run; no restart')\n  File \"/data/liaozijie/hate_speech_detection/src/diagnostics/case_attention_inputs_v1.py\", line 30, in require\n    raise ValueError(message)\nValueError: Use a new isolated run; no restart\n"
+  ]
+}

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer">
+<title>参考利用研究 · 新材料审核</title>
+<style>__SHARED_BASE_CSS__
+__SHARED_PAIRED_CSS__
+:root{--topbar-height:86px;--phase-height:44px}.workbench{grid-template-columns:245px minmax(380px,1fr) 365px}.topbar{grid-template-columns:1fr auto;min-height:86px}.topbar-actions{flex-wrap:wrap}.topbar-status{display:none}.source-pane{display:block}.decision-pane{padding-bottom:16px}.field{display:grid;gap:7px;margin:16px 0}.review-form{padding:0 20px}.field select,.field textarea,.field input{width:100%;font-size:15px;box-sizing:border-box}.material-card{margin-bottom:16px}.case-list{overflow-y:auto}.case-item{width:100%}.case-sidebar{display:flex;flex-direction:column;overflow:hidden}.case-list{flex:1}.filter-tabs{flex-wrap:wrap}.query-content{font-size:18px}.source-pane details{margin:16px 0}.source-pane summary{cursor:pointer}#notice{padding:12px;color:#9c392b;background:#fff2ef;white-space:pre-wrap}#notice:empty{display:none}.decision-footer{position:sticky;bottom:0;background:#fff;padding:14px 20px}.decision-actions{display:flex;flex-wrap:wrap;gap:8px}.sidebar-select{width:100%;margin:8px 0;padding:7px}#search{width:100%;padding:8px}.inline-note{font-size:13px;color:#52665c;line-height:1.7}.field span{font-weight:650}.meta-table{width:100%;border-collapse:collapse;font-size:13px}.meta-table td,.meta-table th{padding:8px;border-bottom:1px solid #dde4df;text-align:left}.topbar h1{font-size:19px}.topbar input{max-width:145px;padding:7px}.case-item.active{border-color:#176b5b;background:#edf5ef}.status-chip{white-space:nowrap}button:disabled{opacity:.5}.workflow-strip{justify-content:flex-start;gap:14px}.workflow-note{margin-left:0}.mobile-tablet-only{display:none!important}
+@media(max-width:1050px){.workbench{grid-template-columns:210px minmax(300px,1fr)}.decision-pane{grid-column:2;max-height:none;overflow:visible;border-top:1px solid #ddd}.source-pane{max-height:none;overflow:visible}.workbench{height:auto}.case-sidebar{grid-row:1/3;display:flex;position:sticky;top:0;max-height:85vh;transform:none!important;width:auto}.topbar{height:auto;display:flex;flex-wrap:wrap}.workflow-strip{height:auto;min-height:44px;white-space:normal;flex-wrap:wrap}}
+@media(max-width:650px){.workbench{display:flex;flex-direction:column}.case-sidebar{position:static;height:auto;min-height:0;max-height:none;top:auto;bottom:auto;flex:none;width:100%;padding:14px;box-sizing:border-box}.case-list{height:160px;min-height:120px;max-height:160px;flex:none}.source-pane{padding:18px}.decision-pane{border-top:1px solid #ddd}.topbar{padding:12px}.workflow-note{display:block}.topbar-actions{justify-content:flex-start}.decision-footer{position:static}}
+</style></head><body>
+<header class="topbar"><div class="topbar-leading"><div class="brand-mark">阅</div><div><p class="eyebrow">参考利用研究 · 材料草稿</p><h1>新材料与关系审核</h1></div></div>
+<div class="topbar-actions"><label>审核人 <input id="reviewer" placeholder="填写你的姓名或代号" autocomplete="name"></label><button class="quiet-button" id="export">导出审核 JSON</button><button class="quiet-button" id="import-button">导入续审</button><input id="import-file" type="file" accept="application/json" hidden></div></header>
+<div class="workflow-strip"><b id="progress">0 / 732 已确认</b><span id="save-state" role="status" aria-live="polite">尚无人工记录</span><span class="workflow-note">建议先审查询，再审示例，最后审逐查询关系。浏览器暂存后，请导出交付。</span></div>
+<div id="notice" role="alert"></div>
+<div class="workbench">
+<aside class="case-sidebar"><p class="section-kicker">独立审核队列</p><label class="search-field"><span>搜索 ID、查询或示例全文</span><input id="search" placeholder="例如 D01、C-T04 或原文"></label>
+<select id="kind" class="sidebar-select" aria-label="材料类型"><option value="query">查询 · 48</option><option value="demo">示例 · 108</option><option value="relation">关系 · 576</option></select>
+<select id="pool" class="sidebar-select" aria-label="材料分组"><option value="">全部分组</option></select>
+<select id="status-filter" class="sidebar-select" aria-label="审核状态"><option value="all">全部状态</option><option value="open">未确认</option><option value="confirmed">已确认</option></select>
+<small id="queue-count" class="search-status"></small><nav id="queue" class="case-list" aria-label="材料队列"></nav><p class="inline-note">AI建议不计入人工完成数。修改原文请写在“修改建议”，旧文本将继续保留。</p></aside>
+<main class="source-pane"><div class="case-toolbar"><div><p id="position" class="section-kicker"></p><h2 id="item-id"></h2></div><div class="case-nav"><button id="prev" class="icon-button" aria-label="上一项">←</button><button id="next" class="icon-button" aria-label="下一项">→</button></div></div>
+<section class="material-card query-card"><div class="card-head"><strong id="main-label">待审原文</strong><span id="split-label" class="count-label"></span></div><blockquote id="main-text" class="query-content"></blockquote></section>
+<section id="source-card" class="material-card" hidden><div class="card-head"><strong id="source-id"></strong></div><blockquote id="source-text" class="query-content"></blockquote><p id="source-quality-status" class="inline-note"></p></section>
+<section class="material-card"><div class="card-head"><strong>AI建议 · 尚未采纳</strong></div><div id="ai-content"></div><button id="copy-ai" class="secondary-button">将 AI 建议填入当前草稿</button></section>
+<details class="material-card"><summary>审核规则与范围</summary><p class="inline-note">当前任务判断作者是否实施或认可针对人的攻击。普通义不能覆盖全文其他攻击；转述、反对和认可分别判断。有／无是二分类，未决不能当作无。</p><p class="inline-note">语义／所指与判断规则分开：direct直接适用；partial部分适用；none所指定的信息不适用；unclear有合理争议。示例本身正确，不保证适用；关系适用也不保证模型受益。</p><p class="inline-note">确认关系不会替代示例答案审核。示例在组内复用，修改其原文会让相关关系需要重核。材料为AI构造，开发和确认采用不同文本；本页不含任何本批模型预测。</p><p class="inline-note">快捷键：[ / ] 上下项；Ctrl/⌘ S 保存草稿。已确认项需写明原因后重新打开，旧版记录会保留。</p></details>
+<details id="related-card" class="material-card"><summary>同组材料与依赖</summary><div id="related-content"></div></details>
+</main>
+<aside class="decision-pane"><div class="decision-heading"><h2>你的裁决</h2><span id="item-status" class="status-chip">未审核</span></div>
+<form id="review-form" class="review-form" onsubmit="return false">
+<div id="material-fields"><label class="field"><span>你判断的答案</span><select id="answer"><option value="">尚未选择</option><option value="无">无</option><option value="有">有</option><option value="unclear">未决</option></select></label><label class="field"><span>文本自然度与可用性</span><select id="naturalness"><option value="">尚未选择</option><option value="usable">自然，可用</option><option value="revise">需要修改</option><option value="unclear">暂不能确定</option></select></label></div>
+<div id="relation-fields" hidden><label class="field"><span>词义／所指信息适用性</span><select id="semantic"><option value="">尚未选择</option><option>direct</option><option>partial</option><option>none</option><option>unclear</option></select></label><label class="field"><span>判断规则适用性</span><select id="rule"><option value="">尚未选择</option><option>direct</option><option>partial</option><option>none</option><option>unclear</option></select></label></div>
+<label class="field"><span>依据、异议或关系边界</span><textarea id="comment" rows="5" placeholder="认可AI理由可注明；改判、未决或部分适用时请说明具体依据。"></textarea></label>
+<label class="field"><span>原文修改建议（可留空）</span><textarea id="revision" rows="4" placeholder="只记录建议，不会覆盖原文。"></textarea></label>
+</form><footer class="decision-footer"><div class="decision-actions"><button id="save" class="secondary-button">保存草稿</button><button id="confirm" class="primary-button">确认此项 · 下一项</button><button id="reopen" class="secondary-button" hidden>重新打开</button></div><p class="inline-note">保存草稿不会采纳材料。确认操作会绑定当前文本版本；导出后再据你的裁决制作正式采纳包。</p></footer></aside></div>
+<script id="review-data" type="application/json">__REVIEW_DATA__</script>
+<script>__SHARED_CORE_JS__</script>
+<script>
+(function(){"use strict";
+const data=JSON.parse(document.getElementById('review-data').textContent), byId=new Map(data.items.map(x=>[x.id,x]));
+const $=id=>document.getElementById(id), key='rrc-material-review:'+data.data_sha256;
+const empty=()=>({package_id:data.package_id,data_sha256:data.data_sha256,reviewer:'',revision:0,records:{},history:[]});
+let state=empty(),current=data.items[0].id,queue=[],conflict=false;
+function notice(t){$('notice').textContent=t||'';}
+function validImported(s){
+ if(s.package_id!==data.package_id||s.data_sha256!==data.data_sha256)throw Error('文件对应其他材料版本，不能覆盖此包。');
+ if(typeof s.reviewer!=='string'||typeof s.records!=='object'||!s.records||Array.isArray(s.records)||!Array.isArray(s.history)||!Number.isInteger(s.revision))throw Error('记录结构不完整。');
+ for(const [id,r]of Object.entries(s.records)){
+  if(!byId.has(id)||r.id!==id||r.kind!==byId.get(id).kind||r.source_hash!==byId.get(id).text_sha256)throw Error('材料身份或原文哈希不匹配：'+id);
+  if(!['draft','confirmed'].includes(r.status))throw Error('未知审核状态：'+id);
+  if(!['','有','无','unclear'].includes(r.answer)||!['','usable','revise','unclear'].includes(r.naturalness)||!['','direct','partial','none','unclear'].includes(r.semantic)||!['','direct','partial','none','unclear'].includes(r.rule))throw Error('字段值无效：'+id);
+  if(typeof r.comment!=='string'||typeof r.revision_text!=='string')throw Error('说明字段无效：'+id);
+  if(r.status==='confirmed'&&(!s.reviewer.trim()||!r.comment.trim()||(r.kind==='relation'?(!r.semantic||!r.rule):(!r.answer||!r.naturalness))||(r.naturalness==='revise'&&!r.revision_text.trim())))throw Error('已确认项缺少必要裁决：'+id);
+ }
+ return s;
+}
+try{const saved=localStorage.getItem(key);if(saved)state=validImported(JSON.parse(saved));}catch(e){notice('未能恢复浏览器暂存：'+e.message+'。原暂存未删除；请先导出或核对。');conflict=true;}
+$('reviewer').value=state.reviewer;
+for(const p of data.pools){const o=document.createElement('option');o.value=p.pool_id;o.textContent=p.pool_id+' · '+p.term+(p.split==='development'?' · 开发':' · 确认');$('pool').appendChild(o);}
+function persist(){
+ if(conflict){notice('检测到保存冲突，当前草稿仍在内存。请导出备份后刷新或导入正确记录。');return false;}
+ try{const old=localStorage.getItem(key);if(old&&JSON.parse(old).revision>state.revision){conflict=true;return persist();}
+  state.reviewer=$('reviewer').value.trim();state.revision++;localStorage.setItem(key,JSON.stringify(state));$('save-state').textContent='已暂存于本浏览器 · 请导出交付';return true;
+ }catch(e){notice('浏览器暂存失败：'+e.message+'。请立即导出，避免关闭页面后丢失。');return false;}
+}
+function freshRecord(it){return {id:it.id,kind:it.kind,source_hash:it.text_sha256,status:'draft',answer:'',naturalness:'',semantic:'',rule:'',comment:'',revision_text:'',confirmed_at:null};}
+function capture(){
+ const it=byId.get(current);if(!it)return;
+ const old=state.records[current];if(old&&old.status==='confirmed')return;
+ const r={...(old||freshRecord(it)),answer:$('answer').value,naturalness:$('naturalness').value,semantic:$('semantic').value,rule:$('rule').value,comment:$('comment').value,revision_text:$('revision').value};
+ const has=[r.answer,r.naturalness,r.semantic,r.rule,r.comment,r.revision_text].some(Boolean);
+ if(has||old)state.records[current]=r;
+}
+function saveDraft(){capture();persist();renderQueue();}
+function filtered(){const term=$('search').value.trim().toLowerCase();return data.items.filter(x=>x.kind===$('kind').value&&(!$('pool').value||x.pool===$('pool').value)&&(!term||[x.id,x.text,x.source_text||''].join(' ').toLowerCase().includes(term))&&($('status-filter').value==='all'||($('status-filter').value==='confirmed')===(state.records[x.id]?.status==='confirmed')));}
+function renderQueue(){
+ queue=filtered();$('queue-count').textContent=queue.length+' 项符合筛选';$('queue').replaceChildren();
+ for(const it of queue){const b=document.createElement('button');b.type='button';b.className='case-item'+(it.id===current?' active':'');const label=document.createElement('span');label.textContent=it.id+' · '+(state.records[it.id]?.status==='confirmed'?'已确认':'待核对')+'\n'+it.text.slice(0,38);b.appendChild(label);b.onclick=()=>{saveDraft();current=it.id;render();};$('queue').appendChild(b);}
+ const confirmed=Object.values(state.records).filter(r=>r.status==='confirmed').length;$('progress').textContent=confirmed+' / '+data.items.length+' 已确认';
+}
+function paragraph(parent,text){const p=document.createElement('p');p.className='inline-note';p.textContent=text;parent.appendChild(p);}
+function render(){
+ renderQueue();const it=byId.get(current);if(!it)return;
+ const r=state.records[current]||freshRecord(it), locked=r.status==='confirmed';
+ $('item-id').textContent=it.id;$('position').textContent=it.pool+' · '+({query:'查询',demo:'示例',relation:'示例→查询关系'}[it.kind]);
+ $('main-label').textContent=it.kind==='relation'?'查询 '+it.target_id:'待审原文';$('main-text').textContent=it.text;
+ $('split-label').textContent=it.split==='development'?'开发材料':'确认材料';
+ $('source-card').hidden=it.kind!=='relation';$('material-fields').hidden=it.kind==='relation';$('relation-fields').hidden=it.kind!=='relation';
+ if(it.kind==='relation'){$('source-id').textContent='来源示例 '+it.source_id;$('source-text').textContent=it.source_text;const d=state.records[it.source_id];$('source-quality-status').textContent=d?.status==='confirmed'?'该示例已单独审核；答案：'+d.answer:'该示例自身答案尚未单独确认。关系建议可先审核。';}
+ $('ai-content').replaceChildren();
+ if(it.kind==='relation'){
+  paragraph($('ai-content'),'语义／所指：'+it.ai_semantic+'。信息：'+it.ai_semantic_information);
+  paragraph($('ai-content'),it.ai_note);paragraph($('ai-content'),'判断规则：'+it.ai_rule+'。'+it.ai_rule_information);
+  paragraph($('ai-content'),it.ai_rule_note+(it.ai_rule_limitation?' 限制：'+it.ai_rule_limitation:''));
+  paragraph($('ai-content'),'指定词形共现：'+it.lexical_overlap+'（机械匹配，独立于语义适用）。');
+ }else{paragraph($('ai-content'),'答案建议：'+it.ai_answer);paragraph($('ai-content'),it.ai_note);}
+ for(const [id,field]of [['answer','answer'],['naturalness','naturalness'],['semantic','semantic'],['rule','rule'],['comment','comment'],['revision','revision_text']]){$(id).value=r[field]||'';$(id).disabled=locked;}
+ $('confirm').disabled=locked;$('save').disabled=locked;$('copy-ai').disabled=locked;$('reopen').hidden=!locked;$('item-status').textContent=locked?'已确认':state.records[current]?'草稿':'未审核';
+ $('related-content').replaceChildren();const pool=data.pools.find(p=>p.pool_id===it.pool);
+ paragraph($('related-content'),'同组查询：'+pool.query_ids.join('、')+'。共用12条示例，示例每次复用的具体关系另审。');
+ const related=data.items.filter(x=>x.pool===it.pool&&x.kind===(it.kind==='demo'?'query':'demo'));
+ for(const x of related)paragraph($('related-content'),x.id+'：'+x.text+'【AI答案 '+x.ai_answer+'，未自动采纳】');
+ const pos=queue.findIndex(x=>x.id===current);$('prev').disabled=pos<=0;$('next').disabled=pos<0||pos>=queue.length-1;
+}
+function move(delta){saveDraft();const i=queue.findIndex(x=>x.id===current);if(i+delta>=0&&i+delta<queue.length){current=queue[i+delta].id;render();}}
+function refilter(){saveDraft();queue=filtered();if(queue.length&&!queue.some(x=>x.id===current))current=queue[0].id;render();}
+for(const id of ['kind','pool','status-filter'])$(id).onchange=refilter;$('search').oninput=refilter;
+$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('save').onclick=saveDraft;
+for(const id of ['answer','naturalness','semantic','rule','comment','revision'])$(id).addEventListener('input',()=>{capture();persist();renderQueue();});
+$('reviewer').onchange=()=>persist();
+$('copy-ai').onclick=()=>{const it=byId.get(current);if(it.kind==='relation'){$('semantic').value=it.ai_semantic;$('rule').value=it.ai_rule;$('comment').value=it.ai_note+' '+it.ai_rule_note+(it.ai_rule_limitation?' '+it.ai_rule_limitation:'');}else{$('answer').value=it.ai_answer;$('comment').value=it.ai_note;}saveDraft();render();};
+$('confirm').onclick=()=>{
+ capture();const it=byId.get(current),r=state.records[current];
+ if(!$('reviewer').value.trim()){notice('请先填写审核人姓名或代号，再确认。');return;}
+ if(!r||(it.kind==='relation'?(!r.semantic||!r.rule):(!r.answer||!r.naturalness))){notice('请完成当前项的必要选择，AI建议不会自动采纳。');return;}
+ if(!r.comment.trim()){notice('请填写依据；可以显式采用AI建议后核对并修改。');return;}
+ if((r.naturalness==='revise'||r.revision_text.trim())&&!r.revision_text.trim()){notice('文本需要修改时，请写明修改建议。');return;}
+ state.history.push({event:'confirm',id:current,reviewer:$('reviewer').value.trim(),at:new Date().toISOString(),record:JSON.parse(JSON.stringify(r))});r.status='confirmed';r.confirmed_at=new Date().toISOString();
+ if(!persist()){r.status='draft';r.confirmed_at=null;return;}
+ notice('');const ordered=filtered();const next=ordered.find(x=>x.id!==current&&state.records[x.id]?.status!=='confirmed');if(next)current=next.id;render();
+};
+$('reopen').onclick=()=>{const reason=prompt('请简要说明更正原因；旧裁决会保留。');if(!reason?.trim())return;const old=state.records[current];state.history.push({event:'reopen',id:current,reason,at:new Date().toISOString(),record:JSON.parse(JSON.stringify(old))});state.records[current]={...old,status:'draft',confirmed_at:null};persist();render();};
+$('export').onclick=()=>{capture();state.reviewer=$('reviewer').value.trim();const blob=new Blob([JSON.stringify({...state,exported_at:new Date().toISOString(),note:'Human review export; not an execution authorization or automatic input adoption.'},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='reference-material-review-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+$('import-button').onclick=()=>$('import-file').click();
+$('import-file').onchange=async()=>{try{const file=$('import-file').files[0];if(!file)return;const incoming=validImported(JSON.parse(await file.text()));if(Object.keys(state.records).length&&!confirm('导入将替换当前浏览器的审核视图。请确认已经导出当前草稿备份。'))return;const old=state;state=incoming;state.revision=Math.max(old.revision,incoming.revision);conflict=false;$('reviewer').value=state.reviewer;persist();notice('已导入对应材料版本的审核记录。');render();}catch(e){notice('导入失败，当前记录未替换：'+e.message);}finally{$('import-file').value='';}};
+addEventListener('storage',e=>{if(e.key===key){conflict=true;notice('另一个页面更新了审核记录。当前草稿保留在内存，请导出后刷新。');}});
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveDraft();return;}if(ReviewCore.isTextEntry(e.target)||e.isComposing)return;if(e.key==='[')move(-1);if(e.key===']')move(1);});
+render();
+})();
+</script></body></html>
