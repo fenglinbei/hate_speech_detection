@@ -1,0 +1,136 @@
+{
+  "job_id": "jmix-J07-MPS/P",
+  "pass": "production",
+  "job": {
+    "job_id": "jmix-J07-MPS/P",
+    "kind": "preceding",
+    "recipient": "jmix-J07-MPS",
+    "background": "P",
+    "upstream": {
+      "donor": "jmix-J07-M00",
+      "layer": 17,
+      "site": "decoder_block_output",
+      "positions": [
+        658,
+        659
+      ],
+      "donor_positions": [
+        559,
+        560
+      ],
+      "strength": 1
+    },
+    "av_override": null
+  },
+  "request_id": "jmix-J07-MPS",
+  "prepared_manifest": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/fixture-prepared/manifest.json",
+    "bytes": 57,
+    "sha256": "227975bd4a6dd423d2cd5d70d75a20875ac07280c1e84c2ebbf740bda5131580"
+  },
+  "prompt_sha256": "1dd022577546ffd9259d6a70973e9bcb85d1156085850ed00a24285d41ed2e8d",
+  "input_ids_sha256": "7d757c54be1c7b34b8838d646e61cd83815304b70cd1338da131988aaf3deb80",
+  "synthetic": true,
+  "padding": "none",
+  "append_tokens": [],
+  "prefix": false,
+  "vector": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J07-MPS/P.vector.npy",
+    "bytes": 160,
+    "sha256": "b5893e56cb160572061d0310a2fb34866b5a0c87ef825c28470cdf7dd045e53f"
+  },
+  "bank": null,
+  "trajectory": {
+    "array_file": {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J07-MPS/P.trajectory.npz",
+      "bytes": 7838,
+      "sha256": "eb71f239ff72c4f66be0b1f6d42bd4c4f5125f5d843626487dee89342f70cd9c"
+    },
+    "metadata": {}
+  },
+  "av": {
+    "array_file": {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J07-MPS/P.av.npz",
+      "bytes": 23500,
+      "sha256": "7ab12b659a42a46e23223703fee2bbb55f4ea4a0e2db3ab108c2d43cca8921b3"
+    },
+    "metadata": {
+      "prompt_sha256": "1dd022577546ffd9259d6a70973e9bcb85d1156085850ed00a24285d41ed2e8d",
+      "input_ids_sha256": "7d757c54be1c7b34b8838d646e61cd83815304b70cd1338da131988aaf3deb80",
+      "position": 679,
+      "layer": 18
+    }
+  },
+  "patch_proof": {
+    "layer": 17,
+    "positions": [
+      658,
+      659
+    ],
+    "outside_rows_exact": true,
+    "donor_rows_exact": true,
+    "native_output_unmodified": true,
+    "synthetic": true
+  },
+  "operations": [],
+  "sources": [
+    {
+      "kind": "block_donor",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/records/production/jmix-J07-M00/N.json",
+        "bytes": 3320,
+        "sha256": "f231573dd7b3384d2a5ff921485f540f66429a3a2b3303150de33e539492dc06"
+      },
+      "bank": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J07-M00/N.bank.npy",
+        "bytes": 2432,
+        "sha256": "41731c4d310fe2d1ce25c4ef0875839580fd3fe4aceae515765d3248a2dda461"
+      },
+      "positions": [
+        559,
+        560
+      ]
+    }
+  ],
+  "readout": {
+    "m": 1.9999959468841553,
+    "z_yes": 0.0,
+    "z_no": 1.9999959468841553,
+    "log_p_yes": -2.666465843160336,
+    "log_p_no": -0.6664698962761806,
+    "log_legal_mass": -0.5395414020890934,
+    "legal_mass": 0.5830155607939694,
+    "pair_support_no": 0.8807966524260608,
+    "raw_prediction": "无",
+    "margin_error_bound": null,
+    "resolution": "unqualified"
+  },
+  "trajectory_validation": {
+    "checks": {
+      "attention_residual": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "mlp_residual": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "continuity": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "normalization": {
+        "absolute": 5.3127845012213015e-08,
+        "scaled": 2.656397563389839e-08
+      },
+      "projection": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      }
+    },
+    "projection_absolute_error": 0.0
+  },
+  "elapsed_seconds": 8.482858538627625e-05,
+  "valid_tokens": 680,
+  "tensor_tokens": 680
+}

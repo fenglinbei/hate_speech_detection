@@ -1,0 +1,186 @@
+{
+  "job_id": "jmix-J05-MSP/AV00",
+  "pass": "production",
+  "job": {
+    "job_id": "jmix-J05-MSP/AV00",
+    "kind": "av_hybrid",
+    "recipient": "jmix-J05-MSP",
+    "background": "U",
+    "upstream": {
+      "donor": "jmix-J05-M00",
+      "layer": 17,
+      "site": "decoder_block_output",
+      "positions": [
+        655,
+        656
+      ],
+      "donor_positions": [
+        556,
+        557
+      ],
+      "strength": 1
+    },
+    "av_override": {
+      "layer": 18,
+      "position": 678,
+      "heads": "all",
+      "site": "attention_after_o_proj_before_residual",
+      "cell": "00",
+      "A_from": "jmix-J05-MSP/N",
+      "V_from": "jmix-J05-MSP/N"
+    }
+  },
+  "request_id": "jmix-J05-MSP",
+  "prepared_manifest": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/fixture-prepared/manifest.json",
+    "bytes": 57,
+    "sha256": "227975bd4a6dd423d2cd5d70d75a20875ac07280c1e84c2ebbf740bda5131580"
+  },
+  "prompt_sha256": "26f821a3a2aa63d6faf29087bcf78b99c5918c7ff32bb8b27bd85b55c0ecf337",
+  "input_ids_sha256": "71a941199ecc4ac06da290dd07f709ba2a630b4371737ca5626c2345073a45ff",
+  "synthetic": true,
+  "padding": "none",
+  "append_tokens": [],
+  "prefix": false,
+  "vector": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-MSP/AV00.vector.npy",
+    "bytes": 160,
+    "sha256": "b5893e56cb160572061d0310a2fb34866b5a0c87ef825c28470cdf7dd045e53f"
+  },
+  "bank": null,
+  "trajectory": {
+    "array_file": {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-MSP/AV00.trajectory.npz",
+      "bytes": 7838,
+      "sha256": "11ac79cb447a76bbbad9d4c573b84caf413f31c92788036db0fa2ae7f20f6246"
+    },
+    "metadata": {}
+  },
+  "av": {
+    "array_file": {
+      "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-MSP/AV00.av.npz",
+      "bytes": 23748,
+      "sha256": "132f969d0c74cba87bffba1df4fce635850601295c907a0208692b7d4eb94207"
+    },
+    "metadata": {
+      "prompt_sha256": "26f821a3a2aa63d6faf29087bcf78b99c5918c7ff32bb8b27bd85b55c0ecf337",
+      "input_ids_sha256": "71a941199ecc4ac06da290dd07f709ba2a630b4371737ca5626c2345073a45ff",
+      "position": 678,
+      "layer": 18
+    }
+  },
+  "patch_proof": {
+    "layer": 17,
+    "positions": [
+      655,
+      656
+    ],
+    "outside_rows_exact": true,
+    "donor_rows_exact": true,
+    "native_output_unmodified": true,
+    "synthetic": true
+  },
+  "operations": [],
+  "sources": [
+    {
+      "kind": "block_donor",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/records/production/jmix-J05-M00/N.json",
+        "bytes": 3321,
+        "sha256": "2186228f3041c77ae60472283bf5b1bf6b3c06952f73f294d024f76bfecb24bc"
+      },
+      "bank": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-M00/N.bank.npy",
+        "bytes": 2432,
+        "sha256": "41731c4d310fe2d1ce25c4ef0875839580fd3fe4aceae515765d3248a2dda461"
+      },
+      "positions": [
+        556,
+        557
+      ]
+    },
+    {
+      "kind": "A_from",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/records/production/jmix-J05-MSP/N.json",
+        "bytes": 3320,
+        "sha256": "429bcb37912a108813db800245355a4491b6c6865f23aa63a792b04c2ca351b5"
+      },
+      "av": {
+        "array_file": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-MSP/N.av.npz",
+          "bytes": 23468,
+          "sha256": "fa28d2509b0036fc12b87d558a07b203dc7aa0ba1ae64f9c142d27ea1622a9da"
+        },
+        "metadata": {
+          "prompt_sha256": "26f821a3a2aa63d6faf29087bcf78b99c5918c7ff32bb8b27bd85b55c0ecf337",
+          "input_ids_sha256": "71a941199ecc4ac06da290dd07f709ba2a630b4371737ca5626c2345073a45ff",
+          "position": 678,
+          "layer": 18
+        }
+      }
+    },
+    {
+      "kind": "V_from",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/records/production/jmix-J05-MSP/N.json",
+        "bytes": 3320,
+        "sha256": "429bcb37912a108813db800245355a4491b6c6865f23aa63a792b04c2ca351b5"
+      },
+      "av": {
+        "array_file": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-01/stage-a/arrays/production/jmix-J05-MSP/N.av.npz",
+          "bytes": 23468,
+          "sha256": "fa28d2509b0036fc12b87d558a07b203dc7aa0ba1ae64f9c142d27ea1622a9da"
+        },
+        "metadata": {
+          "prompt_sha256": "26f821a3a2aa63d6faf29087bcf78b99c5918c7ff32bb8b27bd85b55c0ecf337",
+          "input_ids_sha256": "71a941199ecc4ac06da290dd07f709ba2a630b4371737ca5626c2345073a45ff",
+          "position": 678,
+          "layer": 18
+        }
+      }
+    }
+  ],
+  "readout": {
+    "m": 1.9999959468841553,
+    "z_yes": 0.0,
+    "z_no": 1.9999959468841553,
+    "log_p_yes": -2.666465843160336,
+    "log_p_no": -0.6664698962761806,
+    "log_legal_mass": -0.5395414020890934,
+    "legal_mass": 0.5830155607939694,
+    "pair_support_no": 0.8807966524260608,
+    "raw_prediction": "无",
+    "margin_error_bound": null,
+    "resolution": "unqualified"
+  },
+  "trajectory_validation": {
+    "checks": {
+      "attention_residual": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "mlp_residual": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "continuity": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      },
+      "normalization": {
+        "absolute": 5.3127845012213015e-08,
+        "scaled": 2.656397563389839e-08
+      },
+      "projection": {
+        "absolute": 0.0,
+        "scaled": 0.0
+      }
+    },
+    "projection_absolute_error": 0.0
+  },
+  "elapsed_seconds": 8.597318083047867e-05,
+  "valid_tokens": 679,
+  "tensor_tokens": 679
+}

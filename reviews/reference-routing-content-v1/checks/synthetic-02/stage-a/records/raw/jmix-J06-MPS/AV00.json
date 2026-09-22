@@ -1,0 +1,143 @@
+{
+  "job_id": "jmix-J06-MPS/AV00",
+  "pass": "raw",
+  "job": {
+    "job_id": "jmix-J06-MPS/AV00",
+    "kind": "av_hybrid",
+    "recipient": "jmix-J06-MPS",
+    "background": "U",
+    "upstream": {
+      "donor": "jmix-J06-M00",
+      "layer": 17,
+      "site": "decoder_block_output",
+      "positions": [
+        661,
+        662
+      ],
+      "donor_positions": [
+        562,
+        563
+      ],
+      "strength": 1
+    },
+    "av_override": {
+      "layer": 18,
+      "position": 686,
+      "heads": "all",
+      "site": "attention_after_o_proj_before_residual",
+      "cell": "00",
+      "A_from": "jmix-J06-MPS/N",
+      "V_from": "jmix-J06-MPS/N"
+    }
+  },
+  "request_id": "jmix-J06-MPS",
+  "prepared_manifest": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/fixture-prepared/manifest.json",
+    "bytes": 57,
+    "sha256": "227975bd4a6dd423d2cd5d70d75a20875ac07280c1e84c2ebbf740bda5131580"
+  },
+  "prompt_sha256": "1354ca8e9aca083ea721f053b364c138312cf000496b2c13778bdfdee1037745",
+  "input_ids_sha256": "5e74579aa4828d470b08f42f583ab2e5dab79c1b28bc65175d9576ccafcd73e2",
+  "synthetic": true,
+  "padding": "none",
+  "append_tokens": [],
+  "prefix": false,
+  "vector": {
+    "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/arrays/raw/jmix-J06-MPS/AV00.vector.npy",
+    "bytes": 160,
+    "sha256": "b5893e56cb160572061d0310a2fb34866b5a0c87ef825c28470cdf7dd045e53f"
+  },
+  "bank": null,
+  "trajectory": null,
+  "av": null,
+  "patch_proof": {
+    "layer": 17,
+    "positions": [
+      661,
+      662
+    ],
+    "outside_rows_exact": true,
+    "donor_rows_exact": true,
+    "native_output_unmodified": true,
+    "synthetic": true
+  },
+  "operations": [],
+  "sources": [
+    {
+      "kind": "block_donor",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/records/probe/jmix-J06-M00/N.json",
+        "bytes": 3295,
+        "sha256": "84ca13782204c3456986734f049c07e3db3f508253361dc99f2d5d912d67a38a"
+      },
+      "bank": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/arrays/probe/jmix-J06-M00/N.bank.npy",
+        "bytes": 2432,
+        "sha256": "41731c4d310fe2d1ce25c4ef0875839580fd3fe4aceae515765d3248a2dda461"
+      },
+      "positions": [
+        562,
+        563
+      ]
+    },
+    {
+      "kind": "A_from",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/records/probe/jmix-J06-MPS/N.json",
+        "bytes": 3295,
+        "sha256": "81182a7b68a65430b49c405c6f72c412c0c9f31207c8c8b8dab591b388dc8bab"
+      },
+      "av": {
+        "array_file": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/arrays/probe/jmix-J06-MPS/N.av.npz",
+          "bytes": 23724,
+          "sha256": "ee3c81bc0e42376678cea7302c27754b028aa0999f176e67e40553879c1aea98"
+        },
+        "metadata": {
+          "prompt_sha256": "1354ca8e9aca083ea721f053b364c138312cf000496b2c13778bdfdee1037745",
+          "input_ids_sha256": "5e74579aa4828d470b08f42f583ab2e5dab79c1b28bc65175d9576ccafcd73e2",
+          "position": 686,
+          "layer": 18
+        }
+      }
+    },
+    {
+      "kind": "V_from",
+      "record": {
+        "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/records/probe/jmix-J06-MPS/N.json",
+        "bytes": 3295,
+        "sha256": "81182a7b68a65430b49c405c6f72c412c0c9f31207c8c8b8dab591b388dc8bab"
+      },
+      "av": {
+        "array_file": {
+          "path": "/data/liaozijie/hate_speech_detection/reviews/reference-routing-content-v1/checks/synthetic-02/stage-a/arrays/probe/jmix-J06-MPS/N.av.npz",
+          "bytes": 23724,
+          "sha256": "ee3c81bc0e42376678cea7302c27754b028aa0999f176e67e40553879c1aea98"
+        },
+        "metadata": {
+          "prompt_sha256": "1354ca8e9aca083ea721f053b364c138312cf000496b2c13778bdfdee1037745",
+          "input_ids_sha256": "5e74579aa4828d470b08f42f583ab2e5dab79c1b28bc65175d9576ccafcd73e2",
+          "position": 686,
+          "layer": 18
+        }
+      }
+    }
+  ],
+  "readout": {
+    "m": 1.9999959468841553,
+    "z_yes": 0.0,
+    "z_no": 1.9999959468841553,
+    "log_p_yes": -2.666465843160336,
+    "log_p_no": -0.6664698962761806,
+    "log_legal_mass": -0.5395414020890934,
+    "legal_mass": 0.5830155607939694,
+    "pair_support_no": 0.8807966524260608,
+    "raw_prediction": "无",
+    "margin_error_bound": null,
+    "resolution": "unqualified"
+  },
+  "trajectory_validation": null,
+  "elapsed_seconds": 3.948528319597244e-05,
+  "valid_tokens": 687,
+  "tensor_tokens": 687
+}
